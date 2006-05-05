@@ -80,7 +80,6 @@
 		public function getDistrictID() { return $this->districtID; }
 		public function getName() { return $this->name; }
 		public function getDistrictTypeID() { return $this->districtTypeID; }
-
 		public function getDistrictType()
 		{
 			if (!$this->districtType) { $this->districtType = new DistrictType($this->districtTypeID); }
@@ -90,7 +89,11 @@
 
 		public function setDistrictID($int) { $this->districtID = $int; }
 		public function setName($string) { $this->name = sanitizeString($string); }
-		public function setDistrictTypeID($int) { $this->districtTypeID = $int; }
+		public function setDistrictTypeID($int)
+		{
+			$this->districtType = new DistrictType($int);
+			$this->districtTypeID = $int;
+		}
 
 	}
 ?>

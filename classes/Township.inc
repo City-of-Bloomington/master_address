@@ -18,7 +18,11 @@
 				$result = $PDO->query($sql);
 				if ($row = $result->fetch())
 				{
-					foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
+					$this->townshipID = $townshipID;
+					$this->name = $row['name'];
+					$this->abbreviation = $row['abbreviation'];
+					if ($row['quarterCode']) { $this->quarterCode = $row['quarterCode']; }
+
 					$result->closeCursor();
 				}
 				else { throw new Exception($sql); }
@@ -37,13 +41,9 @@
 			if (!$this->name || !$this->abbreviation) { throw new Exception("missingRequiredFields"); }
 
 			$fields = array();
-			foreach($this as $field=>$value)
-			{
-				if (!is_numeric($field))
-				{
-					if ($value) { $fields[] = "$field='$value'"; } else { $fields[] = "$field=null"; }
-				}
-			}
+			$fields[] = "name='{$this->name}'";
+			$fields[] = "abbreviation='{$this->abbreviation}'";
+			if ($this->quarterCode) { $fields[] = "quarterCode='{$this->quarterCode}'"; } else { $fields[] = "quarterCode=null"; }
 			$fields = implode(",",$fields);
 
 			if ($this->townshipID) { $this->update($fields); }
@@ -75,9 +75,8 @@
 
 
 		public function setTownshipID($int) { $this->townshipID = $int; }
-		public function setName($string) { $this->name = $string; }
-		public function setAbbreviation($char) { $this->abbreviation = $char; }
-		public function setQuarterCode($char) { $this->quarterCode = $char; }
-
+		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setAbbreviation($char) { $this->abbreviation = ereg_replace("[^A-Z]","",strtoupper($char)); }
+		public function setQuarterCode($char) { $this->quarterCode = ereg_replace("[^A-Z]","",strtoupper($char)); }
 	}
 ?>

@@ -1,31 +1,31 @@
 <?php
-	class Suffix
+	class PlatType
 	{
-		private $suffixAbbreviation;
+		private $type;
 		private $description;
 
 
 
-		public function __construct($suffixAbbreviation=null)
+		public function __construct($type=null)
 		{
 			global $PDO;
 
-			if ($suffixAbbreviation)
+			if ($type)
 			{
- 				$sql = "select * from suffixes where suffixAbbreviation='$suffixAbbreviation'";
+				$sql = "select * from platTypes where type='$type'";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
 					{
-						$this->suffixAbbreviation = $suffixAbbreviation;
+						$this->type = $type;
 						$this->description = $row['description'];
 
 						$result->closeCursor();
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e=$PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -38,12 +38,10 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->suffixAbbreviation || !$this->description) { throw new Exception("missingRequiredFields"); }
-
-			$sql = "select * from suffixes where suffixAbbreviation
+			if (!$this->type || !$this->description) { throw new Exception("missingRequiredFields"); }
 
 
-			if ($this->suffixAbbreviation) { $this->update(); }
+			if ($this->type) { $this->update(); }
 			else { $this->insert(); }
 		}
 
@@ -51,7 +49,7 @@
 		{
 			global $PDO;
 
-			$sql = "update suffixes set description='{$this->description}' where suffixAbbreviation='{$this->suffixAbbreviation}'";
+			$sql = "update platTypes set description='{$this->description}' where type='{$this->type}'";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
@@ -59,17 +57,16 @@
 		{
 			global $PDO;
 
-			$sql = "insert suffixes set suffix='{$this->suffix}',description='{$this->description}'";
+			$sql = "insert platTypes values('{$this->type}','{$this->description}')";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->suffix = $PDO->lastInsertID();
 		}
 
 
-		public function getSuffix() { return $this->suffix; }
+		public function getType() { return $this->type; }
 		public function getDescription() { return $this->description; }
 
 
-		public function setSuffix($string) { $this->suffix = ereg_replace("[^A-Z]","",strtoupper($string)); }
+		public function setType($char) { $this->type = ereg_replace("[^A-Z]","",strtoupper($char)); }
 		public function setDescription($string) { $this->description = sanitizeString($string); }
 	}
 ?>

@@ -68,7 +68,7 @@
 		public function getDirection() { return $this->direction; }
 
 
-		public function setDirectionCode($char) { $this->directionCode = $char; }
-		public function setDirection($string) { $this->direction = $string; }
+		public function setDirectionCode($char) { $this->directionCode = ereg_replace("[^A-Z]","",strtoupper($char)); }
+		public function setDirection($string) { $this->direction = ereg_replace("[^a-zA-Z]","",$string); }
 	}
 ?>

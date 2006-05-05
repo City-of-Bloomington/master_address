@@ -12,7 +12,8 @@
 	#--------------------------------------------------------------------------
 	# Database Setup
 	#--------------------------------------------------------------------------
-	$PDO = new PDO("mysql:unix_socket=/tmp/mysql.sock;dbname=master_address","username","password",array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
+	try { $PDO = new PDO("mysql:unix_socket=/tmp/mysql.sock;dbname=master_address","username","password",array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION)); }
+	catch (PDOException $e) { die($e->getMessage()); }
 
 	#--------------------------------------------------------------------------
 	# LDAP Configuration
