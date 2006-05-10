@@ -4,7 +4,7 @@
 		<li><a href="<?php echo BASE_URL; ?>/towns">Towns</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/townships">Townships</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/jurisdictions">Jurisdictions</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/statusCodes">Status Codes</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/statuses">Status Codes</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/suffixes">Suffixes</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/districtTypes">District Types</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/districts">Districts</a></li>
@@ -21,8 +21,5 @@
 </div>
 <?php
 	if (!isset($_SESSION['USER'])) { include(GLOBAL_INCLUDES."/sidebarBoxes/loginBox.inc"); }
-	else
-	{
-		if (in_array("Administrator",$_SESSION['USER']->getRoles())) { include(APPLICATION_HOME."/includes/sidebarBoxes/Administrator.inc"); }
-	}
+	else { if (in_array("Administrator",$_SESSION['USER']->getRoles())) { include(APPLICATION_HOME."/includes/sidebarBoxes/Administrator.inc"); } }
 ?>

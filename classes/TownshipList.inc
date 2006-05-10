@@ -5,20 +5,25 @@
 	class TownshipList extends PDOResultIterator
 	{
 
-		public function find($fields=null,$sort="townshipID")
+		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
 
 			$options = array();
-			if (isset($fields['townshipID'])) { $options[] = "townshipID=$fields[townshipID]"; }
+			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
 			if (isset($fields['abbreviation'])) { $options[] = "abbreviation='$fields[abbreviation]'"; }
 			if (isset($fields['quarterCode'])) { $options[] = "quarterCode='$fields[quarterCode]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select townshipID from townships $where order by $sort";
+			$sql = "select id from townships $where order by $sort";
 
-			foreach($PDO->query($sql) as $row) { $this->list[] = $row['townshipID']; }
+			$result = $PDO->query($sql);
+			if ($result)
+			{
+				foreach($result as $row) { $this->list[] = $row['id']; }
+			}
+			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 

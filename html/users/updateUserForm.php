@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	userID
+	$_GET variables:	id
 */
 	verifyUser("Administrator","Supervisor");
 
@@ -13,12 +13,12 @@
 	<?php
 		include(GLOBAL_INCLUDES."/errorMessages.inc");
 
-		$user = new User($_GET['userID']);
+		$user = new User($_GET['id']);
 	?>
 	<h1>Edit <?php echo $user->getUsername(); ?></h1>
 	<form method="post" action="updateUser.php">
 	<fieldset><legend>Login Info</legend>
-		<input name="userID" type="hidden" value="<?php echo $user->getUserID(); ?>" />
+		<input name="id" type="hidden" value="<?php echo $user->getId(); ?>" />
 		<table>
 		<tr><td><label for="authenticationMethod">Authentication</label></td>
 			<td><select name="authenticationMethod" id="authenticationMethod">

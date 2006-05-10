@@ -1,12 +1,14 @@
 <?php
 /*
-	$_POST variables:	directionCode
+	$_POST variables:	id
+						code
 						direction
 */
 	verifyUser("Administrator");
 
 	require_once(APPLICATION_HOME."/classes/Direction.inc");
-	$direction = new Direction($_POST['directionCode']);
+	$direction = new Direction($_POST['id']);
+	$direction->setCode($_POST['code']);
 	$direction->setDirection($_POST['direction']);
 
 	try
@@ -17,6 +19,6 @@
 	catch (Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateDirectionForm.php?directionCode=$_POST[directionCode]");
+		Header("Location: updateDirectionForm.php?id=$_POST[id]");
 	}
 ?>

@@ -1,27 +1,27 @@
 <?php
 	class Direction
 	{
-		private $directionCode;
+		private $id;
+		private $code;
 		private $direction;
 
 
 
-		public function __construct($directionCode=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($directionCode)
+			if ($id)
 			{
-				$sql = "select * from directions where directionCode='$directionCode'";
+				$sql = "select * from directions where id=$id";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
 					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
-						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
+						$this->id = $id;
+						$this->code = $row['code'];
+						$this->direction = $row['direction'];
 
 						$result->closeCursor();
 					}
@@ -40,35 +40,46 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->directionCode || !$this->direction) { throw new Exception("missingRequiredFields"); }
+			if (!$this->code || !$this->direction) { throw new Exception("missingRequiredField"); }
 
 
-			if ($this->directionCode) { $this->update(); }
-			else { $this->insert(); }
+			# This generates generic SQL that should work right away.
+			# You can (and maybe should) replace this $fields code with your own custom SQL
+			# for each property of this class,
+			$fields = array();
+			$fields[] = "code='{$this->code}'";
+			$fields[] = "direction='{$this->direction}'";
+			$fields = implode(",",$fields);
+
+
+			if ($this->id) { $this->update($fields); }
+			else { $this->insert($fields); }
 		}
 
-		private function update()
+		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update directions set direction='{$this->direction}' where directionCode='{$this->directionCode}'";
+			$sql = "update directions set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert()
+		private function insert($fields)
 		{
 			global $PDO;
 
-			$sql = "insert directions set values('{$directionCode}','{$this->direction}')";
+			$sql = "insert directions set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getDirectionCode() { return $this->directionCode; }
+		public function getId() { return $this->id; }
+		public function getCode() { return $this->code; }
 		public function getDirection() { return $this->direction; }
 
 
-		public function setDirectionCode($char) { $this->directionCode = ereg_replace("[^A-Z]","",strtoupper($char)); }
-		public function setDirection($string) { $this->direction = ereg_replace("[^a-zA-Z]","",$string); }
+		public function setCode($char) { $this->code = ereg_replace("[^A-Z]","",strtoupper($char)); }
+		public function setDirection($string) { $this->direction = sanitizeString($string); }
 	}
 ?>

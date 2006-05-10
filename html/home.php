@@ -6,7 +6,8 @@
 ?>
 <div id="mainContent">
 	<?php
-		if (isset($_SESSION['USER'])) { print_r($_SESSION['USER']); }
+		include(GLOBAL_INCLUDES."/errorMessages.inc");
+		include(APPLICATION_HOME."/includes/addresses/searchForm.inc");
 	?>
 </div>
 <?php

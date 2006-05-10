@@ -1,13 +1,13 @@
 <?php
 /*
-	$_POST variables:	placeTypeID
+	$_POST variables:	id
 						type
 						description
 */
 	verifyUser("Administrator");
 
 	require_once(APPLICATION_HOME."/classes/PlaceType.inc");
-	$placeType = new PlaceType($_POST['placeTypeID']);
+	$placeType = new PlaceType($_POST['id']);
 	$placeType->setType($_POST['type']);
 	$placeType->setDescription($_POST['description']);
 
@@ -19,6 +19,6 @@
 	catch (Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updatePlaceTypeForm.php?placeTypeID=$_POST[placeTypeID]");
+		Header("Location: updatePlaceTypeForm.php?id=$_POST[id]");
 	}
 ?>

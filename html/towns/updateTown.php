@@ -1,12 +1,12 @@
 <?php
 /*
-	$_POST variables:	townID
+	$_POST variables:	id
 						name
 */
 	verifyUser("Administrator");
 
 	require_once(APPLICATION_HOME."/classes/Town.inc");
-	$town = new Town($_POST['townID']);
+	$town = new Town($_POST['id']);
 	$town->setName($_POST['name']);
 
 	try
@@ -17,6 +17,6 @@
 	catch (Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateTownForm.php?townID=$_POST[townID]");
+		Header("Location: updateTownForm.php?id=$_POST[id]");
 	}
 ?>

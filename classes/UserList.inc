@@ -11,9 +11,9 @@
 			if ($fields)
 			{
 				$options = array();
-				$sql = "select distinct users.userID from users";
+				$sql = "select distinct users.id from users";
 
-				if (isset($fields['userID'])) { $options[] = "userID=$fields[userID]"; }
+				if (isset($fields['id'])) { $options[] = "users.id=$fields[id]"; }
 				if (isset($fields['username'])) { $options[] = "username='$fields[username]'"; }
 				if (isset($fields['authenticationMethod'])) { $options[] = "authenticationMethod='$fields[authenticationMethod]'"; }
 				if (isset($fields['firstname'])) { $options[] = "firstname='$fields[firstname]'"; }
@@ -26,16 +26,16 @@
 				# To search on Role, you have to join the userRoles table
 				if (isset($fields['role']))
 				{
-					$sql = " left join userRoles using (userID)";
+					$sql = " left join user_roles on users.id=user_id left join roles on role_id=roles.id";
 					$options[] = "role='$fields[role]'";
 				}
 
 				$where = " where ".implode(" and ",$options);
 				$sql.= "$where order by $sort";
 			}
-			else { $sql = "select userID from users order by $sort"; }
+			else { $sql = "select id from users order by $sort"; }
 
-			foreach($PDO->query($sql) as $row) { $this->list[] = $row['userID']; }
+			foreach($PDO->query($sql) as $row) { $this->list[] = $row['id']; }
 		}
 
 		protected function loadCurrent() { return new User(current($this->list)); }

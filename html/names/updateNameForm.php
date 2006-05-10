@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	nameID
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,53 +10,69 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/Name.inc");
-	$name = new Name($_GET['nameID']);
+	$name = new Name($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updateName.php">
 	<fieldset><legend>Name</legend>
-		<input name="nameID" type="hidden" value="<?php echo $name->getNameID(); ?>" />
+		<input name="id" type="hidden" value="<?php echo $name->getId(); ?>" />
 
 		<table>
-		<tr><td><label for="directionCode">Dir</label></td>
-			<td><label for="name">Name</label></td>
-			<td><label for="suffixAbbreviation">Suff</label></td>
-			<td><label for="postDirectionCode">Dir</label></td>
+		<tr><td><label for="town_id">Town</label></td>
+			<td colspan="3">
+				<select name="town_id" id="town_id">
+				<?php
+					require_once(APPLICATION_HOME."/classes/TownList.inc");
+					$townList = new TownList();
+					$townList->find();
+					foreach($townList as $town)
+					{
+						if ($name->getTown_id() != $town->getId()) { echo "<option value=\"{$town->getId()}\">{$town->getName()}</option>"; }
+						else { echo "<option value=\"{$town->getId()}\" selected=\"selected\">{$town->getName()}</option>"; }
+					}
+				?>
+				</select>
+			</td>
 		</tr>
-		<tr><td><select name="directionCode" id="directionCode"><option></option>
+		<tr><td><label for="direction_id">Dir</label></td>
+			<td><label for="name">Name</label></td>
+			<td><label for="suffix_id">Suff</label></td>
+			<td><label for="postDirection_id">Dir</label></td>
+		</tr>
+		<tr><td><select name="direction_id" id="direction_id"><option></option>
 				<?php
 					$directionList = new DirectionList();
 					$directionList->find();
 					foreach($directionList as $direction)
 					{
-						if ($name->getDirectionCode() != $direction->getDirectionCode()) { echo "<option>{$direction->getDirectionCode()}</option>"; }
-						else { echo "<option selected=\"selected\">{$direction->getDirectionCode()}</option>"; }
+						if ($name->getDirection_id() != $direction->getId()) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
+						else { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
 					}
 				?>
 				</select>
-			</td>
+			</td>88
 			<td><input name="name" id="name" value="<?php echo $name->getName(); ?>" /></td>
-			<td><select name="suffixAbbreviation" id="suffixAbbreviation"><option></option>
+			<td><select name="suffix_id" id="suffix_id"><option></option>
 				<?php
 					$suffixList = new SuffixList();
 					$suffixList->find();
 					foreach($suffixList as $suffix)
 					{
-						if ($name->getSuffixAbbreviation() != $suffix->getSuffixAbbreviation()) { echo "<option>{$suffix->getSuffixAbbreviation()}</option>"; }
-						else { echo "<option selected=\"selected\">{$suffix->getSuffixAbbreviation()}</option>"; }
+						if ($name->getSuffix_id() != $suffix->getId()) { echo "<option value=\"{$suffix->getId()}\">{$suffix->getSuffix()}</option>"; }
+						else { echo "<option value=\"{$suffix->getId()}\" selected=\"selected\">{$suffix->getSuffix()}</option>"; }
 					}
 				?>
 				</select>
 			</td>
-			<td><select name="postDirectionCode" id="postDirectionCode"><option></option>
+			<td><select name="postDirection_id" id="postDirection_id"><option></option>
 				<?php
 					# This reuses the directionList we created for the $name->directionCode
 					foreach($directionList as $direction)
 					{
-						if ($name->getPostDirectionCode() != $direction->getDirectionCode()) { echo "<option>{$direction->getDirectionCode()}</option>"; }
-						else { echo "<option selected=\"selected\">{$direction->getDirectionCode()}</option>"; }
+						if ($name->getPostDirection_id() != $direction->getId()) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
+						else { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
 					}
 				?>
 				</select>

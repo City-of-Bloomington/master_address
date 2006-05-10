@@ -1,24 +1,24 @@
 <?php
 	class DistrictType
 	{
-		private $districtTypeID;
+		private $id;
 		private $type;
 
 
 
-		public function __construct($districtTypeID=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($districtTypeID)
+			if ($id)
 			{
-				$sql = "select * from districtTypes where districtTypeID=$districtTypeID";
+				$sql = "select * from districtTypes where id=$id";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
 					{
-						$this->districtTypeID = $districtTypeID;
+						$this->id = $id;
 						$this->type = $row['type'];
 
 						$result->closeCursor();
@@ -37,32 +37,37 @@
 
 		public function save()
 		{
-			# Check for required properties here.  Throw an exception if anything is missing.
+			# Check for required fields here.  Throw an exception if anything is missing.
 			if (!$this->type) { throw new Exception("missingRequiredFields"); }
 
-			if ($this->districtTypeID) { $this->update(); }
-			else { $this->insert(); }
+			$fields = array();
+			$fields[] = "type='{$this->type}'";
+			$fields = implode(",",$fields);
+
+
+			if ($this->id) { $this->update($fields); }
+			else { $this->insert($fields); }
 		}
 
-		private function update()
+		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update districtTypes set type='{$this->type}' where districtTypeID={$this->districtTypeID}";
+			$sql = "update districtTypes set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert()
+		private function insert($fields)
 		{
 			global $PDO;
 
-			$sql = "insert districtTypes set type='{$this->type}'";
+			$sql = "insert districtTypes set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->districtTypeID = $PDO->lastInsertID();
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getDistrictTypeID() { return $this->districtTypeID; }
+		public function getId() { return $this->id; }
 		public function getType() { return $this->type; }
 
 

@@ -1,12 +1,12 @@
 <?php
 /*
-	$_POST variables:	jurisdictionID
+	$_POST variables:	id
 						name
 */
 	verifyUser("Administrator");
 
 	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
-	$jurisdiction = new Jurisdiction($_POST['jurisdictionID']);
+	$jurisdiction = new Jurisdiction($_POST['id']);
 	$jurisdiction->setName($_POST['name']);
 
 	try
@@ -17,6 +17,6 @@
 	catch (Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateJurisdictionForm.php?jurisdictionID=$_POST[jurisdictionID]");
+		Header("Location: updateJurisdictionForm.php?id=$_POST[id]");
 	}
 ?>

@@ -17,8 +17,12 @@
 			{
 				echo "<tr>";
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateDirectionForm.php?directionCode={$direction->getDirectionCode()}'\">Edit</button></td>"; }
-				echo "<td>{$direction->getDirection()}</td></tr>";
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateDirectionForm.php?id={$direction->getId()}'\">Edit</button></td>"; }
+				echo "
+					<td>{$direction->getCode()}</td>
+					<td>{$direction->getDirection()}</td>
+				</tr>
+				";
 			}
 		?>
 		</table>

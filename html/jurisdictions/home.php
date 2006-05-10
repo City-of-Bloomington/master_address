@@ -17,7 +17,7 @@
 			{
 				echo "<tr>";
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateJurisdictionForm.php?jurisdictionID={$jurisdiction->getJurisdictionID()}'\">Edit</button></td>"; }
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateJurisdictionForm.php?id={$jurisdiction->getId()}'\">Edit</button></td>"; }
 				echo "<td>{$jurisdiction->getName()}</td></tr>";
 			}
 		?>

@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	platID
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,41 +10,41 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/Plat.inc");
-	$plat = new Plat($_GET['platID']);
+	$plat = new Plat($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updatePlat.php">
 	<fieldset><legend>Plat</legend>
-		<input name="platID" type="hidden" value="<?php echo $_GET['platID']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
 		<tr><td><label for="name">Name</label></td>
 			<td><input name="name" id="name" value="<?php echo $plat->getName(); ?>" /></td></tr>
-		<tr><td><label for="townshipID">Township</label></td>
-			<td><select name="townshipID" id="townshipID">
+		<tr><td><label for="township_id">Township</label></td>
+			<td><select name="township_id" id="township_id">
 				<?php
 					$townships = new TownshipList();
 					$townships->find();
 					foreach($townships as $township)
 					{
-						if ($plat->getTownshipID() != $township->getTownshipID()) { echo "<option value=\"{$township->getTownshipID()}\">{$township->getName()}</option>"; }
-						else { echo "<option value=\"{$township->getTownshipID()}\" selected=\"selected\">{$township->getName()}</option>"; }
+						if ($plat->getTownship_id() != $township->getId()) { echo "<option value=\"{$township->getId()}\">{$township->getName()}</option>"; }
+						else { echo "<option value=\"{$township->getId()}\" selected=\"selected\">{$township->getName()}</option>"; }
 					}
 				?>
 				</select>
 			</td>
 		</tr>
-		<tr><td><label for="type">Plat Type</label></td>
-			<td><select name="type" id="type">
+		<tr><td><label for="platType_id">Plat Type</label></td>
+			<td><select name="platType_id" id="platType_id">
 				<?php
 					$platTypes = new PlatTypeList();
 					$platTypes->find();
 					foreach($platTypes as $platType)
 					{
-						if ($plat->getType() != $platType->getType()) { echo "<option value=\"{$platType->getType()}\">{$platType->getDescription()}</option>"; }
-						else { echo "<option value=\"{$platType->getType()}\" selected=\"selected\">{$platType->getDescription()}</option>"; }
+						if ($plat->getPlatType_id() != $platType->getId()) { echo "<option value=\"{$platType->getId()}\">{$platType->getType()}</option>"; }
+						else { echo "<option value=\"{$platType->getId()}\" selected=\"selected\">{$platType->getType()}</option>"; }
 					}
 				?>
 				</select>

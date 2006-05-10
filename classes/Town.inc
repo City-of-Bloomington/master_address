@@ -1,26 +1,31 @@
 <?php
 	class Town
 	{
-		private $townID;
+		private $id;
 		private $name;
 
 
 
-		public function __construct($townID=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($townID)
+			if ($id)
 			{
-				$sql = "select * from towns where townID=$townID";
+				$sql = "select * from towns where id=$id";
 				$result = $PDO->query($sql);
-				if ($row = $result->fetch())
+				if ($result)
 				{
-					$this->townID = $townID;
-					$this->name = $row['name'];
-					$result->closeCursor();
+					if ($row = $result->fetch())
+					{
+						$this->id = $id;
+						$this->name = $row['name'];
+
+						$result->closeCursor();
+					}
+					else { throw new Exception($sql); }
 				}
-				else { throw new Exception($sql); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -32,35 +37,43 @@
 
 		public function save()
 		{
-			if (!$this->name) { throw new Exception("missingRequiredFields"); }
+			# Check for required fields here.  Throw an exception if anything is missing.
 
-			if ($this->townID) { $this->update(); }
-			else { $this->insert(); }
+
+			# This generates generic SQL that should work right away.
+			# You can (and maybe should) replace this $fields code with your own custom SQL
+			# for each property of this class,
+			$fields = array();
+			$fields[] = "name='{$this->name}'";
+			$fields = implode(",",$fields);
+
+
+			if ($this->id) { $this->update($fields); }
+			else { $this->insert($fields); }
 		}
 
-		private function update()
+		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update towns set name='{$this->name}' where townID={$this->townID}";
-			$PDO->exec($sql);
+			$sql = "update towns set $fields where id={$this->id}";
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert()
+		private function insert($fields)
 		{
 			global $PDO;
 
-			$sql = "insert towns set name='{$this->name}'";
-			$PDO->exec($sql);
-			$this->townID = $PDO->lastInsertID();
+			$sql = "insert towns set $fields";
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getTownID() { return $this->townID; }
+		public function getId() { return $this->id; }
 		public function getName() { return $this->name; }
 
 
 		public function setName($string) { $this->name = sanitizeString($string); }
-
 	}
 ?>

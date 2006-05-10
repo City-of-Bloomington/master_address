@@ -1,25 +1,28 @@
 <?php
 	class Annexation
 	{
+		private $id;
 		private $ordinanceNumber;
 		private $name;
 
 
 
-		public function __construct($ordinanceNumber=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($ordinanceNumber)
+			if ($id)
 			{
-				$sql = "select * from annexations where ordinanceNumber='$ordinanceNumber'";
+				$sql = "select * from annexations where id=$id";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
 					{
-						$this->ordinanceNumber = $ordinanceNumber;
-						$this->name = $row['name'];
+						$this->id = $id;
+						$this->ordinanceNumber = $row['ordinanceNumber'];
+						if ($row['name']) { $this->name = $row['name']; }
+
 
 						$result->closeCursor();
 					}
@@ -38,30 +41,38 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->ordinanceNumber || !$this->name) { throw new Exception("missingRequiredFields"); }
+			if (!$this->ordinanceNumber) { throw new Exception("missingRequiredFields"); }
 
-			if ($this->ordinanceNumber) { $this->update(); }
-			else { $this->insert(); }
+
+			$fields = array();
+			$fields[] = "ordinanceNumber='{$this->ordinanceNumber}'";
+			if ($this->name) { $fields[] = "name='{$this->name}'"; } else { $fields[] = "name=null"; }
+			$fields = implode(",",$fields);
+
+
+			if ($this->id) { $this->update($fields); }
+			else { $this->insert($fields); }
 		}
 
-		private function update()
+		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update annexations set name='{$this->name}' where ordinanceNumber='{$this->ordinanceNumber}'";
+			$sql = "update annexations set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert()
+		private function insert($fields)
 		{
 			global $PDO;
 
-			$sql = "insert annexations set values('{$this->ordinanceNumber}','{$this->name}')";
+			$sql = "insert annexations set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->ordinanceNumber = $PDO->lastInsertID();
+			$this->id = $PDO->lastInsertID();
 		}
 
 
+		public function getId() { return $this->id; }
 		public function getOrdinanceNumber() { return $this->ordinanceNumber; }
 		public function getName() { return $this->name; }
 

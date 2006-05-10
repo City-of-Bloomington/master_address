@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	unitType
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,16 +10,18 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/UnitType.inc");
-	$unitType = new UnitType($_GET['unitType']);
+	$unitType = new UnitType($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updateUnitType.php">
 	<fieldset><legend>UnitType</legend>
-		<input name="unitType" type="hidden" value="<?php echo $_GET['unitType']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
+		<tr><td><label for="type">Type</label></td>
+			<td><input name="type" id="type" value="<?php echo $unitType->getType(); ?>" /></td></tr>
 		<tr><td><label for="description">Description</label></td>
 			<td><input name="description" id="description" value="<?php echo $unitType->getDescription(); ?>" /></td></tr>
 		</table>

@@ -5,21 +5,22 @@
 	class AnnexationList extends PDOResultIterator
 	{
 
-		public function find($fields=null,$sort="ordinanceNumber")
+		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
 
 			$options = array();
+			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['ordinanceNumber'])) { $options[] = "ordinanceNumber='$fields[ordinanceNumber]'"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select ordinanceNumber from annexations $where order by $sort";
+			$sql = "select id from annexations $where order by $sort";
 
 			$result = $PDO->query($sql);
 			if ($result)
 			{
-				foreach($result as $row) { $this->list[] = $row['ordinanceNumber']; }
+				foreach($result as $row) { $this->list[] = $row['id']; }
 			}
 			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}

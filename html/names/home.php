@@ -15,13 +15,21 @@
 			$nameList->find();
 			foreach($nameList as $name)
 			{
+				$fullname = "";
+				if ($name->getDirection_id()) { $fullname .= $name->getDirection()->getCode(); }
+				$fullname.=" {$name->getName()} ";
+				if ($name->getSuffix_id()) { $fullname .= $name->getSuffix()->getSuffix(); }
+				if ($name->getPostDirection_id()) { $fullname .= " ".$name->getPostDirection()->getCode(); }
+
+				$town = $name->getTown_id() ? $name->getTown()->getName() : "";
+
 				echo "<tr>";
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateNameForm.php?nameID={$name->getNameID()}'\">Edit</button></td>"; }
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateNameForm.php?id={$name->getId()}'\">Edit</button></td>"; }
 				echo "
-					<td>{$name->getDirectionCode()} {$name->getName()} {$name->getSuffixAbbreviation()} {$name->getPostDirectionCode()}</td>
+					<td>$fullname</td>
 					<td>{$name->getStartDate()} - {$name->getEndDate()}</td>
-					<td>{$name->getTown()->getName()}</td>
+					<td>$town</td>
 				</tr>
 				";
 			}

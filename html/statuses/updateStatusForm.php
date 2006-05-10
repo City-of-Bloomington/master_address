@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	statusCode
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -9,19 +9,19 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	require_once(APPLICATION_HOME."/classes/StatusCode.inc");
-	$statusCode = new StatusCode($_GET['statusCode']);
+	require_once(APPLICATION_HOME."/classes/Status.inc");
+	$status = new Status($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
-	<form method="post" action="updateStatusCode.php">
-	<fieldset><legend>StatusCode</legend>
-		<input name="statusCode" type="hidden" value="<?php echo $_GET['statusCode']; ?>" />
+	<form method="post" action="updateStatus.php">
+	<fieldset><legend>Status</legend>
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
 		<tr><td><label for="status">Status</label></td>
-			<td><input name="status" id="status" value="<?php echo $statusCode->getStatus(); ?>" /></td></tr>
+			<td><input name="status" id="status" value="<?php echo $status->getStatus(); ?>" /></td></tr>
 		</table>
 
 		<button type="submit" class="submit">Submit</button>

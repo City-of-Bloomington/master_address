@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	townID
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,14 +10,14 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/Town.inc");
-	$town = new Town($_GET['townID']);
+	$town = new Town($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updateTown.php">
 	<fieldset><legend>Town</legend>
-		<input name="townID" type="hidden" value="<?php echo $_GET['townID']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
 		<tr><td><label for="name">Name</label></td>

@@ -21,8 +21,8 @@
 			foreach($userList as $user)
 			{
 				echo "
-				<tr><td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateUserForm.php?userID={$user->getUserID()}'\">Edit</button>
-						<button type=\"button\" class=\"deleteSmall\" onclick=\"deleteConfirmation('deleteUser.php?userID={$user->getUserID()}');\">Delete</button>
+				<tr><td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateUserForm.php?id={$user->getId()}'\">Edit</button>
+						<button type=\"button\" class=\"deleteSmall\" onclick=\"deleteConfirmation('deleteUser.php?id={$user->getId()}');\">Delete</button>
 					</td>
 					<td>{$user->getUsername()}</td>
 					<td>{$user->getFirstname()} {$user->getLastname()}</td>

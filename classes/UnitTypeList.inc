@@ -5,21 +5,22 @@
 	class UnitTypeList extends PDOResultIterator
 	{
 
-		public function find($fields=null,$sort="unitType")
+		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
 
 			$options = array();
-			if (isset($fields['unitType'])) { $options[] = "unitType='$fields[unitType]'"; }
+			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
+			if (isset($fields['type'])) { $options[] = "type='$fields[type]'"; }
 			if (isset($fields['description'])) { $options[] = "description='$fields[description]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select unitType from unitTypes $where order by $sort";
+			$sql = "select id from unitTypes $where order by $sort";
 
 			$result = $PDO->query($sql);
 			if ($result)
 			{
-				foreach($result as $row) { $this->list[] = $row['unitType']; }
+				foreach($result as $row) { $this->list[] = $row['id']; }
 			}
 			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}

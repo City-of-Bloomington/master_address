@@ -1,24 +1,24 @@
 <?php
 	class BuildingType
 	{
-		private $typeID;
+		private $id;
 		private $description;
 
 
 
-		public function __construct($typeID=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($typeID)
+			if ($id)
 			{
-				$sql = "select * from buildingTypes where typeID=$typeID";
+				$sql = "select * from buildingTypes where id=$id";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
 					{
-						$this->typeID = $typeID;
+						$this->id = $id;
 						$this->description = $row['description'];
 
 						$result->closeCursor();
@@ -40,29 +40,38 @@
 			# Check for required fields here.  Throw an exception if anything is missing.
 			if (!$this->description) { throw new Exception("missingRequiredFields"); }
 
-			if ($this->typeID) { $this->update(); }
-			else { $this->insert(); }
+
+			# This generates generic SQL that should work right away.
+			# You can (and maybe should) replace this $fields code with your own custom SQL
+			# for each property of this class,
+			$fields = array();
+			$fields[] = "description='{$this->description}'";
+			$fields = implode(",",$fields);
+
+
+			if ($this->id) { $this->update($fields); }
+			else { $this->insert($fields); }
 		}
 
-		private function update()
+		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update buildingTypes set description='{$this->description}' where typeID={$this->typeID}";
+			$sql = "update buildingTypes set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert()
+		private function insert($fields)
 		{
 			global $PDO;
 
-			$sql = "insert buildingTypes set description='{$this->description}'";
+			$sql = "insert buildingTypes set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->typeID = $PDO->lastInsertID();
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getTypeID() { return $this->typeID; }
+		public function getId() { return $this->id; }
 		public function getDescription() { return $this->description; }
 
 

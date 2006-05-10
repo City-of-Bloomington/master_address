@@ -1,6 +1,6 @@
 <?php
 /*
-	$_POST variables:	townshipID
+	$_POST variables:	id
 						name
 						abbreviation
 						quarterCode
@@ -8,7 +8,7 @@
 	verifyUser("Administrator");
 
 	require_once(APPLICATION_HOME."/classes/Township.inc");
-	$township = new Township($_POST['townshipID']);
+	$township = new Township($_POST['id']);
 	$township->setName($_POST['name']);
 	$township->setAbbreviation($_POST['abbreviation']);
 	$township->setQuarterCode($_POST['quarterCode']);
@@ -21,6 +21,6 @@
 	catch (Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateTownshipForm.php?townshipID=$_POST[townshipID]");
+		Header("Location: updateTownshipForm.php?id=$_POST[id]");
 	}
 ?>

@@ -1,13 +1,12 @@
 <?php
 	require_once(APPLICATION_HOME."/classes/Township.inc");
 	require_once(APPLICATION_HOME."/classes/PlatType.inc");
-
 	class Plat
 	{
-		private $platID;
+		private $id;
 		private $name;
-		private $townshipID;
-		private $type;
+		private $township_id;
+		private $platType_id;
 		private $cabinet;
 		private $envelope;
 		private $notes;
@@ -17,13 +16,13 @@
 
 
 
-		public function __construct($platID=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($platID)
+			if ($id)
 			{
-				$sql = "select * from plats where platID=$platID";
+				$sql = "select * from plats where id=$id";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
@@ -51,20 +50,20 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->name || !$this->townshipID || !$this->type) { throw new Exception("missingRequiredFields"); }
+			if (!$this->name) { throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();
 			$fields[] = "name='{$this->name}'";
-			$fields[] = "townshipID={$this->townshipID}";
-			$fields[] = "type='{$this->type}'";
+			if ($this->township_id) { $fields[] = "township_id={$this->township_id}"; } else { $fields[] = "township_id=null"; }
+			if ($this->platType_id) { $fields[] = "platType_id={$this->platType_id}"; } else { $fields[] = "platType_id=null"; }
 			if ($this->cabinet) { $fields[] = "cabinet='{$this->cabinet}'"; } else { $fields[] = "cabinet=null"; }
 			if ($this->envelope) { $fields[] = "envelope='{$this->envelope}'"; } else { $fields[] = "envelope=null"; }
 			if ($this->notes) { $fields[] = "notes='{$this->notes}'"; } else { $fields[] = "notes=null"; }
 			$fields = implode(",",$fields);
 
 
-			if ($this->platID) { $this->update($fields); }
+			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
 		}
 
@@ -72,7 +71,7 @@
 		{
 			global $PDO;
 
-			$sql = "update plats set $fields where platID={$this->platID}";
+			$sql = "update plats set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
@@ -82,42 +81,43 @@
 
 			$sql = "insert plats set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->platID = $PDO->lastInsertID();
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getPlatID() { return $this->platID; }
+		public function getId() { return $this->id; }
 		public function getName() { return $this->name; }
-		public function getTownshipID() { return $this->townshipID; }
-		public function getType() { return $this->type; }
+		public function getTownship_id() { return $this->township_id; }
+		public function getPlatType_id() { return $this->platType_id; }
 		public function getCabinet() { return $this->cabinet; }
 		public function getEnvelope() { return $this->envelope; }
 		public function getNotes() { return $this->notes; }
+
 		public function getTownship()
 		{
-			if (!$this->township) { $this->township = new Township($this->townshipID); }
-			return $this->township;
+			if ($this->township_id)
+			{
+				if (!$this->township) { $this->township = new Township($this->township_id); }
+				return $this->township;
+			}
+			else return null;
 		}
 		public function getPlatType()
 		{
-			if (!$this->platType) { $this->platType = new PlatType($this->type); }
-			return $this->platType;
+			if ($this->platType_id)
+			{
+				if (!$this->platType) { $this->platType = new PlatType($this->platType_id); }
+				return $this->platType;
+			}
+			else return null;
 		}
 
 
-		public function setName($string) { $this->name = $string; }
-		public function setCabinet($string) { $this->cabinet = $string; }
-		public function setEnvelope($string) { $this->envelope = $string; }
-		public function setNotes($string) { $this->notes = $string; }
-		public function setTownshipID($townshipID)
-		{
-			$this->township = new Township($townshipID);
-			$this->townshipID = $townshipID;
-		}
-		public function setType($type)
-		{
-			$this->platType = new PlatType($type);
-			$this->type = $type;
-		}
+		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
+		public function setPlatType_id($int) { $this->platType = new PlatType($int); $this->platType_id = $int; }
+		public function setCabinet($string) { $this->cabinet = sanitizeString($string); }
+		public function setEnvelope($string) { $this->envelope = sanitizeString($string); }
+		public function setNotes($string) { $this->notes = sanitizeString($string); }
 	}
 ?>

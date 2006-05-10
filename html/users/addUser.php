@@ -6,6 +6,7 @@
 
 						# May be optional if LDAP is used
 						password
+
 						firstname
 						lastname
 						department

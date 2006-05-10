@@ -5,21 +5,21 @@
 	class DistrictTypeList extends PDOResultIterator
 	{
 
-		public function find($fields=null,$sort="districtTypeID")
+		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
 
 			$options = array();
-			if (isset($fields['districtTypeID'])) { $options[] = "districtTypeID=$fields[districtTypeID]"; }
+			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['type'])) { $options[] = "type='$fields[type]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select districtTypeID from districtTypes $where order by $sort";
+			$sql = "select id from districtTypes $where order by $sort";
 
 			$result = $PDO->query($sql);
 			if ($result)
 			{
-				foreach($result as $row) { $this->list[] = $row['districtTypeID']; }
+				foreach($result as $row) { $this->list[] = $row['id']; }
 			}
 			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}

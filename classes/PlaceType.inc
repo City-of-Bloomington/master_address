@@ -1,28 +1,27 @@
 <?php
 	class PlaceType
 	{
-		private $placeTypeID;
+		private $id;
 		private $type;
 		private $description;
 
 
 
-		public function __construct($placeTypeID=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($placeTypeID)
+			if ($id)
 			{
-				$sql = "select * from placeTypes where placeTypeID=$placeTypeID";
+				$sql = "select * from placeTypes where id=$id";
 				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
 					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
-						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
+						$this->id = $id;
+						$this->type = $row['type'];
+						$this->description = $row['description'];
 
 						$result->closeCursor();
 					}
@@ -41,16 +40,16 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->type || !$this->description) { throw new Exception("missingRequiredFields"); }
+			if (!$this->type) { throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();
 			$fields[] = "type='{$this->type}'";
-			$fields[] = "description='{$this->description}'";
+			if ($this->description) { $fields[] = "description='{$this->description}'"; } else { $fields[] = "description=null"; }
 			$fields = implode(",",$fields);
 
 
-			if ($this->placeTypeID) { $this->update($fields); }
+			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
 		}
 
@@ -58,7 +57,7 @@
 		{
 			global $PDO;
 
-			$sql = "update placeTypes set $fields where placeTypeID={$this->placeTypeID}";
+			$sql = "update placeTypes set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
@@ -68,11 +67,11 @@
 
 			$sql = "insert placeTypes set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->placeTypeID = $PDO->lastInsertID();
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getPlaceTypeID() { return $this->placeTypeID; }
+		public function getId() { return $this->id; }
 		public function getType() { return $this->type; }
 		public function getDescription() { return $this->description; }
 

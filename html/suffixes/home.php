@@ -17,7 +17,7 @@
 			{
 				echo "<tr>";
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateSuffixForm.php?suffix={$suffix->getSuffix()}'\">Edit</button></td>"; }
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateSuffixForm.php?id={$suffix->getId()}'\">Edit</button></td>"; }
 				echo "
 					<td>{$suffix->getSuffix()}</td>
 					<td>{$suffix->getDescription()}</td>

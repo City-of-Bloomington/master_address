@@ -1,9 +1,9 @@
 <?php
 /*
-	$_POST variables:	platID
+	$_POST variables:	id
 						name
-						townshipID
-						type
+						township_id
+						platType_id
 						cabinet
 						envelope
 						notes
@@ -13,10 +13,10 @@
 	require_once(APPLICATION_HOME."/classes/Plat.inc");
 	try
 	{
-		$plat = new Plat($_POST['platID']);
+		$plat = new Plat($_POST['id']);
 		$plat->setName($_POST['name']);
-		$plat->setTownshipID($_POST['townshipID']);
-		$plat->setType($_POST['type']);
+		$plat->setTownship_id($_POST['township_id']);
+		$plat->setPlatType_id($_POST['platType_id']);
 		$plat->setCabinet($_POST['cabinet']);
 		$plat->setEnvelope($_POST['envelope']);
 		$plat->setNotes($_POST['notes']);
@@ -27,6 +27,6 @@
 	catch (Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updatePlatForm.php?platID=$_POST[platID]");
+		Header("Location: updatePlatForm.php?id=$_POST[id]");
 	}
 ?>

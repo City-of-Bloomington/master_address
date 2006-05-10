@@ -15,13 +15,16 @@
 			$platList->find();
 			foreach($platList as $plat)
 			{
+				$township = $plat->getTownship_id() ? $plat->getTownship()->getName() : "";
+				$type = $plat->getPlatType_id() ? $plat->getPlatType()->getType() : "";
+
 				echo "<tr>";
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updatePlatForm.php?platID={$plat->getPlatID()}'\">Edit</button></td>"; }
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updatePlatForm.php?id={$plat->getId()}'\">Edit</button></td>"; }
 				echo "
 					<td>{$plat->getName()}</td>
-					<td>{$plat->getTownship()->getAbbreviation()}</td>
-					<td>{$plat->getPlatType()->getDescription()}</td>
+					<td>$township</td>
+					<td>$type</td>
 					<td>{$plat->getCabinet()}</td>
 					<td>{$plat->getEnvelope()}</td>
 				</tr>

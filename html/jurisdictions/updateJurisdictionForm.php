@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	jurisdictionID
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,14 +10,14 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
-	$jurisdiction = new Jurisdiction($_GET['jurisdictionID']);
+	$jurisdiction = new Jurisdiction($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updateJurisdiction.php">
 	<fieldset><legend>Jurisdiction</legend>
-		<input name="jurisdictionID" type="hidden" value="<?php echo $_GET['jurisdictionID']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
 		<tr><td><label for="name">Name</label></td>

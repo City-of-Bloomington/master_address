@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	directionCode
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -17,9 +17,11 @@
 
 	<form method="post" action="updateDirection.php">
 	<fieldset><legend>Direction</legend>
-		<input name="directionCode" type="hidden" value="<?php echo $_GET['directionCode']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
+		<tr><td><label for="code">Code</label></td>
+			<td><input name="code" id="code" size="1" maxlength="1" value="<?php echo $direction->getCode(); ?>" /></td></tr>
 		<tr><td><label for="direction">Direction</label></td>
 			<td><input name="direction" id="direction" value="<?php echo $direction->getDirection(); ?>" /></td></tr>
 		</table>

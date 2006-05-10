@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	districtTypeID
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,14 +10,14 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/DistrictType.inc");
-	$districtType = new DistrictType($_GET['districtTypeID']);
+	$districtType = new DistrictType($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updateDistrictType.php">
 	<fieldset><legend>DistrictType</legend>
-		<input name="districtTypeID" type="hidden" value="<?php echo $_GET['districtTypeID']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
 		<tr><td><label for="type">Type</label></td>

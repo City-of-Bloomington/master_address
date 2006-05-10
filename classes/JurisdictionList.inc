@@ -5,18 +5,23 @@
 	class JurisdictionList extends PDOResultIterator
 	{
 
-		public function find($fields=null,$sort="jurisdictionID")
+		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
 
 			$options = array();
-			if (isset($fields['jurisdictionID'])) { $options[] = "jurisdictionID=$fields[jurisdictionID]"; }
+			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select jurisdictionID from jurisdictions $where order by $sort";
+			$sql = "select id from jurisdictions $where order by $sort";
 
-			foreach($PDO->query($sql) as $row) { $this->list[] = $row['jurisdictionID']; }
+			$result = $PDO->query($sql);
+			if ($result)
+			{
+				foreach($result as $row) { $this->list[] = $row['id']; }
+			}
+			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 

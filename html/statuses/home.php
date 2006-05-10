@@ -6,19 +6,19 @@
 ?>
 <div id="mainContent">
 	<div class="interfaceBox">
-		<div class="titleBar">StatusCodes</div>
+		<div class="titleBar">Status Codes</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/StatusCodeList.inc");
+			require_once(APPLICATION_HOME."/classes/StatusList.inc");
 
-			$statusCodeList = new StatusCodeList();
-			$statusCodeList->find();
-			foreach($statusCodeList as $statusCode)
+			$statusList = new StatusList();
+			$statusList->find();
+			foreach($statusList as $status)
 			{
 				echo "<tr>";
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateStatusCodeForm.php?statusCode={$statusCode->getStatusCode()}'\">Edit</button></td>"; }
-				echo "<td>{$statusCode->getStatus()}</td></tr>";
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateStatusForm.php?id={$status->getId()}'\">Edit</button></td>"; }
+				echo "<td>{$status->getStatus()}</td></tr>";
 			}
 		?>
 		</table>

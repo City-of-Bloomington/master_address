@@ -1,6 +1,6 @@
 <?php
 /*
-	$_GET variables:	typeID
+	$_GET variables:	id
 */
 	verifyUser("Administrator");
 
@@ -10,14 +10,14 @@
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
 	require_once(APPLICATION_HOME."/classes/BuildingType.inc");
-	$buildingType = new BuildingType($_GET['typeID']);
+	$buildingType = new BuildingType($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
 	<form method="post" action="updateBuildingType.php">
 	<fieldset><legend>BuildingType</legend>
-		<input name="typeID" type="hidden" value="<?php echo $_GET['typeID']; ?>" />
+		<input name="id" type="hidden" value="<?php echo $_GET['id']; ?>" />
 
 		<table>
 		<tr><td><label for="description">Description</label></td>

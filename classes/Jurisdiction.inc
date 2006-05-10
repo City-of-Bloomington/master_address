@@ -1,30 +1,31 @@
 <?php
 	class Jurisdiction
 	{
-		private $jurisdictionID;
+		private $id;
 		private $name;
 
 
 
-		public function __construct($jurisdictionID=null)
+		public function __construct($id=null)
 		{
 			global $PDO;
 
-			if ($jurisdictionID)
+			if ($id)
 			{
-				$sql = "select * from jurisdictions where jurisdictionID=$jurisdictionID";
+				$sql = "select * from jurisdictions where id=$id";
 				$result = $PDO->query($sql);
-				if ($row = $result->fetch())
+				if ($result)
 				{
-					# This will load all fields in the table as properties of this class.
-					# You may want to replace this with, or add your own extra, custom loading
-					$this->jurisdictionID = $jurisdictionID;
-					$this->name = $row['name'];
+					if ($row = $result->fetch())
+					{
+						$this->id = $id;
+						$this->name = $row['name'];
 
-
-					$result->closeCursor();
+						$result->closeCursor();
+					}
+					else { throw new Exception($sql); }
 				}
-				else { throw new Exception($sql); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -39,34 +40,38 @@
 			# Check for required fields here.  Throw an exception if anything is missing.
 			if (!$this->name) { throw new Exception("missingRequiredFields"); }
 
-			if ($this->jurisdictionID) { $this->update(); }
-			else { $this->insert(); }
+
+			$fields = array();
+			$fields[] = "name='{$this->name}'";
+			$fields = implode(",",$fields);
+
+
+			if ($this->id) { $this->update($fields); }
+			else { $this->insert($fields); }
 		}
 
-		private function update()
+		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update jurisdictions set name='{$this->name}' where jurisdictionID={$this->jurisdictionID}";
+			$sql = "update jurisdictions set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert()
+		private function insert($fields)
 		{
 			global $PDO;
 
-			$sql = "insert jurisdictions set name='{$this->name}'";
+			$sql = "insert jurisdictions set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->jurisdictionID = $PDO->lastInsertID();
+			$this->id = $PDO->lastInsertID();
 		}
 
 
-		public function getJurisdictionID() { return $this->jurisdictionID; }
+		public function getId() { return $this->id; }
 		public function getName() { return $this->name; }
 
 
-		public function setJurisdictionID($int) { $this->jurisdictionID = $int; }
 		public function setName($string) { $this->name = sanitizeString($string); }
-
 	}
 ?>
