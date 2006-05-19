@@ -20,6 +20,7 @@
 					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateTownForm.php?id={$town->getId()}'\">Edit</button></td>"; }
 				echo "<td>{$town->getName()}</td></tr>";
 			}
+
 		?>
 		</table>
 	</div>

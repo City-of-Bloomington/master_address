@@ -3,6 +3,7 @@
 	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
 	require_once(APPLICATION_HOME."/classes/TrashPickupDay.inc");
 	require_once(APPLICATION_HOME."/classes/RecyclingPickupWeek.inc");
+	require_once(APPLICATION_HOME."/classes/AddressList.inc");
 	class Place
 	{
 		private $id;
@@ -17,12 +18,19 @@
 		private $section;
 		private $quarterSection;
 		private $class;
+		private $censusBlockFIPSCode;
+		private $statePlaneX;
+		private $statePlaneY;
+		private $latitude;
+		private $longitude;
 
 		private $township;
 		private $jurisdiction;
 		private $trashPickupDay;
 		private $trashLargeItemPickupDay;
 		private $recyclingPickupWeek;
+
+		private $addressList;
 
 
 		public function __construct($id=null)
@@ -74,6 +82,11 @@
 			$fields[] = $this->section ? "section='{$this->section}'" : "section=null";
 			$fields[] = $this->quarterSection ? "quarterSection='{$this->quarterSection}'" : "quarterSection=null";
 			$fields[] = $this->class ? "class='{$this->class}'" : "class=null";
+			$fields[] = $this->censusBlockFIPSCode ? "censusBlockFIPSCode='{$this->censusBlockFIPSCode}'" : "censusBlockFIPSCode=null";
+			$fields[] = $this->statePlaneX ? "statePlaneX='{$this->statePlaneX}'" : "statePlaneX=null";
+			$fields[] = $this->statePlaneY ? "statePlaneY='{$this->statePlaneY}'" : "statePlaneY=null";
+			$fields[] = $this->latitude ? "latitude='{$this->latitude}'" : "latitude=null";
+			$fields[] = $this->longitude ? "longitude='{$this->longitude}'" : "longitude=null";
 			$fields = implode(",",$fields);
 
 
@@ -111,7 +124,11 @@
 		public function getSection() { return $this->section; }
 		public function getQuarterSection() { return $this->quarterSection; }
 		public function getClass() { return $this->class; }
-
+		public function getCensusBlockFIPSCode() { return $this->censusBlockFIPSCode; }
+		public function getStatePlaneX() { return $this->statePlaneX; }
+		public function getStatePlaneY() { return $this->statePlaneY; }
+		public function getLatitude() { return $this->latitude; }
+		public function getLongitude() { return $this->longitude; }
 		public function getTownship()
 		{
 			if ($this->township_id)
@@ -157,6 +174,11 @@
 			}
 			else return null;
 		}
+		public function getAddressList()
+		{
+			if (!$this->addressList) { $this->addressList = new AddressList(array("place_id"=>$this->id)); }
+			return $this->addressList;
+		}
 
 
 
@@ -171,6 +193,10 @@
 		public function setSection($string) { $this->section = sanitizeString($string); }
 		public function setQuarterSection($string) { $this->quarterSection = ereg_replace("[^A-Z]","",strtoupper($string)); }
 		public function setClass($string) { $this->class = sanitizeString($string); }
-
+		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = sanitizeString($string); }
+		public function setStatePlaneX($int) { $this->statePlaneX = ereg_replace("[^0-9]","",$int); }
+		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
+		public function setLatitude($float) { $this->latitude = ereg_replace("[^0-9.]","",$float); }
+		public function setLongitude($float) { $this->longitude = ereg_replace("[^0-9.]","",$float); }
 	}
 ?>

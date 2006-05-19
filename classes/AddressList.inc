@@ -42,6 +42,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Address(current($this->list)); }
+		protected function loadResult($key) { return new Address($this->list[$key]); }
 	}
 ?>

@@ -25,6 +25,6 @@
 		}
 
 
-		protected function loadCurrent() { return new DistrictType(current($this->list)); }
+		protected function loadResult($key) { return new DistrictType($this->list[$key]); }
 	}
 ?>

@@ -68,6 +68,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Segment(current($this->list)); }
+		protected function loadResult($key) { return new Segment($this->list[$key]); }
 	}
 ?>

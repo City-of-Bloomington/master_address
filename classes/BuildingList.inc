@@ -30,6 +30,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Building(current($this->list)); }
+		protected function loadResult($key) { return new Building($this->list[$key]); }
 	}
 ?>

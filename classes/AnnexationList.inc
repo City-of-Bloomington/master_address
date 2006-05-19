@@ -26,6 +26,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Annexation(current($this->list)); }
+		protected function loadResult($key) { return new Annexation($this->list[$key]); }
 	}
 ?>

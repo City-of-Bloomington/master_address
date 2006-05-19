@@ -7,6 +7,7 @@
 		private $username;
 		private $password;
 		private $authenticationMethod;
+
 		private $firstname;
 		private $lastname;
 		private $department;

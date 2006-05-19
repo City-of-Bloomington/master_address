@@ -4,8 +4,6 @@
 
 	class AddressSearch extends PDOResultIterator
 	{
-		private $maxNumResults = 15;
-
 		public function find($fields=null,$sort=null)
 		{
 			global $PDO;
@@ -20,7 +18,7 @@
 			if (isset($fields['unit_id'])) { $options[] = "unit_id='$fields[unit_id]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select * from addressIndex $where limit {$this->maxNumResults}";
+			$sql = "select * from addressIndex $where";
 
 			$result = $PDO->query($sql);
 			if ($result)
@@ -31,9 +29,9 @@
 		}
 
 
-		protected function loadCurrent()
+		protected function loadResult($key)
 		{
-			$row = current($this->list);
+			$row = $this->list[$key];
 			return new AddressSearchResult($row['fullAddress'],$row['address_id'],$row['segment_id'],$row['street_id'],$row['name_id'],$row['place_id'],$row['unit_id']);
 		}
 	}

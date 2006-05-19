@@ -15,6 +15,8 @@
 		private $endDate;
 		private $notes;
 
+		private $fullname;
+
 		private $town;
 		private $direction;
 		private $suffix;
@@ -43,7 +45,8 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]);
+				}
 			}
 			else
 			{
@@ -94,6 +97,7 @@
 			$this->id = $PDO->lastInsertID();
 		}
 
+		public function __toString() { return $this->getFullname(); }
 
 		public function getId() { return $this->id; }
 		public function getTown_id() { return $this->town_id; }
@@ -104,7 +108,19 @@
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
 		public function getNotes() { return $this->notes; }
-
+		public function getFullname()
+		{
+			if (!$this->fullname)
+			{
+				$temp = array();
+				if ($this->direction_id) { $temp[] = $this->getDirection()->getCode(); }
+				$temp[] = $this->name;
+				if ($this->suffix_id) { $temp[] = $this->getSuffix()->getSuffix(); }
+				if ($this->postDirection_id) { $temp[] = $this->getPostDirection()->getCode(); }
+				$this->fullname = implode(" ",$temp);
+			}
+			return $this->fullname;
+		}
 		public function getTown()
 		{
 			if ($this->town_id)

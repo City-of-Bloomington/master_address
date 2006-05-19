@@ -13,7 +13,14 @@
 
 			$nameList = new NameList();
 			$nameList->find();
-			foreach($nameList as $name)
+
+
+			if (!isset($_GET['page'])) { $_GET['page'] = 0; }
+			$pages = $nameList->getPagination(50);
+
+
+			$iterator = new LimitIterator($nameList->getIterator(),$pages[$_GET['page']],$pages->getPageSize());
+			foreach($iterator as $i=>$name)
 			{
 				$fullname = "";
 				if ($name->getDirection_id()) { $fullname .= $name->getDirection()->getCode(); }
@@ -27,6 +34,7 @@
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
 					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateNameForm.php?id={$name->getId()}'\">Edit</button></td>"; }
 				echo "
+					<th>$i</th>
 					<td>$fullname</td>
 					<td>{$name->getStartDate()} - {$name->getEndDate()}</td>
 					<td>$town</td>
@@ -35,6 +43,8 @@
 			}
 		?>
 		</table>
+
+		<?php include(APPLICATION_HOME."/includes/pageNavigation.inc"); ?>
 	</div>
 </div>
 <?php

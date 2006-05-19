@@ -25,6 +25,6 @@
 		}
 
 
-		protected function loadCurrent() { return new BuildingType(current($this->list)); }
+		protected function loadResult($key) { return new BuildingType($this->list[$key]); }
 	}
 ?>

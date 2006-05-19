@@ -133,8 +133,16 @@ CREATE TABLE names (
 	FOREIGN KEY(direction_id) REFERENCES directions (id),
 	FOREIGN KEY(postDirection_id) REFERENCES directions (id)) engine=InnoDB;
 
+CREATE TABLE streets (
+	id int unsigned auto_increment NOT NULL,
+	notes varchar(255),
+	status_id int unsigned DEFAULT 1 NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+
 CREATE TABLE segments (
 	id int unsigned auto_increment NOT NULL,
+	street_id int unsigned,
 	tag varchar(8) NOT NULL,
 	startingNumber int unsigned NOT NULL,
 	endingNumber int unsigned NOT NULL,
@@ -166,12 +174,13 @@ CREATE TABLE segments (
 	mapArea char(3),
 	lastUpdatedDate date,
 	lastUpdatedAction varchar(30),
-	lastUpdatedUser_id int unsigned,
+	lastUpdatedBy int unsigned,
 	PRIMARY KEY(id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
+	FOREIGN KEY(lastUpdatedBy) REFERENCES users (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id),
 	FOREIGN KEY(travelDirection_id) REFERENCES directions (id),
-	FOREIGN KEY(lastUpdatedUser_id) REFERENCES users (id)) engine=InnoDB;
+	FOREIGN KEY(street_id) REFERENCES streets (id)) engine=InnoDB;
 
 CREATE TABLE places (
 	id int unsigned auto_increment NOT NULL,
@@ -186,6 +195,11 @@ CREATE TABLE places (
 	section varchar(10),
 	quarterSection enum('NE','NW','SE','SW'),
 	class varchar(30),
+	censusBlockFIPSCode varchar(20),
+	statePlaneX int(7) unsigned,
+	statePlaneY int(7) unsigned,
+	latitude float(10,6),
+	longitude float(10,6),
 	PRIMARY KEY(id),
 	FOREIGN KEY(township_id) REFERENCES townships (id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
@@ -214,10 +228,12 @@ CREATE TABLE units (
 	mailable tinyint(1) unsigned,
 	livable tinyint(1) unsigned,
 	notes varchar(255),
+	status_id int unsigned,
 	PRIMARY KEY(id),
 	FOREIGN KEY(building_id) REFERENCES buildings (id),
 	FOREIGN KEY(unitType_id) REFERENCES unitTypes (id),
-	FOREIGN KEY(place_id) REFERENCES places (id)) engine=InnoDB;
+	FOREIGN KEY(place_id) REFERENCES places (id),
+	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
 
 CREATE TABLE addresses (
 	id int unsigned auto_increment NOT NULL,
@@ -231,11 +247,6 @@ CREATE TABLE addresses (
 	zipplus4 int(4) unsigned zerofill,
 	status_id int unsigned DEFAULT 1 NOT NULL,
 	active enum('Y','N') DEFAULT 'Y' NOT NULL,
-	censusBlockFIPSCode varchar(20),
-	statePlaneX int unsigned,
-	statePlaneY int unsigned,
-	latitude float(10,6),
-	longitude float(10,6),
 	startDate date NOT NULL,
 	endDate date,
 	notes varchar(255),
@@ -245,18 +256,12 @@ CREATE TABLE addresses (
 	FOREIGN KEY(city_id) REFERENCES cities (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
 
-CREATE TABLE streets (
+CREATE TABLE streetNames (
 	id int unsigned auto_increment NOT NULL,
-	notes varchar(255),
-	status_id int unsigned DEFAULT 1 NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
-
-CREATE TABLE street_names (
 	street_id int unsigned NOT NULL,
 	name_id int unsigned NOT NULL,
 	streetNameType_id int unsigned,
-	primary key (street_id,name_id),
+	primary key (id),
 	FOREIGN KEY(street_id) REFERENCES streets (id),
 	FOREIGN KEY(name_id) REFERENCES names (id),
 	FOREIGN KEY(streetNameType_id) REFERENCES streetNameTypes (id)) engine=InnoDB;
@@ -297,13 +302,6 @@ CREATE TABLE subdivision_plats (
 	FOREIGN KEY(plat_id) REFERENCES plats (id),
 	FOREIGN KEY(subdivision_id) REFERENCES subdivisions (id)) engine=InnoDB;
 
-CREATE TABLE street_segments (
-	street_id int unsigned NOT NULL,
-	segment_id int unsigned NOT NULL,
-	primary key (street_id,segment_id),
-	FOREIGN KEY(street_id) REFERENCES streets (id),
-	FOREIGN KEY(segment_id) REFERENCES segments (id)) engine=InnoDB;
-
 CREATE TABLE districts (
 	id int unsigned auto_increment NOT NULL,
 	name varchar(128) UNIQUE NOT NULL,
@@ -342,3 +340,4 @@ CREATE TABLE user_roles (
 	primary key (user_id,role_id),
 	FOREIGN KEY(user_id) REFERENCES users (id),
 	FOREIGN KEY(role_id) REFERENCES roles (id)) engine=InnoDB;
+

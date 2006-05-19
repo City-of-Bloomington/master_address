@@ -31,6 +31,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Unit(current($this->list)); }
+		protected function loadResult($key) { return new Unit($this->list[$key]); }
 	}
 ?>

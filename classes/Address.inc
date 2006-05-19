@@ -16,11 +16,6 @@
 		private $zipplus4;
 		private $status_id;
 		private $active;
-		private $censusBlockFIPSCode;
-		private $statePlaneX;
-		private $statePlaneY;
-		private $latitude;
-		private $longitude;
 		private $startDate;
 		private $endDate;
 		private $notes;
@@ -30,6 +25,9 @@
 		private $city;
 		private $status;
 
+		private $street;
+		private $streetName;
+		private $fullAddress;
 
 
 		public function __construct($id=null)
@@ -116,6 +114,15 @@
 			$this->id = $PDO->lastInsertID();
 		}
 
+		public function __toString()
+		{
+			$temp = array();
+			$temp[] = $this->number;
+			if ($this->suffix) { $temp[] = $this->suffix; }
+			$temp[] = $this->getStreetName()->getName()->getFullname();
+			return implode(" ",$temp);
+		}
+
 
 		public function getId() { return $this->id; }
 		public function getPlace_id() { return $this->place_id; }
@@ -128,15 +135,9 @@
 		public function getZipplus4() { return $this->zipplus4; }
 		public function getStatus_id() { return $this->status_id; }
 		public function getActive() { return $this->active; }
-		public function getCensusBlockFIPSCode() { return $this->censusBlockFIPSCode; }
-		public function getStatePlaneX() { return $this->statePlaneX; }
-		public function getStatePlaneY() { return $this->statePlaneY; }
-		public function getLatitude() { return $this->latitude; }
-		public function getLongitude() { return $this->longitude; }
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
 		public function getNotes() { return $this->notes; }
-
 		public function getPlace()
 		{
 			if ($this->place_id)
@@ -173,6 +174,26 @@
 			}
 			else return null;
 		}
+		public function getStreet()
+		{
+			if (!$this->street) { $this->street = $this->getSegment()->getStreet();  }
+			return $this->street;
+		}
+		public function getStreetName()
+		{
+			if (!$this->streetName) { $this->streetName = $this->getStreet()->getStreetName(); }
+			return $this->streetName;
+		}
+		public function getFullAddress()
+		{
+			if (!$this->fullAddress)
+			{
+				$temp = array();
+				$temp[] = $this->number;
+				if ($this->suffix) { $temp[] = $this->suffix; }
+				$temp[] = $this->getStreet()->getStreetName();
+			}
+		}
 
 
 		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }
@@ -185,11 +206,6 @@
 		public function setZipplus4($int) { $this->zipplus4 = ereg_replace("[^0-9]","",$int); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setActive($string) { $this->active = sanitizeString($string); }
-		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = sanitizeString($string); }
-		public function setStatePlaneX($int) { $this->statePlaneX = ereg_replace("[^0-9]","",$int); }
-		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
-		public function setLatitude($float) { $this->latitude = ereg_replace("[^0-9.]","",$float); }
-		public function setLongitude($float) { $this->longitude = ereg_replace("[^0-9.]","",$float); }
 		public function setStartDate($date) { $this->startDate = $date; }
 		public function setEndDate($date) { $this->endDate = $date; }
 		public function setNotes($string) { $this->notes = sanitizeString($string); }

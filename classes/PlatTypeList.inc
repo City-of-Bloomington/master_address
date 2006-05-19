@@ -26,6 +26,6 @@
 		}
 
 
-		protected function loadCurrent() { return new PlatType(current($this->list)); }
+		protected function loadResult($key) { return new PlatType($this->list[$key]); }
 	}
 ?>

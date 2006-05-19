@@ -26,6 +26,6 @@
 		}
 
 
-		protected function loadCurrent() { return new UnitType(current($this->list)); }
+		protected function loadResult($key) { return new UnitType($this->list[$key]); }
 	}
 ?>

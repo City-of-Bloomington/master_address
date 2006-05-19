@@ -115,6 +115,13 @@ left join suffixes on street_type_suffix_code=suffixes.suffix
 left join directions p on mast_street_names.post_direction_suffix_code=p.code;
 
 
+-- streets
+insert streets select distinct streetID,notes,ifnull(s.id,1) from oldAddressData.segments
+left join oldAddressData.mast_street on streetID=street_id
+left join oldAddressData.mast_street_status_lookup using (status_code)
+left join statuses s on description=s.status
+where streetID>0 order by streetID;
+
 
 -- segments
 -- Segments have COUNTY in as a location, which should equate to Monroe County
@@ -131,7 +138,11 @@ update users set username='haleyl' where firstname='LAURA' and lastname='HALEY';
 update users set username='goodmanr' where firstname='RUSS' and lastname='GOODMAN';
 insert users set username='winklec',authenticationMethod='LDAP',firstname='Chuck',lastname='Winkle',department='ITS',phone='812-349-3595';
 
-insert segments select null,tag,lowadd,highadd,j.id,s.id,comments,speed,indotID,class,maintain,
+-- Old Segments may have zeros instead of null for streetID
+update oldAddressData.segments set streetID=null where streetID=0;
+
+
+insert segments select null,streetID,tag,lowadd,highadd,j.id,s.id,comments,speed,indotID,class,maintain,
 leftlow,lefthigh,rightlow,righthigh,rcinode1,rcinode2,low_node,high_node,
 low_x,low_y,high_x,high_y,travel,d.id,complete,rclback,rclahead,class_row,
 maparea,lastdate,up_act,u.id
@@ -148,18 +159,6 @@ update segments set transportationClass=null where transportationClass="-";
 update segments set transportationClass=null where transportationClass="0";
 
 
-
--- streets
-insert streets select distinct streetID,notes,ifnull(s.id,1) from oldAddressData.segments
-left join oldAddressData.mast_street on streetID=street_id
-left join oldAddressData.mast_street_status_lookup using (status_code)
-left join statuses s on description=s.status
-where streetID>0 order by streetID;
-
--- streetSegments
-insert street_segments select streetID,s.id
-from oldAddressData.segments left join segments s using (tag)
-where streetID>0;
 
 -- streetNames
 -- You will need to run PHP -> importStreetNames.php at this point
@@ -179,7 +178,8 @@ delete from tempLocations where subunit_id is not null;
 
 
 insert places
-select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,g.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class
+select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,g.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class,
+census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude
 from tempLocations l left join oldAddressData.mast_address a using (street_address_id)
 left join oldAddressData.mast_address_sanitation s using (street_address_id)
 left join oldAddressData.locations_classes c on l.location_id=c.location_id
@@ -345,10 +345,9 @@ insert into addressIndex
 select concat_ws(' ',addresses.number,d.code,names.name,x.suffix,p.code,unitTypes.type,units.identifier),
 addresses.id as address_id,segments.id as segment_id,streets.id as street_id,names.id as name_id,addresses.place_id,units.id as unit_id
 from addresses left join segments on addresses.segment_id=segments.id
-left join street_segments on segments.id=street_segments.segment_id
-left join streets on street_segments.street_id=streets.id
-left join street_names on streets.id=street_names.street_id
-left join names on street_names.name_id=names.id
+left join streets on segments.street_id=streets.id
+left join streetNames on streets.id=streetNames.street_id
+left join names on streetNames.name_id=names.id
 left join units on addresses.place_id=units.place_id
 left join unitTypes on unitType_id=unitTypes.id
 left join directions d on names.direction_id=d.id

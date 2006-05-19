@@ -4,10 +4,15 @@
 
 	class NameList extends PDOResultIterator
 	{
+		private $joins = "";
+		private $where = "";
+		private $sort;
 
 		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
+
+			$this->sort = $sort;
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
@@ -20,8 +25,15 @@
 			if (isset($fields['endDate'])) { $options[] = "endDate='$fields[endDate]'"; }
 			if (isset($fields['notes'])) { $options[] = "notes='$fields[notes]'"; }
 
-			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select id from names $where order by $sort";
+			if (isset($fields['street_id']))
+			{
+				$this->joins = "left join street_names on id=name_id";
+				$options[] = "street_id=$fields[street_id]";
+			}
+
+
+			if (count($options)) { $this->where = " where ".implode(" and ",$options); }
+			$sql = "select id from names {$this->joins} {$this->where} order by {$this->sort}";
 
 			$result = $PDO->query($sql);
 			if ($result)
@@ -32,6 +44,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Name(current($this->list)); }
+		protected function loadResult($key) { return new Name($this->list[$key]); }
 	}
 ?>

@@ -1,5 +1,6 @@
 <?php
 	require_once(APPLICATION_HOME."/classes/SegmentList.inc");
+	require_once(APPLICATION_HOME."/classes/StreetName.inc");
 	class Street
 	{
 		private $id;
@@ -9,6 +10,8 @@
 		private $status;
 		private $segmentList;
 
+		private $streetName;
+		private $streetNameList;
 
 		public function __construct($id=null)
 		{
@@ -85,8 +88,7 @@
 			}
 			else return null;
 		}
-
-		public function getSegments()
+		public function getSegmentList()
 		{
 			if (!$this->segmentList)
 			{
@@ -95,6 +97,25 @@
 			}
 			return $this->segmentList;
 		}
+		/*
+		* Returns the primary name for this street
+		*/
+		public function getStreetName()
+		{
+			if (!$this->streetName)
+			{
+				if (!$this->streetNameList) { $this->streetNameList = new StreetNameList(); $this->streetNameList->find(array("street_id"=>$this->id)); }
+				foreach($this->streetNameList as $streetName)
+				{
+					if ($streetName->getStreetNameType()->getType() == "STREET") { $this->streetName = $streetName; }
+				}
+			}
+			return $this->streetName;
+		}
+		/*
+		* An alias for getStreetName()
+		*/
+		public function getName() { return $this->getStreetName(); }
 
 
 		public function setNotes($string) { $this->notes = sanitizeString($string); }

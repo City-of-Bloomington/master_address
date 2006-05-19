@@ -27,6 +27,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Township(current($this->list)); }
+		protected function loadResult($key) { return new Township($this->list[$key]); }
 	}
 ?>

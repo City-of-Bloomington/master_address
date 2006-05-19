@@ -2,10 +2,11 @@
 	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
 	require_once(APPLICATION_HOME."/classes/Status.inc");
 	require_once(APPLICATION_HOME."/classes/Direction.inc");
-	require_once(APPLICATION_HOME."/classes/StreetList.inc");
+	require_once(APPLICATION_HOME."/classes/Street.inc");
 	class Segment
 	{
 		private $id;
+		private $street_id;
 		private $tag;
 		private $startingNumber;
 		private $endingNumber;
@@ -45,7 +46,7 @@
 		private $travelDirection;
 		private $lastUpdatedUser;
 
-		private $streetList;
+		private $street;
 
 
 		public function __construct($id=null)
@@ -88,13 +89,40 @@
 			# You can (and maybe should) replace this $fields code with your own custom SQL
 			# for each property of this class,
 			$fields = array();
-			foreach($this as $field=>$value)
-			{
-				if (!is_numeric($field))
-				{
-					if ($value) { $fields[] = "$field='$value'"; } else { $fields[] = "$field=null"; }
-				}
-			}
+			$fields[] = $this->street_id ? "street_id={$this->street_id}" : "street_id=null";
+			$fields[] = $this->tag ? "tag='{$this->tag}'" : "tag=null";
+			$fields[] = $this->startingNumber ? "startingNumber={$this->startingNumber}" : "startingNumber=null";
+			$fields[] = $this->endingNumber ? "endingNumber={$this->endingNumber}" : "endingNumber=null";
+			$fields[] = $this->jurisdiction_id ? "jurisdiction_id={$this->jurisdiction_id}" : "jurisdiction_id=null";
+			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
+			$fields[] = $this->notes ? "notes='{$this->notes}'" : "notes=null";
+			$fields[] = $this->speedLimit ? "speedLimit={$this->speedLimit}" : "speedLimit=null";
+			$fields[] = $this->INDOTSegmentID ? "INDOTSegmentID='{$this->INDOTSegmentID}'" : "INDOTSegmentID=null";
+			$fields[] = $this->transportationClass ? "transportationClass='{$this->transportationClass}'" : "transportationClass=null";
+			$fields[] = $this->maintenanceResponsibility ? "maintenanceResponsibility='{$this->maintenanceResponsibility}'" : "maintenanceResponsibility=null";
+			$fields[] = $this->leftLowNumber ? "leftLowNumber={$this->leftLowNumber}" : "leftLowNumber=null";
+			$fields[] = $this->leftHighNumber ? "leftHighNumber={$this->leftHighNumber}" : "leftHighNumber=null";
+			$fields[] = $this->rightLowNumber ? "rightLowNumber={$this->rightLowNumber}" : "rightLowNumber=null";
+			$fields[] = $this->rightHighNumber ? "rightHighNumber={$this->rightHighNumber}" : "rightHighNumber=null";
+			$fields[] = $this->rcinode1 ? "rcinode1='{$this->rcinode1}'" : "rcinode1=null";
+			$fields[] = $this->rcinode2 ? "rcinode2='{$this->rcinode2}'" : "rcinode2=null";
+			$fields[] = $this->lowNode ? "lowNode='{$this->lowNode}'" : "lowNode=null";
+			$fields[] = $this->highNode ? "highNode='{$this->highNode}'" : "highNode=null";
+			$fields[] = $this->lowXCoordinate ? "lowXCoordinate={$this->lowXCoordinate}" : "lowXCoordinate=null";
+			$fields[] = $this->lowYCoordinate ? "lowYCoordinate={$this->lowYCoordinate}" : "lowYCoordinate=null";
+			$fields[] = $this->highXCoordinate ? "highXCoordinate={$this->highXCoordinate}" : "highXCoordinate=null";
+			$fields[] = $this->highYCoordinate ? "highYCoordinate={$this->highYCoordinate}" : "highYCoordinate=null";
+			$fields[] = $this->travel ? "travel='{$this->travel}'" : "travel=null";
+			$fields[] = $this->travelDirection_id ? "travelDirection_id={$this->travelDirection_id}" : "travelDirection_id=null";
+			$fields[] = $this->complete ? "complete='{$this->complete}'" : "complete=null";
+			$fields[] = $this->rclBack ? "rclBack='{$this->rclBack}'" : "rclBack=null";
+			$fields[] = $this->rclNext ? "rclNext='{$this->rclNext}'" : "rclNext=null";
+			$fields[] = $this->classRow ? "classRow='{$this->classRow}'" : "classRow=null";
+			$fields[] = $this->mapArea ? "mapArea='{$this->mapArea}'" : "mapArea=null";
+			$fields[] = $this->lastUpdatedDate ? "lastUpdatedDate='{$this->lastUpdatedDate}'" : "lastUpdatedDate=null";
+			$fields[] = $this->lastUpdatedAction ? "lastUpdatedAction='{$this->lastUpdatedAction}'" : "lastUpdatedAction=null";
+			$fields[] = $this->lastUpdatedBy ? "lastUpdatedBy={$this->lastUpdatedBy}" : "lastUpdatedBy=null";
+
 			$fields = implode(",",$fields);
 
 
@@ -121,6 +149,7 @@
 
 
 		public function getId() { return $this->id; }
+		public function getStreet_id() { return $this->street_id; }
 		public function getTag() { return $this->tag; }
 		public function getStartingNumber() { return $this->startingNumber; }
 		public function getEndingNumber() { return $this->endingNumber; }
@@ -153,7 +182,15 @@
 		public function getLastUpdatedDate() { return $this->lastUpdatedDate; }
 		public function getLastUpdatedAction() { return $this->lastUpdatedAction; }
 		public function getLastUpdatedUser_id() { return $this->lastUpdatedUser_id; }
-
+		public function getStreet()
+		{
+			if ($this->street_id)
+			{
+				if (!$this->street) { $this->street = new Street($this->street_id); }
+				return $this->street;
+			}
+			else return null;
+		}
 		public function getJurisdiction()
 		{
 			if ($this->jurisdiction_id)
@@ -190,20 +227,12 @@
 			}
 			else return null;
 		}
-		public function getStreetList()
-		{
-			if (!$this->streetList)
-			{
-				$this->streetList = new StreetList();
-				$this->streetList->find(array("segment_id"=>$this->id));
-			}
-			return $this->streetList;
-		}
 
 
 
 
 		public function setTag($string) { $this->tag = sanitizeString($string); }
+		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
 		public function setStartingNumber($int) { $this->startingNumber = ereg_replace("[^0-9]","",$int); }
 		public function setEndingNumber($int) { $this->endingNumber = ereg_replace("[^0-9]","",$int); }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }

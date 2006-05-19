@@ -35,6 +35,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Place(current($this->list)); }
+		protected function loadResult($key) { return new Place($this->list[$key]); }
 	}
 ?>

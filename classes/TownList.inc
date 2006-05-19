@@ -25,6 +25,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Town(current($this->list)); }
+		protected function loadResult($key) { return new Town($this->list[$key]); }
 	}
 ?>

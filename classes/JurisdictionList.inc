@@ -25,6 +25,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Jurisdiction(current($this->list)); }
+		protected function loadResult($key) { return new Jurisdiction($this->list[$key]); }
 	}
 ?>

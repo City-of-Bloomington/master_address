@@ -1,5 +1,5 @@
 <div class="sidebar">
-	<div class="titleBar">Tables</div>
+	<div class="titleBar">Tools</div>
 	<ul>
 		<li><a href="<?php echo BASE_URL; ?>/towns">Towns</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/townships">Townships</a></li>

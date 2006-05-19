@@ -25,6 +25,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Status(current($this->list)); }
+		protected function loadResult($key) { return new Status($this->list[$key]); }
 	}
 ?>

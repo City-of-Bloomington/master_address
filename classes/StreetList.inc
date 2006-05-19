@@ -38,6 +38,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Street(current($this->list)); }
+		protected function loadResult($key) { return new Street($this->list[$key]); }
 	}
 ?>

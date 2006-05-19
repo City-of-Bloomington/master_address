@@ -25,6 +25,6 @@
 		}
 
 
-		protected function loadCurrent() { return new City(current($this->list)); }
+		protected function loadResult($key) { return new City($this->list[$key]); }
 	}
 ?>

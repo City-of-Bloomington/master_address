@@ -26,6 +26,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Directions(current($this->list)); }
+		protected function loadResult($key) { return new Direction($this->list[$key]); }
 	}
 ?>

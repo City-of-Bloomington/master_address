@@ -30,6 +30,6 @@
 		}
 
 
-		protected function loadCurrent() { return new Plat(current($this->list)); }
+		protected function loadResult($key) { return new Plat($this->list[$key]); }
 	}
 ?>
