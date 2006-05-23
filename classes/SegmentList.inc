@@ -16,6 +16,7 @@
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
+			if (isset($fields['street_id'])) { $options[] = "street_id=$fields[street_id]"; }
 			if (isset($fields['tag'])) { $options[] = "tag='$fields[tag]'"; }
 			if (isset($fields['startingNumber'])) { $options[] = "startingNumber=$fields[startingNumber]"; }
 			if (isset($fields['endingNumber'])) { $options[] = "endingNumber=$fields[endingNumber]"; }
@@ -49,12 +50,8 @@
 			if (isset($fields['lastUpdatedAction'])) { $options[] = "lastUpdatedAction='$fields[lastUpdatedAction]'"; }
 			if (isset($fields['lastUpdatedUser_id'])) { $options[] = "lastUpdatedUser_id=$fields[lastUpdatedUser_id]"; }
 
-			# Find by Street requires us to join the street_segments table
-			if (isset($fields['street_id']))
-			{
-				$this->joins = "left join street_segments on id=segment_id";
-				$options[] = "street_id=$fields[street_id]";
-			}
+			if (isset($fields['number'])) { $options[] = "startingNumber<=$fields[number] and endingNumber>=$fields[number]"; }
+
 
 			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
 

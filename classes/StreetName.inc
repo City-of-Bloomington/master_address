@@ -82,7 +82,11 @@
 		}
 
 
-		public function __toString() { return $this->getName()->getFullname(); }
+		public function __toString()
+		{
+			return "Street Name";
+			#return $this->getName()->getFullname();
+		}
 
 		public function getId() { return $this->id; }
 		public function getStreet_id() { return $this->street_id; }

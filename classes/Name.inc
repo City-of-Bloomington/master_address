@@ -22,7 +22,8 @@
 		private $suffix;
 		private $postDirection;
 
-
+		private $streetNameList;
+		private $streets = array();
 
 		public function __construct($id=null)
 		{
@@ -156,6 +157,23 @@
 				return $this->postDirection;
 			}
 			else return null;
+		}
+		public function getStreetNameList()
+		{
+			if (!$this->streetNameList)
+			{
+				$this->streetNameList = new StreetNameList();
+				$this->streetNameList->find(array("name_id"=>$this->id));
+			}
+			return $this->streetNameList;
+		}
+		public function getStreets()
+		{
+			if (!count($this->streets))
+			{
+				foreach($this->getStreetNameList() as $streetName) { $this->streets[] = $streetName->getStreet(); }
+			}
+			return $this->streets;
 		}
 
 

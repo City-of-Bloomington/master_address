@@ -23,6 +23,8 @@ select street_address_id,street_number,street_id from mast_address where street_
 
 -- roles
 insert roles (role) select distinct contact_type from oldAddressData.mast_addr_assignment_contact;
+insert roles set role='Administrator';
+
 
 -- users
 insert users (id,firstname,lastname,phone,department)

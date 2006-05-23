@@ -4,6 +4,7 @@
 	require_once(APPLICATION_HOME."/classes/TrashPickupDay.inc");
 	require_once(APPLICATION_HOME."/classes/RecyclingPickupWeek.inc");
 	require_once(APPLICATION_HOME."/classes/AddressList.inc");
+	require_once(APPLICATION_HOME."/classes/PlaceType.inc");
 	class Place
 	{
 		private $id;
@@ -18,6 +19,7 @@
 		private $section;
 		private $quarterSection;
 		private $class;
+		private $placeType_id;
 		private $censusBlockFIPSCode;
 		private $statePlaneX;
 		private $statePlaneY;
@@ -124,6 +126,7 @@
 		public function getSection() { return $this->section; }
 		public function getQuarterSection() { return $this->quarterSection; }
 		public function getClass() { return $this->class; }
+		public function getPlaceType_id() { return $this->placeType_id; }
 		public function getCensusBlockFIPSCode() { return $this->censusBlockFIPSCode; }
 		public function getStatePlaneX() { return $this->statePlaneX; }
 		public function getStatePlaneY() { return $this->statePlaneY; }
@@ -179,6 +182,15 @@
 			if (!$this->addressList) { $this->addressList = new AddressList(array("place_id"=>$this->id)); }
 			return $this->addressList;
 		}
+		public function getPlaceType()
+		{
+			if ($this->placeType_id)
+			{
+				if (!$this->placeType) { $this->placeType = new PlaceType($this->placeType_id); }
+				return $this->placeType;
+			}
+			else return null;
+		}
 
 
 
@@ -193,6 +205,7 @@
 		public function setSection($string) { $this->section = sanitizeString($string); }
 		public function setQuarterSection($string) { $this->quarterSection = ereg_replace("[^A-Z]","",strtoupper($string)); }
 		public function setClass($string) { $this->class = sanitizeString($string); }
+		public function setPlaceType_id($int) { $this->placeType = new PlaceType($int); $this->placeType_id = $int; }
 		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = sanitizeString($string); }
 		public function setStatePlaneX($int) { $this->statePlaneX = ereg_replace("[^0-9]","",$int); }
 		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
