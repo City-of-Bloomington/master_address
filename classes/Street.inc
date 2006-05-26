@@ -112,10 +112,6 @@
 			}
 			return $this->streetName;
 		}
-		/*
-		* An alias for getStreetName()
-		*/
-		public function getName() { return $this->getStreetName(); }
 
 
 		public function __toString() { return $this->getStreetName()->getName()->getFullname(); }

@@ -240,7 +240,7 @@ CREATE TABLE addresses (
 	place_id int unsigned NOT NULL,
 	segment_id int unsigned  NOT NULL,
 	number int unsigned NOT NULL,
-	suffix varchar(30),
+	suffix char(5),
 	addressType varchar(20) DEFAULT 'STREET' NOT NULL,
 	city_id int unsigned NOT NULL,
 	zip int(5) unsigned zerofill,

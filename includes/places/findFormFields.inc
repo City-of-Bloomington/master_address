@@ -3,7 +3,7 @@
 		<tr><td><label for="name">Name</label></td>
 			<td><input name="name" id="name" /></td></tr>
 		<tr><td><label for="township_id">Township</label></td>
-			<td><select name="township_id" id="township_id">
+			<td><select name="township_id" id="township_id"><option></option>
 				<?php
 					$list = new TownshipList();
 					$list->find();
@@ -13,7 +13,7 @@
 			</td>
 		</tr>
 		<tr><td><label for="jurisdiction_id">Jurisdiction</label></td>
-			<td><select name="jurisdiction_id" id="jurisdiction_id">
+			<td><select name="jurisdiction_id" id="jurisdiction_id"><option></option>
 				<?php
 					$list = new JurisdictionList();
 					$list->find();
@@ -83,4 +83,3 @@
 		</tr>
 		</table>
 	</fieldset>
-

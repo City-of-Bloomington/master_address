@@ -191,9 +191,13 @@
 				$temp = array();
 				$temp[] = $this->number;
 				if ($this->suffix) { $temp[] = $this->suffix; }
-				$temp[] = $this->getStreet()->getStreetName();
+				$temp[] = $this->getSegment()->getFullStreetName();
+				$this->fullAddress = implode(" ",$temp);
 			}
+			return $this->fullAddress;
 		}
+
+		public function __toString() { return $this->getFullAddress(); }
 
 
 		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }

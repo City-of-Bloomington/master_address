@@ -50,7 +50,7 @@
 			if (isset($fields['lastUpdatedAction'])) { $options[] = "lastUpdatedAction='$fields[lastUpdatedAction]'"; }
 			if (isset($fields['lastUpdatedUser_id'])) { $options[] = "lastUpdatedUser_id=$fields[lastUpdatedUser_id]"; }
 
-			if (isset($fields['number'])) { $options[] = "startingNumber<=$fields[number] and endingNumber>=$fields[number]"; }
+			if (isset($fields['number'])) { $options[] = "startingNumber<='$fields[number]' and endingNumber>='$fields[number]'"; }
 
 
 			if (count($options)) { $this->where = "where ".implode(" and ",$options); }

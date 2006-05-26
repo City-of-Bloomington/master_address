@@ -47,6 +47,7 @@
 		private $lastUpdatedUser;
 
 		private $street;
+		private $town;
 
 
 		public function __construct($id=null)
@@ -227,7 +228,15 @@
 			}
 			else return null;
 		}
-
+		public function getTown()
+		{
+			if (!$this->town) { $this->town = $this->getStreet()->getStreetName()->getName()->getTown(); }
+			return $this->town;
+		}
+		public function getFullStreetName()
+		{
+			return $this->getStreet()->getStreetName()->getName()->getFullname();
+		}
 
 
 
