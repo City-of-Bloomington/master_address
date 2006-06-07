@@ -5,7 +5,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Town.inc");
 	$town = new Town($_POST['id']);
 	$town->setName($_POST['name']);
 

@@ -1,10 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Address.inc");
-	require_once(APPLICATION_HOME."/classes/Segment.inc");
-	require_once(APPLICATION_HOME."/classes/Street.inc");
-	require_once(APPLICATION_HOME."/classes/Name.inc");
-	require_once(APPLICATION_HOME."/classes/Place.inc");
-	require_once(APPLICATION_HOME."/classes/Unit.inc");
 	class AddressSearchResult
 	{
 		private $fullAddress;

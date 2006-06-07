@@ -1,9 +1,7 @@
 <?php
-	require_once(GLOBAL_INCLUDES."/classes/PDOResultIterator.inc");
-	require_once(APPLICATION_HOME."/classes/District.inc");
-
 	class DistrictList extends PDOResultIterator
 	{
+		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort="id")
 		{

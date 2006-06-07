@@ -6,12 +6,15 @@
 	include(APPLICATION_HOME."/includes/banner.inc");
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
-
-	require_once(APPLICATION_HOME."/classes/Address.inc");
-	$address = new Address($_GET['id']);
 ?>
 <div id="mainContent">
-	<h1><?php echo $address; ?></h1>
+	<?php
+		$address = new Address($_GET['id']);
+		include(APPLICATION_HOME."/includes/addresses/addressInfo.inc");
+
+		$place = $address->getPlace();
+		include(APPLICATION_HOME."/includes/places/placeInfo.inc");
+	?>
 </div>
 <?php
 	include(APPLICATION_HOME."/includes/footer.inc");

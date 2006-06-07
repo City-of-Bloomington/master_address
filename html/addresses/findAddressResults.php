@@ -45,7 +45,7 @@
 
 			echo "</table>";
 
-			include(APPLICATION_HOME."/includes/pageNavigation.inc");
+			include(GLOBAL_INCLUDES."/pageNavigation.inc");
 		}
 	?>
 </div>

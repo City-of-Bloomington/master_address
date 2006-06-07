@@ -9,7 +9,6 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	require_once(APPLICATION_HOME."/classes/District.inc");
 	$district = new District($_GET['id']);
 ?>
 <div id="mainContent">
@@ -25,7 +24,6 @@
 		<tr><td><label for="districtType_id">Type</label></td>
 			<td><select name="districtType_id" id="districtType_id">
 				<?php
-					require_once(APPLICATION_HOME."/classes/DistrictTypeList.inc");
 					$list = new DistrictTypeList();
 					$list->find();
 					foreach($list as $type)

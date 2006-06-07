@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/District.inc");
 	$district = new District($_POST['id']);
 	$district->setName($_POST['name']);
 	$district->setDistrictType_id($_POST['districtType_id']);

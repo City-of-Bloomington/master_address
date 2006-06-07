@@ -9,7 +9,6 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	require_once(APPLICATION_HOME."/classes/Name.inc");
 	$name = new Name($_GET['id']);
 ?>
 <div id="mainContent">
@@ -24,7 +23,6 @@
 			<td colspan="3">
 				<select name="town_id" id="town_id">
 				<?php
-					require_once(APPLICATION_HOME."/classes/TownList.inc");
 					$townList = new TownList();
 					$townList->find();
 					foreach($townList as $town)

@@ -1,7 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Place.inc");
-	require_once(APPLICATION_HOME."/classes/UnitType.inc");
-	require_once(APPLICATION_HOME."/classes/Building.inc");
 	class Unit
 	{
 		private $id;

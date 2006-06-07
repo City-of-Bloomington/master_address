@@ -1,9 +1,10 @@
 <?php
-	require_once(GLOBAL_INCLUDES."/classes/PDOResultIterator.inc");
-	require_once(APPLICATION_HOME."/classes/Place.inc");
-
 	class PlaceList extends PDOResultIterator
 	{
+		private $joins = "";
+		private $where = "";
+
+		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort="id")
 		{
@@ -22,9 +23,20 @@
 			if (isset($fields['section'])) { $options[] = "section='$fields[section]'"; }
 			if (isset($fields['quarterSection'])) { $options[] = "quarterSection='$fields[quarterSection]'"; }
 			if (isset($fields['class'])) { $options[] = "class='$fields[class]'"; }
+			if (isset($fields['startDate'])) { $options[] = "startDate='$fields[startDate]'"; }
+			if (isset($fields['endDate'])) { $options[] = "endDate='$fields[endDate]'"; }
+			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
 
-			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select id from places $where order by $sort";
+
+			# To find by district we have to join the district_places table
+			if (isset($fields['district_id']))
+			{
+				$this->joins = "left join district_places d on d.place_id=places.id";
+				$options[] = "district_id=$fields[district_id]";
+			}
+
+			if (count($options)) { $this->where = " where ".implode(" and ",$options); }
+			$sql = "select id from places {$this->joins} {$this->where} order by $sort";
 
 			$result = $PDO->query($sql);
 			if ($result)

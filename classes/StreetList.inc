@@ -1,12 +1,11 @@
 <?php
-	require_once(GLOBAL_INCLUDES."/classes/PDOResultIterator.inc");
-	require_once(APPLICATION_HOME."/classes/Street.inc");
-
 	class StreetList extends PDOResultIterator
 	{
 		private $joins = "";
 		private $where = "";
 		private $sort;
+
+		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort="id")
 		{
@@ -22,9 +21,21 @@
 			# Find by Segment requires us to join the street_segments table
 			if (isset($fields['segment_id']))
 			{
-				$this->joins = "left join segments on streets.id=street_id";
+				$this->joins.= " left join segments on streets.id=street_id";
 				$options[] = "segment_id=$fields[segment_id]";
 			}
+
+			# Finding on street name informatino requires joining streetNames and names
+			if (isset($fields['direction_id']) || isset($fields['name']) || isset($fields['suffix_id']) || isset($fields['postDirection_id']))
+			{
+				$this->joins.= " left join streetNames on streets.id=streetNames.street_id left join names on streetNames.name_id=names.id";
+
+				if (isset($fields['direction_id'])) { $options[] = "direction_id=$fields[direction_id]"; }
+				if (isset($fields['suffix_id'])) { $options[] = "suffix_id=$fields[suffix_id]"; }
+				if (isset($fields['postDirection_id'])) { $options[] = "postDirection_id=$fields[postDirection_id]"; }
+				if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
+			}
+
 
 			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
 

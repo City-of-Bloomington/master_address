@@ -1,8 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Town.inc");
-	require_once(APPLICATION_HOME."/classes/Direction.inc");
-	require_once(APPLICATION_HOME."/classes/Suffix.inc");
-
 	class Name
 	{
 		private $id;
@@ -167,6 +163,7 @@
 			}
 			return $this->streetNameList;
 		}
+		public function getStreetNames() { return $this->getStreetNameList(); }
 		public function getStreets()
 		{
 			if (!count($this->streets))

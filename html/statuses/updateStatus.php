@@ -5,7 +5,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Status.inc");
 	$status = new Status($_POST['id']);
 	$status->setStatus($_POST['status']);
 

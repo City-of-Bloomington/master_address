@@ -152,7 +152,7 @@ CREATE TABLE segments (
 	speedLimit tinyint(2) unsigned,
 	INDOTSegmentID varchar(10),
 	transportationClass varchar(5),
-	maintenanceResponsibility enum('UNKNOWN','STATE','DEVELOPER','BLOOMINGTON') DEFAULT 'UNKNOWN' NOT NULL,
+	maintenanceResponsibility enum('UNKNOWN','STATE','COUNTY','PRIVATE','DEVELOPER','BLOOMINGTON','IU') DEFAULT 'UNKNOWN' NOT NULL,
 	leftLowNumber int(4) unsigned,
 	leftHighNumber int(4) unsigned,
 	rightLowNumber int(4) unsigned,
@@ -200,12 +200,16 @@ CREATE TABLE places (
 	statePlaneY int(7) unsigned,
 	latitude float(10,6),
 	longitude float(10,6),
+	startDate date,
+	endDate date,
+	status_id int unsigned NOT NULL default 1,
 	PRIMARY KEY(id),
 	FOREIGN KEY(township_id) REFERENCES townships (id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(trashPickupDay_id) REFERENCES trashPickupDays (id),
 	FOREIGN KEY(trashLargeItemPickupDay_id) REFERENCES trashPickupDays (id),
-	FOREIGN KEY(recyclingPickupWeek_id) REFERENCES recyclingPickupWeeks (id)) engine=InnoDB;
+	FOREIGN KEY(recyclingPickupWeek_id) REFERENCES recyclingPickupWeeks (id),
+	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
 
 CREATE TABLE buildings (
 	id int unsigned auto_increment NOT NULL,
@@ -238,7 +242,8 @@ CREATE TABLE units (
 CREATE TABLE addresses (
 	id int unsigned auto_increment NOT NULL,
 	place_id int unsigned NOT NULL,
-	segment_id int unsigned  NOT NULL,
+	street_id int unsigned NOT NULL,
+	segment_id int unsigned,
 	number int unsigned NOT NULL,
 	suffix char(5),
 	addressType varchar(20) DEFAULT 'STREET' NOT NULL,
@@ -252,6 +257,7 @@ CREATE TABLE addresses (
 	notes varchar(255),
 	PRIMARY KEY(id),
 	FOREIGN KEY(place_id) REFERENCES places (id),
+	FOREIGN KEY(street_id) REFERENCES streets (id),
 	FOREIGN KEY(segment_id) REFERENCES segments (id),
 	FOREIGN KEY(city_id) REFERENCES cities (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
@@ -315,15 +321,6 @@ CREATE TABLE district_places (
 	primary key (place_id,district_id),
 	FOREIGN KEY(district_id) REFERENCES places (id),
 	FOREIGN KEY(district_id) REFERENCES districts (id)) engine=InnoDB;
-
-CREATE TABLE place_status (
-	place_id int unsigned NOT NULL,
-	startDate date NOT NULL,
-	endDate date,
-	status_id int unsigned DEFAULT 1 NOT NULL,
-	primary key (place_id,startDate,status_id),
-	FOREIGN KEY(place_id) REFERENCES places (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
 
 CREATE TABLE placeHistory (
 	place_id int unsigned NOT NULL,

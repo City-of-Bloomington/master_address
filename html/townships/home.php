@@ -9,8 +9,6 @@
 		<div class="titleBar">Townships</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/TownshipList.inc");
-
 			$townshipList = new TownshipList();
 			$townshipList->find();
 			foreach($townshipList as $township)

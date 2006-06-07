@@ -10,7 +10,6 @@
 */
 	#verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Place.inc");
 	$place = new Place();
 	$place->setName($_POST['name']);
 	$place->setTownship_id($_POST['township_id']);

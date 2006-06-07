@@ -10,7 +10,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Plat.inc");
 	try
 	{
 		$plat = new Plat($_POST['id']);

@@ -9,8 +9,6 @@
 		<div class="titleBar">Status Codes</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/StatusList.inc");
-
 			$statusList = new StatusList();
 			$statusList->find();
 			foreach($statusList as $status)

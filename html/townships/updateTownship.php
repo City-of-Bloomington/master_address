@@ -7,7 +7,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Township.inc");
 	$township = new Township($_POST['id']);
 	$township->setName($_POST['name']);
 	$township->setAbbreviation($_POST['abbreviation']);

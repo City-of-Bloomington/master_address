@@ -9,8 +9,6 @@
 		<div class="titleBar">Districts</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/DistrictList.inc");
-
 			$districtList = new DistrictList();
 			$districtList->find();
 			foreach($districtList as $district)
@@ -19,8 +17,8 @@
 					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
 					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateDistrictForm.php?id={$district->getId()}'\">Edit</button></td>"; }
 				echo "
-					<td>{$district->getName()}</td>
-					<td>{$district->getDistrictType()->getType()}</td>
+					<td><a href=\"viewDistrict.php?id={$district->getId()}\">{$district->getName()}</a></td>
+					<td><a href=\"viewDistrict.php?id={$district->getId()}\">{$district->getDistrictType()->getType()}</a></td>
 				</tr>
 				";
 			}

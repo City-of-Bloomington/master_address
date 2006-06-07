@@ -4,12 +4,13 @@
 						suffix
 						segment_id
 */
+	verifyUser("Administrator","ADDRESS COORDINATOR");
+
 	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	require_once(APPLICATION_HOME."/classes/Segment.inc");
 	$segment = new Segment($_GET['segment_id']);
 ?>
 <div id="mainContent">

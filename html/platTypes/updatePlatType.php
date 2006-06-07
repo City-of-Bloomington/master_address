@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/PlatType.inc");
 	$platType = new PlatType($_POST['id']);
 	$platType->setType($_POST['type']);
 	$platType->setDescription($_POST['description']);

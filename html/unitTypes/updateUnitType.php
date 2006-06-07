@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/UnitType.inc");
 	$unitType = new UnitType($_POST['id']);
 	$unitType->setType($_POST['type']);
 	$unitType->setDescription($_POST['description']);

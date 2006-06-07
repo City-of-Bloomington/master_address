@@ -1,10 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Township.inc");
-	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
-	require_once(APPLICATION_HOME."/classes/TrashPickupDay.inc");
-	require_once(APPLICATION_HOME."/classes/RecyclingPickupWeek.inc");
-	require_once(APPLICATION_HOME."/classes/AddressList.inc");
-	require_once(APPLICATION_HOME."/classes/PlaceType.inc");
 	class Place
 	{
 		private $id;
@@ -25,12 +19,16 @@
 		private $statePlaneY;
 		private $latitude;
 		private $longitude;
+		private $startDate;
+		private $endDate;
+		private $status_id;
 
 		private $township;
 		private $jurisdiction;
 		private $trashPickupDay;
 		private $trashLargeItemPickupDay;
 		private $recyclingPickupWeek;
+		private $status;
 
 		private $addressList;
 
@@ -62,6 +60,9 @@
 			{
 				# This is where the code goes to generate a new, empty instance.
 				# Set any default values for properties that need it here
+				$now = getdate();
+				$this->startDate = "$now[year]-$now[mon]-$now[mday]";
+				$this->status_id = 1;
 			}
 		}
 
@@ -89,6 +90,9 @@
 			$fields[] = $this->statePlaneY ? "statePlaneY='{$this->statePlaneY}'" : "statePlaneY=null";
 			$fields[] = $this->latitude ? "latitude='{$this->latitude}'" : "latitude=null";
 			$fields[] = $this->longitude ? "longitude='{$this->longitude}'" : "longitude=null";
+			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
+			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
+			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
 			$fields = implode(",",$fields);
 
 
@@ -132,6 +136,9 @@
 		public function getStatePlaneY() { return $this->statePlaneY; }
 		public function getLatitude() { return $this->latitude; }
 		public function getLongitude() { return $this->longitude; }
+		public function getStartDate() { return $this->startDate; }
+		public function getEndDate() { return $this->endDate; }
+		public function getStatus_id() { return $this->status_id; }
 		public function getTownship()
 		{
 			if ($this->township_id)
@@ -182,12 +189,22 @@
 			if (!$this->addressList) { $this->addressList = new AddressList(array("place_id"=>$this->id)); }
 			return $this->addressList;
 		}
+		public function getAddresses() { return $this->getAddressList(); }
 		public function getPlaceType()
 		{
 			if ($this->placeType_id)
 			{
 				if (!$this->placeType) { $this->placeType = new PlaceType($this->placeType_id); }
 				return $this->placeType;
+			}
+			else return null;
+		}
+		public function getStatus()
+		{
+			if ($this->status_id)
+			{
+				if (!$this->status) { $this->status = new Status($this->status_id); }
+				return $this->status;
 			}
 			else return null;
 		}
@@ -211,5 +228,8 @@
 		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
 		public function setLatitude($float) { $this->latitude = ereg_replace("[^0-9.]","",$float); }
 		public function setLongitude($float) { $this->longitude = ereg_replace("[^0-9.]","",$float); }
+		public function setStartDate($date) { $this->startDate = $date; }
+		public function setEndDate($endDate) { $this->endDate = $date; }
+		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 	}
 ?>

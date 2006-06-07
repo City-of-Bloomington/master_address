@@ -9,8 +9,6 @@
 		<div class="titleBar">PlaceTypes</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/PlaceTypeList.inc");
-
 			$placeTypeList = new PlaceTypeList();
 			$placeTypeList->find();
 			foreach($placeTypeList as $placeType)

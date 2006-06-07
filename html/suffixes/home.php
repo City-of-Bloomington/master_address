@@ -9,8 +9,6 @@
 		<div class="titleBar">Suffixs</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/SuffixList.inc");
-
 			$suffixList = new SuffixList();
 			$suffixList->find();
 			foreach($suffixList as $suffix)

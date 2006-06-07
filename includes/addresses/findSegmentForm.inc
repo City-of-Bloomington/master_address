@@ -50,6 +50,7 @@
 				}
 			?>
 			</select>
+		</td>
 	</tr>
 	</table>
 </fieldset>

@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Suffix.inc");
 	$suffix = new Suffix($_POST['id']);
 	$suffix->setSuffix($_POST['suffix']);
 	$suffix->setDescription($_POST['description']);

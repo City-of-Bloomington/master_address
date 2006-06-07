@@ -1,6 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Township.inc");
-	require_once(APPLICATION_HOME."/classes/PlatType.inc");
 	class Plat
 	{
 		private $id;

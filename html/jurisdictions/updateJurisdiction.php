@@ -5,7 +5,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
 	$jurisdiction = new Jurisdiction($_POST['id']);
 	$jurisdiction->setName($_POST['name']);
 

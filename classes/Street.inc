@@ -1,6 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/SegmentList.inc");
-	require_once(APPLICATION_HOME."/classes/StreetName.inc");
 	class Street
 	{
 		private $id;
@@ -90,13 +88,10 @@
 		}
 		public function getSegmentList()
 		{
-			if (!$this->segmentList)
-			{
-				$this->segmentList = new SegmentList();
-				$this->segmentList->find(array("street_id"=>$this->id));
-			}
+			if (!$this->segmentList) { $this->segmentList = new SegmentList(array("street_id"=>$this->id)); }
 			return $this->segmentList;
 		}
+		public function getSegments() { return $this->getSegmentList(); }
 		/*
 		* Returns the primary name for this street
 		*/
@@ -104,13 +99,25 @@
 		{
 			if (!$this->streetName)
 			{
-				if (!$this->streetNameList) { $this->streetNameList = new StreetNameList(); $this->streetNameList->find(array("street_id"=>$this->id)); }
-				foreach($this->streetNameList as $streetName)
+				foreach($this->getStreetNames() as $streetName)
 				{
 					if ($streetName->getStreetNameType()->getType() == "STREET") { $this->streetName = $streetName; }
 				}
 			}
 			return $this->streetName;
+		}
+		public function getFullStreetName()
+		{
+			if ($this->getStreetName())
+			{
+				return $this->getStreetName()->getName()->getFullName();
+			}
+			else return "";
+		}
+		public function getStreetNames()
+		{
+			if (!count($this->streetNameList)) { $this->streetNameList = new StreetNameList(array("street_id"=>$this->id)); }
+			return $this->streetNameList;
 		}
 
 

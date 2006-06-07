@@ -1,8 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Jurisdiction.inc");
-	require_once(APPLICATION_HOME."/classes/Status.inc");
-	require_once(APPLICATION_HOME."/classes/Direction.inc");
-	require_once(APPLICATION_HOME."/classes/Street.inc");
 	class Segment
 	{
 		private $id;

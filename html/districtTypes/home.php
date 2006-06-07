@@ -9,8 +9,6 @@
 		<div class="titleBar">DistrictTypes</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/DistrictTypeList.inc");
-
 			$districtTypeList = new DistrictTypeList();
 			$districtTypeList->find();
 			foreach($districtTypeList as $districtType)

@@ -1,7 +1,4 @@
 <?php
-	require_once(GLOBAL_INCLUDES."/classes/PDOResultIterator.inc");
-	require_once(APPLICATION_HOME."/classes/AddressSearchResult.inc");
-
 	class AddressSearch extends PDOResultIterator
 	{
 		public function find($fields=null,$sort=null)

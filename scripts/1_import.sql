@@ -118,11 +118,10 @@ left join directions p on mast_street_names.post_direction_suffix_code=p.code;
 
 
 -- streets
-insert streets select distinct streetID,notes,ifnull(s.id,1) from oldAddressData.segments
-left join oldAddressData.mast_street on streetID=street_id
+insert streets select distinct street_id,notes,ifnull(s.id,1)
+from oldAddressData.mast_street
 left join oldAddressData.mast_street_status_lookup using (status_code)
-left join statuses s on description=s.status
-where streetID>0 order by streetID;
+left join statuses s on description=s.status;
 
 
 -- segments
@@ -181,13 +180,17 @@ delete from tempLocations where subunit_id is not null;
 
 insert places
 select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,g.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class,
-census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude
+census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude,
+effective_start_date,effective_end_date,c.id
 from tempLocations l left join oldAddressData.mast_address a using (street_address_id)
 left join oldAddressData.mast_address_sanitation s using (street_address_id)
 left join oldAddressData.locations_classes c on l.location_id=c.location_id
 left join trashPickupDays t on trash_pickup_day=t.day
 left join trashPickupDays g on large_item_pickup_day=g.day
 left join recyclingPickupWeeks r on recycle_week=r.week
+left join oldAddressData.mast_address_location_status m on l.location_id=m.location_id
+left join oldAddressData.mast_address_status_lookup y on m.status_code=y.status_code
+left join statuses c on description=status
 group by location_id;
 
 
@@ -210,11 +213,11 @@ drop table tempLocations;
 
 
 -- placeStatus
-insert place_status
-select p.id,effective_start_date,effective_end_date,s.id
-from places p left join oldAddressData.mast_address_location_status on p.id=location_id
-left join oldAddressData.mast_address_status_lookup using (status_code)
-left join statuses s on description=status;
+--insert place_status
+--select p.id,effective_start_date,effective_end_date,s.id
+--from places p left join oldAddressData.mast_address_location_status on p.id=location_id
+--left join oldAddressData.mast_address_status_lookup using (status_code)
+--left join statuses s on description=status;
 
 
 -- addresses
@@ -328,7 +331,7 @@ select street_address_id,street_number,street_id from mast_address where street_
 create table addressIndex (
 fullAddress varchar(255) not null,
 address_id int unsigned not null,
-segment_id int unsigned not null,
+segment_id int unsigned,
 street_id int unsigned not null,
 name_id int unsigned not null,
 place_id int unsigned not null,
@@ -347,7 +350,7 @@ insert into addressIndex
 select concat_ws(' ',addresses.number,d.code,names.name,x.suffix,p.code,unitTypes.type,units.identifier),
 addresses.id as address_id,segments.id as segment_id,streets.id as street_id,names.id as name_id,addresses.place_id,units.id as unit_id
 from addresses left join segments on addresses.segment_id=segments.id
-left join streets on segments.street_id=streets.id
+left join streets on addresses.street_id=streets.id
 left join streetNames on streets.id=streetNames.street_id
 left join names on streetNames.name_id=names.id
 left join units on addresses.place_id=units.place_id

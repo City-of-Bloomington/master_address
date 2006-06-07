@@ -9,8 +9,6 @@
 		<div class="titleBar">Unit Types</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/UnitTypeList.inc");
-
 			$unitTypeList = new UnitTypeList();
 			$unitTypeList->find();
 			foreach($unitTypeList as $unitType)

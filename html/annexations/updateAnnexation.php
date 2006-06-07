@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Annexation.inc");
 	$annexation = new Annexation($_POST['id']);
 	$annexation->setOrdinanceNumber($_POST['ordinanceNumber']);
 	$annexation->setName($_POST['name']);

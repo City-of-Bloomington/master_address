@@ -1,6 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Place.inc");
-	require_once(APPLICATION_HOME."/classes/Status.inc");
 	class Building
 	{
 		private $id;

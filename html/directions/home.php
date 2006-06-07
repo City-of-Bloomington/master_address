@@ -9,8 +9,6 @@
 		<div class="titleBar">Directions</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/DirectionList.inc");
-
 			$directionList = new DirectionList();
 			$directionList->find();
 			foreach($directionList as $direction)

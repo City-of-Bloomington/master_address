@@ -9,8 +9,6 @@
 		<div class="titleBar">Building Types</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/BuildingTypeList.inc");
-
 			$buildingTypeList = new BuildingTypeList();
 			$buildingTypeList->find();
 			foreach($buildingTypeList as $buildingType)

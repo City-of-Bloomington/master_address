@@ -26,7 +26,6 @@
 	if ($_POST['authenticationMethod'] == "LDAP")
 	{
 		# Load the rest of their stuff from LDAP
-		require_once(GLOBAL_INCLUDES."/classes/LDAPEntry.inc");
 		$ldap = new LDAPEntry($user->getUsername());
 		$user->setFirstname($ldap->getFirstname());
 		$user->setLastname($ldap->getLastname());

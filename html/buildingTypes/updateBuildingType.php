@@ -5,7 +5,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/BuildingType.inc");
 	$buildingType = new BuildingType($_POST['id']);
 	$buildingType->setDescription($_POST['description']);
 

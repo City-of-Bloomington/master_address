@@ -1,12 +1,9 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Place.inc");
-	require_once(APPLICATION_HOME."/classes/Segment.inc");
-	require_once(APPLICATION_HOME."/classes/City.inc");
-	require_once(APPLICATION_HOME."/classes/Status.inc");
 	class Address
 	{
 		private $id;
 		private $place_id;
+		private $street_id;
 		private $segment_id;
 		private $number;
 		private $suffix;
@@ -114,18 +111,11 @@
 			$this->id = $PDO->lastInsertID();
 		}
 
-		public function __toString()
-		{
-			$temp = array();
-			$temp[] = $this->number;
-			if ($this->suffix) { $temp[] = $this->suffix; }
-			$temp[] = $this->getStreetName()->getName()->getFullname();
-			return implode(" ",$temp);
-		}
-
+		public function __toString() { return $this->getFullAddress(); }
 
 		public function getId() { return $this->id; }
 		public function getPlace_id() { return $this->place_id; }
+		public function getStreet_id() { return $this->street_id; }
 		public function getSegment_id() { return $this->segment_id; }
 		public function getNumber() { return $this->number; }
 		public function getSuffix() { return $this->suffix; }
@@ -176,13 +166,16 @@
 		}
 		public function getStreet()
 		{
-			if (!$this->street) { $this->street = $this->getSegment()->getStreet();  }
-			return $this->street;
+			if ($this->street_id)
+			{
+				if (!$this->street) { $this->street = new Street($this->street_id); }
+				return $this->street;
+			}
+			else return null;
 		}
 		public function getStreetName()
 		{
-			if (!$this->streetName) { $this->streetName = $this->getStreet()->getStreetName(); }
-			return $this->streetName;
+			return $this->getStreet()->getStreetName();
 		}
 		public function getFullAddress()
 		{
@@ -191,16 +184,16 @@
 				$temp = array();
 				$temp[] = $this->number;
 				if ($this->suffix) { $temp[] = $this->suffix; }
-				$temp[] = $this->getSegment()->getFullStreetName();
+				$temp[] = $this->getStreet()->getFullStreetName();
 				$this->fullAddress = implode(" ",$temp);
 			}
 			return $this->fullAddress;
 		}
 
-		public function __toString() { return $this->getFullAddress(); }
 
 
 		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }
+		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
 		public function setSegment_id($int) { $this->segment = new Segment($int); $this->segment_id = $int; }
 		public function setNumber($int) { $this->number = ereg_replace("[^0-9]","",$int); }
 		public function setSuffix($string) { $this->suffix = sanitizeString($string); }

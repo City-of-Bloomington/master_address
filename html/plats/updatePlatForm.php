@@ -9,7 +9,6 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	require_once(APPLICATION_HOME."/classes/Plat.inc");
 	$plat = new Plat($_GET['id']);
 ?>
 <div id="mainContent">

@@ -12,15 +12,18 @@
 	if (count($_GET))
 	{
 		foreach($_GET as $field=>$value) { if ($value) { $search[$field] = $value; } }
+
 		if (count($search))
 		{
-			echo "<h2>Places Found</h2>";
-			$placeList = new PlaceList();
-			$placeList->find($search);
+			$placeList = new PlaceList($search);
 
+			echo "<h2>Places Found (".count($placeList).")</h2>";
 			if (count($placeList))
 			{
-				echo "<table>";
+				echo "
+				<table>
+				<tr><th>Place ID</th><th>Start Date</th><th>Addresses</th></tr>
+				";
 				if (!isset($_GET['page'])) { $_GET['page'] = 0; }
 				$pages = $placeList->getPagination(50);
 
@@ -28,13 +31,21 @@
 				foreach($iterator as $place)
 				{
 					echo "
-					<tr><td>{$place->getId()}</td>
+					<tr><td><a href=\"".BASE_URL."/places/viewPlace.php?id={$place->getId()}\">{$place->getId()}</a></td>
+						<td>{$place->getStartDate()}</td>
+						<td><ul>";
+					foreach($place->getAddressList() as $address)
+					{
+						echo "<li>{$address->getFullAddress()}</li>";
+					}
+					echo "
+						</ul></td>
 					</tr>
 					";
 				}
 				echo "</table>";
 
-				include(APPLICATION_HOME."/includes/pageNavigation.inc");
+				include(GLOBAL_INCLUDES."/pageNavigation.inc");
 			}
 		}
 	}

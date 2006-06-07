@@ -1,5 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/DistrictType.inc");
 	class District
 	{
 		private $id;
@@ -7,6 +6,9 @@
 		private $districtType_id;
 
 		private $districtType;
+
+		private $places = array();
+		private $newPlaceIDs = array();
 
 
 		public function __construct($id=null)
@@ -56,6 +58,8 @@
 
 			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
+
+			if (count($this->getPlaces())) { $this->savePlaces(); }
 		}
 
 		private function update($fields)
@@ -75,17 +79,54 @@
 			$this->id = $PDO->lastInsertID();
 		}
 
+		public function addPlace($place)
+		{
+			$this->getPlaces();
+			$this->newPlaceIDs[] = $place->getId();
+			$this->places[] = $place;
+		}
+
+		public function deletePlace($place_id)
+		{
+			foreach($this->places as $i=>$place) { if($place->getId() == $place_id) unset($this->places[$i]); }
+		}
+
+		private function savePlaces()
+		{
+			$ids = array();
+			foreach($this->getPlaces() as $place) { $ids[] = $place->getId(); }
+			$ids = implode(",",$ids);
+
+			$sql = "delete from district_places where place_id in ($ids)";
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+
+			foreach ($this->newPlaceIDs as $place_id)
+			{
+				$sql = "insert district_places values($place_id,{$this->id})";
+				if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			}
+		}
+
+
 
 		public function getId() { return $this->id; }
 		public function getName() { return $this->name; }
 		public function getDistrictType_id() { return $this->districtType_id; }
-
 		public function getDistrictType()
 		{
 			if (!$this->districtType) { $this->districtType = new DistrictType($this->districtType_id); }
 			return $this->districtType;
 		}
-
+		public function getPlaces()
+		{
+			if (!count($this->places))
+			{
+				$placeList = new PlaceList();
+				$placeList->find(array("district_id"=>$this->id));
+				foreach($placeList as $place) { $this->places[] = $place; }
+			}
+			return $this->places;
+		}
 
 		public function setName($string) { $this->name = sanitizeString($string); }
 		public function setDistrictType_id($districtType_id)

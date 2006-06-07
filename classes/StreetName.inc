@@ -1,7 +1,4 @@
 <?php
-	require_once(APPLICATION_HOME."/classes/Name.inc");
-	require_once(APPLICATION_HOME."/classes/Street.inc");
-	require_once(APPLICATION_HOME."/classes/StreetNameType.inc");
 	class StreetName
 	{
 		private $id;
@@ -84,8 +81,7 @@
 
 		public function __toString()
 		{
-			return "Street Name";
-			#return $this->getName()->getFullname();
+			return $this->getFullname();
 		}
 
 		public function getId() { return $this->id; }
@@ -110,6 +106,7 @@
 			}
 			else return null;
 		}
+		public function getFullname() { return $this->getName()->getFullname(); }
 		public function getStreetNameType()
 		{
 			if ($this->streetNameType_id)
@@ -119,6 +116,7 @@
 			}
 			else return null;
 		}
+		public function getType() { return $this->getStreetNameType()->getType(); }
 
 
 		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }

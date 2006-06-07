@@ -1,6 +1,4 @@
 <?php
-	require_once(GLOBAL_INCLUDES."/classes/SystemUser.inc");
-
 	class User extends SystemUser
 	{
 		private $id;

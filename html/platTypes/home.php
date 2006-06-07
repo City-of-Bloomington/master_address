@@ -9,8 +9,6 @@
 		<div class="titleBar">PlatTypes</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/PlatTypeList.inc");
-
 			$platTypeList = new PlatTypeList();
 			$platTypeList->find();
 			foreach($platTypeList as $platType)

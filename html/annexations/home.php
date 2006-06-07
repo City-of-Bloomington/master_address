@@ -9,8 +9,6 @@
 		<div class="titleBar">Annexations</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/AnnexationList.inc");
-
 			$annexationList = new AnnexationList();
 			$annexationList->find();
 			foreach($annexationList as $annexation)

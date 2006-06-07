@@ -8,6 +8,8 @@
 						suffix_id
 						postDirection_id
 */
+	verifyUser("Administrator","ADDRESS COORDINATOR");
+
 	#--------------------------------------------------------------------------
 	# We absolutely have to have a street name and number
 	#--------------------------------------------------------------------------
@@ -48,7 +50,7 @@
 	if (count($segments)==0)
 	{
 		echo "<p>Could not find any matching segments</p>";
-		$_SESSION['errorMessages'][] = new Exception("Could not find any matching segments");
+		$_SESSION['errorMessages'][] = new Exception("noSegmentsFound");
 		Header("Location: findSegmentForm.php");
 		exit();
 	}

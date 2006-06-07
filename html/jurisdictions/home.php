@@ -9,8 +9,6 @@
 		<div class="titleBar">Jurisdictions</div>
 		<table>
 		<?php
-			require_once(APPLICATION_HOME."/classes/JurisdictionList.inc");
-
 			$jurisdictionList = new JurisdictionList();
 			$jurisdictionList->find();
 			foreach($jurisdictionList as $jurisdiction)

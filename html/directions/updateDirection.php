@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/Direction.inc");
 	$direction = new Direction($_POST['id']);
 	$direction->setCode($_POST['code']);
 	$direction->setDirection($_POST['direction']);

@@ -6,7 +6,6 @@
 */
 	verifyUser("Administrator");
 
-	require_once(APPLICATION_HOME."/classes/PlaceType.inc");
 	$placeType = new PlaceType($_POST['id']);
 	$placeType->setType($_POST['type']);
 	$placeType->setDescription($_POST['description']);

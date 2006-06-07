@@ -1,12 +1,11 @@
 <?php
-	require_once(GLOBAL_INCLUDES."/classes/PDOResultIterator.inc");
-	require_once(APPLICATION_HOME."/classes/Segment.inc");
-
 	class SegmentList extends PDOResultIterator
 	{
 		private $joins = "";
 		private $where = "";
 		private $sort;
+
+		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort="id")
 		{
