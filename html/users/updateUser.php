@@ -29,6 +29,7 @@
 	if ($_POST['password']) { $user->setPassword($_POST['password']); }
 	if (isset($_POST['roles'])) { $user->setRoles($_POST['roles']); }
 
+
 	try
 	{
 		$user->save();
