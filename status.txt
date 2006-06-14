@@ -1,0 +1,11 @@
+Tables
+	find
+	view
+	add
+	update
+	delete
+
+Associations
+	list
+	assign
+	remove

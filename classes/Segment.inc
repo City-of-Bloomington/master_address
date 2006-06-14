@@ -2,7 +2,6 @@
 	class Segment
 	{
 		private $id;
-		private $street_id;
 		private $tag;
 		private $startingNumber;
 		private $endingNumber;
@@ -42,8 +41,8 @@
 		private $travelDirection;
 		private $lastUpdatedUser;
 
-		private $street;
-		private $town;
+		private $addressList;
+		private $streets;
 
 
 		public function __construct($id=null)
@@ -86,7 +85,6 @@
 			# You can (and maybe should) replace this $fields code with your own custom SQL
 			# for each property of this class,
 			$fields = array();
-			$fields[] = $this->street_id ? "street_id={$this->street_id}" : "street_id=null";
 			$fields[] = $this->tag ? "tag='{$this->tag}'" : "tag=null";
 			$fields[] = $this->startingNumber ? "startingNumber={$this->startingNumber}" : "startingNumber=null";
 			$fields[] = $this->endingNumber ? "endingNumber={$this->endingNumber}" : "endingNumber=null";
@@ -146,7 +144,6 @@
 
 
 		public function getId() { return $this->id; }
-		public function getStreet_id() { return $this->street_id; }
 		public function getTag() { return $this->tag; }
 		public function getStartingNumber() { return $this->startingNumber; }
 		public function getEndingNumber() { return $this->endingNumber; }
@@ -179,15 +176,6 @@
 		public function getLastUpdatedDate() { return $this->lastUpdatedDate; }
 		public function getLastUpdatedAction() { return $this->lastUpdatedAction; }
 		public function getLastUpdatedUser_id() { return $this->lastUpdatedUser_id; }
-		public function getStreet()
-		{
-			if ($this->street_id)
-			{
-				if (!$this->street) { $this->street = new Street($this->street_id); }
-				return $this->street;
-			}
-			else return null;
-		}
 		public function getJurisdiction()
 		{
 			if ($this->jurisdiction_id)
@@ -224,14 +212,15 @@
 			}
 			else return null;
 		}
-		public function getTown()
+		public function getAddresses()
 		{
-			if (!$this->town) { $this->town = $this->getStreet()->getStreetName()->getName()->getTown(); }
-			return $this->town;
+			if (!count($this->addressList)) { $this->addressList = new AddressList(array("segment_id"=>$this->id)); }
+			return $this->addressList;
 		}
-		public function getFullStreetName()
+		public function getStreets()
 		{
-			return $this->getStreet()->getStreetName()->getName()->getFullname();
+			if (!count($this->streets)) { $this->streets = new StreetList(array("segment_id"=>$this->id)); }
+			return $this->streets;
 		}
 
 

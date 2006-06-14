@@ -7,7 +7,7 @@
 
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
-		public function find($fields=null,$sort="id")
+		public function find($fields=null,$sort="startingNumber")
 		{
 			global $PDO;
 
@@ -15,7 +15,6 @@
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
-			if (isset($fields['street_id'])) { $options[] = "street_id=$fields[street_id]"; }
 			if (isset($fields['tag'])) { $options[] = "tag='$fields[tag]'"; }
 			if (isset($fields['startingNumber'])) { $options[] = "startingNumber=$fields[startingNumber]"; }
 			if (isset($fields['endingNumber'])) { $options[] = "endingNumber=$fields[endingNumber]"; }
@@ -51,6 +50,12 @@
 
 			if (isset($fields['number'])) { $options[] = "startingNumber<='$fields[number]' and endingNumber>='$fields[number]'"; }
 
+			# Finding on street_id requires a join on street_segments
+			if (isset($fields['street_id']))
+			{
+				$this->joins.=" left join street_segments on segment_id=segments.id";
+				$options[] = "street_id=$fields[street_id]";
+			}
 
 			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
 

@@ -142,7 +142,6 @@ CREATE TABLE streets (
 
 CREATE TABLE segments (
 	id int unsigned auto_increment NOT NULL,
-	street_id int unsigned,
 	tag varchar(8) NOT NULL,
 	startingNumber int unsigned NOT NULL,
 	endingNumber int unsigned NOT NULL,
@@ -179,8 +178,7 @@ CREATE TABLE segments (
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(lastUpdatedBy) REFERENCES users (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id),
-	FOREIGN KEY(travelDirection_id) REFERENCES directions (id),
-	FOREIGN KEY(street_id) REFERENCES streets (id)) engine=InnoDB;
+	FOREIGN KEY(travelDirection_id) REFERENCES directions (id)) engine=InnoDB;
 
 CREATE TABLE places (
 	id int unsigned auto_increment NOT NULL,
@@ -337,4 +335,11 @@ CREATE TABLE user_roles (
 	primary key (user_id,role_id),
 	FOREIGN KEY(user_id) REFERENCES users (id),
 	FOREIGN KEY(role_id) REFERENCES roles (id)) engine=InnoDB;
+
+create table street_segments (
+	street_id int unsigned NOT NULl,
+	segment_id int unsigned NOT NULL,
+	primary key (street_id,segment_id),
+	FOREIGN KEY(street_id) REFERENCES streets (id),
+	FOREIGN KEY(segment_id) REFERENCES segments (id)) engine=InnoDB;
 

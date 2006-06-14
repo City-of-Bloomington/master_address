@@ -1,5 +1,5 @@
 <?php
-	if (isset($_SESSION['USER']) && in_array(array("Administrator","ADDRESS COORDINATOR"),$_SESSION['USER']->getRoles()))
+	if (isset($_SESSION['USER']) && $_SESSION['USER']->hasRole(array("Administrator","ADDRESS COORDINATOR")))
 	{
 		echo "
 		<div class=\"sidebar\">

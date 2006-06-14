@@ -26,9 +26,13 @@
 	</table>
 	</div>
 
-	<div class="interfaceBox"><div class="titleBar">Segments</div>
+	<div class="interfaceBox">
+		<div class="titleBar">
+			<?php if (isset($_SESSION['USER'])) { echo "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('addSegmentForm.php?street_id=$_GET[id]');\">Add</button>"; } ?>
+			Segments
+		</div>
 	<table>
-	<tr><th>Tag</th><th>Starting Number</th><th>Ending Number</th></tr>
+	<tr><th>Tag</th><th>Starting Number</th><th>Ending Number</th><th>Addresses</th></tr>
 	<?php
 		foreach($street->getSegments() as $segment)
 		{
@@ -36,6 +40,15 @@
 			<tr><td>{$segment->getTag()}</td>
 				<td>{$segment->getStartingNumber()}</td>
 				<td>{$segment->getEndingNumber()}</td>
+				<td><ul>
+			";
+					foreach($segment->getAddresses() as $address)
+					{
+						echo "<li>{$address->getFullAddress()}</li>";
+					}
+			echo "
+					</ul>
+				</td>
 			</tr>
 			";
 		}

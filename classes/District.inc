@@ -97,7 +97,7 @@
 			foreach($this->getPlaces() as $place) { $ids[] = $place->getId(); }
 			$ids = implode(",",$ids);
 
-			$sql = "delete from district_places where place_id in ($ids)";
+			$sql = "delete from district_places where district_id={$this->id} and place_id not in ($ids)";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 
 			foreach ($this->newPlaceIDs as $place_id)

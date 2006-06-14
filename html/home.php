@@ -8,6 +8,8 @@
 	<?php
 		include(GLOBAL_INCLUDES."/errorMessages.inc");
 		include(APPLICATION_HOME."/includes/addresses/searchForm.inc");
+
+		print_r($_SESSION['USER']->getRoles());
 	?>
 </div>
 <?php

@@ -3,7 +3,7 @@
 	The start of the add address process.  They have to have a valid segment before they
 	can add an address to the system.
 */
-	verifyUser("Administrator","ADDRESS COORDINATOR");
+	verifyUser(array("Administrator","ADDRESS COORDINATOR"));
 	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");
 	include(APPLICATION_HOME."/includes/menubar.inc");

@@ -6,10 +6,12 @@
 		private $status_id;
 
 		private $status;
-		private $segmentList;
 
 		private $streetName;
 		private $streetNameList;
+
+		private $segments = array();
+		private $newSegmentIds = array();
 
 		public function __construct($id=null)
 		{
@@ -54,6 +56,8 @@
 
 			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
+
+			if (count($this->getSegments())) { $this->saveSegments(); }
 		}
 
 		private function update($fields)
@@ -73,6 +77,34 @@
 			$this->id = $PDO->lastInsertID();
 		}
 
+		public function addSegment($segment)
+		{
+			$this->getSegments();
+			$this->newSegmentIds[] = $segment->getId();
+			$this->segments[] = $segment;
+		}
+		public function deleteSegment($segment_id)
+		{
+			foreach($this->getSegments as $i=>$segment) { if ($segment->getId() == $segment_id) unset($this->segments[$i]); }
+		}
+		private function saveSegments()
+		{
+			global $PDO;
+
+			$ids = array();
+			foreach($this->getSegments() as $segment) { $ids[] = $segment->getId(); }
+			$ids = implode(",",$ids);
+
+			$sql = "delete from street_segments where street_id={$this->id} and segment_id not in ($ids)";
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+
+			$statement = $PDO->prepare("insert street_segments values({$this->id},?)");
+			foreach($this->newSegmentIds as $segment_id)
+			{
+				if (false === $statement->execute(array("$segment_id"))) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			}
+		}
+
 
 		public function getId() { return $this->id; }
 		public function getNotes() { return $this->notes; }
@@ -86,12 +118,15 @@
 			}
 			else return null;
 		}
-		public function getSegmentList()
+		public function getSegments()
 		{
-			if (!$this->segmentList) { $this->segmentList = new SegmentList(array("street_id"=>$this->id)); }
-			return $this->segmentList;
+			if (!count($this->segments))
+			{
+				$segments = new SegmentList(array('street_id'=>$this->id));
+				foreach($segments as $segment) { $this->segments[] = $segment; }
+			}
+			return $this->segments;
 		}
-		public function getSegments() { return $this->getSegmentList(); }
 		/*
 		* Returns the primary name for this street
 		*/

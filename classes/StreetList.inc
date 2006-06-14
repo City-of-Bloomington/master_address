@@ -21,7 +21,7 @@
 			# Find by Segment requires us to join the street_segments table
 			if (isset($fields['segment_id']))
 			{
-				$this->joins.= " left join segments on streets.id=street_id";
+				$this->joins.= " left join street_segments on streets.id=street_id";
 				$options[] = "segment_id=$fields[segment_id]";
 			}
 

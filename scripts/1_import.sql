@@ -143,7 +143,7 @@ insert users set username='winklec',authenticationMethod='LDAP',firstname='Chuck
 update oldAddressData.segments set streetID=null where streetID=0;
 
 
-insert segments select null,streetID,tag,lowadd,highadd,j.id,s.id,comments,speed,indotID,class,maintain,
+insert segments select null,tag,lowadd,highadd,j.id,s.id,comments,speed,indotID,class,maintain,
 leftlow,lefthigh,rightlow,righthigh,rcinode1,rcinode2,low_node,high_node,
 low_x,low_y,high_x,high_y,travel,d.id,complete,rclback,rclahead,class_row,
 maparea,lastdate,up_act,u.id
@@ -153,6 +153,9 @@ left join users u on up_by=username
 left join statuses s on seg_stat=status;
 
 alter table segments add index (tag);
+
+-- link the segments to the streets
+insert street_segments select distinct streetID,segments.id from segments left join oldAddressData.segments using (tag) where streetID is not null;
 
 -- Some final cleanup on segments
 update segments set transportationClass=null where transportationClass="\'";
