@@ -38,7 +38,7 @@
 			{
 				echo "
 				<tr><td><a href=\"viewAddress.php?id={$address->getId()}\">{$address->getNumber()} {$address->getSuffix()}</a></td>
-					<td><a href=\"viewAddress.php?id={$address->getId()}\">{$address->getSegment()->getFullStreetName()}</a></td>
+					<td><a href=\"viewAddress.php?id={$address->getId()}\">{$address->getStreetName()->getFullname()}</a></td>
 				</tr>
 				";
 			}

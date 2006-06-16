@@ -236,17 +236,12 @@ where location_id in (select id from places);
 
 
 -- buildings
--- I think these are going to have to be on hold for now.  The data's just to wonky.
--- Right now, we can just link the units directly to the locations.  Come back later
--- and do the buildings
+insert buildings select building_id,building_name,effective_start_date,effective_end_date,gis_tag,statuses.id
+from oldAddressData.buildings left join oldAddressData.buildings_status_lookup using (status_code)
+left join statuses on description=status;
 
--- This would import the buildings, if we didn't have buildings that somehow existed on multiple locations
--- insert buildings
--- select t.building_id,l.placeID,building_name,effective_start_date,effective_end_date,gis_tag,statusCode
--- from places l left join oldAddressData.building_address_location on placeID=location_id
--- left join tempBuildings t using(building_id)
--- left join oldAddressData.buildings_status_lookup using (status_code)
--- left join statusCodes on description=status;
+insert building_places select building_id,location_id from oldAddressData.building_address_location
+where location_id in (select id from places);
 
 
 -- The rest of these tables don't have complete data in the old system.

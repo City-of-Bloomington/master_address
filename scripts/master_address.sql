@@ -211,14 +211,12 @@ CREATE TABLE places (
 
 CREATE TABLE buildings (
 	id int unsigned auto_increment NOT NULL,
-	place_id int unsigned NOT NULL,
 	name varchar(128),
 	startDate date NOT NULL,
 	endDate date,
 	GISTag varchar(20),
 	status_id int unsigned DEFAULT 1 NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY(place_id) REFERENCES places (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
 
 CREATE TABLE units (
@@ -328,6 +326,13 @@ CREATE TABLE placeHistory (
 	user_id int unsigned,
 	FOREIGN KEY(place_id) REFERENCES places (id),
 	FOREIGN KEY(user_id) REFERENCES users (id)) engine=InnoDB;
+
+CREATE TABLE building_places (
+	building_id int unsigned NOT NULL,
+	place_id int unsigned NOT NULL,
+	primary key (building_id,place_id),
+	FOREIGN KEY(building_id) REFERENCES buildings (id),
+	FOREIGN KEY(place_id) REFERENCES places (id)) engine=InnoDB;
 
 CREATE TABLE user_roles (
 	user_id int unsigned NOT NULL,

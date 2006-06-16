@@ -3,7 +3,10 @@
 	Required variables:	$address
 */
 ?>
-	<div class="titleBar"><?php echo "{$address->getFullAddress()}, {$address->getCity()->getName()}, {$address->getZip()}"; ?></div>
+	<div class="titleBar">
+		<a href="<?php echo BASE_URL; ?>/addresses/viewAddress.php?id=<?php echo $address->getId(); ?>">
+		<?php echo "{$address->getFullAddress()}, {$address->getCity()->getName()}, {$address->getZip()}"; ?></a>
+	</div>
 	<p class="comments"><?php echo $address->getNotes(); ?></p>
 	<table>
 	<tr><th>Status</th><td><?php echo $address->getStatus()->getStatus(); ?></td></tr>

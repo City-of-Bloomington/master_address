@@ -55,12 +55,12 @@ I'll try and add in the completion dates and keep them accurate.</p>
 	<tr><td>streets are on routes</td><td></td><td></td><td></td></tr>
 	<tr><td>names are used as streetNames</td><td>2006-06-07</td><td></td><td></td></tr>
 	<tr><td>streets have streetNames</td><td>2006-06-07</td><td></td><td></td></tr>
-	<tr><td>streets have addresses</td><td></td><td></td><td></td></tr>
+	<tr><td>streets have addresses</td><td>2006-06-14</td><td></td><td></td></tr>
 	<tr><td>streets have segments</td><td>2006-06-07</td><td></td><td></td></tr>
 	<tr><td>segments have addresses</td><td></td><td></td><td></td></tr>
 	<tr><td>places have a history of actions</td><td></td><td></td><td></td></tr>
 	<tr><td>places have addresses</td><td>2006-06-07</td><td></td><td></td></tr>
-	<tr><td>places have buildings</td><td></td><td></td><td></td></tr>
+	<tr><td>places have buildings</td><td>2006-06-16</td><td></td><td></td></tr>
 	<tr><td>places have units</td><td></td><td></td><td></td></tr>
 	<tr><td>places can be in many districts</td><td></td><td></td><td></td></tr>
 	<tr><td>districts have places</td><td></td><td></td><td></td></tr>

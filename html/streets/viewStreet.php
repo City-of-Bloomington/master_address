@@ -28,26 +28,43 @@
 
 	<div class="interfaceBox">
 		<div class="titleBar">
-			<?php if (isset($_SESSION['USER'])) { echo "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('addSegmentForm.php?street_id=$_GET[id]');\">Add</button>"; } ?>
+			<?php
+				if (isset($_SESSION['USER']) && $_SESSION['USER']->hasRole("Administrator"))
+				{ echo "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('addSegmentForm.php?street_id=$_GET[id]');\">Add</button>"; }
+			?>
 			Segments
 		</div>
 	<table>
-	<tr><th>Tag</th><th>Starting Number</th><th>Ending Number</th><th>Addresses</th></tr>
+	<tr><th>Tag</th><th>Range</th><th>Places</th></tr>
 	<?php
 		foreach($street->getSegments() as $segment)
 		{
 			echo "
 			<tr><td>{$segment->getTag()}</td>
-				<td>{$segment->getStartingNumber()}</td>
-				<td>{$segment->getEndingNumber()}</td>
-				<td><ul>
+				<td>{$segment->getStartingNumber()} - {$segment->getEndingNumber()}</td>
+				<td><table><tr><th></th><th>This Street</th><th>Other</th></tr>
 			";
-					foreach($segment->getAddresses() as $address)
+					foreach($segment->getPlaces() as $place)
 					{
-						echo "<li>{$address->getFullAddress()}</li>";
+						echo "
+						<tr><td><a href=\"".BASE_URL."/places/viewPlace.php?id={$place->getId()}\">{$place->getId()}</a></td>
+							<td><ul class=\"compact\">
+						";
+								foreach($place->getAddresses() as $address) { if ($address->getStreet_id() == $_GET['id']) echo "<li>{$address->getFullAddress()}</li>"; }
+						echo "
+								</ul>
+							</td>
+							<td><ul class=\"compact\">
+						";
+								foreach($place->getAddresses() as $address) { if ($address->getStreet_id() != $_GET['id']) echo "<li>{$address->getFullAddress()}</li>"; }
+						echo "
+								</ul>
+							</td>
+						</tr>
+						";
 					}
 			echo "
-					</ul>
+					</table>
 				</td>
 			</tr>
 			";

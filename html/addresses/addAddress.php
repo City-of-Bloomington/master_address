@@ -18,7 +18,7 @@
 						largeItemPickupDay_id
 						recyclingPickupWeek_id
 */
-	verifyUser("Administrator","ADDRESS COORDINATOR");
+	verifyUser(array("Administrator","ADDRESS COORDINATOR"));
 	#--------------------------------------------------------------------------
 	# Create the new address
 	#--------------------------------------------------------------------------

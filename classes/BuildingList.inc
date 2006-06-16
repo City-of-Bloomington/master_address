@@ -1,23 +1,37 @@
 <?php
 	class BuildingList extends PDOResultIterator
 	{
+		private $joins = "";
+		private $where = "";
+
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+
 
 		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
 
 			$options = array();
-			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
-			if (isset($fields['place_id'])) { $options[] = "place_id=$fields[place_id]"; }
+			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
 			if (isset($fields['startDate'])) { $options[] = "startDate='$fields[startDate]'"; }
 			if (isset($fields['endDate'])) { $options[] = "endDate='$fields[endDate]'"; }
 			if (isset($fields['GISTag'])) { $options[] = "GISTag='$fields[GISTag]'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id=$fields[status_id]"; }
+			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
 
-			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
-			$sql = "select id from buildings $where order by $sort";
+
+			# Finding on fields from other tables required joining those tables.
+			# You can add fields from other tables to $options by adding the join SQL
+			# to $this->joins here
+			if (isset($fields['place_id']))
+			{
+				$this->joins.= " left join building_places on buildings.id=building_id";
+				$options[] = "place_id=$fields[place_id]";
+			}
+
+
+			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
+			$sql = "select distinct buildings.id from buildings {$this->joins} {$this->where} order by $sort";
 
 			$result = $PDO->query($sql);
 			if ($result)

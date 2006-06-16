@@ -31,6 +31,7 @@
 		private $status;
 
 		private $addressList;
+		private $buildingList;
 
 
 		public function __construct($id=null)
@@ -207,6 +208,11 @@
 				return $this->status;
 			}
 			else return null;
+		}
+		public function getBuildings()
+		{
+			if (!count($this->buildingList)) { $this->buildingList = new BuildingList(array("place_id"=>$this->id)); }
+			return $this->buildingList;
 		}
 
 

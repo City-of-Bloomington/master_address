@@ -11,7 +11,7 @@
 			global $PDO;
 
 			$options = array();
-			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
+			if (isset($fields['id'])) { $options[] = "places.id=$fields[id]"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
 			if (isset($fields['township_id'])) { $options[] = "township_id=$fields[township_id]"; }
 			if (isset($fields['jurisdiction_id'])) { $options[] = "jurisdiction_id=$fields[jurisdiction_id]"; }
@@ -23,20 +23,27 @@
 			if (isset($fields['section'])) { $options[] = "section='$fields[section]'"; }
 			if (isset($fields['quarterSection'])) { $options[] = "quarterSection='$fields[quarterSection]'"; }
 			if (isset($fields['class'])) { $options[] = "class='$fields[class]'"; }
-			if (isset($fields['startDate'])) { $options[] = "startDate='$fields[startDate]'"; }
-			if (isset($fields['endDate'])) { $options[] = "endDate='$fields[endDate]'"; }
+			if (isset($fields['startDate'])) { $options[] = "places.startDate='$fields[startDate]'"; }
+			if (isset($fields['endDate'])) { $options[] = "places.endDate='$fields[endDate]'"; }
 			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
 
 
 			# To find by district we have to join the district_places table
 			if (isset($fields['district_id']))
 			{
-				$this->joins = "left join district_places d on d.place_id=places.id";
+				$this->joins.= " left join district_places d on d.place_id=places.id";
 				$options[] = "district_id=$fields[district_id]";
 			}
 
+			# To find by segment_id join the addresses table
+			if (isset($fields['segment_id']))
+			{
+				$this->joins.= " left join addresses on addresses.place_id=places.id";
+				$options[] = "segment_id=$fields[segment_id]";
+			}
+
 			if (count($options)) { $this->where = " where ".implode(" and ",$options); }
-			$sql = "select id from places {$this->joins} {$this->where} order by $sort";
+			$sql = "select distinct places.id from places {$this->joins} {$this->where} order by $sort";
 
 			$result = $PDO->query($sql);
 			if ($result)

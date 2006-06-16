@@ -34,8 +34,7 @@
 			# Searching on street name information requires some joins
 			if (isset($fields['direction_id']) || isset($fields['name']) || isset($fields['suffix_id']) || isset($fields['postDirection_id']))
 			{
-				$this->joins.= "left join segments on a.segment_id=segments.id
-								left join streets on segments.street_id=streets.id
+				$this->joins.= "left join streets on a.street_id=streets.id
 								left join streetNames on streets.id=streetNames.street_id
 								left join names on streetNames.name_id=names.id";
 				if (isset($fields['direction_id'])) { $options[] = "direction_id='$fields[direction_id]'"; }

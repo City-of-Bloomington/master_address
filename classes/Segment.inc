@@ -42,6 +42,7 @@
 		private $lastUpdatedUser;
 
 		private $addressList;
+		private $placeList;
 		private $streets;
 
 
@@ -221,6 +222,11 @@
 		{
 			if (!count($this->streets)) { $this->streets = new StreetList(array("segment_id"=>$this->id)); }
 			return $this->streets;
+		}
+		public function getPlaces()
+		{
+			if (!count($this->placeList)) { $this->placeList = new PlaceList(array("segment_id"=>$this->id)); }
+			return $this->placeList;
 		}
 
 

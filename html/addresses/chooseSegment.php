@@ -8,7 +8,7 @@
 						suffix_id
 						postDirection_id
 */
-	verifyUser("Administrator","ADDRESS COORDINATOR");
+	verifyUser(array("Administrator","ADDRESS COORDINATOR"));
 
 	#--------------------------------------------------------------------------
 	# We absolutely have to have a street name and number

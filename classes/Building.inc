@@ -2,15 +2,11 @@
 	class Building
 	{
 		private $id;
-		private $place_id;
 		private $name;
 		private $startDate;
 		private $endDate;
 		private $GISTag;
 		private $status_id;
-
-		private $place;
-		private $status;
 
 
 
@@ -26,10 +22,7 @@
 				{
 					if ($row = $result->fetch())
 					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
 						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
 
 						$result->closeCursor();
 					}
@@ -48,16 +41,18 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->place_id) { throw new Exception("missingRequiredFields"); }
 
 
+			# This generates generic SQL that should work right away.
+			# You can (and maybe should) replace this $fields code with your own custom SQL
+			# for each property of this class,
 			$fields = array();
-			$fields[] = "place_id={$this->place_id}";
 			$fields[] = $this->name ? "name='{$this->name}'" : "name=null";
-			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=now()";
+			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
 			$fields[] = $this->GISTag ? "GISTag='{$this->GISTag}'" : "GISTag=null";
-			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
+			$fields[] = $this->status_id ? "status_id='{$this->status_id}'" : "status_id=null";
+
 			$fields = implode(",",$fields);
 
 
@@ -84,37 +79,17 @@
 
 
 		public function getId() { return $this->id; }
-		public function getPlace_id() { return $this->place_id; }
 		public function getName() { return $this->name; }
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
 		public function getGISTag() { return $this->GISTag; }
 		public function getStatus_id() { return $this->status_id; }
-		public function getPlace()
-		{
-			if ($this->place_id)
-			{
-				if (!$this->place) { $this->place = new Place($this->place_id); }
-				return $this->place;
-			}
-			else return null;
-		}
-		public function getStatus()
-		{
-			if ($this->status_id)
-			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
-				return $this->status;
-			}
-			else return null;
-		}
 
 
-		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }
-		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setName($string) { $this->name = $string; }
 		public function setStartDate($date) { $this->startDate = $date; }
 		public function setEndDate($date) { $this->endDate = $date; }
-		public function setGISTag($string) { $this->GISTag = sanitizeString($string); }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setGISTag($string) { $this->GISTag = $string; }
+		public function setStatus_id($int) { $this->status_id = $int; }
 	}
 ?>

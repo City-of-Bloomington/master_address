@@ -33,7 +33,7 @@
 					echo "
 					<tr><td><a href=\"".BASE_URL."/places/viewPlace.php?id={$place->getId()}\">{$place->getId()}</a></td>
 						<td>{$place->getStartDate()}</td>
-						<td><ul>";
+						<td><ul class=\"compact\">";
 					foreach($place->getAddressList() as $address)
 					{
 						echo "<li><a href=\"".BASE_URL."/addresses/viewAddress.php?id={$address->getId()}\">";

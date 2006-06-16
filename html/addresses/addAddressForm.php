@@ -4,7 +4,7 @@
 						suffix
 						segment_id
 */
-	verifyUser("Administrator","ADDRESS COORDINATOR");
+	verifyUser(array("Administrator","ADDRESS COORDINATOR"));
 
 	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");

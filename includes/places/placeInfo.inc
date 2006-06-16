@@ -3,7 +3,10 @@
 	Required variables:		place  # Must be a place object
 */
 ?>
-	<div class="interfaceBox"><div class="titleBar">Place Information: <?php echo $place->getName(); ?></div>
+	<div class="interfaceBox">
+		<div class="titleBar">Place
+			<?php echo "<a href=\"".BASE_URL."/places/viewPlace.php?id={$place->getId()}\">{$place->getId()}: {$place->getName()}</a>"; ?>
+		</div>
 	<table>
 	<tr><th>Township</th><td><?php echo $place->getTownship(); ?></td></tr>
 	<tr><th>Jurisdiction</th><td><?php echo $place->getJurisdiction(); ?></td></tr>
@@ -26,3 +29,14 @@
 	<tr><th>Status</th><td><?php echo $place->getStatus(); ?></td></tr>
 	</table>
 	</div>
+
+	<div class="titleBar">Buildings</div>
+	<table>
+	<?php
+		$buildings = new BuildingList(array("place_id"=>$place->getId()));
+		foreach($buildings as $building)
+		{
+			echo "<tr><td>{$building->getName()}</td><td>{$building->getGISTag()}</td></tr>";
+		}
+	?>
+	</table>
