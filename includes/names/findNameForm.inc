@@ -1,24 +1,23 @@
-<?php
-/*
-	$_GET variables:	direction_id		town_id
-						name
-						suffix_id
-						postDirection_id
-*/
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
-?>
-<div id="mainContent">
-	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
-
-	<p>Names can be used for multiple streets.</p>
-
-	<h1>Find a Name</h1>
 	<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 	<fieldset><legend>Name info</legend>
 		<?php include(APPLICATION_HOME."/includes/names/findFields.inc"); ?>
+
+		<table>
+		<tr><td><label for="town_id">Town</label></td>
+			<td><select name="town_id"><option></option>
+				<?php
+					$towns = new TownList();
+					$towns->find();
+					foreach($towns as $town)
+					{
+						if (isset($_GET['town_id']) && $_GET['town_id']==$town->getId()) { echo "<option value\"{$town->getId()}\" selected=\"selected\">{$town->getName()}</option>"; }
+						else { echo "<option value=\"{$town->getId()}\">{$town->getName()}</option>"; }
+					}
+				?>
+				</select>
+			</td>
+		</tr>
+		</table>
 
 		<button type="submit" class="search">Search</button>
 	</fieldset>
@@ -48,16 +47,4 @@
 				else { echo "<p>No Names Found</p>"; }
 			}
 		}
-
-
-		if (userHasRole("Administrator"))
-		{
-			echo "<h1>Add a new Name</h1>";
-			include(APPLICATION_HOME."/includes/names/addNameForm.inc");
-		}
 	?>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
-?>

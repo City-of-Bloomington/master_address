@@ -67,7 +67,7 @@
 			if ($this->town_id) { $fields[] = "town_id={$this->town_id}"; } else { $fields[] = "town_id=null"; }
 			if ($this->direction_id) { $fields[] = "direction_id={$this->direction_id}"; } else { $fields[] = "direction_id=null"; }
 			if ($this->suffix_id) { $fields[] = "suffix_id={$this->suffix_id}"; } else { $fields[] = "suffix_id=null"; }
-			if ($this->postDirection_id) { $fields[] = "postDirection_id={$this->postDirection_id}"; } else { $fields[] = "postDirection=null"; }
+			if ($this->postDirection_id) { $fields[] = "postDirection_id={$this->postDirection_id}"; } else { $fields[] = "postDirection_id=null"; }
 			if ($this->startDate) { $fields[] = "startDate='{$this->startDate}'"; } else { $fields[] = "startDate=null"; }
 			if ($this->endDate) { $fields[] = "endDate='{$this->endDate}'"; } else { $fields[] = "endDate=null"; }
 			if ($this->notes) { $fields[] = "notes='{$this->notes}'"; } else { $fields[] = "notes=null"; }

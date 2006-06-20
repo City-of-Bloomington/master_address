@@ -1,5 +1,6 @@
 	<table>
-	<tr><td><select name="direction_id" id="direction_id"><option></option>
+	<tr><td><label for="name">Name</label></td>
+		<td><select name="direction_id" id="direction_id"><option></option>
 			<?php
 				$directionList = new DirectionList();
 				$directionList->find();
@@ -28,6 +29,20 @@
 				{
 					if (isset($_GET['postDirection_id']) && $_GET['postDirection_id']==$direction->getId()) { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
 					else { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	<tr><td><label for="town_id">Town</label></td>
+		<td><select name="town_id"><option></option>
+			<?php
+				$towns = new TownList();
+				$towns->find();
+				foreach($towns as $town)
+				{
+					if (isset($_GET['town_id']) && $_GET['town_id']==$town->getId()) { echo "<option value\"{$town->getId()}\" selected=\"selected\">{$town->getName()}</option>"; }
+					else { echo "<option value=\"{$town->getId()}\">{$town->getName()}</option>"; }
 				}
 			?>
 			</select>

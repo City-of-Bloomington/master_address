@@ -20,7 +20,7 @@ I'll try and add in the completion dates and keep them accurate.</p>
 	<tr><td>district_places</td><td></td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>districts</td><td></td><td>In progress</td><td></td><td>2006-05-10</td><td></td></tr>
 	<tr><td>jurisdictions</td><td>2006-05-10</td><td></td><td></td><td>2006-05-10</td><td></td></tr>
-	<tr><td>names</td><td>2006-06-07</td><td>2006-06-07</td><td></td><td>2006-05-10</td><td></td></tr>
+	<tr><td>names</td><td>2006-06-07</td><td>2006-06-07</td><td>2006-06-20</td><td>2006-05-10</td><td></td></tr>
 	<tr><td>placeHistory</td><td></td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>placeTypes</td><td>2006-05-10</td><td>2006-05-10</td><td></td><td>2006-05-10</td><td></td></tr>
 	<tr><td>places</td><td>2006-05-23</td><td>2006-06-07</td><td>2006-05-23</td><td></td><td></td></tr>
@@ -34,7 +34,7 @@ I'll try and add in the completion dates and keep them accurate.</p>
 	<tr><td>stateRoads</td><td></td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>statuses</td><td>2006-05-10</td><td>2006-05-10</td><td></td><td>2006-05-10</td><td></td></tr>
 	<tr><td>streetNameTypes</td><td></td><td></td><td></td><td></td><td></td></tr>
-	<tr><td>streetNames</td><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr><td>streetNames</td><td>2006-06-20</td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>streets</td><td>2006-06-07</td><td>2006-06-07</td><td></td><td></td><td></td></tr>
 	<tr><td>subdivisionNames</td><td></td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>subdivision_plats</td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -53,13 +53,13 @@ I'll try and add in the completion dates and keep them accurate.</p>
 	<tr><th></th><th>list</th><th>assign</th><th>remove</th></tr>
 	<tr><td>routes have streets</td><td></td><td></td><td></td></tr>
 	<tr><td>streets are on routes</td><td></td><td></td><td></td></tr>
-	<tr><td>names are used as streetNames</td><td>2006-06-07</td><td></td><td></td></tr>
-	<tr><td>streets have streetNames</td><td>2006-06-07</td><td></td><td></td></tr>
+	<tr><td>names are used as streetNames</td><td>2006-06-07</td><td>In Progress</td><td></td></tr>
+	<tr><td>streets have streetNames</td><td>2006-06-07</td><td>In Progress</td><td></td></tr>
 	<tr><td>streets have addresses</td><td>2006-06-14</td><td></td><td></td></tr>
-	<tr><td>streets have segments</td><td>2006-06-07</td><td></td><td></td></tr>
-	<tr><td>segments have addresses</td><td></td><td></td><td></td></tr>
+	<tr><td>streets have segments</td><td>2006-06-07</td><td>In Progress</td><td></td></tr>
+	<tr><td>segments have addresses</td><td>2006-06-16</td><td>In Progress</td><td></td></tr>
 	<tr><td>places have a history of actions</td><td></td><td></td><td></td></tr>
-	<tr><td>places have addresses</td><td>2006-06-07</td><td></td><td></td></tr>
+	<tr><td>places have addresses</td><td>2006-06-07</td><td>In Progress</td><td></td></tr>
 	<tr><td>places have buildings</td><td>2006-06-16</td><td></td><td></td></tr>
 	<tr><td>places have units</td><td></td><td></td><td></td></tr>
 	<tr><td>places can be in many districts</td><td></td><td></td><td></td></tr>

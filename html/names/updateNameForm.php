@@ -14,14 +14,51 @@
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
 
+	<h1>Edit Name:<?php echo $_GET['id']; ?></h1>
+
 	<form method="post" action="updateName.php">
 	<fieldset><legend>Name</legend>
 		<input name="id" type="hidden" value="<?php echo $name->getId(); ?>" />
 
 		<table>
+		<tr><td><label for="name">Name</label></td>
+			<td><select name="direction_id" id="direction_id"><option></option>
+				<?php
+					$directionList = new DirectionList();
+					$directionList->find();
+					foreach($directionList as $direction)
+					{
+						if ($name->getDirection_id() != $direction->getId()) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
+						else { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
+					}
+				?>
+				</select>
+				<input name="name" id="name" value="<?php echo $name->getName(); ?>" />
+				<select name="suffix_id" id="suffix_id"><option></option>
+				<?php
+					$suffixList = new SuffixList();
+					$suffixList->find();
+					foreach($suffixList as $suffix)
+					{
+						if ($name->getSuffix_id() != $suffix->getId()) { echo "<option value=\"{$suffix->getId()}\">{$suffix->getSuffix()}</option>"; }
+						else { echo "<option value=\"{$suffix->getId()}\" selected=\"selected\">{$suffix->getSuffix()}</option>"; }
+					}
+				?>
+				</select>
+				<select name="postDirection_id" id="postDirection_id"><option></option>
+				<?php
+					# This reuses the directionList we created for the $name->directionCode
+					foreach($directionList as $direction)
+					{
+						if ($name->getPostDirection_id() != $direction->getId()) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
+						else { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
+					}
+				?>
+				</select>
+			</td>
+		</tr>
 		<tr><td><label for="town_id">Town</label></td>
-			<td colspan="3">
-				<select name="town_id" id="town_id">
+			<td><select name="town_id" id="town_id">
 				<?php
 					$townList = new TownList();
 					$townList->find();
@@ -34,52 +71,6 @@
 				</select>
 			</td>
 		</tr>
-		<tr><td><label for="direction_id">Dir</label></td>
-			<td><label for="name">Name</label></td>
-			<td><label for="suffix_id">Suff</label></td>
-			<td><label for="postDirection_id">Dir</label></td>
-		</tr>
-		<tr><td><select name="direction_id" id="direction_id"><option></option>
-				<?php
-					$directionList = new DirectionList();
-					$directionList->find();
-					foreach($directionList as $direction)
-					{
-						if ($name->getDirection_id() != $direction->getId()) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
-						else { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
-					}
-				?>
-				</select>
-			</td>88
-			<td><input name="name" id="name" value="<?php echo $name->getName(); ?>" /></td>
-			<td><select name="suffix_id" id="suffix_id"><option></option>
-				<?php
-					$suffixList = new SuffixList();
-					$suffixList->find();
-					foreach($suffixList as $suffix)
-					{
-						if ($name->getSuffix_id() != $suffix->getId()) { echo "<option value=\"{$suffix->getId()}\">{$suffix->getSuffix()}</option>"; }
-						else { echo "<option value=\"{$suffix->getId()}\" selected=\"selected\">{$suffix->getSuffix()}</option>"; }
-					}
-				?>
-				</select>
-			</td>
-			<td><select name="postDirection_id" id="postDirection_id"><option></option>
-				<?php
-					# This reuses the directionList we created for the $name->directionCode
-					foreach($directionList as $direction)
-					{
-						if ($name->getPostDirection_id() != $direction->getId()) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
-						else { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
-					}
-				?>
-				</select>
-			</td>
-		</tr>
-		</table>
-	</fieldset>
-	<fieldset><legend>Info</legend>
-		<table>
 		<tr><td><label for="startMonth">Start Date</label></td>
 			<td><select name="startMonth" id="startMonth">
 				<?php
@@ -105,7 +96,7 @@
 			</td>
 		</tr>
 		<tr><td><label for="endMonth">End Date</label></td>
-			<td><select name="endMonth" id="endMonth">
+			<td><select name="endMonth" id="endMonth"><option></option>
 				<?php
 					if ($name->getEndDate()) { list($endYear,$endMonth,$endDay) = explode("-",$name->getEndDate()); }
 					else { list($endYear,$endMonth,$endDay) = array("","",""); }
@@ -116,7 +107,7 @@
 					}
 				?>
 				</select>
-				<select name="endDay">
+				<select name="endDay"><option></option>
 				<?php
 					for($i=1; $i<=31; $i++)
 					{
@@ -128,18 +119,18 @@
 				<input name="endYear" id="endYear" size="4" maxlength="4" value="<?php echo $endYear; ?>" />
 			</td>
 		</tr>
-		<tr><td colspan="2">
-				<div><label for="notes">Notes</label></div>
-				<textarea name="notes" id="notes" rows="3" cols="60"><?php echo $name->getNotes(); ?></textarea>
-		</td></tr>
 		</table>
+		<div><label for="notes">Notes</label></div>
+		<textarea name="notes" id="notes" rows="3" cols="60"><?php echo $name->getNotes(); ?></textarea>
 
 	</fieldset>
 	<fieldset>
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='home.php';">Cancel</button>
+		<button type="button" class="cancel" onclick="document.location.href='viewName.php?id=<?php echo $_GET['id']; ?>';">Cancel</button>
 	</fieldset>
 	</form>
+
+	<?php include(APPLICATION_HOME."/includes/names/listStreets.inc"); ?>
 </div>
 <?php
 	include(APPLICATION_HOME."/includes/footer.inc");

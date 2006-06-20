@@ -1,10 +1,20 @@
 <?php
 /*
-	$_GET variables:	number
-						suffix
+	$_GET variables:	street_id
 						segment_id
+						place_id
+
+						return_url
 */
 	verifyUser(array("Administrator","ADDRESS COORDINATOR"));
+
+	# Check for required parameters.  This form willl not work without them
+	if (!$_GET['street_id'] || !$_GET['place_id'])
+	{
+		$_SESSION['errorMessages'][] = new Exception("missingRequiredFields");
+		Header("Location: $_GET[return_url]");
+		exit();
+	}
 
 	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");
@@ -18,14 +28,15 @@
 	<h2><?php echo "$_GET[number] $_GET[suffix] {$segment->getFullStreetName()}"; ?></h2>
 	<form method="post" action="addAddress.php">
 	<fieldset><legend>Address Info</legend>
-		<input name="number" type="hidden" value="<?php echo $_GET['number']; ?>" />
-		<input name="suffix" type="hidden" value="<?php echo $_GET['suffix']; ?>" />
-		<input name="segment_id" type="hidden" value="<?php echo $_GET['segment_id']; ?>" />
+		<input name="street_id" type="hidden" value="<?php echo $_GET['street_id']; ?>" />
+		<input name="place_id" type="hidden" value="<?php echO $_GET['place_id']; ?>" />
+		<input name="segment_id" type="hidden" value="<?php if (isset($_GET['segment_id'])) echo $_GET['segment_id']; ?>" />
 
 		<table>
+		<tr><td><label for="number">Number</label></td>
+			<td><input name="number" id="number" /><input name="suffix" size="4" /></td></tr>
 		<tr><td><label for="addressType">Type</label></td>
-			<td colspan="2">
-				<select name="addressType" id="addressType">
+			<td><select name="addressType" id="addressType">
 					<option>STREET</option>
 					<option>UTILITY</option>
 					<option>TEMPORARY</option>
@@ -34,8 +45,7 @@
 				</select>
 			</td></tr>
 		<tr><td><label for="city_id">City</label></td>
-			<td colspan="2">
-				<select name="city_id" id="city_id">
+			<td><select name="city_id" id="city_id">
 				<?php
 					$list = new CityList();
 					$list->find();
@@ -44,13 +54,11 @@
 				</select>
 			</td></tr>
 		<tr><td><label for="zip">Zip</label></td>
-			<td colspan="2">
-				<input name="zip" id="zip" size="5" maxlength="5" />
+			<td><input name="zip" id="zip" size="5" maxlength="5" />
 				<input name="zipplus4" id="zipplus4" size="4" maxlength="4" />
 			</td></tr>
 		<tr><td><label for="status_id">Status</label></td>
-			<td colspan="2">
-				<select name="status_id" id="status_id">
+			<td><select name="status_id" id="status_id">
 				<?php
 					$list = new StatusList();
 					$list->find();
@@ -59,14 +67,12 @@
 				</select>
 			</td></tr>
 		<tr><td><label for="active_yes">Active</label></td>
-			<td colspan="2">
-				<label><input type="radio" name="active" id="active_yes" value="Y" checked="checked" />Yes</label>
+			<td><label><input type="radio" name="active" id="active_yes" value="Y" checked="checked" />Yes</label>
 				<label><input type="radio" name="active" id="active_no" value="N" />No</label>
 			</td>
 		</tr>
 		<tr><td><label for="startMonth">Start Date</label></td>
-			<td colspan="2">
-				<select name="startMonth" id="startMonth"><option></option>
+			<td><select name="startMonth" id="startMonth"><option></option>
 				<?php
 					$now = getdate();
 					for($i=1; $i<=12; $i++)
@@ -89,8 +95,7 @@
 			</td>
 		</tr>
 		<tr><td><label for="endMonth">End Date</label></td>
-			<td colspan="2">
-				<select name="endMonth" id="endMonth"><option></option>
+			<td><select name="endMonth" id="endMonth"><option></option>
 				<?php
 					for($i=1; $i<=12; $i++) { echo "<option>$i</option>"; }
 				?>
@@ -110,8 +115,6 @@
 		</tr>
 		</table>
 	</fieldset>
-
-	<?php include(APPLICATION_HOME."/includes/places/addFormFields.inc"); ?>
 
 	<fieldset>
 		<button type="submit" class="submit">Submit</button>
