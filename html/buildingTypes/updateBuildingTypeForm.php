@@ -9,7 +9,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$buildingType = new BuildingType($_GET['id']);
+	$buildingType = new BuildingType($PDO,$_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>

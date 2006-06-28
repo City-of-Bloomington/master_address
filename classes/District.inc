@@ -1,5 +1,5 @@
 <?php
-	class District
+	class District extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -11,14 +11,14 @@
 		private $newPlaceIDs = array();
 
 
-		public function __construct($id=null)
+		public function __construct(PDO $PDO,$id=null)
 		{
-			global $PDO;
+			$this->PDO = $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from districts where id=$id";
-				$result = $PDO->query($sql);
+				$result = $this->PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -31,7 +31,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -64,19 +64,15 @@
 
 		private function update($fields)
 		{
-			global $PDO;
-
 			$sql = "update districts set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
-			global $PDO;
-
 			$sql = "insert districts set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $PDO->lastInsertID();
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $this->PDO->lastInsertID();
 		}
 
 		public function addPlace($place)
@@ -98,12 +94,12 @@
 			$ids = implode(",",$ids);
 
 			$sql = "delete from district_places where district_id={$this->id} and place_id not in ($ids)";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 
 			foreach ($this->newPlaceIDs as $place_id)
 			{
 				$sql = "insert district_places values($place_id,{$this->id})";
-				if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 		}
 
@@ -114,14 +110,14 @@
 		public function getDistrictType_id() { return $this->districtType_id; }
 		public function getDistrictType()
 		{
-			if (!$this->districtType) { $this->districtType = new DistrictType($this->districtType_id); }
+			if (!$this->districtType) { $this->districtType = new DistrictType($this->PDO,$this->districtType_id); }
 			return $this->districtType;
 		}
 		public function getPlaces()
 		{
 			if (!count($this->places))
 			{
-				$placeList = new PlaceList();
+				$placeList = new PlaceList($this->PDO);
 				$placeList->find(array("district_id"=>$this->id));
 				foreach($placeList as $place) { $this->places[] = $place; }
 			}
@@ -131,7 +127,7 @@
 		public function setName($string) { $this->name = sanitizeString($string); }
 		public function setDistrictType_id($districtType_id)
 		{
-			$this->districtType = new DistrictType($districtType_id);
+			$this->districtType = new DistrictType($this->PDO,$districtType_id);
 			$this->districtType_id = $districtType_id;
 		}
 

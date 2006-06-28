@@ -15,7 +15,7 @@
 
 		if (count($search))
 		{
-			$placeList = new PlaceList($search);
+			$placeList = new PlaceList($PDO,$search);
 
 			echo "<h2>Places Found (".count($placeList).")</h2>";
 			if (count($placeList))

@@ -1,19 +1,17 @@
 <?php
-	class Town
+	class Town extends ActiveRecord
 	{
 		private $id;
 		private $name;
 
-
-
-		public function __construct($id=null)
+		public function __construct(PDO $PDO,$id=null)
 		{
-			global $PDO;
+			$this->PDO = $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from towns where id=$id";
-				$result = $PDO->query($sql);
+				$result = $this->PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -25,7 +23,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -54,19 +52,15 @@
 
 		private function update($fields)
 		{
-			global $PDO;
-
 			$sql = "update towns set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
-			global $PDO;
-
 			$sql = "insert towns set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $PDO->lastInsertID();
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $this->PDO->lastInsertID();
 		}
 
 		public function __toString() { return $this->name; }

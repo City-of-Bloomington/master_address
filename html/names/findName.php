@@ -13,7 +13,7 @@
 	foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 	if (count($search))
 	{
-		$nameList = new NameList($search);
+		$nameList = new NameList($PDO,$search);
 		switch (count($nameList))
 		{
 			case 0:

@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$suffix = new Suffix($_POST['id']);
+	$suffix = new Suffix($PDO,$_POST['id']);
 	$suffix->setSuffix($_POST['suffix']);
 	$suffix->setDescription($_POST['description']);
 

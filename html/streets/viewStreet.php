@@ -10,7 +10,7 @@
 ?>
 <div id="mainContent">
 	<?php
-		$street = new Street($_GET['id']);
+		$street = new Street($PDO,$_GET['id']);
 		$return_url = "viewStreet.php?id=";
 		include(APPLICATION_HOME."/includes/streets/streetInfo.inc");
 		include(APPLICATION_HOME."/includes/streets/streetNames.inc");

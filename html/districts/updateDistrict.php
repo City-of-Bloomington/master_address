@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$district = new District($_POST['id']);
+	$district = new District($PDO,$_POST['id']);
 	$district->setName($_POST['name']);
 	$district->setDistrictType_id($_POST['districtType_id']);
 

@@ -1,5 +1,5 @@
 <?php
-	class Plat
+	class Plat extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -12,16 +12,14 @@
 		private $township;
 		private $platType;
 
-
-
-		public function __construct($id=null)
+		public function __construct(PDO $PDO,$id=null)
 		{
-			global $PDO;
+			$this->PDO = $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from plats where id=$id";
-				$result = $PDO->query($sql);
+				$result = $this->PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -35,7 +33,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -67,19 +65,15 @@
 
 		private function update($fields)
 		{
-			global $PDO;
-
 			$sql = "update plats set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
-			global $PDO;
-
 			$sql = "insert plats set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $PDO->lastInsertID();
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $this->PDO->lastInsertID();
 		}
 
 
@@ -95,7 +89,7 @@
 		{
 			if ($this->township_id)
 			{
-				if (!$this->township) { $this->township = new Township($this->township_id); }
+				if (!$this->township) { $this->township = new Township($this->PDO,$this->township_id); }
 				return $this->township;
 			}
 			else return null;
@@ -104,7 +98,7 @@
 		{
 			if ($this->platType_id)
 			{
-				if (!$this->platType) { $this->platType = new PlatType($this->platType_id); }
+				if (!$this->platType) { $this->platType = new PlatType($this->PDO,$this->platType_id); }
 				return $this->platType;
 			}
 			else return null;
@@ -112,8 +106,8 @@
 
 
 		public function setName($string) { $this->name = sanitizeString($string); }
-		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
-		public function setPlatType_id($int) { $this->platType = new PlatType($int); $this->platType_id = $int; }
+		public function setTownship_id($int) { $this->township = new Township($this->PDO,$int); $this->township_id = $int; }
+		public function setPlatType_id($int) { $this->platType = new PlatType($this->PDO,$int); $this->platType_id = $int; }
 		public function setCabinet($string) { $this->cabinet = sanitizeString($string); }
 		public function setEnvelope($string) { $this->envelope = sanitizeString($string); }
 		public function setNotes($string) { $this->notes = sanitizeString($string); }

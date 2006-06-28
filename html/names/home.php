@@ -11,7 +11,7 @@
 		<div class="titleBar">Names</div>
 		<table>
 		<?php
-			$nameList = new NameList();
+			$nameList = new NameList($PDO);
 			$nameList->find();
 
 

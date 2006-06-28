@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$annexation = new Annexation($_POST['id']);
+	$annexation = new Annexation($PDO,$_POST['id']);
 	$annexation->setOrdinanceNumber($_POST['ordinanceNumber']);
 	$annexation->setName($_POST['name']);
 

@@ -9,7 +9,7 @@
 		<div class="titleBar">Status Codes</div>
 		<table>
 		<?php
-			$statusList = new StatusList();
+			$statusList = new StatusList($PDO);
 			$statusList->find();
 			foreach($statusList as $status)
 			{

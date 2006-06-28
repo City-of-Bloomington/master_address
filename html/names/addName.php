@@ -17,7 +17,7 @@
 */
 	verifyUser("Administrator");
 
-	$name = new Name();
+	$name = new Name($PDO);
 	$name->setDirection_id($_POST['name']['direction_id']);
 	$name->setName($_POST['name']['name']);
 	$name->setSuffix_id($_POST['name']['suffix_id']);

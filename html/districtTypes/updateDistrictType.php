@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$districtType = new DistrictType($_POST['id']);
+	$districtType = new DistrictType($PDO,$_POST['id']);
 	$districtType->setType($_POST['type']);
 
 	try

@@ -10,7 +10,7 @@
 */
 	#verifyUser("Administrator");
 
-	$place = new Place();
+	$place = new Place($PDO);
 	$place->setName($_POST['name']);
 	$place->setTownship_id($_POST['township_id']);
 	$place->setJurisdiction_id($_POST['jurisdiction_id']);

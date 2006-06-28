@@ -7,7 +7,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$district = new District($_GET['id']);
+	$district = new District($PDO,$_GET['id']);
 ?>
 <div id="mainContent">
 	<h1><?php echo $district->getName(); ?></h1>

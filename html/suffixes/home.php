@@ -9,7 +9,7 @@
 		<div class="titleBar">Suffixs</div>
 		<table>
 		<?php
-			$suffixList = new SuffixList();
+			$suffixList = new SuffixList($PDO);
 			$suffixList->find();
 			foreach($suffixList as $suffix)
 			{

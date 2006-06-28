@@ -10,7 +10,7 @@
 	<label>Status
 		<select name="street[status_id]">
 		<?php
-			$statusList = new StatusList();
+			$statusList = new StatusList($PDO);
 			$statusList->find();
 			foreach($statusList as $status) { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
 		?>

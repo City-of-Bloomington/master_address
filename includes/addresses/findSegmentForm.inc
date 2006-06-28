@@ -20,7 +20,7 @@
 		<td><input name="suffix" id="suffix" size="3" value="<?php if(isset($_GET['suffix'])) echo $_GET['suffix']; ?>" /></td>
 		<td><select name="direction_id" id="direction_id"><option></option>
 			<?php
-				$directionList = new DirectionList();
+				$directionList = new DirectionList($PDO);
 				$directionList->find();
 				foreach($directionList as $direction)
 				{
@@ -32,7 +32,7 @@
 			<input name="name" id="name" value="<?php if(isset($_GET['name'])) echo $_GET['name']; ?>" />
 			<select name="suffix_id" id="suffix_id"><option></option>
 			<?php
-				$list = new SuffixList();
+				$list = new SuffixList($PDO);
 				$list->find();
 				foreach($list as $suffix)
 				{

@@ -1,12 +1,14 @@
 <?php
 	class UserList extends PDOResultIterator
 	{
-		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+		public function __construct(PDO $PDO,$fields=null)
+		{
+			$this->PDO = $PDO;
+			if (is_array($fields)) $this->find($fields);
+		}
 
 		public function find($fields=null,$sort = "username")
 		{
-			global $PDO;
-
 			if ($fields)
 			{
 				$options = array();
@@ -32,13 +34,11 @@
 			}
 			else { $sql = "select id from users order by $sort"; }
 
-			foreach($PDO->query($sql) as $row) { $this->list[] = $row['id']; }
+			foreach($this->PDO->query($sql) as $row) { $this->list[] = $row['id']; }
 		}
 
 		public function search($fields=null,$sort = "username")
 		{
-			global $PDO;
-
 			if ($fields)
 			{
 				$options = array();
@@ -63,14 +63,14 @@
 			}
 			else { $sql = "select id from users order by $sort"; }
 
-			$result = $PDO->query($sql);
+			$result = $this->PDO->query($sql);
 			if ($result)
 			{
 				foreach($result as $row) { $this->list[] = $row['id']; }
 			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		protected function loadResult($key) { return new User($this->list[$key]); }
+		protected function loadResult($key) { return new User($this->PDO,$this->list[$key]); }
 	}
 ?>

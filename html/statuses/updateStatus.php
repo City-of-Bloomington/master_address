@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$status = new Status($_POST['id']);
+	$status = new Status($PDO,$_POST['id']);
 	$status->setStatus($_POST['status']);
 
 	try

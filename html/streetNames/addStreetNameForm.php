@@ -12,8 +12,8 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	if (isset($_GET['name_id'])) { $name = new Name($_GET['name_id']); }
-	if (isset($_GET['street_id'])) { $street = new Street($_GET['street_id']); }
+	if (isset($_GET['name_id'])) { $name = new Name($PDO,$_GET['name_id']); }
+	if (isset($_GET['street_id'])) { $street = new Street($PDO,$_GET['street_id']); }
 
 	# URLs need to get stored in the session to avoid all the urlencode recursion problems
 	if (isset($_GET['return_url'])) { $_SESSION['return_url'] = $_GET['return_url']; }
@@ -80,7 +80,7 @@
 				<div><label>Type
 							<select name=\"streetNameType_id\" id=\"streetNameType_id\">
 			";
-							$types = new StreetNameTypeList();
+							$types = new StreetNameTypeList($PDO);
 							$types->find();
 							foreach($types as $type) { echo "<option value=\"{$type->getId()}\">{$type->getType()}</option>"; }
 			echo "

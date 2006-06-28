@@ -9,7 +9,7 @@
 */
 	verifyUser("Administrator");
 
-	$streetName = new StreetName();
+	$streetName = new StreetName($PDO);
 	$streetName->setStreet_id($_POST['street_id']);
 	$streetName->setName_id($_POST['name_id']);
 	$streetName->setStreetNameType_id($_POST['streetNameType_id']);

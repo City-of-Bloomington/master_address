@@ -7,7 +7,7 @@
 */
 	verifyUser("Administrator");
 
-	$street = new Street();
+	$street = new Street($PDO);
 	$street->setNotes($_POST['notes']);
 	$street->setStatus_id($_POST['status_id']);
 	try { $street->save(); }
@@ -18,7 +18,7 @@
 		exit();
 	}
 
-	$streetName = new StreetName();
+	$streetName = new StreetName($PDO);
 	$streetName->setStreet_id($street->getId());
 	$streetName->setName_id($_POST['name_id']);
 	$streetName->setStreetNameType_id($_POST['streetNameType_id']);

@@ -6,13 +6,13 @@
 */
 	verifyUser("Administrator");
 
-	$street = new Street($_POST['street_id']);
+	$street = new Street($PDO,$_POST['street_id']);
 
 	foreach($_POST['segments'] as $segment_id=>$value)
 	{
 		if ($value == "on")
 		{
-			$segment = new Segment($segment_id);
+			$segment = new Segment($PDO,$segment_id);
 			$street->addSegment($segment);
 		}
 	}

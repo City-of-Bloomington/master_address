@@ -9,7 +9,7 @@
 		<div class="titleBar">Districts</div>
 		<table>
 		<?php
-			$districtList = new DistrictList();
+			$districtList = new DistrictList($PDO);
 			$districtList->find();
 			foreach($districtList as $district)
 			{

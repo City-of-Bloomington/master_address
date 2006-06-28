@@ -9,7 +9,7 @@
 		<div class="titleBar">Directions</div>
 		<table>
 		<?php
-			$directionList = new DirectionList();
+			$directionList = new DirectionList($PDO);
 			$directionList->find();
 			foreach($directionList as $direction)
 			{

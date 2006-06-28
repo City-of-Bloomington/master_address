@@ -9,7 +9,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$name = new Name($_GET['id']);
+	$name = new Name($PDO,$_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
@@ -24,7 +24,7 @@
 		<tr><td><label for="name">Name</label></td>
 			<td><select name="direction_id" id="direction_id"><option></option>
 				<?php
-					$directionList = new DirectionList();
+					$directionList = new DirectionList($PDO);
 					$directionList->find();
 					foreach($directionList as $direction)
 					{
@@ -36,7 +36,7 @@
 				<input name="name" id="name" value="<?php echo $name->getName(); ?>" />
 				<select name="suffix_id" id="suffix_id"><option></option>
 				<?php
-					$suffixList = new SuffixList();
+					$suffixList = new SuffixList($PDO);
 					$suffixList->find();
 					foreach($suffixList as $suffix)
 					{
@@ -60,7 +60,7 @@
 		<tr><td><label for="town_id">Town</label></td>
 			<td><select name="town_id" id="town_id">
 				<?php
-					$townList = new TownList();
+					$townList = new TownList($PDO);
 					$townList->find();
 					foreach($townList as $town)
 					{

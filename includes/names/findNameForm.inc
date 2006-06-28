@@ -10,7 +10,7 @@
 	<tr><td><label for="name-name">Name</label></td>
 		<td><select name="name[direction_id]" id="name-direction_id"><option></option>
 			<?php
-				$directionList = new DirectionList();
+				$directionList = new DirectionList($PDO);
 				$directionList->find();
 				foreach($directionList as $direction)
 				{
@@ -22,7 +22,7 @@
 			<input name="name[name]" id="name-name" value="<?php if(isset($_GET['name']['name'])) echo $_GET['name']['name']; ?>" />
 			<select name="name[suffix_id]" id="name-suffix_id"><option></option>
 			<?php
-				$list = new SuffixList();
+				$list = new SuffixList($PDO);
 				$list->find();
 				foreach($list as $suffix)
 				{
@@ -45,7 +45,7 @@
 	<tr><td><label for="name-town_id">Town</label></td>
 		<td><select name="name[town_id]" id="name-town_id"><option></option>
 			<?php
-				$towns = new TownList();
+				$towns = new TownList($PDO);
 				$towns->find();
 				foreach($towns as $town)
 				{

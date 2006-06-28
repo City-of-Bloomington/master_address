@@ -1,5 +1,5 @@
 <?php
-	class Address
+	class Address extends ActiveRecord
 	{
 		private $id;
 		private $place_id;
@@ -27,14 +27,14 @@
 		private $fullAddress;
 
 
-		public function __construct($id=null)
+		public function __construct(PDO $PDO,$id=null)
 		{
-			global $PDO;
+			$this->PDO = $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from addresses where id=$id";
-				$result = $PDO->query($sql);
+				$result = $this->PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -48,7 +48,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -96,19 +96,15 @@
 
 		private function update($fields)
 		{
-			global $PDO;
-
 			$sql = "update addresses set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
-			global $PDO;
-
 			$sql = "insert addresses set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $PDO->lastInsertID();
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $this->PDO->lastInsertID();
 		}
 
 		public function __toString() { return $this->getFullAddress(); }
@@ -132,7 +128,7 @@
 		{
 			if ($this->place_id)
 			{
-				if (!$this->place) { $this->place = new Place($this->place_id); }
+				if (!$this->place) { $this->place = new Place($this->PDO,$this->place_id); }
 				return $this->place;
 			}
 			else return null;
@@ -141,7 +137,7 @@
 		{
 			if ($this->segment_id)
 			{
-				if (!$this->segment) { $this->segment = new Segment($this->segment_id); }
+				if (!$this->segment) { $this->segment = new Segment($this->PDO,$this->segment_id); }
 				return $this->segment;
 			}
 			else return null;
@@ -150,7 +146,7 @@
 		{
 			if ($this->city_id)
 			{
-				if (!$this->city) { $this->city = new City($this->city_id); }
+				if (!$this->city) { $this->city = new City($this->PDO,$this->city_id); }
 				return $this->city;
 			}
 			else return null;
@@ -159,7 +155,7 @@
 		{
 			if ($this->status_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
+				if (!$this->status) { $this->status = new Status($this->PDO,$this->status_id); }
 				return $this->status;
 			}
 			else return null;
@@ -168,7 +164,7 @@
 		{
 			if ($this->street_id)
 			{
-				if (!$this->street) { $this->street = new Street($this->street_id); }
+				if (!$this->street) { $this->street = new Street($this->PDO,$this->street_id); }
 				return $this->street;
 			}
 			else return null;
@@ -192,16 +188,16 @@
 
 
 
-		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }
-		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
-		public function setSegment_id($int) { $this->segment = new Segment($int); $this->segment_id = $int; }
+		public function setPlace_id($int) { $this->place = new Place($this->PDO,$int); $this->place_id = $int; }
+		public function setStreet_id($int) { $this->street = new Street($this->PDO,$int); $this->street_id = $int; }
+		public function setSegment_id($int) { $this->segment = new Segment($this->PDO,$int); $this->segment_id = $int; }
 		public function setNumber($int) { $this->number = ereg_replace("[^0-9]","",$int); }
 		public function setSuffix($string) { $this->suffix = sanitizeString($string); }
 		public function setAddressType($string) { $this->addressType = sanitizeString($string); }
-		public function setCity_id($int) { $this->city = new City($int); $this->city_id = $int; }
+		public function setCity_id($int) { $this->city = new City($this->PDO,$int); $this->city_id = $int; }
 		public function setZip($int) { $this->zip = ereg_replace("[^0-9]","",$int); }
 		public function setZipplus4($int) { $this->zipplus4 = ereg_replace("[^0-9]","",$int); }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setStatus_id($int) { $this->status = new Status($this->PDO,$int); $this->status_id = $int; }
 		public function setActive($string) { $this->active = sanitizeString($string); }
 		public function setStartDate($date) { $this->startDate = $date; }
 		public function setEndDate($date) { $this->endDate = $date; }

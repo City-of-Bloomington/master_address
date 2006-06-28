@@ -8,7 +8,7 @@
 	<tr><td><label for="township_id">Township</label></td>
 		<td><select name="township_id" id="township_id"><option></option>
 			<?php
-				$list = new TownshipList();
+				$list = new TownshipList($PDO);
 				$list->find();
 				foreach($list as $township) { echo "<option value=\"{$township->getId()}\">{$township->getName()}</option>"; }
 			?>
@@ -18,7 +18,7 @@
 	<tr><td><label for="jurisdiction_id">Jurisdiction</label></td>
 		<td><select name="jurisdiction_id" id="jurisdiction_id"><option></option>
 			<?php
-				$list = new JurisdictionList();
+				$list = new JurisdictionList($PDO);
 				$list->find();
 				foreach($list as $jurisdiction) { echo "<option value=\"{$jurisdiction->getId()}\">{$jurisdiction->getName()}</option>"; }
 			?>
@@ -28,7 +28,7 @@
 	<tr><td><label for="trashPickupDay_id">Trash Pickup Day</label></td>
 		<td><select name="trashPickupDay_id" id="trashPickupDay_id"><option></option>
 			<?php
-					$days = new TrashPickupDayList();
+					$days = new TrashPickupDayList($PDO);
 					$days->find();
 					foreach($days as $day) { echo "<option value=\"{$day->getId()}\">{$day->getDay()}</option>"; }
 			?>
@@ -46,7 +46,7 @@
 	<tr><td><label for="recyclingPickupWeek_id">Recycling Week</label></td>
 		<td><select name="recyclingPickupWeek_id" id="recyclingPickupWeek_id"><option></option>
 			<?php
-				$list = new RecyclingPickupWeekList();
+				$list = new RecyclingPickupWeekList($PDO);
 				$list->find();
 				foreach($list as $week) { echo "<option value=\"{$week->getId()}\">{$week->getWeek()}</option>"; }
 			?>
@@ -77,7 +77,7 @@
 	<tr><td><label for="placeType_id">Type</label></td>
 		<td><select name="placeType_id"><option></option>
 			<?php
-				$list = new PlaceTypeList();
+				$list = new PlaceTypeList($PDO);
 				$list->find();
 				foreach($list as $type) { echo "<option value=\"{$type->getId()}\">{$type->getType()}</option>"; }
 			?>

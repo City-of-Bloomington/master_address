@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$placeType = new PlaceType($_POST['id']);
+	$placeType = new PlaceType($PDO,$_POST['id']);
 	$placeType->setType($_POST['type']);
 	$placeType->setDescription($_POST['description']);
 

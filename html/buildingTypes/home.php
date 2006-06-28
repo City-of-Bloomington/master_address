@@ -9,7 +9,7 @@
 		<div class="titleBar">Building Types</div>
 		<table>
 		<?php
-			$buildingTypeList = new BuildingTypeList();
+			$buildingTypeList = new BuildingTypeList($PDO);
 			$buildingTypeList->find();
 			foreach($buildingTypeList as $buildingType)
 			{

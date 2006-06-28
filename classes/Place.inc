@@ -1,5 +1,5 @@
 <?php
-	class Place
+	class Place extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -34,14 +34,14 @@
 		private $buildingList;
 
 
-		public function __construct($id=null)
+		public function __construct(PDO $PDO,$id=null)
 		{
-			global $PDO;
+			$this->PDO = $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from places where id=$id";
-				$result = $PDO->query($sql);
+				$result = $this->PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -55,7 +55,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -103,19 +103,15 @@
 
 		private function update($fields)
 		{
-			global $PDO;
-
 			$sql = "update places set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
-			global $PDO;
-
 			$sql = "insert places set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $PDO->lastInsertID();
+			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $this->PDO->lastInsertID();
 		}
 
 
@@ -144,7 +140,7 @@
 		{
 			if ($this->township_id)
 			{
-				if (!$this->township) { $this->township = new Township($this->township_id); }
+				if (!$this->township) { $this->township = new Township($this->PDO,$this->township_id); }
 				return $this->township;
 			}
 			else return null;
@@ -153,7 +149,7 @@
 		{
 			if ($this->jurisdiction_id)
 			{
-				if (!$this->jurisdiction) { $this->jurisdiction = new Jurisdiction($this->jurisdiction_id); }
+				if (!$this->jurisdiction) { $this->jurisdiction = new Jurisdiction($this->PDO,$this->jurisdiction_id); }
 				return $this->jurisdiction;
 			}
 			else return null;
@@ -162,7 +158,7 @@
 		{
 			if ($this->trashPickupDay_id)
 			{
-				if (!$this->trashPickupDay) { $this->trashPickupDay = new TrashPickupDay($this->trashPickupDay_id); }
+				if (!$this->trashPickupDay) { $this->trashPickupDay = new TrashPickupDay($this->PDO,$this->trashPickupDay_id); }
 				return $this->trashPickupDay;
 			}
 			else return null;
@@ -171,7 +167,7 @@
 		{
 			if ($this->trashLargeItemPickupDay_id)
 			{
-				if (!$this->trashLargeItemPickupDay) { $this->trashLargeItemPickupDay = new TrashPickupDay($this->trashLargeItemPickupDay_id); }
+				if (!$this->trashLargeItemPickupDay) { $this->trashLargeItemPickupDay = new TrashPickupDay($this->PDO,$this->trashLargeItemPickupDay_id); }
 				return $this->trashLargeItemPickupDay;
 			}
 			else return null;
@@ -180,14 +176,14 @@
 		{
 			if ($this->recyclingPickupWeek_id)
 			{
-				if (!$this->recyclingPickupWeek) { $this->recyclingPickupWeek = new RecyclingPickupWeek($this->recyclingPickupWeek_id); }
+				if (!$this->recyclingPickupWeek) { $this->recyclingPickupWeek = new RecyclingPickupWeek($this->PDO,$this->recyclingPickupWeek_id); }
 				return $this->recyclingPickupWeek;
 			}
 			else return null;
 		}
 		public function getAddressList()
 		{
-			if (!$this->addressList) { $this->addressList = new AddressList(array("place_id"=>$this->id)); }
+			if (!$this->addressList) { $this->addressList = new AddressList($this->PDO,array("place_id"=>$this->id)); }
 			return $this->addressList;
 		}
 		public function getAddresses() { return $this->getAddressList(); }
@@ -195,7 +191,7 @@
 		{
 			if ($this->placeType_id)
 			{
-				if (!$this->placeType) { $this->placeType = new PlaceType($this->placeType_id); }
+				if (!$this->placeType) { $this->placeType = new PlaceType($this->PDO,$this->placeType_id); }
 				return $this->placeType;
 			}
 			else return null;
@@ -204,31 +200,31 @@
 		{
 			if ($this->status_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
+				if (!$this->status) { $this->status = new Status($this->PDO,$this->status_id); }
 				return $this->status;
 			}
 			else return null;
 		}
 		public function getBuildings()
 		{
-			if (!count($this->buildingList)) { $this->buildingList = new BuildingList(array("place_id"=>$this->id)); }
+			if (!count($this->buildingList)) { $this->buildingList = new BuildingList($this->PDO,array("place_id"=>$this->id)); }
 			return $this->buildingList;
 		}
 
 
 
 		public function setName($string) { $this->name = sanitizeString($string); }
-		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
-		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
-		public function setTrashPickupDay_id($int) { $this->trashPickupDay = new TrashPickupDay($int); $this->trashPickupDay_id = $int; }
-		public function setTrashLargeItemPickupDay_id($int) { $this->trashLargeItemPickupDay = new TrashPickupDay($int); $this->trashLargeItemPickupDay_id = $int; }
-		public function setRecyclingPickupWeek_id($int) { $this->recyclingPickupWeek = new RecyclingPickupWeek($int); $this->recyclingPickupWeek_id = $int; }
+		public function setTownship_id($int) { $this->township = new Township($this->PDO,$int); $this->township_id = $int; }
+		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($this->PDO,$int); $this->jurisdiction_id = $int; }
+		public function setTrashPickupDay_id($int) { $this->trashPickupDay = new TrashPickupDay($this->PDO$int); $this->trashPickupDay_id = $int; }
+		public function setTrashLargeItemPickupDay_id($int) { $this->trashLargeItemPickupDay = new TrashPickupDay($this->PDO,$int); $this->trashLargeItemPickupDay_id = $int; }
+		public function setRecyclingPickupWeek_id($int) { $this->recyclingPickupWeek = new RecyclingPickupWeek($this->PDO,$int); $this->recyclingPickupWeek_id = $int; }
 		public function setMailable($int) { $this->mailable = ereg_replace("[^0-9]","",$int); }
 		public function setLivable($int) { $this->livable = ereg_replace("[^0-9]","",$int); }
 		public function setSection($string) { $this->section = sanitizeString($string); }
 		public function setQuarterSection($string) { $this->quarterSection = ereg_replace("[^A-Z]","",strtoupper($string)); }
 		public function setClass($string) { $this->class = sanitizeString($string); }
-		public function setPlaceType_id($int) { $this->placeType = new PlaceType($int); $this->placeType_id = $int; }
+		public function setPlaceType_id($int) { $this->placeType = new PlaceType($this->PDO,$int); $this->placeType_id = $int; }
 		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = sanitizeString($string); }
 		public function setStatePlaneX($int) { $this->statePlaneX = ereg_replace("[^0-9]","",$int); }
 		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
@@ -236,6 +232,6 @@
 		public function setLongitude($float) { $this->longitude = ereg_replace("[^0-9.]","",$float); }
 		public function setStartDate($date) { $this->startDate = $date; }
 		public function setEndDate($endDate) { $this->endDate = $date; }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setStatus_id($int) { $this->status = new Status($this->PDO,$int); $this->status_id = $int; }
 	}
 ?>

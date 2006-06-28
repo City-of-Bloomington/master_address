@@ -9,7 +9,7 @@
 		<div class="titleBar">Jurisdictions</div>
 		<table>
 		<?php
-			$jurisdictionList = new JurisdictionList();
+			$jurisdictionList = new JurisdictionList($PDO);
 			$jurisdictionList->find();
 			foreach($jurisdictionList as $jurisdiction)
 			{

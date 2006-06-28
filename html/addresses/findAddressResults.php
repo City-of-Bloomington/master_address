@@ -24,7 +24,7 @@
 		$fields = array();
 		foreach($_GET as $name=>$value) { if ($value) { $fields[$name] = $value; } }
 
-		$addressList = new AddressList();
+		$addressList = new AddressList($PDO);
 		$addressList->find($fields);
 
 		if (count($addressList))

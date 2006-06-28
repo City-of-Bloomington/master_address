@@ -8,7 +8,7 @@
 			<td><input name="suffix" id="suffix" size="3" /></td>
 			<td><select name="direction_id" id="direction_id"><option></option>
 				<?php
-					$directionList = new DirectionList();
+					$directionList = new DirectionList($PDO);
 					$directionList->find();
 					foreach($directionList as $direction) { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
 				?>
@@ -16,7 +16,7 @@
 				<input name="name" id="name" />
 				<select name="suffix_id" id="suffix_id"><option></option>
 				<?php
-					$list = new SuffixList();
+					$list = new SuffixList($PDO);
 					$list->find();
 					foreach($list as $suffix) { echo "<option value=\"{$suffix->getId()}\">{$suffix->getSuffix()}</option>"; }
 				?>
@@ -44,7 +44,7 @@
 			<td colspan="2">
 				<select name="city_id" id="city_id"><option></option>
 				<?php
-					$list = new CityList();
+					$list = new CityList($PDO);
 					$list->find();
 					foreach($list as $city) { echo "<option value=\"{$city->getId()}\">{$city->getName()}</option>"; }
 				?>
@@ -59,7 +59,7 @@
 			<td colspan="2">
 				<select name="status_id" id="status_id"><option></option>
 				<?php
-					$list = new StatusList();
+					$list = new StatusList($PDO);
 					$list->find();
 					foreach($list as $status) { echo "<option>{$status->getStatus()}</option>"; }
 				?>

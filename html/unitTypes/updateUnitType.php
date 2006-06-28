@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$unitType = new UnitType($_POST['id']);
+	$unitType = new UnitType($PDO,$_POST['id']);
 	$unitType->setType($_POST['type']);
 	$unitType->setDescription($_POST['description']);
 

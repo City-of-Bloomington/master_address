@@ -20,7 +20,7 @@
 <div id="mainContent">
 	<?php
 		include(GLOBAL_INCLUDES."/errorMessages.inc");
-		$name = new Name($_GET['name_id']);
+		$name = new Name($PDO,$_GET['name_id']);
 	?>
 	<h1>Add a new Street</h1>
 	<form method="post" action="addStreet.php">
@@ -39,7 +39,7 @@
 		<label>Type
 				<select name="streetNameType_id" id="streetNameType_id">
 				<?php
-					$types = new StreetNameTypeList();
+					$types = new StreetNameTypeList($PDO);
 					$types->find();
 					foreach($types as $type) { echo "<option value=\"{$type->getId()}\">{$type->getType()}</option>"; }
 				?>
@@ -51,7 +51,7 @@
 		<label>Status
 				<select name="status_id" id="status_id">
 				<?php
-					$statusList = new StatusList();
+					$statusList = new StatusList($PDO);
 					$statusList->find();
 					foreach($statusList as $status) { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
 				?>

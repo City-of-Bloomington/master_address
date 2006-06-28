@@ -9,7 +9,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$plat = new Plat($_GET['id']);
+	$plat = new Plat($PDO,$_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
@@ -24,7 +24,7 @@
 		<tr><td><label for="township_id">Township</label></td>
 			<td><select name="township_id" id="township_id">
 				<?php
-					$townships = new TownshipList();
+					$townships = new TownshipList($PDO);
 					$townships->find();
 					foreach($townships as $township)
 					{
@@ -38,7 +38,7 @@
 		<tr><td><label for="platType_id">Plat Type</label></td>
 			<td><select name="platType_id" id="platType_id">
 				<?php
-					$platTypes = new PlatTypeList();
+					$platTypes = new PlatTypeList($PDO);
 					$platTypes->find();
 					foreach($platTypes as $platType)
 					{

@@ -14,7 +14,7 @@
 		</div>
 		<table>
 		<?php
-			$userList = new UserList();
+			$userList = new UserList($PDO);
 			$userList->find();
 			foreach($userList as $user)
 			{

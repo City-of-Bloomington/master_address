@@ -17,7 +17,7 @@
 	#--------------------------------------------------------------------------
 	# Update the account
 	#--------------------------------------------------------------------------
-	$user = new User($_POST['id']);
+	$user = new User($PDO,$_POST['id']);
 	$user->setAuthenticationMethod($_POST['authenticationMethod']);
 	$user->setUsername($_POST['username']);
 	$user->setFirstname($_POST['firstname']);

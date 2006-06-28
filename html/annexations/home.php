@@ -9,7 +9,7 @@
 		<div class="titleBar">Annexations</div>
 		<table>
 		<?php
-			$annexationList = new AnnexationList();
+			$annexationList = new AnnexationList($PDO);
 			$annexationList->find();
 			foreach($annexationList as $annexation)
 			{

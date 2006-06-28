@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$town = new Town($_POST['id']);
+	$town = new Town($PDO,$_POST['id']);
 	$town->setName($_POST['name']);
 
 	try
