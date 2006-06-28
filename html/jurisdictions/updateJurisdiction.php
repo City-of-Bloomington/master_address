@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$jurisdiction = new Jurisdiction($PDO,$_POST['id']);
+	$jurisdiction = new Jurisdiction($_POST['id']);
 	$jurisdiction->setName($_POST['name']);
 
 	try

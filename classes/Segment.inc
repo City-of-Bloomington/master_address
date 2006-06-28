@@ -1,5 +1,5 @@
 <?php
-	class Segment extends ActiveRecord
+	class Segment
 	{
 		private $id;
 		private $tag;
@@ -46,14 +46,14 @@
 		private $streets;
 
 
-		public function __construct(PDO $PDO,$id=null)
+		public function __construct($id=null)
 		{
-			$this->PDO = $PDO;
+			global $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from segments where id=$id";
-				$result = $this->PDO->query($sql);
+				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -67,7 +67,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -128,15 +128,19 @@
 
 		private function update($fields)
 		{
+			global $PDO;
+
 			$sql = "update segments set $fields where id={$this->id}";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
+			global $PDO;
+
 			$sql = "insert segments set $fields";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $this->PDO->lastInsertID();
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $PDO->lastInsertID();
 		}
 
 
@@ -177,7 +181,7 @@
 		{
 			if ($this->jurisdiction_id)
 			{
-				if (!$this->jurisdiction) { $this->jurisdiction = new Jurisdiction($this->PDO,$this->jurisdiction_id); }
+				if (!$this->jurisdiction) { $this->jurisdiction = new Jurisdiction($this->jurisdiction_id); }
 				return $this->jurisdiction;
 			}
 			else return null;
@@ -186,7 +190,7 @@
 		{
 			if ($this->status_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->PDO,$this->status_id); }
+				if (!$this->status) { $this->status = new Status($this->status_id); }
 				return $this->status;
 			}
 			else return null;
@@ -195,7 +199,7 @@
 		{
 			if ($this->travelDirection_id)
 			{
-				if (!$this->travelDirection) { $this->travelDirection = new Direction($this->PDO,$this->travelDirection_id); }
+				if (!$this->travelDirection) { $this->travelDirection = new Direction($this->travelDirection_id); }
 				return $this->travelDirection;
 			}
 			else return null;
@@ -204,35 +208,35 @@
 		{
 			if ($this->lastUpdatedUser_id)
 			{
-				if (!$this->lastUpdatedUser) { $this->lastUpdatedUser = new User($this->PDO,$this->lastUpdatedUser_id); }
+				if (!$this->lastUpdatedUser) { $this->lastUpdatedUser = new User($this->lastUpdatedUser_id); }
 				return $this->lastUpdatedUser;
 			}
 			else return null;
 		}
 		public function getAddresses()
 		{
-			if (!count($this->addressList)) { $this->addressList = new AddressList($this->PDO,array("segment_id"=>$this->id)); }
+			if (!count($this->addressList)) { $this->addressList = new AddressList(array("segment_id"=>$this->id)); }
 			return $this->addressList;
 		}
 		public function getStreets()
 		{
-			if (!count($this->streets)) { $this->streets = new StreetList($this->PDO,array("segment_id"=>$this->id)); }
+			if (!count($this->streets)) { $this->streets = new StreetList(array("segment_id"=>$this->id)); }
 			return $this->streets;
 		}
 		public function getPlaces()
 		{
-			if (!count($this->placeList)) { $this->placeList = new PlaceList($this->PDO,array("segment_id"=>$this->id)); }
+			if (!count($this->placeList)) { $this->placeList = new PlaceList(array("segment_id"=>$this->id)); }
 			return $this->placeList;
 		}
 
 
 
 		public function setTag($string) { $this->tag = sanitizeString($string); }
-		public function setStreet_id($int) { $this->street = new Street($this->PDO,$int); $this->street_id = $int; }
+		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
 		public function setStartingNumber($int) { $this->startingNumber = ereg_replace("[^0-9]","",$int); }
 		public function setEndingNumber($int) { $this->endingNumber = ereg_replace("[^0-9]","",$int); }
-		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($this->PDO,$int); $this->jurisdiction_id = $int; }
-		public function setStatus_id($int) { $this->status = new Status($this->PDO,$int); $this->status_id = $int; }
+		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
+		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setNotes($string) { $this->notes = sanitizeString($string); }
 		public function setSpeedLimit($int) { $this->speedLimit = ereg_replace("[^0-9]","",$int); }
 		public function setINDOTSegmentID($string) { $this->INDOTSegmentID = sanitizeString($string); }
@@ -251,7 +255,7 @@
 		public function setHighXCoordinate($int) { $this->highXCoordinate = ereg_replace("[^0-9]","",$int); }
 		public function setHighYCoordinate($int) { $this->highYCoordinate = ereg_replace("[^0-9]","",$int); }
 		public function setTravel($int) { $this->travel = ereg_replace("[^0-9]","",$int); }
-		public function setTravelDirection_id($int) { $this->travelDirection = new Direction($this->PDO,$int); $this->travelDirection_id = $int; }
+		public function setTravelDirection_id($int) { $this->travelDirection = new Direction($int); $this->travelDirection_id = $int; }
 		public function setComplete($char) { $this->complete = $char; }
 		public function setRclBack($char) { $this->rclBack = ereg_replace("[^0-9a-z]","",strtolower($char)); }
 		public function setRclNext($char) { $this->rclNext = ereg_replace("[^0-9a-z]","",strtolower($char)); }
@@ -259,6 +263,6 @@
 		public function setMapArea($char) { $this->mapArea = $char; }
 		public function setLastUpdatedDate($date) { $this->lastUpdatedDate = $date; }
 		public function setLastUpdatedAction($string) { $this->lastUpdatedAction = sanitizeString($string); }
-		public function setLastUpdatedUser_id($int) { $this->lastUpdatedUser = new User($this->PDO,$int); $this->lastUpdatedBy = $int; }
+		public function setLastUpdatedUser_id($int) { $this->lastUpdatedUser = new User($int); $this->lastUpdatedBy = $int; }
 	}
 ?>

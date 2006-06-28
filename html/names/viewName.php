@@ -9,7 +9,7 @@
 ?>
 <div id="mainContent">
 	<?php
-		$name = new Name($PDO,$_GET['id']);
+		$name = new Name($_GET['id']);
 		include(APPLICATION_HOME."/includes/names/nameInfo.inc");
 		include(APPLICATION_HOME."/includes/names/listStreets.inc");
 	?>

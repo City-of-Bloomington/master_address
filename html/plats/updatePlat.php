@@ -12,7 +12,7 @@
 
 	try
 	{
-		$plat = new Plat($PDO,$_POST['id']);
+		$plat = new Plat($_POST['id']);
 		$plat->setName($_POST['name']);
 		$plat->setTownship_id($_POST['township_id']);
 		$plat->setPlatType_id($_POST['platType_id']);

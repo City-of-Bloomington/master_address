@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$buildingType = new BuildingType($PDO,$_POST['id']);
+	$buildingType = new BuildingType($_POST['id']);
 	$buildingType->setDescription($_POST['description']);
 
 	try

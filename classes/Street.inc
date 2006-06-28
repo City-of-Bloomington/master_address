@@ -1,5 +1,5 @@
 <?php
-	class Street extends ActiveRecord
+	class Street
 	{
 		private $id;
 		private $notes;
@@ -13,14 +13,14 @@
 		private $segments = array();
 		private $newSegmentIds = array();
 
-		public function __construct(PDO $PDO,$id=null)
+		public function __construct($id=null)
 		{
-			$this->PDO = $PDO;
+			global $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from streets where id=$id";
-				$result = $this->PDO->query($sql);
+				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -33,7 +33,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -62,15 +62,19 @@
 
 		private function update($fields)
 		{
+			global $PDO;
+
 			$sql = "update streets set $fields where id={$this->id}";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
+			global $PDO;
+
 			$sql = "insert streets set $fields";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $this->PDO->lastInsertID();
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $PDO->lastInsertID();
 		}
 
 		public function addSegment($segment)
@@ -85,17 +89,19 @@
 		}
 		private function saveSegments()
 		{
+			global $PDO;
+
 			$ids = array();
 			foreach($this->getSegments() as $segment) { $ids[] = $segment->getId(); }
 			$ids = implode(",",$ids);
 
 			$sql = "delete from street_segments where street_id={$this->id} and segment_id not in ($ids)";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 
-			$statement = $this->PDO->prepare("insert street_segments values({$this->id},?)");
+			$statement = $PDO->prepare("insert street_segments values({$this->id},?)");
 			foreach($this->newSegmentIds as $segment_id)
 			{
-				if (false === $statement->execute(array("$segment_id"))) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				if (false === $statement->execute(array("$segment_id"))) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 		}
 
@@ -107,7 +113,7 @@
 		{
 			if ($this->status_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->PDO,$this->status_id); }
+				if (!$this->status) { $this->status = new Status($this->status_id); }
 				return $this->status;
 			}
 			else return null;
@@ -116,7 +122,7 @@
 		{
 			if (!count($this->segments))
 			{
-				$segments = new SegmentList($this->PDO,array('street_id'=>$this->id));
+				$segments = new SegmentList(array('street_id'=>$this->id));
 				foreach($segments as $segment) { $this->segments[] = $segment; }
 			}
 			return $this->segments;
@@ -145,7 +151,7 @@
 		}
 		public function getStreetNames()
 		{
-			if (!count($this->streetNameList)) { $this->streetNameList = new StreetNameList($this->PDO,array("street_id"=>$this->id)); }
+			if (!count($this->streetNameList)) { $this->streetNameList = new StreetNameList(array("street_id"=>$this->id)); }
 			return $this->streetNameList;
 		}
 
@@ -153,6 +159,6 @@
 		public function __toString() { return $this->getStreetName()->getName()->getFullname(); }
 
 		public function setNotes($string) { $this->notes = sanitizeString($string); }
-		public function setStatus_id($int) { $this->status = new Status($this->PDO,$int); $this->status_id = $int; }
+		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 	}
 ?>

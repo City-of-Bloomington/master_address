@@ -12,7 +12,7 @@
 	{
 		echo "<div><table>";
 		require_once(APPLICATION_HOME."/classes/AddressSearch.inc");
-		$search = new AddressSearch($PDO);
+		$search = new AddressSearch();
 		$search->find(array("fullAddress"=>$_GET['fullAddress']));
 
 		if (!isset($_GET['page'])) { $_GET['page'] = 0; }

@@ -9,7 +9,7 @@
 		<div class="titleBar">PlatTypes</div>
 		<table>
 		<?php
-			$platTypeList = new PlatTypeList($PDO);
+			$platTypeList = new PlatTypeList();
 			$platTypeList->find();
 			foreach($platTypeList as $platType)
 			{

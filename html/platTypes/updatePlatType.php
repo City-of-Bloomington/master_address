@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$platType = new PlatType($PDO,$_POST['id']);
+	$platType = new PlatType($_POST['id']);
 	$platType->setType($_POST['type']);
 	$platType->setDescription($_POST['description']);
 

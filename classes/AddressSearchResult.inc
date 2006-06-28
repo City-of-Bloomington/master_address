@@ -16,14 +16,10 @@
 		private $place;
 		private $unit;
 
-		private $PDO;
 
 
-
-		public function __construct(PDO $PDO,$fullAddress,$address_id,$segment_id,$street_id,$name_id,$place_id,$unit_id)
+		public function __construct($fullAddress,$address_id,$segment_id,$street_id,$name_id,$place_id,$unit_id)
 		{
-			$this->PDO = $PDO;
-
 			$this->fullAddress = $fullAddress;
 			$this->address_id = $address_id;
 			$this->segment_id = $segment_id;
@@ -41,16 +37,16 @@
 		public function getPlace_id() { return $this->place_id; }
 		public function getUnit_id() { return $this->unit_id; }
 
-		public function getAddress() { if (!$this->address) { $this->address = new Address($this->PDO,$this->address_id); } return $this->address; }
-		public function getSegment() { if (!$this->segment) { $this->segment = new Segment($this->PDO,$this->segment_id); } return $this->segment; }
-		public function getStreet() { if (!$this->street) { $this->street = new Street($this->PDO,$this->street_id); } return $this->street; }
-		public function getName() { if (!$this->name) { $this->name = new Name($this->PDO,$this->name_id); } return $this->name; }
-		public function getPlace() { if (!$this->place) { $this->place = new Place($this->PDO,$this->place_id); } return $this->place; }
+		public function getAddress() { if (!$this->address) { $this->address = new Address($this->address_id); } return $this->address; }
+		public function getSegment() { if (!$this->segment) { $this->segment = new Segment($this->segment_id); } return $this->segment; }
+		public function getStreet() { if (!$this->street) { $this->street = new Street($this->street_id); } return $this->street; }
+		public function getName() { if (!$this->name) { $this->name = new Name($this->name_id); } return $this->name; }
+		public function getPlace() { if (!$this->place) { $this->place = new Place($this->place_id); } return $this->place; }
 		public function getUnit()
 		{
 			if ($this->unit_id)
 			{
-				if (!$this->unit) { $this->unit = new Unit($this->PDO,$this->unit_id); }
+				if (!$this->unit) { $this->unit = new Unit($this->unit_id); }
 				return $this->unit;
 			}
 			else return null;

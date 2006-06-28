@@ -33,7 +33,7 @@
 	<div class="titleBar">Buildings</div>
 	<table>
 	<?php
-		$buildings = new BuildingList($PDO,array("place_id"=>$place->getId()));
+		$buildings = new BuildingList(array("place_id"=>$place->getId()));
 		foreach($buildings as $building)
 		{
 			echo "<tr><td>{$building->getName()}</td><td>{$building->getGISTag()}</td></tr>";

@@ -9,7 +9,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$district = new District($PDO,$_GET['id']);
+	$district = new District($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
@@ -24,7 +24,7 @@
 		<tr><td><label for="districtType_id">Type</label></td>
 			<td><select name="districtType_id" id="districtType_id">
 				<?php
-					$list = new DistrictTypeList($PDO);
+					$list = new DistrictTypeList();
 					$list->find();
 					foreach($list as $type)
 					{

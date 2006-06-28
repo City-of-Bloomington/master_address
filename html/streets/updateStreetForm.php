@@ -10,7 +10,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$street = new Street($PDO,$_GET['id']);
+	$street = new Street($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(GLOBAL_INCLUDES."/errorMessages.inc"); ?>
@@ -24,7 +24,7 @@
 		<tr><td><label for="street-status_id">Status</label></td>
 			<td><select name="street[status_id]" id="street-status">
 				<?php
-					$list = new StatusList($PDO);
+					$list = new StatusList();
 					$list->find();
 					foreach($list as $status)
 					{

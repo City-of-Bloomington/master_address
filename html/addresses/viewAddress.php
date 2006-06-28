@@ -9,7 +9,7 @@
 ?>
 <div id="mainContent">
 	<?php
-		$address = new Address($PDO,$_GET['id']);
+		$address = new Address($_GET['id']);
 		include(APPLICATION_HOME."/includes/addresses/addressInfo.inc");
 
 		$place = $address->getPlace();

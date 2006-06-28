@@ -9,7 +9,7 @@
 		<div class="titleBar">PlaceTypes</div>
 		<table>
 		<?php
-			$placeTypeList = new PlaceTypeList($PDO);
+			$placeTypeList = new PlaceTypeList();
 			$placeTypeList->find();
 			foreach($placeTypeList as $placeType)
 			{

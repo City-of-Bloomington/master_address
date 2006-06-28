@@ -31,14 +31,14 @@
 	$search['name'] = $_GET['name'];
 
 	$segments = array();
-	$nameList = new NameList($PDO);
+	$nameList = new NameList();
 	$nameList->find($search);
 	foreach($nameList as $name)
 	{
 		$streets = $name->getStreets();
 		foreach($streets as $street)
 		{
-			$list = new SegmentList($PDO);
+			$list = new SegmentList();
 			$list->find(array("street_id"=>$street->getId(),"number"=>$_GET['number']));
 			foreach($list as $segment) { $segments[] = $segment; }
 		}
@@ -76,10 +76,10 @@
 	<h1>Choose a Segment</h1>
 	<h2><?php
 			echo "$_GET[number] $_GET[suffix]";
-			if ($_GET['direction_id']) { $direction = new Direction($PDO,$_GET['direction_id']); echo $direction; }
+			if ($_GET['direction_id']) { $direction = new Direction($_GET['direction_id']); echo $direction; }
 			echo sanitizeString($_GET['name']);
-			if ($_GET['suffix_id']) { $suffix = new Suffix($PDO,$_GET['suffix_id']); echo $suffix; }
-			if ($_GET['postDirection_id']) { $post = new Direction($PDO,$_GET['postDirection_id']); echo $post; }
+			if ($_GET['suffix_id']) { $suffix = new Suffix($_GET['suffix_id']); echo $suffix; }
+			if ($_GET['postDirection_id']) { $post = new Direction($_GET['postDirection_id']); echo $post; }
 		?>
 	</h2>
 	<table>

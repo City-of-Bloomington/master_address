@@ -10,7 +10,7 @@
 */
 	verifyUser("Administrator");
 
-	$name = new Name($PDO,$_POST['id']);
+	$name = new Name($_POST['id']);
 	$name->setName($_POST['name']);
 	$name->setDirection_id($_POST['direction_id']);
 	$name->setPostDirection_id($_POST['direction_id']);

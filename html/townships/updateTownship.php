@@ -7,7 +7,7 @@
 */
 	verifyUser("Administrator");
 
-	$township = new Township($PDO,$_POST['id']);
+	$township = new Township($_POST['id']);
 	$township->setName($_POST['name']);
 	$township->setAbbreviation($_POST['abbreviation']);
 	$township->setQuarterCode($_POST['quarterCode']);

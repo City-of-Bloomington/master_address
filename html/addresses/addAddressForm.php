@@ -21,7 +21,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$segment = new Segment($PDO,$_GET['segment_id']);
+	$segment = new Segment($_GET['segment_id']);
 ?>
 <div id="mainContent">
 	<h1>Add Address</h1>
@@ -47,7 +47,7 @@
 		<tr><td><label for="city_id">City</label></td>
 			<td><select name="city_id" id="city_id">
 				<?php
-					$list = new CityList($PDO);
+					$list = new CityList();
 					$list->find();
 					foreach($list as $city) { echo "<option value=\"{$city->getId()}\">{$city->getName()}</option>"; }
 				?>
@@ -60,7 +60,7 @@
 		<tr><td><label for="status_id">Status</label></td>
 			<td><select name="status_id" id="status_id">
 				<?php
-					$list = new StatusList($PDO);
+					$list = new StatusList();
 					$list->find();
 					foreach($list as $status) { echo "<option>{$status->getStatus()}</option>"; }
 				?>

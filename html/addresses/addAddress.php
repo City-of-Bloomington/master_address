@@ -22,7 +22,7 @@
 	#--------------------------------------------------------------------------
 	# Create the new address
 	#--------------------------------------------------------------------------
-	$address = new Address($PDO);
+	$address = new Address();
 	$address->setNumber($_POST['number']);
 	$address->setSuffix($_POST['suffix']);
 	$address->setSegment_id($_POST['segment_id']);
@@ -38,7 +38,7 @@
 	#--------------------------------------------------------------------------
 	# Add the new place
 	#--------------------------------------------------------------------------
-	$place = new Place($PDO);
+	$place = new Place();
 	$place->setName($_POST['name']);
 	$place->setTownship_id($_POST['township_id']);
 	$place->setJurisdiction_id($_POST['jurisdiction_id']);

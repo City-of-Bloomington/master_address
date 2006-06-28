@@ -17,7 +17,7 @@
 	#--------------------------------------------------------------------------
 	# Create the new account
 	#--------------------------------------------------------------------------
-	$user = new User($PDO);
+	$user = new User();
 	$user->setAuthenticationMethod($_POST['authenticationMethod']);
 	$user->setUsername($_POST['username']);
 	if ($_POST['password']) { $user->setPassword($_POST['password']); }

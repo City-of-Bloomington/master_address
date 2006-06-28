@@ -1,5 +1,5 @@
 <?php
-	class Name extends ActiveRecord
+	class Name
 	{
 		private $id;
 		private $town_id;
@@ -21,14 +21,14 @@
 		private $streetNameList;
 		private $streets = array();
 
-		public function __construct(PDO $PDO,$id=null)
+		public function __construct($id=null)
 		{
-			$this->PDO = $PDO;
+			global $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from names where id=$id";
-				$result = $this->PDO->query($sql);
+				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -42,7 +42,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]);
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]);
 				}
 			}
 			else
@@ -79,15 +79,19 @@
 
 		private function update($fields)
 		{
+			global $PDO;
+
 			$sql = "update names set $fields where id={$this->id}";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
+			global $PDO;
+
 			$sql = "insert names set $fields";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $this->PDO->lastInsertID();
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $PDO->lastInsertID();
 		}
 
 		public function __toString() { return $this->getFullname(); }
@@ -118,7 +122,7 @@
 		{
 			if ($this->town_id)
 			{
-				if (!$this->town) { $this->town = new Town($this->PDO,$this->town_id); }
+				if (!$this->town) { $this->town = new Town($this->town_id); }
 				return $this->town;
 			}
 			else return null;
@@ -127,7 +131,7 @@
 		{
 			if ($this->direction_id)
 			{
-				if (!$this->direction) { $this->direction = new Direction($this->PDO,$this->direction_id); }
+				if (!$this->direction) { $this->direction = new Direction($this->direction_id); }
 				return $this->direction;
 			}
 			else return null;
@@ -136,7 +140,7 @@
 		{
 			if ($this->suffix_id)
 			{
-				if (!$this->suffix) { $this->suffix = new Suffix($this->PDO,$this->suffix_id); }
+				if (!$this->suffix) { $this->suffix = new Suffix($this->suffix_id); }
 				return $this->suffix;
 			}
 			else return null;
@@ -145,7 +149,7 @@
 		{
 			if ($this->postDirection_id)
 			{
-				if (!$this->postDirection) { $this->postDirection = new Direction($this->PDO,$this->postDirection_id); }
+				if (!$this->postDirection) { $this->postDirection = new Direction($this->postDirection_id); }
 				return $this->postDirection;
 			}
 			else return null;
@@ -154,7 +158,7 @@
 		{
 			if (!$this->streetNameList)
 			{
-				$this->streetNameList = new StreetNameList($this->PDO);
+				$this->streetNameList = new StreetNameList();
 				$this->streetNameList->find(array("name_id"=>$this->id));
 			}
 			return $this->streetNameList;
@@ -170,11 +174,11 @@
 		}
 
 
-		public function setTown_id($int) { $this->town = new Town($this->PDO,$int); $this->town_id = $int; }
-		public function setDirection_id($int) { $this->direction = new Direction($this->PDO,$int); $this->direction_id = $int; }
+		public function setTown_id($int) { $this->town = new Town($int); $this->town_id = $int; }
+		public function setDirection_id($int) { $this->direction = new Direction($int); $this->direction_id = $int; }
 		public function setName($string) { $this->name = sanitizeString($string); }
-		public function setSuffix_id($int) { $this->suffix = new Suffix($this->PDO,$int); $this->suffix_id = $int; }
-		public function setPostDirection_id($int) { $this->postDirection = new Direction($this->PDO,$int); $this->postDirection_id = $int; }
+		public function setSuffix_id($int) { $this->suffix = new Suffix($int); $this->suffix_id = $int; }
+		public function setPostDirection_id($int) { $this->postDirection = new Direction($int); $this->postDirection_id = $int; }
 		public function setStartDate($date) { $this->startDate = $date; }
 		public function setEndDate($date) { $this->endDate = $date; }
 		public function setNotes($string) { $this->notes = sanitizeString($string); }

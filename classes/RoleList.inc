@@ -4,21 +4,19 @@
 */
 	class RoleList extends PDOResultIterator
 	{
-		public function __construct(PDO $PDO,$fields=null)
-		{
-			$this->PDO = $PDO;
-			if (is_array($fields)) $this->find($fields);
-		}
+		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort='role')
 		{
+			global $PDO;
+
 			$options = array();
 			if (isset($fields['role'])) { $options[] = "role='$fields[role]'"; }
 
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
 			$sql = "select role from roles $where order by $sort";
 
-			foreach($this->PDO->query($sql) as $row) { $this->list[] = $row['role']; }
+			foreach($PDO->query($sql) as $row) { $this->list[] = $row['role']; }
 		}
 
 

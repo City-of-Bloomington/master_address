@@ -14,7 +14,7 @@
 	foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 	if (count($search))
 	{
-		$streetList = new StreetList($PDO,$search);
+		$streetList = new StreetList($search);
 		switch (count($streetList))
 		{
 			case 0:

@@ -1,13 +1,10 @@
 <?php
 	class AddressSearch extends PDOResultIterator
 	{
-		public function __construct(PDO $PDO)
-		{
-			$this->PDO = $PDO;
-		}
-
 		public function find($fields=null,$sort=null)
 		{
+			global $PDO;
+
 			$options = array();
 			if (isset($fields['fullAddress'])) { $options[] = "match(fullAddress) against ('$fields[fullAddress]')"; }
 			if (isset($fields['address_id'])) { $options[] = "address_id='$fields[address_id]'"; }
@@ -20,19 +17,19 @@
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
 			$sql = "select * from addressIndex $where";
 
-			$result = $this->PDO->query($sql);
+			$result = $PDO->query($sql);
 			if ($result)
 			{
 				foreach($result as $row) { $this->list[] = $row; }
 			}
-			else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 
 		protected function loadResult($key)
 		{
 			$row = $this->list[$key];
-			return new AddressSearchResult($this->PDO,$row['fullAddress'],$row['address_id'],$row['segment_id'],$row['street_id'],$row['name_id'],$row['place_id'],$row['unit_id']);
+			return new AddressSearchResult($row['fullAddress'],$row['address_id'],$row['segment_id'],$row['street_id'],$row['name_id'],$row['place_id'],$row['unit_id']);
 		}
 	}
 ?>

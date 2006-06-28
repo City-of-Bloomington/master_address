@@ -1,5 +1,5 @@
 <?php
-	class StreetName extends ActiveRecord
+	class StreetName
 	{
 		private $id;
 		private $street_id;
@@ -10,14 +10,16 @@
 		private $name;
 		private $streetNameType;
 
-		public function __construct(PDO $PDO,$id=null)
+
+
+		public function __construct($id=null)
 		{
-			$this->PDO = $PDO;
+			global $PDO;
 
 			if ($id)
 			{
 				$sql = "select * from streetNames where id=$id";
-				$result = $this->PDO->query($sql);
+				$result = $PDO->query($sql);
 				if ($result)
 				{
 					if ($row = $result->fetch())
@@ -31,7 +33,7 @@
 					}
 					else { throw new Exception($sql); }
 				}
-				else { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 			else
 			{
@@ -61,15 +63,19 @@
 
 		private function update($fields)
 		{
+			global $PDO;
+
 			$sql = "update streetNames set $fields where id={$this->id}";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 		private function insert($fields)
 		{
+			global $PDO;
+
 			$sql = "insert streetNames set $fields";
-			if (false === $this->PDO->exec($sql)) { $e = $this->PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $this->PDO->lastInsertID();
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->id = $PDO->lastInsertID();
 		}
 
 
@@ -86,7 +92,7 @@
 		{
 			if ($this->street_id)
 			{
-				if (!$this->street) { $this->street = new Street($this->PDO,$this->street_id); }
+				if (!$this->street) { $this->street = new Street($this->street_id); }
 				return $this->street;
 			}
 			else return null;
@@ -95,7 +101,7 @@
 		{
 			if ($this->name_id)
 			{
-				if (!$this->name) { $this->name = new Name($this->PDO,$this->name_id); }
+				if (!$this->name) { $this->name = new Name($this->name_id); }
 				return $this->name;
 			}
 			else return null;
@@ -105,7 +111,7 @@
 		{
 			if ($this->streetNameType_id)
 			{
-				if (!$this->streetNameType) { $this->streetNameType = new StreetNameType($this->PDO,$this->streetNameType_id); }
+				if (!$this->streetNameType) { $this->streetNameType = new StreetNameType($this->streetNameType_id); }
 				return $this->streetNameType;
 			}
 			else return null;
@@ -113,9 +119,9 @@
 		public function getType() { return $this->getStreetNameType()->getType(); }
 
 
-		public function setStreet_id($int) { $this->street = new Street($this->PDO,$int); $this->street_id = $int; }
-		public function setName_id($int) { $this->name = new Name($this->PDO,$int); $this->name_id = $int; }
-		public function setStreetNameType_id($int) { $this->streetNameType = new StreetNameType($this->PDO,$int); $this->streetNameType_id = $int; }
+		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
+		public function setName_id($int) { $this->name = new Name($int); $this->name_id = $int; }
+		public function setStreetNameType_id($int) { $this->streetNameType = new StreetNameType($int); $this->streetNameType_id = $int; }
 		public function setStreet($street) { $this->street = $street; $this->street_id = $street->getId(); }
 		public function setName($name) { $this->name = $name; $this->name_id = $name->getId(); }
 		public function setStreetNameType($type) { $this->streetNameType = $type; $this->streetNameType_id = $type->getId(); }

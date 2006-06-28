@@ -6,7 +6,7 @@
 */
 	verifyUser("Administrator");
 
-	$direction = new Direction($PDO,$_POST['id']);
+	$direction = new Direction($_POST['id']);
 	$direction->setCode($_POST['code']);
 	$direction->setDirection($_POST['direction']);
 

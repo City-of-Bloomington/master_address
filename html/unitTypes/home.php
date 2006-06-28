@@ -9,7 +9,7 @@
 		<div class="titleBar">Unit Types</div>
 		<table>
 		<?php
-			$unitTypeList = new UnitTypeList($PDO);
+			$unitTypeList = new UnitTypeList();
 			$unitTypeList->find();
 			foreach($unitTypeList as $unitType)
 			{

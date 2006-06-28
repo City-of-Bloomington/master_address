@@ -7,7 +7,7 @@
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
 
-	$place = new Place($PDO,$_GET['id']);
+	$place = new Place($_GET['id']);
 ?>
 <div id="mainContent">
 	<?php include(APPLICATION_HOME."/includes/places/placeInfo.inc"); ?>
