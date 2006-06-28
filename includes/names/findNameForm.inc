@@ -1,50 +1,123 @@
-	<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-	<fieldset><legend>Name info</legend>
-		<?php include(APPLICATION_HOME."/includes/names/findFields.inc"); ?>
-
-		<table>
-		<tr><td><label for="town_id">Town</label></td>
-			<td><select name="town_id"><option></option>
-				<?php
-					$towns = new TownList();
-					$towns->find();
-					foreach($towns as $town)
-					{
-						if (isset($_GET['town_id']) && $_GET['town_id']==$town->getId()) { echo "<option value\"{$town->getId()}\" selected=\"selected\">{$town->getName()}</option>"; }
-						else { echo "<option value=\"{$town->getId()}\">{$town->getName()}</option>"; }
-					}
-				?>
-				</select>
-			</td>
-		</tr>
-		</table>
-
-		<button type="submit" class="search">Search</button>
-	</fieldset>
-	</form>
-
-	<?php
-		if (isset($_GET['direction_id']) || isset($_GET['name']) || isset($_GET['suffix_id']) || isset($_GET['postDirection_id']) || isset($_GET['town_id']))
-		{
-			$search = array();
-			if ($_GET['direction_id']) { $search['direction_id'] = $_GET['direction_id']; }
-			if ($_GET['suffix_id']) { $search['suffix_id'] = $_GET['suffix_id']; }
-			if ($_GET['postDirection_id']) { $search['postDirection_id'] = $_GET['postDirection_id']; }
-			if ($_GET['name']) { $search['name'] = $_GET['name']; }
-			if ($_GET['town_id']) { $search['town_id'] = $_GET['town_id']; }
-			if (count($search))
-			{
-				$nameList = new NameList($search);
-				if (count($nameList))
+<?php
+/*
+	Required Variables:		return_url
+*/
+?>
+<h2>Find a name</h2>
+<form id="findNameForm" action="javascript:findName();">
+<fieldset><legend>Name info</legend>
+	<table>
+	<tr><td><label for="name-name">Name</label></td>
+		<td><select name="name[direction_id]" id="name-direction_id"><option></option>
+			<?php
+				$directionList = new DirectionList();
+				$directionList->find();
+				foreach($directionList as $direction)
 				{
-					echo "<table>";
-					foreach($nameList as $name)
-					{
-						echo "<tr><td><a href=\"viewName.php?id={$name->getId()}\">{$name->getFullname()}</a></td></tr>";
-					}
-					echo "</table>";
+					if (isset($_GET['name']['direction_id']) && $_GET['name']['direction_id']==$direction->getId()) { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
+					else { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
 				}
-				else { echo "<p>No Names Found</p>"; }
+			?>
+			</select>
+			<input name="name[name]" id="name-name" value="<?php if(isset($_GET['name']['name'])) echo $_GET['name']['name']; ?>" />
+			<select name="name[suffix_id]" id="name-suffix_id"><option></option>
+			<?php
+				$list = new SuffixList();
+				$list->find();
+				foreach($list as $suffix)
+				{
+					if (isset($_GET['name']['suffix_id']) && $_GET['name']['suffix_id']==$suffix->getId()) { echo "<option value=\"{$suffix->getId()}\" selected=\"selected\">{$suffix->getSuffix()}</option>"; }
+					else { echo "<option value=\"{$suffix->getId()}\">{$suffix->getSuffix()}</option>"; }
+				}
+			?>
+			</select>
+			<select name="name[postDirection_id]" id="name-postDirection_id"><option></option>
+			<?php
+				foreach($directionList as $direction)
+				{
+					if (isset($_GET['name']['postDirection_id']) && $_GET['name']['postDirection_id']==$direction->getId()) { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
+					else { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	<tr><td><label for="name-town_id">Town</label></td>
+		<td><select name="name[town_id]" id="name-town_id"><option></option>
+			<?php
+				$towns = new TownList();
+				$towns->find();
+				foreach($towns as $town)
+				{
+					if (isset($_GET['name']['town_id']) && $_GET['name']['town_id']==$town->getId()) { echo "<option value\"{$town->getId()}\" selected=\"selected\">{$town->getName()}</option>"; }
+					else { echo "<option value=\"{$town->getId()}\">{$town->getName()}</option>"; }
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	</table>
+
+	<button type="submit" class="search">Search</button>
+</fieldset>
+</form>
+<div id="findNameResults"></div>
+<script type="text/javascript">
+	var findNameRequest = getXMLHttpRequestObject();
+
+	function findName()
+	{
+		var params = getFormValues(document.getElementById("findNameForm"));
+		findNameRequest.open("get","<?php echo BASE_URL; ?>/names/findName.php?"+params);
+		findNameRequest.onreadystatechange = findNameResults;
+		findNameRequest.send(null);
+	}
+
+	function findNameResults()
+	{
+		// Clear out the results div, so we can update it's contents
+		var div = document.getElementById("findNameResults");
+		while(div.firstChild) { div.removeChild(div.firstChild); }
+
+		if (findNameRequest.readyState == 4)
+		{
+			// Build a new table from the results
+			var results = eval("("+findNameRequest.responseText+")");
+			if (results)
+			{
+				tbody = document.createElement("tbody");
+				for(var i=0; i<results.length; i++)
+				{
+					var id = document.createTextNode(results[i].id);
+					var name = document.createTextNode(results[i].name);
+
+					var tr = document.createElement("tr");
+
+					var td = document.createElement("td");
+					var a = document.createElement("a");
+					a.setAttribute("href","<?php echo $return_url; ?>"+results[i].id);
+					a.appendChild(id);
+					td.appendChild(a);
+					tr.appendChild(td);
+
+					td = document.createElement("td");
+					a.removeChild(a.firstChild);
+					a.appendChild(name);
+					td.appendChild(a);
+					tr.appendChild(td);
+
+					tbody.appendChild(tr);
+				}
+				table = document.createElement("table");
+				table.appendChild(tbody);
+				div.appendChild(table);
+			}
+			else
+			{
+				var p = document.createElement("p");
+				p.appendChild(document.createTextNode("No Names Found"));
+				div.appendChild(p);
 			}
 		}
-	?>
+	}
+</script>
