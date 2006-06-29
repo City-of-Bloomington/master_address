@@ -1,18 +1,16 @@
 <?php
 	class PlaceHistory extends PDOResultIterator
 	{
-		private $joins = "";
-		private $where = "";
-
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort="date")
 		{
 			global $PDO;
+			$this->sort = $sort;
 
 			$options = array();
 			if (count($options)) { $this->where = " where ".implode(" and ",$options); }
-			$sql = "select * from placeHistory {$this->joins} {$this->where} order by $sort";
+			$sql = "select * from placeHistory {$this->joins} {$this->where} order by {$this->sort}";
 
 			$result = $PDO->query($sql);
 			if ($result)

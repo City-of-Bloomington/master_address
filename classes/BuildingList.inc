@@ -1,15 +1,13 @@
 <?php
 	class BuildingList extends PDOResultIterator
 	{
-		private $joins = "";
-		private $where = "";
-
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 
 		public function find($fields=null,$sort="id")
 		{
 			global $PDO;
+			$this->sort = $sort;
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
@@ -31,7 +29,7 @@
 
 
 			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
-			$sql = "select distinct buildings.id from buildings {$this->joins} {$this->where} order by $sort";
+			$sql = "select distinct buildings.id from buildings {$this->joins} {$this->where} order by {$this->sort}";
 
 			$result = $PDO->query($sql);
 			if ($result)

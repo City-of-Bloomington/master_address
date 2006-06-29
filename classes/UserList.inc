@@ -6,11 +6,11 @@
 		public function find($fields=null,$sort = "username")
 		{
 			global $PDO;
+			$this->sort = $sort;
 
 			if ($fields)
 			{
 				$options = array();
-				$sql = "select distinct users.id from users";
 
 				if (isset($fields['id'])) { $options[] = "users.id=$fields[id]"; }
 				if (isset($fields['username'])) { $options[] = "username='$fields[username]'"; }
@@ -23,14 +23,14 @@
 				# To search on Role, you have to join the userRoles table
 				if (isset($fields['role']))
 				{
-					$sql = " left join user_roles on users.id=user_id left join roles on role_id=roles.id";
+					$this->joins.= " left join user_roles on users.id=user_id left join roles on role_id=roles.id";
 					$options[] = "role='$fields[role]'";
 				}
 
-				$where = " where ".implode(" and ",$options);
-				$sql.= "$where order by $sort";
+				$this->where = " where ".implode(" and ",$options);
+				$sql = "select distinct users.id from users {$this->joins} {$this->where} order by {$this->sort}";
 			}
-			else { $sql = "select id from users order by $sort"; }
+			else { $sql = "select id from users order by {$this->sort}"; }
 
 			foreach($PDO->query($sql) as $row) { $this->list[] = $row['id']; }
 		}
@@ -38,6 +38,7 @@
 		public function search($fields=null,$sort = "username")
 		{
 			global $PDO;
+			$this->sort = $sort;
 
 			if ($fields)
 			{
@@ -59,9 +60,9 @@
 				}
 
 				$this->where = "where ".implode(" and ",$options);
-				$sql.= "select distinct users.id from users {$this->joins} {$this->where} order by $sort";
+				$sql.= "select distinct users.id from users {$this->joins} {$this->where} order by {$this->sort}";
 			}
-			else { $sql = "select id from users order by $sort"; }
+			else { $sql = "select id from users order by {$this->sort}"; }
 
 			$result = $PDO->query($sql);
 			if ($result)

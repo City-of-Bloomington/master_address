@@ -1,16 +1,11 @@
 <?php
 	class SegmentList extends PDOResultIterator
 	{
-		private $joins = "";
-		private $where = "";
-		private $sort;
-
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
 		public function find($fields=null,$sort="startingNumber")
 		{
 			global $PDO;
-
 			$this->sort = $sort;
 
 			$options = array();
