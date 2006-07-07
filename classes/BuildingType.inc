@@ -1,5 +1,5 @@
 <?php
-	class BuildingType
+	class BuildingType extends ActiveRecord
 	{
 		private $id;
 		private $description;
@@ -75,6 +75,6 @@
 		public function getDescription() { return $this->description; }
 
 
-		public function setDescription($string) { $this->description = sanitizeString($string); }
+		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
 	}
 ?>

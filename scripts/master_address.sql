@@ -166,14 +166,14 @@ CREATE TABLE segments (
 	highYCoordinate int(7) unsigned,
 	travel tinyint(1) unsigned,
 	travelDirection_id int unsigned,
-	complete char(2),
+	complete char(2) NOT NULL,
 	rclBack char(8),
 	rclNext char(8),
 	classRow int(4) unsigned,
 	mapArea char(3),
 	lastUpdatedDate date,
 	lastUpdatedAction varchar(30),
-	lastUpdatedBy int unsigned,
+	lastUpdatedUser_id int unsigned,
 	PRIMARY KEY(id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(lastUpdatedBy) REFERENCES users (id),
@@ -193,6 +193,7 @@ CREATE TABLE places (
 	section varchar(10),
 	quarterSection enum('NE','NW','SE','SW'),
 	class varchar(30),
+	placeType_id int unsigned,
 	censusBlockFIPSCode varchar(20),
 	statePlaneX int(7) unsigned,
 	statePlaneY int(7) unsigned,
@@ -207,6 +208,7 @@ CREATE TABLE places (
 	FOREIGN KEY(trashPickupDay_id) REFERENCES trashPickupDays (id),
 	FOREIGN KEY(trashLargeItemPickupDay_id) REFERENCES trashPickupDays (id),
 	FOREIGN KEY(recyclingPickupWeek_id) REFERENCES recyclingPickupWeeks (id),
+	FOREIGN KEY(placeType_id) REFERENCES placeTypes (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
 
 CREATE TABLE buildings (

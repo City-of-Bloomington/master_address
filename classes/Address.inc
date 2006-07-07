@@ -1,5 +1,5 @@
 <?php
-	class Address
+	class Address extends ActiveRecord
 	{
 		private $id;
 		private $place_id;
@@ -61,7 +61,7 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->place_id || !$this->segment_id || !$this->number || !$this->city_id) { throw new Exception("missingRequiredFields"); }
+			if (!$this->place_id || !$this->street_id || !$this->segment_id || !$this->number || !$this->city_id) { throw new Exception("missingRequiredFields"); }
 
 
 			# This generates generic SQL that should work right away.
@@ -69,6 +69,7 @@
 			# for each property of this class,
 			$fields = array();
 			$fields[] = "place_id={$this->place_id}";
+			$fields[] = "street_id={$this->street_id}";
 			$fields[] = "segment_id={$this->segment_id}";
 			$fields[] = "number={$this->number}";
 			$fields[] = $this->suffix ? "suffix='{$this->suffix}'" : "suffix=null";
@@ -78,11 +79,6 @@
 			$fields[] = $this->zipplus4 ? "zipplus4={$this->zipplus4}" : "zipplus4=null";
 			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
 			$fields[] = $this->active ? "active='{$this->active}'" : "active=null";
-			$fields[] = $this->censusBlockFIPSCode ? "censusBlockFIPSCode='{$this->censusBlockFIPSCode}'" : "censusBlockFIPSCode=null";
-			$fields[] = $this->statePlaneX ? "statePlaneX={$this->statePlaneX}" : "statePlaneX=null";
-			$fields[] = $this->statePlaneY ? "statePlaneY={$this->statePlaneY}" : "statePlaneY=null";
-			$fields[] = $this->latitude ? "latitude='{$this->latitude}'" : "latitude=null";
-			$fields[] = $this->longitude ? "longitude='{$this->longitude}'" : "longitude=null";
 			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
 			$fields[] = $this->notes ? "notes='{$this->notes}'" : "notes=null";
@@ -196,15 +192,15 @@
 		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
 		public function setSegment_id($int) { $this->segment = new Segment($int); $this->segment_id = $int; }
 		public function setNumber($int) { $this->number = ereg_replace("[^0-9]","",$int); }
-		public function setSuffix($string) { $this->suffix = sanitizeString($string); }
-		public function setAddressType($string) { $this->addressType = sanitizeString($string); }
+		public function setSuffix($string) { $this->suffix = $this->sanitizeString($string); }
+		public function setAddressType($string) { $this->addressType = $this->sanitizeString($string); }
 		public function setCity_id($int) { $this->city = new City($int); $this->city_id = $int; }
 		public function setZip($int) { $this->zip = ereg_replace("[^0-9]","",$int); }
 		public function setZipplus4($int) { $this->zipplus4 = ereg_replace("[^0-9]","",$int); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
-		public function setActive($string) { $this->active = sanitizeString($string); }
-		public function setStartDate($date) { $this->startDate = $date; }
-		public function setEndDate($date) { $this->endDate = $date; }
-		public function setNotes($string) { $this->notes = sanitizeString($string); }
+		public function setActive($string) { $this->active = $this->sanitizeString($string); }
+		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
 	}
 ?>

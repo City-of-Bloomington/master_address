@@ -1,5 +1,5 @@
 <?php
-	class PlaceType
+	class PlaceType extends ActiveRecord
 	{
 		private $id;
 		private $type;
@@ -76,7 +76,7 @@
 		public function getDescription() { return $this->description; }
 
 
-		public function setType($string) { $this->type = sanitizeString($string); }
-		public function setDescription($string) { $this->description = sanitizeString($string); }
+		public function setType($string) { $this->type = $this->sanitizeString($string); }
+		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
 	}
 ?>

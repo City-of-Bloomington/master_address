@@ -1,5 +1,5 @@
 <?php
-	class Annexation
+	class Annexation extends ActiveRecord
 	{
 		private $id;
 		private $ordinanceNumber;
@@ -77,7 +77,7 @@
 		public function getName() { return $this->name; }
 
 
-		public function setOrdinanceNumber($string) { $this->ordinanceNumber = sanitizeString($string); }
-		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setOrdinanceNumber($string) { $this->ordinanceNumber = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = $this->sanitizeString($string); }
 	}
 ?>

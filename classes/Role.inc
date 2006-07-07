@@ -1,5 +1,5 @@
 <?php
-	class Role
+	class Role extends ActiveRecord
 	{
 		private $id;
 		private $role;

@@ -1,5 +1,5 @@
 <?php
-	class Place
+	class Place extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -71,7 +71,7 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->jurisdiction_id) { throw new Exception("missingRequiredFields"); }
+			if (!$this->jurisdiction_id || !$this->status_id) { throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();
@@ -217,7 +217,7 @@
 
 
 
-		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setName($string) { $this->name = $this->sanitizeString($string); }
 		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
 		public function setTrashPickupDay_id($int) { $this->trashPickupDay = new TrashPickupDay($int); $this->trashPickupDay_id = $int; }
@@ -225,17 +225,17 @@
 		public function setRecyclingPickupWeek_id($int) { $this->recyclingPickupWeek = new RecyclingPickupWeek($int); $this->recyclingPickupWeek_id = $int; }
 		public function setMailable($int) { $this->mailable = ereg_replace("[^0-9]","",$int); }
 		public function setLivable($int) { $this->livable = ereg_replace("[^0-9]","",$int); }
-		public function setSection($string) { $this->section = sanitizeString($string); }
+		public function setSection($string) { $this->section = $this->sanitizeString($string); }
 		public function setQuarterSection($string) { $this->quarterSection = ereg_replace("[^A-Z]","",strtoupper($string)); }
-		public function setClass($string) { $this->class = sanitizeString($string); }
+		public function setClass($string) { $this->class = $this->sanitizeString($string); }
 		public function setPlaceType_id($int) { $this->placeType = new PlaceType($int); $this->placeType_id = $int; }
-		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = sanitizeString($string); }
+		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = $this->sanitizeString($string); }
 		public function setStatePlaneX($int) { $this->statePlaneX = ereg_replace("[^0-9]","",$int); }
 		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
 		public function setLatitude($float) { $this->latitude = ereg_replace("[^0-9.]","",$float); }
 		public function setLongitude($float) { $this->longitude = ereg_replace("[^0-9.]","",$float); }
-		public function setStartDate($date) { $this->startDate = $date; }
-		public function setEndDate($endDate) { $this->endDate = $date; }
+		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 	}
 ?>

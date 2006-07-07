@@ -1,5 +1,5 @@
 <?php
-	class StreetName
+	class StreetName extends ActiveRecord
 	{
 		private $id;
 		private $street_id;

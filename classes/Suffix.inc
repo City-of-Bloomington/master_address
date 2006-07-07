@@ -1,5 +1,5 @@
 <?php
-	class Suffix
+	class Suffix extends ActiveRecord
 	{
 		private $id;
 		private $suffix;
@@ -77,6 +77,6 @@
 
 
 		public function setSuffix($char) { $this->suffix = ereg_replace("[^A-Z]","",strtoupper($char)); }
-		public function setDescription($string) { $this->description = sanitizeString($string); }
+		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
 	}
 ?>

@@ -1,5 +1,5 @@
 <?php
-	class Status
+	class Status extends ActiveRecord
 	{
 		private $id;
 		private $status;
@@ -73,6 +73,6 @@
 
 		public function __toString() { return $this->status; }
 
-		public function setStatus($string) { $this->status = sanitizeString($string); }
+		public function setStatus($string) { $this->status = $this->sanitizeString($string); }
 	}
 ?>

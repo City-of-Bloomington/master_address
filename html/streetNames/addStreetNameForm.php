@@ -32,6 +32,8 @@
 		if (isset($street)) { $return_url.="street_id={$street->getId()};"; }
 		$return_url.="name_id=";
 
+		$error_url = $_SERVER['REQUEST_URI'];
+
 		if (isset($name))
 		{
 			echo "<h2>Use this name:</h2><input name=\"name_id\" type=\"hidden\" value=\"{$name->getId()}\" />";

@@ -1,5 +1,5 @@
 <?php
-	class Building
+	class Building extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -87,8 +87,8 @@
 
 
 		public function setName($string) { $this->name = $string; }
-		public function setStartDate($date) { $this->startDate = $date; }
-		public function setEndDate($date) { $this->endDate = $date; }
+		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setGISTag($string) { $this->GISTag = $string; }
 		public function setStatus_id($int) { $this->status_id = $int; }
 	}

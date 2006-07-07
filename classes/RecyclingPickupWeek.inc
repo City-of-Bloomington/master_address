@@ -1,5 +1,5 @@
 <?php
-	class RecyclingPickupWeek
+	class RecyclingPickupWeek extends ActiveRecord
 	{
 		private $id;
 		private $week;

@@ -1,40 +1,69 @@
 <?php
 /*
+	This is designed to run as a pop up.  When done, it needs to
+	refresh the parent window
+
+	$_GET variables:	street_id
+	---------------------------------------------------------------------------
 	$_POST variables	street_id
 
-						segments[]	# Will use the segment_id as the index
+						segments[]	# This comes in from the find form.
+									# Used for selecting multiple, pre-existing segments
+									# to add to the street
+
+
+						segment[] 	# This comes in from the add form
+									# Used to create a single new segment, and add
+									# it to the street
 */
 	verifyUser("Administrator");
 
-	$street = new Street($_POST['street_id']);
+	#--------------------------------------------------------------------------
+	# Load the street
+	#--------------------------------------------------------------------------
+	if (isset($_POST['street_id'])) { $street = new Street($_POST['street_id']); }
+	else { $street = new Street($_GET['street_id']); }
 
-	foreach($_POST['segments'] as $segment_id=>$value)
+	#--------------------------------------------------------------------------
+	# Handle multiple segments from the find form
+	#--------------------------------------------------------------------------
+	if (isset($_POST['segments']))
 	{
-		if ($value == "on")
+		foreach($_POST['segments'] as $segment_id=>$value)
 		{
-			$segment = new Segment($segment_id);
-			$street->addSegment($segment);
+			if ($value == "on")
+			{
+				$segment = new Segment($segment_id);
+				$street->addSegment($segment);
+			}
 		}
+		try { $street->save(); }
+		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	try
+	#--------------------------------------------------------------------------
+	# Handle a new segment from the add form
+	#--------------------------------------------------------------------------
+	if (isset($_POST['segment']))
 	{
-		$street->save();
-		include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-		echo "
-		<head>
-			<script type=\"text/javascript\">
-				window.opener.location.reload();
-				window.close();
-			</script>
-		</head>
-		<body>
-		";
-		include(GLOBAL_INCLUDE."/xhtmlFooter.inc");
+		try { $street->save(); }
+		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
-	catch (Exception $e)
-	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: addSegmentForm.php?street_id=$_POST[street_id]");
-	}
+
+
+	#--------------------------------------------------------------------------
+	# Refresh the main page and show the forms again
+	#--------------------------------------------------------------------------
+	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
+	include(APPLICATION_HOME."/includes/popUpBanner.inc");
+	include(GLOBAL_INCLUDES."/errorMessages.inc");
+
+	echo "
+	<script type=\"text/javascript\">window.opener.location.reload();</script>
+	<h1>Add Segments</h1>
+	";
+	include(APPLICATION_HOME."/includes/streets/findSegmentForm.inc");
+	include(APPLICATION_HOME."/includes/segments/addSegmentForm.inc");
+
+	include(GLOBAL_INCLUDE."/xhtmlFooter.inc");
 ?>

@@ -1,5 +1,5 @@
 <?php
-	class Name
+	class Name extends ActiveRecord
 	{
 		private $id;
 		private $town_id;
@@ -176,11 +176,11 @@
 
 		public function setTown_id($int) { $this->town = new Town($int); $this->town_id = $int; }
 		public function setDirection_id($int) { $this->direction = new Direction($int); $this->direction_id = $int; }
-		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setName($string) { $this->name = $this->sanitizeString($string); }
 		public function setSuffix_id($int) { $this->suffix = new Suffix($int); $this->suffix_id = $int; }
 		public function setPostDirection_id($int) { $this->postDirection = new Direction($int); $this->postDirection_id = $int; }
-		public function setStartDate($date) { $this->startDate = $date; }
-		public function setEndDate($date) { $this->endDate = $date; }
-		public function setNotes($string) { $this->notes = sanitizeString($string); }
+		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
 	}
 ?>

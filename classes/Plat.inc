@@ -1,5 +1,5 @@
 <?php
-	class Plat
+	class Plat extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -111,11 +111,11 @@
 		}
 
 
-		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setName($string) { $this->name = $this->sanitizeString($string); }
 		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
 		public function setPlatType_id($int) { $this->platType = new PlatType($int); $this->platType_id = $int; }
-		public function setCabinet($string) { $this->cabinet = sanitizeString($string); }
-		public function setEnvelope($string) { $this->envelope = sanitizeString($string); }
-		public function setNotes($string) { $this->notes = sanitizeString($string); }
+		public function setCabinet($string) { $this->cabinet = $this->sanitizeString($string); }
+		public function setEnvelope($string) { $this->envelope = $this->sanitizeString($string); }
+		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
 	}
 ?>

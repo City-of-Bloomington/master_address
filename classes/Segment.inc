@@ -1,5 +1,5 @@
 <?php
-	class Segment
+	class Segment extends ActiveRecord
 	{
 		private $id;
 		private $tag;
@@ -80,7 +80,9 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-
+			if (!$this->startingNumber || !$this->endingNumber || !$this->jurisdiction_id || !$this->status_id
+				|| !$this->maintenanceResponsibility || !$this->complete)
+			{ throw new Exception("missingRequiredFields"); }
 
 			# This generates generic SQL that should work right away.
 			# You can (and maybe should) replace this $fields code with your own custom SQL
@@ -117,7 +119,7 @@
 			$fields[] = $this->mapArea ? "mapArea='{$this->mapArea}'" : "mapArea=null";
 			$fields[] = $this->lastUpdatedDate ? "lastUpdatedDate='{$this->lastUpdatedDate}'" : "lastUpdatedDate=null";
 			$fields[] = $this->lastUpdatedAction ? "lastUpdatedAction='{$this->lastUpdatedAction}'" : "lastUpdatedAction=null";
-			$fields[] = $this->lastUpdatedBy ? "lastUpdatedBy={$this->lastUpdatedBy}" : "lastUpdatedBy=null";
+			$fields[] = $this->lastUpdatedUser_id ? "lastUpdatedUser_id={$this->lastUpdatedUser_id}" : "lastUpdatedUser_id=null";
 
 			$fields = implode(",",$fields);
 
@@ -231,17 +233,17 @@
 
 
 
-		public function setTag($string) { $this->tag = sanitizeString($string); }
+		public function setTag($string) { $this->tag = $this->sanitizeString($string); }
 		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
 		public function setStartingNumber($int) { $this->startingNumber = ereg_replace("[^0-9]","",$int); }
 		public function setEndingNumber($int) { $this->endingNumber = ereg_replace("[^0-9]","",$int); }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
-		public function setNotes($string) { $this->notes = sanitizeString($string); }
+		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
 		public function setSpeedLimit($int) { $this->speedLimit = ereg_replace("[^0-9]","",$int); }
-		public function setINDOTSegmentID($string) { $this->INDOTSegmentID = sanitizeString($string); }
+		public function setINDOTSegmentID($string) { $this->INDOTSegmentID = $this->sanitizeString($string); }
 		public function setTransportationClass($string) { $this->transportationClass = ereg_replace("[^A-Z]","",strtoupper($string)); }
-		public function setMaintenanceResponsibility($string) { $this->maintenanceResponsibility = sanitizeString($string); }
+		public function setMaintenanceResponsibility($string) { $this->maintenanceResponsibility = $this->sanitizeString($string); }
 		public function setLeftLowNumber($int) { $this->leftLowNumber = ereg_replace("[^0-9]","",$int); }
 		public function setLeftHighNumber($int) { $this->leftHighNumber = ereg_replace("[^0-9]","",$int); }
 		public function setRightLowNumber($int) { $this->rightLowNumber = ereg_replace("[^0-9]","",$int); }
@@ -261,8 +263,8 @@
 		public function setRclNext($char) { $this->rclNext = ereg_replace("[^0-9a-z]","",strtolower($char)); }
 		public function setClassRow($int) { $this->classRow = ereg_replace("[^0-9]","",$int); }
 		public function setMapArea($char) { $this->mapArea = $char; }
-		public function setLastUpdatedDate($date) { $this->lastUpdatedDate = $date; }
-		public function setLastUpdatedAction($string) { $this->lastUpdatedAction = sanitizeString($string); }
-		public function setLastUpdatedUser_id($int) { $this->lastUpdatedUser = new User($int); $this->lastUpdatedBy = $int; }
+		public function setLastUpdatedDate($date) { $this->lastUpdatedDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
+		public function setLastUpdatedAction($string) { $this->lastUpdatedAction = $this->sanitizeString($string); }
+		public function setLastUpdatedUser_id($int) { $this->lastUpdatedUser = new User($int); $this->lastUpdatedUser_id = $int; }
 	}
 ?>

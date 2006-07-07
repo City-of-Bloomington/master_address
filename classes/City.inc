@@ -1,5 +1,5 @@
 <?php
-	class City
+	class City extends ActiveRecord
 	{
 		private $id;
 		private $name;
@@ -74,7 +74,7 @@
 		public function __toString() { return $this->name; }
 
 
-		public function setName($string) { $this->name = sanitizeString($string); }
+		public function setName($string) { $this->name = $this->sanitizeString($string); }
 
 	}
 ?>

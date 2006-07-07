@@ -1,5 +1,5 @@
 <?php
-	class TrashPickupDay
+	class TrashPickupDay extends ActiveRecord
 	{
 		private $id;
 		private $day;

@@ -49,12 +49,14 @@
 			if (isset($fields['street_id']))
 			{
 				$this->joins.=" left join street_segments on segment_id=segments.id";
-				$options[] = "street_id=$fields[street_id]";
+				if ($fields['street_id'] != "null") { $options[] = "street_id=$fields[street_id]";}
+				else { $options[] = "street_id is null"; }
 			}
+
 
 			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
 
-			$sql = "select id from segments {$this->joins} {$this->where} order by {$this->sort}";
+			$sql = "select segments.id from segments {$this->joins} {$this->where} order by {$this->sort}";
 			$result = $PDO->query($sql);
 			if ($result)
 			{

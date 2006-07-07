@@ -1,5 +1,5 @@
 <?php
-	class PlatType
+	class PlatType extends ActiveRecord
 	{
 		private $id;
 		private $type;
@@ -77,6 +77,6 @@
 
 
 		public function setType($char) { $this->type = ereg_replace("[^A-Z]","",strtoupper($char)); }
-		public function setDescription($string) { $this->description = sanitizeString($string); }
+		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
 	}
 ?>
