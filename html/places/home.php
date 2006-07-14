@@ -8,7 +8,10 @@
 	<div class="interfaceBox">
 		<div class="titleBar">Find a Place</div>
 
-		<?php include(APPLICATION_HOME."/includes/places/searchForm.inc"); ?>
+		<?php
+			include(GLOBAL_INCLUDES."/errorMessages.inc");
+			include(APPLICATION_HOME."/includes/places/searchForm.inc");
+		?>
 	</div>
 </div>
 <?php

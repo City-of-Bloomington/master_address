@@ -5,8 +5,7 @@
 ?>
 	<div class="titleBar">
 		<button type="button" class="addSmall">Add</button>
-		<a href="<?php echo BASE_URL; ?>/addresses/viewAddress.php?id=<?php echo $address->getId(); ?>">
-		<?php echo "{$address->getFullAddress()}, {$address->getCity()->getName()}, {$address->getZip()}"; ?></a>
+		<?php echo "{$address->getFullAddress()}, {$address->getCity()->getName()}, {$address->getZip()}"; ?>
 	</div>
 	<p class="comments"><?php echo $address->getNotes(); ?></p>
 	<table>

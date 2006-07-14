@@ -182,14 +182,13 @@ delete from tempLocations where subunit_id is not null;
 
 
 insert places
-select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,g.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class,
+select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class,
 census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude,
 effective_start_date,effective_end_date,c.id
 from tempLocations l left join oldAddressData.mast_address a using (street_address_id)
 left join oldAddressData.mast_address_sanitation s using (street_address_id)
 left join oldAddressData.locations_classes c on l.location_id=c.location_id
 left join trashPickupDays t on trash_pickup_day=t.day
-left join trashPickupDays g on large_item_pickup_day=g.day
 left join recyclingPickupWeeks r on recycle_week=r.week
 left join oldAddressData.mast_address_location_status m on l.location_id=m.location_id
 left join oldAddressData.mast_address_status_lookup y on m.status_code=y.status_code
@@ -201,7 +200,7 @@ group by location_id;
 -- There are some contacts that just aren't in the system anymore.  We should clear those contact_id's out
 update oldAddressData.mast_address_assignment_hist set contact_id=null where contact_id not in (select id from users);
 
-insert placeHistory select location_id,action,action_date,notes,contact_id from oldAddressData.mast_address_assignment_hist
+insert placeHistory select null,location_id,action,action_date,notes,contact_id from oldAddressData.mast_address_assignment_hist
 where location_id in (select id from places);
 
 -- units

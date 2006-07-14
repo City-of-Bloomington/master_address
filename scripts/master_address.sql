@@ -186,7 +186,6 @@ CREATE TABLE places (
 	township_id int unsigned,
 	jurisdiction_id int unsigned NOT NULL,
 	trashPickupDay_id int unsigned,
-	trashLargeItemPickupDay_id int unsigned,
 	recyclingPickupWeek_id int unsigned,
 	mailable tinyint(1) unsigned,
 	livable tinyint(1) unsigned,
@@ -206,7 +205,6 @@ CREATE TABLE places (
 	FOREIGN KEY(township_id) REFERENCES townships (id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(trashPickupDay_id) REFERENCES trashPickupDays (id),
-	FOREIGN KEY(trashLargeItemPickupDay_id) REFERENCES trashPickupDays (id),
 	FOREIGN KEY(recyclingPickupWeek_id) REFERENCES recyclingPickupWeeks (id),
 	FOREIGN KEY(placeType_id) REFERENCES placeTypes (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
@@ -321,11 +319,13 @@ CREATE TABLE district_places (
 	FOREIGN KEY(district_id) REFERENCES districts (id)) engine=InnoDB;
 
 CREATE TABLE placeHistory (
+	id int unsigned auto_increment NOT NULL,
 	place_id int unsigned NOT NULL,
 	action varchar(30) NOT NULL,
 	date date NOT NULL,
 	notes varchar(255),
 	user_id int unsigned,
+	PRIMARY KEY(id),
 	FOREIGN KEY(place_id) REFERENCES places (id),
 	FOREIGN KEY(user_id) REFERENCES users (id)) engine=InnoDB;
 

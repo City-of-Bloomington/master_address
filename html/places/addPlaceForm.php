@@ -1,8 +1,5 @@
 <?php
-/*
-
-*/
-	#verifyUser("Administrator");
+	verifyUser("Administrator");
 
 	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");

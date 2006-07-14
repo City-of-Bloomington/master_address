@@ -6,7 +6,6 @@
 		private $township_id;
 		private $jurisdiction_id;
 		private $trashPickupDay_id;
-		private $trashLargeItemPickupDay_id;
 		private $recyclingPickupWeek_id;
 		private $mailable;
 		private $livable;
@@ -32,6 +31,7 @@
 
 		private $addressList;
 		private $buildingList;
+		private $history;
 
 
 		public function __construct($id=null)
@@ -124,7 +124,6 @@
 		public function getTownship_id() { return $this->township_id; }
 		public function getJurisdiction_id() { return $this->jurisdiction_id; }
 		public function getTrashPickupDay_id() { return $this->trashPickupDay_id; }
-		public function getTrashLargeItemPickupDay_id() { return $this->trashLargeItemPickupDay_id; }
 		public function getRecyclingPickupWeek_id() { return $this->recyclingPickupWeek_id; }
 		public function getMailable() { return $this->mailable; }
 		public function getLivable() { return $this->livable; }
@@ -167,15 +166,6 @@
 			}
 			else return null;
 		}
-		public function getTrashLargeItemPickupDay()
-		{
-			if ($this->trashLargeItemPickupDay_id)
-			{
-				if (!$this->trashLargeItemPickupDay) { $this->trashLargeItemPickupDay = new TrashPickupDay($this->trashLargeItemPickupDay_id); }
-				return $this->trashLargeItemPickupDay;
-			}
-			else return null;
-		}
 		public function getRecyclingPickupWeek()
 		{
 			if ($this->recyclingPickupWeek_id)
@@ -214,14 +204,17 @@
 			if (!count($this->buildingList)) { $this->buildingList = new BuildingList(array("place_id"=>$this->id)); }
 			return $this->buildingList;
 		}
-
+		public function getHistory()
+		{
+			if (!count($this->history)) { $this->history = new PlaceHistoryList(array("place_id"=>$this->id)); }
+			return $this->history;
+		}
 
 
 		public function setName($string) { $this->name = $this->sanitizeString($string); }
 		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
 		public function setTrashPickupDay_id($int) { $this->trashPickupDay = new TrashPickupDay($int); $this->trashPickupDay_id = $int; }
-		public function setTrashLargeItemPickupDay_id($int) { $this->trashLargeItemPickupDay = new TrashPickupDay($int); $this->trashLargeItemPickupDay_id = $int; }
 		public function setRecyclingPickupWeek_id($int) { $this->recyclingPickupWeek = new RecyclingPickupWeek($int); $this->recyclingPickupWeek_id = $int; }
 		public function setMailable($int) { $this->mailable = ereg_replace("[^0-9]","",$int); }
 		public function setLivable($int) { $this->livable = ereg_replace("[^0-9]","",$int); }

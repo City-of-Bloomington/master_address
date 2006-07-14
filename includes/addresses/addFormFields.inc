@@ -4,7 +4,16 @@
 							segment
 							place
 	---------------------------------------------------------
-	$_POST variables:	address[	 ]		# All of these fields might get posted back
+	$_POST variables:	address[	street_id
+									place_id
+									segment_id
+
+									number			status_id
+									addressType		active
+									city_id			startDate
+									zip				endDate
+									zipplus4		notes
+							]
 */
 ?>
 <fieldset><legend>Address Info</legend>

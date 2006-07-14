@@ -58,10 +58,8 @@
 	include(APPLICATION_HOME."/includes/popUpBanner.inc");
 	include(GLOBAL_INCLUDES."/errorMessages.inc");
 
-	echo "
-	<script type=\"text/javascript\">window.opener.location.reload();</script>
-	<h1>Add Segments</h1>
-	";
+	echo "<h1>Add Segments</h1>";
+
 	include(APPLICATION_HOME."/includes/streets/findSegmentForm.inc");
 	include(APPLICATION_HOME."/includes/segments/addSegmentForm.inc");
 

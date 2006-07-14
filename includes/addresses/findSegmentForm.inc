@@ -1,57 +1,72 @@
-<?php
-/*
-	$_GET variables:	number
-						suffix
-
-						direction_id
-						street_name
-						suffix_id
-						postDirection_id
-*/
-?>
-<form method="get" action="findSegmentForm.php">
+<h1>Add Address</h1>
+<form method="get" action="javascript:findSegments();">
 <fieldset><legend>Find a segment</legend>
 	<table>
-	<tr><th><label for="number">Number</label></th>
-		<th><label for="suffix">Suffix</label></th>
-		<th><label for="name">Street Name</label></th>
-	</tr>
-	<tr><td><input name="number" id="number" size="5" value="<?php if(isset($_GET['number'])) echo $_GET['number']; ?>" /></td>
-		<td><input name="suffix" id="suffix" size="3" value="<?php if(isset($_GET['suffix'])) echo $_GET['suffix']; ?>" /></td>
-		<td><select name="direction_id" id="direction_id"><option></option>
-			<?php
-				$directionList = new DirectionList();
-				$directionList->find();
-				foreach($directionList as $direction)
-				{
-					if (isset($_GET['direction_id']) && $_GET['direction_id']==$direction->getId()) { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
-					else { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
-				}
-			?>
-			</select>
-			<input name="name" id="name" value="<?php if(isset($_GET['name'])) echo $_GET['name']; ?>" />
-			<select name="suffix_id" id="suffix_id"><option></option>
-			<?php
-				$list = new SuffixList();
-				$list->find();
-				foreach($list as $suffix)
-				{
-					if (isset($_GET['suffix_id']) && $_GET['suffix_id']==$suffix->getId()) { echo "<option value=\"{$suffix->getId()}\" selected=\"selected\">{$suffix->getSuffix()}</option>"; }
-					else { echo "<option value=\"{$suffix->getId()}\">{$suffix->getSuffix()}</option>"; }
-				}
-			?>
-			</select>
-			<select name="postDirection_id" id="postDirection_id"><option></option>
-			<?php
-				foreach($directionList as $direction)
-				{
-					if (isset($_GET['postDirection_id']) && $_GET['postDirection_id']==$direction->getId()) { echo "<option value=\"{$direction->getId()}\" selected=\"selected\">{$direction->getCode()}</option>"; }
-					else { echo "<option value=\"{$direction->getId()}\">{$direction->getCode()}</option>"; }
-				}
-			?>
-			</select>
-		</td>
+	<tr><th><label for="address-number">Number</label></th>
+		<th><label for="address-suffix">Suffix</label></th>
+		<th><label for="name-name">Street Name</label></th>
 	</tr>
 	</table>
 </fieldset>
+<?php include(APPLICATION_HOME."/includes/names/findFields.inc"); ?>
 </form>
+<div id="findSegmentResults"></div>
+<script type="text/javascript">
+	var findSegmentRequest = getXMLHttpRequestObject();
+
+	function findSegments()
+	{
+		var params = getFormValues(document.getElementById("findSegmentForm"));
+		findSegmentRequest.open("get","<?php echo BASE_URL; ?>/segments/findSegment.php?"+params);
+		findSegmentRequest.onreadystatechange = findSegmentResults;
+		findSegmentRequest.send(null);
+	}
+
+	function findSegmentResults()
+	{
+		// Clear out the results div, so we can update it's contents
+		var div = document.getElementById("findNameResults");
+		while(div.firstChild) { div.removeChild(div.firstChild); }
+
+		if (findNameRequest.readyState == 4)
+		{
+			// Build a new table from the results
+			var results = eval("("+findNameRequest.responseText+")");
+			if (results)
+			{
+				tbody = document.createElement("tbody");
+				for(var i=0; i<results.length; i++)
+				{
+					var id = document.createTextNode(results[i].id);
+					var name = document.createTextNode(results[i].name);
+
+					var tr = document.createElement("tr");
+
+					var td = document.createElement("td");
+					var a = document.createElement("a");
+					a.setAttribute("href","<?php echo $return_url; ?>"+results[i].id);
+					a.appendChild(id);
+					td.appendChild(a);
+					tr.appendChild(td);
+
+					td = document.createElement("td");
+					a.removeChild(a.firstChild);
+					a.appendChild(name);
+					td.appendChild(a);
+					tr.appendChild(td);
+
+					tbody.appendChild(tr);
+				}
+				table = document.createElement("table");
+				table.appendChild(tbody);
+				div.appendChild(table);
+			}
+			else
+			{
+				var p = document.createElement("p");
+				p.appendChild(document.createTextNode("No Names Found"));
+				div.appendChild(p);
+			}
+		}
+	}
+</script>
