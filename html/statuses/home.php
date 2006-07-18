@@ -1,28 +1,5 @@
 <?php
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
-?>
-<div id="mainContent">
-	<div class="interfaceBox">
-		<div class="titleBar">Status Codes</div>
-		<table>
-		<?php
-			$statusList = new StatusList();
-			$statusList->find();
-			foreach($statusList as $status)
-			{
-				echo "<tr>";
-					if ( isset($_SESSION['USER']) && in_array("Administrator",$_SESSION['USER']->getRoles()) )
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateStatusForm.php?id={$status->getId()}'\">Edit</button></td>"; }
-				echo "<td>{$status->getStatus()}</td></tr>";
-			}
-		?>
-		</table>
-	</div>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
+	$view = new View();
+	$view->addBlock("statuses/statusList.inc");
+	$view->render();
 ?>

@@ -1,21 +1,41 @@
 <?php
 /*
+	$_GET variables:	id
+	-----------------------------------------------
 	$_POST variables:	id
-						name
+						jurisdiction [ name ]
 */
 	verifyUser("Administrator");
 
-	$jurisdiction = new Jurisdiction($_POST['id']);
-	$jurisdiction->setName($_POST['name']);
+	if (isset($_POST['jurisdiction']))
+	{
+		$jurisdiction = new Jurisdiction($_POST['id']);
+		foreach($_POST['jurisdiction'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$jurisdiction->$set($value);
+		}
 
-	try
-	{
-		$jurisdiction->save();
-		Header("Location: home.php");
+		try
+		{
+			$jurisdiction->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->jurisdiction = $jurisdiction;
+			$view->addBlock("jurisdictions/updateJurisdictionForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateJurisdictionForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->jurisdiction = new Jurisdiction($_GET['id']);
+		$view->addBlock("jurisdictions/updateJurisdictionForm.inc");
+		$view->render();
 	}
 ?>

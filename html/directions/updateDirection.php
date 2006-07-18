@@ -1,23 +1,43 @@
 <?php
 /*
+	$_GET variables:	id
+	----------------------------------------------
 	$_POST variables:	id
-						code
-						direction
+						direction [	code
+									direction
+								]
 */
 	verifyUser("Administrator");
 
-	$direction = new Direction($_POST['id']);
-	$direction->setCode($_POST['code']);
-	$direction->setDirection($_POST['direction']);
+	if (isset($_POST['direction']))
+	{
+		$direction = new Direction($_POST['id']);
+		foreach($_POST['direction'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$direction->$set($value);
+		}
 
-	try
-	{
-		$direction->save();
-		Header("Location: home.php");
+		try
+		{
+			$direction->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->direction = $direction;
+			$view->addBlock("directions/updateDirectionForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateDirectionForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->direction = new Direction($_GET['id']);
+		$view->addBlock("directions/updateDirectionForm.inc");
+		$view->render();
 	}
 ?>

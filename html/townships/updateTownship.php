@@ -1,25 +1,44 @@
 <?php
 /*
+	$_GET variables:	id
+	----------------------------------
 	$_POST variables:	id
-						name
-						abbreviation
-						quarterCode
+						township [ name
+									abbreviation
+									quarterCode
+								]
 */
 	verifyUser("Administrator");
 
-	$township = new Township($_POST['id']);
-	$township->setName($_POST['name']);
-	$township->setAbbreviation($_POST['abbreviation']);
-	$township->setQuarterCode($_POST['quarterCode']);
+	if (isset($_POST['township']))
+	{
+		$township = new Township($_POST['id']);
+		foreach($_POST['township'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$township->$set($value);
+		}
 
-	try
-	{
-		$township->save();
-		Header("Location: home.php");
+		try
+		{
+			$township->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->township = $township;
+			$view->addBlock("townships/updateTownshipForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateTownshipForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->township = new Township($_GET['id']);
+		$view->addBlock("townships/updateTownshipForm.inc");
+		$view->render();
 	}
 ?>

@@ -1,21 +1,41 @@
 <?php
 /*
+	$_GET variables:	id
+	-----------------------------------------
 	$_POST variables:	id
-						type
+						districtType[ type ]
 */
 	verifyUser("Administrator");
 
-	$districtType = new DistrictType($_POST['id']);
-	$districtType->setType($_POST['type']);
+	if (isset($_POST['districtType']))
+	{
+		$districtType = new DistrictType($_POST['id']);
+		foreach($_POST['districtType'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$districtType->$set($value);
+		}
 
-	try
-	{
-		$districtType->save();
-		Header("Location: home.php");
+		try
+		{
+			$districtType->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->districtType = $districtType;
+			$view->addBlock("districtTypes/updateDistrictTypeForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateDistrictTypeForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->districtType = new DistrictType($_GET['id']);
+		$view->addBlock("districtTypes/updateDistrictTypeForm.inc");
+		$view->render();
 	}
 ?>

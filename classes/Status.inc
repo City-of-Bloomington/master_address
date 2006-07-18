@@ -6,32 +6,24 @@
 
 
 
-		public function __construct($id=null)
+		public function __construct($id=1)
 		{
 			global $PDO;
 
-			if ($id)
+			$sql = "select * from statuses where id=$id";
+			$result = $PDO->query($sql);
+			if ($result)
 			{
-				$sql = "select * from statuses where id=$id";
-				$result = $PDO->query($sql);
-				if ($result)
+				if ($row = $result->fetch())
 				{
-					if ($row = $result->fetch())
-					{
-						$this->id = $id;
-						$this->status = $row['status'];
+					$this->id = $id;
+					$this->status = $row['status'];
 
-						$result->closeCursor();
-					}
-					else { throw new Exception($sql); }
+					$result->closeCursor();
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				else { throw new Exception($sql); }
 			}
-			else
-			{
-				# This is where the code goes to generate a new, empty instance.
-				# Set any default values for properties that need it here
-			}
+			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
 

@@ -1,23 +1,42 @@
 <?php
 /*
+	$_GET variables:	id
+	-------------------------------------
 	$_POST variables:	id
 						suffix
 						description
 */
 	verifyUser("Administrator");
 
-	$suffix = new Suffix($_POST['id']);
-	$suffix->setSuffix($_POST['suffix']);
-	$suffix->setDescription($_POST['description']);
+	if (isset($_POST['suffix']))
+	{
+		$suffix = new Suffix($_POST['id']);
+		foreach($_POST['suffix'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$suffix->$set($value);
+		}
 
-	try
-	{
-		$suffix->save();
-		Header("Location: home.php");
+		try
+		{
+			$suffix->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->suffix = $suffix;
+			$view->addBlock("suffixes/updateSuffix.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateSuffixForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->suffix = new Suffix($_GET['suffix']);
+		$view->addBlock("suffixes/updateSuffix.inc");
+		$view->render();
 	}
 ?>

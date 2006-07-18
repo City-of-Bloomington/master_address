@@ -9,10 +9,12 @@
 		private $mailable;
 		private $livable;
 		private $notes;
+		private $status_id;
 
 		private $place;
 		private $unitType;
 		private $building;
+		private $status;
 
 
 		public function __construct($id=null)
@@ -42,6 +44,7 @@
 			{
 				# This is where the code goes to generate a new, empty instance.
 				# Set any default values for properties that need it here
+				$this->status_id = 1;
 			}
 		}
 
@@ -49,7 +52,7 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->place_id || !$this->unitType_id) { throw new Exception("missingRequiredFields"); }
+			if (!$this->place_id || !$this->unitType_id || !$this->status_id) { throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();
@@ -60,6 +63,7 @@
 			$fields[] = $this->mailable ? "mailable='{$this->mailable}'" : "mailable=null";
 			$fields[] = $this->livable ? "livable='{$this->livable}'" : "livable=null";
 			$fields[] = $this->notes ? "notes='{$this->notes}'" : "notes=null";
+			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
 			$fields = implode(",",$fields);
 
 
@@ -93,7 +97,7 @@
 		public function getMailable() { return $this->mailable; }
 		public function getLivable() { return $this->livable; }
 		public function getNotes() { return $this->notes; }
-
+		public function getStatus_id() { return $this->status_id; }
 		public function getPlace()
 		{
 			if ($this->place_id)
@@ -121,6 +125,12 @@
 			}
 			else return null;
 		}
+		public function getStatus()
+		{
+			if (!$this->status_id) { $this->status_id = 1; }
+			if (!$this->status) { $this->status = new Status($this->status_id); }
+			return $this->status;
+		}
 
 
 		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }
@@ -130,5 +140,7 @@
 		public function setMailable($int) { $this->mailable = ereg_replace("[^0-9]","",$int); }
 		public function setLivable($int) { $this->livable = ereg_replace("[^0-9]","",$int); }
 		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setStatus($status) { $this->status_id = $status->getId(); $this->status = $status; }
 	}
 ?>

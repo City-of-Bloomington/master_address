@@ -30,8 +30,6 @@
 		private $status;
 
 		private $addressList;
-		private $buildingList;
-		private $history;
 
 
 		public function __construct($id=null)
@@ -199,16 +197,9 @@
 			}
 			else return null;
 		}
-		public function getBuildings()
-		{
-			if (!count($this->buildingList)) { $this->buildingList = new BuildingList(array("place_id"=>$this->id)); }
-			return $this->buildingList;
-		}
-		public function getHistory()
-		{
-			if (!count($this->history)) { $this->history = new PlaceHistoryList(array("place_id"=>$this->id)); }
-			return $this->history;
-		}
+		public function getBuildings() { return new BuildingList(array("place_id"=>$this->id)); }
+		public function getHistory() { return new PlaceHistoryList(array("place_id"=>$this->id)); }
+		public function getUnits() { return new UnitList(array("place_id"=>$this->id)); }
 
 
 		public function setName($string) { $this->name = $this->sanitizeString($string); }

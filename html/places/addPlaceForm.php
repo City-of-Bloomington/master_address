@@ -1,6 +1,9 @@
 <?php
 	verifyUser("Administrator");
 
+	$view = new View();
+	$view->addBlock("places/addPlaceForm.inc");
+
 	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");
 	include(APPLICATION_HOME."/includes/menubar.inc");

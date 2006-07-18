@@ -1,21 +1,37 @@
 <?php
 /*
+	$_GET variables:	id
+	------------------------------------------
 	$_POST variables:	id
-						status
+						status [ status ]
 */
 	verifyUser("Administrator");
 
-	$status = new Status($_POST['id']);
-	$status->setStatus($_POST['status']);
+	if (isset($_POST['status']))
+	{
+		$status = new Status($_POST['id']);
+		$status->setStatus($_POST['status']);
 
-	try
-	{
-		$status->save();
-		Header("Location: home.php");
+		try
+		{
+			$status->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->status = $status;
+			$view->addBlock("statuses/updateStatusForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateStatusForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->status = new Status($_GET['id']);
+		$view->addBlock("statuses/updateStatusForm.inc");
+		$view->render();
 	}
 ?>

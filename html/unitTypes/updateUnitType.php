@@ -1,23 +1,42 @@
 <?php
 /*
+	$_GET variables:	id
+	-----------------------------------
 	$_POST variables:	id
-						type
-						name
+						unitType [ type
+									name
+								]
 */
 	verifyUser("Administrator");
-
-	$unitType = new UnitType($_POST['id']);
-	$unitType->setType($_POST['type']);
-	$unitType->setDescription($_POST['description']);
-
-	try
+	if (isset($_POST['unitTyope']))
 	{
-		$unitType->save();
-		Header("Location: home.php");
+		$unitType = new UnitType($_POST['id']);
+		foreach($_POST['unitType'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$unitType->$set($value);
+		}
+
+		try
+		{
+			$unitType->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->unitType = $unitType;
+			$view->addBlock("unitTypes/updateUnitTypeForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateUnitTypeForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->unitType = new UnitType($_GET['id']);
+		$view->addBlock("unitTypes/updateUnitTypeForm.inc");
+		$view->render();
 	}
 ?>

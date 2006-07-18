@@ -1,21 +1,37 @@
 <?php
 /*
+	$_GET variables:	id
+	-------------------------------
 	$_POST variables:	id
-						name
+						town [ name ]
 */
 	verifyUser("Administrator");
 
-	$town = new Town($_POST['id']);
-	$town->setName($_POST['name']);
+	if (isset($_POST['town']))
+	{
+		$town = new Town($_POST['id']);
+		$town->setName($_POST['name']);
 
-	try
-	{
-		$town->save();
-		Header("Location: home.php");
+		try
+		{
+			$town->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->town = $town;
+			$view->addBlock("towns/udpateTownForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateTownForm.php?id=$_POST[id]");
+		$view = new View();
+		$view->town = new Town($_GET['id']);
+		$view->addBlock("towns/udpateTownForm.inc");
+		$view->render();
 	}
 ?>

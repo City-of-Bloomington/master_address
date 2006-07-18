@@ -12,20 +12,29 @@
 */
 	verifyUser("Administrator");
 
-	$place = new Place();
-	foreach($_POST['place'] as $field=>$value)
+	if (isset($_POST['place']))
 	{
-		$set = "set".ucfirst($field);
-		$place->set($value);
+		$place = new Place();
+		foreach($_POST['place'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$place->set($value);
+		}
+		try
+		{
+			$place->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+			Header("Location: addPlace.php");
+		}
 	}
-	try
+	else
 	{
-		$place->save();
-		Header("Location: home.php");
-	}
-	catch (Exception $e)
-	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: addPlaceForm.php");
+		$view = new View();
+		$view->addBlock("places/addPlaceForm.inc");
+		$view->renderHTML();
 	}
 ?>
