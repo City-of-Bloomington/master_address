@@ -8,7 +8,7 @@
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))
-					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateBuildingType.php?id={$buildingType->getId()}'\">Edit</button></td>"; }
+					{ echo "<td><button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/buildingTypes/updateBuildingType.php?id={$buildingType->getId()}'\">Edit</button></td>"; }
 			echo "<td>{$buildingType->getDescription()}</td></tr>";
 		}
 	?>
