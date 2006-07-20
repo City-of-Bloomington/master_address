@@ -62,6 +62,21 @@
 			$this->updateRoles();
 		}
 
+		public function delete()
+		{
+			global $PDO;
+
+			$PDO->beginTransaction();
+
+			$sql = "delete from user_roles where user_id={$this->id}";
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); $PDO->rollBack(); throw new Exception($sql.$e[2]); }
+
+			$sql = "delete from users where id={$this->id}";
+			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); $PDO->rollBack(); throw new Exception($sql.$e[2]); }
+
+			$PDO->commit();
+		}
+
 		private function update($fields)
 		{
 			global $PDO;
@@ -158,7 +173,7 @@
 		}
 
 		public function setUsername($string) { $this->username = $this->sanitizeString($string); }
-		public function setPassword($string) { $this->password = $string; }
+		public function setPassword($string) { if ($string) { $this->password = $string; } }
 		public function setAuthenticationMethod($string) { $this->authenticationMethod = $string; }
 		public function setFirstname($string) { $this->firstname = $this->sanitizeString($string); }
 		public function setLastname($string) { $this->lastname = $this->sanitizeString($string); }

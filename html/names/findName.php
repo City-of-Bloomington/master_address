@@ -1,30 +1,9 @@
 <?php
 /*
-	AJAX Support script
-	Produces Name information in JSON format
-
-	$_GET variables:	name[	direction_id		town_id
-								name
-								suffix_id
-								postDirection_id
-							]
+	$_GET variables:	name 	# Only if the find form is submitted
 */
-	$search = array();
-	foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
-	if (count($search))
-	{
-		$nameList = new NameList($search);
-		switch (count($nameList))
-		{
-			case 0:
-				echo "null";
-			break;
-
-			default:
-				$results = array();
-				foreach($nameList as $name) { $results[] = "{\"id\":\"{$name->getId()}\",\"name\":\"{$name->getFullname()}\"}"; }
-				$results = implode(",",$results);
-				echo "[$results]";
-		}
-	}
+	$view = new View();
+	$view->return_url = BASE_URL."/names/viewName.php?id=";
+	$view->addBlock("names/findNameForm.inc");
+	$view->render();
 ?>

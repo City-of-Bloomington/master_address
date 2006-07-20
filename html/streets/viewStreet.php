@@ -1,23 +1,14 @@
 <?php
 /*
-	$_GET variables:	id
+	$_GET variables:	street_id
 */
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
+	$view = new View();
+	$view->street = new Street($_GET['street_id']);
+	$view->return_url = "viewStreet.php?id=";
 
-?>
-<div id="mainContent">
-	<?php
-		$street = new Street($_GET['id']);
-		$return_url = "viewStreet.php?id=";
-		include(APPLICATION_HOME."/includes/streets/streetInfo.inc");
-		include(APPLICATION_HOME."/includes/streets/streetNames.inc");
-		include(APPLICATION_HOME."/includes/streets/segments.inc");
-	?>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
+	$view->addBlock("streets/streetInfo.inc");
+	$view->addBlock("streets/streetNames.inc");
+	$view->addBlock("streets/segments.inc");
+
+	$view->render();
 ?>

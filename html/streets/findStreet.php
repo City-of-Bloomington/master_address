@@ -1,31 +1,19 @@
 <?php
-/*
-	AJAX support script.
-	Produces street data in JSON format.
+	$view = new View();
+	$view->addBlock("streets/findStreetForm.inc");
 
-	$_GET variables:	name[	direction_id
-								name
-								suffix_id
-								postDirection_id
-								town_id
-							]
-*/
-	$search = array();
-	foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
-	if (count($search))
+	# IF they've submitted the form, show any results
+	if (isset($_GET['name']))
 	{
-		$streetList = new StreetList($search);
-		switch (count($streetList))
+		$search = array();
+		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
+		if (count($search))
 		{
-			case 0:
-				echo "null";
-			break;
-
-			default:
-				$results = array();
-				foreach($streetList as $street) { $results[] = "{\"id\":\"{$street->getId()}\",\"name\":\"{$street->getFullStreetName()}\"}"; }
-				$results = implode(",",$results);
-				echo "[$results]";
+			$view->response = new URL("viewStreet.php");
+			$view->streetList = new StreetList($search);
+			$view->addBlock("streets/findStreetResults.inc");
 		}
 	}
+
+	$view->render();
 ?>

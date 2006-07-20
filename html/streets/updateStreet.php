@@ -1,26 +1,47 @@
 <?php
 /*
-	$_POST variables:	street[	id
-								status_id
+	$_GET variables:	id
+						return_url
+	-----------------------------------------
+	$_POST variables:	id
+						street [ status_id
 								notes
-							]
-
+								]
 						return_url
 */
 	verifyUser("Administrator");
 
-	$street = new Street($_POST['street']['id']);
-	$street->setStatus_id($_POST['street']['status_id']);
-	$street->setNotes($_POST['street']['notes']);
+	if (isset($_POST['street']))
+	{
+		$street = new Street($_POST['id']);
+		foreach($_POST['street'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$street->$set($value);
+		}
 
-	try
-	{
-		$street->save();
-		Header("Location: $_POST[return_url]{$street->getId()}");
+		try
+		{
+			$street->save();
+			Header("Location: $_POST[return_url]{$street->getId()}");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->street = $street;
+			$view->return_url = $_POST['return_url'];
+			$view->addBlock("streets/updateStreetForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateStreetForm.php?id={$street->getId()}");
+		$view = new View();
+		$view->street = new Street($_GET['id']);
+		$view->return_url = $_GET['return_url'];
+		$view->addBlock("streets/updateStreetForm.inc");
+		$view->render();
 	}
 ?>

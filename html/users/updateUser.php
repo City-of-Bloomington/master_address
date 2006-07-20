@@ -1,43 +1,48 @@
 <?php
 /*
+	$_GET variables:	id
+	---------------------------------------------------------------------------
 	$_POST variables:	id
-						authenticationMethod
-						username
-						roles
-						firstname
-						lastname
-
-						# Optional
-						password
-						department
-						phone
+						user [ authenticationMethod		# Optional
+								username				password
+								roles					firstname
+														lastname
+														department
+														phone
+							]
 */
 	verifyUser("Administrator");
 
-	#--------------------------------------------------------------------------
-	# Update the account
-	#--------------------------------------------------------------------------
-	$user = new User($_POST['id']);
-	$user->setAuthenticationMethod($_POST['authenticationMethod']);
-	$user->setUsername($_POST['username']);
-	$user->setFirstname($_POST['firstname']);
-	$user->setLastname($_POST['lastname']);
-	$user->setDepartment($_POST['department']);
-	$user->setPhone($_POST['phone']);
-
-	# Only update the password if they actually typed somethign in
-	if ($_POST['password']) { $user->setPassword($_POST['password']); }
-	if (isset($_POST['roles'])) { $user->setRoles($_POST['roles']); }
-
-
-	try
+	if (isset($_POST['user']))
 	{
-		$user->save();
-		Header("Location: home.php");
+		$user = new User($_POST['id']);
+		foreach($_POST['user'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$user->$set($value);
+		}
+
+
+		try
+		{
+			$user->save();
+			Header("Location: home.php");
+		}
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+
+			$view = new View();
+			$view->user = $user;
+			$view->addBlock("users/updateUserForm.inc");
+			$view->render();
+		}
 	}
-	catch (Exception $e)
+	else
 	{
-		$_SESSION['errorMessages'][] = $e;
-		Header("Location: updateUserForm.php");
+		$view = new View();
+		$view->user = new User($_GET['id']);
+		$view->addBlock("users/updateUserForm.inc");
+		$view->render();
 	}
 ?>

@@ -1,20 +1,19 @@
 <?php
-	Header("Location: findStreetForm.php");
-/*
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
-?>
-<div id="mainContent">
-	<div class="interfaceBox">
-		<div class="titleBar">Streets</div>
+	$view = new View();
+	$view->addBlock("streets/findStreetForm.inc");
 
-		<?php include(APPLICATION_HOME."/includes/streets/searchForm.inc"); ?>
-	</div>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
-*/
+	# IF they've submitted the form, show any results
+	if (isset($_GET['name']))
+	{
+		$search = array();
+		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
+		if (count($search))
+		{
+			$view->response = new URL("viewStreet.php");
+			$view->streetList = new StreetList($search);
+			$view->addBlock("streets/findStreetResults.inc");
+		}
+	}
+
+	$view->render();
 ?>
