@@ -1,26 +1,4 @@
-<?php
-/*
-	Required variables:		street
-							segment
-							place
-	---------------------------------------------------------
-	$_POST variables:	address[	street_id
-									place_id
-									segment_id
-
-									number			status_id
-									addressType		active
-									city_id			startDate
-									zip				endDate
-									zipplus4		notes
-							]
-*/
-?>
 <fieldset><legend>Address Info</legend>
-	<input name="address[street_id]" type="hidden" value="<?php echo $street->getId(); ?>" />
-	<input name="address[place_id]" type="hidden" value="<?php echO $place->getId(); ?>" />
-	<input name="address[segment_id]" type="hidden" value="<?php echo $segment->getId(); ?>" />
-
 	<table>
 	<tr><td><label for="address-number" class="required">Number</label></td>
 		<td><input name="address[number]" id="address-number" value="<?php if(isset($_POST['address']['number'])) echo $_POST['address']['number']; ?>" /><input name="suffix" size="4" /></td></tr>
@@ -31,7 +9,7 @@
 				$list->find();
 				foreach($list as $type)
 				{
-					if (isset($_POST['address']['adressType']) && $_POST['address']['addressType']==$type)
+					if (isset($_POST['address']['addressType']) && $_POST['address']['addressType']==$type)
 					{ echo "<option selected=\"selected\">$type</option>"; }
 					else { echo "<option>$type</option>"; }
 				}

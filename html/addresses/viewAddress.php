@@ -1,22 +1,14 @@
 <?php
 /*
-	$_GET variables;	id
+	$_GET variables;	address_id
 */
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
-?>
-<div id="mainContent">
-	<?php
-		$address = new Address($_GET['id']);
-		include(APPLICATION_HOME."/includes/addresses/addressInfo.inc");
+	$view = new View();
 
-		$place = $address->getPlace();
-		include(APPLICATION_HOME."/includes/places/placeInfo.inc");
-	?>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
+	$view->address = new Address($_GET['address_id']);
+	$view->addBlock("addresses/addressInfo.inc");
+
+	$view->place = $view->address->getPlace();
+	$view->addBlock("places/placeInfo.inc");
+
+	$view->render();
 ?>

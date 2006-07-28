@@ -1,20 +1,16 @@
 <?php
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
-?>
-<div id="mainContent">
-	<div class="interfaceBox">
-		<div class="titleBar">Find a Place</div>
-
-		<?php
-			include(GLOBAL_INCLUDES."/errorMessages.inc");
-			include(APPLICATION_HOME."/includes/places/searchForm.inc");
-		?>
-	</div>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
+	$view = new View();
+	$view->addBlock("places/findPlaceForm.inc");
+	if (isset($_GET['place']))
+	{
+		$search = array();
+		foreach($_GET['place'] as $field=>$value) { if ($value) $search[$field] = $value; }
+		if (count($search))
+		{
+			$view->placeList = new PlaceList($search);
+			$view->response = new URL("viewPlace.php");
+			$view->addBlock("places/findPlaceResults.inc");
+		}
+	}
+	$view->render();
 ?>

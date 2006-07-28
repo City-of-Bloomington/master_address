@@ -85,7 +85,10 @@
 		}
 		public function deleteSegment($segment_id)
 		{
-			foreach($this->getSegments as $i=>$segment) { if ($segment->getId() == $segment_id) unset($this->segments[$i]); }
+			foreach($this->getSegments() as $i=>$segment)
+			{
+				if ($segment->getId() == $segment_id) { unset($this->segments[$i]); }
+			}
 		}
 		private function saveSegments()
 		{
@@ -95,14 +98,29 @@
 			foreach($this->getSegments() as $segment) { $ids[] = $segment->getId(); }
 			$ids = implode(",",$ids);
 
-			$sql = "delete from street_segments where street_id={$this->id} and segment_id not in ($ids)";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$PDO->beginTransaction();
+				$sql = "delete from street_segments where street_id={$this->id} and segment_id not in ($ids)";
+				if (false === $PDO->exec($sql))
+				{
+					$PDO->rollBack();
+					$e = $PDO->errorInfo();
+					throw new Exception($sql.$e[2]);
+				}
 
-			$statement = $PDO->prepare("insert street_segments values({$this->id},?)");
-			foreach($this->newSegmentIds as $segment_id)
-			{
-				if (false === $statement->execute(array("$segment_id"))) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			}
+				if (count($this->newSegmentIds))
+				{
+					$statement = $PDO->prepare("insert street_segments values({$this->id},?)");
+					foreach($this->newSegmentIds as $segment_id)
+					{
+						try { $statement->execute(array("$segment_id")); }
+						catch (PDOException $e)
+						{
+							$PDO->rollBack();
+							throw new Exception($e);
+						}
+					}
+				}
+			$PDO->commit();
 		}
 
 

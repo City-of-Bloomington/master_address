@@ -1,12 +1,14 @@
 <div class="interfaceBox">
 	<div class="titleBar">
-		<?php
-			if (userHasRole("Administrator"))
-			{
-				echo "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/places/updatePlaceForm.php?id={$this->place->getId()}';\">Edit</button>";
-			}
-			echo "Place: <a href=\"".BASE_URL."/places/viewPlace.php?id={$this->place->getId()}\">{$this->place->getId()}: {$this->place->getName()}</a>";
-		?>
+	<?php
+		$editButton = userHasRole("Administrator") ? "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/places/updatePlace.php?place_id={$this->place->getId()}';\">Edit</button>" : "";
+		echo "
+		$editButton
+		Place:
+		<a href=\"".BASE_URL."/places/viewPlace.php?place_id={$this->place->getId()}\">{$this->place->getId()}:
+		{$this->place->getName()}</a>
+		";
+	?>
 	</div>
 <table>
 <tr><th>Status</th>

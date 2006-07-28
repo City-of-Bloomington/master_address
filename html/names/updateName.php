@@ -27,7 +27,7 @@
 		try
 		{
 			$name->save();
-			Header("Location: viewName.php?id=$_POST[id]");
+			Header("Location: viewName.php?name_id=$_POST[id]");
 		}
 		catch (Exception $e)
 		{

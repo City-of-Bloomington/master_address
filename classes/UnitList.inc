@@ -3,7 +3,7 @@
 	{
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
-		public function find($fields=null,$sort="id")
+		public function find($fields=null,$sort="identifier")
 		{
 			global $PDO;
 
@@ -11,7 +11,7 @@
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['place_id'])) { $options[] = "place_id=$fields[place_id]"; }
 			if (isset($fields['unitType_id'])) { $options[] = "unitType_id=$fields[unitType_id]"; }
-			if (isset($fields['building_id'])) { $options[] = "building_id=$fields[building_id]"; }
+			if (isset($fields['building_id'])) { $options[] = $fields['building_id']=="null" ? "building_id is null" : "building_id=$fields[building_id]"; }
 			if (isset($fields['identifier'])) { $options[] = "identifier='$fields[identifier]'"; }
 			if (isset($fields['mailable'])) { $options[] = "mailable='$fields[mailable]'"; }
 			if (isset($fields['livable'])) { $options[] = "livable='$fields[livable]'"; }

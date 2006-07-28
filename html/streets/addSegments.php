@@ -5,9 +5,7 @@
 
 	$_GET variables:	street_id
 	---------------------------------------------------------------------------
-	$_POST variables	street_id
-
-						segments[]	# This comes in from the find form.
+	$_POST variables	segments[]	# This comes in from the find form.
 									# Used for selecting multiple, pre-existing segments
 									# to add to the street
 
@@ -21,12 +19,27 @@
 	#--------------------------------------------------------------------------
 	# Load the street
 	#--------------------------------------------------------------------------
-	if (isset($_POST['street_id'])) { $street = new Street($_POST['street_id']); }
-	else { $street = new Street($_GET['street_id']); }
+	if (isset($_GET['street_id'])) { $_SESSION['street'] = new Street($_GET['street_id']); }
+
+
+	$view = new View("popup");
 
 	#--------------------------------------------------------------------------
-	# Handle multiple segments from the find form
+	# Show the Find Segment Form
 	#--------------------------------------------------------------------------
+	$view->addBlock("segments/findSegmentForm.inc");
+	if (isset($_GET['name']) || isset($_GET['address']))
+	{
+		$search = array();
+		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
+		if (count($search))
+		{
+			$view->streetList = new StreetList($search);
+			$view->addBlock("streets/chooseSegmentsForm.inc");
+		}
+	}
+
+	# Handle any segments that were chosen
 	if (isset($_POST['segments']))
 	{
 		foreach($_POST['segments'] as $segment_id=>$value)
@@ -34,34 +47,35 @@
 			if ($value == "on")
 			{
 				$segment = new Segment($segment_id);
-				$street->addSegment($segment);
+				$_SESSION['street']->addSegment($segment);
 			}
 		}
-		try { $street->save(); }
+		try { $_SESSION['street']->save(); }
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
+
 	#--------------------------------------------------------------------------
-	# Handle a new segment from the add form
+	# Show the Add Segment Form
 	#--------------------------------------------------------------------------
+	$view->addBlock("segments/addSegmentForm.inc");
 	if (isset($_POST['segment']))
 	{
-		try { $street->save(); }
+		$segment = new Segment();
+		foreach($_POST['segment'] as $field=>$value)
+		{
+			$set = "set".ucfirst($field);
+			$segment->$set($value);
+		}
+
+		try
+		{
+			$segment->save();
+			$_SESSION['street']->addSegment($segment);
+			$_SESSION['street']->save();
+		}
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-
-	#--------------------------------------------------------------------------
-	# Refresh the main page and show the forms again
-	#--------------------------------------------------------------------------
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/popUpBanner.inc");
-	include(GLOBAL_INCLUDES."/errorMessages.inc");
-
-	echo "<h1>Add Segments</h1>";
-
-	include(APPLICATION_HOME."/includes/streets/findSegmentForm.inc");
-	include(APPLICATION_HOME."/includes/segments/addSegmentForm.inc");
-
-	include(GLOBAL_INCLUDE."/xhtmlFooter.inc");
+	$view->render();
 ?>

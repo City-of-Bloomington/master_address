@@ -9,6 +9,7 @@
 		private $status_id;
 
 		private $status;
+		private $unitList;
 
 		public function __construct($id=null)
 		{
@@ -51,7 +52,7 @@
 			# for each property of this class,
 			$fields = array();
 			$fields[] = $this->name ? "name='{$this->name}'" : "name=null";
-			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=nul";
+			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
 			$fields[] = $this->GISTag ? "GISTag='{$this->GISTag}'" : "GISTag=null";
 			$fields[] = $this->status_id ? "status_id='{$this->status_id}'" : "status_id=null";
@@ -91,6 +92,11 @@
 		{
 			if (!$this->status) { $this->status = new Status($this->status_id); }
 			return $this->status;
+		}
+		public function getUnits()
+		{
+			if (!$this->unitList) { $this->unitList = new UnitList(array("building_id"=>$this->id)); }
+			return $this->unitList;
 		}
 
 

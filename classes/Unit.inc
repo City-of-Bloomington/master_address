@@ -116,6 +116,7 @@
 			}
 			else return null;
 		}
+		public function getType() { return $this->getUnitType(); }
 		public function getBuilding()
 		{
 			if ($this->building_id)
@@ -142,5 +143,8 @@
 		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setStatus($status) { $this->status_id = $status->getId(); $this->status = $status; }
+
+		public function setPlace($place) { $this->place_id = $place->getId(); $this->place = $place; }
+		public function setBuilding($building) { $this->building_id = $building->getId(); $this->building = $building; }
 	}
 ?>

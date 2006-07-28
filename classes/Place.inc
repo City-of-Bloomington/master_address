@@ -25,11 +25,13 @@
 		private $township;
 		private $jurisdiction;
 		private $trashPickupDay;
-		private $trashLargeItemPickupDay;
 		private $recyclingPickupWeek;
+		private $placeType;
 		private $status;
 
 		private $addressList;
+		private $buildings = array();
+		private $newBuildingIds = array();
 
 
 		public function __construct($id=null)
@@ -77,7 +79,6 @@
 			$fields[] = $this->township_id ? "township_id={$this->township_id}" : "township_id=null";
 			$fields[] = "jurisdiction_id={$this->jurisdiction_id}";
 			$fields[] = $this->trashPickupDay_id ? "trashPickupDay_id={$this->trashPickupDay_id}" : "trashPickupDay_id=null";
-			$fields[] = $this->trashLargeItemPickupDay_id ? "trashLargeItemPickupDay_id={$this->trashLargeItemPickupDay_id}" : "trashLargeItemPickupDay_id=null";
 			$fields[] = $this->recyclingPickupWeek_id ? "recyclingPickupWeek_id={$this->recyclingPickupWeek_id}" : "recyclingPickupWeek_id=null";
 			$fields[] = $this->mailable ? "mailable='{$this->mailable}'" : "mailable=null";
 			$fields[] = $this->livable ? "livable='{$this->livable}'" : "livable=null";
@@ -97,8 +98,9 @@
 
 			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
-		}
 
+			if (count($this->getBuildings())) { $this->saveBuildings(); }
+		}
 		private function update($fields)
 		{
 			global $PDO;
@@ -115,6 +117,55 @@
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 		}
+
+
+		public function addBuilding($building)
+		{
+			$this->getBuildings();
+			$this->newBuildingIds[] = $building->getId();
+			$this->buildings[] = $building;
+		}
+		public function deleteBuilding($building_id)
+		{
+			foreach($this->getBuildings() as $i=>$building)
+			{
+				if ($building->getId() == $building_id) { unset($this->buildings[$i]); }
+			}
+		}
+		public function saveBuildings()
+		{
+			global $PDO;
+
+			$ids = array();
+			foreach ($this->getBuildings() as $building) { $ids[] = $building->getId(); }
+			$ids = implode(",",$ids);
+
+			$PDO->beginTransaction();
+				$sql = "delete from building_places where place_id={$this->id} and building_id not in ($ids)";
+				if (false === $PDO->exec($sql))
+				{
+					$PDO->rollBack();
+					$e = $PDO->errorInfo();
+					throw new Exception($sql.$e[2]);
+				}
+
+				if (count($this->newBuildingIds))
+				{
+					$statement = $PDO->prepare("insert building_places values (?,{$this->id})");
+					foreach($this->newBuildingIds as $building_id)
+					{
+						try { $statement->execute(array("$building_id")); }
+						catch (PDOException $e)
+						{
+							$PDO->rollBack();
+							throw new Exception ($e);
+						}
+					}
+				}
+			$PDO->commit();
+		}
+
+
 
 
 		public function getId() { return $this->id; }
@@ -175,7 +226,7 @@
 		}
 		public function getAddressList()
 		{
-			if (!$this->addressList) { $this->addressList = new AddressList(array("place_id"=>$this->id)); }
+			if (!$this->addressList) { $this->addressList = new AddressList(array("place_id"=>$this->id),"startDate desc"); }
 			return $this->addressList;
 		}
 		public function getAddresses() { return $this->getAddressList(); }
@@ -197,9 +248,21 @@
 			}
 			else return null;
 		}
-		public function getBuildings() { return new BuildingList(array("place_id"=>$this->id)); }
+		public function getBuildings()
+		{
+			if (!count($this->buildings))
+			{
+				$list = new BuildingList(array("place_id"=>$this->id));
+				foreach($list as $building) { $this->buildings[] = $building; }
+			}
+			return $this->buildings;
+		}
 		public function getHistory() { return new PlaceHistoryList(array("place_id"=>$this->id)); }
-		public function getUnits() { return new UnitList(array("place_id"=>$this->id)); }
+		public function getUnits($fields=null,$sort=null)
+		{
+			$fields['place_id'] = $this->id;
+			return new UnitList($fields,$sort);
+		}
 
 
 		public function setName($string) { $this->name = $this->sanitizeString($string); }

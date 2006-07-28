@@ -4,12 +4,12 @@
 -- We need to make sure that all the street_numbers are valid before importing the data
 -- Make sure that there's spaces after each number and before any letter or fraction
 -- Also make sure that we don't have any numbers that aren't numbers.
-select street_address_id,street_number,street_id from mast_address where street_number regexp '[a-zA-Z]';
+select street_address_id,street_number,street_id from oldAddressData.mast_address where street_number regexp '[a-zA-Z]';
 
 -- Once we're done with the import, we're going to come back to this list
 -- The places on this list should really be subunits.  But it'll be
 -- easier to fix once we've got the data into the new schema.
-select street_address_id,street_number,street_id from mast_address where street_number is null;
+select street_address_id,street_number,street_id from oldAddressData.mast_address where street_number is null;
 
 ----------------------------------------------------------------------------
 -- Target checkist
@@ -183,7 +183,7 @@ delete from tempLocations where subunit_id is not null;
 
 insert places
 select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class,
-census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude,
+null,census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude,
 effective_start_date,effective_end_date,c.id
 from tempLocations l left join oldAddressData.mast_address a using (street_address_id)
 left join oldAddressData.mast_address_sanitation s using (street_address_id)
@@ -195,6 +195,14 @@ left join oldAddressData.mast_address_status_lookup y on m.status_code=y.status_
 left join statuses c on description=status
 group by location_id;
 
+-- Convert the old classes into Place Types
+update places set placeType_id=(select id from placeTypes where type='RESIDENTIAL MULTI-FAMILY') where class='MULTI-FAMILY RESIDENTIAL';
+update places set placeType_id=(select id from placeTypes where type='RESIDENTIAL SFR') where class='SINGLE-FAMILY RESIDENTIAL';
+update places set placeType_id=(select id from placeTypes where type='COMMERCIAL') where class='COMMERCIAL';
+update places set placeType_id=(select id from placeTypes where type='COMMERCIAL SUPER') where class='WHOLESALE/OUTSIDE SALES';
+update places set placeType_id=(select id from placeTypes where type='INDUSTRIAL') where class='INDUSTRIAL';
+update places set placeType_id=(select id from placeTypes where type='EDUCATIONAL INDIANA UNIV') where class='IU MASTER';
+
 
 -- placeHistory
 -- There are some contacts that just aren't in the system anymore.  We should clear those contact_id's out
@@ -202,6 +210,15 @@ update oldAddressData.mast_address_assignment_hist set contact_id=null where con
 
 insert placeHistory select null,location_id,action,action_date,notes,contact_id from oldAddressData.mast_address_assignment_hist
 where location_id in (select id from places);
+
+-- buildings
+insert buildings select building_id,building_name,effective_start_date,effective_end_date,gis_tag,statuses.id
+from oldAddressData.buildings left join oldAddressData.buildings_status_lookup using (status_code)
+left join statuses on description=status;
+
+insert building_places select building_id,location_id from oldAddressData.building_address_location
+where location_id in (select id from places);
+
 
 -- units
 -- Run PHP-> importUnits at this point.
@@ -233,14 +250,6 @@ insert district_places
 select location_id,location_purpose_id from oldAddressData.addr_location_purposes
 where location_id in (select id from places);
 
-
--- buildings
-insert buildings select building_id,building_name,effective_start_date,effective_end_date,gis_tag,statuses.id
-from oldAddressData.buildings left join oldAddressData.buildings_status_lookup using (status_code)
-left join statuses on description=status;
-
-insert building_places select building_id,location_id from oldAddressData.building_address_location
-where location_id in (select id from places);
 
 
 -- The rest of these tables don't have complete data in the old system.

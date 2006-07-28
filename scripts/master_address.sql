@@ -176,7 +176,7 @@ CREATE TABLE segments (
 	lastUpdatedUser_id int unsigned,
 	PRIMARY KEY(id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
-	FOREIGN KEY(lastUpdatedBy) REFERENCES users (id),
+	FOREIGN KEY(lastUpdatedUser_id) REFERENCES users (id),
 	FOREIGN KEY(status_id) REFERENCES statuses (id),
 	FOREIGN KEY(travelDirection_id) REFERENCES directions (id)) engine=InnoDB;
 

@@ -44,9 +44,10 @@
 	{
 		$view->addBlock("streets/findStreetForm.inc");
 		# If they've submitted the Find Street Form, show any results
-		if (isset($_GET['name']))
+		if (isset($_GET['street']['id']) && isset($_GET['name']))
 		{
 			$search = array();
+			if ($_GET['street']['id']) { $search['id'] = $_GET['street']['id']; }
 			foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 			if (count($search))
 			{
@@ -79,10 +80,11 @@
 				$streetName->save();
 
 				# Clear out the session stuff, just to be nice
+				$name_id = $_SESSION['name']->getId();
 				unset($_SESSION['name']);
 				unset($_SESSION['street']);
 
-				Header("Location: viewName.php?name_id={$_SESSION[name]->getId()}");
+				Header("Location: viewName.php?name_id=$name_id");
 				exit();
 			}
 			catch (Exception $e)

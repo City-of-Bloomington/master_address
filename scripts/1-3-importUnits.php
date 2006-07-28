@@ -17,8 +17,15 @@
 		$sql = "select location_id from oldAddressData.address_location where street_address_id=$subunit[street_address_id] and subunit_id is null";
 		list($place_id) = mysql_fetch_array(mysql_query($sql)) or die($sql.mysql_error());
 
+		# If we've got a building at this place use it on the Units
+		$sql = "select building_id from building_places where place_id=$place_id";
+		$buildings = mysql_query($sql) or die($sql.mysql_error());
+		if (mysql_num_rows($buildings)) { list($building_id) = mysql_fetch_array($buildings); }
+		else { $building_id="null"; }
 
-		$sql = "insert units set id=$subunit[subunit_id],place_id=$place_id,unitType_id='$subunit[unitType_id]',identifier='$subunit[street_subunit_identifier]'";
+
+		$sql = "insert units set id=$subunit[subunit_id],place_id=$place_id,unitType_id='$subunit[unitType_id]',
+				identifier='$subunit[street_subunit_identifier]',building_id=$building_id";
 		if ($subunit['mailable_flag']) { $sql.=",mailable=$subunit[mailable_flag]"; }
 		if ($subunit['livable_flag']) { $sql.=",livable=$subunit[livable_flag]"; }
 		if ($subunit['notes']) { $sql.=",notes='$subunit[notes]'"; }

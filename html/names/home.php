@@ -4,7 +4,6 @@
 */
 	$view = new View();
 	$view->addBlock("names/findNameForm.inc");
-
 	if (isset($_GET['name']))
 	{
 		$search = array();
@@ -17,6 +16,28 @@
 		}
 	}
 
-	$view->return_url = BASE_URL."/names/viewName.php?id=";
+	# If they're logged in, they can add a new name
+	if (userHasRole("Administrator"))
+	{
+		$view->addBlock("names/addNameForm.inc");
+		if (isset($_POST['name']))
+		{
+			$name = new Name();
+			foreach($_POST['name'] as $field=>$value)
+			{
+				$set = "set".ucfirst($field);
+				$name->$set($value);
+			}
+
+			try
+			{
+				$name->save();
+				Header("Location: viewName.php?name_id={$name->getId()}");
+				exit();
+			}
+			catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
+		}
+	}
+
 	$view->render();
 ?>

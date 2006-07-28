@@ -14,6 +14,7 @@
 		<li><a href="<?php echo BASE_URL; ?>/names">Names</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/annexations">Annexations</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/plats">Plats</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/buildings">Buildings</a></li>
 	</ul>
 </div>
 <?php

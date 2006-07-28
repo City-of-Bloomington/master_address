@@ -1,8 +1,8 @@
-<div class="titleBar">Units</div>
+<div class="titleBar">Unassigned Units</div>
 <table>
 <tr><th>ID</th><th>Identifier</th><th>Type</th><th>Status</th><th>Mailable</th><th>Livable</th></tr>
 <?php
-	foreach($this->place->getUnits() as $unit)
+	foreach($this->place->getUnassignedUnits() as $unit)
 	{
 		echo "
 		<tr><td>{$unit->getId()}</td>

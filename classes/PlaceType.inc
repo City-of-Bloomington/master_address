@@ -70,6 +70,7 @@
 			$this->id = $PDO->lastInsertID();
 		}
 
+		public function __toString() { return $this->type; }
 
 		public function getId() { return $this->id; }
 		public function getType() { return $this->type; }

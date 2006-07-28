@@ -1,7 +1,7 @@
 <?php
 	class AddressList extends PDOResultIterator
 	{
-		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+		public function __construct($fields=null,$sort=null) { if (is_array($fields) || $sort) $this->find($fields,$sort); }
 
 		public function find($fields=null,$sort="a.id")
 		{

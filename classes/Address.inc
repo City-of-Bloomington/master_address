@@ -202,5 +202,9 @@
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+
+		public function setPlace($place) { $this->place_id = $place->getId(); $this->place = $place; }
+		public function setStreet($street) { $this->street_id = $street->getId(); $this->street = $street; }
+		public function setSegment($segment) { $this->segment_id = $segment->getId(); $this->segment = $segment; }
 	}
 ?>
