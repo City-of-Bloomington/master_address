@@ -178,6 +178,10 @@
 			<input name="place[endDate][year]" id="place-endDate-year" size="4" maxlength="4" value="<?php echo $endDate['year']; ?>" />
 		</td>
 	</tr>
+	<tr><td><label for="place-plat_id">Plat ID</label></td>
+		<td><input name="place[plat_id]" id="place-plat_id" value="<?php echo $this->place->getPlat_id(); ?>" /></td></tr>
+	<tr><td><label for="place-lotNumber">Lot Number</label></td>
+		<td><input name="place[lotNumber]" id="place-lotNumber" value="<?php echo $this->place->getLotNumber(); ?>" /></td></tr>
 	</table>
 </fieldset>
 <fieldset>

@@ -33,7 +33,7 @@
 
 						$result->closeCursor();
 					}
-					else { throw new Exception($sql); }
+					else { throw new Exception("unknownPlat"); }
 				}
 				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
@@ -98,7 +98,7 @@
 				if (!$this->township) { $this->township = new Township($this->township_id); }
 				return $this->township;
 			}
-			else return null;
+			else return new Township();
 		}
 		public function getPlatType()
 		{
@@ -109,6 +109,7 @@
 			}
 			else return null;
 		}
+		public function getType() { return $this->getPlatType(); }
 
 
 		public function setName($string) { $this->name = $this->sanitizeString($string); }

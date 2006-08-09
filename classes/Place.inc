@@ -21,6 +21,8 @@
 		private $startDate;
 		private $endDate;
 		private $status_id;
+		private $plat_id;
+		private $lotNumber;
 
 		private $township;
 		private $jurisdiction;
@@ -93,6 +95,8 @@
 			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
 			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
+			$fields[] = $this->plat_id ? "plat_iid={$this->plat_id}" : "plat_id=null";
+			$fields[] = $this->lotNumber ? "lotNumber={$this->lotNumber}" : "lotNumber=null";
 			$fields = implode(",",$fields);
 
 
@@ -188,6 +192,8 @@
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
 		public function getStatus_id() { return $this->status_id; }
+		public function getPlat_id() { return $this->plat_id; }
+		public function getLotNumber() { return $this->lotNumber; }
 		public function getTownship()
 		{
 			if ($this->township_id)
@@ -263,6 +269,15 @@
 			$fields['place_id'] = $this->id;
 			return new UnitList($fields,$sort);
 		}
+		public function getPlat()
+		{
+			if ($this->plat_id)
+			{
+				if (!$this->plat) { $this->plat = new Plat($this->plat_id); }
+				return $this->plat;
+			}
+			else return new Plat();
+		}
 
 
 		public function setName($string) { $this->name = $this->sanitizeString($string); }
@@ -284,5 +299,8 @@
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setPlat_id($int) { $this->plat = new Plat($int); $this->plat_id = $int; }
+		public function setLotNumber($int) { $this->lotNumber = ereg_replace("[^0-9]","",$int); }
+		public function setPlat($plat) { $this->plat_id = $plat->getId(); $this->plat = $plat; }
 	}
 ?>

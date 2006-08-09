@@ -30,6 +30,12 @@ insert roles set role='Administrator';
 insert users (id,firstname,lastname,phone,department)
 select contact_id,first_name,last_name,phone_number,agency from oldAddressData.mast_addr_assignment_contact;
 
+--I'm going to go ahead and add myself in as an Admin.  It's such a pain having to do this
+-- every time I reload the database
+insert users (username,firstname,lastname,department) values("inghamn","Cliff","Inghamn","ITS");
+insert user_roles select users.id,roles.id from users,roles where username='inghamn' and role='Administrator';
+
+
 -- userRoles
 insert user_roles select contact_id,id from oldAddressData.mast_addr_assignment_contact
 left join roles on contact_type=role;
@@ -184,7 +190,7 @@ delete from tempLocations where subunit_id is not null;
 insert places
 select distinct l.location_id,common_name,township_id,gov_jur_id,t.id,r.id,mailable_flag,livable_flag,section,quarter_section,location_class,
 null,census_block_fips_code,state_plane_x_coordinate,state_plane_y_coordinate,latitude,longitude,
-effective_start_date,effective_end_date,c.id
+effective_start_date,effective_end_date,c.id,plat_id,plat_lot_number
 from tempLocations l left join oldAddressData.mast_address a using (street_address_id)
 left join oldAddressData.mast_address_sanitation s using (street_address_id)
 left join oldAddressData.locations_classes c on l.location_id=c.location_id
@@ -231,6 +237,7 @@ select count(*) from tempLocations;
 drop table tempLocations;
 
 
+-- This table is no longer in the database.  We have replaced it with placeHistory
 -- placeStatus
 --insert place_status
 --select p.id,effective_start_date,effective_end_date,s.id

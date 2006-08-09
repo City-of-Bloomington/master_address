@@ -11,14 +11,15 @@
 	if (isset($_POST['place']))
 	{
 		$place = new Place($_POST['place_id']);
-		foreach($_POST['place'] as $field=>$value)
-		{
-			$set = "set".ucfirst($field);
-			$place->$set($value);
-		}
 
 		try
 		{
+			foreach($_POST['place'] as $field=>$value)
+			{
+				$set = "set".ucfirst($field);
+				$place->$set($value);
+			}
+
 			$place->save();
 			Header("Location: viewPlace.php?place_id={$place->getId()}");
 			exit();

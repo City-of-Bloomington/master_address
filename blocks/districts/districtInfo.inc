@@ -19,12 +19,12 @@
 			foreach($iterator as $place)
 			{
 				echo "
-				<tr><td><a href=\"".BASE_URL."/places/viewPlace.php?id={$place->getId()}\">{$place->getId()}</a></td>
+				<tr><td><a href=\"".BASE_URL."/places/viewPlace.php?place_id={$place->getId()}\">{$place->getId()}</a></td>
 					<td>{$place->getStartDate()}</td>
 					<td><ul class=\"compact\">";
 				foreach($place->getAddressList() as $address)
 				{
-					echo "<li><a href=\"".BASE_URL."/addresses/viewAddress.php?id={$address->getId()}\">";
+					echo "<li><a href=\"".BASE_URL."/addresses/viewAddress.php?address_id={$address->getId()}\">";
 					echo $address->getFullAddress();
 					echo "</a></li>";
 				}

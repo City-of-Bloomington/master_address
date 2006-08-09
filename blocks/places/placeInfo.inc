@@ -64,5 +64,13 @@
 	<td><?php echo $this->place->getRecyclingPickupWeek(); ?></td>
 	<td></td>
 	<td></td></tr>
+
+<tr><th colspan="2">Plat</th>
+	<th>Lot</th>
+	<th></th></tr>
+<tr><td colspan="2"><?php echo $this->place->getPlat(); ?></td>
+	<td><?php echo $this->place->getLotNumber(); ?></td>
+	<td></td></tr>
+
 </table>
 </div>

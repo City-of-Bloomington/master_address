@@ -23,8 +23,8 @@
 			<td colspan=\"3\">
 				<table>
 				<tr><th>ID</th>
-					<th>Identifier</th>
 					<th>Type</th>
+					<th>Identifier</th>
 					<th>Status</th>
 					<th>Mailable</th>
 					<th>Livable</th>
@@ -36,8 +36,8 @@
 				{
 					echo "
 					<tr><td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getId()}</a></td>
-						<td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getIdentifier()}</a></td>
 						<td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getUnitType()->getType()}</a></td>
+						<td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getIdentifier()}</a></td>
 						<td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getStatus()->getStatus()}</a></td>
 						<td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getMailable()}</a></td>
 						<td><a href=\"".BASE_URL."/units/viewUnit.php?unit_id={$unit->getId()}\">{$unit->getLivable()}</a></td>

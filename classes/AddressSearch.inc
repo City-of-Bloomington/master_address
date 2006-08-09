@@ -1,6 +1,8 @@
 <?php
 	class AddressSearch extends PDOResultIterator
 	{
+		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+
 		public function find($fields=null,$sort=null)
 		{
 			global $PDO;
@@ -17,6 +19,7 @@
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
 			$sql = "select * from addressIndex $where";
 
+			echo $sql;
 			$result = $PDO->query($sql);
 			if ($result)
 			{

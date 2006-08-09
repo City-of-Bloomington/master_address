@@ -11,6 +11,7 @@
 </div>
 <p class="comments"><?php echo $this->address->getNotes(); ?></p>
 <table>
+<tr><th>Type</th><td><?php echo $this->address->getAddressType(); ?></td></tr>
 <tr><th>Status</th><td><?php echo $this->address->getStatus()->getStatus(); ?></td></tr>
 <tr><th>Active</th><td><?php echO $this->address->getActive(); ?></td></tr>
 <tr><th>Start Date</th><td><?php echo $this->address->getStartDate(); ?></td></tr>

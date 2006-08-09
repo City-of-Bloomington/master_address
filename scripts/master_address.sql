@@ -101,6 +101,18 @@ CREATE TABLE cities (
 	name varchar(30) UNIQUE,
 	PRIMARY KEY(id)) engine=InnoDB;
 
+CREATE TABLE plats (
+	id int unsigned auto_increment NOT NULL,
+	name varchar(128) NOT NULL,
+	township_id int unsigned,
+	platType_id int unsigned,
+	cabinet varchar(30),
+	envelope varchar(30),
+	notes varchar(255),
+	PRIMARY KEY(id),
+	FOREIGN KEY(township_id) REFERENCES townships (id),
+	FOREIGN KEY(platType_id) REFERENCES platTypes (id)) engine=InnoDB;
+
 CREATE TABLE users (
 	id int unsigned auto_increment NOT NULL,
 	username varchar(30) UNIQUE,
@@ -201,13 +213,16 @@ CREATE TABLE places (
 	startDate date,
 	endDate date,
 	status_id int unsigned NOT NULL default 1,
+	plat_id int unsigned,
+	lotNumber int unsigned,
 	PRIMARY KEY(id),
 	FOREIGN KEY(township_id) REFERENCES townships (id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(trashPickupDay_id) REFERENCES trashPickupDays (id),
 	FOREIGN KEY(recyclingPickupWeek_id) REFERENCES recyclingPickupWeeks (id),
 	FOREIGN KEY(placeType_id) REFERENCES placeTypes (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+	FOREIGN KEY(status_id) REFERENCES statuses (id),
+	FOREIGN KEY(plat_id) REFERENCES plats (id)) engine=InnoDB;
 
 CREATE TABLE buildings (
 	id int unsigned auto_increment NOT NULL,
@@ -274,18 +289,6 @@ CREATE TABLE route_streets (
 	primary key (route_id,street_id),
 	FOREIGN KEY(route_id) REFERENCES routes (id),
 	FOREIGN KEY(street_id) REFERENCES streets (id)) engine=InnoDB;
-
-CREATE TABLE plats (
-	id int unsigned auto_increment NOT NULL,
-	name varchar(128) NOT NULL,
-	township_id int unsigned,
-	platType_id int unsigned,
-	cabinet varchar(30),
-	envelope varchar(30),
-	notes varchar(255),
-	PRIMARY KEY(id),
-	FOREIGN KEY(township_id) REFERENCES townships (id),
-	FOREIGN KEY(platType_id) REFERENCES platTypes (id)) engine=InnoDB;
 
 CREATE TABLE subdivisionNames (
 	subdivision_id int unsigned auto_increment NOT NULL,

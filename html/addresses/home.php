@@ -1,7 +1,11 @@
 <?php
-/*
-	For now, we just need the addresses page to go directly to the add address form
-*/
-	if (isset($_SESSION['USER']) && $_SESSION['USER']->hasRole(array("Administrator","ADDRESS COORDINATOR"))) { Header("Location: findSegmentForm.php"); }
-	else { Header("Location: findAddressForm.php"); }
+	$view = new View();
+	$view->addBlock("addresses/searchForm.inc");
+	if (isset($_GET['fullAddress']))
+	{
+		$view->search = new AddressSearch(array('fullAddress'=>$_GET['fullAddress']));
+		$view->response = new URL("viewAddress.php");
+		$view->addBlock("addresses/searchResults.inc");
+	}
+	$view->render();
 ?>

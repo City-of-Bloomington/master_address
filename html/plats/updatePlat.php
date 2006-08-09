@@ -1,8 +1,8 @@
 <?php
 /*
-	$_GET variables:	id
+	$_GET variables:	plat_id
 	-----------------------------------------
-	$_POST variables:	id
+	$_POST variables:	plat_id
 						plat [ name
 								township_id
 								platType_id
@@ -24,7 +24,7 @@
 		try
 		{
 			$plat->save();
-			Header("Location: home.php");
+			Header("Location: viewPlat.php?plat_id={$plat->getId()}");
 		}
 		catch (Exception $e)
 		{
@@ -39,7 +39,7 @@
 	else
 	{
 		$view = new View();
-		$view->plat = new Plat($_GET['id']);
+		$view->plat = new Plat($_GET['plat_id']);
 		$view->addBlock("plats/updatePlatForm.inc");
 		$view->render();
 	}

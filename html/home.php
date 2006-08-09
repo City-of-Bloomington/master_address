@@ -1,16 +1,11 @@
 <?php
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
-	include(APPLICATION_HOME."/includes/banner.inc");
-	include(APPLICATION_HOME."/includes/menubar.inc");
-	include(APPLICATION_HOME."/includes/sidebar.inc");
-?>
-<div id="mainContent">
-	<?php
-		include(GLOBAL_INCLUDES."/errorMessages.inc");
-		include(APPLICATION_HOME."/includes/addresses/searchForm.inc");
-	?>
-</div>
-<?php
-	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
+	$view = new View();
+	$view->addBlock("addresses/searchForm.inc");
+	if (isset($_GET['fullAddress']))
+	{
+		$view->search = new AddressSearch(array('fullAddress'=>$_GET['fullAddress']));
+		$view->response = new URL("addresses/viewAddress.php");
+		$view->addBlock("addresses/searchResults.inc");
+	}
+	$view->render();
 ?>

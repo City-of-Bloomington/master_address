@@ -10,7 +10,7 @@
 	$places = mysql_query($sql) or die($sql.mysql_error());
 	while(list($place_id) = mysql_fetch_array($places))
 	{
-		$sql = "select l.street_address_id,active,street_id,street_number,address_type,c.id as city_id,zip,zipplus4,notes
+		$sql = "select l.street_address_id,active,street_id,street_number,address_type,c.id as city_id,zip,zipplus4,plat_lot_number,notes
 				from oldAddressData.address_location l left join oldAddressData.mast_address a using (street_address_id)
 				left join cities c on city=c.name
 				where location_id=$place_id";
@@ -50,6 +50,13 @@
 			if ($suffix) { $sql.=",suffix='$suffix'"; }
 			if ($address['zipplus4']) { $sql.=",zipplus4=$address[zipplus4]"; }
 			if ($address['notes']) { $sql.=",notes='$address[notes]'"; }
+
+			# If there's an existing lot number, update the place with the lot number
+			if ($address['plat_lot_number'])
+			{
+				$update = "update places set lotNumber=$address[plat_lot_number] where id=$place_id";
+				mysql_query($update) or die($update.mysql_error());
+			}
 
 			# Look up the status for this address
 			$temp = "select s.id as status_id,start_date,end_date from oldAddressData.mast_address_status

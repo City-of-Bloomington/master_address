@@ -109,6 +109,10 @@
 			</select>
 		</td>
 	</tr>
+	<tr><td><label for="place-plat_id">Plat ID</label></td>
+		<td><input name="place[plat_id]" id="place-plat_id" value="<?php if(isset($_GET['place']['plat_id'])) echo $_GET['place']['plat_id']; ?>" /></td></tr>
+	<tr><td><label for="place-lotNumber">Lot Number</label></td>
+		<td><input name="place[lotNumber]" id="place-lotNumber" value="<?php if(isset($_GET['place']['lotNumber'])) echo $_GET['place']['lotNumber']; ?>" /></td></tr>
 	</table>
 
 	<button type="submit" class="search">Search</button>

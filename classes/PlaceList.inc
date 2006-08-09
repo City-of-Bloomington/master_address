@@ -24,6 +24,8 @@
 			if (isset($fields['startDate'])) { $options[] = "places.startDate='$fields[startDate]'"; }
 			if (isset($fields['endDate'])) { $options[] = "places.endDate='$fields[endDate]'"; }
 			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
+			if (isset($fields['plat_id'])) { $options[] = "plat_id='$fields[plat_id]'"; }
+			if (isset($fields['lotNumber'])) { $options[] = "lotNumber='$fields[lotNumber]'"; }
 
 
 			# To find by district we have to join the district_places table
