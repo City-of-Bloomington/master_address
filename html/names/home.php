@@ -3,6 +3,7 @@
 	$_GET variables:	name
 */
 	$view = new View();
+	$view->response = new URL("viewName.php");
 	$view->addBlock("names/findNameForm.inc");
 	if (isset($_GET['name']))
 	{
@@ -10,7 +11,6 @@
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->response = new URL("viewName.php");
 			$view->nameList = new NameList($search);
 			$view->addBlock("names/findNameResults.inc");
 		}
@@ -32,7 +32,9 @@
 			try
 			{
 				$name->save();
-				Header("Location: viewName.php?name_id={$name->getId()}");
+
+				$view->response->parameters['name_id'] = $name->getId();
+				Header("Location: {$view->response->getURL()}");
 				exit();
 			}
 			catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }

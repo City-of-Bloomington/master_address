@@ -2,6 +2,7 @@
 /*
 	$_GET variables:	building_id
 */
+	verifyUser("Administrator");
 	$view = new View();
 	if (isset($_GET['building_id'])) { $view->building = new Building($_GET['building_id']); }
 

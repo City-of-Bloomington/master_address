@@ -7,5 +7,11 @@
 		$view->response = new URL("viewAddress.php");
 		$view->addBlock("addresses/searchResults.inc");
 	}
+
+	$view->addBlock("addresses/findAddressForm.inc");
+	if(isset($_GET['address']) && isset($_GET['name']))
+	{
+
+	}
 	$view->render();
 ?>

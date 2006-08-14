@@ -15,8 +15,8 @@
 				<td>{$segment->getStartingNumber()} - {$segment->getEndingNumber()}</td>
 				<td><table>
 					<tr><th>{$addPlaceButton} Place ID</th>
-						<th colspan=\"2\">This Street</th>
-						<th colspan=\"2\">Other</th>
+						<th colspan=\"2\">This Name</th>
+						<th colspan=\"2\">Alias</th>
 					</tr>
 			";
 					foreach($segment->getPlaces() as $place)
@@ -25,7 +25,7 @@
 						<tr><td><a href=\"".BASE_URL."/places/viewPlace.php?place_id={$place->getId()}\">{$place->getId()}</a></td>
 							<td>
 						";
-								if (userHasRole("Administrator")) { echo "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('".BASE_URL."/addresses/add/addAddress.php?street_id={$this->street->getId()};segment_id={$segment->getId()};place_id={$place->getId()}');\">Add</button>"; }
+								if (userHasRole("Administrator")) { echo "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('".BASE_URL."/addresses/addAddress.php?street_id={$this->street->getId()};segment_id={$segment->getId()};place_id={$place->getId()}');\">Add</button>"; }
 						echo "
 							</td>
 							<td><ul class=\"compact\">
@@ -40,11 +40,7 @@
 						echo "
 								</ul>
 							</td>
-							<td>
-						";
-								if (userHasRole("Administrator")) { echo "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('".BASE_URL."/addresses/add/addAddress.php?place_id={$place->getId()}');\">Add</button>"; }
-						echo "
-							</td>
+							<td></td>
 							<td><ul class=\"compact\">
 						";
 								foreach($place->getAddresses() as $address)

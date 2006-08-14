@@ -63,9 +63,11 @@
 	{
 		# We've got a street
 		$view->street = $_SESSION['street'];
+		$view->response = new URL(BASE_URL."/names/addStreetName.php");
 		$view->addBlock("streets/streetInfo.inc");
 
 		# Handle any new streetName that they've posted
+		$view->addBlock("streetNames/addStreetNameForm.inc");
 		if (isset($_POST['streetName']))
 		{
 			$streetName = new StreetName();
@@ -87,13 +89,8 @@
 				Header("Location: viewName.php?name_id=$name_id");
 				exit();
 			}
-			catch (Exception $e)
-			{
-				$_SESSION['errorMessages'][] = $e;
-				$view->addBlock("streetNames/addStreetNameForm.inc");
-			}
+			catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 		}
-		else { $view->addBlock("streetNames/addStreetNameForm.inc"); }
 	}
 
 	$view->render();

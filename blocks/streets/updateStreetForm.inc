@@ -1,8 +1,13 @@
+<?php
+/*
+	$this->street
+	$this->response
+*/
+?>
 <h2>Edit Street: <?php echo $this->street->getId(); ?></h2>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Street Info</legend>
-	<input name="id" type="hidden" value="<?php echo $this->street->getId(); ?>" />
-	<input name="return_url" type="hidden" value="<?php echo $this->return_url; ?>" />
+	<input name="street_id" type="hidden" value="<?php echo $this->street->getId(); ?>" />
 	<table>
 	<tr><td><label for="street-status_id">Status</label></td>
 		<td><select name="street[status_id]" id="street-status">
@@ -24,6 +29,6 @@
 	</td></tr>
 	</table>
 	<button type="submit" class="submit">Submit</button>
-	<button type="button" class="cancel" onclick="document.location.href='<?php echo $this->return_url; ?>';">Cancel</button>
+	<button type="button" class="cancel" onclick="document.location.href='<?php echo $this->response->getURL(); ?>';">Cancel</button>
 </fieldset>
 </form>

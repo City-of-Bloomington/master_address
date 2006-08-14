@@ -1,7 +1,7 @@
 <h1><?php
 		if (userHasRole("Administrator"))
 		{
-			echo "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/streets/updateStreet.php?id={$this->street->getId()};return_url=$this->return_url';\">Edit</button>";
+			echo "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/streets/updateStreet.php?street_id={$this->street->getId()};return_url={$this->response->getURL()}';\">Edit</button>";
 		}
 		echo "Street:{$this->street->getId()}";
 	?>
