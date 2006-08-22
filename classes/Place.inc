@@ -264,11 +264,8 @@
 			return $this->buildings;
 		}
 		public function getHistory() { return new PlaceHistoryList(array("place_id"=>$this->id)); }
-		public function getUnits($fields=null,$sort=null)
-		{
-			$fields['place_id'] = $this->id;
-			return new UnitList($fields,$sort);
-		}
+		public function getUnits() { return new UnitList(array("place_id"=>$this->id)); }
+		public function getUnassignedUnits() { return new UnitList(array("place_id"=>$this->id,"building_id"=>"null")); }
 		public function getPlat()
 		{
 			if ($this->plat_id)
@@ -276,7 +273,7 @@
 				if (!$this->plat) { $this->plat = new Plat($this->plat_id); }
 				return $this->plat;
 			}
-			else return new Plat();
+			else return null;
 		}
 
 

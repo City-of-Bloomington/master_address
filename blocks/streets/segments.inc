@@ -12,7 +12,7 @@
 			echo "
 			<tr><td>{$segment->getId()}</td>
 				<td>{$segment->getTag()}</td>
-				<td>{$segment->getStartingNumber()} - {$segment->getEndingNumber()}</td>
+				<td>{$segment->getLowAddressNumber()} - {$segment->getHighAddressNumber()}</td>
 				<td><table>
 					<tr><th>{$addPlaceButton} Place ID</th>
 						<th colspan=\"2\">This Name</th>

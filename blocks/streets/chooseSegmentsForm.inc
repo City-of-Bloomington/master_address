@@ -25,8 +25,8 @@
 						<li><table>
 							<tr><td><input name=\"segments[{$segment->getId()}]\" id=\"segment{$segment->getId()}\" type=\"checkbox\" /></td>
 								<td><label for=\"segment{$segment->getId()}\">{$segment->getTag()}</label></td>
-								<td>{$segment->getStartingNumber()}</td>
-								<td>{$segment->getEndingNumber()}</td>
+								<td>{$segment->getLowAddressNumber()}</td>
+								<td>{$segment->getHighAddressNumber()}</td>
 							</tr>
 							</table>
 						</li>

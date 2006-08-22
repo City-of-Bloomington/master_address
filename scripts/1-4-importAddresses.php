@@ -24,7 +24,7 @@
 			# Try and find the segment tag for this streetID and number
 			$sql = "select segment_id from street_segments left join segments on segment_id=segments.id
 					where street_id=$address[street_id]
-					and startingNumber<=$number and endingNumber>=$number";
+					and lowAddressNumber<=$number and highAddressNumber>=$number";
 			$temp = mysql_query($sql) or die("Location: $place_id\n$sql\n".mysql_error());
 			if (mysql_num_rows($temp))
 			{
@@ -45,8 +45,7 @@
 			}
 
 			$sql = "insert addresses set place_id=$place_id,street_id=$address[street_id],segment_id=$segment_id,number=$number,
-					addressType='$address[address_type]',city_id='$address[city_id]',
-					zip='$address[zip]',active='$address[active]'";
+					addressType='$address[address_type]',city_id=$address[city_id],zip='$address[zip]',active='$address[active]'";
 			if ($suffix) { $sql.=",suffix='$suffix'"; }
 			if ($address['zipplus4']) { $sql.=",zipplus4=$address[zipplus4]"; }
 			if ($address['notes']) { $sql.=",notes='$address[notes]'"; }

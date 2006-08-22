@@ -95,6 +95,13 @@ insert recyclingPickupWeeks (week) select * from oldAddressData.trash_recycle_we
 -- directions
 insert directions (code,direction) select * from oldAddressData.mast_street_direction_master;
 
+-- thoroughfareClass
+update oldAddressData.segments set class=null where class in ("'","-");
+insert thoroughfareClasses (class) select distinct class from oldAddressData.segments where class is not null;
+
+-- travelWayCodes
+insert travelWayCodes select distinct travel from oldAddressData.segments where travel is not null;
+
 -- annexations
 insert annexations (ordinanceNumber,name) select ordinance_number,name from oldAddressData.annexations;
 
@@ -148,31 +155,59 @@ insert users set username='winklec',authenticationMethod='LDAP',firstname='Chuck
 -- Old Segments may have zeros instead of null for streetID
 update oldAddressData.segments set streetID=null where streetID=0;
 
+-- Clean up segments with typo's
+update oldAddressData.segments set seg_stat='BUILT' where seg_stat='BULIT';
+update oldAddressData.segments set maintain='COUNTY' where maintain='COUNY';
+update oldAddressData.segments set maintain='IU' where maintain='U';
+update oldAddressData.segments set maintain='BLOOMINGTON' where maintain='CITY';
 
-insert segments select null,tag,lowadd,highadd,j.id,s.id,comments,speed,indotID,class,maintain,
-leftlow,lefthigh,rightlow,righthigh,rcinode1,rcinode2,low_node,high_node,
-low_x,low_y,high_x,high_y,travel,d.id,complete,rclback,rclahead,class_row,
-maparea,lastdate,up_act,u.id
-from oldAddressData.segments left join jurisdictions j on location=j.name
+
+insert segments
+select null,tag,1,null,null,null,
+lowadd,highadd,leftlow,lefthigh,rightlow,righthigh,
+j.id,null,null,s.id,null,maintain,null,
+travel,d.id,speed,null,t.id,
+null,null,null,null,null,null,null,null,
+maparea,null,null,null,null,comments
+from oldAddressData.segments as rcl
+left join jurisdictions j on location=j.name
 left join directions d on travel_d=d.code
-left join users u on up_by=username
-left join statuses s on seg_stat=status;
+left join statuses s on seg_stat=status
+left join thoroughfareClasses t on rcl.class=t.class;
 
-alter table segments add index (tag);
+-- Set default values for new segment status fields
+update segments set status_id=(select id from statuses where status='UNKNOWN');
+update segments set mapStatus_id=(select id from statuses where status='CURRENT');
+
+
+-- Link all the segments together with back and next
+update segments new left join oldAddressData.segments old using (tag) left join segments back on rclback=back.tag set new.segmentBack_id=back.id;
+update segments new left join oldAddressData.segments old using (tag) left join segments ahead on rclahead=ahead.tag set new.segmentAhead_id=ahead.id;
+
+-- Intersections
+insert intersections (tag) select distinct rcinode1 from oldAddressData.segments where rcinode1 is not null;
+insert intersections (tag) select rcinode2 from oldAddressData.segments left join intersections i on rcinode2=i.tag where rcinode2 is not null and i.id is null;
+
+update segments new left join oldAddressData.segments old using (tag) left join intersections i on rcinode1=i.tag set new.intersectionBack_id=i.id;
+update segments new left join oldAddressData.segments old using (tag) left join intersections i on rcinode2=i.tag set new.intersectionAhead_id=i.id;
+update segments new left join oldAddressData.segments old using (tag) left join intersections i on low_node=i.tag set new.lowAddressIntersection_id=i.id;
+update segments new left join oldAddressData.segments old using (tag) left join intersections i on high_node=i.tag set new.highAddressIntersection_id=i.id;
+
 
 -- link the segments to the streets
 insert street_segments select distinct streetID,segments.id from segments left join oldAddressData.segments using (tag) where streetID is not null;
 
 -- Some final cleanup on segments
-update segments set transportationClass=null where transportationClass="\'";
-update segments set transportationClass=null where transportationClass="-";
-update segments set transportationClass=null where transportationClass="0";
+-- This is no longer needed, since we're joining on a lookup table
+--update segments set transportationClass=null where transportationClass="\'";
+--update segments set transportationClass=null where transportationClass="-";
+--update segments set transportationClass=null where transportationClass="0";
 
 
 
 -- streetNames
 -- You will need to run PHP -> importStreetNames.php at this point
--- I could not figure out a way to get it to work using just SQL.  It wasn't macthing the fields
+-- I could not figure out a way to get it to work using just SQL.  It wasn't matching the fields
 -- in the new names table.
 
 
@@ -335,8 +370,7 @@ where location_id in (select id from places);
 ----------------------------------------------------------------------------
 -- DATA Cleanup
 ----------------------------------------------------------------------------
-select street_address_id,street_number,street_id from mast_address where street_number regexp '[a-zA-Z]';
-
+select street_address_id,street_number,street_id from eng.mast_address where street_number regexp '[a-zA-Z]';
 
 ----------------------------------------------------------------------------
 -- Fulltext search index creation
