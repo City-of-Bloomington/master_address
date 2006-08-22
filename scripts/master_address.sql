@@ -36,7 +36,7 @@ CREATE TABLE thoroughfareClasses (
 	PRIMARY KEY(id));
 
 CREATE TABLE travelWayCodes (
-	id tinyint(1) unsigned auto_increment NOT NULL,
+	id tinyint(1) unsigned NOT NULL,
 	PRIMARY KEY(id));
 
 CREATE TABLE statuses (

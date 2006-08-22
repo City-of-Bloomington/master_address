@@ -186,7 +186,7 @@ update segments new left join oldAddressData.segments old using (tag) left join 
 
 -- Intersections
 insert intersections (tag) select distinct rcinode1 from oldAddressData.segments where rcinode1 is not null;
-insert intersections (tag) select rcinode2 from oldAddressData.segments left join intersections i on rcinode2=i.tag where rcinode2 is not null and i.id is null;
+insert intersections (tag) select distinct rcinode2 from oldAddressData.segments left join intersections i on rcinode2=i.tag where rcinode2 is not null and i.id is null;
 
 update segments new left join oldAddressData.segments old using (tag) left join intersections i on rcinode1=i.tag set new.intersectionBack_id=i.id;
 update segments new left join oldAddressData.segments old using (tag) left join intersections i on rcinode2=i.tag set new.intersectionAhead_id=i.id;
