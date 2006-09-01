@@ -71,6 +71,6 @@
 		public function getType() { return $this->type; }
 
 
-		public function setType($string) { $this->type = $this->sanitizeString($string); }
+		public function setType($string) { $this->type = trim($string); }
 	}
 ?>

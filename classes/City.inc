@@ -74,7 +74,7 @@
 		public function __toString() { return $this->name; }
 
 
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = trim($string); }
 
 	}
 ?>

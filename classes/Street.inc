@@ -176,7 +176,7 @@
 
 		public function __toString() { return $this->getStreetName()->getName()->getFullname(); }
 
-		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+		public function setNotes($string) { $this->notes = trim($string); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 	}
 ?>

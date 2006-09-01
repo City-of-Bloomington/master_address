@@ -80,6 +80,6 @@
 
 
 		public function setCode($char) { $this->code = ereg_replace("[^A-Z]","",strtoupper($char)); }
-		public function setDirection($string) { $this->direction = $this->sanitizeString($string); }
+		public function setDirection($string) { $this->direction = trim($string); }
 	}
 ?>

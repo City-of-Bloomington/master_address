@@ -125,9 +125,9 @@
 
 
 		public function setPlace_id($int) { $this->place_id = ereg_replace("[^0-9]","",$int); }
-		public function setAction($string) { $this->action = $this->sanitizeString($string); }
+		public function setAction($string) { $this->action = trim($string); }
 		public function setDate($date) { $this->date = is_array($date) ? $this->dateArrayToString($date) : $date; }
-		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+		public function setNotes($string) { $this->notes = trim($string); }
 		public function setUser_id($int) { $this->user_id = ereg_replace("[^0-9]","",$int); }
 		public function setPlace($place) { $this->place_id = $place->getId(); $this->place = $place; }
 		public function setUser($user) { $this->user_id = $user->getId(); $this->user = $user; }

@@ -128,7 +128,7 @@
 			return $this->places;
 		}
 
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = trim($string); }
 		public function setDistrictType_id($districtType_id)
 		{
 			$this->districtType = new DistrictType($districtType_id);

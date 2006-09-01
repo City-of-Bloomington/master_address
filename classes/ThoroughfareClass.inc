@@ -99,7 +99,7 @@
 		public function getDescription() { return $this->description; }
 
 
-		public function setClass($string) { $this->class = $this->sanitizeString($string); }
-		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
+		public function setClass($string) { $this->class = trim($string); }
+		public function setDescription($string) { $this->description = trim($string); }
 	}
 ?>

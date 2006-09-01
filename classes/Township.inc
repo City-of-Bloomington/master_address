@@ -81,7 +81,7 @@
 		public function getQuarterCode() { return $this->quarterCode; }
 
 
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = trim($string); }
 		public function setAbbreviation($char) { $this->abbreviation = ereg_replace("[^A-Z]","",strtoupper($char)); }
 		public function setQuarterCode($char) { $this->quarterCode = ereg_replace("[^A-Z]","",strtoupper($char)); }
 	}

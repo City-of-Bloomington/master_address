@@ -192,16 +192,16 @@
 		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }
 		public function setSegment_id($int) { $this->segment = new Segment($int); $this->segment_id = $int; }
 		public function setNumber($int) { $this->number = ereg_replace("[^0-9]","",$int); }
-		public function setSuffix($string) { $this->suffix = $this->sanitizeString($string); }
-		public function setAddressType($string) { $this->addressType = $this->sanitizeString($string); }
+		public function setSuffix($string) { $this->suffix = trim($string); }
+		public function setAddressType($string) { $this->addressType = trim($string); }
 		public function setCity_id($int) { $this->city = new City($int); $this->city_id = $int; }
 		public function setZip($int) { $this->zip = ereg_replace("[^0-9]","",$int); }
 		public function setZipplus4($int) { $this->zipplus4 = ereg_replace("[^0-9]","",$int); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
-		public function setActive($string) { $this->active = $this->sanitizeString($string); }
+		public function setActive($string) { $this->active = trim($string); }
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
-		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+		public function setNotes($string) { $this->notes = trim($string); }
 
 		public function setPlace($place) { $this->place_id = $place->getId(); $this->place = $place; }
 		public function setStreet($street) { $this->street_id = $street->getId(); $this->street = $street; }

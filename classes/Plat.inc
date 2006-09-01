@@ -114,11 +114,11 @@
 		public function getType() { return $this->getPlatType(); }
 
 
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = trim($string); }
 		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
 		public function setPlatType_id($int) { $this->platType = new PlatType($int); $this->platType_id = $int; }
-		public function setCabinet($string) { $this->cabinet = $this->sanitizeString($string); }
-		public function setEnvelope($string) { $this->envelope = $this->sanitizeString($string); }
-		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+		public function setCabinet($string) { $this->cabinet = trim($string); }
+		public function setEnvelope($string) { $this->envelope = trim($string); }
+		public function setNotes($string) { $this->notes = trim($string); }
 	}
 ?>

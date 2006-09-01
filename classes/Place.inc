@@ -277,18 +277,18 @@
 		}
 
 
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = trim($string); }
 		public function setTownship_id($int) { $this->township = new Township($int); $this->township_id = $int; }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
 		public function setTrashPickupDay_id($int) { $this->trashPickupDay = new TrashPickupDay($int); $this->trashPickupDay_id = $int; }
 		public function setRecyclingPickupWeek_id($int) { $this->recyclingPickupWeek = new RecyclingPickupWeek($int); $this->recyclingPickupWeek_id = $int; }
 		public function setMailable($int) { $this->mailable = ereg_replace("[^0-9]","",$int); }
 		public function setLivable($int) { $this->livable = ereg_replace("[^0-9]","",$int); }
-		public function setSection($string) { $this->section = $this->sanitizeString($string); }
+		public function setSection($string) { $this->section = trim($string); }
 		public function setQuarterSection($string) { $this->quarterSection = ereg_replace("[^A-Z]","",strtoupper($string)); }
-		public function setClass($string) { $this->class = $this->sanitizeString($string); }
+		public function setClass($string) { $this->class = trim($string); }
 		public function setPlaceType_id($int) { $this->placeType = new PlaceType($int); $this->placeType_id = $int; }
-		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = $this->sanitizeString($string); }
+		public function setCensusBlockFIPSCode($string) { $this->censusBlockFIPSCode = trim($string); }
 		public function setStatePlaneX($int) { $this->statePlaneX = ereg_replace("[^0-9]","",$int); }
 		public function setStatePlaneY($int) { $this->statePlaneY = ereg_replace("[^0-9]","",$int); }
 		public function setLatitude($float) { $this->latitude = ereg_replace("[^0-9.]","",$float); }

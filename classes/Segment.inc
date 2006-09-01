@@ -66,7 +66,6 @@
 		private $jurisdictionRight;
 		private $constructionStatus;
 		private $inventoryStatus;
-		private $travelWayCode;
 		private $travelDirection;
 		private $thoroughfareClass;
 		private $segmentBack;
@@ -429,10 +428,10 @@
 			return $this->placeList;
 		}
 
-		public function setTag($string) { $this->tag = $this->sanitizeString($string); }
+		public function setTag($string) { $this->tag = trim($string); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setDataOwner_id($int) { $this->dataOwner = new User($int); $this->dataOwner_id = $int; }
-		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
+		public function setDescription($string) { $this->description = trim($string); }
 		public function setStation($int) { $this->station = ereg_replace("[^0-9]","",$int); }
 		public function setLowAddressNumber($int) { $this->lowAddressNumber = ereg_replace("[^0-9]","",$int); }
 		public function setHighAddressNumber($int) { $this->highAddressNumber = ereg_replace("[^0-9]","",$int); }
@@ -444,13 +443,13 @@
 		public function setJurisdictionLeft_id($int) { $this->jurisdictionLeft = new Jurisdiction($int); $this->jurisdictionLeft_id = $int; }
 		public function setJurisdictionRight_id($int) { $this->jurisdictionRight = new Jurisdiction($int); $this->jurisdictionRight_id = $int; }
 		public function setConstructionStatus_id($int) { $this->constructionStatus = new Status($int); $this->constructionStatus_id = $int; }
-		public function setDedicatedRightOfWay($string) { $this->dedicatedRightOfWay = $this->sanitizeString($string); }
-		public function setMaintainedBy($string) { $this->maintainedBy = $this->sanitizeString($string); }
+		public function setDedicatedRightOfWay($string) { $this->dedicatedRightOfWay = trim($string); }
+		public function setMaintainedBy($string) { $this->maintainedBy = trim($string); }
 		public function setInventoryStatus_id($int) { $this->inventoryStatus = new Status($int); $this->inventoryStatus_id = $int; }
 		public function setTravelWayCode_id($int) { $this->travelWayCode_id = ereg_replace("[^0-9]","",$int); }
 		public function setTravelDirection_id($int) { $this->travelDirection = new Direction($int); $this->travelDirection_id = $int; }
 		public function setSpeedLimit($int) { $this->speedLimit = ereg_replace("[^0-9]","",$int); }
-		public function setSpeedLimitOrdinance($string) { $this->speedLimitOrdinance = $this->sanitizeString($string); }
+		public function setSpeedLimitOrdinance($string) { $this->speedLimitOrdinance = trim($string); }
 		public function setThoroughfareClass_id($int) { $this->thoroughfareClass = new ThoroughfareClass($int); $this->thoroughfareClass_id = $int; }
 		public function setSegmentBack_id($int) { $this->segmentBack = new Segment($int); $this->segmentBack_id = $int; }
 		public function setSegmentAhead_id($int) { $this->segmentAhead = new Segment($int); $this->segmentAhead_id = $int; }
@@ -462,29 +461,29 @@
 		public function setRightSidewalkStatus_id($int) { $this->rightSidewalkStatus = new Status($int); $this->rightSidewalkStatus_id = $int; }
 		public function setMapArea($char) { $this->mapArea = $char; }
 		public function setMapStatus_id($int) { $this->mapStatus = new Status($int); $this->mapStatus_id = $int; }
-		public function setMapSource($string) { $this->mapSource = $this->sanitizeString($string); }
+		public function setMapSource($string) { $this->mapSource = trim($string); }
 		public function setLabelX($int) { $this->labelX = ereg_replace("[^0-9]","",$int); }
 		public function setLabelY($int) { $this->labelY = ereg_replace("[^0-9]","",$int); }
 		public function setNotes($text) { $this->notes = $text; }
 
-		public function setStatus($status) { $this->status_id = $status->getId(); $this->property = $status; }
-		public function setDataOwner($user) { $this->dataOwner_id = $user->getId(); $this->property = $user; }
-		public function setJurisdiction($jurisdiction) { $this->jurisdiction_id = $jurisdiction->getId(); $this->property = $jurisdiction; }
-		public function setJurisdictionLeft($jurisdiction) { $this->jurisdictionLeft_id = $jurisdiction->getId(); $this->property = $jurisdiction; }
-		public function setJurisdictionRight($jurisdiction) { $this->jurisdictionRight_id = $jurisdiction->getId(); $this->property = $jurisdiction; }
-		public function setConstructionStatus($status) { $this->constructionStatus_id = $status->getId(); $this->property = $status; }
-		public function setInventoryStatus($status) { $this->inventoryStatus_id = $status->getId(); $this->property = $status; }
+		public function setStatus($status) { $this->status_id = $status->getId(); $this->status = $status; }
+		public function setDataOwner($user) { $this->dataOwner_id = $user->getId(); $this->dataOwner = $user; }
+		public function setJurisdiction($jurisdiction) { $this->jurisdiction_id = $jurisdiction->getId(); $this->jurisdiction = $jurisdiction; }
+		public function setJurisdictionLeft($jurisdiction) { $this->jurisdictionLeft_id = $jurisdiction->getId(); $this->jurisdictionLeft = $jurisdiction; }
+		public function setJurisdictionRight($jurisdiction) { $this->jurisdictionRight_id = $jurisdiction->getId(); $this->jurisdictionRight = $jurisdiction; }
+		public function setConstructionStatus($status) { $this->constructionStatus_id = $status->getId(); $this->constructionStatus = $status; }
+		public function setInventoryStatus($status) { $this->inventoryStatus_id = $status->getId(); $this->inventoryStatus = $status; }
 		public function setTravelWayCode($int) { $this->travelWayCode_id = ereg_replace("[^0-9]","",$int); }
-		public function setTravelDirection($direction) { $this->travelDirection_id = $direction->getId(); $this->property = $direction; }
-		public function setThoroughfareClass($thoroughfareClass) { $this->thoroughfareClass_id = $thoroughfareClass->getId(); $this->property = $thoroughfareClass; }
-		public function setSegmentBack($segment) { $this->segmentBack_id = $segment->getId(); $this->property = $segment; }
-		public function setSegmentAhead($segment) { $this->segmentAhead_id = $segment->getId(); $this->property = $segment; }
-		public function setIntersectionBack($intersection) { $this->intersectionBack_id = $intersection->getId(); $this->property = $intersection; }
-		public function setIntersectionAhead($intersection) { $this->intersectionAhead_id = $intersection->getId(); $this->property = $intersection; }
-		public function setLowAddressIntersection($intersection) { $this->lowAddressIntersection_id = $intersection->getId(); $this->property = $intersection; }
-		public function setHighAddressIntersection($intersection) { $this->highAddressIntersection_id = $intersection->getId(); $this->property = $intersection; }
-		public function setLeftSidewalkStatus($status) { $this->leftSidewalkStatus_id = $status->getId(); $this->property = $status; }
-		public function setRightSidewalkStatus($status) { $this->rightSidewalkStatus_id = $status->getId(); $this->property = $status; }
-		public function setMapStatus($status) { $this->mapStatus_id = $status->getId(); $this->property = $status; }
+		public function setTravelDirection($direction) { $this->travelDirection_id = $direction->getId(); $this->travelDirection = $direction; }
+		public function setThoroughfareClass($thoroughfareClass) { $this->thoroughfareClass_id = $thoroughfareClass->getId(); $this->thoroughfareClass = $thoroughfareClass; }
+		public function setSegmentBack($segment) { $this->segmentBack_id = $segment->getId(); $this->segmentBack = $segment; }
+		public function setSegmentAhead($segment) { $this->segmentAhead_id = $segment->getId(); $this->segmentAhead = $segment; }
+		public function setIntersectionBack($intersection) { $this->intersectionBack_id = $intersection->getId(); $this->intersectionBack = $intersection; }
+		public function setIntersectionAhead($intersection) { $this->intersectionAhead_id = $intersection->getId(); $this->intersectionAhead = $intersection; }
+		public function setLowAddressIntersection($intersection) { $this->lowAddressIntersection_id = $intersection->getId(); $this->lowAddressIntersection = $intersection; }
+		public function setHighAddressIntersection($intersection) { $this->highAddressIntersection_id = $intersection->getId(); $this->highAddressIntersection = $intersection; }
+		public function setLeftSidewalkStatus($status) { $this->leftSidewalkStatus_id = $status->getId(); $this->leftSidewalkStatus = $status; }
+		public function setRightSidewalkStatus($status) { $this->rightSidewalkStatus_id = $status->getId(); $this->rightSidewalkStatus = $status; }
+		public function setMapStatus($status) { $this->mapStatus_id = $status->getId(); $this->mapStatus = $status; }
 	}
 ?>

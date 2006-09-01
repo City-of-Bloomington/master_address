@@ -100,10 +100,10 @@
 		}
 
 
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setName($string) { $this->name = trim($string); }
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
-		public function setGISTag($string) { $this->GISTag = $this->sanitizeString($string); }
+		public function setGISTag($string) { $this->GISTag = trim($string); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setStatus($status) { $this->status_id = $status->getStatus(); $this->status = $status; }
 	}

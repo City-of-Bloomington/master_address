@@ -65,6 +65,6 @@
 
 		public function __toString() { return $this->status; }
 
-		public function setStatus($string) { $this->status = $this->sanitizeString($string); }
+		public function setStatus($string) { $this->status = trim($string); }
 	}
 ?>

@@ -172,13 +172,13 @@
 			return $this->roles;
 		}
 
-		public function setUsername($string) { $this->username = $this->sanitizeString($string); }
+		public function setUsername($string) { $this->username = trim($string); }
 		public function setPassword($string) { if ($string) { $this->password = $string; } }
 		public function setAuthenticationMethod($string) { $this->authenticationMethod = $string; }
-		public function setFirstname($string) { $this->firstname = $this->sanitizeString($string); }
-		public function setLastname($string) { $this->lastname = $this->sanitizeString($string); }
-		public function setDepartment($string) { $this->department = $this->sanitizeString($string); }
-		public function setPhone($string) { $this->phone = $this->sanitizeString($string); }
+		public function setFirstname($string) { $this->firstname = trim($string); }
+		public function setLastname($string) { $this->lastname = trim($string); }
+		public function setDepartment($string) { $this->department = trim($string); }
+		public function setPhone($string) { $this->phone = trim($string); }
 		/* Takes an array of role names.  Needs to look up the role_id and add them to the user */
 		public function setRoles($array)
 		{

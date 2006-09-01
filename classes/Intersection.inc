@@ -133,15 +133,15 @@
 		}
 
 
-		public function setTag($string) { $this->tag = $this->sanitizeString($string); }
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setTag($string) { $this->tag = trim($string); }
+		public function setName($string) { $this->name = trim($string); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
 		public function setX($int) { $this->x = ereg_replace("[^0-9]","",$int); }
 		public function setY($int) { $this->y = ereg_replace("[^0-9]","",$int); }
 		public function setNotes($text) { $this->notes = $text; }
 
-		public function setStatus($status) { $this->status_id = $status->getId(); $this->property = $status; }
-		public function setJurisdiction($jurisdiction) { $this->jurisdiction_id = $jurisdiction->getId(); $this->property = $jurisdiction; }
+		public function setStatus($status) { $this->status_id = $status->getId(); $this->status = $status; }
+		public function setJurisdiction($jurisdiction) { $this->jurisdiction_id = $jurisdiction->getId(); $this->jurisdiction = $jurisdiction; }
 	}
 ?>

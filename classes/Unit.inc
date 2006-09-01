@@ -137,10 +137,10 @@
 		public function setPlace_id($int) { $this->place = new Place($int); $this->place_id = $int; }
 		public function setUnitType_id($int) { $this->unitType = new UnitType($int); $this->unitType_id = $int; }
 		public function setBuilding_id($int) { $this->building = new Building($int); $this->building_id = $int; }
-		public function setIdentifier($string) { $this->identifier = $this->sanitizeString($string); }
+		public function setIdentifier($string) { $this->identifier = trim($string); }
 		public function setMailable($int) { $this->mailable = ereg_replace("[^0-9]","",$int); }
 		public function setLivable($int) { $this->livable = ereg_replace("[^0-9]","",$int); }
-		public function setNotes($string) { $this->notes = $this->sanitizeString($string); }
+		public function setNotes($string) { $this->notes = trim($string); }
 		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
 		public function setStatus($status) { $this->status_id = $status->getId(); $this->status = $status; }
 

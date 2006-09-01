@@ -77,7 +77,7 @@
 		public function getName() { return $this->name; }
 
 
-		public function setOrdinanceNumber($string) { $this->ordinanceNumber = $this->sanitizeString($string); }
-		public function setName($string) { $this->name = $this->sanitizeString($string); }
+		public function setOrdinanceNumber($string) { $this->ordinanceNumber = trim($string); }
+		public function setName($string) { $this->name = trim($string); }
 	}
 ?>

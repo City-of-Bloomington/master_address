@@ -75,6 +75,6 @@
 		public function getDescription() { return $this->description; }
 
 
-		public function setDescription($string) { $this->description = $this->sanitizeString($string); }
+		public function setDescription($string) { $this->description = trim($string); }
 	}
 ?>
