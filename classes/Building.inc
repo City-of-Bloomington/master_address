@@ -98,6 +98,7 @@
 			if (!$this->unitList) { $this->unitList = new UnitList(array("building_id"=>$this->id)); }
 			return $this->unitList;
 		}
+		public function getPlaceList() { return new PlaceList(array("building_id"=>$this->id)); }
 
 
 		public function setName($string) { $this->name = trim($string); }

@@ -1,11 +1,33 @@
 <?php
+/**
+* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+* This file is part of the City of Bloomington's Master Address system.
+* Master Address is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Master Address is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Master Address; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+*/
 	class AddressList extends PDOResultIterator
 	{
-		public function __construct($fields=null,$sort=null) { if (is_array($fields) || $sort) $this->find($fields,$sort); }
+		public function __construct($fields=null,$sort="a.id")
+		{
+			$this->select = "select addresses.id from addresses a";
+			$this->sort = $sort;
+			if (is_array($fields)) $this->find($fields);
+		}
 
 		public function find($fields=null,$sort="a.id")
 		{
-			global $PDO;
 			$this->sort = $sort;
 
 			$options = array();
@@ -25,9 +47,17 @@
 			if (isset($fields['statePlaneY'])) { $options[] = "a.statePlaneY='$fields[statePlaneY]'"; }
 			if (isset($fields['latitude'])) { $options[] = "a.latitude='$fields[latitude]'"; }
 			if (isset($fields['longitude'])) { $options[] = "a.longitude='$fields[longitude]'"; }
-			if (isset($fields['startDate'])) { $options[] = "a.startDate='$fields[startDate]'"; }
-			if (isset($fields['endDate'])) { $options[] = "a.endDate='$fields[endDate]'"; }
 			if (isset($fields['notes'])) { $options[] = "a.notes='$fields[notes]'"; }
+			if (isset($fields['startDate']))
+			{
+				if (is_array($fields['startDate'])) { $fields['startDate'] = $this->dateArrayToString($fields['startDate']); }
+				if ($fields['startDate']) { $options[] = "a.startDate='$fields[startDate]'"; }
+			}
+			if (isset($fields['endDate']))
+			{
+				if (is_array($fields['endDate'])) { $fields['endDate'] = $this->dateArrayToString($fields['endDate']); }
+				if ($fields['endDate']) { $options[] = "a.endDate='$fields[endDate]'"; }
+			}
 
 			# Searching on street name information requires some joins
 			if (isset($fields['direction_id']) || isset($fields['name']) || isset($fields['suffix_id']) || isset($fields['postDirection_id']))
@@ -41,15 +71,7 @@
 				if (isset($fields['postDirection_id'])) { $options[] = "postDirection_id='$fields[postDirection_id]'"; }
 			}
 
-			if (count($options)) { $this->where = " where ".implode(" and ",$options); }
-			$sql = "select a.id from addresses a {$this->joins} {$this->where} order by {$this->sort}";
-
-			$result = $PDO->query($sql);
-			if ($result)
-			{
-				foreach($result as $row) { $this->list[] = $row['id']; }
-			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->populateList($options);
 		}
 
 

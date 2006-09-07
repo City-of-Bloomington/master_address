@@ -19,12 +19,16 @@
 */
 	class SegmentList extends PDOResultIterator
 	{
-		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+		public function __construct($fields=null,$sort="lowAddressNumber")
+		{
+			$this->select = "select segments.id from segments";
+			$this->sort = $sort;
+			if (is_array($fields)) $this->find($fields);
+		}
 
 
 		public function find($fields=null,$sort="lowAddressNumber")
 		{
-			global $PDO;
 			$this->sort = $sort;
 
 			$options = array();
@@ -79,16 +83,7 @@
 				else { $options[] = "street_id is null"; }
 			}
 
-
-			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
-			$sql = "select segments.id from segments {$this->joins} {$this->where} order by {$this->sort}";
-
-			$result = $PDO->query($sql);
-			if ($result)
-			{
-				foreach($result as $row) { $this->list[] = $row['id']; }
-			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->populateList($options);
 		}
 
 

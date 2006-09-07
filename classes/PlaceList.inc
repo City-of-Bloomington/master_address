@@ -1,21 +1,43 @@
 <?php
+/**
+* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+* This file is part of the City of Bloomington's Master Address system.
+* Master Address is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Master Address is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Master Address; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+*/
 	class PlaceList extends PDOResultIterator
 	{
-		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+		public function __construct($fields=null,$sort="id")
+		{
+			$this->select = "select places.id from places";
+			$this->sort = $sort;
+			if (is_array($fields)) $this->find($fields);
+		}
 
 		public function find($fields=null,$sort="id")
 		{
-			global $PDO;
 			$this->sort = $sort;
 
 			$options = array();
-			if (isset($fields['id'])) { $options[] = "places.id=$fields[id]"; }
+			if (isset($fields['id'])) { $options[] = "places.id='$fields[id]'"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
-			if (isset($fields['township_id'])) { $options[] = "township_id=$fields[township_id]"; }
-			if (isset($fields['jurisdiction_id'])) { $options[] = "jurisdiction_id=$fields[jurisdiction_id]"; }
-			if (isset($fields['trashPickupDay_id'])) { $options[] = "trashPickupDay_id=$fields[trashPickupDay_id]"; }
-			if (isset($fields['trashLargeItemPickupDay_id'])) { $options[] = "trashLargeItemPickupDay_id=$fields[trashLargeItemPickupDay_id]"; }
-			if (isset($fields['recyclingPickupWeek_id'])) { $options[] = "recyclingPickupWeek_id=$fields[recyclingPickupWeek_id]"; }
+			if (isset($fields['township_id'])) { $options[] = "township_id='$fields[township_id]'"; }
+			if (isset($fields['jurisdiction_id'])) { $options[] = "jurisdiction_id='$fields[jurisdiction_id]'"; }
+			if (isset($fields['trashPickupDay_id'])) { $options[] = "trashPickupDay_id='$fields[trashPickupDay_id]'"; }
+			if (isset($fields['trashLargeItemPickupDay_id'])) { $options[] = "trashLargeItemPickupDay_id='$fields[trashLargeItemPickupDay_id]'"; }
+			if (isset($fields['recyclingPickupWeek_id'])) { $options[] = "recyclingPickupWeek_id='$fields[recyclingPickupWeek_id]'"; }
 			if (isset($fields['mailable'])) { $options[] = "mailable='$fields[mailable]'"; }
 			if (isset($fields['livable'])) { $options[] = "livable='$fields[livable]'"; }
 			if (isset($fields['section'])) { $options[] = "section='$fields[section]'"; }
@@ -32,27 +54,25 @@
 			if (isset($fields['district_id']))
 			{
 				$this->joins.= " left join district_places d on d.place_id=places.id";
-				$options[] = "district_id=$fields[district_id]";
+				$options[] = "district_id='$fields[district_id]'";
 			}
 
 			# To find by segment_id join the addresses table
 			if (isset($fields['segment_id']))
 			{
 				$this->joins.= " left join addresses on addresses.place_id=places.id";
-				$options[] = "segment_id=$fields[segment_id]";
+				$options[] = "segment_id='$fields[segment_id]'";
 			}
 
-			if (count($options)) { $this->where = " where ".implode(" and ",$options); }
-			$sql = "select distinct places.id from places {$this->joins} {$this->where} order by {$this->sort}";
-
-			$result = $PDO->query($sql);
-			if ($result)
+			# To find by buildings joing the building_places table
+			if (isset($fields['building_id']))
 			{
-				foreach($result as $row) { $this->list[] = $row['id']; }
+				$this->joins.= " left join building_places on building_places.place_id=places.id";
+				$options[] = "building_id='$fields[building_id]'";
 			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-		}
 
+			$this->populateList($options);
+		}
 
 		protected function loadResult($key) { return new Place($this->list[$key]); }
 	}

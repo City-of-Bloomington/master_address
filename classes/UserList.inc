@@ -1,75 +1,80 @@
 <?php
+/**
+* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+* This file is part of the City of Bloomington's Master Address system.
+* Master Address is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* Master Address is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Master Address; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+*/
 	class UserList extends PDOResultIterator
 	{
-		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
-
-		public function find($fields=null,$sort = "username")
+		public function __construct($fields=null,$sort="username")
 		{
-			global $PDO;
+			$this->select = "select distinct users.id from users";
 			$this->sort = $sort;
-
-			if ($fields)
-			{
-				$options = array();
-
-				if (isset($fields['id'])) { $options[] = "users.id=$fields[id]"; }
-				if (isset($fields['username'])) { $options[] = "username='$fields[username]'"; }
-				if (isset($fields['authenticationMethod'])) { $options[] = "authenticationMethod='$fields[authenticationMethod]'"; }
-				if (isset($fields['firstname'])) { $options[] = "firstname='$fields[firstname]'"; }
-				if (isset($fields['lastname'])) { $options[] = "lastname='$fields[lastname]'"; }
-				if (isset($fields['department'])) { $options[] = "department='$fields[department]'"; }
-				if (isset($fields['phone'])) { $options[] = "phone='$fields[phone]'"; }
-
-				# To search on Role, you have to join the userRoles table
-				if (isset($fields['role']))
-				{
-					$this->joins.= " left join user_roles on users.id=user_id left join roles on role_id=roles.id";
-					$options[] = "role='$fields[role]'";
-				}
-
-				$this->where = " where ".implode(" and ",$options);
-				$sql = "select distinct users.id from users {$this->joins} {$this->where} order by {$this->sort}";
-			}
-			else { $sql = "select id from users order by {$this->sort}"; }
-
-			foreach($PDO->query($sql) as $row) { $this->list[] = $row['id']; }
+			if (is_array($fields)) $this->find($fields);
 		}
 
-		public function search($fields=null,$sort = "username")
+
+		public function find($fields=null,$sort="username")
 		{
 			global $PDO;
 			$this->sort = $sort;
 
-			if ($fields)
+			$options = array();
+			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
+			if (isset($fields['username'])) { $options[] = "username='$fields[username]'"; }
+			if (isset($fields['password'])) { $options[] = "password='$fields[password]'"; }
+			if (isset($fields['authenticationMethod'])) { $options[] = "authenticationMethod='$fields[authenticationMethod]'"; }
+			if (isset($fields['firstname'])) { $options[] = "firstname='$fields[firstname]'"; }
+			if (isset($fields['lastname'])) { $options[] = "lastname='$fields[lastname]'"; }
+			if (isset($fields['department'])) { $options[] = "department='$fields[department]'"; }
+			if (isset($fields['phone'])) { $options[] = "phone='$fields[phone]'"; }
+
+			# To search on Role, you have to join the userRoles table
+			if (isset($fields['role']))
 			{
-				$options = array();
-
-				if (isset($fields['id'])) { $options[] = "users.id=$fields[id]"; }
-				if (isset($fields['username'])) { $options[] = "username like '$fields[username]%'"; }
-				if (isset($fields['authenticationMethod'])) { $options[] = "authenticationMethod='$fields[authenticationMethod]'"; }
-				if (isset($fields['firstname'])) { $options[] = "firstname like '$fields[firstname]%'"; }
-				if (isset($fields['lastname'])) { $options[] = "lastname like '$fields[lastname]%'"; }
-				if (isset($fields['department'])) { $options[] = "department like '$fields[department]%'"; }
-				if (isset($fields['phone'])) { $options[] = "phone like '$fields[phone]%'"; }
-
-				# To search on Role, you have to join the userRoles table
-				if (isset($fields['role']))
-				{
-					$this->joins = "left join user_roles on users.id=user_id left join roles on role_id=roles.id";
-					$options[] = "role='$fields[role]'";
-				}
-
-				$this->where = "where ".implode(" and ",$options);
-				$sql.= "select distinct users.id from users {$this->joins} {$this->where} order by {$this->sort}";
+				$this->joins = "left join user_roles on users.id=user_id left join roles on role_id=roles.id";
+				$options[] = "role='$fields[role]'";
 			}
-			else { $sql = "select id from users order by {$this->sort}"; }
 
-			$result = $PDO->query($sql);
-			if ($result)
+			$this->populateList($options);
+		}
+
+		public function search(array $fields,$sort="username")
+		{
+			global $PDO;
+			$this->sort = $sort;
+
+			$options = array();
+			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
+			if (isset($fields['username'])) { $options[] = "username='$fields[username]'"; }
+			if (isset($fields['password'])) { $options[] = "password='$fields[password]'"; }
+			if (isset($fields['authenticationMethod'])) { $options[] = "authenticationMethod='$fields[authenticationMethod]'"; }
+			if (isset($fields['firstname'])) { $options[] = "firstname like '$fields[firstname]%'"; }
+			if (isset($fields['lastname'])) { $options[] = "lastname like '$fields[lastname]%'"; }
+			if (isset($fields['department'])) { $options[] = "department='$fields[department]'"; }
+			if (isset($fields['phone'])) { $options[] = "phone like '$fields[phone]%'"; }
+
+			# To search on Role, you have to join the userRoles table
+			if (isset($fields['role']))
 			{
-				foreach($result as $row) { $this->list[] = $row['id']; }
+				$this->joins = "left join user_roles on users.id=user_id left join roles on role_id=roles.id";
+				$options[] = "role='$fields[role]'";
 			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+
+			$this->populateList($options);
 		}
 
 		protected function loadResult($key) { return new User($this->list[$key]); }

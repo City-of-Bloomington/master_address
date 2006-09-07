@@ -19,12 +19,19 @@
 */
 	class ThoroughfareClassList extends PDOResultIterator
 	{
-		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
+		public function __construct($fields=null,$sort="class")
+		{
+			$this->select = "select thoroughfareClasses.id from thoroughfareClasses";
+			$this->sort = $sort;
+			if (is_array($fields)) $this->find($fields);
+		}
 
 
+		/*
+		* This will find records based on exact matches to the fields entered
+		*/
 		public function find($fields=null,$sort="class")
 		{
-			global $PDO;
 			$this->sort = $sort;
 
 			$options = array();
@@ -37,18 +44,13 @@
 			# You can add fields from other tables to $options by adding the join SQL
 			# to $this->joins here
 
-
-			if (count($options)) { $this->where = "where ".implode(" and ",$options); }
-			$sql = "select id from thoroughfareClasses {$this->joins} {$this->where} order by {$this->sort}";
-
-			$result = $PDO->query($sql);
-			if ($result)
-			{
-				foreach($result as $row) { $this->list[] = $row['id']; }
-			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$this->populateList($options);
 		}
 
+		/*
+		* To find records based on loose matches or fulltext searches,
+		* create a search function here
+		*/
 
 		protected function loadResult($key) { return new ThoroughfareClass($this->list[$key]); }
 	}
