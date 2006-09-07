@@ -37,12 +37,14 @@
 	<tr><td><label for="address-status_id">Status</label></td>
 		<td><select name="address[status_id]" id="address-status_id">
 			<?php
+				if (isset($_POST['address']['status_id'])) { $status_id = $_POST['address']['status_id']; }
+				else { $status = new Status("CURRENT"); $status_id = $status->getId(); }
 				$list = new StatusList();
 				$list->find();
 				foreach($list as $status)
 				{
-					if (isset($_POST['address']['status_id']) && $_POST['address']['status_id']==$status->getId())
-					{ echo "<option value=\"{$status->getId()}\" selected=\"selected\">{$status->getStatus()}</option>"; }
+					if ($status_id == $status->getId())
+						{ echo "<option value=\"{$status->getId()}\" selected=\"selected\">{$status->getStatus()}</option>"; }
 					else { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
 				}
 			?>

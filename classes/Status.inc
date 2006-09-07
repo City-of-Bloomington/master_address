@@ -10,13 +10,15 @@
 		{
 			global $PDO;
 
-			$sql = "select * from statuses where id=$id";
+			if (is_numeric($id)) { $sql = "select * from statuses where id=$id"; }
+			else { $sql = "select * from statuses where status='$id'"; }
+
 			$result = $PDO->query($sql);
 			if ($result)
 			{
 				if ($row = $result->fetch())
 				{
-					$this->id = $id;
+					$this->id = $row['id'];
 					$this->status = $row['status'];
 
 					$result->closeCursor();

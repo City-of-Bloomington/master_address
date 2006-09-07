@@ -17,7 +17,7 @@
 		}
 		echo "</table>";
 
-		include(GLOBAL_INCLUDES."/pageNavigation.inc");
+		include(FRAMEWORK."/pageNavigation.inc");
 	}
 	else { echo "<p>No addresses found</p>"; }
 ?>

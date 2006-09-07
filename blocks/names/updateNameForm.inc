@@ -6,7 +6,7 @@
 <h1>Edit Name:<?php echo $this->name->getId(); ?></h1>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Name</legend>
-	<input name="name_id" type="hidden" value="<?php echo $this->name->getId(); ?>" />
+	<input name="id" type="hidden" value="<?php echo $this->name->getId(); ?>" />
 
 	<table>
 	<tr><td><label for="name-name">Name</label></td>

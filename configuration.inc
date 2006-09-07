@@ -4,7 +4,7 @@
 */
 	define("APPLICATION_NAME","master_address");	# Used to keep sessions on the same webserver seperate;
 
-	define("GLOBAL_INCLUDES","/var/www/libraries/php");	# Where on the filesystem this package of libraries is installed.
+	define("FRAMEWORK","/var/www/libraries/php");	# Where on the filesystem this package of libraries is installed.
 														# These are shared among other applications we write, so they
 														# are a seperate package we will release.
 
@@ -32,7 +32,7 @@
 
 
 	# Import global functions that we use for many applications we write
-	include(GLOBAL_INCLUDES."/ITSFunctions.inc");
+	include(FRAMEWORK."/ITSFunctions.inc");
 
 	#--------------------------------------------------------------------------
 	# Session Startup

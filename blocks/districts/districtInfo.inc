@@ -35,7 +35,7 @@
 			}
 			echo "</table>";
 
-			include(GLOBAL_INCLUDES."/pageNavigation.inc");
+			include(FRAMEWORK."/pageNavigation.inc");
 		}
 	?>
 </div>

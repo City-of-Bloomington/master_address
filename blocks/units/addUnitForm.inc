@@ -1,4 +1,5 @@
 <h2>Add a new Unit</h2>
+<p>Use this form to add multiple units, one at a time.  Close this window when you are done.</p>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Unit Info</legend>
 	<table>
@@ -51,5 +52,6 @@
 	</table>
 
 	<button type="submit" class="submit">Submit</button>
+	<button type="button" class="done" onclick="self.close();">Done</button>
 </fieldset>
 </form>

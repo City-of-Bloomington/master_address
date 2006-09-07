@@ -19,7 +19,7 @@
 */
 	class BuildingTypeList extends PDOResultIterator
 	{
-		public function __construct($fields=null,$sort="id")
+		public function __construct($fields=null,$sort="description")
 		{
 			$this->select = "select buildingTypes.id from buildingTypes";
 			$this->sort = $sort;
@@ -30,7 +30,7 @@
 		/*
 		* This will find records based on exact matches to the fields entered
 		*/
-		public function find($fields=null,$sort="id")
+		public function find($fields=null,$sort="description")
 		{
 			$this->sort = $sort;
 

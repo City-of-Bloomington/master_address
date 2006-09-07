@@ -11,7 +11,8 @@
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->nameList = new NameList($search);
+			$view->nameList = new NameList();
+			$view->nameList->search($search);
 			$view->addBlock("names/findNameResults.inc");
 		}
 	}

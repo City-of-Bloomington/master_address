@@ -1,4 +1,5 @@
 <h1>Add a new Building</h1>
+<p>Use this form to add multiple buildings.  Close this window when you are done.</p>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Building Info</legend>
 	<table>
@@ -68,5 +69,6 @@
 	</table>
 
 	<button type="submit" class="search">Search</button>
+	<button type="button" class="done" onclick="self.close();">Done</button>
 </fieldset>
 </form>

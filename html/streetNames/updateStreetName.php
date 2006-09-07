@@ -18,7 +18,7 @@
 
 
 	$view->streetName = $_SESSION['streetName'];
-	$view->addBlock("streetNames/updateStreetName.inc");
+	$view->addBlock("streetNames/updateStreetNameForm.inc");
 	if (isset($_POST['streetName']))
 	{
 		$streetName = new StreetName($_POST['streetName_id']);

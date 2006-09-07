@@ -9,6 +9,8 @@
 
 	$view->place = $view->address->getPlace();
 	$view->addBlock("places/placeInfo.inc");
+	$view->addBlock("places/buildings.inc");
+	$view->addBlock("places/units.inc");
 
 	$view->render();
 ?>

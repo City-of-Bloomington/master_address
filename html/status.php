@@ -1,5 +1,5 @@
 <?php
-	include(GLOBAL_INCLUDES."/xhtmlHeader.inc");
+	include(FRAMEWORK."/xhtmlHeader.inc");
 	include(APPLICATION_HOME."/includes/banner.inc");
 	include(APPLICATION_HOME."/includes/menubar.inc");
 	include(APPLICATION_HOME."/includes/sidebar.inc");
@@ -72,5 +72,5 @@ I'll try and add in the completion dates and keep them accurate.</p>
 </div>
 <?php
 	include(APPLICATION_HOME."/includes/footer.inc");
-	include(GLOBAL_INCLUDES."/xhtmlFooter.inc");
+	include(FRAMEWORK."/xhtmlFooter.inc");
 ?>

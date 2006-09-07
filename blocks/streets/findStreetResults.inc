@@ -7,6 +7,7 @@
 	{
 		case 0:
 			echo "<p>No Streets Found</p>";
+			if (userHasRole("Administrator")) echo "<p>Do you want to <a href=\"".BASE_URL."/names\">add a new Name?</a></p>";
 		break;
 
 		default:

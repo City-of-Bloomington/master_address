@@ -7,10 +7,13 @@
 */
 	verifyUser("Administrator");
 
+	$view = new View();
+	if (isset($_GET['id'])) { $view->town = new Town($_GET['id']); }
+
 	if (isset($_POST['town']))
 	{
 		$town = new Town($_POST['id']);
-		$town->setName($_POST['name']);
+		$town->setName($_POST['town']['name']);
 
 		try
 		{
@@ -23,7 +26,7 @@
 
 			$view = new View();
 			$view->town = $town;
-			$view->addBlock("towns/udpateTownForm.inc");
+			$view->addBlock("towns/updateTownForm.inc");
 			$view->render();
 		}
 	}
@@ -31,7 +34,7 @@
 	{
 		$view = new View();
 		$view->town = new Town($_GET['id']);
-		$view->addBlock("towns/udpateTownForm.inc");
+		$view->addBlock("towns/updateTownForm.inc");
 		$view->render();
 	}
 ?>

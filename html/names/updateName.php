@@ -10,7 +10,7 @@
 	$view = new View();
 	$view->name = $_SESSION['name'];
 	$view->addBlock("names/updateNameForm.inc");
-	if (isset($_POST['name']))
+	if (isset($_POST['name']) && $_POST['id'])
 	{
 		$name = new Name($_POST['id']);
 		foreach($_POST['name'] as $field=>$value)

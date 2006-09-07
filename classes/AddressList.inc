@@ -21,7 +21,7 @@
 	{
 		public function __construct($fields=null,$sort="a.id")
 		{
-			$this->select = "select addresses.id from addresses a";
+			$this->select = "select a.id from addresses a";
 			$this->sort = $sort;
 			if (is_array($fields)) $this->find($fields);
 		}

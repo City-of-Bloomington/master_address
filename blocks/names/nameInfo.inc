@@ -1,7 +1,7 @@
 <h1><?php
 		if (userHasRole("Administrator"))
 		{
-			echo "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/names/updateName.php?id={$this->name->getId()}';\">Edit</button>";
+			echo "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/names/updateName.php?name_id={$this->name->getId()}';\">Edit</button>";
 		}
 		echo "Name:{$this->name->getId()}";
 	?>
