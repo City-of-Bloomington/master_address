@@ -28,7 +28,7 @@
 
 		public function find($fields=null,$sort="identifier")
 		{
-			global $PDO;
+			$this->sort = $sort;
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }

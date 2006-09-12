@@ -28,6 +28,8 @@
 
 		public function find($fields=null,$sort="id")
 		{
+			$this->sort = $sort;
+
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['ordinanceNumber'])) { $options[] = "ordinanceNumber='$fields[ordinanceNumber]'"; }

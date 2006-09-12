@@ -4,7 +4,7 @@
 */
 	verifyUser("Administrator");
 
-	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']; }
+	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 
 	$view = new View();
 	$view->addBlock("buildings/addBuildingForm.inc");
@@ -18,9 +18,10 @@
 		}
 		try
 		{
-			$building->setPlace($_SESSION['place']; }
+			$building->setPlace($_SESSION['place']);
 			$building->save();
 
 		}
+		catch (Exception $e) { $_SESSION['errorMessages'][] = $e->getMessage(); }
 	}
 ?>

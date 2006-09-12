@@ -3,7 +3,7 @@
 	$view->addBlock("streets/findStreetForm.inc");
 
 	# IF they've submitted the form, show any results
-	if (isset($_GET['street']['id'] && isset($_GET['name']))
+	if (isset($_GET['street']['id']) && isset($_GET['name']))
 	{
 		$search = array();
 		if ($_GET['street']['id']) { $search['id'] = $_GET['street']['id']; }

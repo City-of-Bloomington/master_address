@@ -131,9 +131,8 @@
 
 			$sql = "select id from users where username='{$this->username}' and password=md5('$password')";
 			$result = $PDO->query($sql);
-			if ($user = $result->fetch()) { return true; }
-			else { return false; }
-			$result->closeCursor();
+			if ($user = $result->fetch()) { $result->closeCursor(); return true; }
+			else { $result->closeCursor(); return false; }
 		}
 		/* Takes a string or an array of strings and checks if the user has that role */
 		public function hasRole($roles)

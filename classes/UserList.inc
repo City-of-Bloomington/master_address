@@ -29,7 +29,6 @@
 
 		public function find($fields=null,$sort="username")
 		{
-			global $PDO;
 			$this->sort = $sort;
 
 			$options = array();
@@ -54,7 +53,6 @@
 
 		public function search(array $fields,$sort="username")
 		{
-			global $PDO;
 			$this->sort = $sort;
 
 			$options = array();
