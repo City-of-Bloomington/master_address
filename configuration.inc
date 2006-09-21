@@ -11,6 +11,10 @@
 	define("APPLICATION_HOME","/var/www/sites/master_address");	# Where on the filesystem this is installed
 	define("BASE_URL","/master_address");							# The base URL to get to this site on this webserver
 
+	define("ADMINISTRATOR_NAME","Mr. Site Admin");			# Used when there's an error on the site.  The Framework will
+	define("ADMINISTRATOR_EMAIL","admin@servername.com");	# print out a nice error message, encouraging users to report any problems
+															# See: FRAMEWORK/ITSFunctions.inc
+
 	#--------------------------------------------------------------------------
 	# Database Setup
 	#--------------------------------------------------------------------------
