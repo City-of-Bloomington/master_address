@@ -3,7 +3,7 @@
 	$this->type
 */
 ?>
-<h1>Add a new <?php echo $type; ?> status code</h1>
+<h1>Add a new <?php echo $this->type; ?> status code</h1>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend><?php echo ucfirst($this->type); ?> Status</legend>
 	<input name="type" type="hidden" value="<?php echo $this->type; ?>" />

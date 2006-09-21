@@ -97,7 +97,7 @@
 		public function getMailable() { return $this->mailable; }
 		public function getLivable() { return $this->livable; }
 		public function getNotes() { return $this->notes; }
-		public function getUnitStatus_id { return $this->unitStatus_id; }
+		public function getUnitStatus_id() { return $this->unitStatus_id; }
 		public function getStatus_id() { return $this->unitStatus_id; }
 		public function getPlace()
 		{
