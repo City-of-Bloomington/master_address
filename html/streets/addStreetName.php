@@ -19,9 +19,7 @@
 
 
 	$view = new View();
-	$view->street = $_SESSION['street'];
-	$view->response = $_SESSION['response'];
-	$view->addBlock("streets/streetInfo.inc");
+	$view->blocks[] = new Block("streets/streetInfo.inc",array("street"=>$_SESSION['street'],"response"=>$_SESSION['response']));
 
 	# Handle any new Name they're posting
 	if (isset($_POST['name']))
@@ -44,8 +42,8 @@
 	# Show the find and add name forms if we still don't have a name
 	if (!isset($_SESSION['name']))
 	{
-		$view->addBlock("names/findNameForm.inc");
-		$view->addBlock("names/addNameForm.inc");
+		$view->blocks[] = new Block("names/findNameForm.inc");
+		$view->blocks[] = new Block("names/addNameForm.inc");
 
 		# If they've searched for a name, show the results
 		if (isset($_GET['name']))
@@ -54,21 +52,20 @@
 			foreach($_GET['name'] as $field=>$value) { if ($value) $search[$field] = $value; }
 			if (count($search))
 			{
-				$view->response = new URL("addStreetName.php");
-				$view->nameList = new NameList($search);
-				$view->addBlock("names/findNameResults.inc");
+				$response = new URL("addStreetName.php");
+				$nameList = new NameList($search);
+				$view->blocks[] = new Block("names/findNameResults.inc",array("nameList"=>$nameList,"response"=>$response));
 			}
 		}
 	}
 	else
 	{
 		# we've got a name
-		$view->name = $_SESSION['name'];
-		$view->addBlock("names/nameInfo.inc");
+		$view->blocks[] = new Block("names/nameInfo.inc",array("name"=>$_SESSION['name']));
 
 
 		# Show the Add Street Name form
-		$view->addBlock("streetNames/addStreetNameForm.inc");
+		$view->blocks[] = new Block("streetNames/addStreetNameForm.inc",array("name"=>$_SESSION['name'],"street"=>$_SESSION['street']));
 		if (isset($_POST['streetName']))
 		{
 			$streetName = new StreetName();

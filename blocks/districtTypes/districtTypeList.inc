@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->districtTypeList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">DistrictTypes</div>
 	<table>
 	<?php
-		$districtTypeList = new DistrictTypeList();
-		$districtTypeList->find();
-		foreach($districtTypeList as $districtType)
+		foreach($this->districtTypeList as $districtType)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

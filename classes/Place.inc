@@ -20,7 +20,7 @@
 		private $longitude;
 		private $startDate;
 		private $endDate;
-		private $status_id;
+		private $placeStatus_id;
 		private $plat_id;
 		private $lotNumber;
 
@@ -65,7 +65,7 @@
 				# Set any default values for properties that need it here
 				$now = getdate();
 				$this->startDate = "$now[year]-$now[mon]-$now[mday]";
-				$this->status_id = 1;
+				$this->placeStatus_id = 1;
 			}
 		}
 
@@ -73,7 +73,7 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->jurisdiction_id || !$this->status_id) { throw new Exception("missingRequiredFields"); }
+			if (!$this->jurisdiction_id || !$this->placeStatus_id) { throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();
@@ -94,7 +94,7 @@
 			$fields[] = $this->longitude ? "longitude='{$this->longitude}'" : "longitude=null";
 			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
-			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
+			$fields[] = $this->placeStatus_id ? "placeStatus_id={$this->placeStatus_id}" : "placeStatus_id=null";
 			$fields[] = $this->plat_id ? "plat_iid={$this->plat_id}" : "plat_id=null";
 			$fields[] = $this->lotNumber ? "lotNumber={$this->lotNumber}" : "lotNumber=null";
 			$fields = implode(",",$fields);
@@ -191,7 +191,8 @@
 		public function getLongitude() { return $this->longitude; }
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
-		public function getStatus_id() { return $this->status_id; }
+		public function getPlaceStatus_id() { return $this->placeStatus_id; }
+		public function getStatus_id() { return $this->placeStatus_id; }
 		public function getPlat_id() { return $this->plat_id; }
 		public function getLotNumber() { return $this->lotNumber; }
 		public function getTownship()
@@ -247,9 +248,9 @@
 		}
 		public function getStatus()
 		{
-			if ($this->status_id)
+			if ($this->placeStatus_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
+				if (!$this->status) { $this->status = new Status("place",$this->placeStatus_id); }
 				return $this->status;
 			}
 			else return null;
@@ -295,7 +296,9 @@
 		public function setLongitude($float) { $this->longitude = ereg_replace("[^0-9.]","",$float); }
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setPlaceStatus_id($int) { $this->status = new Status("place",$int); $this->placeStatus_id = $int; }
+		public function setStatus_id($int) { $this->setPlaceStatus_id($int); }
+		public function setStatus($status) { $this->placeStatus_id = $status->getId(); $this->status = $status; }
 		public function setPlat_id($int) { $this->plat = new Plat($int); $this->plat_id = $int; }
 		public function setLotNumber($int) { $this->lotNumber = ereg_replace("[^0-9]","",$int); }
 		public function setPlat($plat) { $this->plat_id = $plat->getId(); $this->plat = $plat; }

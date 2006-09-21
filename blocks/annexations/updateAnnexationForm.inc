@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->annexation
+*/
+?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Annexation</legend>
 	<input name="id" type="hidden" value="<?php echo $this->annexation->getId(); ?>" />

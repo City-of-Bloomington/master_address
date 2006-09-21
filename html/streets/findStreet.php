@@ -1,6 +1,6 @@
 <?php
 	$view = new View();
-	$view->addBlock("streets/findStreetForm.inc");
+	$view->blocks[] = new Block("streets/findStreetForm.inc");
 
 	# IF they've submitted the form, show any results
 	if (isset($_GET['street']['id']) && isset($_GET['name']))
@@ -10,9 +10,9 @@
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->response = new URL("viewStreet.php");
-			$view->streetList = new StreetList($search);
-			$view->addBlock("streets/findStreetResults.inc");
+			$streetList = new StreetList($search);
+			$response = new URL("viewStreet.php");
+			$view->blocks[] = new Block("streets/findStreetResults.inc",array("streetList"=>$streetList,"response"=>$response));
 		}
 	}
 

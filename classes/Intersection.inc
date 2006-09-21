@@ -22,7 +22,7 @@
 		private $id;
 		private $tag;
 		private $name;
-		private $status_id;
+		private $intersectionStatus_id;
 		private $jurisdiction_id;
 		private $x;
 		private $y;
@@ -74,7 +74,7 @@
 			$fields = array();
 			$fields[] = $this->tag ? "tag='{$this->tag}'" : "tag=null";
 			$fields[] = $this->name ? "name='{$this->name}'" : "name=null";
-			$fields[] = $this->status_id ? "status_id='{$this->status_id}'" : "status_id=null";
+			$fields[] = $this->intersectionStatus_id ? "intersectionStatus_id='{$this->intersectionStatus_id}'" : "intersectionStatus_id=null";
 			$fields[] = $this->jurisdiction_id ? "jurisdiction_id='{$this->jurisdiction_id}'" : "jurisdiction_id=null";
 			$fields[] = $this->x ? "x='{$this->x}'" : "x=null";
 			$fields[] = $this->y ? "y='{$this->y}'" : "y=null";
@@ -108,16 +108,17 @@
 		public function getId() { return $this->id; }
 		public function getTag() { return $this->tag; }
 		public function getName() { return $this->name; }
-		public function getStatus_id() { return $this->status_id; }
+		public function getIntersectionStatus_id() { return $this->intersectionStatus_id; }
+		public function getStatus_id() { return $this->intersectionStatus_id; }
 		public function getJurisdiction_id() { return $this->jurisdiction_id; }
 		public function getX() { return $this->x; }
 		public function getY() { return $this->y; }
 		public function getNotes() { return $this->notes; }
 		public function getStatus()
 		{
-			if ($this->status_id)
+			if ($this->intersectionStatus_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
+				if (!$this->status) { $this->status = new Status("intersection",$this->intersectionStatus_id); }
 				return $this->status;
 			}
 			else return null;
@@ -135,13 +136,14 @@
 
 		public function setTag($string) { $this->tag = trim($string); }
 		public function setName($string) { $this->name = trim($string); }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setIntersectionStatus_id($int) { $this->status = new Status("intersection",$int); $this->intersectionStatus_id = $int; }
+		public function setStatus_id($int) { $this->setIntersectionStatus_id($int); }
 		public function setJurisdiction_id($int) { $this->jurisdiction = new Jurisdiction($int); $this->jurisdiction_id = $int; }
 		public function setX($int) { $this->x = ereg_replace("[^0-9]","",$int); }
 		public function setY($int) { $this->y = ereg_replace("[^0-9]","",$int); }
 		public function setNotes($text) { $this->notes = $text; }
 
-		public function setStatus($status) { $this->status_id = $status->getId(); $this->status = $status; }
+		public function setStatus($status) { $this->intersectionStatus_id = $status->getId(); $this->status = $status; }
 		public function setJurisdiction($jurisdiction) { $this->jurisdiction_id = $jurisdiction->getId(); $this->jurisdiction = $jurisdiction; }
 	}
 ?>

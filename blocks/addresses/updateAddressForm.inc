@@ -44,10 +44,10 @@
 		<td><input name="address[zip]" id="address-zip" size="5" maxlength="5" value="<?php echo $this->address->getZip(); ?>" />
 			<input name="address[zipplus4]" id="address-zipplus4" size="4" maxlength="4" value="<?php echo $this->address->getZipplus4(); ?>" />
 		</td></tr>
-	<tr><td><label for="address-status_id">Status</label></td>
-		<td><select name="address[status_id]" id="address-status_id">
+	<tr><td><label for="address-addressStatus_id">Status</label></td>
+		<td><select name="address[addressStatus_id]" id="address-addressStatus_id">
 			<?php
-				$list = new StatusList();
+				$list = new StatusList("address");
 				$list->find();
 				foreach($list as $status)
 				{

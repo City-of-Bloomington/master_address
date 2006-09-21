@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->unitType
+*/
+?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>UnitType</legend>
 	<input name="id" type="hidden" value="<?php echo $this->unitType->getId(); ?>" />

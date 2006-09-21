@@ -1,5 +1,9 @@
 <?php
 	$view = new View();
-	$view->addBlock("directions/directionList.inc");
+
+	$directionList = new DirectionList();
+	$directionList->find();
+	$view->blocks[] = new Block("directions/directionList.inc",array("directionList"=>$directionList));
+
 	$view->render();
 ?>

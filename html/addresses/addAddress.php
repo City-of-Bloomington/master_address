@@ -11,12 +11,9 @@
 	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 
 	$view = new View("popup");
+	$view->blocks[] = new Block("places/placeInfo.inc",array("place"=>$_SESSION['place']));
 
-	$view->place = $_SESSION['place'];
-	$view->addBlock("places/placeInfo.inc");
-
-
-	$view->addBlock("addresses/addAddressForm.inc");
+	$addAddressForm = new Block("addresses/addAddressForm.inc");
 	if (isset($_POST['address']))
 	{
 		$address = new Address();
@@ -30,8 +27,13 @@
 		$address->setPlace($_SESSION['place']);
 
 		try { $address->save(); }
-		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+			$addAddressForm->address = $address;
+		}
 	}
+	$view->blocks[] = $addAddressForm;
 
 
 	$view->render();

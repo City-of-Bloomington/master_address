@@ -6,9 +6,9 @@
 						town [ name ]
 */
 	verifyUser("Administrator");
-
 	$view = new View();
-	if (isset($_GET['id'])) { $view->town = new Town($_GET['id']); }
+	$form = new Block("towns/updateTownForm.inc");
+	if (isset($_GET['id'])) { $form->town = new Town($_GET['id']); }
 
 	if (isset($_POST['town']))
 	{
@@ -19,22 +19,15 @@
 		{
 			$town->save();
 			Header("Location: home.php");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->town = $town;
-			$view->addBlock("towns/updateTownForm.inc");
-			$view->render();
+			$form->town = $town;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->town = new Town($_GET['id']);
-		$view->addBlock("towns/updateTownForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

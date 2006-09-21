@@ -8,7 +8,11 @@
 								]
 */
 	verifyUser("Administrator");
-	if (isset($_POST['unitTyope']))
+	$view = new View();
+	$form = new Block("unitTypes/updateUnitTypeForm.inc");
+	if (isset($_GET['id'])) { $form->unitType = new UnitType($_GET['id']); }
+
+	if (isset($_POST['unitType']))
 	{
 		$unitType = new UnitType($_POST['id']);
 		foreach($_POST['unitType'] as $field=>$value)
@@ -21,22 +25,15 @@
 		{
 			$unitType->save();
 			Header("Location: home.php");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->unitType = $unitType;
-			$view->addBlock("unitTypes/updateUnitTypeForm.inc");
-			$view->render();
+			$form->unitType = $unitType;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->unitType = new UnitType($_GET['id']);
-		$view->addBlock("unitTypes/updateUnitTypeForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

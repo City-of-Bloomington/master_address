@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->unitTypeList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">Unit Types</div>
 	<table>
 	<?php
-		$unitTypeList = new UnitTypeList();
-		$unitTypeList->find();
-		foreach($unitTypeList as $unitType)
+		foreach($this->unitTypeList as $unitType)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

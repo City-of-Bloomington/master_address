@@ -32,14 +32,14 @@
 			?>
 			</select>
 		</td></tr>
-	<tr><td><label for="segment-status_id" class="required">Status</label></td>
-		<td><select name="segment[status_id]" id="segment-status_id">
+	<tr><td><label for="segment-segmentStatus_id" class="required">Status</label></td>
+		<td><select name="segment[segmentStatus_id]" id="segment-segmentStatus_id">
 			<?php
-				$statusList = new StatusList();
+				$statusList = new StatusList("segment");
 				$statusList->find();
 				foreach($statusList as $status)
 				{
-					if (isset($_POST['segment']['status_id']) && $_POST['segment']['status_id']==$status->getId())
+					if (isset($_POST['segment']['segmentStatus_id']) && $_POST['segment']['segmentStatus_id']==$status->getId())
 					{
 						echo "<option value=\"{$status->getId()}\" selected=\"selected\">{$status->getStatus()}</option>";
 					}
@@ -51,6 +51,8 @@
 	<tr><td><label for="segment-constructionStatus_id" class="required">Construction Status</label></td>
 		<td><select name="segment[constructionStatus_id]" id="segment-constructionStatus_id">
 			<?php
+				$statusList = new StatusList("construction");
+				$statusList->find();
 				foreach($statusList as $status)
 				{
 					if (isset($_POST['segment']['constructionStatus_id']) && $_POST['segment']['constructionStatus_id']==$status->getId())

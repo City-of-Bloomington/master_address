@@ -3,10 +3,13 @@
 	$_GET variables:	id
 	-------------------------------------
 	$_POST variables:	id
-						suffix
-						description
+						suffix [ suffix
+								description ]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block("suffixes/updateSuffixForm.inc");
+	if (isset($_GET['id'])) { $form->suffix = new Suffix($_GET['id']); }
 
 	if (isset($_POST['suffix']))
 	{
@@ -21,22 +24,15 @@
 		{
 			$suffix->save();
 			Header("Location: home.php");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->suffix = $suffix;
-			$view->addBlock("suffixes/updateSuffix.inc");
-			$view->render();
+			$form->suffix = $suffix;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->suffix = new Suffix($_GET['suffix']);
-		$view->addBlock("suffixes/updateSuffix.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

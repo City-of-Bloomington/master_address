@@ -38,7 +38,7 @@
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 			if (isset($fields['tag'])) { $options[] = "tag='$fields[tag]'"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
+			if (isset($fields['intersectionStatus_id'])) { $options[] = "intersectionStatus_id='$fields[intersectionStatus_id]'"; }
 			if (isset($fields['jurisdiction_id'])) { $options[] = "jurisdiction_id='$fields[jurisdiction_id]'"; }
 			if (isset($fields['x'])) { $options[] = "x='$fields[x]'"; }
 			if (isset($fields['y'])) { $options[] = "y='$fields[y]'"; }

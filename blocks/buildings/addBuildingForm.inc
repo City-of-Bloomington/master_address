@@ -51,14 +51,14 @@
 			</select>
 			<input name="building[endDate][year]" value="<?php echo $endDate['year']; ?>" />
 	</td></tr>
-	<tr><td><label for="building-status_id">Status</label></td>
-		<td><select name="building[status_id]" id="building-status_id">
+	<tr><td><label for="building-buildingStatus_id">Status</label></td>
+		<td><select name="building[buildingStatus_id]" id="building-buildingStatus_id">
 			<?php
-				$list = new StatusList();
+				$list = new StatusList("building");
 				$list->find();
 				foreach($list as $status)
 				{
-					if (isset($_POST['building']['status_id']) && $_POST['building']['status_id']==$status->getId())
+					if (isset($_POST['building']['buildingStatus_id']) && $_POST['building']['buildingStatus_id']==$status->getId())
 						{ echo "<option value=\"{$status->getId()}\" selected=\"selected\">{$status->getStatus()}</option>"; }
 					else { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
 				}

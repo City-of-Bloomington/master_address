@@ -8,6 +8,9 @@
 								]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block("districts/updateDistrictForm.inc");
+	if (isset($_GET['id'])) { $form->district = new District($_GET['id']); }
 
 	if (isset($_POST['district']))
 	{
@@ -25,18 +28,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->district = $district;
-			$view->addBlock("districts/udpateDistrictForm.inc");
-			$view->render();
+			$form->district = $district;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->district = new District($_GET['id']);
-		$view->addBlock("districts/updateDistrictForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

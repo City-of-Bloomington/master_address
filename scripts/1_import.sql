@@ -56,17 +56,52 @@ insert jurisdictions select * from oldAddressData.governmental_jurisdiction_mast
 insert cities (name) select distinct city from oldAddressData.mast_address;
 
 -- statusCodes
---		This is actually combining 3 tables of status codes into one.  The original
---		status_code integers won't be valid anymore.  When importing status fields
+--		The original status_code integers won't be valid anymore.  When importing status fields
 --		you will need to join those and compare the description with this statusCode.status
 --		for the correct statusCode to use
 -- We also need an UNKNOWN status for the ones that are blank
-insert statuses values(1,"UNKNOWN");
+insert placeStatuses set status="UNKNOWN";
+insert placeStatuses set status="PROPOSED";
+insert placeStatuses set status="CURRENT";
+insert placeStatuses set status="RETIRED";
 
-insert statuses (status) (select description from oldAddressData.buildings_status_lookup)
-union (select description from oldAddressData.mast_address_status_lookup)
-union (select description from oldAddressData.mast_street_status_lookup)
-order by description;
+insert addressStatuses set status="UNKNOWN";
+insert addressStatuses set status="PROPOSED";
+insert addressStatuses set status="CURRENT";
+insert addressStatuses set status="RETIRED";
+
+insert buildingStatuses set status="UNKNOWN";
+insert buildingStatuses set status="PROPOSED";
+insert buildingStatuses set status="BUILT";
+insert buildingStatuses set status="DEMOLISHED";
+
+insert unitStatuses set status="UNKNOWN";
+
+insert streetStatuses set status="UNKNOWN";
+insert streetStatuses set status="CURRENT";
+insert streetStatuses set status="RETIRED";
+insert streetStatuses set status="PROPOSED";
+insert streetStatuses set status="CORRECTED";
+
+insert intersectionStatuses set status="UNKNOWN";
+insert intersectionStatuses set status="CURRENT";
+insert intersectionStatuses set status="RETIRED";
+
+insert segmentStatuses set status="UNKNOWN";
+insert segmentStatuses set status="CURRENT";
+insert segmentStatuses set status="RETIRED";
+
+insert inventoryStatuses set status="UNKNOWN";
+
+insert constructionStatuses set status="UNKNOWN";
+insert constructionStatuses set status="PROPOSED";
+insert constructionStatuses set status="BUILT";
+
+insert mapStatuses set status="UNKNOWN";
+insert mapStatuses set status="CURRENT";
+
+insert sidewalkStatuses set status="UNKNOWN";
+
 
 -- suffixes
 insert suffixes (suffix,description) select * from oldAddressData.mast_street_type_suffix_master;
@@ -134,7 +169,7 @@ left join directions p on mast_street_names.post_direction_suffix_code=p.code;
 insert streets select distinct street_id,notes,ifnull(s.id,1)
 from oldAddressData.mast_street
 left join oldAddressData.mast_street_status_lookup using (status_code)
-left join statuses s on description=s.status;
+left join streetStatuses s on description=s.status;
 
 
 -- segments
@@ -144,8 +179,6 @@ update oldAddressData.segments set location='MONROE COUNTY' where location='COUN
 -- Clean up the travel_d information
 update oldAddressData.segments set travel_d=null where travel_d not in ('N','S','E','W');
 
--- The segments have a BUILT status that hasn't been added to statusCodes yet
-insert statuses set status='BUILT';
 
 -- We need some usernames in the new data, so we can assign correct userIDs for the last updated fields
 update users set username='haleyl' where firstname='LAURA' and lastname='HALEY';
@@ -162,22 +195,23 @@ update oldAddressData.segments set maintain='IU' where maintain='U';
 update oldAddressData.segments set maintain='BLOOMINGTON' where maintain='CITY';
 
 
+-- The only status we're putting in right now is constructionStatus_id
 insert segments
 select null,tag,1,null,null,null,
 lowadd,highadd,leftlow,lefthigh,rightlow,righthigh,
-j.id,null,null,s.id,null,maintain,null,
+j.id,null,null,ifnull(s.id,1),null,maintain,null,
 travel,d.id,speed,null,t.id,
 null,null,null,null,null,null,null,null,
 maparea,null,null,null,null,comments
 from oldAddressData.segments as rcl
 left join jurisdictions j on location=j.name
 left join directions d on travel_d=d.code
-left join statuses s on seg_stat=status
+left join segmentStatuses s on seg_stat=status
 left join thoroughfareClasses t on rcl.class=t.class;
 
--- Set default values for new segment status fields
-update segments set status_id=(select id from statuses where status='UNKNOWN');
-update segments set mapStatus_id=(select id from statuses where status='CURRENT');
+-- Set default values for the new segment status fields
+update segments set segmentStatus_id=(select id from segmentStatuses where status='UNKNOWN');
+update segments set mapStatus_id=(select id from mapStatuses where status='CURRENT');
 
 
 -- Link all the segments together with back and next
@@ -233,7 +267,7 @@ left join trashPickupDays t on trash_pickup_day=t.day
 left join recyclingPickupWeeks r on recycle_week=r.week
 left join oldAddressData.mast_address_location_status m on l.location_id=m.location_id
 left join oldAddressData.mast_address_status_lookup y on m.status_code=y.status_code
-left join statuses c on description=status
+left join placeStatuses c on description=status
 group by location_id;
 
 -- Convert the old classes into Place Types
@@ -253,9 +287,9 @@ insert placeHistory select null,location_id,action,action_date,notes,contact_id 
 where location_id in (select id from places);
 
 -- buildings
-insert buildings select building_id,building_name,effective_start_date,effective_end_date,gis_tag,statuses.id
+insert buildings select building_id,building_name,effective_start_date,effective_end_date,gis_tag,ifnull(b.id,1)
 from oldAddressData.buildings left join oldAddressData.buildings_status_lookup using (status_code)
-left join statuses on description=status;
+left join buildingStatuses b on description=status;
 
 insert building_places select building_id,location_id from oldAddressData.building_address_location
 where location_id in (select id from places);
@@ -271,14 +305,6 @@ delete from tempLocations where location_id in (select id from places);
 select count(*) from tempLocations;
 drop table tempLocations;
 
-
--- This table is no longer in the database.  We have replaced it with placeHistory
--- placeStatus
---insert place_status
---select p.id,effective_start_date,effective_end_date,s.id
---from places p left join oldAddressData.mast_address_location_status on p.id=location_id
---left join oldAddressData.mast_address_status_lookup using (status_code)
---left join statuses s on description=status;
 
 
 -- addresses

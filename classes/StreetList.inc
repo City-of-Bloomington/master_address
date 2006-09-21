@@ -33,7 +33,7 @@
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "streets.id=$fields[id]"; }
 			if (isset($fields['notes'])) { $options[] = "notes='$fields[notes]'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id=$fields[status_id]"; }
+			if (isset($fields['streetStatus_id'])) { $options[] = "streetStatus_id=$fields[streetStatus_id]"; }
 
 			# Find by Segment requires us to join the street_segments table
 			if (isset($fields['segment_id']))
@@ -63,7 +63,7 @@
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "streets.id=$fields[id]"; }
 			if (isset($fields['notes'])) { $options[] = "notes='$fields[notes]'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id=$fields[status_id]"; }
+			if (isset($fields['streetStatus_id'])) { $options[] = "streetStatus_id=$fields[streetStatus_id]"; }
 
 			# Find by Segment requires us to join the street_segments table
 			if (isset($fields['segment_id']))

@@ -9,6 +9,9 @@
 								]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block("townships/updateTownshipForm.inc");
+	if (isset($_GET['id'])) { $form->township = new Township($_GET['id']); }
 
 	if (isset($_POST['township']))
 	{
@@ -23,22 +26,15 @@
 		{
 			$township->save();
 			Header("Location: home.php");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->township = $township;
-			$view->addBlock("townships/updateTownshipForm.inc");
-			$view->render();
+			$form->township = $township;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->township = new Township($_GET['id']);
-		$view->addBlock("townships/updateTownshipForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

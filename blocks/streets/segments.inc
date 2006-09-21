@@ -1,4 +1,7 @@
 <?php
+/*
+	$this->street
+*/
 	$addSegmentButton = userHasRole("Administrator") ? "<button type=\"button\" class=\"addSmall\" onclick=\"window.open('".BASE_URL."/streets/addSegments.php?street_id={$this->street->getId()}');\">Add</button>" : "";
 ?>
 <div class="interfaceBox">

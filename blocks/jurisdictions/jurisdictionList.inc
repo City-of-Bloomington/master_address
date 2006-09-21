@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->jurisdictionList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">Jurisdictions</div>
 	<table>
 	<?php
-		$jurisdictionList = new JurisdictionList();
-		$jurisdictionList->find();
-		foreach($jurisdictionList as $jurisdiction)
+		foreach($this->jurisdictionList as $jurisdiction)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

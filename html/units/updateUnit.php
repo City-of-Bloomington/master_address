@@ -4,10 +4,9 @@
 */
 	verifyUser("Administrator");
 	$view = new View();
+	$form = new Block("units/updateUnitForm.inc");
+	if (isset($_GET['unit_id'])) { $form->unit = new Unit($_GET['unit_id']); }
 
-	if (isset($_GET['unit_id'])) { $view->unit = new Unit($_GET['unit_id']); }
-
-	$view->addBlock("units/updateUnitForm.inc");
 	if (isset($_POST['unit']))
 	{
 		$unit = new Unit($_POST['unit_id']);
@@ -25,10 +24,11 @@
 		}
 		catch (Exception $e)
 		{
-			$view->unit = $unit;
 			$_SESSION['errorMessages'][] = $e;
+			$form->unit = $unit;
 		}
 	}
 
+	$view->blocks[] = $form;
 	$view->render();
 ?>

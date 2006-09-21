@@ -60,13 +60,13 @@
 			# Look up the status for this address
 			$temp = "select s.id as status_id,start_date,end_date from oldAddressData.mast_address_status
 					left join oldAddressData.mast_address_status_lookup using (status_code)
-					left join statuses s on description=status
+					left join addressStatuses s on description=status
 					where street_address_id=$address[street_address_id]";
 			$statusResult = mysql_query($temp) or die($sql.mysql_error());
 			if (mysql_num_rows($statusResult))
 			{
 				list($status_id,$startDate,$endDate)  = mysql_fetch_array($statusResult);
-				$sql.=",status_id=$status_id,startDate='$startDate'";
+				$sql.=",addressStatus_id=$status_id,startDate='$startDate'";
 				if ($endDate) { $sql.=",endDate='$endDate'"; }
 			}
 

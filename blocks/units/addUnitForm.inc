@@ -30,14 +30,14 @@
 			<label><input name="unit[livable]" id="unit-livable-no" type="radio" value="0" <?php if(isset($_POST['unit']['livable']) && $_POST['unit']['livable']==0) echo "checked=\"checked\""; ?> />No</label>
 		</td>
 	</tr>
-	<tr><td><label for="unit-status_id">Status</label></td>
-		<td><select name="unit[status_id]" id="unit-status_id">
+	<tr><td><label for="unit-unitStatus_id">Status</label></td>
+		<td><select name="unit[unitStatus_id]" id="unit-unitStatus_id">
 			<?php
-				$list = new StatusList();
+				$list = new StatusList("unit");
 				$list->find();
 				foreach($list as $status)
 				{
-					if (isset($_POST['unit']['status_id']) && $_POST['unit']['status_id']==$status->getId())
+					if (isset($_POST['unit']['unitStatus_id']) && $_POST['unit']['unitStatus_id']==$status->getId())
 						{ echo "<option value=\"{$status->getId()}\" selected=\"selected\">{$status->getStatus()}</option>"; }
 					else { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
 				}

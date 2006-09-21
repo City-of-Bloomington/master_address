@@ -3,12 +3,12 @@
 	$_GET variables:	street_id
 */
 	$view = new View();
-	$view->street = new Street($_GET['street_id']);
-	$view->response = new URL($_SERVER['REQUEST_URI']);
+	$street = new Street($_GET['street_id']);
+	$response = new URL($_SERVER['REQUEST_URI']);
 
-	$view->addBlock("streets/streetInfo.inc");
-	$view->addBlock("streets/streetNames.inc");
-	$view->addBlock("streets/segments.inc");
+	$view->blocks[] = new Block("streets/streetInfo.inc",array("street"=>$street,"response"=>$response));
+	$view->blocks[] = new Block("streets/streetNames.inc",array("street"=>$street,"response"=>$response));
+	$view->blocks[] = new Block("streets/segments.inc",array("street"=>$street));
 
 	$view->render();
 ?>

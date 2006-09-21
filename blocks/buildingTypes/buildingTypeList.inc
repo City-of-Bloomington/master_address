@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->buildingTypeList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">Building Types</div>
 	<table>
 	<?php
-		$buildingTypeList = new BuildingTypeList();
-		$buildingTypeList->find();
-		foreach($buildingTypeList as $buildingType)
+		foreach($this->buildingTypeList as $buildingType)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

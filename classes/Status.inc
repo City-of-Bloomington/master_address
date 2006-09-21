@@ -4,14 +4,18 @@
 		private $id;
 		private $status;
 
+		private $type;
+		private $tableName;
 
-
-		public function __construct($id=1)
+		public function __construct($type,$id=1)
 		{
 			global $PDO;
 
-			if (is_numeric($id)) { $sql = "select * from statuses where id=$id"; }
-			else { $sql = "select * from statuses where status='$id'"; }
+			$this->type = $type;
+			$this->tableName = $type."Statuses";
+
+			if (is_numeric($id)) { $sql = "select * from {$this->tableName} where id=$id"; }
+			else { $sql = "select * from {$this->tableName} where status='$id'"; }
 
 			$result = $PDO->query($sql);
 			if ($result)
@@ -48,7 +52,7 @@
 		{
 			global $PDO;
 
-			$sql = "update statuses set $fields where id={$this->id}";
+			$sql = "update {$this->tableName} set $fields where id={$this->id}";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
@@ -56,7 +60,7 @@
 		{
 			global $PDO;
 
-			$sql = "insert statuses set $fields";
+			$sql = "insert {$this->tableName} set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 		}
@@ -64,6 +68,8 @@
 
 		public function getId() { return $this->id; }
 		public function getStatus() { return $this->status; }
+		public function getType() { return $this->type; }
+		public function getTableName() { return $this->tableName; }
 
 		public function __toString() { return $this->status; }
 

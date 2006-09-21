@@ -15,6 +15,7 @@
 									# it to the street
 */
 	verifyUser("Administrator");
+	$view = new View("popup");
 
 	#--------------------------------------------------------------------------
 	# Load the street
@@ -22,20 +23,18 @@
 	if (isset($_GET['street_id'])) { $_SESSION['street'] = new Street($_GET['street_id']); }
 
 
-	$view = new View("popup");
 
 	#--------------------------------------------------------------------------
 	# Show the Find Segment Form
 	#--------------------------------------------------------------------------
-	$view->addBlock("segments/findSegmentForm.inc");
+	$view->blocks[] = new Block("segments/findSegmentForm.inc");
 	if (isset($_GET['name']) || isset($_GET['address']))
 	{
 		$search = array();
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->streetList = new StreetList($search);
-			$view->addBlock("streets/chooseSegmentsForm.inc");
+			$view->blocks[] = new Block("streets/chooseSegmentsForm.inc",array("streetList"=>new StreetList($search)));
 		}
 	}
 
@@ -46,8 +45,7 @@
 		{
 			if ($value == "on")
 			{
-				$segment = new Segment($segment_id);
-				$_SESSION['street']->addSegment($segment);
+				$_SESSION['street']->addSegment(new Segment($segment_id));
 			}
 		}
 		try { $_SESSION['street']->save(); }
@@ -58,7 +56,7 @@
 	#--------------------------------------------------------------------------
 	# Show the Add Segment Form
 	#--------------------------------------------------------------------------
-	$view->addBlock("segments/addSegmentForm.inc");
+	$view->blocks[] = new Block("segments/addSegmentForm.inc");
 	if (isset($_POST['segment']))
 	{
 		$segment = new Segment();

@@ -5,17 +5,18 @@
 */
 	verifyUser("Administrator");
 
-	if (isset($_GET['street_id'])) { $_SESSION['street'] = new Street($_GET['street_id']); }
-	if (isset($_GET['return_url'])) { $_SESSION['response'] = new URL($_GET['return_url']); }
 
 	$view = new View();
-	$view->street = $_SESSION['street'];
-	$view->response = $_SESSION['response'];
+	$form = new Block("streets/updateStreetForm.inc");
 
-	$view->addBlock("streets/updateStreetForm.inc");
+	if (isset($_GET['street_id'])) { $form->street = new Street($_GET['street_id']); }
+	if (isset($_GET['return_url'])) { $form->response = new URL($_GET['return_url']); }
+
+
 	if (isset($_POST['street']))
 	{
 		$street = new Street($_POST['street_id']);
+		$form->response = new URL($_POST['response']);
 		foreach($_POST['street'] as $field=>$value)
 		{
 			$set = "set".ucfirst($field);
@@ -25,15 +26,16 @@
 		try
 		{
 			$street->save();
-
-			# Clean out the session junk
-			unset($_SESSION['street']);
-			unset($_SESSION['response']);
-
-			Header("Location: {$view->response->getURL()}");
+			Header("Location: {$form->response->getURL()}");
+			exit();
 		}
-		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+			$form->street = $street;
+		}
 	}
 
+	$view->blocks[] = $form;
 	$view->render();
 ?>

@@ -26,10 +26,6 @@
 			if (is_array($fields)) $this->find($fields);
 		}
 
-
-		/*
-		* This will find records based on exact matches to the fields entered
-		*/
 		public function find($fields=null,$sort="id")
 		{
 			$this->sort = $sort;
@@ -37,19 +33,9 @@
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 
-
-			# Finding on fields from other tables required joining those tables.
-			# You can add fields from other tables to $options by adding the join SQL
-			# to $this->joins here
-
 			$this->populateList($options);
 		}
 
-		/*
-		* To find records based on loose matches or fulltext searches,
-		* create a search function here
-		*/
-
-		protected function loadResult($key) { return new TravelWayCode($this->list[$key]); }
+		protected function loadResult($key) { return $this->list[$key]; }
 	}
 ?>

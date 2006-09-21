@@ -19,7 +19,6 @@
 			if (count($options)) { $where = " where ".implode(" and ",$options); } else { $where = ""; }
 			$sql = "select * from addressIndex $where";
 
-			echo $sql;
 			$result = $PDO->query($sql);
 			if ($result)
 			{

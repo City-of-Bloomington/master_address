@@ -35,7 +35,7 @@
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
 			if (isset($fields['GISTag'])) { $options[] = "GISTag='$fields[GISTag]'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
+			if (isset($fields['buildingStatus_id'])) { $options[] = "buildingStatus_id='$fields[buildingStatus_id]'"; }
 
 			# Dates can come in as arrays as well as strings
 			if (isset($fields['startDate']))
@@ -69,7 +69,7 @@
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 			if (isset($fields['name'])) { $options[] = "name like '$fields[name]%'"; }
 			if (isset($fields['GISTag'])) { $options[] = "GISTag like '$fields[GISTag]%'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
+			if (isset($fields['buildingStatus_id'])) { $options[] = "buildingStatus_id='$fields[buildingsStatus_id]'"; }
 
 			# Dates can come in as arrays as well as strings
 			if (isset($fields['startDate']))

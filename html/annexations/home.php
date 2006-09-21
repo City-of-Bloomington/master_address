@@ -1,5 +1,9 @@
 <?php
 	$view = new View();
-	$view->addBlock("annexations/annexationList.inc");
+
+	$annexationList = new AnnexationList();
+	$annexationList->find();
+	$view->blocks[] = new Block("annexations/annexationList.inc",array("annexationList"=>$annexationList));
+
 	$view->render();
 ?>

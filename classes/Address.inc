@@ -11,7 +11,7 @@
 		private $city_id;
 		private $zip;
 		private $zipplus4;
-		private $status_id;
+		private $addressStatus_id;
 		private $active;
 		private $startDate;
 		private $endDate;
@@ -77,7 +77,7 @@
 			$fields[] = "city_id={$this->city_id}";
 			$fields[] = $this->zip ? "zip={$this->zip}" : "zip=null";
 			$fields[] = $this->zipplus4 ? "zipplus4={$this->zipplus4}" : "zipplus4=null";
-			$fields[] = $this->status_id ? "status_id={$this->status_id}" : "status_id=null";
+			$fields[] = $this->addressStatus_id ? "addressStatus_id={$this->addressStatus_id}" : "addressStatus_id=null";
 			$fields[] = $this->active ? "active='{$this->active}'" : "active=null";
 			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
@@ -119,7 +119,8 @@
 		public function getCity_id() { return $this->city_id; }
 		public function getZip() { return $this->zip; }
 		public function getZipplus4() { return $this->zipplus4; }
-		public function getStatus_id() { return $this->status_id; }
+		public function getAddressStatus_id() { return $this->addressStatus_id; }
+		public function getStatus_id() { return $this->addressStatus_id; }
 		public function getActive() { return $this->active; }
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
@@ -153,9 +154,9 @@
 		}
 		public function getStatus()
 		{
-			if ($this->status_id)
+			if ($this->addressStatus_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
+				if (!$this->status) { $this->status = new Status("address",$this->addressStatus_id); }
 				return $this->status;
 			}
 			else return null;
@@ -197,7 +198,8 @@
 		public function setCity_id($int) { $this->city = new City($int); $this->city_id = $int; }
 		public function setZip($int) { $this->zip = ereg_replace("[^0-9]","",$int); }
 		public function setZipplus4($int) { $this->zipplus4 = ereg_replace("[^0-9]","",$int); }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setAddressStatus_id($int) { $this->status = new Status("address",$int); $this->addressStatus_id = $int; }
+		public function setStatus_id($int) { $this->addressStatus_id($int); }
 		public function setActive($string) { $this->active = trim($string); }
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }

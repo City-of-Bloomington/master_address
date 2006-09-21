@@ -9,6 +9,11 @@
 */
 	verifyUser("Administrator");
 
+	$view = new View();
+	$block = new Block("annexations/updateAnnexationForm.inc");
+	if (isset($_GET['id'])) { $block->annexation = new Annexation($_GET['id']); }
+
+
 	if (isset($_POST['annexation']))
 	{
 		$annexation = new Annexation($_POST['id']);
@@ -25,18 +30,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->annexation = $annexation;
-			$view->addBlock("annexations/updateAnnexationForm.inc");
-			$view->render();
+			$block->annexation = $annexation;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->annexation = new Annexation($_GET['id']);
-		$view->addBlock("annexations/updateAnnexationForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $block;
+	$view->render();
 ?>

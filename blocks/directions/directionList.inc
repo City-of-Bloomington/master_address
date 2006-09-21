@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->directionList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">Directions</div>
 	<table>
 	<?php
-		$directionList = new DirectionList();
-		$directionList->find();
-		foreach($directionList as $direction)
+		foreach($this->directionList as $direction)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

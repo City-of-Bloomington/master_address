@@ -4,13 +4,13 @@
 */
 	$view = new View();
 
-	$view->address = new Address($_GET['address_id']);
-	$view->addBlock("addresses/addressInfo.inc");
+	$address = new Address($_GET['address_id']);
+	$view->blocks[] = new Block("addresses/addressInfo.inc",array("address"=>$address));
 
-	$view->place = $view->address->getPlace();
-	$view->addBlock("places/placeInfo.inc");
-	$view->addBlock("places/buildings.inc");
-	$view->addBlock("places/units.inc");
+
+	$view->blocks[] = new Block("places/placeInfo.inc",array("place"=>$address->getPlace()));
+	$view->blocks[] = new Block("places/buildings.inc",array("place"=>$address->getPlace()));
+	$view->blocks[] = new Block("places/units.inc",array("place"=>$address->getPlace()));
 
 	$view->render();
 ?>

@@ -34,7 +34,7 @@
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 			if (isset($fields['tag'])) { $options[] = "tag='$fields[tag]'"; }
-			if (isset($fields['status_id'])) { $options[] = "status_id='$fields[status_id]'"; }
+			if (isset($fields['segmentStatus_id'])) { $options[] = "segmentStatus_id='$fields[segmentStatus_id]'"; }
 			if (isset($fields['dataOwner_id'])) { $options[] = "dataOwner_id='$fields[dataOwner_id]'"; }
 			if (isset($fields['description'])) { $options[] = "description='$fields[description]'"; }
 			if (isset($fields['station'])) { $options[] = "station='$fields[station]'"; }

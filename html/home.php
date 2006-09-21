@@ -1,11 +1,11 @@
 <?php
 	$view = new View();
-	$view->addBlock("addresses/searchForm.inc");
+	$view->blocks[] = new Block("addresses/searchForm.inc");
 	if (isset($_GET['fullAddress']))
 	{
-		$view->search = new AddressSearch(array('fullAddress'=>$_GET['fullAddress']));
-		$view->response = new URL("addresses/viewAddress.php");
-		$view->addBlock("addresses/searchResults.inc");
+		$view->blocks[] = new Block("addresses/searchResults.inc",
+									array( "search"=>new AddressSearch(array('fullAddress'=>$_GET['fullAddress'])),
+											"response"=>new URL("addresses/viewAddress.php") ) );
 	}
 	$view->render();
 ?>

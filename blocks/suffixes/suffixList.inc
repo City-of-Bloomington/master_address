@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->suffixList
+*/
+?>
 <div class="interfaceBox">
-	<div class="titleBar">Suffixs</div>
+	<div class="titleBar">Suffixes</div>
 	<table>
 	<?php
-		$suffixList = new SuffixList();
-		$suffixList->find();
-		foreach($suffixList as $suffix)
+		foreach($this->suffixList as $suffix)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

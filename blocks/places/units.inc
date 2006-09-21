@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->place
+*/
+?>
 <div class="titleBar">Unassigned Units</div>
 <table>
 <tr><th>ID</th><th>Identifier</th><th>Type</th><th>Status</th><th>Mailable</th><th>Livable</th></tr>

@@ -4,7 +4,7 @@
 */
 	define("APPLICATION_NAME","master_address");	# Used to keep sessions on the same webserver seperate;
 
-	define("FRAMEWORK","/var/www/libraries/framework");	# Where on the filesystem this package of libraries is installed.
+	define("FRAMEWORK","/var/www/libraries/devel");	# Where on the filesystem this package of libraries is installed.
 														# These are shared among other applications we write, so they
 														# are a seperate package we will release.
 

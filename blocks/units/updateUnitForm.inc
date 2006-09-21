@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->unit
+*/
+?>
 <h2>Edit Unit</h2>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Unit Info</legend>
@@ -30,10 +35,10 @@
 			<label><input name="unit[livable]" id="unit-livable-no" type="radio" value="0" <?php if($this->unit->getLivable()==0) echo "checked=\"checked\""; ?> />No</label>
 		</td>
 	</tr>
-	<tr><td><label for="unit-status_id">Status</label></td>
-		<td><select name="unit[status_id]" id="unit-status_id">
+	<tr><td><label for="unit-unitStatus_id">Status</label></td>
+		<td><select name="unit[unitStatus_id]" id="unit-unitStatus_id">
 			<?php
-				$list = new StatusList();
+				$list = new StatusList("unit");
 				$list->find();
 				foreach($list as $status)
 				{

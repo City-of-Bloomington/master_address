@@ -1,5 +1,9 @@
 <?php
 	$view = new View();
-	$view->addBlock("districts/districtList.inc");
+
+	$districtList = new DistrictList();
+	$districtList->find();
+	$view->blocks[] = new Block("districts/districtList.inc",array("districtList"=>$districtList));
+
 	$view->render();
 ?>

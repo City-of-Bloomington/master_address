@@ -1,15 +1,16 @@
 <?php
 	$view = new View();
-	$view->response = new URL("viewAddress.php");
+	$response = new URL("viewAddress.php");
 
-	$view->addBlock("addresses/searchForm.inc");
+	$view->blocks[] = new Block("addresses/searchForm.inc");
 	if (isset($_GET['fullAddress']))
 	{
-		$view->search = new AddressSearch(array('fullAddress'=>$_GET['fullAddress']));
-		$view->addBlock("addresses/searchResults.inc");
+		$view->blocks[] = new Block("addresses/searchResults.inc",
+									array("search"=>new AddressSearch(array('fullAddress'=>$_GET['fullAddress'])),
+											"response"=>$response));
 	}
 
-	$view->addBlock("addresses/findAddressForm.inc");
+	$view->blocks[] = new Block("addresses/findAddressForm.inc");
 	if(isset($_GET['address']) && isset($_GET['name']))
 	{
 		$search = array();
@@ -18,8 +19,7 @@
 
 		if(count($search))
 		{
-			$view->addressList = new AddressList($search);
-			$view->addBlock("addresses/findAddressResults.inc");
+			$view->blocks[] = new Block("addresses/findAddressResults.inc",array("addressList"=>new AddressList($search),"response"=>$response));
 		}
 	}
 	$view->render();

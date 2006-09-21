@@ -1,6 +1,6 @@
 <?php
 /*
-	View variables:		$this->return_url
+	$this->return_url
 */
 
 ?>
@@ -10,9 +10,9 @@
 	<input name="form" type="hidden" value="addStreetForm" />
 	<input name="return_url" type="hidden" value="<?php echo $this->return_url; ?>" />
 	<label>Status
-		<select name="street[status_id]">
+		<select name="street[streetStatus_id]">
 		<?php
-			$statusList = new StatusList();
+			$statusList = new StatusList("street");
 			$statusList->find();
 			foreach($statusList as $status) { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
 		?>

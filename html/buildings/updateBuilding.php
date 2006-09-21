@@ -4,9 +4,9 @@
 */
 	verifyUser("Administrator");
 	$view = new View();
-	if (isset($_GET['building_id'])) { $view->building = new Building($_GET['building_id']); }
+	$updateBuildingForm = new Block("buildings/updateBuildingForm.inc");
+	if (isset($_GET['building_id'])) { $updateBuildingForm->building = new Building($_GET['building_id']); }
 
-	$view->addBlock("buildings/updateBuildingForm.inc");
 	if (isset($_POST['building']))
 	{
 		$building = new Building($_POST['building_id']);
@@ -25,9 +25,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-			$view->building = $building;
+			$updateBuildingForm->building = $building;
 		}
 	}
 
+	$view->blocks[] = $updateBuildingForm;
 	$view->render();
 ?>

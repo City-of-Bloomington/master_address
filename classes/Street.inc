@@ -3,7 +3,7 @@
 	{
 		private $id;
 		private $notes;
-		private $status_id;
+		private $streetStatus_id;
 
 		private $status;
 
@@ -25,9 +25,7 @@
 				{
 					if ($row = $result->fetch())
 					{
-						$this->id = $id;
-						$this->notes = $row['notes'];
-						$this->status_id = $row['status_id'];
+						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
 
 						$result->closeCursor();
 					}
@@ -50,7 +48,7 @@
 
 			$fields = array();
 			if ($this->notes) { $fields[] = "notes='{$this->notes}'"; } else { $fields[] = "notes=null"; }
-			if ($this->status_id) { $fields[] = "status_id={$this->status_id}"; } else { $fields[] = "status_id=null"; }
+			if ($this->streetStatus_id) { $fields[] = "streetStatus_id={$this->streetStatus_id}"; } else { $fields[] = "streetStatus_id=null"; }
 			$fields = implode(",",$fields);
 
 
@@ -126,12 +124,13 @@
 
 		public function getId() { return $this->id; }
 		public function getNotes() { return $this->notes; }
-		public function getStatus_id() { return $this->status_id; }
+		public function getStreetStatus_id() { return $this->streetStatus_id; }
+		public function getStatus_id() { return $this->streetStatus_id; }
 		public function getStatus()
 		{
-			if ($this->status_id)
+			if ($this->streetStatus_id)
 			{
-				if (!$this->status) { $this->status = new Status($this->status_id); }
+				if (!$this->status) { $this->status = new Status("street",$this->streetStatus_id); }
 				return $this->status;
 			}
 			else return null;
@@ -177,6 +176,8 @@
 		public function __toString() { return $this->getStreetName()->getName()->getFullname(); }
 
 		public function setNotes($string) { $this->notes = trim($string); }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
+		public function setStreetStatus_id($int) { $this->status = new Status("street",$int); $this->streetStatus_id = $int; }
+		public function setStatus_id($int) { $this->setStreetStatus_id($int); }
+		public function setStatus($status) { $this->streetStatus_id = $status->getId(); $this->status = $status; }
 	}
 ?>

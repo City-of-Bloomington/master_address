@@ -3,7 +3,6 @@
 	$_GET variables:	id
 */
 	$view = new View();
-	$view->district = new District($_GET['id']);
-	$view->addBlock("districts/districtInfo.inc");
+	$view->blocks[] = new Block("districts/districtInfo.inc",array("district"=>new District($_GET['id'])));
 	$view->render();
 ?>

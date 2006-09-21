@@ -9,6 +9,11 @@
 */
 	verifyUser("Administrator");
 
+	$view = new View();
+	$form = new Block("directions/updateDirectionForm.inc");
+	if (isset($_GET['id'])) { $form->direction = new Direction($_GET['id']); }
+
+
 	if (isset($_POST['direction']))
 	{
 		$direction = new Direction($_POST['id']);
@@ -26,18 +31,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->direction = $direction;
-			$view->addBlock("directions/updateDirectionForm.inc");
-			$view->render();
+			$form->direction = $direction;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->direction = new Direction($_GET['id']);
-		$view->addBlock("directions/updateDirectionForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

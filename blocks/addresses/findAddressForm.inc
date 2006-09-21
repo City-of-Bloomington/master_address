@@ -77,15 +77,15 @@
 			<input name="address[zip]" id="address-zip" size="5" maxlength="5" value="<?php if(isset($_GET['address']['zip'])) echo $_GET['address']['zip']; ?>" />
 			<input name="address[zipplus4]" id="address-zipplus4" size="4" maxlength="4" value="<?php if(isset($_GET['address']['zipplus4'])) echo $_GET['address']['zipplus4']; ?>" />
 		</td></tr>
-	<tr><td><label for="address-status_id">Status</label></td>
+	<tr><td><label for="address-addressStatus_id">Status</label></td>
 		<td colspan="2">
-			<select name="address[status_id]" id="address-status_id"><option></option>
+			<select name="address[addressStatus_id]" id="address-addressStatus_id"><option></option>
 			<?php
-				$list = new StatusList();
+				$list = new StatusList("address");
 				$list->find();
 				foreach($list as $status)
 				{
-					if (isset($_GET['address']['status_id']) && $_GET['address']['status_id']==$status->getId())
+					if (isset($_GET['address']['addressStatus_id']) && $_GET['address']['addressStatus_id']==$status->getId())
 						{ echo "<option selected=\"selected\">{$status->getStatus()}</option>"; }
 					else { echo "<option>{$status->getStatus()}</option>"; }
 				}

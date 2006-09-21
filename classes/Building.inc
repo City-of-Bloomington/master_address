@@ -6,7 +6,7 @@
 		private $startDate;
 		private $endDate;
 		private $GISTag;
-		private $status_id;
+		private $buildingStatus_id;
 
 		private $status;
 		private $unitList;
@@ -36,8 +36,8 @@
 				# This is where the code goes to generate a new, empty instance.
 				# Set any default values for properties that need it here
 				$this->startDate = $this->dateArrayToString(getdate());
-				$this->status = new Status(1);
-				$this->status_id = 1;
+				$this->status = new Status("building",1);
+				$this->buildingStatus_id = 1;
 			}
 		}
 
@@ -55,7 +55,7 @@
 			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
 			$fields[] = $this->GISTag ? "GISTag='{$this->GISTag}'" : "GISTag=null";
-			$fields[] = $this->status_id ? "status_id='{$this->status_id}'" : "status_id=null";
+			$fields[] = $this->buildingStatus_id ? "buildingStatus_id='{$this->buildingStatus_id}'" : "buildingStatus_id=null";
 
 			$fields = implode(",",$fields);
 
@@ -87,10 +87,11 @@
 		public function getStartDate() { return $this->startDate; }
 		public function getEndDate() { return $this->endDate; }
 		public function getGISTag() { return $this->GISTag; }
-		public function getStatus_id() { return $this->status_id; }
+		public function getBuildingStatus_id() { return $this->buildingStatus_id; }
+		public function getStatus_id() { return $this->buildingStatus_id; }
 		public function getStatus()
 		{
-			if (!$this->status) { $this->status = new Status($this->status_id); }
+			if (!$this->status) { $this->status = new Status("building",$this->buildingStatus_id); }
 			return $this->status;
 		}
 		public function getUnits()
@@ -105,7 +106,8 @@
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setGISTag($string) { $this->GISTag = trim($string); }
-		public function setStatus_id($int) { $this->status = new Status($int); $this->status_id = $int; }
-		public function setStatus($status) { $this->status_id = $status->getStatus(); $this->status = $status; }
+		public function setBuildingStatus_id($int) { $this->status = new Status("building",$int); $this->buildingStatus_id = $int; }
+		public function setStatus_id($int) { $this->setBuildingStatus_id($int); }
+		public function setStatus($status) { $this->buildingStatus_id = $status->getId(); $this->status = $status; }
 	}
 ?>

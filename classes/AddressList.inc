@@ -40,7 +40,7 @@
 			if (isset($fields['city_id'])) { $options[] = "a.city_id='$fields[city_id]'"; }
 			if (isset($fields['zip'])) { $options[] = "a.zip='$fields[zip]'"; }
 			if (isset($fields['zipplus4'])) { $options[] = "a.zipplus4='$fields[zipplus4]'"; }
-			if (isset($fields['status_id'])) { $options[] = "a.status_id='$fields[status_id]'"; }
+			if (isset($fields['addressStatus_id'])) { $options[] = "a.addressStatus_id='$fields[addressStatus_id]'"; }
 			if (isset($fields['active'])) { $options[] = "a.active='$fields[active]'"; }
 			if (isset($fields['censusBlockFIPSCode'])) { $options[] = "a.censusBlockFIPSCode='$fields[censusBlockFIPSCode]'"; }
 			if (isset($fields['statePlaneX'])) { $options[] = "a.statePlaneX='$fields[statePlaneX]'"; }

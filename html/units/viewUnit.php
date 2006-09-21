@@ -3,15 +3,12 @@
 	$_GET variables:	unit_id
 */
 	$view = new View();
-	$view->unit = new Unit($_GET['unit_id']);
-	$view->addBlock("units/unitInfo.inc");
+	$unit = new Unit($_GET['unit_id']);
 
-	$view->building = $view->unit->getBuilding();
-	$view->addBlock("buildings/buildingInfo.inc");
-
-	$view->place = $view->unit->getPlace();
-	$view->addBlock("places/placeInfo.inc");
-	$view->addBlock("places/addresses.inc");
+	$view->blocks[] = new Block("units/unitInfo.inc",array("unit"=>$unit));
+	$view->blocks[] = new Block("buildings/buildingInfo.inc",array("building"=>$unit->getBuilding()));
+	$view->blocks[] = new Block("places/placeInfo.inc",array("place"=>$unit->getPlace()));
+	$view->blocks[] = new Block("places/addresses.inc",array("place"=>$unit->getPlace()));
 
 	$view->render();
 ?>

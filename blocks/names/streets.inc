@@ -1,4 +1,7 @@
 <?php
+/*
+	$this->name
+*/
 	if (userHasRole("Administrator"))
 	{
 		$addButton = "<button type=\"button\" class=\"addSmall\" onclick=\"document.location.href='".BASE_URL."/names/addStreetName.php?name_id={$this->name->getId()}';\">Add</button>";

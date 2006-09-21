@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->township
+*/
+?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Township</legend>
 	<input name="id" type="hidden" value="<?php echo $this->township->getId(); ?>" />

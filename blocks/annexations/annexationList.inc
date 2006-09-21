@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->annexationList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">Annexations</div>
 	<table>
 	<?php
-		$annexationList = new AnnexationList();
-		$annexationList->find();
-		foreach($annexationList as $annexation)
+		foreach($this->annexationList as $annexation)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

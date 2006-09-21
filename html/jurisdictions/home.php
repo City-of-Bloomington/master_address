@@ -1,5 +1,9 @@
 <?php
 	$view = new View();
-	$view->addBlock("jurisdictions/jurisdictionList.inc");
+
+	$jurisdictionList = new JurisdictionList();
+	$jurisdictionList->find();
+	$view->blocks[] = new Block("jurisdictions/jurisdictionList.inc",array("jurisdictionList"=>$jurisdictionList));
+
 	$view->render();
 ?>

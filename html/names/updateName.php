@@ -5,11 +5,11 @@
 	$_POST variables:	name
 */
 	verifyUser("Administrator");
-	if (isset($_GET['name_id'])) { $_SESSION['name'] = new Name($_GET['name_id']); }
-
 	$view = new View();
-	$view->name = $_SESSION['name'];
-	$view->addBlock("names/updateNameForm.inc");
+	$form = new Block("names/updateNameForm.inc");
+	if (isset($_GET['name_id'])) { $form->name = new Name($_GET['name_id']); }
+
+
 	if (isset($_POST['name']) && $_POST['id'])
 	{
 		$name = new Name($_POST['id']);
@@ -22,12 +22,16 @@
 		try
 		{
 			$name->save();
-
-			unset($_SESSION['name']);
-			Header("Location: viewName.php?name_id={$view->name->getId()}");
+			Header("Location: viewName.php?name_id={$name->getId()}");
+			exit();
 		}
-		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
+		catch (Exception $e)
+		{
+			$_SESSION['errorMessages'][] = $e;
+			$form->name = $name;
+		}
 	}
 
+	$view->blocks[] = $form;
 	$view->render();
 ?>

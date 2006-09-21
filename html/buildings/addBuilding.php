@@ -7,19 +7,18 @@
 	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 
 	$view = new View("popup");
-	$view->place = $_SESSION['place'];
 
 	# Show the find form
-	$view->addBlock("buildings/findBuildingForm.inc");
+	$view->blocks[] = new Block("buildings/findBuildingForm.inc");
 	if (isset($_GET['building']))
 	{
 		$search = array();
 		foreach($_GET['building'] as $field=>$value) { if ($value) $search[$field] = $value; }
 		if (count($search))
 		{
-			$view->response = new URL("addBuilding.php?place_id={$_SESSION['place']->getId()}");
-			$view->buildingList = new BuildingList($search);
-			$view->addBlock("buildings/findBuildingResults.inc");
+			$view->blocks[] = new Block("buildings/findBuildingResults.inc",
+										array("response"=>new URL("addBuilding.php?place_id={$_SESSION['place']->getId()}"),
+										"buildingList"=>new BuildingList($search)));
 		}
 	}
 
@@ -32,7 +31,7 @@
 	}
 
 	# Show the Add form
-	$view->addBlock("buildings/addBuildingForm.inc");
+	$view->blocks[] = new Block("buildings/addBuildingForm.inc");
 	if (isset($_POST['building']))
 	{
 		$building = new Building();

@@ -6,6 +6,9 @@
 						districtType[ type ]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block("districtTypes/updateDistrictTypeForm.inc");
+	if (isset($_GET['id'])) { $form->districtType = new DistrictType($_GET['id']); }
 
 	if (isset($_POST['districtType']))
 	{
@@ -24,18 +27,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->districtType = $districtType;
-			$view->addBlock("districtTypes/updateDistrictTypeForm.inc");
-			$view->render();
+			$form->districtType = $districtType;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->districtType = new DistrictType($_GET['id']);
-		$view->addBlock("districtTypes/updateDistrictTypeForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

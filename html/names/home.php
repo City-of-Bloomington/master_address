@@ -3,24 +3,25 @@
 	$_GET variables:	name
 */
 	$view = new View();
-	$view->response = new URL("viewName.php");
-	$view->addBlock("names/findNameForm.inc");
+	$response = new URL("viewName.php");
+
+	$view->blocks[] = new Block("names/findNameForm.inc");
 	if (isset($_GET['name']))
 	{
 		$search = array();
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->nameList = new NameList();
-			$view->nameList->search($search);
-			$view->addBlock("names/findNameResults.inc");
+			$nameList = new NameList();
+			$nameList->search($search);
+			$view->blocks[] = new Block("names/findNameResults.inc",array("nameList"=>$nameList,"response"=>$response));
 		}
 	}
 
 	# If they're logged in, they can add a new name
 	if (userHasRole("Administrator"))
 	{
-		$view->addBlock("names/addNameForm.inc");
+		$view->blocks[] = new Block("names/addNameForm.inc");
 		if (isset($_POST['name']))
 		{
 			$name = new Name();
@@ -34,8 +35,8 @@
 			{
 				$name->save();
 
-				$view->response->parameters['name_id'] = $name->getId();
-				Header("Location: {$view->response->getURL()}");
+				$response->parameters['name_id'] = $name->getId();
+				Header("Location: {$response->getURL()}");
 				exit();
 			}
 			catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }

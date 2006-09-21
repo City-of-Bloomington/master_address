@@ -1,5 +1,6 @@
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-<fieldset><legend>Status</legend>
+<fieldset><legend><?php echo ucfirst($this->status->getType()); ?> Status</legend>
+	<input name="type" type="hidden" value="<?php echo $this->status->getType(); ?>" />
 	<input name="id" type="hidden" value="<?php echo $this->status->getId(); ?>" />
 
 	<table>

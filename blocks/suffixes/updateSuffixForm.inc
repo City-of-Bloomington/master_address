@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->suffix
+*/
+?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Suffix</legend>
 	<input name="id" type="hidden" value="<?php echo $this->suffix->getId(); ?>" />

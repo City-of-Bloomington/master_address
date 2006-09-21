@@ -6,6 +6,9 @@
 						jurisdiction [ name ]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block("jurisdictions/updateJurisdictionForm.inc");
+	if (isset($_GET['id'])) { $form->jurisdiction = new Jurisdiction($_GET['id']); }
 
 	if (isset($_POST['jurisdiction']))
 	{
@@ -24,18 +27,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->jurisdiction = $jurisdiction;
-			$view->addBlock("jurisdictions/updateJurisdictionForm.inc");
-			$view->render();
+			$form->jurisdiction = $jurisdiction;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->jurisdiction = new Jurisdiction($_GET['id']);
-		$view->addBlock("jurisdictions/updateJurisdictionForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

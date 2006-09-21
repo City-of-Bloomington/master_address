@@ -39,10 +39,61 @@ CREATE TABLE travelWayCodes (
 	id tinyint(1) unsigned NOT NULL,
 	PRIMARY KEY(id));
 
-CREATE TABLE statuses (
-	id int unsigned auto_increment NOT NULL,
-	status varchar(30) UNIQUE NOT NULL,
-	PRIMARY KEY(id)) engine=InnoDB;
+CREATE TABLE placeStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE addressStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE buildingStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE unitStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE streetStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE intersectionStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE segmentStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE inventoryStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE constructionStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE mapStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
+CREATE TABLE sidewalkStatuses (
+	id int unsigned not null primary key auto_increment,
+	status varchar(30) not null unique
+) engine=InnoDB;
+
 
 CREATE TABLE suffixes (
 	id int unsigned auto_increment NOT NULL,
@@ -158,15 +209,15 @@ CREATE TABLE names (
 CREATE TABLE streets (
 	id int unsigned auto_increment NOT NULL,
 	notes varchar(255),
-	status_id int unsigned DEFAULT 1 NOT NULL,
+	streetStatus_id int unsigned DEFAULT 1 NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+	FOREIGN KEY(streetStatus_id) REFERENCES streetStatuses (id)) engine=InnoDB;
 
 CREATE TABLE intersections (
 	id int unsigned auto_increment NOT NULL,
 	tag varchar(8) not null,
 	name varchar(128),
-	status_id int unsigned,
+	intersectionStatus_id int unsigned,
 	jurisdiction_id int unsigned,
 	x int(7) unsigned,
 	y int(7) unsigned,
@@ -174,12 +225,12 @@ CREATE TABLE intersections (
 	PRIMARY KEY(id),
 	unique (tag),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+	FOREIGN KEY(intersectionStatus_id) REFERENCES intersectionStatuses (id)) engine=InnoDB;
 
 CREATE TABLE segments (
 	id int unsigned auto_increment NOT NULL,
 	tag varchar(8) NOT NULL,
-	status_id int unsigned DEFAULT 1 NOT NULL,
+	segmentStatus_id int unsigned DEFAULT 1 NOT NULL,
 	dataOwner_id int unsigned,
 	description varchar(255),
 	station int unsigned,
@@ -218,16 +269,16 @@ CREATE TABLE segments (
 	PRIMARY KEY(id),
 	unique (tag),
 	FOREIGN KEY(dataOwner_id) REFERENCES jurisdictions (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id),
+	FOREIGN KEY(segmentStatus_id) REFERENCES segmentStatuses (id),
 	FOREIGN KEY(jurisdiction_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(jurisdictionLeft_id) REFERENCES jurisdictions (id),
 	FOREIGN KEY(jurisdictionRight_id) REFERENCES jurisdictions (id),
-	FOREIGN KEY(constructionStatus_id) REFERENCES statuses (id),
-	FOREIGN KEY(inventoryStatus_id) REFERENCES statuses (id),
+	FOREIGN KEY(constructionStatus_id) REFERENCES constructionStatuses (id),
+	FOREIGN KEY(inventoryStatus_id) REFERENCES inventoryStatuses (id),
 	FOREIGN KEY(thoroughfareClass_id) REFERENCES thoroughfareClasses (id),
 	FOREIGN KEY(travelDirection_id) REFERENCES directions (id),
 	FOREIGN KEY(travelWayCode_id) REFERENCES travelWayCodes (id),
-	FOREIGN KEY(mapStatus_id) REFERENCES statuses (id),
+	FOREIGN KEY(mapStatus_id) REFERENCES mapStatuses (id),
 	FOREIGN KEY(intersectionAhead_id) REFERENCES intersections (id),
 	FOREIGN KEY(intersectionBack_id) REFERENCES intersections (id),
 	FOREIGN KEY(lowAddressIntersection_id) REFERENCES intersections (id),
@@ -253,7 +304,7 @@ CREATE TABLE places (
 	longitude float(10,6),
 	startDate date,
 	endDate date,
-	status_id int unsigned NOT NULL default 1,
+	placeStatus_id int unsigned NOT NULL default 1,
 	plat_id int unsigned,
 	lotNumber int unsigned,
 	PRIMARY KEY(id),
@@ -262,7 +313,7 @@ CREATE TABLE places (
 	FOREIGN KEY(trashPickupDay_id) REFERENCES trashPickupDays (id),
 	FOREIGN KEY(recyclingPickupWeek_id) REFERENCES recyclingPickupWeeks (id),
 	FOREIGN KEY(placeType_id) REFERENCES placeTypes (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id),
+	FOREIGN KEY(placeStatus_id) REFERENCES placeStatuses (id),
 	FOREIGN KEY(plat_id) REFERENCES plats (id)) engine=InnoDB;
 
 CREATE TABLE buildings (
@@ -271,9 +322,9 @@ CREATE TABLE buildings (
 	startDate date NOT NULL,
 	endDate date,
 	GISTag varchar(20),
-	status_id int unsigned DEFAULT 1 NOT NULL,
+	buildingStatus_id int unsigned DEFAULT 1 NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+	FOREIGN KEY(buildingStatus_id) REFERENCES buildingStatuses (id)) engine=InnoDB;
 
 CREATE TABLE units (
 	id int unsigned auto_increment NOT NULL,
@@ -284,12 +335,12 @@ CREATE TABLE units (
 	mailable tinyint(1) unsigned,
 	livable tinyint(1) unsigned,
 	notes varchar(255),
-	status_id int unsigned,
+	unitStatus_id int unsigned,
 	PRIMARY KEY(id),
 	FOREIGN KEY(building_id) REFERENCES buildings (id),
 	FOREIGN KEY(unitType_id) REFERENCES unitTypes (id),
 	FOREIGN KEY(place_id) REFERENCES places (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+	FOREIGN KEY(unitStatus_id) REFERENCES unitStatuses (id)) engine=InnoDB;
 
 CREATE TABLE addresses (
 	id int unsigned auto_increment NOT NULL,
@@ -302,7 +353,7 @@ CREATE TABLE addresses (
 	city_id int unsigned NOT NULL,
 	zip int(5) unsigned zerofill,
 	zipplus4 int(4) unsigned zerofill,
-	status_id int unsigned DEFAULT 1 NOT NULL,
+	addressStatus_id int unsigned DEFAULT 1 NOT NULL,
 	active enum('Y','N') DEFAULT 'Y' NOT NULL,
 	startDate date NOT NULL,
 	endDate date,
@@ -312,7 +363,7 @@ CREATE TABLE addresses (
 	FOREIGN KEY(street_id) REFERENCES streets (id),
 	FOREIGN KEY(segment_id) REFERENCES segments (id),
 	FOREIGN KEY(city_id) REFERENCES cities (id),
-	FOREIGN KEY(status_id) REFERENCES statuses (id)) engine=InnoDB;
+	FOREIGN KEY(addressStatus_id) REFERENCES addressStatuses (id)) engine=InnoDB;
 
 CREATE TABLE streetNames (
 	id int unsigned auto_increment NOT NULL,

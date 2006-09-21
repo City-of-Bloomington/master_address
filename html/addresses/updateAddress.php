@@ -6,10 +6,11 @@
 	verifyUser("Administrator");
 
 	$view = new View();
-	if (isset($_GET['address_id'])) { $view->address = new Address($_GET['address_id']); }
+	$updateAddressForm = new Block("addresses/updateAddressForm.inc");
+	if (isset($_GET['address_id'])) { $updateAddressForm->address = new Address($_GET['address_id']); }
 	if (isset($_GET['return_url'])) { $_SESSION['return_url'] = new URL($_GET['return_url']); }
 
-	$view->addBlock("addresses/updateAddressForm.inc");
+
 	if (isset($_POST['address']))
 	{
 		$address = new Address($_POST['address_id']);
@@ -28,9 +29,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-			$view->address = $address;
+			$updateAddressForm->address = $address;
 		}
 	}
 
+	$view->blocks[] = $updateAddressForm;
 	$view->render();
 ?>

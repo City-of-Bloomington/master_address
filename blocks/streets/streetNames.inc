@@ -9,7 +9,7 @@
 		<?php
 			if (userHasRole("Administrator"))
 			{
-				echo "<button type=\"button\" class=\"addSmall\" onclick=\"document.location.href='".BASE_URL."/streets/addStreetName.php?street_id={$this->street->getId()};return_url=$this->return_url';\">Add</button>";
+				echo "<button type=\"button\" class=\"addSmall\" onclick=\"document.location.href='".BASE_URL."/streets/addStreetName.php?street_id={$this->street->getId()};return_url={$this->response->getURL()}';\">Add</button>";
 			}
 		?>
 		Street Names

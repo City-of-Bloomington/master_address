@@ -1,11 +1,14 @@
-<h1><?php
-		if (userHasRole("Administrator"))
-		{
-			echo "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/names/updateName.php?name_id={$this->name->getId()}';\">Edit</button>";
-		}
-		echo "Name:{$this->name->getId()}";
-	?>
-</h1>
+<?php
+/*
+	$this->name
+*/
+	if (userHasRole("Administrator"))
+	{
+		$editButton =  "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='".BASE_URL."/names/updateName.php?name_id={$this->name->getId()}';\">Edit</button>";
+	}
+	else { $editButton = ""; }
+?>
+<h1><?php echo "{$editButton}Name:{$this->name->getId()}"; ?> </h1>
 <h2><?php echo $this->name; ?></h2>
 <table>
 <tr><th>Town</th><td><?php echo $this->name->getTown(); ?></td></tr>

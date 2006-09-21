@@ -8,6 +8,7 @@
 		private $districtType;
 
 		private $places = array();
+		private $deletedPlaceIDs = array();
 		private $newPlaceIDs = array();
 
 
@@ -59,7 +60,7 @@
 			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
 
-			if (count($this->getPlaces())) { $this->savePlaces(); }
+			if (count($this->deletedPlaceIDs) || count($this->newPlaceIDs)) { $this->savePlaces(); }
 		}
 
 		private function update($fields)
@@ -88,18 +89,29 @@
 
 		public function deletePlace($place_id)
 		{
-			foreach($this->places as $i=>$place) { if($place->getId() == $place_id) unset($this->places[$i]); }
+			foreach($this->places as $i=>$place)
+			{
+				if($place->getId() == $place_id)
+				{
+					unset($this->places[$i]);
+					$this->deletedPlaceIDs[] = $place_id;
+				}
+			}
 		}
 
 		private function savePlaces()
 		{
-			$ids = array();
-			foreach($this->getPlaces() as $place) { $ids[] = $place->getId(); }
-			$ids = implode(",",$ids);
+			global $PDO;
 
-			$sql = "delete from district_places where district_id={$this->id} and place_id not in ($ids)";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			# Clean out all the deleted ones
+			if (count($this->deletedPlaceIDs))
+			{
+				$ids = implode(",",$this->deletedPlaceIDs);
+				$sql = "delete from district_places where district_id={$this->id} and place_id in ($ids)";
+				if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			}
 
+			# Add in the new ones
 			foreach ($this->newPlaceIDs as $place_id)
 			{
 				$sql = "insert district_places values($place_id,{$this->id})";

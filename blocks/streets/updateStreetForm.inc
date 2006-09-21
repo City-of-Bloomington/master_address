@@ -8,11 +8,12 @@
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Street Info</legend>
 	<input name="street_id" type="hidden" value="<?php echo $this->street->getId(); ?>" />
+	<input name="response" type="hidden" value="<?php echo $this->response->getURL(); ?>" />
 	<table>
-	<tr><td><label for="street-status_id">Status</label></td>
-		<td><select name="street[status_id]" id="street-status">
+	<tr><td><label for="street-streetStatus_id">Status</label></td>
+		<td><select name="street[streetStatus_id]" id="street-streetStatus">
 			<?php
-				$list = new StatusList();
+				$list = new StatusList("street");
 				$list->find();
 				foreach($list as $status)
 				{

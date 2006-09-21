@@ -1,9 +1,15 @@
 <?php
 /*
+	$_GET variables:	id
+	------------------------------------------------
 	$_POST variables:	id
 						buildingType[ description ]
 */
 	verifyUser("Administrator");
+	$view = new View();
+
+	$form = new Block("buildingTypes/updateBuildingTypeForm.inc");
+	if (isset($_GET['id'])) { $form->buildingType = new BuildingType($_GET['id']); }
 
 	if (isset($_POST['buildingType']))
 	{
@@ -22,17 +28,10 @@
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-			$view = new View();
-			$view->buildingType = $buildingType;
-			$view->addBlock("buildingTypes/updateBuildingTypeForm.inc");
-			$view->render();
+			$form->buildingType = $buildingType;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->buildingType = new BuildingType($_GET['id']);
-		$view->addBlock("buildingTypes/updateBuildingTypeForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>
