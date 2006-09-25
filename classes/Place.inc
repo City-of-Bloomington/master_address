@@ -34,6 +34,7 @@
 
 		private $addressList;
 		private $buildings = array();
+		private $deletedBuildingIds = array();
 		private $newBuildingIds = array();
 
 
@@ -96,7 +97,7 @@
 			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
 			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
 			$fields[] = $this->placeStatus_id ? "placeStatus_id={$this->placeStatus_id}" : "placeStatus_id=null";
-			$fields[] = $this->plat_id ? "plat_iid={$this->plat_id}" : "plat_id=null";
+			$fields[] = $this->plat_id ? "plat_id={$this->plat_id}" : "plat_id=null";
 			$fields[] = $this->lotNumber ? "lotNumber={$this->lotNumber}" : "lotNumber=null";
 			$fields = implode(",",$fields);
 
@@ -134,40 +135,36 @@
 		{
 			foreach($this->getBuildings() as $i=>$building)
 			{
-				if ($building->getId() == $building_id) { unset($this->buildings[$i]); }
+				if ($building->getId() == $building_id)
+				{
+					unset($this->buildings[$i]);
+					$this->deletedBuildingIds[] = $building_id;
+				}
 			}
 		}
 		public function saveBuildings()
 		{
 			global $PDO;
 
-			$ids = array();
-			foreach ($this->getBuildings() as $building) { $ids[] = $building->getId(); }
-			$ids = implode(",",$ids);
+			# Clean out all the deleted buildings
+			if (count($this->deletedBuildingIds))
+			{
+				$ids = implode(",",$this->deletedBuildingIds);
+				$sql = "delete from building_places where place_id={$this->id} and building_id in ($ids)";
+				if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			}
 
-			$PDO->beginTransaction();
-				$sql = "delete from building_places where place_id={$this->id} and building_id not in ($ids)";
-				if (false === $PDO->exec($sql))
-				{
-					$PDO->rollBack();
-					$e = $PDO->errorInfo();
-					throw new Exception($sql.$e[2]);
-				}
 
-				if (count($this->newBuildingIds))
+			# Add in all the new buildings
+			if (count($this->newBuildingIds))
+			{
+				$statement = $PDO->prepare("insert building_places values (?,{$this->id})");
+				foreach($this->newBuildingIds as $building_id)
 				{
-					$statement = $PDO->prepare("insert building_places values (?,{$this->id})");
-					foreach($this->newBuildingIds as $building_id)
-					{
-						try { $statement->execute(array("$building_id")); }
-						catch (PDOException $e)
-						{
-							$PDO->rollBack();
-							throw new Exception ($e);
-						}
-					}
+					try { $statement->execute(array("$building_id")); }
+					catch (PDOException $e) { throw new Exception ($e); }
 				}
-			$PDO->commit();
+			}
 		}
 
 
@@ -277,6 +274,8 @@
 			}
 			else return null;
 		}
+
+		public function deletePlat() { unset($this->plat); unset($this->plat_id); }
 
 
 		public function setName($string) { $this->name = trim($string); }

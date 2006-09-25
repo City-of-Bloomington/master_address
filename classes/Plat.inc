@@ -11,6 +11,7 @@
 
 		private $township;
 		private $platType;
+		private $placeList;
 
 
 
@@ -92,7 +93,8 @@
 		public function getCabinet() { return $this->cabinet; }
 		public function getEnvelope() { return $this->envelope; }
 		public function getNotes() { return $this->notes; }
-
+		public function getType() { return $this->getPlatType(); }
+		public function getPlaces() { return $this->getPlaceList(); }
 		public function getTownship()
 		{
 			if ($this->township_id)
@@ -111,7 +113,11 @@
 			}
 			else return null;
 		}
-		public function getType() { return $this->getPlatType(); }
+		public function getPlaceList()
+		{
+			if (!$this->placeList) { $this->placeList = new PlaceList(array('plat_id'=>$this->id)); }
+			return $this->placeList;
+		}
 
 
 		public function setName($string) { $this->name = trim($string); }

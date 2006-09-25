@@ -1,5 +1,6 @@
+<h2>Find a Place</h2>
 <form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-<fieldset><legend>Place</legend>
+<fieldset><legend>Place Info</legend>
 	<table>
 	<tr><td><label for="place-id">Place ID</label></td>
 		<td><input name="place[id]" id="place-id" value="<?php if(isset($_GET['place']['id'])) echo $_GET['place']['id']; ?>" /></td></tr>
