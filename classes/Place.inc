@@ -30,6 +30,7 @@
 		private $recyclingPickupWeek;
 		private $placeType;
 		private $status;
+		private $plat;
 
 		private $addressList;
 		private $buildings = array();

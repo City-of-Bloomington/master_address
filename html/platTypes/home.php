@@ -1,5 +1,9 @@
 <?php
 	$view = new View();
-	$view->addBlock("platTypes/platTypeList.inc");
+
+	$platTypeList = new PlatTypeList();
+	$platTypeList->find();
+	$view->blocks[] = new Block("platTypes/platTypeList.inc",array('platTypeList'=>$platTypeList));
+
 	$view->render();
 ?>

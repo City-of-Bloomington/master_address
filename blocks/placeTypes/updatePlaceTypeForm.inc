@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->placeType
+*/
+?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>PlaceType</legend>
 	<input name="id" type="hidden" value="<?php echo $this->placeType->getId(); ?>" />

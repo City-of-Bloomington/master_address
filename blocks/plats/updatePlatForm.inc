@@ -1,3 +1,8 @@
+<?php
+/*
+	$this->plat
+*/
+?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Plat</legend>
 	<input name="plat_id" type="hidden" value="<?php echo $this->plat->getId(); ?>" />

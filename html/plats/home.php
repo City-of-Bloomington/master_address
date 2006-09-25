@@ -1,15 +1,13 @@
 <?php
 	$view = new View();
-	$view->addBlock("plats/findPlatForm.inc");
+	$view->blocks[] = new Block("plats/findPlatForm.inc");
 	if (isset($_GET['plat']))
 	{
 		$search = array();
 		foreach($_GET['plat'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->response = new URL("viewPlat.php");
-			$view->platList = new PlatList($search);
-			$view->addBlock("plats/findPlatResults.inc");
+			$view->blocks[] = new Block("plats/findPlatResults.inc",array("response"=>new URL("viewPlat.php"),"platList"=>new PlatList($search)));
 		}
 	}
 	$view->render();

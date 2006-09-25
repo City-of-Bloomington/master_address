@@ -3,7 +3,6 @@
 	$_GET variables:	plat_id
 */
 	$view = new View();
-	$view->plat = new Plat($_GET['plat_id']);
-	$view->addBlock("plats/platInfo.inc");
+	$view->blocks[] = new Block("plats/platInfo.inc",array("plat"=>new Plat($_GET['plat_id'])));
 	$view->render();
 ?>

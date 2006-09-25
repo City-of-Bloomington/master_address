@@ -12,6 +12,9 @@
 								]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block('plats/updatePlatForm.inc');
+	if (isset($_GET['plat_id'])) { $form->plat = new Plat($_GET['plat_id']); }
 	if (isset($_POST['plat']))
 	{
 		$plat = new Plat($_POST['id']);
@@ -25,22 +28,15 @@
 		{
 			$plat->save();
 			Header("Location: viewPlat.php?plat_id={$plat->getId()}");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->plat = $plat;
-			$view->addBlock("plats/updatePlatForm.inc");
-			$view->render();
+			$form->plat = $plat;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->plat = new Plat($_GET['plat_id']);
-		$view->addBlock("plats/updatePlatForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

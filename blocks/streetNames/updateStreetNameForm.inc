@@ -1,12 +1,14 @@
 <?php
 /*
 	$this->streetName
+	$this->response
 */
 ?>
 <h1>Edit Street Name</h1>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <fieldset><legend>Street Name Info</legend>
 	<input name="streetName_id" type="hidden" value="<?php echo $this->streetName->getId(); ?>" />
+	<input name="response" type="hidden" value="<?php echo $this->response->getURL(); ?>" />
 	<div><label>Type
 				<select name="streetName[streetNameType_id]" id="streetName-streetNameType_id">
 				<?php

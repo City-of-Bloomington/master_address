@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->platTypeList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">PlatTypes</div>
 	<table>
 	<?php
-		$list = new PlatTypeList();
-		$list->find();
-		foreach($list as $type)
+		foreach($this->platTypeList as $type)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

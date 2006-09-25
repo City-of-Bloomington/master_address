@@ -1,10 +1,13 @@
+<?php
+/*
+	$this->placeTypeList
+*/
+?>
 <div class="interfaceBox">
 	<div class="titleBar">PlaceTypes</div>
 	<table>
 	<?php
-		$placeTypeList = new PlaceTypeList();
-		$placeTypeList->find();
-		foreach($placeTypeList as $placeType)
+		foreach($this->placeTypeList as $placeType)
 		{
 			echo "<tr>";
 				if (userHasRole("Administrator"))

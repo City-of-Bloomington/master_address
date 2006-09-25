@@ -68,7 +68,7 @@
 <tr><th colspan="2">Plat</th>
 	<th>Lot</th>
 	<th></th></tr>
-<tr><td colspan="2"><?php if ($this->place->getPlat()) echo $this->place->getPlat(); ?></td>
+<tr><td colspan="2"> <?php if ($this->place->getPlat()) { echo "<a href=\"".BASE_URL."/plats/viewPlat.php?plat_id={$this->place->getPlat()->getId()}\">{$this->place->getPlat()->getName()}</a>"; } ?></td>
 	<td><?php echo $this->place->getLotNumber(); ?></td>
 	<td></td></tr>
 

@@ -3,11 +3,12 @@
 	$_GET variables:	place_id
 */
 	$view = new View();
-	$view->place = new Place($_GET['place_id']);
-	$view->addBlock("places/placeInfo.inc");
-	$view->addBlock("places/addresses.inc");
-	$view->addBlock("places/buildings.inc");
-	$view->addBlock("places/units.inc");
-	$view->addBlock("places/history.inc");
+	$place = new Place($_GET['place_id']);
+
+	$view->blocks[] = new Block("places/placeInfo.inc",array('place'=>$place));
+	$view->blocks[] = new Block("places/addresses.inc",array('place'=>$place));
+	$view->blocks[] = new Block("places/buildings.inc",array('place'=>$place));
+	$view->blocks[] = new Block("places/units.inc",array('place'=>$place));
+	$view->blocks[] = new Block("places/history.inc",array('place'=>$place));
 	$view->render();
 ?>

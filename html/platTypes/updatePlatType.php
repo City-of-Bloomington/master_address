@@ -8,6 +8,9 @@
 								]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block('platTypes/updatePlatTypeForm.inc');
+	if (isset($_GET['id'])) { $form->platType = new PlatType($_GET['id']); }
 
 	if (isset($_POST['platType']))
 	{
@@ -22,22 +25,15 @@
 		{
 			$platType->save();
 			Header("Location: home.php");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->platType = $platType;
-			$view->addBlock("platTypes/updatePlatTypeForm.inc");
-			$view->render();
+			$form->platType = $platType;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->platType = new PlatType($_GET['id']);
-		$view->addBlock("platTypes/updatePlatTypeForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>

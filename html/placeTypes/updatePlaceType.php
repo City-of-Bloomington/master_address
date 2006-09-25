@@ -8,6 +8,9 @@
 								]
 */
 	verifyUser("Administrator");
+	$view = new View();
+	$form = new Block('placeTypes/updatePlaceTypeForm.inc');
+	if (isset($_GET['id'])) { $form->placeType = new PlaceType($_GET['id']); }
 
 	if (isset($_POST['placeType']))
 	{
@@ -22,22 +25,15 @@
 		{
 			$placeType->save();
 			Header("Location: home.php");
+			exit();
 		}
 		catch (Exception $e)
 		{
 			$_SESSION['errorMessages'][] = $e;
-
-			$view = new View();
-			$view->placeType = $placeType;
-			$view->addBlock("placeTypes/updatePlaceTypeForm.inc");
-			$view->render();
+			$form->placeType = $placeType;
 		}
 	}
-	else
-	{
-		$view = new View();
-		$view->placeType = new PlaceType($_GET['id']);
-		$view->addBlock("placeTypes/updatePlaceTypeForm.inc");
-		$view->render();
-	}
+
+	$view->blocks[] = $form;
+	$view->render();
 ?>
