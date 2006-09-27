@@ -38,8 +38,8 @@
 		<td><select name="address[status_id]" id="address-status_id">
 			<?php
 				if (isset($_POST['address']['status_id'])) { $status_id = $_POST['address']['status_id']; }
-				else { $status = new Status("CURRENT"); $status_id = $status->getId(); }
-				$list = new StatusList();
+				else { $status = new Status('address',"CURRENT"); $status_id = $status->getId(); }
+				$list = new StatusList('address');
 				$list->find();
 				foreach($list as $status)
 				{

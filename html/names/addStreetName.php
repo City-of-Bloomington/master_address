@@ -14,6 +14,7 @@
 	verifyUser("Administrator");
 	if (isset($_GET['name_id'])) { $_SESSION['name'] = new Name($_GET['name_id']); }
 	if (isset($_GET['street_id'])) { $_SESSION['street'] = new Street($_GET['street_id']); }
+	$response = new URL(BASE_URL."/names/addStreetName.php");
 
 
 	$view = new View();
@@ -42,7 +43,6 @@
 	if (!isset($_SESSION['street']))
 	{
 		$view->blocks[] = new Block("streets/findStreetForm.inc");
-		$response = new URL(BASE_URL."/names/addStreetName.php");
 
 		# If they've submitted the Find Street Form, show any results
 		if (isset($_GET['street']['id']) && isset($_GET['name']))

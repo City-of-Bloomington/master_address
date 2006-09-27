@@ -18,7 +18,7 @@
 	<tr><td><label for="place-status_id" class="required">Status</label></td>
 		<td><select name="place[status_id]" id="place-status_id">
 			<?php
-				$list = new StatusList();
+				$list = new StatusList('place');
 				$list->find();
 				foreach($list as $status)
 				{

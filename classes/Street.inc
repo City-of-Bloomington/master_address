@@ -11,6 +11,7 @@
 		private $streetNameList;
 
 		private $segments = array();
+		private $deletedSegmentIds = array();
 		private $newSegmentIds = array();
 
 		public function __construct($id=null)
@@ -55,7 +56,7 @@
 			if ($this->id) { $this->update($fields); }
 			else { $this->insert($fields); }
 
-			if (count($this->getSegments())) { $this->saveSegments(); }
+			$this->saveSegments();
 		}
 
 		private function update($fields)
@@ -85,40 +86,35 @@
 		{
 			foreach($this->getSegments() as $i=>$segment)
 			{
-				if ($segment->getId() == $segment_id) { unset($this->segments[$i]); }
+				if ($segment->getId() == $segment_id)
+				{
+					unset($this->segments[$i]);
+					$this->deletedSegmentIds[] = $segment_id;
+				}
 			}
 		}
 		private function saveSegments()
 		{
 			global $PDO;
 
-			$ids = array();
-			foreach($this->getSegments() as $segment) { $ids[] = $segment->getId(); }
-			$ids = implode(",",$ids);
+			# Clear out any deleted segments
+			if (count($this->deletedSegmentIds))
+			{
+				$ids = implode(",",$this->deletedSegmentIds);
+				$sql = "delete from street_segments where street_id={$this->id} and segment_id in ($ids)";
+				if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			}
 
-			$PDO->beginTransaction();
-				$sql = "delete from street_segments where street_id={$this->id} and segment_id not in ($ids)";
-				if (false === $PDO->exec($sql))
+			# Add in any new segments
+			if (count($this->newSegmentIds))
+			{
+				$statement = $PDO->prepare("insert street_segments values({$this->id},?)");
+				foreach($this->newSegmentIds as $segment_id)
 				{
-					$PDO->rollBack();
-					$e = $PDO->errorInfo();
-					throw new Exception($sql.$e[2]);
+					try { $statement->execute(array("$segment_id")); }
+					catch (PDOException $e) { throw $e; }
 				}
-
-				if (count($this->newSegmentIds))
-				{
-					$statement = $PDO->prepare("insert street_segments values({$this->id},?)");
-					foreach($this->newSegmentIds as $segment_id)
-					{
-						try { $statement->execute(array("$segment_id")); }
-						catch (PDOException $e)
-						{
-							$PDO->rollBack();
-							throw new Exception($e);
-						}
-					}
-				}
-			$PDO->commit();
+			}
 		}
 
 

@@ -21,11 +21,7 @@
 			$building->setPlace($_SESSION['place']);
 			$building->save();
 		}
-		catch (Exception $e)
-		{
-			$_SESSION['errorMessages'][] = $e->getMessage();
-			$form->place = $place;
-		}
+		catch (Exception $e) { $_SESSION['errorMessages'][] = $e->getMessage(); }
 	}
 
 	$view->blocks[] = $form;
