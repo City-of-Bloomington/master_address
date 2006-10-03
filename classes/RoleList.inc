@@ -1,4 +1,8 @@
 <?php
+/**
+* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+*/
 /*
 	Roles are really just an attribute array for users.  For now, I'm not loading them in as objects.
 */
