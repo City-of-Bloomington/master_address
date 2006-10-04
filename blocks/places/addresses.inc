@@ -1,4 +1,14 @@
-<div class="titleBar">Addresses</div>
+<?php
+/**
+ * @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ */
+/*
+	$this->place
+*/
+	$addButton = userHasRole("Administrator") ? "<button type=\"button\" class=\"addSmall\" onclick=\"document.location.href='".BASE_URL."/places/addAddress.php?place_id={$this->place->getId()}';\">Add</button>" : "";
+?>
+<div class="titleBar"><?php echo $addButton; ?>Addresses</div>
 <table>
 <tr><th>ID</th><th>Address</th><th>Status</th><th>Start Date</th><th>End Date</th></tr>
 <?php

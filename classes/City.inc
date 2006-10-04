@@ -16,7 +16,9 @@
 
 			if ($id)
 			{
-				$sql = "select * from cities where id=$id";
+				if (is_numeric($id)) { $sql = "select * from cities where id=$id"; }
+				else { $sql = "select * from cities where name='$id'"; }
+
 				$result = $PDO->query($sql);
 				if ($result)
 				{
@@ -42,7 +44,7 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if ($this->name) { throw new Exception("missingRequiredFields"); }
+			if (!$this->name) { throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();

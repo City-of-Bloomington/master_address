@@ -14,17 +14,18 @@
 	if (isset($_POST['place']) && isset($_POST['address']))
 	{
 		$PDO->beginTransaction();
+			# Create the new Place
 			$place = new Place();
 			foreach($_POST['place'] as $field=>$value)
 			{
 				$set = "set".ucfirst($field);
 				$place->$set($value);
 			}
-
 			try
 			{
 				$place->save();
 
+				# Create the new Address
 				$address = new Address();
 				foreach($_POST['address'] as $field=>$value)
 				{
@@ -47,7 +48,7 @@
 				$_SESSION['errorMessages'][] = $e;
 				$PDO->rollBack();
 			}
-		$PDO->commit();
+		if (!isset($_SESSION['errorMessages'])) { $PDO->commit(); }
 	}
 
 	$view->render();

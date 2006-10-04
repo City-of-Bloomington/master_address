@@ -49,6 +49,6 @@
 	</table>
 
 	<button type="submit" class="submit">Submit</button>
-	<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/platTypes';">Cancel</button>
+	<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/plats';">Cancel</button>
 </fieldset>
 </form>

@@ -1,8 +1,8 @@
 <?php
 /**
-* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
-* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
-*/
+ * @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ */
 	class Address extends ActiveRecord
 	{
 		private $id;
@@ -203,7 +203,7 @@
 		public function setZip($int) { $this->zip = ereg_replace("[^0-9]","",$int); }
 		public function setZipplus4($int) { $this->zipplus4 = ereg_replace("[^0-9]","",$int); }
 		public function setAddressStatus_id($int) { $this->status = new Status("address",$int); $this->addressStatus_id = $int; }
-		public function setStatus_id($int) { $this->addressStatus_id($int); }
+		public function setStatus_id($int) { $this->setAddressStatus_id($int); }
 		public function setActive($string) { $this->active = trim($string); }
 		public function setStartDate($date) { $this->startDate = is_array($date) ? $this->dateArrayToString($date) : $date; }
 		public function setEndDate($date) { $this->endDate = is_array($date) ? $this->dateArrayToString($date) : $date; }

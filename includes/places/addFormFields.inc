@@ -18,6 +18,10 @@
 	<tr><td><label for="place-status_id" class="required">Status</label></td>
 		<td><select name="place[status_id]" id="place-status_id">
 			<?php
+				# Default Status should be CURRENT
+				$current = new Status('place','CURRENT');
+				echo "<option value=\"{$current->getId()}\">{$current->getStatus()}</option>";
+
 				$list = new StatusList('place');
 				$list->find();
 				foreach($list as $status)
@@ -25,6 +29,46 @@
 					if (isset($_POST['place']['status_id']) && $_POST['place']['status_id']==$status->getId())
 						{ echo "<option value=\"{$status->getId()}\" selected=\"selected\">{$status->getStatus()}</option>"; }
 					else { echo "<option value=\"{$status->getId()}\">{$status->getStatus()}</option>"; }
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	<tr><td><label for="place-mailable_yes" class="required">Mailable</label></td>
+		<td><?php $mailable = isset($_POST['place']['mailable']) ? $_POST['place']['mailable'] : 1; ?>
+			<label><input type="radio" name="place[mailable]" id="place-mailable_yes" value="1" <?php if ($mailable) echo "checked=\"checked\""; ?> />Yes</label>
+			<label><input type="radio" name="place[mailable]" id="place-mailable_no" value="0" <?php if (!$mailable) echo "checked=\"checked\""; ?> />No</label>
+		</td>
+	</tr>
+	<tr><td><label for="place-livable_yes" class="required">Livable</label></td>
+		<td><?php $livable = isset($_POST['place']['livable']) ? $_POST['place']['livable'] : 1; ?>
+			<label><input type="radio" name="place[livable]" id="place-livable_yes" value="1" <?php if ($livable) echo "checked=\"checked\""; ?> />Yes</label>
+			<label><input type="radio" name="place[livable]" id="place-livable_no" value="0" <?php if (!$livable) echo "checked=\"checked\""; ?> />No</label>
+		</td>
+	</tr>
+	<tr><td><label for="place-placeType_id" class="required">Type</label></td>
+		<td><select name="place[placeType_id]" id="place-placeType_id">
+			<?php
+				$list = new PlaceTypeList();
+				$list->find();
+				foreach($list as $type)
+				{
+					if (isset($_POST['place']['placeType_id']) && $_POST['place']['placeType_id']==$type->getId())
+					{ echo "<option value=\"{$type->getId()}\" selected=\"selected\">{$type->getType()}</option>"; }
+					else { echo "<option value=\"{$type->getId()}\">{$type->getType()}</option>"; }
+				}
+			?>
+			</select>
+			<label for="place-class">Class</label>
+			<select name="place[class]" id="place-class">
+			<?php
+				$list = new PlaceClassList();
+				$list->find();
+				foreach($list as $class)
+				{
+					if (isset($_POST['place']['class']) && $_POST['place']['class'] = $class)
+						{ echo "<option selected=\"selected\">$class</option>"; }
+					else { echo "<option>$class</option>"; }
 				}
 			?>
 			</select>
@@ -45,6 +89,21 @@
 				}
 			?>
 			</select>
+			<label for="place-section">Section</label>
+			<input name="place[section]" id="place-section" size="2" value="<?php if(isset($_POST['place']['section'])) echo $_POST['place']['section']; ?>" />
+			<label for="place-quarterSection">Quarter Section</label>
+			<select name="place[quarterSection]" id="place-quarterSection"><option></option>
+			<?php
+				$list = new QuarterSectionList();
+				$list->find();
+				foreach($list as $section)
+				{
+					if (isset($_POST['place']['quarterSection']) && $_POST['place']['quarterSection']==$section)
+						{ echo "<option selected=\"selected\">$section</option>"; }
+					else { echo "<option>$section</option>"; }
+				}
+			?>
+			</select>
 		</td>
 	</tr>
 	<tr><td><label for="place-trashPickupDay_id">Trash Pickup Day</label></td>
@@ -60,10 +119,8 @@
 					}
 			?>
 			</select>
-		</td>
-	</tr>
-	<tr><td><label for="place-recyclingPickupWeek_id">Recycling Week</label></td>
-		<td><select name="place[recyclingPickupWeek_id]" id="place-recyclingPickupWeek_id"><option></option>
+			<label for="place-recyclingPickupWeek_id">Recycling Week</label>
+			<select name="place[recyclingPickupWeek_id]" id="place-recyclingPickupWeek_id"><option></option>
 			<?php
 				$list = new RecyclingPickupWeekList();
 				$list->find();
@@ -77,60 +134,16 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="place-mailable_yes">Mailable</label></td>
-		<td><label><input type="radio" name="place[mailable]" id="place-mailable_yes" value="1" <?php if(isset($_POST['place']['mailable']) && $_POST['place']['mailable']==1) echo "checked=\"checked\""; ?> />Yes</label>
-			<label><input type="radio" name="place[mailable]" id="place-mailable_no" value="0" <?php if(isset($_POST['place']['mailable']) && $_POST['place']['mailable']==0) echo "checked=\"checked\""; ?> />No</label>
-		</td>
-	</tr>
-	<tr><td><label for="place-livable_yes">Livable</label></td>
-		<td><label><input type="radio" name="place[livable]" id="place-livable_yes" value="1" <?php if(isset($_POST['place']['livable']) && $_POST['place']['livable']==1) echo "checked=\"checked\""; ?> />Yes</label>
-			<label><input type="radio" name="place[livable]" id="place-livable_no" value="0" <?php if(isset($_POST['place']['livable']) && $_POST['place']['livable']==0) echo "checked=\"checked\""; ?> />No</label>
-		</td>
-	</tr>
-	<tr><td><label for="place-section">Section</label></td>
-		<td><input name="place[section]" id="place-section" value="<?php if(isset($_POST['place']['section'])) echo $_POST['place']['section']; ?>" /></td></tr>
-	<tr><td><label for="place-quarterSection">Quarter Section</label></td>
-		<td><select name="place[quarterSection]" id="place-quarterSection"><option></option>
-			<?php
-				$list = new QuarterSectionList();
-				$list->find();
-				foreach($list as $section)
-				{
-					if (isset($_POST['place']['quarterSection']) && $_POST['place']['quarterSection']==$section)
-						{ echo "<option selected=\"selected\">$section</option>"; }
-					else { echo "<option>$section</option>"; }
-				}
-			?>
-			</select>
-		</td>
-	</tr>
-	<tr><td><label for="place-class">Class</label></td>
-		<td><input name="place[class]" id="place-class" value="<?php if(isset($_POST['place']['class'])) echo $_POST['place']['class']; ?>" /></td></tr>
-	<tr><td><label for="place-placeType_id">Type</label></td>
-		<td><select name="place[placeType_id]" id="place-placeType_id">
-			<?php
-				$list = new PlaceTypeList();
-				$list->find();
-				foreach($list as $type)
-				{
-					if (isset($_POST['place']['placeType_id']) && $_POST['place']['placeType_id']==$type->getId())
-					{ echo "<option value=\"{$type->getId()}\" selected=\"selected\">{$type->getType()}</option>"; }
-					else { echo "<option value=\"{$type->getId()}\">{$type->getType()}</option>"; }
-				}
-			?>
-			</select>
-		</td>
-	</tr>
 	<tr><td><label for="place-censusBlockFIPSCode">Census Block FIPS Code</label></td>
 		<td><input name="place[censusBlockFIPSCode]" id="place-censusBlockFIPSCode" value="<?php if(isset($_POST['place']['censusBlockFIPSCode'])) echo $_POST['place']['censusBlockFIPSCode']; ?>" /></td></tr>
 	<tr><td><label for="place-statePlaneX">State Plane X</label></td>
-		<td><input name="place[statePlaneX]" id="place-statePlaneX" value="<?php if(isset($_POST['place']['statePlaneX'])) echo $_POST['place']['statePlaneX']; ?>" /></td></tr>
-	<tr><td><label for="place-statePlaneY">State Plane X</label></td>
-		<td><input name="place[statePlaneY]" id="place-statePlaneY" value="<?php if(isset($_POST['place']['statePlaneY'])) echo $_POST['place']['statePlaneY']; ?>" /></td></tr>
+		<td><input name="place[statePlaneX]" id="place-statePlaneX" value="<?php if(isset($_POST['place']['statePlaneX'])) echo $_POST['place']['statePlaneX']; ?>" />
+			<label for="place-statePlaneY">State Plane X</label>
+			<input name="place[statePlaneY]" id="place-statePlaneY" value="<?php if(isset($_POST['place']['statePlaneY'])) echo $_POST['place']['statePlaneY']; ?>" /></td></tr>
 	<tr><td><label for="place-latitude">Latitude</label></td>
-		<td><input name="place[latitude]" id="place-latitude" value="<?php if(isset($_POST['place']['latitude'])) echo $_POST['place']['latitude']; ?>" /></td></tr>
-	<tr><td><label for="place-longitude">Longitude</label></td>
-		<td><input name="place[longitude]" id="place-longitude" value="<?php if(isset($_POST['place']['longitude'])) echo $_POST['place']['longitude']; ?>" /></td></tr>
+		<td><input name="place[latitude]" id="place-latitude" value="<?php if(isset($_POST['place']['latitude'])) echo $_POST['place']['latitude']; ?>" />
+			<label for="place-longitude">Longitude</label>
+			<input name="place[longitude]" id="place-longitude" value="<?php if(isset($_POST['place']['longitude'])) echo $_POST['place']['longitude']; ?>" /></td></tr>
 	<tr><td><label for="place-startDate-mon">Start Date</label></td>
 		<td><select name="place[startDate][mon]" id="place-startDate-mon"><option></option>
 			<?php

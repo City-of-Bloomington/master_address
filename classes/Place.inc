@@ -79,7 +79,8 @@
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
-			if (!$this->jurisdiction_id || !$this->placeStatus_id) { throw new Exception("missingRequiredFields"); }
+			if (!$this->jurisdiction_id || !$this->placeStatus_id || !$this->mailable || !$this->livable || !$this->placeType_id)
+			{ throw new Exception("missingRequiredFields"); }
 
 
 			$fields = array();
@@ -126,6 +127,11 @@
 			$sql = "insert places set $fields";
 			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
+
+			$event = new PlaceHistory();
+			$event->setPlace_id($this->id);
+			$event->setAction("Created");
+			$event->save();
 		}
 
 

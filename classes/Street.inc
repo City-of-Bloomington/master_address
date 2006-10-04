@@ -14,7 +14,7 @@
 		private $streetName;
 		private $streetNameList;
 
-		private $segments = array();
+		private $segments;
 		private $deletedSegmentIds = array();
 		private $newSegmentIds = array();
 
@@ -137,11 +137,7 @@
 		}
 		public function getSegments()
 		{
-			if (!count($this->segments))
-			{
-				$segments = new SegmentList(array('street_id'=>$this->id));
-				foreach($segments as $segment) { $this->segments[] = $segment; }
-			}
+			if (!count($this->segments)) { $this->segments = new SegmentList(array('street_id'=>$this->id)); }
 			return $this->segments;
 		}
 		/*
