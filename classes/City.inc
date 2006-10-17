@@ -7,8 +7,7 @@
 	{
 		private $id;
 		private $name;
-
-
+		private $zip;
 
 		public function __construct($id=null)
 		{
@@ -24,8 +23,7 @@
 				{
 					if ($row = $result->fetch())
 					{
-						$this->id = $id;
-						$this->name = $row['name'];
+						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
 
 						$result->closeCursor();
 					}
@@ -49,6 +47,7 @@
 
 			$fields = array();
 			$fields[] = $this->name ? "name='{$this->name}'" : "name=null";
+			$fields[] = $this->zip ? "zip={$this->zip}" : "zip=null";
 			$fields = implode(",",$fields);
 
 
@@ -76,11 +75,12 @@
 
 		public function getId() { return $this->id; }
 		public function getName() { return $this->name; }
+		public function getZip() { return $this->zip; }
 
 		public function __toString() { return $this->name; }
 
 
 		public function setName($string) { $this->name = trim($string); }
-
+		public function setZip($int) { $this->zip = ereg_replace("[^0-9]","",$int); }
 	}
 ?>

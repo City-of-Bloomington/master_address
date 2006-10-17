@@ -160,6 +160,7 @@ CREATE TABLE stateRoads (
 CREATE TABLE cities (
 	id int unsigned auto_increment NOT NULL,
 	name varchar(30) UNIQUE,
+	zip int(5),
 	PRIMARY KEY(id)) engine=InnoDB;
 
 CREATE TABLE plats (

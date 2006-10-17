@@ -58,9 +58,19 @@
 					if ($city_id == $city->getId())
 						{ echo "<option value=\"{$city->getId()}\" selected=\"selected\">{$city->getName()}</option>"; }
 					else { echo "<option value=\"{$city->getId()}\">{$city->getName()}</option>"; }
+
+					$cities[] = "'{$city->getName()}':'{$city->getZip()}'";
 				}
+				$cities = "[".implode(",",$cities)."]";
 			?>
 			</select>
+			<script type="text/javascript">
+			function updateZip(select)
+			{
+				var cities = eval("<?php echo $cities; ?>");
+				document.getElementById('address-zip').value = cities[select.options[select.selectedIndex].text];
+			}
+			</script>
 			<label for="address-zip">Zip</label>
 			<input name="address[zip]" id="address-zip" size="5" maxlength="5" value="<?php if(isset($_POST['address']['zip'])) echo $_POST['address']['zip']; ?>" />
 			<input name="address[zipplus4]" id="address-zipplus4" size="4" maxlength="4" value="<?php if(isset($_POST['address']['zipplus4'])) echo $_POST['address']['zipplus4']; ?>" />

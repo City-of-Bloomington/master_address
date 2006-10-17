@@ -5,7 +5,7 @@
 */
 	class CityList extends PDOResultIterator
 	{
-		public function __construct($fields=null,$sort="id")
+		public function __construct($fields=null,$sort="name")
 		{
 			$this->select = "select cities.id from cities";
 			$this->sort = $sort;
@@ -16,13 +16,14 @@
 		/*
 		* This will find records based on exact matches to the fields entered
 		*/
-		public function find($fields=null,$sort="id")
+		public function find($fields=null,$sort="name")
 		{
 			$this->sort = $sort;
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "id='$fields[id]'"; }
 			if (isset($fields['name'])) { $options[] = "name='$fields[name]'"; }
+			if (isset($fields['zip'])) { $options[] = "zip='$fields[zip]'"; }
 
 
 			# Finding on fields from other tables required joining those tables.

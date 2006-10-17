@@ -8,8 +8,10 @@
 	<input name="id" type="hidden" value="<?php echo $this->city->getId(); ?>" />
 
 	<table>
-	<tr><td><label for="city-name">Name</label></td>
+	<tr><td><label for="city-name" class="required">Name</label></td>
 		<td><input name="city[name]" id="city-name" value="<?php echo $this->city->getName(); ?>" /></td></tr>
+	<tr><td><label for="city-zip">Zip</label></td>
+		<td><input name="city[zip]" id="city-zip" size="5" maxlength="5" value="<?php echo $this->city->getZip(); ?>" /></td></tr>
 	</table>
 
 	<button type="submit" class="submit">Submit</button>
