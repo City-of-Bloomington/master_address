@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$buildingTypeList = new BuildingTypeList();
 	$buildingTypeList->find();
-	$view->blocks[] = new Block("buildingTypes/buildingTypeList.inc",array("buildingTypeList"=>$buildingTypeList));
+	$template->blocks[] = new Block("buildingTypes/buildingTypeList.inc",array("buildingTypeList"=>$buildingTypeList));
 
-	$view->render();
+	$template->render();
 ?>

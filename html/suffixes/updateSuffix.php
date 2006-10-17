@@ -7,7 +7,7 @@
 								description ]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block("suffixes/updateSuffixForm.inc");
 	if (isset($_GET['id'])) { $form->suffix = new Suffix($_GET['id']); }
 
@@ -33,6 +33,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

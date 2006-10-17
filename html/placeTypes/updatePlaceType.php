@@ -8,7 +8,7 @@
 								]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block('placeTypes/updatePlaceTypeForm.inc');
 	if (isset($_GET['id'])) { $form->placeType = new PlaceType($_GET['id']); }
 
@@ -34,6 +34,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

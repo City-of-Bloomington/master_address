@@ -5,16 +5,16 @@
 	verifyUser("Administrator");
 	if (isset($_GET['plat_id'])) { $_SESSION['plat_id'] = $_GET['plat_id']; }
 
-	$view = new View("popup");
+	$template = new Template("popup");
 
-	$view->blocks[] = new Block("places/findPlaceForm.inc");
+	$template->blocks[] = new Block("places/findPlaceForm.inc");
 	if (isset($_GET['place']))
 	{
 		$search = array();
 		foreach($_GET['place'] as $field=>$value) { if ($value) $search[$field] = $value; }
 		if (count($search))
 		{
-			$view->blocks[] = new Block("plats/choosePlacesForm.inc",array("placeList"=>new PlaceList($search)));
+			$template->blocks[] = new Block("plats/choosePlacesForm.inc",array("placeList"=>new PlaceList($search)));
 		}
 	}
 
@@ -33,5 +33,5 @@
 		}
 	}
 
-	$view->render();
+	$template->render();
 ?>

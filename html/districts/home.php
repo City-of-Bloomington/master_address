@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$districtList = new DistrictList();
 	$districtList->find();
-	$view->blocks[] = new Block("districts/districtList.inc",array("districtList"=>$districtList));
+	$template->blocks[] = new Block("districts/districtList.inc",array("districtList"=>$districtList));
 
-	$view->render();
+	$template->render();
 ?>

@@ -8,10 +8,10 @@
 						status [ status ]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 
-	if (isset($_GET['type']) && isset($_GET['id'])) { $view->status = new Status($_GET['type'],$_GET['id']); }
-	$view->addBlock("statuses/updateStatusForm.inc");
+	if (isset($_GET['type']) && isset($_GET['id'])) { $template->status = new Status($_GET['type'],$_GET['id']); }
+	$template->addBlock("statuses/updateStatusForm.inc");
 
 	if (isset($_POST['status']))
 	{
@@ -26,5 +26,5 @@
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	$view->render();
+	$template->render();
 ?>

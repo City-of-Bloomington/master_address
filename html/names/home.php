@@ -2,10 +2,10 @@
 /*
 	$_GET variables:	name
 */
-	$view = new View();
+	$template = new Template();
 	$response = new URL("viewName.php");
 
-	$view->blocks[] = new Block("names/findNameForm.inc");
+	$template->blocks[] = new Block("names/findNameForm.inc");
 	if (isset($_GET['name']))
 	{
 		$search = array();
@@ -14,14 +14,14 @@
 		{
 			$nameList = new NameList();
 			$nameList->search($search);
-			$view->blocks[] = new Block("names/findNameResults.inc",array("nameList"=>$nameList,"response"=>$response));
+			$template->blocks[] = new Block("names/findNameResults.inc",array("nameList"=>$nameList,"response"=>$response));
 		}
 	}
 
 	# If they're logged in, they can add a new name
 	if (userHasRole("Administrator"))
 	{
-		$view->blocks[] = new Block("names/addNameForm.inc");
+		$template->blocks[] = new Block("names/addNameForm.inc");
 		if (isset($_POST['name']))
 		{
 			$name = new Name();
@@ -43,5 +43,5 @@
 		}
 	}
 
-	$view->render();
+	$template->render();
 ?>

@@ -5,8 +5,8 @@
  */
 	verifyUser("Administrator");
 
-	$view = new View();
-	$view->blocks[] = new Block("plats/addPlatForm.inc");
+	$template = new Template();
+	$template->blocks[] = new Block("plats/addPlatForm.inc");
 
 	if (isset($_POST['plat']))
 	{
@@ -26,5 +26,5 @@
 		}
 	}
 
-	$view->render();
+	$template->render();
 ?>

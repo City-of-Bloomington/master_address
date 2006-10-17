@@ -1,48 +1,48 @@
 <?php
-	$view = new View();
-	$view->addressStatusList = new StatusList("address");
-	$view->addressStatusList->find();
-	$view->addBlock("statuses/addressStatusList.inc");
+	$template = new Template();
+	$template->addressStatusList = new StatusList("address");
+	$template->addressStatusList->find();
+	$template->addBlock("statuses/addressStatusList.inc");
 
-	$view->buildingStatusList = new StatusList("building");
-	$view->buildingStatusList->find();
-	$view->addBlock("statuses/buildingStatusList.inc");
+	$template->buildingStatusList = new StatusList("building");
+	$template->buildingStatusList->find();
+	$template->addBlock("statuses/buildingStatusList.inc");
 
-	$view->constructionStatusList = new StatusList("construction");
-	$view->constructionStatusList->find();
-	$view->addBlock("statuses/constructionStatusList.inc");
+	$template->constructionStatusList = new StatusList("construction");
+	$template->constructionStatusList->find();
+	$template->addBlock("statuses/constructionStatusList.inc");
 
-	$view->intersectionStatusList = new StatusList("intersection");
-	$view->intersectionStatusList->find();
-	$view->addBlock("statuses/intersectionStatusList.inc");
+	$template->intersectionStatusList = new StatusList("intersection");
+	$template->intersectionStatusList->find();
+	$template->addBlock("statuses/intersectionStatusList.inc");
 
-	$view->inventoryStatusList = new StatusList("inventory");
-	$view->inventoryStatusList->find();
-	$view->addBlock("statuses/inventoryStatusList.inc");
+	$template->inventoryStatusList = new StatusList("inventory");
+	$template->inventoryStatusList->find();
+	$template->addBlock("statuses/inventoryStatusList.inc");
 
-	$view->mapStatusList = new StatusList("map");
-	$view->mapStatusList->find();
-	$view->addBlock("statuses/mapStatusList.inc");
+	$template->mapStatusList = new StatusList("map");
+	$template->mapStatusList->find();
+	$template->addBlock("statuses/mapStatusList.inc");
 
-	$view->placeStatusList = new StatusList("place");
-	$view->placeStatusList->find();
-	$view->addBlock("statuses/placeStatusList.inc");
+	$template->placeStatusList = new StatusList("place");
+	$template->placeStatusList->find();
+	$template->addBlock("statuses/placeStatusList.inc");
 
-	$view->segmentStatusList = new StatusList("segment");
-	$view->segmentStatusList->find();
-	$view->addBlock("statuses/segmentStatusList.inc");
+	$template->segmentStatusList = new StatusList("segment");
+	$template->segmentStatusList->find();
+	$template->addBlock("statuses/segmentStatusList.inc");
 
-	$view->sidewalkStatusList = new StatusList("sidewalk");
-	$view->sidewalkStatusList->find();
-	$view->addBlock("statuses/sidewalkStatusList.inc");
+	$template->sidewalkStatusList = new StatusList("sidewalk");
+	$template->sidewalkStatusList->find();
+	$template->addBlock("statuses/sidewalkStatusList.inc");
 
-	$view->streetStatusList = new StatusList("street");
-	$view->streetStatusList->find();
-	$view->addBlock("statuses/streetStatusList.inc");
+	$template->streetStatusList = new StatusList("street");
+	$template->streetStatusList->find();
+	$template->addBlock("statuses/streetStatusList.inc");
 
-	$view->unitStatusList = new StatusList("unit");
-	$view->unitStatusList->find();
-	$view->addBlock("statuses/unitStatusList.inc");
+	$template->unitStatusList = new StatusList("unit");
+	$template->unitStatusList->find();
+	$template->addBlock("statuses/unitStatusList.inc");
 
-	$view->render();
+	$template->render();
 ?>

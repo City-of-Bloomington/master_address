@@ -7,12 +7,12 @@
 	after each unit is added.
 */
 	verifyUser("Administrator");
-	$view = new View("popup");
+	$template = new Template("popup");
 
 	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 	if (isset($_GET['building_id'])) { $_SESSION['building'] = new Building($_GET['building_id']); }
 
-	$view->blocks[] = new Block("units/addUnitForm.inc");
+	$template->blocks[] = new Block("units/addUnitForm.inc");
 	if (isset($_POST['unit']))
 	{
 		$unit = new Unit();
@@ -28,5 +28,5 @@
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	$view->render();
+	$template->render();
 ?>

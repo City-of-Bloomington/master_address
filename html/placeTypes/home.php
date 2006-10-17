@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$placeTypeList = new PlaceTypeList();
 	$placeTypeList->find();
-	$view->blocks[] = new Block("placeTypes/placeTypeList.inc",array('placeTypeList'=>$placeTypeList));
+	$template->blocks[] = new Block("placeTypes/placeTypeList.inc",array('placeTypeList'=>$placeTypeList));
 
-	$view->render();
+	$template->render();
 ?>

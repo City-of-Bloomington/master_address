@@ -3,7 +3,7 @@
 	$_GET variables:	building_id
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$updateBuildingForm = new Block("buildings/updateBuildingForm.inc");
 	if (isset($_GET['building_id'])) { $updateBuildingForm->building = new Building($_GET['building_id']); }
 
@@ -29,6 +29,6 @@
 		}
 	}
 
-	$view->blocks[] = $updateBuildingForm;
-	$view->render();
+	$template->blocks[] = $updateBuildingForm;
+	$template->render();
 ?>

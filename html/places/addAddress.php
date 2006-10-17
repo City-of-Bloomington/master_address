@@ -19,16 +19,17 @@
 	if (isset($_GET['segment_id'])) { $_SESSION['segment'] = new Segment($_GET['segment_id']); }
 
 
-	$view = new View();
+	$template = new Template();
 	$response = new URL('addAddress.php');
 
 
-	$view->blocks[] = new Block('places/placeInfo.inc',array('place'=>$_SESSION['place']));
+	$template->blocks[] = new Block('places/placeInfo.inc',array('place'=>$_SESSION['place']));
+	$template->blocks[] = new Block('places/addAddressInstructions.inc');
 
 
 	if (!isset($_SESSION['street']))
 	{
-		$view->blocks[] = new Block("streets/findStreetForm.inc");
+		$template->blocks[] = new Block("streets/findStreetForm.inc");
 
 		# If they've submitted the Find Street Form, show any results
 		if (isset($_GET['street']['id']) && isset($_GET['name']))
@@ -39,23 +40,23 @@
 			if (count($search))
 			{
 				$streetList = new StreetList($search);
-				$view->blocks[] = new Block("streets/findStreetResults.inc",array("response"=>$response,"streetList"=>$streetList));
+				$template->blocks[] = new Block("streets/findStreetResults.inc",array("response"=>$response,"streetList"=>$streetList));
 			}
 		}
 	}
 	else
 	{
-		$view->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$_SESSION['street'],'response'=>$response));
+		$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$_SESSION['street'],'response'=>$response));
 
 		if (!isset($_SESSION['segment']))
 		{
-			$view->blocks[] = new Block('segments/chooseSegment.inc',array('response'=>$response,'segmentList'=>$_SESSION['street']->getSegments()));
+			$template->blocks[] = new Block('segments/chooseSegment.inc',array('response'=>$response,'segmentList'=>$_SESSION['street']->getSegments()));
 		}
 		else
 		{
 			# We've now got a Place, Street, and Segment
 			# Show the add address form
-			$view->blocks[] = new Block('places/addAddressForm.inc');
+			$template->blocks[] = new Block('places/addAddressForm.inc');
 			if (isset($_POST['address']))
 			{
 				$address = new Address();
@@ -87,5 +88,5 @@
 		}
 	}
 
-	$view->render();
+	$template->render();
 ?>

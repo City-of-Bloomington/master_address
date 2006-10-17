@@ -1,6 +1,6 @@
 <?php
-	$view = new View();
-	$view->blocks[] = new Block("streets/findStreetForm.inc");
+	$template = new Template();
+	$template->blocks[] = new Block("streets/findStreetForm.inc");
 
 	# IF they've submitted the form, show any results
 	if (isset($_GET['street']['id']) && isset($_GET['name']))
@@ -12,9 +12,9 @@
 		{
 			$streetList = new StreetList($search);
 			$response = new URL("viewStreet.php");
-			$view->blocks[] = new Block("streets/findStreetResults.inc",array("streetList"=>$streetList,"response"=>$response));
+			$template->blocks[] = new Block("streets/findStreetResults.inc",array("streetList"=>$streetList,"response"=>$response));
 		}
 	}
 
-	$view->render();
+	$template->render();
 ?>

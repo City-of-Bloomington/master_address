@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$suffixList = new SuffixList();
 	$suffixList->find();
-	$view->blocks[] = new Block("suffixes/suffixList.inc",array("suffixList"=>$suffixList));
+	$template->blocks[] = new Block("suffixes/suffixList.inc",array("suffixList"=>$suffixList));
 
-	$view->render();
+	$template->render();
 ?>

@@ -17,8 +17,8 @@
 	$response = new URL(BASE_URL."/names/addStreetName.php");
 
 
-	$view = new View();
-	$view->blocks[] = new Block("names/nameInfo.inc",array("name"=>$_SESSION['name']));
+	$template = new Template();
+	$template->blocks[] = new Block("names/nameInfo.inc",array("name"=>$_SESSION['name']));
 
 	# Handle any new street that they're posting
 	if (isset($_POST['street']))
@@ -42,7 +42,7 @@
 	# Show the street stuff if we still don't have a street
 	if (!isset($_SESSION['street']))
 	{
-		$view->blocks[] = new Block("streets/findStreetForm.inc");
+		$template->blocks[] = new Block("streets/findStreetForm.inc");
 
 		# If they've submitted the Find Street Form, show any results
 		if (isset($_GET['street']['id']) && isset($_GET['name']))
@@ -53,18 +53,18 @@
 			if (count($search))
 			{
 				$streetList = new StreetList($search);
-				$view->blocks[] = new Block("streets/findStreetResults.inc",array("response"=>$response,"streetList"=>$streetList));
+				$template->blocks[] = new Block("streets/findStreetResults.inc",array("response"=>$response,"streetList"=>$streetList));
 			}
 		}
-		$view->blocks[] = new Block("streets/addStreetForm.inc",array("return_url"=>$response));
+		$template->blocks[] = new Block("streets/addStreetForm.inc",array("return_url"=>$response));
 	}
 	else
 	{
 		# We've got a street
-		$view->blocks[] = new Block("streets/streetInfo.inc",array("street"=>$_SESSION['street'],"response"=>$response));
+		$template->blocks[] = new Block("streets/streetInfo.inc",array("street"=>$_SESSION['street'],"response"=>$response));
 
 		# Handle any new streetName that they've posted
-		$view->blocks[] = new Block("streetNames/addStreetNameForm.inc",array("name"=>$_SESSION['name'],"street"=>$_SESSION['street']));
+		$template->blocks[] = new Block("streetNames/addStreetNameForm.inc",array("name"=>$_SESSION['name'],"street"=>$_SESSION['street']));
 		if (isset($_POST['streetName']))
 		{
 			$streetName = new StreetName();
@@ -90,5 +90,5 @@
 		}
 	}
 
-	$view->render();
+	$template->render();
 ?>

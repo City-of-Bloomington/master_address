@@ -3,7 +3,7 @@
 	$_GET variables:	place_id
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block('places/updatePlaceForm.inc');
 	if (isset($_GET['place_id'])) { $form->place = new Place($_GET['place_id']); }
 
@@ -29,6 +29,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

@@ -3,7 +3,7 @@
 	$_GET variables:	unit_id
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block("units/updateUnitForm.inc");
 	if (isset($_GET['unit_id'])) { $form->unit = new Unit($_GET['unit_id']); }
 
@@ -29,6 +29,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

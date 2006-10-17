@@ -9,7 +9,7 @@
 */
 	verifyUser("Administrator");
 
-	$view = new View();
+	$template = new Template();
 	$block = new Block("annexations/updateAnnexationForm.inc");
 	if (isset($_GET['id'])) { $block->annexation = new Annexation($_GET['id']); }
 
@@ -34,6 +34,6 @@
 		}
 	}
 
-	$view->blocks[] = $block;
-	$view->render();
+	$template->blocks[] = $block;
+	$template->render();
 ?>

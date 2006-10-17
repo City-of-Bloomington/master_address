@@ -6,7 +6,7 @@
 						districtType[ type ]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block("districtTypes/updateDistrictTypeForm.inc");
 	if (isset($_GET['id'])) { $form->districtType = new DistrictType($_GET['id']); }
 
@@ -31,6 +31,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

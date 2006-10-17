@@ -5,7 +5,7 @@
 	$_POST variables:	name
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block("names/updateNameForm.inc");
 	if (isset($_GET['name_id'])) { $form->name = new Name($_GET['name_id']); }
 
@@ -32,6 +32,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

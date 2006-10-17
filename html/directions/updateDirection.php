@@ -9,7 +9,7 @@
 */
 	verifyUser("Administrator");
 
-	$view = new View();
+	$template = new Template();
 	$form = new Block("directions/updateDirectionForm.inc");
 	if (isset($_GET['id'])) { $form->direction = new Direction($_GET['id']); }
 
@@ -35,6 +35,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

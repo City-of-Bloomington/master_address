@@ -2,10 +2,10 @@
 /*
 	$_GET variables:	name_id
 */
-	$view = new View();
+	$template = new Template();
 
 	$name = new Name($_GET['name_id']);
-	$view->blocks[] = new Block("names/nameInfo.inc",array("name"=>$name));
-	$view->blocks[] = new Block("names/streets.inc",array("name"=>$name));
-	$view->render();
+	$template->blocks[] = new Block("names/nameInfo.inc",array("name"=>$name));
+	$template->blocks[] = new Block("names/streets.inc",array("name"=>$name));
+	$template->render();
 ?>

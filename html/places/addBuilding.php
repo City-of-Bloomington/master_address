@@ -5,7 +5,7 @@
 	verifyUser("Administrator");
 	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 
-	$view = new View('popup');
+	$template = new Template('popup');
 	$form = new Block('buildings/addBuildingForm.inc',array('place'=>$_SESSION['place']));
 
 	if (isset($_POST['building']))
@@ -24,6 +24,6 @@
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e->getMessage(); }
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

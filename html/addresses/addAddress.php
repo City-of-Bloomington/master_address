@@ -10,8 +10,8 @@
 	if (isset($_GET['segment_id'])) { $_SESSION['segment'] = new Segment($_GET['segment_id']); }
 	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 
-	$view = new View("popup");
-	$view->blocks[] = new Block("places/placeInfo.inc",array("place"=>$_SESSION['place']));
+	$template = new Template("popup");
+	$template->blocks[] = new Block("places/placeInfo.inc",array("place"=>$_SESSION['place']));
 
 	$addAddressForm = new Block("addresses/addAddressForm.inc");
 	if (isset($_POST['address']))
@@ -33,8 +33,8 @@
 			$addAddressForm->address = $address;
 		}
 	}
-	$view->blocks[] = $addAddressForm;
+	$template->blocks[] = $addAddressForm;
 
 
-	$view->render();
+	$template->render();
 ?>

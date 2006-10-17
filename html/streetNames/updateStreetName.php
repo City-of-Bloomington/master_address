@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$view = new View();
+	$template = new Template();
 	$form = new Block('streetNames/updateStreetNameForm.inc');
 	if (isset($_GET['streetName_id']) && isset($_GET['return_url']))
 	{
@@ -32,12 +32,12 @@
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	$view->blocks[] = new Block("names/nameInfo.inc",array('name'=>$streetName->getName()));
-	$view->blocks[] = new Block("streets/streetInfo.inc",array('street'=>$streetName->getStreet(),'response'=>$response));
+	$template->blocks[] = new Block("names/nameInfo.inc",array('name'=>$streetName->getName()));
+	$template->blocks[] = new Block("streets/streetInfo.inc",array('street'=>$streetName->getStreet(),'response'=>$response));
 
 	$form->streetName = $streetName;
 	$form->response = $response;
-	$view->blocks[] = $form;
+	$template->blocks[] = $form;
 
-	$view->render();
+	$template->render();
 ?>

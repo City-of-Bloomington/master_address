@@ -12,7 +12,7 @@
 								]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block('plats/updatePlatForm.inc');
 	if (isset($_GET['plat_id'])) { $form->plat = new Plat($_GET['plat_id']); }
 	if (isset($_POST['plat']))
@@ -37,6 +37,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

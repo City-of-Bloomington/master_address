@@ -6,7 +6,7 @@
 						buildingType[ description ]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 
 	$form = new Block("buildingTypes/updateBuildingTypeForm.inc");
 	if (isset($_GET['id'])) { $form->buildingType = new BuildingType($_GET['id']); }
@@ -32,6 +32,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

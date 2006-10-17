@@ -4,13 +4,13 @@
 						segment_id
 */
 	verifyUser("Administrator");
-	$view = new View("popup");
+	$template = new Template("popup");
 
 	if (isset($_GET['street_id'])) { $_SESSION['street'] = new Street($_GET['street_id']); }
 	if (isset($_GET['segment_id'])) { $_SESSION['segment'] = new Segment($_GET['segment_id']); }
 
 
-	$view->blocks[] = new Block("streets/addPlaceAddressForm.inc");
+	$template->blocks[] = new Block("streets/addPlaceAddressForm.inc");
 	if (isset($_POST['place']) && isset($_POST['address']))
 	{
 		$PDO->beginTransaction();
@@ -51,5 +51,5 @@
 		if (!isset($_SESSION['errorMessages'])) { $PDO->commit(); }
 	}
 
-	$view->render();
+	$template->render();
 ?>

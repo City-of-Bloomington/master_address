@@ -6,17 +6,17 @@
 
 	if (isset($_GET['place_id'])) { $_SESSION['place'] = new Place($_GET['place_id']); }
 
-	$view = new View("popup");
+	$template = new Template("popup");
 
 	# Show the find form
-	$view->blocks[] = new Block("buildings/findBuildingForm.inc");
+	$template->blocks[] = new Block("buildings/findBuildingForm.inc");
 	if (isset($_GET['building']))
 	{
 		$search = array();
 		foreach($_GET['building'] as $field=>$value) { if ($value) $search[$field] = $value; }
 		if (count($search))
 		{
-			$view->blocks[] = new Block("buildings/findBuildingResults.inc",
+			$template->blocks[] = new Block("buildings/findBuildingResults.inc",
 										array("response"=>new URL("addBuilding.php?place_id={$_SESSION['place']->getId()}"),
 										"buildingList"=>new BuildingList($search)));
 		}
@@ -31,7 +31,7 @@
 	}
 
 	# Show the Add form
-	$view->blocks[] = new Block("buildings/addBuildingForm.inc");
+	$template->blocks[] = new Block("buildings/addBuildingForm.inc");
 	if (isset($_POST['building']))
 	{
 		$building = new Building();
@@ -50,5 +50,5 @@
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	$view->render();
+	$template->render();
 ?>

@@ -3,21 +3,21 @@
  * @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  */
-	$view = new View();
-	$view->blocks[] = new Block("plats/findPlatForm.inc");
+	$template = new Template();
+	$template->blocks[] = new Block("plats/findPlatForm.inc");
 	if (isset($_GET['plat']))
 	{
 		$search = array();
 		foreach($_GET['plat'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->blocks[] = new Block("plats/findPlatResults.inc",array("response"=>new URL("viewPlat.php"),"platList"=>new PlatList($search)));
+			$template->blocks[] = new Block("plats/findPlatResults.inc",array("response"=>new URL("viewPlat.php"),"platList"=>new PlatList($search)));
 		}
 	}
 
 	if (userHasRole('Administrator'))
 	{
-		$view->blocks[] = new Block("plats/addPlatForm.inc");
+		$template->blocks[] = new Block("plats/addPlatForm.inc");
 		if (isset($_POST['plat']))
 		{
 			$plat = new Plat();
@@ -36,5 +36,5 @@
 			}
 		}
 	}
-	$view->render();
+	$template->render();
 ?>

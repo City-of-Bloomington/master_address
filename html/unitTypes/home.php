@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$unitTypeList = new UnitTypeList();
 	$unitTypeList->find();
-	$view->blocks[] = new Block("unitTypes/unitTypeList.inc",array("unitTypeList"=>$unitTypeList));
+	$template->blocks[] = new Block("unitTypes/unitTypeList.inc",array("unitTypeList"=>$unitTypeList));
 
-	$view->render();
+	$template->render();
 ?>

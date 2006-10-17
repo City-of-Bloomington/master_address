@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$cityList = new CityList();
 	$cityList->find();
-	$view->blocks[] = new Block("cities/cityList.inc",array('cityList'=>$cityList));
+	$template->blocks[] = new Block("cities/cityList.inc",array('cityList'=>$cityList));
 
-	$view->render();
+	$template->render();
 ?>

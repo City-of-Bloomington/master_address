@@ -9,7 +9,7 @@
 							]
 */
 	verifyUser("Administrator");
-	$view = new View();
+	$template = new Template();
 	$form = new Block("users/addUserForm.inc");
 
 	if (isset($_POST['user']))
@@ -44,6 +44,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

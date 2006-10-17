@@ -1,9 +1,9 @@
 <?php
-	$view = new View();
+	$template = new Template();
 
 	$annexationList = new AnnexationList();
 	$annexationList->find();
-	$view->blocks[] = new Block("annexations/annexationList.inc",array("annexationList"=>$annexationList));
+	$template->blocks[] = new Block("annexations/annexationList.inc",array("annexationList"=>$annexationList));
 
-	$view->render();
+	$template->render();
 ?>

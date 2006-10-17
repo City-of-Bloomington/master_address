@@ -6,7 +6,7 @@
 	verifyUser("Administrator");
 
 
-	$view = new View();
+	$template = new Template();
 	$form = new Block("streets/updateStreetForm.inc");
 
 	if (isset($_GET['street_id'])) { $form->street = new Street($_GET['street_id']); }
@@ -36,6 +36,6 @@
 		}
 	}
 
-	$view->blocks[] = $form;
-	$view->render();
+	$template->blocks[] = $form;
+	$template->render();
 ?>

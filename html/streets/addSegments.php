@@ -15,7 +15,7 @@
 									# it to the street
 */
 	verifyUser("Administrator");
-	$view = new View("popup");
+	$template = new Template("popup");
 
 	#--------------------------------------------------------------------------
 	# Load the street
@@ -27,14 +27,14 @@
 	#--------------------------------------------------------------------------
 	# Show the Find Segment Form
 	#--------------------------------------------------------------------------
-	$view->blocks[] = new Block("segments/findSegmentForm.inc");
+	$template->blocks[] = new Block("segments/findSegmentForm.inc");
 	if (isset($_GET['name']) || isset($_GET['address']))
 	{
 		$search = array();
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$view->blocks[] = new Block("streets/chooseSegmentsForm.inc",array("streetList"=>new StreetList($search)));
+			$template->blocks[] = new Block("streets/chooseSegmentsForm.inc",array("streetList"=>new StreetList($search)));
 		}
 	}
 
@@ -56,7 +56,7 @@
 	#--------------------------------------------------------------------------
 	# Show the Add Segment Form
 	#--------------------------------------------------------------------------
-	$view->blocks[] = new Block("segments/addSegmentForm.inc");
+	$template->blocks[] = new Block("segments/addSegmentForm.inc");
 	if (isset($_POST['segment']))
 	{
 		$segment = new Segment();
@@ -75,5 +75,5 @@
 		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	$view->render();
+	$template->render();
 ?>

@@ -5,7 +5,7 @@
 */
 	verifyUser("Administrator");
 
-	$view = new View();
+	$template = new Template();
 	$updateAddressForm = new Block("addresses/updateAddressForm.inc");
 	if (isset($_GET['address_id'])) { $updateAddressForm->address = new Address($_GET['address_id']); }
 	if (isset($_GET['return_url'])) { $_SESSION['return_url'] = new URL($_GET['return_url']); }
@@ -33,6 +33,6 @@
 		}
 	}
 
-	$view->blocks[] = $updateAddressForm;
-	$view->render();
+	$template->blocks[] = $updateAddressForm;
+	$template->render();
 ?>
