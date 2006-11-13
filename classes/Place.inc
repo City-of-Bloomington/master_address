@@ -48,22 +48,16 @@
 
 			if ($id)
 			{
-				$sql = "select * from places where id=$id";
-				$result = $PDO->query($sql);
-				if ($result)
+				$sql = "select * from places where id=?";
+				try
 				{
-					if ($row = $result->fetch())
-					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
-						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
-
-						$result->closeCursor();
-					}
-					else { throw new Exception($sql); }
+					$query = $PDO->prepare($sql);
+					$query->execute(array($id));
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				catch (Exception $e) { throw $e; }
+
+				$result = $query->fetchAll();
+				foreach($result[0] as $field=>$value) { if ($value) $this->$field = $value; }
 			}
 			else
 			{
@@ -76,6 +70,11 @@
 		}
 
 
+		/**
+		 * This generates generic SQL that should work right away.
+		 * You can replace this $fields code with your own custom SQL
+		 * for each property of this class,
+		 */
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
@@ -84,48 +83,62 @@
 
 
 			$fields = array();
-			$fields[] = $this->name ? "name='{$this->name}'" : "name=null";
-			$fields[] = $this->township_id ? "township_id={$this->township_id}" : "township_id=null";
-			$fields[] = "jurisdiction_id={$this->jurisdiction_id}";
-			$fields[] = $this->trashPickupDay_id ? "trashPickupDay_id={$this->trashPickupDay_id}" : "trashPickupDay_id=null";
-			$fields[] = $this->recyclingPickupWeek_id ? "recyclingPickupWeek_id={$this->recyclingPickupWeek_id}" : "recyclingPickupWeek_id=null";
-			$fields[] = $this->mailable ? "mailable='{$this->mailable}'" : "mailable=null";
-			$fields[] = $this->livable ? "livable='{$this->livable}'" : "livable=null";
-			$fields[] = $this->section ? "section='{$this->section}'" : "section=null";
-			$fields[] = $this->quarterSection ? "quarterSection='{$this->quarterSection}'" : "quarterSection=null";
-			$fields[] = $this->class ? "class='{$this->class}'" : "class=null";
-			$fields[] = $this->censusBlockFIPSCode ? "censusBlockFIPSCode='{$this->censusBlockFIPSCode}'" : "censusBlockFIPSCode=null";
-			$fields[] = $this->statePlaneX ? "statePlaneX='{$this->statePlaneX}'" : "statePlaneX=null";
-			$fields[] = $this->statePlaneY ? "statePlaneY='{$this->statePlaneY}'" : "statePlaneY=null";
-			$fields[] = $this->latitude ? "latitude='{$this->latitude}'" : "latitude=null";
-			$fields[] = $this->longitude ? "longitude='{$this->longitude}'" : "longitude=null";
-			$fields[] = $this->startDate ? "startDate='{$this->startDate}'" : "startDate=null";
-			$fields[] = $this->endDate ? "endDate='{$this->endDate}'" : "endDate=null";
-			$fields[] = $this->placeStatus_id ? "placeStatus_id={$this->placeStatus_id}" : "placeStatus_id=null";
-			$fields[] = $this->plat_id ? "plat_id={$this->plat_id}" : "plat_id=null";
-			$fields[] = $this->lotNumber ? "lotNumber={$this->lotNumber}" : "lotNumber=null";
-			$fields = implode(",",$fields);
+			$fields['name'] = $this->name ? $this->name : null;
+			$fields['township_id'] = $this->township_id ? $this->township_id : null;
+			$fields['jurisdiction_id'] = $this->jurisdiction_id ? $this->jurisdiction_id : null;
+			$fields['trashPickupDay_id'] = $this->trashPickupDay_id ? $this->trashPickupDay_id : null;
+			$fields['recyclingPickupWeek_id'] = $this->recyclingPickupWeek_id ? $this->recyclingPickupWeek_id : null;
+			$fields['mailable'] = $this->mailable ? $this->mailable : null;
+			$fields['livable'] = $this->livable ? $this->livable : null;
+			$fields['section'] = $this->section ? $this->section : null;
+			$fields['quarterSection'] = $this->quarterSection ? $this->quarterSection : null;
+			$fields['class'] = $this->class ? $this->class : null;
+			$fields['placeType_id'] = $this->placeType_id ? $this->placeType_id : null;
+			$fields['censusBlockFIPSCode'] = $this->censusBlockFIPSCode ? $this->censusBlockFIPSCode : null;
+			$fields['statePlaneX'] = $this->statePlaneX ? $this->statePlaneX : null;
+			$fields['statePlaneY'] = $this->statePlaneY ? $this->statePlaneY : null;
+			$fields['latitude'] = $this->latitude ? $this->latitude : null;
+			$fields['longitude'] = $this->longitude ? $this->longitude : null;
+			$fields['startDate'] = $this->startDate ? $this->startDate : null;
+			$fields['endDate'] = $this->endDate ? $this->endDate : null;
+			$fields['placeStatus_id'] = $this->placeStatus_id ? $this->placeStatus_id : null;
+			$fields['plat_id'] = $this->plat_id ? $this->plat_id : null;
+			$fields['lotNumber'] = $this->lotNumber ? $this->lotNumber : null;
+
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
 
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
 
 			if (count($this->getBuildings())) { $this->saveBuildings(); }
 		}
-		private function update($fields)
+
+		private function update($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "update places set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update places set $preparedFields where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert places set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "insert places set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 
 			$event = new PlaceHistory();

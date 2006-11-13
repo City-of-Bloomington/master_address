@@ -31,23 +31,16 @@
 
 			if ($id)
 			{
-				$sql = "select * from names where id=$id";
-				$result = $PDO->query($sql);
-				if ($result)
+				$sql = "select * from names where id=?";
+				try
 				{
-					if ($row = $result->fetch())
-					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
-						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
-
-						$result->closeCursor();
-					}
-					else { throw new Exception($sql); }
+					$query = $PDO->prepare($sql);
+					$query->execute(array($id));
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]);
-				}
+				catch (Exception $e) { throw $e; }
+
+				$result = $query->fetchAll();
+				foreach($result[0] as $field=>$value) { if ($value) $this->$field = $value; }
 			}
 			else
 			{
@@ -57,44 +50,59 @@
 		}
 
 
+		/**
+		 * This generates generic SQL that should work right away.
+		 * You can replace this $fields code with your own custom SQL
+		 * for each property of this class,
+		 */
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
 			if (!$this->name) { throw new Exception("missingRequiredFields"); }
 
 
-			# This generates generic SQL that should work right away.
-			# You can (and maybe should) replace this $fields code with your own custom SQL
-			# for each property of this class,
 			$fields = array();
-			$fields[] = "name='{$this->name}'";
-			if ($this->town_id) { $fields[] = "town_id={$this->town_id}"; } else { $fields[] = "town_id=null"; }
-			if ($this->direction_id) { $fields[] = "direction_id={$this->direction_id}"; } else { $fields[] = "direction_id=null"; }
-			if ($this->suffix_id) { $fields[] = "suffix_id={$this->suffix_id}"; } else { $fields[] = "suffix_id=null"; }
-			if ($this->postDirection_id) { $fields[] = "postDirection_id={$this->postDirection_id}"; } else { $fields[] = "postDirection_id=null"; }
-			if ($this->startDate) { $fields[] = "startDate='{$this->startDate}'"; } else { $fields[] = "startDate=null"; }
-			if ($this->endDate) { $fields[] = "endDate='{$this->endDate}'"; } else { $fields[] = "endDate=null"; }
-			if ($this->notes) { $fields[] = "notes='{$this->notes}'"; } else { $fields[] = "notes=null"; }
-			$fields = implode(",",$fields);
+			$fields['town_id'] = $this->town_id ? $this->town_id : null;
+			$fields['direction_id'] = $this->direction_id ? $this->direction_id : null;
+			$fields['name'] = $this->name ? $this->name : null;
+			$fields['suffix_id'] = $this->suffix_id ? $this->suffix_id : null;
+			$fields['postDirection_id'] = $this->postDirection_id ? $this->postDirection_id : null;
+			$fields['startDate'] = $this->startDate ? $this->startDate : null;
+			$fields['endDate'] = $this->endDate ? $this->endDate : null;
+			$fields['notes'] = $this->notes ? $this->notes : null;
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
+
+
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
 		}
 
-		private function update($fields)
+		private function update($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "update names set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update names set $preparedFields where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert names set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "insert names set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 		}
 

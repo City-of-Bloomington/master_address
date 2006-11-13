@@ -75,22 +75,16 @@
 
 			if ($id)
 			{
-				$sql = "select * from segments where id=$id";
-				$result = $PDO->query($sql);
-				if ($result)
+				$sql = "select * from segments where id=?";
+				try
 				{
-					if ($row = $result->fetch())
-					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
-						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
-
-						$result->closeCursor();
-					}
-					else { throw new Exception($sql); }
+					$query = $PDO->prepare($sql);
+					$query->execute(array($id));
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				catch (Exception $e) { throw $e; }
+
+				$result = $query->fetchAll();
+				foreach($result[0] as $field=>$value) { if ($value) $this->$field = $value; }
 			}
 			else
 			{
@@ -100,6 +94,11 @@
 		}
 
 
+		/**
+		 * This generates generic SQL that should work right away.
+		 * You can replace this $fields code with your own custom SQL
+		 * for each property of this class,
+		 */
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
@@ -108,69 +107,77 @@
 			{ throw new Exception("missingRequiredFields"); }
 
 
-			# This generates generic SQL that should work right away.
-			# You can (and maybe should) replace this $fields code with your own custom SQL
-			# for each property of this class,
 			$fields = array();
-			$fields[] = $this->tag ? "tag='{$this->tag}'" : "tag=null";
-			$fields[] = $this->segmentStatus_id ? "segmentStatus_id='{$this->segmentStatus_id}'" : "segmentStatus_id=null";
-			$fields[] = $this->dataOwner_id ? "dataOwner_id='{$this->dataOwner_id}'" : "dataOwner_id=null";
-			$fields[] = $this->description ? "description='{$this->description}'" : "description=null";
-			$fields[] = $this->station ? "station='{$this->station}'" : "station=null";
-			$fields[] = $this->lowAddressNumber ? "lowAddressNumber='{$this->lowAddressNumber}'" : "lowAddressNumber=null";
-			$fields[] = $this->highAddressNumber ? "highAddressNumber='{$this->highAddressNumber}'" : "highAddressNumber=null";
-			$fields[] = $this->leftLowAddressNumber ? "leftLowAddressNumber='{$this->leftLowAddressNumber}'" : "leftLowAddressNumber=null";
-			$fields[] = $this->leftHighAddressNumber ? "leftHighAddressNumber='{$this->leftHighAddressNumber}'" : "leftHighAddressNumber=null";
-			$fields[] = $this->rightLowAddressNumber ? "rightLowAddressNumber='{$this->rightLowAddressNumber}'" : "rightLowAddressNumber=null";
-			$fields[] = $this->rightHighAddressNumber ? "rightHighAddressNumber='{$this->rightHighAddressNumber}'" : "rightHighAddressNumber=null";
-			$fields[] = $this->jurisdiction_id ? "jurisdiction_id='{$this->jurisdiction_id}'" : "jurisdiction_id=null";
-			$fields[] = $this->jurisdictionLeft_id ? "jurisdictionLeft_id='{$this->jurisdictionLeft_id}'" : "jurisdictionLeft_id=null";
-			$fields[] = $this->jurisdictionRight_id ? "jurisdictionRight_id='{$this->jurisdictionRight_id}'" : "jurisdictionRight_id=null";
-			$fields[] = $this->constructionStatus_id ? "constructionStatus_id='{$this->constructionStatus_id}'" : "constructionStatus_id=null";
-			$fields[] = $this->dedicatedRightOfWay ? "dedicatedRightOfWay='{$this->dedicatedRightOfWay}'" : "dedicatedRightOfWay=null";
-			$fields[] = $this->maintainedBy ? "maintainedBy='{$this->maintainedBy}'" : "maintainedBy=null";
-			$fields[] = $this->inventoryStatus_id ? "inventoryStatus_id='{$this->inventoryStatus_id}'" : "inventoryStatus_id=null";
-			$fields[] = $this->travelWayCode_id ? "travelWayCode_id='{$this->travelWayCode_id}'" : "travelWayCode_id=null";
-			$fields[] = $this->travelDirection_id ? "travelDirection_id='{$this->travelDirection_id}'" : "travelDirection_id=null";
-			$fields[] = $this->speedLimit ? "speedLimit='{$this->speedLimit}'" : "speedLimit=null";
-			$fields[] = $this->speedLimitOrdinance ? "speedLimitOrdinance='{$this->speedLimitOrdinance}'" : "speedLimitOrdinance=null";
-			$fields[] = $this->thoroughfareClass_id ? "thoroughfareClass_id='{$this->thoroughfareClass_id}'" : "thoroughfareClass_id=null";
-			$fields[] = $this->segmentBack_id ? "segmentBack_id='{$this->segmentBack_id}'" : "segmentBack_id=null";
-			$fields[] = $this->segmentAhead_id ? "segmentAhead_id='{$this->segmentAhead_id}'" : "segmentAhead_id=null";
-			$fields[] = $this->intersectionBack_id ? "intersectionBack_id='{$this->intersectionBack_id}'" : "intersectionBack_id=null";
-			$fields[] = $this->intersectionAhead_id ? "intersectionAhead_id='{$this->intersectionAhead_id}'" : "intersectionAhead_id=null";
-			$fields[] = $this->lowAddressIntersection_id ? "lowAddressIntersection_id='{$this->lowAddressIntersection_id}'" : "lowAddressIntersection_id=null";
-			$fields[] = $this->highAddressIntersection_id ? "highAddressIntersection_id='{$this->highAddressIntersection_id}'" : "highAddressIntersection_id=null";
-			$fields[] = $this->leftSidewalkStatus_id ? "leftSidewalkStatus_id='{$this->leftSidewalkStatus_id}'" : "leftSidewalkStatus_id=null";
-			$fields[] = $this->rightSidewalkStatus_id ? "rightSidewalkStatus_id='{$this->rightSidewalkStatus_id}'" : "rightSidewalkStatus_id=null";
-			$fields[] = $this->mapArea ? "mapArea='{$this->mapArea}'" : "mapArea=null";
-			$fields[] = $this->mapStatus_id ? "mapStatus_id='{$this->mapStatus_id}'" : "mapStatus_id=null";
-			$fields[] = $this->mapSource ? "mapSource='{$this->mapSource}'" : "mapSource=null";
-			$fields[] = $this->labelX ? "labelX='{$this->labelX}'" : "labelX=null";
-			$fields[] = $this->labelY ? "labelY='{$this->labelY}'" : "labelY=null";
-			$fields[] = $this->notes ? "notes='{$this->notes}'" : "notes=null";
+			$fields['tag'] = $this->tag ? $this->tag : null;
+			$fields['segmentStatus_id'] = $this->segmentStatus_id ? $this->segmentStatus_id : null;
+			$fields['dataOwner_id'] = $this->dataOwner_id ? $this->dataOwner_id : null;
+			$fields['description'] = $this->description ? $this->description : null;
+			$fields['station'] = $this->station ? $this->station : null;
+			$fields['lowAddressNumber'] = $this->lowAddressNumber ? $this->lowAddressNumber : null;
+			$fields['highAddressNumber'] = $this->highAddressNumber ? $this->highAddressNumber : null;
+			$fields['leftLowAddressNumber'] = $this->leftLowAddressNumber ? $this->leftLowAddressNumber : null;
+			$fields['leftHighAddressNumber'] = $this->leftHighAddressNumber ? $this->leftHighAddressNumber : null;
+			$fields['rightLowAddressNumber'] = $this->rightLowAddressNumber ? $this->rightLowAddressNumber : null;
+			$fields['rightHighAddressNumber'] = $this->rightHighAddressNumber ? $this->rightHighAddressNumber : null;
+			$fields['jurisdiction_id'] = $this->jurisdiction_id ? $this->jurisdiction_id : null;
+			$fields['jurisdictionLeft_id'] = $this->jurisdictionLeft_id ? $this->jurisdictionLeft_id : null;
+			$fields['jurisdictionRight_id'] = $this->jurisdictionRight_id ? $this->jurisdictionRight_id : null;
+			$fields['constructionStatus_id'] = $this->constructionStatus_id ? $this->constructionStatus_id : null;
+			$fields['dedicatedRightOfWay'] = $this->dedicatedRightOfWay ? $this->dedicatedRightOfWay : null;
+			$fields['maintainedBy'] = $this->maintainedBy ? $this->maintainedBy : null;
+			$fields['inventoryStatus_id'] = $this->inventoryStatus_id ? $this->inventoryStatus_id : null;
+			$fields['travelWayCode_id'] = $this->travelWayCode_id ? $this->travelWayCode_id : null;
+			$fields['travelDirection_id'] = $this->travelDirection_id ? $this->travelDirection_id : null;
+			$fields['speedLimit'] = $this->speedLimit ? $this->speedLimit : null;
+			$fields['speedLimitOrdinance'] = $this->speedLimitOrdinance ? $this->speedLimitOrdinance : null;
+			$fields['thoroughfareClass_id'] = $this->thoroughfareClass_id ? $this->thoroughfareClass_id : null;
+			$fields['segmentBack_id'] = $this->segmentBack_id ? $this->segmentBack_id : null;
+			$fields['segmentAhead_id'] = $this->segmentAhead_id ? $this->segmentAhead_id : null;
+			$fields['intersectionBack_id'] = $this->intersectionBack_id ? $this->intersectionBack_id : null;
+			$fields['intersectionAhead_id'] = $this->intersectionAhead_id ? $this->intersectionAhead_id : null;
+			$fields['lowAddressIntersection_id'] = $this->lowAddressIntersection_id ? $this->lowAddressIntersection_id : null;
+			$fields['highAddressIntersection_id'] = $this->highAddressIntersection_id ? $this->highAddressIntersection_id : null;
+			$fields['leftSidewalkStatus_id'] = $this->leftSidewalkStatus_id ? $this->leftSidewalkStatus_id : null;
+			$fields['rightSidewalkStatus_id'] = $this->rightSidewalkStatus_id ? $this->rightSidewalkStatus_id : null;
+			$fields['mapArea'] = $this->mapArea ? $this->mapArea : null;
+			$fields['mapStatus_id'] = $this->mapStatus_id ? $this->mapStatus_id : null;
+			$fields['mapSource'] = $this->mapSource ? $this->mapSource : null;
+			$fields['labelX'] = $this->labelX ? $this->labelX : null;
+			$fields['labelY'] = $this->labelY ? $this->labelY : null;
+			$fields['notes'] = $this->notes ? $this->notes : null;
 
-			$fields = implode(",",$fields);
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
 
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
 		}
 
-		private function update($fields)
+		private function update($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "update segments set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update segments set $preparedFields where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert segments set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "insert segments set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 		}
 

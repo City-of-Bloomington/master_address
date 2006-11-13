@@ -24,12 +24,21 @@
 			if ($id)
 			{
 				# Load an existing user
-				if (is_numeric($id)) { $sql = "select * from users where id=$id"; }
-				else { $sql = "select * from users where username='$id'"; }
+				if (is_numeric($id)) { $sql = "select * from users where id=?"; }
+				else { $sql = "select * from users where username=?"; }
 
-				$result = $PDO->query($sql);
-				if ($user = $result->fetch())
+				try
 				{
+					$query = $PDO->prepare($sql);
+					$query->execute(array($id));
+				}
+				catch (Exception $e) { throw $e; }
+
+				$result = $query->fetchAll();
+				if (count($result[0]))
+				{
+					$user = $result[0];
+
 					$this->id = $user['id'];
 					$this->username = $user['username'];
 					# Passwords are one-way encrypted.  They should not be loaded by default
@@ -39,8 +48,6 @@
 					$this->lastname = $user['lastname'];
 					if ($user['phone']) { $this->phone = $user['phone']; }
 					if ($user['department']) { $this->department = $user['department']; }
-
-					$result->closeCursor();
 				}
 				else { throw new Exception("unknownUser"); }
 			}
@@ -52,16 +59,31 @@
 			if (!$this->username || !$this->firstname || !$this->lastname) { throw new Exception("missingRequiredFields"); }
 
 			$fields = array();
-			$fields[] = "username='{$this->username}'";
-			$fields[] = "firstname='{$this->firstname}'";
-			$fields[] = "lastname='{$this->lastname}'";
-			if ($this->authenticationMethod) { $fields[] = "authenticationMethod='{$this->authenticationMethod}'"; } else { $fields[] = "authenticationMethod=null"; }
-			if ($this->phone) { $fields[] = "phone='{$this->phone}'"; } else { $fields[] = "phone=null"; }
-			if ($this->department) { $fields[] = "department='{$this->department}'"; } else { $fields[] = "department=null"; }
-			$fields = implode(",",$fields);
+			$fields['username'] = $this->username ? $this->username : null;
+			# Passwords should not be updated by default.  Use the savePassword() function
+			$fields['authenticationMethod'] = $this->authenticationMethod ? $this->authenticationMethod : null;
+			$fields['firstname'] = $this->firstname ? $this->firstname : null;
+			$fields['lastname'] = $this->lastname ? $this->lastname : null;
+			$fields['department'] = $this->department ? $this->department : null;
+			$fields['phone'] = $this->phone ? $this->phone : null;
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
+
+
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
+
+			# Save the password only if they've typed one
+			if ($this->getPassword()) { $this->savePassword(); }
 
 			$this->updateRoles();
 		}
@@ -81,27 +103,23 @@
 			$PDO->commit();
 		}
 
-		private function update($fields)
+		private function update($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "update users set $fields where id={$this->id}";
-
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update users set $preparedFields where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert users set $fields";
-
-
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "insert users set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
-
-			# Save the initial password if we've added one
-			if ($this->getPassword()) { $this->savePassword(); }
 		}
 
 

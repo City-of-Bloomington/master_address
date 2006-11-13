@@ -21,21 +21,16 @@
 
 			if ($id)
 			{
-				$sql = "select * from placeHistory where id=$id";
-				$result = $PDO->query($sql);
-				if ($result)
+				$sql = "select * from placeHistory where id=?";
+				try
 				{
-					if ($row = $result->fetch())
-					{
-						# This will load all fields in the table as properties of this class.
-						# You may want to replace this with, or add your own extra, custom loading
-						foreach($row as $field=>$value) { if ($value) $this->$field = $value; }
-
-						$result->closeCursor();
-					}
-					else { throw new Exception($sql); }
+					$query = $PDO->prepare($sql);
+					$query->execute(array($id));
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				catch (Exception $e) { throw $e; }
+
+				$result = $query->fetchAll();
+				foreach($result[0] as $field=>$value) { if ($value) $this->$field = $value; }
 			}
 			else
 			{
@@ -47,43 +42,56 @@
 		}
 
 
+		/**
+		 * This generates generic SQL that should work right away.
+		 * You can replace this $fields code with your own custom SQL
+		 * for each property of this class,
+		 */
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
 			if (!$this->place_id || !$this->action) { throw new Exception("missingRequiredFields"); }
 
 
-			# This generates generic SQL that should work right away.
-			# You can (and maybe should) replace this $fields code with your own custom SQL
-			# for each property of this class,
 			$fields = array();
-			$fields[] = $this->place_id ? "place_id='{$this->place_id}'" : "place_id=null";
-			$fields[] = $this->action ? "action='{$this->action}'" : "action=null";
-			$fields[] = $this->date ? "date='{$this->date}'" : "date=null";
-			$fields[] = $this->notes ? "notes='{$this->notes}'" : "notes=null";
-			$fields[] = $this->user_id ? "user_id='{$this->user_id}'" : "user_id=null";
+			$fields['place_id'] = $this->place_id ? $this->place_id : null;
+			$fields['action'] = $this->action ? $this->action : null;
+			$fields['date'] = $this->date ? $this->date : null;
+			$fields['notes'] = $this->notes ? $this->notes : null;
+			$fields['user_id'] = $this->user_id ? $this->user_id : null;
 
-			$fields = implode(",",$fields);
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
 
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
 		}
 
-		private function update($fields)
+		private function update($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "update placeHistory set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update placeHistory set $preparedFields where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert placeHistory set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "insert placeHistory set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 		}
 

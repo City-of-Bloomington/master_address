@@ -11,6 +11,7 @@ foreach($PDO->query("show tables") as $row) { list($tables[]) = $row; }
 
 foreach($tables as $tableName)
 {
+	$fields = array();
 	foreach($PDO->query("describe $tableName") as $row)
 	{
 		$type = ereg_replace("[^a-z]","",$row['Type']);
@@ -26,6 +27,8 @@ foreach($tables as $tableName)
 	if (count($result) != 1) { continue; }
 	$key = $result[0];
 
+
+	$className = Inflector::classify($tableName);
 	#--------------------------------------------------------------------------
 	# Constructor
 	#--------------------------------------------------------------------------
@@ -40,20 +43,16 @@ foreach($tables as $tableName)
 
 			if (\$$key[Column_name])
 			{
-				\$sql = \"select * from $tableName where $key[Column_name]=\$$key[Column_name]\";
-				\$result = \$PDO->query(\$sql);
-				if (\$result)
+				\$sql = \"select * from $tableName where $key[Column_name]=?\";
+				try
 				{
-					if (\$row = \$result->fetch())
-					{
-						# You may want to replace this line to do your own custom loading
-						foreach(\$row as \$field=>\$value) { if (\$value) \$this->\$field = \$value; }
-
-						\$result->closeCursor();
-					}
-					else { throw new Exception(\$sql); }
+					\$query = \$PDO->prepare(\$sql);
+					\$query->execute(array(\$$key[Column_name]));
 				}
-				else { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
+				catch (Exception \$e) { throw \$e; }
+
+				\$result = \$query->fetchAll();
+				foreach(\$result[0] as \$field=>\$value) { if (\$value) \$this->\$field = \$value; }
 			}
 			else
 			{
@@ -98,7 +97,7 @@ foreach($tables as $tableName)
 		$field = substr($property,0,-3);
 		$fieldFunctionName = ucwords($field);
 		$getters.= "
-		public get$fieldFunctionName()
+		public function get$fieldFunctionName()
 		{
 			if (\$this->$property)
 			{
@@ -117,36 +116,39 @@ foreach($tables as $tableName)
 	$setters = "";
 	foreach($fields as $field)
 	{
-		$fieldFunctionName = ucwords($field['Field']);
-		switch ($field['Type'])
+		if ($field['Field'] != $key['Column_name'])
 		{
-			case "int":
-				if (in_array($field['Field'],$linkedProperties))
-				{
-					$property = substr($field['Field'],0,-3);
-					$object = ucfirst($property);
-					$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$property = new $object(\$int); \$this->$field[Field] = \$$field[Type]; }\n";
-				}
-				else
-				{
-					$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = ereg_replace(\"[^0-9]\",\"\",\$$field[Type]); }\n";
-				}
-			break;
+			$fieldFunctionName = ucwords($field['Field']);
+			switch ($field['Type'])
+			{
+				case "int":
+					if (in_array($field['Field'],$linkedProperties))
+					{
+						$property = substr($field['Field'],0,-3);
+						$object = ucfirst($property);
+						$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$property = new $object(\$int); \$this->$field[Field] = \$$field[Type]; }\n";
+					}
+					else
+					{
+						$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = ereg_replace(\"[^0-9]\",\"\",\$$field[Type]); }\n";
+					}
+				break;
 
-			case "string":
-				$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = trim(\$$field[Type]); }\n";
-			break;
+				case "string":
+					$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = trim(\$$field[Type]); }\n";
+				break;
 
-			case "date":
-				$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = is_array(\$$field[Type]) ? \$this->dateArrayToString(\$$field[Type]) : \$$field[Type]; }\n";
-			break;
+				case "date":
+					$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = is_array(\$$field[Type]) ? \$this->dateArrayToString(\$$field[Type]) : \$$field[Type]; }\n";
+				break;
 
-			case "float":
-				$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = ereg_replace(\"[^0-9.\-]\",\"\",\$$field[Type]); }\n";
-			break;
+				case "float":
+					$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = ereg_replace(\"[^0-9.\-]\",\"\",\$$field[Type]); }\n";
+				break;
 
-			default:
-				$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = \$$field[Type]; }\n";
+				default:
+					$setters.= "\t\tpublic function set$fieldFunctionName(\$$field[Type]) { \$this->$field[Field] = \$$field[Type]; }\n";
+			}
 		}
 	}
 	$setters.= "\n";
@@ -154,14 +156,12 @@ foreach($tables as $tableName)
 	{
 		$property = substr($field,0,-3);
 		$object = ucfirst($property);
-		$setters.= "\t\tpublic function set$object(\$$object) { \$this->$field = {$object}->getId(); \$this->$property = \$$object; }\n";
+		$setters.= "\t\tpublic function set$object(\$$property) { \$this->$field = \${$property}->getId(); \$this->$property = \$$property; }\n";
 	}
 
 	#--------------------------------------------------------------------------
 	# Output the class
 	#--------------------------------------------------------------------------
-	$className = ucwords($tableName);
-
 $contents = "<?php
 $copyright
 	class $className extends ActiveRecord
@@ -181,30 +181,47 @@ $constructor
 
 			\$fields = array();
 ";
-			foreach($fields as $field) { $contents.="\t\t\t\$fields[] = \$this->$field[Field] ? \"$field[Field]='{\$this->$field[Field]}'\" : \"$field[Field]=null\";\n"; }
+			foreach($fields as $field)
+			{
+				if ($field['Field'] != $key['Column_name'])
+				{
+					$contents.="\t\t\t\$fields['$field[Field]'] = \$this->$field[Field] ? \$this->$field[Field] : null;\n";
+				}
+			}
 $contents.= "
-			\$fields = implode(\",\",\$fields);
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from \$fields
+			\$preparedFields = array();
+			foreach(\$fields as \$key=>\$value)
+			{
+				\$preparedFields[] = \"\$key=?\";
+				\$values[] = \$value;
+			}
+			\$preparedFields = implode(\",\",\$preparedFields);
 
 
-			if (\$this->$key[Column_name]) { \$this->update(\$fields); }
-			else { \$this->insert(\$fields); }
+			if (\$this->$key[Column_name]) { \$this->update(\$values,\$preparedFields); }
+			else { \$this->insert(\$values,\$preparedFields); }
 		}
 
-		private function update(\$fields)
+		private function update(\$values,\$preparedFields)
 		{
 			global \$PDO;
 
-			\$sql = \"update $tableName set \$fields where $key[Column_name]={\$this->$key[Column_name]}\";
-			if (false === \$PDO->exec(\$sql)) { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
+			\$sql = \"update $tableName set \$preparedFields where id={\$this->id}\";
+			if (false === \$query = \$PDO->prepare(\$sql)) { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
+			if (false === \$query->execute(\$values)) { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
 		}
 
-		private function insert(\$fields)
+		private function insert(\$values,\$preparedFields)
 		{
 			global \$PDO;
 
-			\$sql = \"insert $tableName set \$fields\";
-			if (false === \$PDO->exec(\$sql)) { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
-			\$this->$key[Column_name] = \$PDO->lastInsertID();
+			\$sql = \"insert $tableName set \$preparedFields\";
+			if (false === \$query = \$PDO->prepare(\$sql)) { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
+			if (false === \$query->execute(\$values)) { \$e = \$PDO->errorInfo(); throw new Exception(\$sql.\$e[2]); }
+			\$this->id = \$PDO->lastInsertID();
 		}
 
 

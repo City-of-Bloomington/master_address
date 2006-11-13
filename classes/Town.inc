@@ -1,8 +1,8 @@
 <?php
 /**
-* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
-* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
-*/
+ * @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ */
 	class Town extends ActiveRecord
 	{
 		private $id;
@@ -10,26 +10,26 @@
 
 
 
+		/**
+		 * This will load all fields in the table as properties of this class.
+		 * You may want to replace this with, or add your own extra, custom loading
+		 */
 		public function __construct($id=null)
 		{
 			global $PDO;
 
 			if ($id)
 			{
-				$sql = "select * from towns where id=$id";
-				$result = $PDO->query($sql);
-				if ($result)
+				$sql = "select * from towns where id=?";
+				try
 				{
-					if ($row = $result->fetch())
-					{
-						$this->id = $id;
-						$this->name = $row['name'];
-
-						$result->closeCursor();
-					}
-					else { throw new Exception($sql); }
+					$query = $PDO->prepare($sql);
+					$query->execute(array($id));
 				}
-				else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+				catch (Exception $e) { throw $e; }
+
+				$result = $query->fetchAll();
+				foreach($result[0] as $field=>$value) { if ($value) $this->$field = $value; }
 			}
 			else
 			{
@@ -39,47 +39,61 @@
 		}
 
 
+		/**
+		 * This generates generic SQL that should work right away.
+		 * You can replace this $fields code with your own custom SQL
+		 * for each property of this class,
+		 */
 		public function save()
 		{
 			# Check for required fields here.  Throw an exception if anything is missing.
 
-
-			# This generates generic SQL that should work right away.
-			# You can (and maybe should) replace this $fields code with your own custom SQL
-			# for each property of this class,
 			$fields = array();
-			$fields[] = "name='{$this->name}'";
-			$fields = implode(",",$fields);
+			$fields['name'] = $this->name ? $this->name : null;
+
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
 
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
 		}
 
-		private function update($fields)
+		private function update($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "update towns set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update towns set $preparedFields garge where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert towns set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
-			$this->id = $PDO->lastInsertID();
+			$sql = "insert towns set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
+
 
 		public function __toString() { return $this->name; }
-
 
 		public function getId() { return $this->id; }
 		public function getName() { return $this->name; }
 
 
 		public function setName($string) { $this->name = trim($string); }
+
+
 	}
 ?>

@@ -18,22 +18,18 @@
 			$this->type = $type;
 			$this->tableName = $type."Statuses";
 
-			if (is_numeric($id)) { $sql = "select * from {$this->tableName} where id=$id"; }
-			else { $sql = "select * from {$this->tableName} where status='$id'"; }
+			if (is_numeric($id)) { $sql = "select * from {$this->tableName} where id=?"; }
+			else { $sql = "select * from {$this->tableName} where status=?"; }
 
-			$result = $PDO->query($sql);
-			if ($result)
+			try
 			{
-				if ($row = $result->fetch())
-				{
-					$this->id = $row['id'];
-					$this->status = $row['status'];
-
-					$result->closeCursor();
-				}
-				else { throw new Exception($sql); }
+				$query = $PDO->prepare($sql);
+				$query->execute(array($id));
 			}
-			else { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			catch (Exception $e) { throw $e; }
+
+			$result = $query->fetchAll();
+			foreach($result[0] as $field=>$value) { if ($value) $this->$field = $value; }
 		}
 
 
@@ -44,28 +40,40 @@
 
 
 			$fields = array();
-			$fields[] = "status='{$this->status}'";
-			$fields = implode(",",$fields);
+			$fields['status'] = $this->status ? $this->status : null;
+
+			# Split the fields up into a preparedFields array and a values array.
+			# PDO->execute cannot take an associative array for values, so we have
+			# to strip out the keys from $fields
+			$preparedFields = array();
+			foreach($fields as $key=>$value)
+			{
+				$preparedFields[] = "$key=?";
+				$values[] = $value;
+			}
+			$preparedFields = implode(",",$preparedFields);
 
 
-			if ($this->id) { $this->update($fields); }
-			else { $this->insert($fields); }
+			if ($this->id) { $this->update($values,$preparedFields); }
+			else { $this->insert($values,$preparedFields); }
 		}
 
 		private function update($fields)
 		{
 			global $PDO;
 
-			$sql = "update {$this->tableName} set $fields where id={$this->id}";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "update roles set {$this->tableName} where id={$this->id}";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 		}
 
-		private function insert($fields)
+		private function insert($values,$preparedFields)
 		{
 			global $PDO;
 
-			$sql = "insert {$this->tableName} set $fields";
-			if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			$sql = "insert {$this->tableName} set $preparedFields";
+			if (false === $query = $PDO->prepare($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
+			if (false === $query->execute($values)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			$this->id = $PDO->lastInsertID();
 		}
 
