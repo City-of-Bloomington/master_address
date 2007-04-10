@@ -130,6 +130,7 @@
 			else return null;
 		}
 		public function getType() { return $this->getStreetNameType()->getType(); }
+		public function getTown() { return $this->getName()->getTown(); }
 
 
 		public function setStreet_id($int) { $this->street = new Street($int); $this->street_id = $int; }

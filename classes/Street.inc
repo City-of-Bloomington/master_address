@@ -180,6 +180,7 @@
 			if (!count($this->streetNameList)) { $this->streetNameList = new StreetNameList(array("street_id"=>$this->id)); }
 			return $this->streetNameList;
 		}
+		public function getTown() { return $this->getStreetName()->getName()->getTown(); }
 
 
 		public function __toString() { return $this->getStreetName()->getName()->getFullname(); }

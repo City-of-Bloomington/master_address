@@ -6,13 +6,15 @@
 	if (isset($_GET['street']['id']) && isset($_GET['name']))
 	{
 		$search = array();
-		if ($_GET['street']['id']) { $search['id'] = $_GET['street']['id']; }
+		if ($_GET['street']['id']) { $search['street_id'] = $_GET['street']['id']; }
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
+			# Searching for street name information is really searching through the streetNames
 			$response = new URL("viewStreet.php");
-			$streetList = new StreetList($search);
-			$template->blocks[] = new Block("streets/findStreetResults.inc",array("streetList"=>$streetList,"response"=>$response));
+			$streetNameList = new StreetNameList();
+			$streetNameList->search($search);
+			$template->blocks[] = new Block("streets/findStreetResults.inc",array("streetNameList"=>$streetNameList,"response"=>$response));
 		}
 	}
 

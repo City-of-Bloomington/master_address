@@ -1,9 +1,9 @@
 <?php
 /*
-	$this->streetList
+	$this->streetNameList
 	$this->response
 */
-	switch (count($this->streetList))
+	switch (count($this->streetNameList))
 	{
 		case 0:
 			echo "<p>No Streets Found</p>";
@@ -12,12 +12,15 @@
 
 		default:
 			echo "<table>";
-			foreach($this->streetList as $street)
+			foreach($this->streetNameList as $streetName)
 			{
-				$this->response->parameters['street_id'] = $street->getId();
+				$this->response->parameters['street_id'] = $streetName->getStreet_id();
 				echo "
-				<tr><td><a href=\"{$this->response->getURL()}\">{$street->getId()}</a></td>
-					<td><a href=\"{$this->response->getURL()}\">{$street->getFullStreetName()}</a></td></tr>
+				<tr><td><a href=\"{$this->response->getURL()}\">{$streetName->getStreet_id()}</a></td>
+					<td><a href=\"{$this->response->getURL()}\">$streetName</a></td>
+					<td>{$streetName->getTown()}</td>
+					<td>{$streetName->getStreetNameType()}</td>
+				</tr>
 				";
 			}
 			echo "</table>";

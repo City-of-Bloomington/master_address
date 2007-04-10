@@ -10,8 +10,9 @@
 		foreach($_GET['name'] as $field=>$value) { if ($value) { $search[$field] = $value; } }
 		if (count($search))
 		{
-			$streetList = new StreetList($search);
 			$response = new URL("viewStreet.php");
+			$streetList = new StreetList();
+			$streetList->search($search);
 			$template->blocks[] = new Block("streets/findStreetResults.inc",array("streetList"=>$streetList,"response"=>$response));
 		}
 	}

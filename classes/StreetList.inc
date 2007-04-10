@@ -62,11 +62,12 @@
 			if (isset($fields['direction_id']) || isset($fields['name']) || isset($fields['suffix_id']) || isset($fields['postDirection_id']))
 			{
 				$this->joins.= " left join streetNames on streets.id=streetNames.street_id left join names on streetNames.name_id=names.id";
+				if ($this->sort == "id") { $this->sort = "name"; }
 
 				if (isset($fields['direction_id'])) { $options[] = "direction_id=$fields[direction_id]"; }
 				if (isset($fields['suffix_id'])) { $options[] = "suffix_id=$fields[suffix_id]"; }
 				if (isset($fields['postDirection_id'])) { $options[] = "postDirection_id=$fields[postDirection_id]"; }
-				if (isset($fields['name'])) { $options[] = "name like '$fields[name]%'"; }
+				if (isset($fields['name'])) { $options[] = "name like '%$fields[name]%'"; }
 			}
 
 			$this->populateList($options);

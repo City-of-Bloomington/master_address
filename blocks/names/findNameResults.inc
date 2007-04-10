@@ -12,7 +12,7 @@
 		default:
 			echo "
 			<table>
-			<tr><th>ID</th><th>Name</th></tr>
+			<tr><th>ID</th><th>Name</th><th>Town</th></tr>
 			";
 			foreach($this->nameList as $name)
 			{
@@ -20,6 +20,7 @@
 				echo "
 				<tr><td><a href=\"{$this->response->getURL()}\">{$name->getId()}</a></td>
 					<td><a href=\"{$this->response->getURL()}\">{$name->getFullname()}</a></td>
+					<td>{$name->getTown()}</td>
 				</tr>
 				";
 			}

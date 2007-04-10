@@ -44,7 +44,7 @@
 			if (isset($fields['id'])) { $options[] = "id=$fields[id]"; }
 			if (isset($fields['town_id'])) { $options[] = "town_id=$fields[town_id]"; }
 			if (isset($fields['direction_id'])) { $options[] = "direction_id=$fields[direction_id]"; }
-			if (isset($fields['name'])) { $options[] = "name like '$fields[name]%'"; }
+			if (isset($fields['name'])) { $options[] = "name like '%$fields[name]%'"; }
 			if (isset($fields['suffix_id'])) { $options[] = "suffix_id=$fields[suffix_id]"; }
 			if (isset($fields['postDirection_id'])) { $options[] = "postDirection_id=$fields[postDirection_id]"; }
 			if (isset($fields['startDate'])) { $options[] = "startDate='$fields[startDate]'"; }

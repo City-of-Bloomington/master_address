@@ -173,7 +173,7 @@
 			if (count($this->deletedBuildingIds))
 			{
 				$ids = implode(",",$this->deletedBuildingIds);
-				$sql = "delete from building_places where place_id={$this->id} and building_id in ($ids)";
+				$sql = "delete from building_places where place_id={$this->id} and building_id not in ($ids)";
 				if (false === $PDO->exec($sql)) { $e = $PDO->errorInfo(); throw new Exception($sql.$e[2]); }
 			}
 

@@ -6,9 +6,7 @@
 						town [ name ]
 */
 	verifyUser("Administrator");
-	$template = new Template();
-	$form = new Block("towns/updateTownForm.inc");
-	if (isset($_GET['id'])) { $form->town = new Town($_GET['id']); }
+	if (isset($_GET['id'])) { $town = new Town($_GET['id']); }
 
 	if (isset($_POST['town']))
 	{
@@ -21,13 +19,10 @@
 			Header("Location: home.php");
 			exit();
 		}
-		catch (Exception $e)
-		{
-			$_SESSION['errorMessages'][] = $e;
-			$form->town = $town;
-		}
+		catch (Exception $e) { $_SESSION['errorMessages'][] = $e; }
 	}
 
-	$template->blocks[] = $form;
+	$template = new Template();
+	$template->blocks[] = new Block("towns/updateTownForm.inc",array('town'=>$town));
 	$template->render();
 ?>
