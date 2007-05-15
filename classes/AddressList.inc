@@ -1,8 +1,9 @@
 <?php
 /**
-* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
-* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
-*/
+ * @copyright Copyright (C) 2006,2007 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
 	class AddressList extends PDOResultIterator
 	{
 		public function __construct($fields=null,$sort="a.id")
@@ -12,9 +13,11 @@
 			if (is_array($fields)) $this->find($fields);
 		}
 
-		public function find($fields=null,$sort="a.id")
+		public function find($fields=null,$sort="a.id",$limit=null,$groupBy=null)
 		{
 			$this->sort = $sort;
+			$this->limit = $limit;
+			$this->groupBy = $groupBy;
 
 			$options = array();
 			if (isset($fields['id'])) { $options[] = "a.id='$fields[id]'"; }

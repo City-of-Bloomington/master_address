@@ -1,14 +1,19 @@
 <?php
 /**
-* @copyright Copyright (C) 2006 City of Bloomington, Indiana. All rights reserved.
-* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
-*/
+ * @copyright Copyright (C) 2006,2007 City of Bloomington, Indiana. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
 	class AddressSearch extends PDOResultIterator
 	{
 		public function __construct($fields=null) { if (is_array($fields)) $this->find($fields); }
 
-		public function find($fields=null,$sort=null)
+		public function find($fields=null,$sort=null,$limit=null,$groupBy=null)
 		{
+			$this->sort = $sort;
+			$this->limit = $limit;
+			$this->groupBy = $groupBy;
+
 			global $PDO;
 
 			$options = array();
