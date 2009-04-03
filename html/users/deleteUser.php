@@ -1,11 +1,13 @@
 <?php
-/*
-	$_GET variables:	id
-*/
-	verifyUser("Administrator");
+/**
+ * @copyright 2006-2008 City of Bloomington, Indiana
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param GET user_id
+ */
+verifyUser('Administrator');
 
-	$user = new User($_GET['id']);
-	$user->delete();
+$user = new User($_GET['user_id']);
+$user->delete();
 
-	Header("Location: home.php");
-?>
+header('Location: '.BASE_URL.'/users');

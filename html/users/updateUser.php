@@ -1,43 +1,32 @@
 <?php
-/*
-	$_GET variables:	id
-	---------------------------------------------------------------------------
-	$_POST variables:	id
-						user [ authenticationMethod		# Optional
-								username				password
-								roles					firstname
-														lastname
-														department
-														phone
-							]
-*/
-	verifyUser("Administrator");
-	$template = new Template();
-	$form = new Block("users/updateUserForm.inc");
-	if (isset($_GET['id'])) { $form->user = new User($_GET['id']); }
+/**
+ * @copyright 2009 City of Bloomington, Indiana
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param REQUEST user_id
+ */
 
-	if (isset($_POST['user']))
-	{
-		$user = new User($_POST['id']);
-		foreach($_POST['user'] as $field=>$value)
-		{
-			$set = "set".ucfirst($field);
-			$user->$set($value);
-		}
+verifyUser('Administrator');
 
-		try
-		{
-			$user->save();
-			Header("Location: home.php");
-			exit();
-		}
-		catch (Exception $e)
-		{
-			$_SESSION['errorMessages'][] = $e;
-			$form->user = $user;
-		}
+$user = new User($_REQUEST['user_id']);
+
+if (isset($_POST['user'])) {
+	foreach ($_POST['user'] as $field=>$value) {
+		$set = 'set'.ucfirst($field);
+		$user->$set($value);
 	}
 
-	$template->blocks[] = $form;
-	$template->render();
-?>
+	try {
+		$user->save();
+		header('Location: '.BASE_URL.'/users');
+		exit();
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+	}
+}
+
+$template = new Template();
+$template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
+$template->blocks[] = new BlocK('people/personInfo.inc',array('person'=>$user->getPerson()));
+echo $template->render();

@@ -1,11 +1,8 @@
 <?php
-	$template = new Template();
-	$template->blocks[] = new Block("addresses/searchForm.inc");
-	if (isset($_GET['fullAddress']))
-	{
-		$template->blocks[] = new Block("addresses/searchResults.inc",
-									array( "search"=>new AddressSearch(array('fullAddress'=>$_GET['fullAddress'])),
-											"response"=>new URL("addresses/viewAddress.php") ) );
-	}
-	$template->render();
-?>
+/**
+ * @copyright 2006-2008 City of Bloomington, Indiana
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
+$template = new Template();
+echo $template->render();

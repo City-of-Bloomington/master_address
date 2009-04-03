@@ -1,49 +1,68 @@
 <?php
-/*
-	$_POST variables:	user [ authenticationMethod		# Optional
-								username				password
-								roles					firstname
-														lastname
-														department
-														phone
-							]
-*/
-	verifyUser("Administrator");
-	$template = new Template();
-	$form = new Block("users/addUserForm.inc");
+/**
+ * @copyright 2006-2009 City of Bloomington, Indiana
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param GET person_id
+ */
+verifyUser('Administrator');
+if (isset($_REQUEST['person_id'])) {
+	try {
+		$person = new Person($_REQUEST['person_id']);
+	}
+	catch (Exception $e) {
+	}
+}
 
-	if (isset($_POST['user']))
-	{
-		$user = new User();
-		foreach($_POST['user'] as $field=>$value)
-		{
-			$set = "set".ucfirst($field);
-			$user->$set($value);
-		}
+if (isset($_POST['user'])) {
 
-		if ($user->getAuthenticationMethod() == "LDAP")
-		{
-			# Load the rest of their stuff from LDAP
-			$ldap = new LDAPEntry($user->getUsername());
-			$user->setFirstname($ldap->getFirstname());
-			$user->setLastname($ldap->getLastname());
-			$user->setDepartment($ldap->getDepartment());
-			$user->setPhone($ldap->getPhone());
-		}
+	$user = new User();
+	foreach ($_POST['user'] as $field=>$value) {
+		$set = 'set'.ucfirst($field);
+		$user->$set($value);
+	}
 
-		try
-		{
-			$user->save();
-			Header("Location: home.php");
-			exit();
-		}
-		catch (Exception $e)
-		{
-			$_SESSION['errorMessages'][] = $e;
-			$form->user = $user;
+	if (isset($person)) {
+		$user->setPerson_id($person->getId());
+	}
+	else {
+		// Load their information from LDAP
+		// Delete this statement if you're not using LDAP
+		if ($user->getAuthenticationMethod() == 'LDAP') {
+			try {
+				$ldap = new LDAPEntry($user->getUsername());
+				try {
+					$person = new Person($ldap->getEmail());
+				}
+				catch (Exception $e) {
+					$person = new Person();
+					$person->setFirstname($ldap->getFirstname());
+					$person->setLastname($ldap->getLastname());
+					$person->setEmail($ldap->getEmail());
+					$person->save();
+				}
+				$user->setPerson($person);
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
 		}
 	}
 
-	$template->blocks[] = $form;
-	$template->render();
-?>
+	try {
+		$user->save();
+		header('Location: '.BASE_URL.'/users');
+		exit();
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+	}
+}
+
+$template = new Template();
+$template->title = 'Create a user account';
+$template->blocks[] = new Block('users/addUserForm.inc');
+if (isset($person)) {
+	$template->blocks[] = new Block('people/personInfo.inc',array('person'=>$person));
+}
+echo $template->render();

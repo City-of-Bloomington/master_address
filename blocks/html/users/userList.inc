@@ -1,38 +1,59 @@
 <?php
-/*
-	$this->userList
-*/
-	if (userHasRole("Administrator"))
-	{
-		$addButton = "<button type=\"button\" class=\"addSmall\" onclick=\"document.location.href='".BASE_URL."/users/addUser.php';\">Add</button>";
-	}
-	else { $addButton = ""; }
+/**
+ * @copyright 2007-2009 City of Bloomington, Indiana
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param UserList $this->userList
+ */
 ?>
 <div class="interfaceBox">
-	<div class="titleBar"><?php echo $addButton; ?>Users</div>
+	<h1><?php
+			if (userHasRole('Administrator')) {
+				echo "
+				<a class=\"add button\" href=\"".BASE_URL."/users/addUser.php\" title=\"Add user account\">
+					Add
+				</a>
+				";
+			}
+		?>
+		User Accounts
+	</h1>
 	<table>
 	<?php
-		foreach($this->userList as $user)
-		{
-			if (userHasRole("Administrator"))
-			{
-				$editButton = "<button type=\"button\" class=\"editSmall\" onclick=\"document.location.href='updateUser.php?id={$user->getId()}'\">Edit</button>";
-				$deleteButton = "<button type=\"button\" class=\"deleteSmall\" onclick=\"deleteConfirmation('deleteUser.php?id={$user->getId()}');\">Delete</button>";
+		foreach ($this->userList as $user) {
+			$editButton = '';
+			$deleteButton = '';
+			if (userHasRole('Administrator')) {
+				$url = new URL(BASE_URL.'/users/updateUser.php');
+				$url->user_id = $user->getId();
+				$editButton = "
+				<a class=\"edit button\" href=\"$url\" title=\"Edit user account\">
+					Edit
+				</a>
+				";
+
+				$url = BASE_URL.'/users/deleteUser.php?user_id='.$user->getId();
+				$deleteButton = "
+				<a class=\"delete button\" href=\"$url\" title=\"Delete user account\">
+					Delete
+				</a>
+				";
 			}
-			else
-			{
-				$editButton = "";
-				$deleteButton = "";
-			}
+
 			echo "
-			<tr><td>{$editButton}{$deleteButton}</td>
+			<tr><td>$editButton</td>
 				<td>{$user->getUsername()}</td>
 				<td>{$user->getFirstname()} {$user->getLastname()}</td>
 				<td>{$user->getAuthenticationMethod()}</td>
 				<td>
 			";
-					foreach($user->getRoles() as $role) { echo "$role "; }
-			echo "</td></tr>";
+					foreach ($user->getRoles() as $role) {
+						echo "$role ";
+					}
+			echo "
+				</td>
+			</tr>
+			";
 		}
 	?>
 	</table>
