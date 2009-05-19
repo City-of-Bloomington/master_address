@@ -35,14 +35,15 @@ class User extends SystemUser
 				$zend_db = Database::getConnection();
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
-
-			if (!count($result)) {
-				throw new Exception('users/unknownUser');
-			}
-			foreach ($result as $field=>$value) {
-				if ($value) {
-					$this->$field = $value;
+			if ($result) {
+				foreach ($result as $field=>$value) {
+					if ($value) {
+						$this->$field = $value;
+					}
 				}
+			}
+			else {
+				throw new Exception('users/unknownUser');
 			}
 		}
 		else {
@@ -112,7 +113,7 @@ class User extends SystemUser
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('users',$data);
-		$this->id = $zend_db->lastInsertId();
+		$this->id = $zend_db->lastInsertId('users','id');
 	}
 
 	/**

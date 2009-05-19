@@ -25,9 +25,13 @@ class Database
 									'username'=>DB_USER,
 									'password'=>DB_PASS,
 									'dbname'=>DB_NAME,
-									'options'=>array(Zend_Db::CASE_FOLDING=>Zend_Db::CASE_LOWER));
+									'options'=>array(Zend_Db::CASE_FOLDING=>Zend_Db::CASE_LOWER,
+													 Zend_Db::AUTO_QUOTE_IDENTIFIERS=>false));
 				self::$connection = Zend_Db::factory(DB_ADAPTER,$parameters);
 				self::$connection->getConnection();
+				if (strtolower(DB_ADAPTER) == 'pdo_oci') {
+					self::$connection->query('alter session set current_schema=?',DB_USER);
+				}
 			}
 			catch (Exception $e) {
 				die($e->getMessage());
