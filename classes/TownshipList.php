@@ -1,12 +1,12 @@
 <?php
 /**
- * A collection class for TownshipMaster objects
+ * A collection class for Township objects
  *
  * This class creates a zend_db select statement.
  * ZendDbResultIterator handles iterating and paginating those results.
  * As the results are iterated over, ZendDbResultIterator will pass each desired
  * row back to this class's loadResult() which will be responsible for hydrating
- * each TownshipMaster object
+ * each Township object
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
@@ -16,7 +16,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class TownshipMasterList extends ZendDbResultIterator
+class TownshipList extends ZendDbResultIterator
 {
 	/**
 	 * Creates a basic select statement for the collection.
@@ -42,6 +42,9 @@ class TownshipMasterList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='township_id',$limit=null,$groupBy=null)
 	{
+		$this->select->from('township_master');
+
+		// Finding on fields from the township_master table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				$this->select->where("$key=?",$value);
@@ -64,11 +67,16 @@ class TownshipMasterList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Hydrates each TownshipMaster object as we iterate through the results
-	 * @param int $key
+	 * Hydrates all the Township objects from a database result set
+	 *
+	 * This is a callback function, called from ZendDbResultIterator.  It is
+	 * called once per row of the result.
+	 *
+	 * @param int $key The index of the result row to load
+	 * @return Township
 	 */
 	protected function loadResult($key)
 	{
-		return new TownshipMaster($this->result[$key]);
+		return new Township($this->result[$key]);
 	}
 }

@@ -4,17 +4,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class TownshipMaster
+class Township
 {
 	private $township_id;
 	private $name;
 	private $township_abbreviation;
 	private $quarter_code;
-
-
-	private $township;
-
-
 
 	/**
 	 * Populates the object with data
@@ -48,7 +43,7 @@ class TownshipMaster
 				}
 			}
 			else {
-				throw new Exception('township_master/unknownTownshipMaster');
+				throw new Exception('townships/unknownTownship');
 			}
 		}
 		else {
@@ -56,7 +51,7 @@ class TownshipMaster
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -64,6 +59,9 @@ class TownshipMaster
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
+		if (!$this->name || !$this->township_abbreviation) {
+			throw new Exception('missingRequiredFields');
+		}
 
 	}
 
@@ -75,8 +73,8 @@ class TownshipMaster
 		$this->validate();
 
 		$data = array();
-		$data['name'] = $this->name ? $this->name : null;
-		$data['township_abbreviation'] = $this->township_abbreviation ? $this->township_abbreviation : null;
+		$data['name'] = $this->name;
+		$data['township_abbreviation'] = $this->township_abbreviation;
 		$data['quarter_code'] = $this->quarter_code ? $this->quarter_code : null;
 
 		if ($this->township_id) {
@@ -136,20 +134,6 @@ class TownshipMaster
 		return $this->quarter_code;
 	}
 
-	/**
-	 * @return Township
-	 */
-	public function getTownship()
-	{
-		if ($this->township_id) {
-			if (!$this->township) {
-				$this->township = new Township($this->township_id);
-			}
-			return $this->township;
-		}
-		return null;
-	}
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -178,18 +162,27 @@ class TownshipMaster
 		$this->quarter_code = $char;
 	}
 
-	/**
-	 * @param Township $township
-	 */
-	public function setTownship($township)
-	{
-		$this->township_id = $township->getId();
-		$this->township = $township;
-	}
-
-
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Alias for getTownship_id()
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->getTownship_id();
+	}
+
+	/**
+	 * Alias for getTownship_abbreviation()
+	 *
+	 * @return string
+	 */
+	public function getAbbreviation()
+	{
+		return $this->getTownship_abbreviation();
+	}
 }
