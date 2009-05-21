@@ -255,6 +255,7 @@ class User extends SystemUser
 	//----------------------------------------------------------------
 	/**
 	 * Returns an array of Role names with the role id as the array index
+	 *
 	 * @return array
 	 */
 	public function getRoles()
@@ -277,6 +278,7 @@ class User extends SystemUser
 	}
 	/**
 	 * Takes an array of role names.  Loads the Roles from the database
+	 *
 	 * @param array $roleNames An array of names
 	 */
 	public function setRoles($roleNames)
@@ -289,6 +291,7 @@ class User extends SystemUser
 	}
 	/**
 	 * Takes a string or an array of strings and checks if the user has that role
+	 * 
 	 * @param Array|String $roles
 	 * @return boolean
 	 */
@@ -307,6 +310,9 @@ class User extends SystemUser
 		}
 	}
 
+	/**
+	 * Saves the current roles back to the database
+	 */
 	private function updateRoles()
 	{
 		$zend_db = Database::getConnection();
@@ -346,9 +352,11 @@ class User extends SystemUser
 
 	/**
 	 * Callback function from the SystemUser class
+	 *
 	 * The SystemUser class will determine where the authentication
 	 * should occur.  If the user should be authenticated locally,
 	 * this function will be called.
+	 *
 	 * @param string $password
 	 * @return boolean
 	 */
