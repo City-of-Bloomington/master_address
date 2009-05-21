@@ -291,7 +291,7 @@ class User extends SystemUser
 	}
 	/**
 	 * Takes a string or an array of strings and checks if the user has that role
-	 * 
+	 *
 	 * @param Array|String $roles
 	 * @return boolean
 	 */
@@ -344,10 +344,12 @@ class User extends SystemUser
 	 */
 	protected function saveLocalPassword()
 	{
-		$zend_db = Database::getConnection();
+		if ($this->id) {
+			$zend_db = Database::getConnection();
 
-		// Passwords in the class should already be MD5 hashed
-		$zend_db->update('users',array('password'=>$this->password),"id={$this->id}");
+			// Passwords in the class should already be MD5 hashed
+			$zend_db->update('users',array('password'=>$this->password),"id={$this->id}");
+		}
 	}
 
 	/**
