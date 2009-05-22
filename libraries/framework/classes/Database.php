@@ -29,8 +29,13 @@ class Database
 													 Zend_Db::AUTO_QUOTE_IDENTIFIERS=>false));
 				self::$connection = Zend_Db::factory(DB_ADAPTER,$parameters);
 				self::$connection->getConnection();
-				if (strtolower(DB_ADAPTER) == 'pdo_oci') {
+
+				// Alter oracle sessions to act more like MySQL
+				if (self::getType() == 'oracle') {
 					self::$connection->query('alter session set current_schema=?',DB_USER);
+					self::$connection->query('alter session set nls_date_format=?','YYYY-MM-DD HH24:MI:SS');
+					self::$connection->query('alter session set nls_comp=linguistic');
+					self::$connection->query('alter session set nls_sort=binary_ci');
 				}
 			}
 			catch (Exception $e) {
@@ -38,5 +43,26 @@ class Database
 			}
 		}
 		return self::$connection;
+	}
+
+	/**
+	 * Returns the type of database that's being used (mysql, oracle, etc.)
+	 *
+	 * @return string
+	 */
+	public static function getType()
+	{
+		switch (strtolower(DB_ADAPTER)) {
+			case 'pdo_mysql':
+			case 'mysqli':
+				return 'mysql';
+				break;
+
+			case 'pdo_oci':
+			case 'oci8':
+				return 'oracle';
+				break;
+		}
+
 	}
 }
