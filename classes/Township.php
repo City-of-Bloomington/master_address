@@ -95,7 +95,12 @@ class Township
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('township_master',$data);
-		$this->id = $zend_db->lastInsertId('township_master','township_id');
+		if (Database::getType()=='oracle') {
+			$this->township_id = $zend_db->lastSequenceId('township_id_s');
+		}
+		else {
+			$this->township_id = $zend_db->lastInsertId('township_master','township_id');
+		}
 	}
 
 	//----------------------------------------------------------------

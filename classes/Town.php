@@ -93,7 +93,12 @@ class Town
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('towns_master',$data);
-		$this->id = $zend_db->lastInsertId('towns_master','town_id');
+		if (Database::getType()=='oracle') {
+			$this->town_id = $zend_db->lastSequenceId('town_id_s');
+		}
+		else {
+			$this->town_id = $zend_db->lastInsertId();
+		}
 	}
 
 	//----------------------------------------------------------------
