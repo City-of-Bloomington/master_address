@@ -145,3 +145,23 @@ create table voting_precincts (
 	precinct_name varchar2(20),
 	active char(1) not null
 );
+
+create table state_road_master (
+	state_road_id number not null primary key,
+	description varchar2(40),
+	abbreviation varchar2(10)
+);
+
+create sequence state_road_id_s
+start with 1
+increment by 1
+nomaxvalue
+nocache;
+
+create trigger state_road_autoincrement_trigger
+before insert on state_road_master
+for each row
+begin
+select state_road_id_s.nextval into :new.state_road_id from dual;
+end;
+/

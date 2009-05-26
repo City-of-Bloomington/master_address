@@ -65,3 +65,9 @@ create table voting_precincts (
 	precinct_name varchar(20),
 	active char(1) not null
 );
+
+create table state_road_master (
+	state_road_id int unsigned not null primary key autoincrement,
+	description varchar(40),
+	abbreviation varchar(10)
+);
