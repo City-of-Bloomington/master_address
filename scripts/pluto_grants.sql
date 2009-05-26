@@ -44,6 +44,11 @@ grant select,insert,update,delete on eng.township_master to master_address;
 grant select,insert,update,delete on eng.trash_pickup_master to master_address;
 grant select,insert,update,delete on eng.trash_recycle_week_master to master_address;
 
+grant select,insert,update,delete on eng.people to master_address;
+grant select,insert,update,delete on eng.users to master_address;
+grant select,insert,update,delete on eng.roles to master_address;
+grant select,insert,update,delete on eng.user_roles to master_address;
+
 
 grant select on eng.gov_jur_id_s to master_address;
 grant select on eng.jurisdiction_id_s to master_address;
@@ -63,19 +68,6 @@ grant select on eng.township_id_s to master_address;
 grant select on eng.users_id_seq to master_address;
 
 
-grant select,insert,update,delete on gis.annexations to master_address;
-grant select,insert,update,delete on gis.building_address_location to master_address;
-grant select,insert,update,delete on gis.building_types_master to master_address;
-grant select,insert,update,delete on gis.buildings to master_address;
-grant select,insert,update,delete on gis.buildings_status_lookup to master_address;
-grant select,insert,update,delete on gis.mast_address_parcel to master_address;
-grant select,insert,update,delete on gis.parcel to master_address;
-grant select,insert,update,delete on gis.precinct_address_location to master_address;
-grant select,insert,update,delete on gis.voting_precincts to master_address;
-
-
-grant select on gis.building_id_s to master_address;
-grant select on gis.building_type_id_s to master_address;
 
 
 create synonym master_address.address_location for eng.address_location;
@@ -124,6 +116,12 @@ create synonym master_address.township_master for eng.township_master;
 create synonym master_address.trash_pickup_master for eng.trash_pickup_master;
 create synonym master_address.trash_recycle_week_master for eng.trash_recycle_week_master;
 
+create synonym master_address.people for eng.people;
+create synonym master_address.users for eng.users;
+create synonym master_address.roles for eng.roles;
+create synonym master_address.user_roles for eng.user_roles;
+
+
 create synonym master_address.gov_jur_id_s for eng.gov_jur_id_s;
 create synonym master_address.jurisdiction_id_s for eng.jurisdiction_id_s;
 create synonym master_address.location_change_id_s for eng.location_change_id_s;
@@ -140,6 +138,21 @@ create synonym master_address.subunit_id_s for eng.subunit_id_s;
 create synonym master_address.town_id_s for eng.town_id_s;
 create synonym master_address.township_id_s for eng.township_id_s;
 create synonym master_address.users_id_seq for eng.users_id_seq;
+
+
+grant select,insert,update,delete on gis.annexations to master_address;
+grant select,insert,update,delete on gis.building_address_location to master_address;
+grant select,insert,update,delete on gis.building_types_master to master_address;
+grant select,insert,update,delete on gis.buildings to master_address;
+grant select,insert,update,delete on gis.buildings_status_lookup to master_address;
+grant select,insert,update,delete on gis.mast_address_parcel to master_address;
+grant select,insert,update,delete on gis.parcel to master_address;
+grant select,insert,update,delete on gis.precinct_address_location to master_address;
+grant select,insert,update,delete on gis.voting_precincts to master_address;
+
+
+grant select on gis.building_id_s to master_address;
+grant select on gis.building_type_id_s to master_address;
 
 
 create synonym master_address.annexations for gis.annexations;

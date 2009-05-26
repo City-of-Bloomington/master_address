@@ -9,7 +9,7 @@ create table people (
 ) engine=InnoDB;
 insert people values(1,'Administrator','','');
 
-CREATE TABLE users (
+create table users (
 	id int unsigned not null primary key auto_increment,
 	person_id int unsigned not null unique,
 	username varchar(30) not null unique,
@@ -19,13 +19,13 @@ CREATE TABLE users (
 ) engine=InnoDB;
 insert users values(1,1,'admin',md5('admin'),'local');
 
-CREATE TABLE roles (
+create table roles (
 	id int unsigned not null primary key auto_increment,
 	name varchar(30) not null unique
 ) engine=InnoDB;
 insert roles values(1,'Administrator');
 
-CREATE TABLE user_roles (
+create table user_roles (
 	user_id int unsigned not null,
 	role_id int unsigned not null,
 	primary key (user_id,role_id),
@@ -33,3 +33,35 @@ CREATE TABLE user_roles (
 	foreign key(role_id) references roles (id)
 ) engine=InnoDB;
 insert user_roles values(1,1);
+
+create table towns_master (
+	town_id int unsigned not null primary key autoincrement,
+	description varchar(40),
+	town_code varchar(9)
+);
+
+create table township_master (
+	township_id int unsigned not null primary key autoincrement,
+	name varchar(40),
+	township_abbreviation char(2),
+	quarter_code char(1)
+);
+
+create table plat_master (
+	plat_id int unsigned not null primary key autoincrement,
+	name varchar(120),
+	township_id int unsigned not null,
+	effective_start_date date,
+	effective_end_date date,
+	plat_type char(1),
+	plat_cabinet varchar(5),
+	envelope varchar(10),
+	notes varchar(240),
+	foreign key (township_id) references township_master(township_id)
+);
+
+create table voting_precincts (
+	precinct varchar(6) not null primary key,
+	precinct_name varchar(20),
+	active char(1) not null
+);

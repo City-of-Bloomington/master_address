@@ -93,7 +93,7 @@ end;
 
 create table township_master (
 	township_id number not null primary key,
-	name varchar(40),
+	name varchar2(40),
 	township_abbreviation char(2),
 	quarter_code char(1)
 );
@@ -121,7 +121,8 @@ create table plat_master (
 	plat_type char(1),
 	plat_cabinet varchar2(5),
 	envelope varchar2(10),
-	notes varchar2(240)
+	notes varchar2(240),
+	foreign key (township_id) references townships_master(township_id)
 );
 
 create sequence plat_id_s
@@ -137,3 +138,10 @@ begin
 select plat_id_s.nextval into :new.plat_id from dual;
 end;
 /
+
+
+create table voting_precincts (
+	precinct varchar2(6) not null primary key,
+	precinct_name varchar2(20),
+	active char(1) not null
+);
