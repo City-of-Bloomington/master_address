@@ -71,3 +71,8 @@ create table state_road_master (
 	description varchar(40),
 	abbreviation varchar(10)
 );
+
+create table addr_jurisdiction_master (
+	jurisdiction_id int unsigned not null primary key,
+	description varchar(20)
+);

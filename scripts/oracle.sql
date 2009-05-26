@@ -165,3 +165,23 @@ begin
 select state_road_id_s.nextval into :new.state_road_id from dual;
 end;
 /
+
+
+create table addr_jurisdiction_master (
+	jurisdiction_id number not null primary key,
+	description varchar2(20)
+);
+
+create sequence jurisdiction_id_s
+start with 1
+increment by 1
+nomaxvalue
+nocache;
+
+create trigger jurisdiction_autoincrement_trigger
+before insert on addr_jurisdiction_master
+for each row
+begin
+select jurisdiction_id_s.nextval into :new.jurisdiction_id from dual;
+end;
+/
