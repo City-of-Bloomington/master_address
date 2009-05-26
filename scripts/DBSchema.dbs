@@ -1,0 +1,3175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="XE" version="42" database="Oracle" >
+	<schema schemaname="ENG" defo="false" >
+		<table name="ACTION" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="ACTION_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="ADDRESS_LOCATION" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="LOCATION_TYPE_ID" type="VARCHAR2" java_type="12" length="40" mandatory="true" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="SUBUNIT_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="MAILABLE_FLAG" type="NUMBER" java_type="2" length="22" />
+			<column name="LIVABLE_FLAG" type="NUMBER" java_type="2" length="22" />
+			<column name="COMMON_NAME" type="VARCHAR2" java_type="12" length="100" />
+			<column name="ACTIVE" type="CHAR" java_type="1" length="1" mandatory="true" >
+				<check_name>ACTIVE_CK</check_name>
+				<check>active IN ('Y','N')</check>
+			</column>
+			<index name="ADDRESS_LOCATION_UK1" unique="UNIQUE" >
+				<column name="LOCATION_ID" />
+				<column name="STREET_ADDRESS_ID" />
+				<column name="SUBUNIT_ID" />
+			</index>
+			<fk name="SYS_C004305" to_schema="ENG" to_table="ADDR_LOCATION_TYPES_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="LOCATION_TYPE_ID" pk="LOCATION_TYPE_ID" />
+			</fk>
+			<fk name="SYS_C004303" to_schema="ENG" to_table="MAST_ADDRESS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ADDRESS_ID" pk="STREET_ADDRESS_ID" />
+			</fk>
+			<fk name="SYS_C004304" to_schema="ENG" to_table="MAST_ADDRESS_SUBUNITS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUBUNIT_ID" pk="SUBUNIT_ID" />
+			</fk>
+		</table>
+		<table name="ADDR_JURISDICTION_MASTER" >
+			<column name="JURISDICTION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="20" />
+			<index name="SYS_C004037" unique="PRIMARY_KEY" >
+				<column name="JURISDICTION_ID" />
+			</index>
+		</table>
+		<table name="ADDR_LOCATION_PURPOSES" >
+			<column name="LOCATION_PURPOSE_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004041" unique="PRIMARY_KEY" >
+				<column name="LOCATION_PURPOSE_ID" />
+				<column name="LOCATION_ID" />
+			</index>
+			<fk name="SYS_C004306" to_schema="ENG" to_table="ADDR_LOCATION_PURPOSE_MAST" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="LOCATION_PURPOSE_ID" pk="LOCATION_PURPOSE_ID" />
+			</fk>
+		</table>
+		<table name="ADDR_LOCATION_PURPOSE_MAST" >
+			<column name="LOCATION_PURPOSE_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="80" />
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="32" />
+			<index name="SYS_C004044" unique="PRIMARY_KEY" >
+				<column name="LOCATION_PURPOSE_ID" />
+			</index>
+		</table>
+		<table name="ADDR_LOCATION_TYPES_MASTER" >
+			<column name="LOCATION_TYPE_ID" type="VARCHAR2" java_type="12" length="40" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004055" unique="PRIMARY_KEY" >
+				<column name="LOCATION_TYPE_ID" />
+			</index>
+		</table>
+		<table name="CAUSE" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="CAUSE_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="COLLISION" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="COLLISION_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="COUNCIL_MEMBERS_MAST" >
+			<column name="DISTRICT" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="30" mandatory="true" />
+			<index name="SYS_C004062" unique="PRIMARY_KEY" >
+				<column name="DISTRICT" />
+			</index>
+		</table>
+		<table name="COUNT" >
+			<column name="COUNT_ID" type="VARCHAR2" java_type="12" length="9" mandatory="true" />
+			<column name="SEGMENT" type="VARCHAR2" java_type="12" length="8" />
+			<column name="PERIOD" type="NUMBER" java_type="2" length="4" />
+			<column name="METHOD" type="CHAR" java_type="1" length="1" />
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OTHER_TYPE" type="VARCHAR2" java_type="12" length="40" />
+			<column name="LANE_DIR" type="VARCHAR2" java_type="12" length="2" />
+			<column name="BEGIN_DATE" type="DATE" java_type="91" length="7" />
+			<column name="BEGIN_TIME" type="NUMBER" java_type="2" length="4" />
+			<column name="END_DATE" type="DATE" java_type="91" length="7" />
+			<column name="END_TIME" type="NUMBER" java_type="2" length="4" />
+			<column name="RAW_COUNT" type="NUMBER" java_type="2" length="5" />
+			<column name="AADT_FACTOR" type="NUMBER" java_type="2" length="4" />
+			<column name="AADT_COUNT" type="NUMBER" java_type="2" length="5" />
+			<column name="PEAK_HOUR_AM" type="NUMBER" java_type="2" length="4" />
+			<column name="PEAK_COUNT_AM" type="NUMBER" java_type="2" length="4" />
+			<column name="PEAK_HOUR_PM" type="NUMBER" java_type="2" length="4" />
+			<column name="PEAK_COUNT_PM" type="NUMBER" java_type="2" length="4" />
+			<column name="AVG_SPEED" type="NUMBER" java_type="2" length="4" decimal="1" />
+			<column name="PCT_SPEED" type="NUMBER" java_type="2" length="4" decimal="1" />
+			<column name="STATION_LOC" type="VARCHAR2" java_type="12" length="40" />
+			<column name="SOURCE" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OPERATOR" type="VARCHAR2" java_type="12" length="8" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="100" />
+			<column name="PCT_TRUCK" type="NUMBER" java_type="2" length="4" decimal="1" />
+		</table>
+		<table name="COUNT_TYPES" >
+			<column name="COUNT_TYPE" type="VARCHAR2" java_type="12" length="10" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="COUNT_TYPES_COUNT_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="COUNT_TYPE" />
+			</index>
+		</table>
+		<table name="DVRPHY" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="DVRPHY_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="GOVERNMENTAL_JURISDICTION_MAST" >
+			<column name="GOV_JUR_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="20" />
+			<index name="SYS_C004070" unique="PRIMARY_KEY" >
+				<column name="GOV_JUR_ID" />
+			</index>
+		</table>
+		<table name="LIGHT" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="LIGHT_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="LOCATION" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="LOCATION_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="MAPREQ" >
+			<column name="REQ_NUM" type="NUMBER" java_type="2" length="8" mandatory="true" />
+			<column name="INTAKE" type="VARCHAR2" java_type="12" length="8" />
+			<column name="DEPT" type="VARCHAR2" java_type="12" length="50" />
+			<column name="REQ_DATE" type="DATE" java_type="91" length="7" />
+			<column name="PRIORITY" type="VARCHAR2" java_type="12" length="4" />
+			<column name="DUE_DATE" type="DATE" java_type="91" length="7" />
+			<column name="REQ_TYPE" type="VARCHAR2" java_type="12" length="7" />
+			<column name="USE" type="VARCHAR2" java_type="12" length="5" />
+			<column name="OTHER_USE" type="VARCHAR2" java_type="12" length="20" />
+			<column name="BOUNDARY" type="VARCHAR2" java_type="12" length="8" />
+			<column name="N_BOUND" type="VARCHAR2" java_type="12" length="15" />
+			<column name="S_BOUND" type="VARCHAR2" java_type="12" length="15" />
+			<column name="E_BOUND" type="VARCHAR2" java_type="12" length="15" />
+			<column name="W_BOUND" type="VARCHAR2" java_type="12" length="15" />
+			<column name="OTHER_BOUND" type="VARCHAR2" java_type="12" length="15" />
+			<column name="SCALE" type="NUMBER" java_type="2" length="6" />
+			<column name="COPIES" type="NUMBER" java_type="2" length="4" />
+			<column name="FORMAT" type="VARCHAR2" java_type="12" length="6" />
+			<column name="MAP_SIZE" type="VARCHAR2" java_type="12" length="2" />
+			<column name="OTHER_SIZE" type="VARCHAR2" java_type="12" length="8" />
+			<column name="FILE_TYPE" type="VARCHAR2" java_type="12" length="6" />
+			<column name="PRESET" type="VARCHAR2" java_type="12" length="12" />
+			<column name="REP" type="CHAR" java_type="1" length="1" />
+			<column name="BGT" type="CHAR" java_type="1" length="1" />
+			<column name="MB" type="CHAR" java_type="1" length="1" />
+			<column name="WH" type="CHAR" java_type="1" length="1" />
+			<column name="PD" type="CHAR" java_type="1" length="1" />
+			<column name="RCL" type="CHAR" java_type="1" length="1" />
+			<column name="LC" type="CHAR" java_type="1" length="1" />
+			<column name="M2MF" type="CHAR" java_type="1" length="1" />
+			<column name="SP" type="CHAR" java_type="1" length="1" />
+			<column name="PB" type="CHAR" java_type="1" length="1" />
+			<column name="RT" type="CHAR" java_type="1" length="1" />
+			<column name="LS" type="CHAR" java_type="1" length="1" />
+			<column name="MC" type="CHAR" java_type="1" length="1" />
+			<column name="DP" type="CHAR" java_type="1" length="1" />
+			<column name="PDT" type="CHAR" java_type="1" length="1" />
+			<column name="RRC" type="CHAR" java_type="1" length="1" />
+			<column name="LH" type="CHAR" java_type="1" length="1" />
+			<column name="ZB" type="CHAR" java_type="1" length="1" />
+			<column name="DI" type="CHAR" java_type="1" length="1" />
+			<column name="PSB" type="CHAR" java_type="1" length="1" />
+			<column name="BF" type="CHAR" java_type="1" length="1" />
+			<column name="LDB" type="CHAR" java_type="1" length="1" />
+			<column name="ZCB" type="CHAR" java_type="1" length="1" />
+			<column name="DM" type="CHAR" java_type="1" length="1" />
+			<column name="PE" type="CHAR" java_type="1" length="1" />
+			<column name="BAT" type="CHAR" java_type="1" length="1" />
+			<column name="ZCT" type="CHAR" java_type="1" length="1" />
+			<column name="WP" type="CHAR" java_type="1" length="1" />
+			<column name="DT" type="CHAR" java_type="1" length="1" />
+			<column name="RO" type="CHAR" java_type="1" length="1" />
+			<column name="OTHER_LAY1" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OTHER_LAY2" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OTHER_LAY3" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OTHER_LAY4" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OTHER_LAY5" type="VARCHAR2" java_type="12" length="10" />
+			<column name="OTHER_LAY6" type="VARCHAR2" java_type="12" length="10" />
+			<column name="SPEC_INST" type="VARCHAR2" java_type="12" length="100" />
+			<column name="FILE_TOP" type="VARCHAR2" java_type="12" length="12" />
+			<column name="FILE_MAP" type="VARCHAR2" java_type="12" length="12" />
+			<column name="FILE_WIN" type="VARCHAR2" java_type="12" length="12" />
+			<column name="ACRES" type="NUMBER" java_type="2" length="4" />
+			<column name="LAYERS" type="NUMBER" java_type="2" length="2" />
+			<column name="MAP_SET" type="NUMBER" java_type="2" length="2" />
+			<column name="ASSIGN" type="VARCHAR2" java_type="12" length="8" />
+			<column name="CLOSE_DATE" type="DATE" java_type="91" length="7" />
+			<index name="MAPREQ_REQ_NUM_PK" unique="PRIMARY_KEY" >
+				<column name="REQ_NUM" />
+			</index>
+			<fk name="MAPREQ_USE_FK" to_schema="ENG" to_table="USE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="USE" pk="TYPE" />
+			</fk>
+			<fk name="MAPREQ_ASSIGN_FK" to_schema="ENG" to_table="USERS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="ASSIGN" pk="USERNAME" />
+			</fk>
+			<fk name="MAPREQ_INTAKE_FK" to_schema="ENG" to_table="USERS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="INTAKE" pk="USERNAME" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS" >
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_NUMBER" type="VARCHAR2" java_type="12" length="20" />
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="ADDRESS_TYPE" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<column name="TAX_JURISDICTION" type="CHAR" java_type="1" length="3" />
+			<column name="JURISDICTION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="GOV_JUR_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="TOWNSHIP_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="SECTION" type="VARCHAR2" java_type="12" length="20" />
+			<column name="QUARTER_SECTION" type="CHAR" java_type="1" length="2" />
+			<column name="SUBDIVISION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="PLAT_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="PLAT_LOT_NUMBER" type="NUMBER" java_type="2" length="22" />
+			<column name="STREET_ADDRESS_2" type="VARCHAR2" java_type="12" length="40" />
+			<column name="CITY" type="VARCHAR2" java_type="12" length="20" />
+			<column name="STATE" type="VARCHAR2" java_type="12" length="3" />
+			<column name="ZIP" type="VARCHAR2" java_type="12" length="6" />
+			<column name="ZIPPLUS4" type="VARCHAR2" java_type="12" length="6" />
+			<column name="CENSUS_BLOCK_FIPS_CODE" type="VARCHAR2" java_type="12" length="20" />
+			<column name="STATE_PLANE_X_COORDINATE" type="NUMBER" java_type="2" length="22" />
+			<column name="STATE_PLANE_Y_COORDINATE" type="NUMBER" java_type="2" length="22" />
+			<column name="LATITUDE" type="NUMBER" java_type="2" length="22" />
+			<column name="LONGITUDE" type="NUMBER" java_type="2" length="22" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004083" unique="PRIMARY_KEY" >
+				<column name="STREET_ADDRESS_ID" />
+			</index>
+			<fk name="SYS_C004315" to_schema="ENG" to_table="ADDR_JURISDICTION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="JURISDICTION_ID" pk="JURISDICTION_ID" />
+			</fk>
+			<fk name="SYS_C004316" to_schema="ENG" to_table="GOVERNMENTAL_JURISDICTION_MAST" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="GOV_JUR_ID" pk="GOV_JUR_ID" />
+			</fk>
+			<fk name="SYS_C004311" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="SYS_C004317" to_schema="ENG" to_table="PLAT_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="PLAT_ID" pk="PLAT_ID" />
+			</fk>
+			<fk name="SYS_C004312" to_schema="ENG" to_table="QUARTER_SECTION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="QUARTER_SECTION" pk="QUARTER_SECTION" />
+			</fk>
+			<fk name="SYS_C004314" to_schema="ENG" to_table="SUBDIVISION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUBDIVISION_ID" pk="SUBDIVISION_ID" />
+			</fk>
+			<fk name="SYS_C004313" to_schema="ENG" to_table="TOWNSHIP_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TOWNSHIP_ID" pk="TOWNSHIP_ID" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS_ANNEXATION" >
+			<column name="ORDINANCE_NUMBER" type="VARCHAR2" java_type="12" length="12" mandatory="true" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004087" unique="PRIMARY_KEY" >
+				<column name="ORDINANCE_NUMBER" />
+			</index>
+			<fk name="SYS_C004318" to_schema="ENG" to_table="MAST_ADDRESS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ADDRESS_ID" pk="STREET_ADDRESS_ID" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS_ASSIGNMENT_HIST" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="ACTION_DATE" type="DATE" java_type="91" length="7" mandatory="true" />
+			<column name="ACTION" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="CONTACT_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<column name="SUBUNIT_ID" type="NUMBER" java_type="2" length="22" />
+			<index name="SYS_C004089" unique="PRIMARY_KEY" >
+				<column name="LOCATION_ID" />
+				<column name="ACTION_DATE" />
+				<column name="ACTION" />
+				<column name="STREET_ADDRESS_ID" />
+			</index>
+		</table>
+		<table name="MAST_ADDRESS_LOCATION_CHANGE" >
+			<column name="LOCATION_CHANGE_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="OLD_LOCATION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="CHANGE_DATE" type="DATE" java_type="91" length="7" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004092" unique="PRIMARY_KEY" >
+				<column name="LOCATION_CHANGE_ID" />
+			</index>
+		</table>
+		<table name="MAST_ADDRESS_LOCATION_STATUS" >
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" java_type="91" length="7" mandatory="true" />
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" java_type="91" length="7" />
+			<index name="MAST_ADDR_LOC_STAT_IDX" unique="NORMAL" >
+				<column name="LOCATION_ID" />
+			</index>
+			<index name="SYS_C004097" unique="PRIMARY_KEY" >
+				<column name="STATUS_CODE" />
+				<column name="EFFECTIVE_START_DATE" />
+				<column name="LOCATION_ID" />
+			</index>
+			<fk name="SYS_C004319" to_schema="ENG" to_table="MAST_ADDRESS_STATUS_LOOKUP" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STATUS_CODE" pk="STATUS_CODE" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS_SANITATION" >
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="TRASH_PICKUP_DAY" type="VARCHAR2" java_type="12" length="20" />
+			<column name="RECYCLE_WEEK" type="VARCHAR2" java_type="12" length="20" />
+			<column name="LARGE_ITEM_PICKUP_DAY" type="VARCHAR2" java_type="12" length="20" />
+			<index name="SYS_C004100" unique="PRIMARY_KEY" >
+				<column name="STREET_ADDRESS_ID" />
+			</index>
+			<fk name="SYS_C004323" to_schema="ENG" to_table="MAST_ADDRESS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ADDRESS_ID" pk="STREET_ADDRESS_ID" />
+			</fk>
+			<fk name="SYS_C004320" to_schema="ENG" to_table="TRASH_LARGE_ITEM_PICKUP_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="LARGE_ITEM_PICKUP_DAY" pk="LARGE_ITEM_PICKUP_DAY" />
+			</fk>
+			<fk name="SYS_C004322" to_schema="ENG" to_table="TRASH_PICKUP_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TRASH_PICKUP_DAY" pk="TRASH_PICKUP_DAY" />
+			</fk>
+			<fk name="SYS_C004321" to_schema="ENG" to_table="TRASH_RECYCLE_WEEK_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="RECYCLE_WEEK" pk="RECYCLE_WEEK" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS_STATUS" >
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" />
+			<column name="START_DATE" type="DATE" java_type="91" length="7" />
+			<column name="END_DATE" type="DATE" java_type="91" length="7" />
+			<index name="MAST_ADDRESS_STATUS_PK" unique="PRIMARY_KEY" >
+				<column name="STREET_ADDRESS_ID" />
+			</index>
+			<fk name="MAS_STREET_ADDR_ID_FK" to_schema="ENG" to_table="MAST_ADDRESS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ADDRESS_ID" pk="STREET_ADDRESS_ID" />
+			</fk>
+			<fk name="MAS_STATUS_CODE_FK" to_schema="ENG" to_table="MAST_ADDRESS_STATUS_LOOKUP" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STATUS_CODE" pk="STATUS_CODE" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS_STATUS_LOOKUP" >
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004105" unique="PRIMARY_KEY" >
+				<column name="STATUS_CODE" />
+			</index>
+		</table>
+		<table name="MAST_ADDRESS_SUBUNITS" >
+			<column name="SUBUNIT_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="SUDTYPE" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<column name="STREET_SUBUNIT_IDENTIFIER" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004111" unique="PRIMARY_KEY" >
+				<column name="SUBUNIT_ID" />
+			</index>
+			<fk name="SYS_C004327" to_schema="ENG" to_table="MAST_ADDRESS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ADDRESS_ID" pk="STREET_ADDRESS_ID" />
+			</fk>
+			<fk name="SYS_C004326" to_schema="ENG" to_table="MAST_ADDR_SUBUNIT_TYPES_MAST" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUDTYPE" pk="SUDTYPE" />
+			</fk>
+		</table>
+		<table name="MAST_ADDRESS_SUBUNIT_STATUS" >
+			<column name="SUBUNIT_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" />
+			<column name="START_DATE" type="DATE" java_type="91" length="7" />
+			<column name="END_DATE" type="DATE" java_type="91" length="7" />
+			<index name="MAST_ADDRESS_SUBUNIT_STATUS_PK" unique="PRIMARY_KEY" >
+				<column name="SUBUNIT_ID" />
+			</index>
+			<fk name="MASS_STREET_ADDR_ID_FK" to_schema="ENG" to_table="MAST_ADDRESS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ADDRESS_ID" pk="STREET_ADDRESS_ID" />
+			</fk>
+			<fk name="MASS_STATUS_CODE_FK" to_schema="ENG" to_table="MAST_ADDRESS_STATUS_LOOKUP" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STATUS_CODE" pk="STATUS_CODE" />
+			</fk>
+			<fk name="MASS_SUBUNIT_ID_FK" to_schema="ENG" to_table="MAST_ADDRESS_SUBUNITS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUBUNIT_ID" pk="SUBUNIT_ID" />
+			</fk>
+		</table>
+		<table name="MAST_ADDR_ASSGN_HIST_TEMP" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="ACTION_DATE" type="DATE" java_type="91" length="7" />
+			<column name="ACTION" type="VARCHAR2" java_type="12" length="20" />
+			<column name="CONTACT_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+		</table>
+		<table name="MAST_ADDR_ASSIGNMENT_CONTACT" >
+			<column name="CONTACT_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="LAST_NAME" type="VARCHAR2" java_type="12" length="30" />
+			<column name="FIRST_NAME" type="VARCHAR2" java_type="12" length="20" />
+			<column name="CONTACT_TYPE" type="VARCHAR2" java_type="12" length="20" />
+			<column name="PHONE_NUMBER" type="VARCHAR2" java_type="12" length="12" />
+			<column name="AGENCY" type="VARCHAR2" java_type="12" length="40" />
+			<index name="SYS_C004117" unique="PRIMARY_KEY" >
+				<column name="CONTACT_ID" />
+			</index>
+		</table>
+		<table name="MAST_ADDR_COMBO" >
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="SUBUNIT_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="ADDRESS" type="VARCHAR2" java_type="12" length="218" />
+			<index name="MAST_ADDR_WS_INDEX" unique="NORMAL" >
+				<column name="ADDRESS" />
+			</index>
+		</table>
+		<table name="MAST_ADDR_SUBUNIT_TYPES_MAST" >
+			<column name="SUDTYPE" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="40" />
+			<index name="SYS_C004122" unique="PRIMARY_KEY" >
+				<column name="SUDTYPE" />
+			</index>
+		</table>
+		<table name="MAST_STREET" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_DIRECTION_CODE" type="CHAR" java_type="1" length="2" />
+			<column name="POST_DIRECTION_SUFFIX_CODE" type="CHAR" java_type="1" length="2" />
+			<column name="TOWN_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004126" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+			</index>
+			<fk name="SYS_C004334" to_schema="ENG" to_table="MAST_STREET_DIRECTION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="POST_DIRECTION_SUFFIX_CODE" pk="DIRECTION_CODE" />
+			</fk>
+			<fk name="SYS_C004333" to_schema="ENG" to_table="MAST_STREET_DIRECTION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_DIRECTION_CODE" pk="DIRECTION_CODE" />
+			</fk>
+			<fk name="SYS_C004331" to_schema="ENG" to_table="MAST_STREET_STATUS_LOOKUP" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STATUS_CODE" pk="STATUS_CODE" />
+			</fk>
+			<fk name="SYS_C004332" to_schema="ENG" to_table="TOWNS_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TOWN_ID" pk="TOWN_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_ADDR_JURISDICTIONS" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="JURISDICTION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<fk name="SYS_C004336" to_schema="ENG" to_table="ADDR_JURISDICTION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="JURISDICTION_ID" pk="JURISDICTION_ID" />
+			</fk>
+			<fk name="SYS_C004335" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_DIRECTION_MASTER" >
+			<column name="DIRECTION_CODE" type="CHAR" java_type="1" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="12" />
+			<index name="SYS_C004131" unique="PRIMARY_KEY" >
+				<column name="DIRECTION_CODE" />
+			</index>
+		</table>
+		<table name="MAST_STREET_GOV_JURISDICTIONS" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="GOV_JUR_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004135" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="GOV_JUR_ID" />
+			</index>
+			<fk name="SYS_C004338" to_schema="ENG" to_table="GOVERNMENTAL_JURISDICTION_MAST" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="GOV_JUR_ID" pk="GOV_JUR_ID" />
+			</fk>
+			<fk name="SYS_C004337" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_NAMES" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_NAME" type="VARCHAR2" java_type="12" length="60" mandatory="true" />
+			<column name="STREET_TYPE_SUFFIX_CODE" type="VARCHAR2" java_type="12" length="8" />
+			<column name="STREET_NAME_TYPE" type="VARCHAR2" java_type="12" length="20" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" java_type="91" length="7" curdate="true" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" java_type="91" length="7" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<column name="STREET_DIRECTION_CODE" type="CHAR" java_type="1" length="2" />
+			<column name="POST_DIRECTION_SUFFIX_CODE" type="CHAR" java_type="1" length="2" />
+			<index name="SYS_C004139" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="STREET_NAME" />
+			</index>
+			<fk name="SYS_C004341" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="SYS_C004339" to_schema="ENG" to_table="MAST_STREET_NAME_TYPE_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_NAME_TYPE" pk="STREET_NAME_TYPE" />
+			</fk>
+			<fk name="SYS_C004340" to_schema="ENG" to_table="MAST_STREET_TYPE_SUFFIX_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_TYPE_SUFFIX_CODE" pk="SUFFIX_CODE" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_NAME_TYPE_MASTER" >
+			<column name="STREET_NAME_TYPE" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004142" unique="PRIMARY_KEY" >
+				<column name="STREET_NAME_TYPE" />
+			</index>
+		</table>
+		<table name="MAST_STREET_PLAT" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="PLAT_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004146" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="PLAT_ID" />
+			</index>
+			<fk name="SYS_C004342" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="SYS_C004343" to_schema="ENG" to_table="PLAT_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="PLAT_ID" pk="PLAT_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_SECTION" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="SECTION" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004150" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="SECTION" />
+			</index>
+			<fk name="SYS_C004344" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_STATE_ROAD" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STATE_ROAD_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004154" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="STATE_ROAD_ID" />
+			</index>
+			<fk name="SYS_C004345" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="SYS_C004346" to_schema="ENG" to_table="STATE_ROAD_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STATE_ROAD_ID" pk="STATE_ROAD_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_STATUS_LOOKUP" >
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004157" unique="PRIMARY_KEY" >
+				<column name="STATUS_CODE" />
+			</index>
+		</table>
+		<table name="MAST_STREET_SUBDIVISION" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="SUBDIVISION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004161" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="SUBDIVISION_ID" />
+			</index>
+			<fk name="SYS_C004347" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="SYS_C004348" to_schema="ENG" to_table="SUBDIVISION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUBDIVISION_ID" pk="SUBDIVISION_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_TOWNSHIPS" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="TOWNSHIP_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004165" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="TOWNSHIP_ID" />
+			</index>
+			<fk name="SYS_C004349" to_schema="ENG" to_table="MAST_STREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="SYS_C004350" to_schema="ENG" to_table="TOWNSHIP_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TOWNSHIP_ID" pk="TOWNSHIP_ID" />
+			</fk>
+		</table>
+		<table name="MAST_STREET_TYPE_SUFFIX_MASTER" >
+			<column name="SUFFIX_CODE" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004168" unique="PRIMARY_KEY" >
+				<column name="SUFFIX_CODE" />
+			</index>
+		</table>
+		<table name="NEWMASTSTREET" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_NAME_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="TOWN_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="START_DATE" type="DATE" java_type="91" length="7" />
+			<column name="END_DATE" type="DATE" java_type="91" length="7" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="PK_STREET" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+			</index>
+			<fk name="FK_STREET_TOWN_ID" to_schema="ENG" to_table="TOWNS_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TOWN_ID" pk="TOWN_ID" />
+			</fk>
+		</table>
+		<table name="NEWMASTSTREETALIAS" >
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_NAME_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="ALIAS_TYPE" type="VARCHAR2" java_type="12" length="10" />
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="COMMENTS" type="VARCHAR2" java_type="12" length="240" />
+			<index name="PK_STREET_ALIAS" unique="PRIMARY_KEY" >
+				<column name="STREET_ID" />
+				<column name="STREET_NAME_ID" />
+			</index>
+			<fk name="FK_ALIAS_STREET_ID" to_schema="ENG" to_table="NEWMASTSTREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+			<fk name="FK_ALIAS_STREET_NAME_ID" to_schema="ENG" to_table="NEWMASTSTREETNAMES" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_NAME_ID" pk="STREET_NAME_ID" />
+			</fk>
+		</table>
+		<table name="NEWMASTSTREETHISTORY" >
+			<column name="ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="ACTION" type="VARCHAR2" java_type="12" length="12" mandatory="true" />
+			<column name="ACTION_DATE" type="DATE" java_type="91" length="7" />
+			<column name="USERNAME" type="VARCHAR2" java_type="12" length="12" />
+			<column name="CONTACT_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="COMMENTS" type="VARCHAR2" java_type="12" length="240" />
+			<index name="PK_STREET_HISTORY" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<fk name="FK_HISTORY_STREET_ID" to_schema="ENG" to_table="NEWMASTSTREET" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_ID" pk="STREET_ID" />
+			</fk>
+		</table>
+		<table name="NEWMASTSTREETNAMES" >
+			<column name="STREET_NAME_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="STREET_NAME_TYPE" type="VARCHAR2" java_type="12" length="20" />
+			<column name="ACTIVE_FLAG" type="CHAR" java_type="1" length="2" />
+			<column name="STREET_DIRECTION_CODE" type="CHAR" java_type="1" length="2" />
+			<column name="STREET_NAME" type="VARCHAR2" java_type="12" length="40" />
+			<column name="STREET_TYPE_SUFFIX_CODE" type="VARCHAR2" java_type="12" length="8" />
+			<column name="POST_DIRECTION_SUFFIX_CODE" type="CHAR" java_type="1" length="2" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="PK_STREET_NAME" unique="PRIMARY_KEY" >
+				<column name="STREET_NAME_ID" />
+			</index>
+			<fk name="FK_STREET_TYPE_SUFFIX_CODE" to_schema="ENG" to_table="MAST_STREET_TYPE_SUFFIX_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STREET_TYPE_SUFFIX_CODE" pk="SUFFIX_CODE" />
+			</fk>
+		</table>
+		<table name="OFFENSE" >
+			<column name="CODE" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="OFFENSE_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="PLAN_TABLE" >
+			<column name="STATEMENT_ID" type="VARCHAR2" java_type="12" length="30" />
+			<column name="TIMESTAMP" type="DATE" java_type="91" length="7" />
+			<column name="REMARKS" type="VARCHAR2" java_type="12" length="80" />
+			<column name="OPERATION" type="VARCHAR2" java_type="12" length="30" />
+			<column name="OPTIONS" type="VARCHAR2" java_type="12" length="30" />
+			<column name="OBJECT_NODE" type="VARCHAR2" java_type="12" length="128" />
+			<column name="OBJECT_OWNER" type="VARCHAR2" java_type="12" length="30" />
+			<column name="OBJECT_NAME" type="VARCHAR2" java_type="12" length="30" />
+			<column name="OBJECT_INSTANCE" type="NUMBER" java_type="2" length="22" />
+			<column name="OBJECT_TYPE" type="VARCHAR2" java_type="12" length="30" />
+			<column name="OPTIMIZER" type="VARCHAR2" java_type="12" length="255" />
+			<column name="SEARCH_COLUMNS" type="NUMBER" java_type="2" length="22" />
+			<column name="ID" type="NUMBER" java_type="2" length="22" />
+			<column name="PARENT_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="POSITION" type="NUMBER" java_type="2" length="22" />
+			<column name="COST" type="NUMBER" java_type="2" length="22" />
+			<column name="CARDINALITY" type="NUMBER" java_type="2" length="22" />
+			<column name="BYTES" type="NUMBER" java_type="2" length="22" />
+			<column name="OTHER_TAG" type="VARCHAR2" java_type="12" length="255" />
+			<column name="PARTITION_START" type="VARCHAR2" java_type="12" length="255" />
+			<column name="PARTITION_STOP" type="VARCHAR2" java_type="12" length="255" />
+			<column name="PARTITION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="OTHER" type="LONG" java_type="-1" length="0" />
+			<column name="DISTRIBUTION" type="VARCHAR2" java_type="12" length="30" />
+		</table>
+		<table name="PLAT_MASTER" >
+			<column name="PLAT_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="120" />
+			<column name="TOWNSHIP_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" java_type="91" length="7" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" java_type="91" length="7" />
+			<column name="PLAT_TYPE" type="CHAR" java_type="1" length="1" />
+			<column name="PLAT_CABINET" type="VARCHAR2" java_type="12" length="5" />
+			<column name="ENVELOPE" type="VARCHAR2" java_type="12" length="10" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="240" />
+			<index name="SYS_C004189" unique="PRIMARY_KEY" >
+				<column name="PLAT_ID" />
+			</index>
+			<fk name="SYS_C004356" to_schema="ENG" to_table="TOWNSHIP_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TOWNSHIP_ID" pk="TOWNSHIP_ID" />
+			</fk>
+		</table>
+		<table name="QUARTER_SECTION_MASTER" >
+			<column name="QUARTER_SECTION" type="CHAR" java_type="1" length="2" mandatory="true" />
+			<index name="SYS_C004192" unique="PRIMARY_KEY" >
+				<column name="QUARTER_SECTION" />
+			</index>
+		</table>
+		<table name="RCI_NAME" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" />
+			<column name="DIR" type="VARCHAR2" java_type="12" length="2" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="20" />
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="4" />
+			<column name="POST_DIR" type="VARCHAR2" java_type="12" length="2" />
+		</table>
+		<table name="RCL" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="DIRECTION" type="VARCHAR2" java_type="12" length="2" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="30" />
+			<column name="CLASS" type="VARCHAR2" java_type="12" length="15" />
+			<column name="LOWADD" type="NUMBER" java_type="2" length="5" />
+			<column name="HIGHADD" type="NUMBER" java_type="2" length="5" />
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="4" />
+			<column name="POST_DIR" type="VARCHAR2" java_type="12" length="2" />
+			<column name="RCI1" type="VARCHAR2" java_type="12" length="8" />
+			<column name="RCI2" type="VARCHAR2" java_type="12" length="8" />
+			<index name="RCL_TAG_PK" unique="PRIMARY_KEY" >
+				<column name="TAG" />
+			</index>
+		</table>
+		<table name="ROADSURF" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="ROADSURF_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="STATE_ROAD_MASTER" >
+			<column name="STATE_ROAD_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="40" />
+			<column name="ABBREVIATION" type="VARCHAR2" java_type="12" length="10" />
+			<index name="SYS_C004199" unique="PRIMARY_KEY" >
+				<column name="STATE_ROAD_ID" />
+			</index>
+		</table>
+		<table name="STORM_BASIN" >
+			<column name="BASIN" type="VARCHAR2" java_type="12" length="2" mandatory="true" />
+			<column name="BASIN_DESC" type="VARCHAR2" java_type="12" length="25" />
+			<index name="STORM_BASIN_BASIN_PK" unique="PRIMARY_KEY" >
+				<column name="BASIN" />
+			</index>
+		</table>
+		<table name="STORM_COMPON" >
+			<column name="COMPON_TYPE" type="VARCHAR2" java_type="12" length="2" mandatory="true" />
+			<column name="COMPON_DESC" type="VARCHAR2" java_type="12" length="25" />
+			<index name="STORM_COMPON_COMPON_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="COMPON_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_COND" >
+			<column name="COND_RATE" type="NUMBER" java_type="2" length="1" mandatory="true" />
+			<column name="COND_DESC" type="VARCHAR2" java_type="12" length="25" />
+			<index name="STORM_COND_COND_RATE_PK" unique="PRIMARY_KEY" >
+				<column name="COND_RATE" />
+			</index>
+		</table>
+		<table name="STORM_DESC" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" />
+			<column name="DDESC" type="VARCHAR2" java_type="12" length="12" />
+			<column name="STATION" type="VARCHAR2" java_type="12" length="6" />
+			<column name="OFFSET" type="VARCHAR2" java_type="12" length="5" />
+			<column name="PROBLEM" type="VARCHAR2" java_type="12" length="3" />
+			<column name="PROB_DESC" type="VARCHAR2" java_type="12" length="40" />
+			<column name="CONDITION" type="NUMBER" java_type="2" length="1" />
+			<column name="PHOTO" type="VARCHAR2" java_type="12" length="12" />
+			<fk name="STORM_DESC_COND_FK" to_schema="ENG" to_table="STORM_COND" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="CONDITION" pk="COND_RATE" />
+			</fk>
+		</table>
+		<table name="STORM_IMAGE" >
+			<column name="IMAGE_ID" type="VARCHAR2" java_type="12" length="6" mandatory="true" />
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="7" />
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" />
+			<column name="SYSNAME" type="VARCHAR2" java_type="12" length="3" />
+			<column name="PROJECT" type="VARCHAR2" java_type="12" length="20" />
+			<column name="IMAGE_DATE" type="DATE" java_type="91" length="7" />
+			<column name="STATION_ID" type="VARCHAR2" java_type="12" length="5" />
+			<column name="PROB_ID" type="VARCHAR2" java_type="12" length="6" />
+			<column name="AFTERFIX" type="VARCHAR2" java_type="12" length="1" />
+			<column name="IMAGE_BY" type="VARCHAR2" java_type="12" length="10" />
+			<column name="IMAGE_DESC" type="VARCHAR2" java_type="12" length="100" />
+			<column name="IMAGE" type="LONG RAW" java_type="-4" length="0" />
+			<index name="STORM_IMAGE_ID_PK" unique="PRIMARY_KEY" >
+				<column name="IMAGE_ID" />
+			</index>
+		</table>
+		<table name="STORM_LOCATE" >
+			<column name="LOCATE_TYPE" type="VARCHAR2" java_type="12" length="1" mandatory="true" />
+			<column name="LOCATE_DESC" type="VARCHAR2" java_type="12" length="25" />
+			<index name="STORM_LOCATE_LOCATE_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="LOCATE_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_MAT" >
+			<column name="MAT_TYPE" type="VARCHAR2" java_type="12" length="3" mandatory="true" />
+			<column name="MAT_DESC" type="VARCHAR2" java_type="12" length="30" />
+			<index name="STORM_MAT_MAT_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="MAT_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_MAT2" >
+			<column name="MAT2_ID" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="STRUCTURE" type="VARCHAR2" java_type="12" length="8" />
+			<column name="MATERIAL2" type="VARCHAR2" java_type="12" length="3" mandatory="true" />
+			<column name="MATLOC2" type="VARCHAR2" java_type="12" length="8" />
+		</table>
+		<table name="STORM_NODE" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="7" />
+			<column name="NODE_ID" type="VARCHAR2" java_type="12" length="9" />
+			<column name="BASIN" type="VARCHAR2" java_type="12" length="2" />
+			<column name="SYSNAME" type="VARCHAR2" java_type="12" length="3" />
+			<column name="OWNER" type="VARCHAR2" java_type="12" length="15" />
+			<column name="COMPON" type="VARCHAR2" java_type="12" length="2" />
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="15" />
+			<column name="DOWNNUM" type="VARCHAR2" java_type="12" length="8" />
+			<column name="LOCATION" type="VARCHAR2" java_type="12" length="1" />
+			<column name="INROW" type="VARCHAR2" java_type="12" length="4" />
+			<column name="SURFACE" type="VARCHAR2" java_type="12" length="4" />
+			<column name="NSIZE" type="VARCHAR2" java_type="12" length="9" />
+			<column name="MATERIAL" type="VARCHAR2" java_type="12" length="3" />
+			<column name="DEPTH" type="NUMBER" java_type="2" length="5" decimal="1" />
+			<column name="INVERT" type="NUMBER" java_type="2" length="6" decimal="2" />
+			<column name="NUMPIPES" type="CHAR" java_type="1" length="1" />
+			<column name="SUMMRATE" type="NUMBER" java_type="2" length="1" />
+			<column name="MAP" type="VARCHAR2" java_type="12" length="8" />
+			<column name="SOURCE" type="NUMBER" java_type="2" length="2" />
+			<column name="FIELDCHK" type="CHAR" java_type="1" length="1" />
+			<column name="REMARKS" type="VARCHAR2" java_type="12" length="200" />
+			<column name="YR_INST" type="VARCHAR2" java_type="12" length="4" />
+			<column name="MARKING_DATE" type="VARCHAR2" java_type="12" length="4" />
+			<column name="MARKING" type="VARCHAR2" java_type="12" length="10" />
+			<fk name="STORM_NODE_STORM_BASIN_FK" to_schema="ENG" to_table="STORM_BASIN" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="BASIN" pk="BASIN" />
+			</fk>
+			<fk name="STORM_NODE_STORM_COND_FK" to_schema="ENG" to_table="STORM_COND" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUMMRATE" pk="COND_RATE" />
+			</fk>
+			<fk name="STORM_NODE_STORM_LOCATE_FK" to_schema="ENG" to_table="STORM_LOCATE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="LOCATION" pk="LOCATE_TYPE" />
+			</fk>
+			<fk name="STORM_NODE_STORM_MAT_FK" to_schema="ENG" to_table="STORM_MAT" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="MATERIAL" pk="MAT_TYPE" />
+			</fk>
+			<fk name="STORM_NODE_SN_COMPON_FK" to_schema="ENG" to_table="STORM_NODE_COMPON" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="COMPON" pk="NODE_COMPON" />
+			</fk>
+			<fk name="STORM_NODE_STORM_SOURCE_FK" to_schema="ENG" to_table="STORM_SOURCE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SOURCE" pk="SOURCE_TYPE" />
+			</fk>
+			<fk name="STORM_NODE_STORM_SURFACE_FK" to_schema="ENG" to_table="STORM_SURFACE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SURFACE" pk="SURFACE_TYPE" />
+			</fk>
+			<fk name="STORM_NODE_STORM_SYSNAME_FK" to_schema="ENG" to_table="STORM_SYSNAME" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SYSNAME" pk="NAME_ID" />
+			</fk>
+		</table>
+		<table name="STORM_NODE_COMPON" >
+			<column name="NODE_COMPON" type="VARCHAR2" java_type="12" length="2" mandatory="true" />
+			<column name="COMPON_DESC" type="VARCHAR2" java_type="12" length="25" />
+			<index name="STORM_NODE_COMPON_PK" unique="PRIMARY_KEY" >
+				<column name="NODE_COMPON" />
+			</index>
+		</table>
+		<table name="STORM_NODE_OLDTAG" >
+			<column name="OLDTAG" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="NEWTAG" type="VARCHAR2" java_type="12" length="8" />
+			<index name="PK_STORM_NODE_OLDTAG" unique="PRIMARY_KEY" >
+				<column name="OLDTAG" />
+			</index>
+		</table>
+		<table name="STORM_NODE_PROB" >
+			<column name="PROB_ID" type="VARCHAR2" java_type="12" length="5" />
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="DISTANCE" type="NUMBER" java_type="2" length="3" />
+			<column name="STATION" type="VARCHAR2" java_type="12" length="6" />
+			<column name="OFFSET" type="VARCHAR2" java_type="12" length="5" />
+			<column name="PROBLEM" type="VARCHAR2" java_type="12" length="3" />
+			<column name="PROB_DESC" type="VARCHAR2" java_type="12" length="40" />
+			<column name="PROB_DATE" type="DATE" java_type="91" length="7" />
+			<column name="CONDITION" type="NUMBER" java_type="2" length="1" />
+			<column name="PHOTO" type="VARCHAR2" java_type="12" length="1" />
+			<column name="SOURCE" type="VARCHAR2" java_type="12" length="2" />
+			<column name="REMEDIATED" type="CHAR" java_type="1" length="1" />
+		</table>
+		<table name="STORM_OFFSET" >
+			<column name="OFFSET_TYPE" type="VARCHAR2" java_type="12" length="5" mandatory="true" />
+			<index name="STORM_OFFSET_OFFSET_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="OFFSET_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_PIPE" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="PIPE_ID" type="VARCHAR2" java_type="12" length="11" />
+			<column name="BASIN" type="VARCHAR2" java_type="12" length="2" />
+			<column name="SYSNAME" type="VARCHAR2" java_type="12" length="3" />
+			<column name="OWNER" type="VARCHAR2" java_type="12" length="2" />
+			<column name="DOWNNUM" type="VARCHAR2" java_type="12" length="8" />
+			<column name="UPNUM" type="VARCHAR2" java_type="12" length="8" />
+			<column name="COMPON" type="VARCHAR2" java_type="12" length="2" />
+			<column name="LOCATION" type="VARCHAR2" java_type="12" length="1" />
+			<column name="INROW" type="VARCHAR2" java_type="12" length="1" />
+			<column name="WT_LIMIT" type="VARCHAR2" java_type="12" length="7" />
+			<column name="LENGTH" type="NUMBER" java_type="2" length="6" />
+			<column name="NO_OPEN" type="NUMBER" java_type="2" length="1" />
+			<column name="DIST_OPEN" type="NUMBER" java_type="2" length="3" />
+			<column name="SHAPE" type="VARCHAR2" java_type="12" length="1" />
+			<column name="WIDTH" type="NUMBER" java_type="2" length="6" decimal="2" />
+			<column name="HEIGHT" type="NUMBER" java_type="2" length="6" decimal="2" />
+			<column name="COVER" type="NUMBER" java_type="2" length="5" />
+			<column name="THICK" type="NUMBER" java_type="2" length="5" decimal="2" />
+			<column name="THICK2" type="NUMBER" java_type="2" length="5" decimal="2" />
+			<column name="MATERIAL" type="VARCHAR2" java_type="12" length="3" />
+			<column name="UPINVERT" type="NUMBER" java_type="2" length="6" decimal="2" />
+			<column name="DWINVERT" type="NUMBER" java_type="2" length="6" decimal="2" />
+			<column name="SLOPE" type="NUMBER" java_type="2" length="5" decimal="2" />
+			<column name="SUMMRATE" type="NUMBER" java_type="2" length="1" />
+			<column name="EASEMENT" type="VARCHAR2" java_type="12" length="1" />
+			<column name="SOURCE" type="NUMBER" java_type="2" length="2" />
+			<column name="FIELDCHK" type="CHAR" java_type="1" length="1" />
+			<column name="REMARKS" type="VARCHAR2" java_type="12" length="255" />
+			<index name="STORM_PIPE_TAG_PK" unique="PRIMARY_KEY" >
+				<column name="TAG" />
+			</index>
+			<fk name="STORM_PIPE_STORM_BASIN_FK" to_schema="ENG" to_table="STORM_BASIN" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="BASIN" pk="BASIN" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_COMPON_FK" to_schema="ENG" to_table="STORM_COMPON" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="COMPON" pk="COMPON_TYPE" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_COND_FK" to_schema="ENG" to_table="STORM_COND" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUMMRATE" pk="COND_RATE" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_LOCATE_FK" to_schema="ENG" to_table="STORM_LOCATE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="LOCATION" pk="LOCATE_TYPE" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_MAT_FK" to_schema="ENG" to_table="STORM_MAT" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="MATERIAL" pk="MAT_TYPE" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_SHAPE_FK" to_schema="ENG" to_table="STORM_SHAPE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SHAPE" pk="SHAPE_TYPE" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_SOURCE_FK" to_schema="ENG" to_table="STORM_SOURCE" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SOURCE" pk="SOURCE_TYPE" />
+			</fk>
+			<fk name="STORM_PIPE_STORM_SYSNAME_FK" to_schema="ENG" to_table="STORM_SYSNAME" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SYSNAME" pk="NAME_ID" />
+			</fk>
+		</table>
+		<table name="STORM_PIPE_OLDTAG" >
+			<column name="OLDTAG" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="NEWTAG" type="VARCHAR2" java_type="12" length="8" />
+			<index name="PK_STORM_PIPE_OLDTAG" unique="PRIMARY_KEY" >
+				<column name="OLDTAG" />
+			</index>
+		</table>
+		<table name="STORM_PIPE_PROB" >
+			<column name="PROB_ID" type="VARCHAR2" java_type="12" length="5" />
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="DISTANCE" type="NUMBER" java_type="2" length="3" />
+			<column name="STATION" type="VARCHAR2" java_type="12" length="6" />
+			<column name="OFFSET" type="VARCHAR2" java_type="12" length="5" />
+			<column name="PROBLEM" type="VARCHAR2" java_type="12" length="3" />
+			<column name="PROB_DESC" type="VARCHAR2" java_type="12" length="40" />
+			<column name="PROB_DATE" type="DATE" java_type="91" length="7" />
+			<column name="CONDITION" type="NUMBER" java_type="2" length="1" />
+			<column name="PHOTO" type="VARCHAR2" java_type="12" length="1" />
+			<column name="SOURCE" type="VARCHAR2" java_type="12" length="2" />
+			<column name="REMEDIATED" type="CHAR" java_type="1" length="1" />
+		</table>
+		<table name="STORM_PROBLEM" >
+			<column name="PROBLEM_TYPE" type="VARCHAR2" java_type="12" length="3" mandatory="true" />
+			<column name="PROBLEM_DESC" type="VARCHAR2" java_type="12" length="20" />
+			<index name="STORM_PROBLEM_PROBLEM_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="PROBLEM_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_RCL" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" />
+			<column name="RCL_TAG" type="VARCHAR2" java_type="12" length="8" />
+			<index name="STORM_RCL_TAG_RCL" unique="UNIQUE" >
+				<column name="TAG" />
+				<column name="RCL_TAG" />
+			</index>
+		</table>
+		<table name="STORM_SHAPE" >
+			<column name="SHAPE_TYPE" type="VARCHAR2" java_type="12" length="1" mandatory="true" />
+			<column name="SHAPE_DESC" type="VARCHAR2" java_type="12" length="25" />
+			<index name="STORM_SHAPE_SHAPE_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="SHAPE_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_SOURCE" >
+			<column name="SOURCE_TYPE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="SOURCE_DESC" type="VARCHAR2" java_type="12" length="20" />
+			<index name="STORM_SOURCE_SOURCE_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="SOURCE_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_STATION" >
+			<column name="STATION_ID" type="VARCHAR2" java_type="12" length="5" />
+			<column name="TAG" type="VARCHAR2" java_type="12" length="7" />
+			<column name="SYSNAME" type="VARCHAR2" java_type="12" length="3" />
+			<column name="STATION_LOC" type="VARCHAR2" java_type="12" length="12" />
+			<column name="STATION" type="VARCHAR2" java_type="12" length="6" />
+			<column name="SOURCE" type="VARCHAR2" java_type="12" length="2" />
+		</table>
+		<table name="STORM_STATION_LOC" >
+			<column name="LOCATION_TYPE" type="VARCHAR2" java_type="12" length="12" mandatory="true" />
+			<index name="STORM_ST_LOC_LOC_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="LOCATION_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_SURFACE" >
+			<column name="SURFACE_TYPE" type="VARCHAR2" java_type="12" length="4" mandatory="true" />
+			<column name="SURFACE_DESC" type="VARCHAR2" java_type="12" length="20" />
+			<index name="STORM_SURFACE_SURFACE_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="SURFACE_TYPE" />
+			</index>
+		</table>
+		<table name="STORM_SYSNAME" >
+			<column name="NAME_ID" type="VARCHAR2" java_type="12" length="3" mandatory="true" />
+			<column name="NAME_DESC" type="VARCHAR2" java_type="12" length="20" />
+			<index name="STORM_SYSNAME_NAME_ID_PK" unique="PRIMARY_KEY" >
+				<column name="NAME_ID" />
+			</index>
+		</table>
+		<table name="STORM_UPPIPE" >
+			<column name="TAG" type="VARCHAR2" java_type="12" length="8" />
+			<column name="UPPIPE" type="VARCHAR2" java_type="12" length="8" />
+			<index name="STORM_UPPIPE_TAG_UPPIPE" unique="UNIQUE" >
+				<column name="TAG" />
+				<column name="UPPIPE" />
+			</index>
+		</table>
+		<table name="STREET_CLASS" >
+			<column name="ST_CLASS" type="VARCHAR2" java_type="12" length="4" mandatory="true" />
+			<column name="STREET_CLASS" type="VARCHAR2" java_type="12" length="45" />
+			<index name="STREET_CLASS_ST_CLASS_PK" unique="PRIMARY_KEY" >
+				<column name="ST_CLASS" />
+			</index>
+		</table>
+		<table name="SUBDIVISION_MASTER" >
+			<column name="SUBDIVISION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="TOWNSHIP_ID" type="NUMBER" java_type="2" length="22" />
+			<index name="SYS_C004247" unique="PRIMARY_KEY" >
+				<column name="SUBDIVISION_ID" />
+			</index>
+			<fk name="SYS_C004374" to_schema="ENG" to_table="TOWNSHIP_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="TOWNSHIP_ID" pk="TOWNSHIP_ID" />
+			</fk>
+		</table>
+		<table name="SUBDIVISION_NAMES" >
+			<column name="SUBDIVISION_NAME_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="SUBDIVISION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="100" mandatory="true" />
+			<column name="PHASE" type="VARCHAR2" java_type="12" length="20" />
+			<column name="STATUS" type="VARCHAR2" java_type="12" length="20" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" java_type="91" length="7" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" java_type="91" length="7" />
+			<index name="SYS_C004252" unique="PRIMARY_KEY" >
+				<column name="SUBDIVISION_NAME_ID" />
+			</index>
+			<fk name="SYS_C004375" to_schema="ENG" to_table="SUBDIVISION_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="SUBDIVISION_ID" pk="SUBDIVISION_ID" />
+			</fk>
+		</table>
+		<table name="SURFCOND" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="SURFCOND_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="THOROUGHFARE" >
+			<column name="SEGMENT" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="RCL_TAG" type="VARCHAR2" java_type="12" length="8" />
+			<column name="PROPOSED" type="CHAR" java_type="1" length="1" />
+			<column name="YEAR" type="NUMBER" java_type="2" length="4" />
+			<column name="CLASS" type="VARCHAR2" java_type="12" length="4" />
+			<column name="ROW_CLASS" type="VARCHAR2" java_type="12" length="10" />
+			<column name="SPEED" type="NUMBER" java_type="2" length="2" />
+			<column name="TRAVEL_WAY" type="NUMBER" java_type="2" length="1" />
+			<index name="THOROUGHFARE_SEGMENT_PK" unique="PRIMARY_KEY" >
+				<column name="SEGMENT" />
+			</index>
+			<fk name="THOROUGHFARE_RCL_TAG_FK" to_schema="ENG" to_table="RCL" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="RCL_TAG" pk="TAG" />
+			</fk>
+			<fk name="THOROUGHFARE_CLASS_FK" to_schema="ENG" to_table="STREET_CLASS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="CLASS" pk="ST_CLASS" />
+			</fk>
+		</table>
+		<table name="TOWNSHIP_MASTER" >
+			<column name="TOWNSHIP_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="40" />
+			<column name="TOWNSHIP_ABBREVIATION" type="CHAR" java_type="1" length="2" />
+			<column name="QUARTER_CODE" type="CHAR" java_type="1" length="1" />
+			<index name="SYS_C004259" unique="PRIMARY_KEY" >
+				<column name="TOWNSHIP_ID" />
+			</index>
+		</table>
+		<table name="TOWNS_MASTER" >
+			<column name="TOWN_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="40" />
+			<column name="TOWN_CODE" type="VARCHAR2" java_type="12" length="9" />
+			<index name="SYS_C004262" unique="PRIMARY_KEY" >
+				<column name="TOWN_ID" />
+			</index>
+		</table>
+		<table name="TRAFCTRL" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="TRAFCTRL_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="TRASH_LARGE_ITEM_PICKUP_MASTER" >
+			<column name="LARGE_ITEM_PICKUP_DAY" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<index name="SYS_C004267" unique="PRIMARY_KEY" >
+				<column name="LARGE_ITEM_PICKUP_DAY" />
+			</index>
+		</table>
+		<table name="TRASH_PICKUP_MASTER" >
+			<column name="TRASH_PICKUP_DAY" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<index name="SYS_C004270" unique="PRIMARY_KEY" >
+				<column name="TRASH_PICKUP_DAY" />
+			</index>
+		</table>
+		<table name="TRASH_RECYCLE_WEEK_MASTER" >
+			<column name="RECYCLE_WEEK" type="VARCHAR2" java_type="12" length="20" mandatory="true" />
+			<index name="SYS_C004273" unique="PRIMARY_KEY" >
+				<column name="RECYCLE_WEEK" />
+			</index>
+		</table>
+		<table name="USE" >
+			<column name="TYPE" type="VARCHAR2" java_type="12" length="5" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="20" />
+			<index name="USE_TYPE_PK" unique="PRIMARY_KEY" >
+				<column name="TYPE" />
+			</index>
+		</table>
+		<table name="USERS" >
+			<column name="USERNAME" type="VARCHAR2" java_type="12" length="8" mandatory="true" />
+			<column name="LNAME" type="VARCHAR2" java_type="12" length="15" />
+			<column name="FNAME" type="VARCHAR2" java_type="12" length="12" />
+			<index name="USERS_USERNAME_PK" unique="PRIMARY_KEY" >
+				<column name="USERNAME" />
+			</index>
+		</table>
+		<table name="VEHICLE" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="VEHICLE_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="VEHUSE" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="VEHUSE_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<table name="WEATHER" >
+			<column name="CODE" type="NUMBER" java_type="2" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="WEATHER_CODE_PK" unique="PRIMARY_KEY" >
+				<column name="CODE" />
+			</index>
+		</table>
+		<view name="COUNCIL_DISTRICT_ADDRESS_VIEW" >
+			<view_script> <![CDATA[select ma.street_address_id, al.location_id, alp.location_purpose_id, alpm.description
+from eng.mast_address ma, eng.address_location al, ENG.ADDR_LOCATION_PURPOSES alp, ENG.ADDR_LOCATION_PURPOSE_MAST alpm
+where alp.location_id = al.location_id (+)
+and al.street_address_id = ma.street_address_id
+and alp.location_purpose_id = alpm.location_purpose_id
+and alpm.type = 'CITY COUNCIL DISTRICT'
+--order by ma.street_address_id
+]]> </view_script>
+			<column name="STREET_ADDRESS_ID" type="NUMBER" />
+			<column name="LOCATION_ID" type="NUMBER" />
+			<column name="LOCATION_PURPOSE_ID" type="NUMBER" />
+			<column name="DESCRIPTION" type="VARCHAR2" />
+		</view>
+		<view name="LOC_ADDR_SUB_V" >
+			<view_script> <![CDATA[select al.location_id,  
+          al.street_address_id, 
+		  al.subunit_id, 
+		  mals.status_code, 
+		  mals.effective_start_date, 
+		  mals.effective_end_date 
+     from eng.address_location al, 
+	      eng.mast_address_location_status mals 
+    where al.location_id = mals.location_id
+]]> </view_script>
+			<column name="LOCATION_ID" type="NUMBER" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" />
+			<column name="SUBUNIT_ID" type="NUMBER" />
+			<column name="STATUS_CODE" type="NUMBER" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" />
+		</view>
+		<view name="NEIGHBORHOOD_ADDRESS_VIEW" >
+			<view_script> <![CDATA[select ma.street_address_id, al.location_id, alp.location_purpose_id, alpm.description
+from eng.mast_address ma, eng.address_location al, ENG.ADDR_LOCATION_PURPOSES alp, ENG.ADDR_LOCATION_PURPOSE_MAST alpm
+where alp.location_id = al.location_id (+)
+and al.street_address_id = ma.street_address_id
+and alp.location_purpose_id = alpm.location_purpose_id
+and alpm.type = 'NEIGHBORHOOD ASSOCIATION'
+--order by ma.street_address_id
+]]> </view_script>
+			<column name="STREET_ADDRESS_ID" type="NUMBER" />
+			<column name="LOCATION_ID" type="NUMBER" />
+			<column name="LOCATION_PURPOSE_ID" type="NUMBER" />
+			<column name="DESCRIPTION" type="VARCHAR2" />
+		</view>
+		<view name="PARKS_ADDR_VIEW" >
+			<view_script> <![CDATA[select ma.street_address_id, al.location_id, al.common_name, ma.street_number||' '||s.street_direction_code||' '||s.street_name||' '||s.street_type_suffix_code as address,ma.latitude, ma.longitude, ma.state_plane_x_coordinate, ma.state_plane_y_coordinate from eng.mast_address ma, eng.address_location al, eng.addr_location_types_master altm, eng.mast_street_names s where al.street_address_id = ma.street_address_id and al.location_type_id = altm.location_type_id and altm.location_type_id = 'GOVERNMENT BLOOMINGTON PARKS' and s.street_id=ma.street_id order by al.common_name ]]> </view_script>
+			<column name="STREET_ADDRESS_ID" type="NUMBER" />
+			<column name="LOCATION_ID" type="NUMBER" />
+			<column name="COMMON_NAME" type="VARCHAR2" />
+			<column name="ADDRESS" type="VARCHAR2" />
+			<column name="LATITUDE" type="NUMBER" />
+			<column name="LONGITUDE" type="NUMBER" />
+			<column name="STATE_PLANE_X_COORDINATE" type="NUMBER" />
+			<column name="STATE_PLANE_Y_COORDINATE" type="NUMBER" />
+		</view>
+		<view name="PARK_ADDRESS_VIEW" >
+			<view_script> <![CDATA[select ma.street_address_id, al.location_id, al.common_name, altm.location_type_id,
+ma.state_plane_x_coordinate, ma.state_plane_y_coordinate, ma.latitude, ma.longitude
+from eng.mast_address ma, eng.address_location al, eng.addr_location_types_master altm
+where al.street_address_id = ma.street_address_id
+and al.location_type_id = altm.location_type_id
+and altm.location_type_id = 'GOVERNMENT BLOOMINGTON PARKS'
+order by al.common_name
+]]> </view_script>
+			<column name="STREET_ADDRESS_ID" type="NUMBER" />
+			<column name="LOCATION_ID" type="NUMBER" />
+			<column name="COMMON_NAME" type="VARCHAR2" />
+			<column name="LOCATION_TYPE_ID" type="VARCHAR2" />
+			<column name="STATE_PLANE_X_COORDINATE" type="NUMBER" />
+			<column name="STATE_PLANE_Y_COORDINATE" type="NUMBER" />
+			<column name="LATITUDE" type="NUMBER" />
+			<column name="LONGITUDE" type="NUMBER" />
+		</view>
+		<view name="REAL_STREET_NAMES" >
+			<view_script> <![CDATA[select street_id, street_name
+  from eng.mast_street_names
+ where street_name_type = 'STREET'
+]]> </view_script>
+			<column name="STREET_ID" type="NUMBER" />
+			<column name="STREET_NAME" type="VARCHAR2" />
+		</view>
+		<view name="REAL_STREET_NAMES_V" >
+			<view_script> <![CDATA[select ms.street_id STREET_ID, nvl(ms.street_direction_code,NULL) || ' ' || msn.street_name || ' ' ||
+       msn.street_type_suffix_code || ' ' || ms.post_direction_suffix_code STREET_NAME
+  from eng.mast_street ms, eng.mast_street_names msn
+ where ms.street_id = msn.street_id
+   and msn.street_name_type = 'STREET'
+]]> </view_script>
+			<column name="STREET_ID" type="NUMBER" />
+			<column name="STREET_NAME" type="VARCHAR2" />
+		</view>
+		<view name="STORM_NODE_V" >
+			<view_script> <![CDATA[select to_number(nvl(replace(tag, 'dn',''),0)) TAG,
+       NODE_ID,BASIN,SYSNAME,OWNER ,COMPON,TYPE,DOWNNUM,LOCATION,INROW,
+       SURFACE,NSIZE,MATERIAL,DEPTH,INVERT,NUMPIPES,SUMMRATE,MAP,
+       SOURCE,FIELDCHK,REMARKS,YR_INST,MARKING_DATE,MARKING
+       from eng.storm_node
+]]> </view_script>
+			<column name="TAG" type="NUMBER" />
+			<column name="NODE_ID" type="VARCHAR2" />
+			<column name="BASIN" type="VARCHAR2" />
+			<column name="SYSNAME" type="VARCHAR2" />
+			<column name="OWNER" type="VARCHAR2" />
+			<column name="COMPON" type="VARCHAR2" />
+			<column name="TYPE" type="VARCHAR2" />
+			<column name="DOWNNUM" type="VARCHAR2" />
+			<column name="LOCATION" type="VARCHAR2" />
+			<column name="INROW" type="VARCHAR2" />
+			<column name="SURFACE" type="VARCHAR2" />
+			<column name="NSIZE" type="VARCHAR2" />
+			<column name="MATERIAL" type="VARCHAR2" />
+			<column name="DEPTH" type="NUMBER" />
+			<column name="INVERT" type="NUMBER" />
+			<column name="NUMPIPES" type="CHAR" />
+			<column name="SUMMRATE" type="NUMBER" />
+			<column name="MAP" type="VARCHAR2" />
+			<column name="SOURCE" type="NUMBER" />
+			<column name="FIELDCHK" type="CHAR" />
+			<column name="REMARKS" type="VARCHAR2" />
+			<column name="YR_INST" type="VARCHAR2" />
+			<column name="MARKING_DATE" type="VARCHAR2" />
+			<column name="MARKING" type="VARCHAR2" />
+		</view>
+		<view name="STORM_PIPE_V" >
+			<view_script> <![CDATA[select to_number(nvl(replace(tag, 'ds',''),0)) TAG,
+       PIPE_ID, BASIN, SYSNAME, OWNER,
+       to_number(nvl(replace(downnum, 'dn',''),0)) DOWNNUM,
+       to_number(nvl(replace(upnum, 'dn',''),0)) UPNUM,
+       COMPON, LOCATION, INROW, WT_LIMIT, LENGTH, NO_OPEN,
+       SHAPE,WIDTH, HEIGHT,COVER,THICK,THICK2,MATERIAL,UPINVERT,
+       DWINVERT,SLOPE,SUMMRATE,EASEMENT,SOURCE,FIELDCHK,REMARKS
+       from eng.storm_pipe
+]]> </view_script>
+			<column name="TAG" type="NUMBER" />
+			<column name="PIPE_ID" type="VARCHAR2" />
+			<column name="BASIN" type="VARCHAR2" />
+			<column name="SYSNAME" type="VARCHAR2" />
+			<column name="OWNER" type="VARCHAR2" />
+			<column name="DOWNNUM" type="NUMBER" />
+			<column name="UPNUM" type="NUMBER" />
+			<column name="COMPON" type="VARCHAR2" />
+			<column name="LOCATION" type="VARCHAR2" />
+			<column name="INROW" type="VARCHAR2" />
+			<column name="WT_LIMIT" type="VARCHAR2" />
+			<column name="LENGTH" type="NUMBER" />
+			<column name="NO_OPEN" type="NUMBER" />
+			<column name="SHAPE" type="VARCHAR2" />
+			<column name="WIDTH" type="NUMBER" />
+			<column name="HEIGHT" type="NUMBER" />
+			<column name="COVER" type="NUMBER" />
+			<column name="THICK" type="NUMBER" />
+			<column name="THICK2" type="NUMBER" />
+			<column name="MATERIAL" type="VARCHAR2" />
+			<column name="UPINVERT" type="NUMBER" />
+			<column name="DWINVERT" type="NUMBER" />
+			<column name="SLOPE" type="NUMBER" />
+			<column name="SUMMRATE" type="NUMBER" />
+			<column name="EASEMENT" type="VARCHAR2" />
+			<column name="SOURCE" type="NUMBER" />
+			<column name="FIELDCHK" type="CHAR" />
+			<column name="REMARKS" type="VARCHAR2" />
+		</view>
+		<sequence name="CONTACT_ID_S" start="1" />
+		<sequence name="CONTACT_ID_S" start="1" />
+		<sequence name="COUNT_ID_SEQ" start="1" />
+		<sequence name="COUNT_ID_SEQ" start="1" />
+		<sequence name="GOV_JUR_ID_S" start="1" />
+		<sequence name="GOV_JUR_ID_S" start="1" />
+		<sequence name="JURISDICTION_ID_S" start="1" />
+		<sequence name="JURISDICTION_ID_S" start="1" />
+		<sequence name="LOCATION_CHANGE_ID_S" start="1" />
+		<sequence name="LOCATION_CHANGE_ID_S" start="1" />
+		<sequence name="LOCATION_ID_S" start="1" />
+		<sequence name="LOCATION_ID_S" start="1" />
+		<sequence name="LOCATION_PURPOSE_ID_S" start="1" />
+		<sequence name="LOCATION_PURPOSE_ID_S" start="1" />
+		<sequence name="PLAT_ID_S" start="1" />
+		<sequence name="PLAT_ID_S" start="1" />
+		<sequence name="STATE_ROAD_ID_S" start="1" />
+		<sequence name="STATE_ROAD_ID_S" start="1" />
+		<sequence name="STORM_PIPE_PROB_PROB_ID" start="1" />
+		<sequence name="STORM_PIPE_PROB_PROB_ID" start="1" />
+		<sequence name="STORM_STATION_SEQ_ID" start="1" />
+		<sequence name="STORM_STATION_SEQ_ID" start="1" />
+		<sequence name="STREET_ADDRESS_ID_S" start="1" />
+		<sequence name="STREET_ADDRESS_ID_S" start="1" />
+		<sequence name="STREET_ID_S" start="1" />
+		<sequence name="STREET_ID_S" start="1" />
+		<sequence name="SUBDIVISION_ID_S" start="1" />
+		<sequence name="SUBDIVISION_ID_S" start="1" />
+		<sequence name="SUBDIVISION_NAME_ID_S" start="1" />
+		<sequence name="SUBDIVISION_NAME_ID_S" start="1" />
+		<sequence name="SUBUNIT_ID_S" start="1" />
+		<sequence name="SUBUNIT_ID_S" start="1" />
+		<sequence name="TOWNSHIP_ID_S" start="1" />
+		<sequence name="TOWNSHIP_ID_S" start="1" />
+		<sequence name="TOWN_ID_S" start="1" />
+		<sequence name="TOWN_ID_S" start="1" />
+		<procedure name="CREATE_CORNER_ADDRESS" >
+			<string>PROCEDURE     create_corner_address (
+	vStreetNumber1		IN	VARCHAR2,
+	cStreet_direction1	IN	CHAR,
+	vStreetName1			IN	VARCHAR2,
+	vStreetSuffix1		IN	VARCHAR2,
+	cPost_direction1		IN	CHAR,
+	vTown1				IN	VARCHAR2,
+	vStreetAddress2_1			IN	VARCHAR2,
+	vStreetNumber2		IN	VARCHAR2,
+	cStreet_direction2	IN	CHAR,
+	vStreetName2			IN	VARCHAR2,
+	vStreetSuffix2		IN	VARCHAR2,
+	cPost_direction2		IN	CHAR,
+	vTown2				IN	VARCHAR2,
+	vStreetAddress2_2			IN	VARCHAR2,
+	vCity					IN	VARCHAR2,
+	vzip					IN	VARCHAR2,
+	vZipPlus4				IN	VARCHAR2,
+	vAddressJurisdiction	IN	VARCHAR2,
+	vGovtJurisdiction		IN	VARCHAR2, 
+	vTaxJurisdiction		IN	CHAR,
+	vQuarterSection			IN	VARCHAR2,
+	vTownship				IN	VARCHAR2,
+	vSection				IN	VARCHAR2,
+	nSubdivisionID			IN	NUMBER,
+	nPlatID					IN	NUMBER,
+	vPlatLotNumber			IN	VARCHAR2,
+	vNotes1					IN	VARCHAR2,
+	vNotes2					IN	VARCHAR2,
+	vLocationType			IN	VARCHAR2,
+	nMailable				IN	NUMBER,
+	nLivable				IN	NUMBER,
+	nContactID				IN	NUMBER,
+	vMessage				OUT	VARCHAR2)
+	 IS
+	 
+	myStreetID1				NUMBER; 
+	myStreetID2				NUMBER; 
+	myStreetAddressID1		NUMBER;     
+	myStreetAddressID2		NUMBER;     
+	myTownID1				NUMBER;
+	myTownID2				NUMBER;
+	myTownshipID			NUMBER;
+	myAddressJurisdictionID NUMBER;
+	myGovtJurisdictionID	NUMBER;
+	myLocationID			NUMBER;
+	myLocationTypeID		NUMBER;
+	address1_already_exists	EXCEPTION;
+	address2_already_exists	EXCEPTION;
+	street1_not_found 	EXCEPTION;
+	street2_not_found 	EXCEPTION;
+	myNum					NUMBER;
+	errorblock				CHAR(1);
+	
+	BEGIN     
+	    
+	    errorblock:='A';                
+    		-- Find the town 1
+ 		IF vTown1 IS NOT NULL THEN
+			SELECT town_id INTO myTownID1 FROM eng.towns_master WHERE UPPER(description) = UPPER(vTown1);
+	    ELSE
+	    	myTownID1 := NULL;
+		END IF;
+
+
+	    errorblock:='B';                
+    		-- Find the town 2
+
+
+ 		IF vTown2 IS NOT NULL THEN
+			SELECT town_id INTO myTownID2 FROM eng.towns_master WHERE UPPER(description) = UPPER(vTown2);
+	    ELSE
+	    	myTownID2 := NULL;
+		END IF;
+	    
+	    
+		    -- Find the street1           
+		errorblock:='C';
+		SELECT COUNT(s.street_id) INTO myNum FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vStreetName1)
+			  AND (s.town_id = myTownID1 OR s.town_id IS NULL)
+			  AND n.street_direction_code = cStreet_direction1
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cPost_direction1,'XXX')
+			  AND (s.status_code = 1 OR s.status_code = 3)
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vStreetSuffix1,'XXX')
+			  AND n.street_name_type = 'STREET';
+		IF myNum = 0 THEN RAISE street1_not_found;
+		END IF;
+
+
+		-- Generate the street ID  1
+		errorblock:='D';			  
+		SELECT s.street_id INTO myStreetID1 FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vStreetName1)
+			  AND (s.town_id = myTownID1 OR s.town_id IS NULL)
+			  AND n.street_direction_code = cStreet_direction1
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cPost_direction1,'XXX')
+			  AND (s.status_code = 1 OR s.status_code = 2)
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vStreetSuffix1,'XXX')
+			  --AND n.street_name_type = 'STREET';			  
+			  AND n.street_name_type != 'ALIAS';			  
+
+
+		
+		    -- Find the street 2          
+		errorblock:='E';
+		SELECT COUNT(s.street_id) INTO myNum FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vStreetName2)
+			  AND (s.town_id = myTownID2 OR s.town_id IS NULL)
+			  AND n.street_direction_code = cStreet_direction2
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cPost_direction2,'XXX')
+			  AND s.status_code = 1
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vStreetSuffix2,'XXX')
+			  AND n.street_name_type = 'STREET';
+		IF myNum = 0 THEN RAISE street2_not_found;
+		END IF;
+
+
+		-- Generate the street ID  2
+		errorblock:='F';			  
+		SELECT s.street_id INTO myStreetID2 FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vStreetName2)
+			  AND (s.town_id = myTownID2 OR s.town_id IS NULL)
+			  AND n.street_direction_code = cStreet_direction2
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cPost_direction2,'XXX')
+			  AND s.status_code = 1
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vStreetSuffix2,'XXX')
+			  AND n.street_name_type = 'STREET';			  
+
+
+        
+  		-- Find the township
+		errorblock:='G';
+  		IF vTownship IS NOT NULL THEN
+  			SELECT township_id INTO myTownshipID FROM eng.township_master WHERE UPPER(name) =  UPPER(vTownship); 
+  		ELSE
+  			myTownshipID:=NULL;
+  		END IF;
+  		
+  		-- Find the Address Jurisdiction
+		errorblock:='H';  
+		
+		IF vAddressJurisdiction IS NOT NULL THEN
+  			SELECT jurisdiction_id INTO myAddressJurisdictionID FROM eng.addr_jurisdiction_master WHERE
+  			UPPER(description) = UPPER(vAddressJurisdiction);                                          
+  		ELSE
+  			myAddressJurisdictionID :=NULL;
+  		END IF;
+  		
+  		-- Find the Government Jurisdiction
+		errorblock:='I';
+		IF vGovtJurisdiction IS NOT NULL THEN
+    		SELECT gov_jur_id INTO myGovtJurisdictionID FROM eng.governmental_jurisdiction_mast WHERE	
+			UPPER(description) = UPPER(vGovtJurisdiction);
+		ELSE
+			myGovtJurisdictionID:=NULL;
+		END IF;
+		
+	    
+		-- Check to see if address 1 already exists
+		-- in future, address_type may be part of key so we can have duplicate numbers
+		errorblock:='J';
+		SELECT COUNT(*) 
+		  INTO myNum
+		  FROM eng.mast_address 
+		 WHERE street_id = myStreetID1
+		   AND street_number = vStreetNumber1;
+		   
+		IF myNum &gt; 0 THEN RAISE address1_already_exists;
+		END IF;
+
+
+		-- Check to see if address 2 already exists
+		-- in future, address_type may be part of key so we can have duplicate numbers
+		errorblock:='K';
+		SELECT COUNT(*) 
+		  INTO myNum
+		  FROM eng.mast_address 
+		 WHERE street_id = myStreetID2
+		   AND street_number = vStreetNumber2;
+		   
+		IF myNum &gt; 0 THEN RAISE address2_already_exists;
+		END IF;
+
+
+		
+		-- Find a new street address ID 1
+		errorblock:='L';
+		SELECT eng.street_address_id_s.NEXTVAL INTO myStreetAddressID1 FROM DUAL;
+		                       	    
+
+
+		-- Create the address 1
+		errorblock:='M';		 
+		INSERT INTO ENG.MAST_ADDRESS (STREET_ADDRESS_ID, STREET_NUMBER, STREET_ID, ADDRESS_TYPE, 
+			TAX_JURISDICTION, JURISDICTION_ID, GOV_JUR_ID, TOWNSHIP_ID, SECTION, 
+			QUARTER_SECTION, SUBDIVISION_ID, PLAT_ID, PLAT_LOT_NUMBER, 
+			STREET_ADDRESS_2, CITY, STATE, ZIP, ZIPPLUS4, NOTES)
+		VALUES (myStreetAddressID1, vStreetNumber1, myStreetID1, 'STREET', 
+			vTaxJurisdiction, myAddressJurisdictionID, myGovtJurisdictionID, myTownshipID, vSection,
+			vQuarterSection, nSubdivisionID, nPlatID, vPlatLotNumber, 
+			vStreetAddress2_1, vCity, 'IN', vZip, vZipPlus4, 
+			'CORNER LOT WITH ' ||vStreetNumber2||' '||cStreet_direction2||' '||vStreetName2||' '||vStreetSuffix2||' '||cPost_direction2); 
+		
+		IF vNotes1 IS NOT NULL THEN
+	    	UPDATE eng.mast_address set notes = notes || ' ' || vNotes1 where street_address_id = myStreetAddressID1;
+		END IF;
+
+
+
+
+		-- Find a new street address ID 2
+		errorblock:='N';
+		SELECT eng.street_address_id_s.NEXTVAL INTO myStreetAddressID2 FROM DUAL;
+		                       	    
+
+
+		-- Create the address 2
+		errorblock:='O';		 
+		INSERT INTO ENG.MAST_ADDRESS (STREET_ADDRESS_ID, STREET_NUMBER, STREET_ID, ADDRESS_TYPE, 
+			TAX_JURISDICTION, JURISDICTION_ID, GOV_JUR_ID, TOWNSHIP_ID, SECTION, 
+			QUARTER_SECTION, SUBDIVISION_ID, PLAT_ID, PLAT_LOT_NUMBER, 
+			STREET_ADDRESS_2, CITY, STATE, ZIP, ZIPPLUS4, NOTES)
+		VALUES (myStreetAddressID2, vStreetNumber2, myStreetID2, 'STREET', 
+			vTaxJurisdiction, myAddressJurisdictionID, myGovtJurisdictionID, myTownshipID, vSection,
+			vQuarterSection, nSubdivisionID, nPlatID, vPlatLotNumber, 
+			vStreetAddress2_2, vCity, 'IN', vZip, vZipPlus4, 
+		   'CORNER LOT WITH ' ||vStreetNumber1||' '||cStreet_direction1||' '||vStreetName1||' '||vStreetSuffix1||' '||cPost_direction1); 
+
+
+		IF vNotes2 IS NOT NULL THEN
+	    	UPDATE eng.mast_address set notes = notes || ' ' || vNotes1 where street_address_id = myStreetAddressID2;
+		END IF;
+			
+			
+			
+		-- Create Locaation - Only 1 Location is needed maake first active and second inactive
+		
+	   errorblock:='P';
+	   SELECT eng.location_id_s.nextval INTO myLocationID FROM DUAL;
+		
+	   INSERT INTO eng.address_location (location_id, location_type_id, street_address_id, 
+	   		mailable_flag,livable_flag, active)
+	   VALUES (myLocationID, vLocationType ,myStreetAddressID1, nMailable, nLivable, 'Y');
+		
+	   INSERT INTO eng.address_location (location_id, location_type_id, street_address_id, 
+	   		mailable_flag,livable_flag, active)
+	   VALUES (myLocationID, vLocationType ,myStreetAddressID2, nMailable, nLivable, 'N');
+
+
+		-- Create the status for the location
+		errorblock := 'Q';
+		INSERT INTO eng.mast_address_location_status (status_code, effective_start_date, location_id)
+		 VALUES (1, SYSDATE, myLocationID);
+		 
+		-- Create the status for the address 1
+		errorblock := 'R';
+		INSERT into eng.mast_address_status (status_code, start_date, street_address_id)
+		 VALUES (1, SYSDATE, myStreetAddressID1);
+		                                                   
+		-- Create the status for the  address 2
+		errorblock := 'S';
+		INSERT into eng.mast_address_status (status_code, start_date, street_address_id)
+		 VALUES (1, SYSDATE, myStreetAddressID2);
+
+
+		 
+
+
+		 
+		-- Update Location Assignment History		                                                                  
+		-- Note that we defaulted the contact to NULL
+		errorblock:='T';
+		
+		-- First address             
+		INSERT INTO eng.mast_address_assignment_hist (location_id, action_date, action, contact_id, notes, street_address_id)
+		 VALUES (myLocationID, SYSDATE, 'ASSIGN', nContactID, 'CORNER LOT', myStreetAddressID1); 
+		-- now the second address
+	   INSERT INTO eng.mast_address_assignment_hist (location_id, action_date, action, contact_id, notes, street_address_id)
+		 VALUES (myLocationID, SYSDATE, 'ASSIGN', nContactID, 'CORNER LOT', myStreetAddressID2); 
+				                     
+		 
+		-- Generate the status message
+		 
+		vMessage:='Corner lots '||vStreetNumber1||' '||cStreet_direction1||' '||vStreetName1||' '||vStreetSuffix1||' '||cPost_direction1||
+		' and '|| vStreetNumber2|| ' ' ||cStreet_direction2||' '||vStreetName2||' '||vStreetSuffix2||' '||cPost_direction2||
+		' -Address IDs '||myStreetAddressID1|| ' ' ||myStreetAddressID2|| ' - Location ID '||myLocationID;
+        
+	COMMIT;
+		
+	EXCEPTION
+		WHEN address1_already_exists THEN
+			vMessage:=vStreetNumber1||' '||cStreet_direction1||' '||vStreetName1||' '||vStreetSuffix1||' '||cPost_direction1||' address1 already exists';
+		WHEN address2_already_exists THEN
+			vMessage:=vStreetNumber2||' '||cStreet_direction2||' '||vStreetName2||' '||vStreetSuffix2||' '||cPost_direction2||' address2 already exists';
+		WHEN street1_not_found THEN
+			vMessage:=cStreet_direction1||' '||vStreetName1||' '||vStreetSuffix1||' '||cPost_direction1||' street1 not found';
+		WHEN street2_not_found THEN
+			vMessage:=cStreet_direction2||' '||vStreetName2||' '||vStreetSuffix2||' '||cPost_direction2||' street2 not found';
+		WHEN no_data_found THEN
+			vMessage:='Some other error has occurred in block '||errorblock;
+	END;
+	
+
+
+	
+</string>
+			<comment> <![CDATA[Standalone procedure or function]]> </comment>
+		</procedure>
+		<procedure name="CREATE_LOCATION_PURPOSE" >
+			<string>PROCEDURE     create_location_purpose (
+	vLocationPurpose	IN	VARCHAR2,
+	vType				IN	VARCHAR2,
+	vMessage			OUT	VARCHAR2) 
+	IS
+		 
+	myLocationPurposeID	NUMBER;      
+	myNumPurposes		NUMBER;
+	purpose_already_exists EXCEPTION;
+	
+	BEGIN
+		 
+		-- Checks for duplicates
+		SELECT COUNT(*) INTO myNumPurposes FROM eng.addr_location_purpose_mast WHERE 
+			description = vLocationPurpose ;
+		IF myNumPurposes &gt; 0 THEN RAISE purpose_already_exists;
+		END IF;
+		                       
+		-- Generate the new location purpose ID
+		SELECT eng.location_purpose_id_s.NEXTVAL INTO myLocationPurposeID FROM DUAL;
+				
+		-- This script should create a new street
+
+
+		INSERT INTO eng.addr_location_purpose_mast (location_purpose_id, description, type)
+		 VALUES (myLocationPurposeID, vLocationPurpose, vType);
+		                                                     
+		COMMIT;
+		vMessage:=vLocationPurpose|| ' Location PurposeID ' ||myLocationPurposeID|| ' successfully added';
+		
+		EXCEPTION
+			WHEN purpose_already_exists THEN
+				vMessage:=vLocationPurpose||' already exists';
+	
+	END;
+</string>
+			<comment> <![CDATA[Standalone procedure or function]]> </comment>
+		</procedure>
+		<procedure name="MOVE_CORNER_ADDRESS" >
+			<string>PROCEDURE     move_corner_address (
+	vGoodStreetNumber		IN	VARCHAR2,
+	cGoodStreet_direction	IN	CHAR,
+	vGoodStreetName			IN	VARCHAR2,
+	vGoodStreetSuffix		IN	VARCHAR2,
+	cGoodPost_direction		IN	CHAR,
+	vGoodTown				IN	VARCHAR2,
+	vInactiveStreetNumber		IN	VARCHAR2,
+	cInactiveStreet_direction	IN	CHAR,
+	vInactiveStreetName			IN	VARCHAR2,
+	vInactiveStreetSuffix		IN	VARCHAR2,
+	cInactivePost_direction		IN	CHAR,
+	vInactiveTown				IN	VARCHAR2,
+	nInactiveAddressStatusCode  IN NUMBER,
+	--vGoodNotes					IN	VARCHAR2,
+	--vInactiveNotes					IN	VARCHAR2,
+   --	vInactiveLocationTypeID			IN	VARCHAR2,
+   --	nInactiveMailable				IN	NUMBER,	
+   --	nInactiveLivable				IN	NUMBER,	
+	nContactID				IN	NUMBER,
+	vMessage				OUT	VARCHAR2)
+	 IS
+	 
+	myGoodStreetID				NUMBER; 
+	myInactiveStreetID				NUMBER; 
+	myGoodStreetAddressID		NUMBER;     
+	myInactiveStreetAddressID		NUMBER;     
+	myGoodTownID				NUMBER;
+	myInactiveTownID				NUMBER;
+	myGoodLocationID			NUMBER;
+	myInactiveLocationID			NUMBER;
+	myLocationTypeID		NUMBER;
+	myInactiveBuildingID	NUMBER;
+	good_street_not_found 	EXCEPTION;
+	inactive_street_not_found 	EXCEPTION;
+	good_address_not_found	EXCEPTION;
+	inactive_address_not_found	EXCEPTION;
+	good_location_not_found	EXCEPTION;
+	inactive_location_not_found	EXCEPTION;
+	myNum					NUMBER;
+	errorblock				CHAR(1);
+	
+	BEGIN     
+	    
+	    errorblock:='A';                
+    		-- Find the town for good corner address
+ 		IF vGoodTown IS NOT NULL THEN
+			SELECT town_id INTO myGoodTownID FROM eng.towns_master WHERE UPPER(description) = UPPER(vGoodTown);
+	    ELSE
+	    	myGoodTownID := NULL;
+		END IF;
+
+
+	    errorblock:='B';                
+    		-- Find the town for inactive corner address
+
+
+ 		IF vInactiveTown IS NOT NULL THEN
+			SELECT town_id INTO myInactiveTownID FROM eng.towns_master WHERE UPPER(description) = UPPER(vInactiveTown);
+	    ELSE
+	    	myInactiveTownID := NULL;
+		END IF;
+	    
+	    
+		    -- Find the street for good address           
+		errorblock:='C';
+		SELECT COUNT(s.street_id) INTO myNum FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vGoodStreetName)
+			  AND (s.town_id = myGoodTownID OR s.town_id IS NULL)
+			  AND n.street_direction_code = cGoodStreet_direction
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cGoodPost_direction,'XXX')
+			  AND (s.status_code = 1 OR s.status_code = 3)
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vGoodStreetSuffix,'XXX')
+			  AND n.street_name_type = 'STREET';
+		IF myNum = 0 THEN RAISE good_street_not_found;
+		END IF;
+
+
+		-- Generate the street ID  for good address  
+		errorblock:='D';			  
+		SELECT s.street_id INTO myGoodStreetID FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vGoodStreetName)
+			  AND (s.town_id = myGoodTownID OR s.town_id IS NULL)
+			  AND n.street_direction_code = cGoodStreet_direction
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cGoodPost_direction,'XXX')
+			  AND (s.status_code = 1 OR s.status_code = 2)
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vGoodStreetSuffix,'XXX')
+			  --AND n.street_name_type = 'STREET';			  
+			  AND n.street_name_type != 'ALIAS';			  
+
+
+		
+		    -- Find the street for inactive corner address          
+		errorblock:='E';
+		SELECT COUNT(s.street_id) INTO myNum FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vInactiveStreetName)
+			  AND (s.town_id = myInactiveTownID OR s.town_id IS NULL)
+			  AND n.street_direction_code = cInactiveStreet_direction
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cInactivePost_direction,'XXX')
+			  AND s.status_code = 1
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vInactiveStreetSuffix,'XXX')
+			  AND n.street_name_type = 'STREET';
+		IF myNum = 0 THEN RAISE inactive_street_not_found;
+		END IF;
+
+
+		-- Generate the street ID  for inactive corner address
+		errorblock:='F';			  
+		SELECT s.street_id INTO myInactiveStreetID FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vInactiveStreetName)
+			  AND (s.town_id = myInactiveTownID OR s.town_id IS NULL)
+			  AND n.street_direction_code = cInactiveStreet_direction
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cInactivePost_direction,'XXX')
+			  AND s.status_code = 1
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vInactiveStreetSuffix,'XXX')
+			  AND n.street_name_type = 'STREET';			  
+
+
+	    
+		-- Check to see if the good address  exists
+		-- only checking STREET address types
+		errorblock:='G';
+		SELECT COUNT(*) INTO myNum FROM eng.mast_address  WHERE street_id = myGoodStreetID
+		   AND street_number = vGoodStreetNumber
+		   AND address_type = 'STREET';
+		   
+		IF myNum = 0 THEN RAISE good_address_not_found;
+		END IF;
+
+
+		-- Get good address street_address_id
+		errorblock:='H';
+		SELECT street_address_id INTO myGoodStreetAddressID FROM eng.mast_address  WHERE street_id = myGoodStreetID
+		   AND street_number = vGoodStreetNumber
+		   AND address_type = 'STREET';
+
+
+		-- Check to see if the inactive address  exists
+		-- only checking STREET address types
+		errorblock:='I';
+		SELECT COUNT(*) INTO myNum FROM eng.mast_address  WHERE street_id = myInactiveStreetID
+		   AND street_number = vInactiveStreetNumber
+		   AND address_type = 'STREET';
+		   
+		IF myNum = 0 THEN RAISE inactive_address_not_found;
+		END IF;
+
+
+		-- Get inactiveaddress street_address_id
+		errorblock:='J';
+		SELECT street_address_id INTO myInactiveStreetAddressID FROM eng.mast_address  WHERE street_id = myInactiveStreetID
+		   AND street_number = vInactiveStreetNumber
+		   AND address_type = 'STREET';
+
+
+
+
+		-- Check to see if location exists for good address
+		errorblock:='K';
+		SELECT COUNT(*) INTO myNum FROM eng.address_location al, eng.mast_address ma, eng.mast_address_status mas  
+		   WHERE al.street_address_id = myGoodStreetAddressID
+		   AND al.street_address_id = ma.street_address_id
+		   AND ma.street_address_id = mas.street_address_id
+		   AND mas.status_code = 1
+		   AND al.subunit_id is NULL;
+
+
+		IF myNum = 0 THEN RAISE good_location_not_found;
+		END IF;
+
+
+		-- Get the location id for good address
+		errorblock:='L';
+		SELECT al.location_id INTO myGoodLocationID 
+		FROM eng.address_location al, eng.mast_address ma, eng.mast_address_status mas  
+		   WHERE al.street_address_id = myGoodStreetAddressID
+		   AND al.street_address_id = ma.street_address_id
+		   AND ma.street_address_id = mas.street_address_id
+		   AND mas.status_code = 1
+		   AND al.subunit_id is NULL;
+
+
+
+
+		-- Check to see if location exists for inactive address
+		errorblock:='M';
+		SELECT COUNT(*) INTO myNum FROM eng.address_location al, eng.mast_address ma, eng.mast_address_status mas  
+		   WHERE al.street_address_id = myInactiveStreetAddressID
+		   AND al.street_address_id = ma.street_address_id
+		   AND ma.street_address_id = mas.street_address_id
+		   AND mas.status_code = 1
+		   AND al.subunit_id is NULL;
+
+
+		IF myNum = 0 THEN RAISE inactive_location_not_found;
+		END IF;
+
+
+		-- Get the location id for inactive address
+		errorblock:='N';
+		SELECT al.location_id INTO myInactiveLocationID 
+		FROM eng.address_location al, eng.mast_address ma, eng.mast_address_status mas  
+		   WHERE al.street_address_id = myInactiveStreetAddressID
+		   AND al.street_address_id = ma.street_address_id
+		   AND ma.street_address_id = mas.street_address_id
+		   AND mas.status_code = 1
+		   AND al.subunit_id is NULL;
+
+
+		-- Deal with building tables for inactive locations if they exist
+		errorblock:='M';
+		SELECT COUNT(*)INTO myNum FROM gis.building_address_location 
+		   WHERE location_id = myInactiveLocationID;
+
+
+		IF myNum &gt; 0 THEN
+			SELECT building_id INTO myInactiveBuildingID FROM gis.building_address_location
+				WHERE location_id = myInactiveLocationID;
+		   --	DELETE FROM gis.building_address_location
+				--WHERE location_id = myInactiveLocationID;
+			UPDATE gis.buildings SET status_code = 4, effective_end_date = SYSDATE
+				WHERE building_id = myInactiveBuildingID;
+			
+		END IF;		
+		
+                
+		-- Update Location Assignment History for good location	                                                                  
+	   errorblock:='T';	         
+	   INSERT INTO eng.mast_address_assignment_hist (location_id, action_date, action, contact_id, notes, street_address_id)
+	   	VALUES (myGoodLocationID, SYSDATE, 'MOVED TO LOCATION', nContactID, 'CORNER LOT', myInactiveStreetAddressID); 
+
+
+		-- Update Location Assignment History for inactive location		                                                                  
+		errorblock:='O';	         
+		INSERT INTO eng.mast_address_assignment_hist (location_id, action_date, action, contact_id, notes, street_address_id)
+		 VALUES (myInactiveLocationID, SYSDATE, 'RETIRED LOCATION', nContactID, 'DUPLICATE CORNER LOT LOCATION', myInactiveStreetAddressID); 
+		   
+		-- Move inactive address to good location
+		errorblock:='P';
+		INSERT into eng.address_location (location_id, location_type_id, street_address_id, subunit_id, mailable_flag,
+		livable_flag, common_name, active) 
+			VALUES (myGoodLocationID, 'UNKNOWN', myInactiveStreetAddressID, NULL, 0, 0, NULL, 'N') ;
+
+
+		-- Set location of  inactive address inactive
+		errorblock:='Q';
+		UPDATE eng.address_location SET  active = 'N'
+			WHERE location_id = myInactiveLocationID;		
+
+
+		-- Append notes for good address
+		errorblock := 'U';
+		--UPDATE eng.mast_address set notes = notes || ' ' || vGoodNotes WHERE street_address_id = myGoodStreetAddressID ;
+		UPDATE eng.mast_address set notes = notes || ' CORNER LOT WITH ' || vInactiveStreetNumber||' '||cInactiveStreet_direction||' '||vInactiveStreetName||' '||vInactiveStreetSuffix||' '||cInactivePost_direction
+			WHERE street_address_id = myGoodStreetAddressID ;
+			
+		-- Append notes for inactive address
+		errorblock := 'V';
+		--UPDATE eng.mast_address set notes = notes || ' ' || vInactiveNotes WHERE street_address_id = myInactiveStreetAddressID ;			 		 						                     
+		UPDATE eng.mast_address set notes = notes || ' CORNER LOT WITH ' || vGoodStreetNumber||' '||cGoodStreet_direction||' '||vGoodStreetName||' '||vGoodStreetSuffix||' '||cGoodPost_direction
+			WHERE street_address_id = myInactiveStreetAddressID ;			 		 						                     
+
+
+		
+   		-- Update address status for Inactive address.
+		errorblock:='R';   		
+		UPDATE eng.mast_address_status SET status_code = nInactiveAddressStatusCode 
+			WHERE street_address_id = myInactiveStreetAddressID; 
+			
+						
+       -- If address status retired, set end date
+		errorblock:='S';
+		SELECT COUNT(*) INTO myNum FROM eng.mast_address_status  WHERE street_address_id = myInactiveStreetAddressID
+		   AND status_code = 3;
+
+
+		IF myNum = 1 THEN
+			UPDATE eng.mast_address_status SET end_date = SYSDATE
+				WHERE street_address_id = myInactiveStreetAddressID;
+	   		INSERT INTO eng.mast_address_assignment_hist (location_id, action_date, action, contact_id, notes, street_address_id)
+	   			VALUES (myGoodLocationID, SYSDATE, 'RETIRED', nContactID, 'UNUSED CORNER LOT', myInactiveStreetAddressID); 
+	   	   	UPDATE eng.mast_address set notes = notes || ' - NOT USED'  	
+		   		WHERE street_address_id = myInactiveStreetAddressID ;			 		 						                     
+	   	   			 				
+		END IF;
+
+
+		-- Retire the Inactive location
+		errorblock := 'T';
+		UPDATE eng.mast_address_location_status SET status_code = 3, effective_end_date = SYSDATE
+			WHERE location_id = myInactiveLocationID ;
+
+
+		 
+		-- Generate the status message
+		 
+		vMessage:='Corner lot '||vInactiveStreetNumber||' '||cInactiveStreet_direction||' '||vInactiveStreetName||' '||vInactiveStreetSuffix||' '||cInactivePost_direction||
+		' Address ID '|| myInactiveStreetAddressID|| ', Location ID ' ||myInactiveLocationID||' successfully moved to Location ID '||myGoodLocationID;
+        
+	COMMIT;
+		
+	EXCEPTION
+		WHEN good_address_not_found THEN
+			vMessage:=vGoodStreetNumber||' '||cGoodStreet_direction||' '||vGoodStreetName||' '||vGoodStreetSuffix||' '||cGoodPost_direction||' good address not found';
+		WHEN inactive_address_not_found THEN
+			vMessage:=vInactiveStreetNumber||' '||cInactiveStreet_direction||' '||vInactiveStreetName||' '||vInactiveStreetSuffix||' '||cInactivePost_direction||' inactive address not found';
+		WHEN good_street_not_found THEN
+			vMessage:=cGoodStreet_direction||' '||vGoodStreetName||' '||vGoodStreetSuffix||' '||cGoodPost_direction||' good street not found';
+		WHEN inactive_street_not_found THEN
+			vMessage:=cInactiveStreet_direction||' '||vInactiveStreetName||' '||vInactiveStreetSuffix||' '||cInactivePost_direction||' inactive street not found';
+		WHEN good_location_not_found THEN
+			vMessage:=vGoodStreetNumber||' '||cGoodStreet_direction||' '||vGoodStreetName||' '||vGoodStreetSuffix||' '||cGoodPost_direction||' good location not found';
+		WHEN inactive_location_not_found THEN
+			vMessage:=vInactiveStreetNumber||' '||cInactiveStreet_direction||' '||vInactiveStreetName||' '||vInactiveStreetSuffix||' '||cInactivePost_direction||' inactive location not found';
+		WHEN no_data_found THEN
+			vMessage:='Some other error has occurred in block '||errorblock;
+	END;
+	
+
+
+	
+</string>
+			<comment> <![CDATA[Standalone procedure or function]]> </comment>
+		</procedure>
+		<procedure name="REASSIGN_ADDRESS" >
+			<string>PROCEDURE reassign_address (
+	vStreetNumber		IN	VARCHAR2,
+	cStreet_direction	IN	CHAR,
+	vStreetName			IN	VARCHAR2,
+	vStreetSuffix		IN	VARCHAR2,
+	cPost_direction		IN	CHAR,
+	vTown				IN	VARCHAR2,
+	--vAddressType			IN	VARCHAR2,
+	--vStreetAddress2			IN	VARCHAR2,
+	--vCity					IN	VARCHAR2,
+	--vzip					IN	VARCHAR2,
+	--vZipPlus4				IN	VARCHAR2,
+	--vAddressJurisdiction	IN	VARCHAR2,
+	--vGovtJurisdiction		IN	VARCHAR2, 
+	--vTaxJurisdiction		IN	CHAR,
+	--vQuarterSection			IN	VARCHAR2,
+	--vTownship				IN	VARCHAR2,
+	--vSection				IN	VARCHAR2,
+   --SubdivisionID			IN	NUMBER,
+	--nPlatID					IN	NUMBER,
+	--vPlatLotNumber			IN	VARCHAR2,
+	--vCensusBlock			IN	VARCHAR2,
+	--nX						IN	NUMBER,
+	--nY						IN	NUMBER,
+	--nLat					IN	NUMBER,
+	--nLong					IN	NUMBER,
+	--vNotes					IN	VARCHAR2,
+	vLocationType			IN	VARCHAR2,
+	nMailable				IN	NUMBER,
+	nLivable				IN	NUMBER,
+	nContactID				IN	NUMBER,
+	vAssignmentNotes		IN	VARCHAR2,
+	vMessage				OUT	VARCHAR2)
+	 IS
+	 
+	myStreetID				NUMBER; 
+	myStreetAddressID		NUMBER;     
+	myTownID				NUMBER;
+	myTownshipID			NUMBER;
+	--myAddressJurisdictionID NUMBER;
+ 	--myGovtJurisdictionID	NUMBER;
+	myLocationID			NUMBER;
+	myLocationTypeID		NUMBER;
+	address_not_found	EXCEPTION;
+	street_not_found 		EXCEPTION;
+	myNum					NUMBER;
+	errorblock				CHAR(1);
+	
+	BEGIN     
+	    
+	    errorblock:='A';                
+    		-- Find the town 
+ 		IF vTown IS NOT NULL THEN
+			SELECT town_id INTO myTownID FROM eng.towns_master WHERE UPPER(description) = UPPER(vTown);
+	    ELSE
+	    	myTownID := NULL;
+		END IF;
+	    
+		errorblock:='B';
+		    -- Find the street           
+		SELECT COUNT(s.street_id) INTO myNum FROM eng.mast_street s, eng.mast_street_names n
+			WHERE s.street_id = n.street_id
+			  AND UPPER(n.street_name) = UPPER(vStreetName)
+			  AND (s.town_id = myTownID OR s.town_id IS NULL)
+			  AND n.street_direction_code = cStreet_direction
+			  AND NVL(n.post_direction_suffix_code,'XXX') = NVL(cPost_direction,'XXX')
+			  AND s.status_code = 1
+			  AND NVL(n.street_type_suffix_code,'XXX') = NVL(vStreetSuffix,'XXX')
+			  AND n.street_name_type = 'STREET';
+		errorblock:='C';			  
+		IF myNum = 0 THEN RAISE street_not_found;
+		END IF;
+		
+		-- Check to see if the address already exists
+		
+  /*
+  		-- Find the township
+  		IF vTownship IS NOT NULL THEN
+  			SELECT township_id INTO myTownshipID FROM eng.township_master WHERE UPPER(name) =  UPPER(vTownship); 
+  		ELSE
+  			myTownshipID:=NULL;
+  		END IF;
+  		
+  		-- Find the Address Jurisdiction
+		errorblock:='D';  
+		
+		IF vAddressJurisdiction IS NOT NULL THEN
+  			SELECT jurisdiction_id INTO myAddressJurisdictionID FROM eng.addr_jurisdiction_master WHERE
+  			UPPER(description) = UPPER(vAddressJurisdiction);                                          
+  		ELSE
+  			myAddressJurisdictionID :=NULL;
+  		END IF;
+  		
+  		-- Find the Government Jurisdiction
+		errorblock:='E';
+		IF vGovtJurisdiction IS NOT NULL THEN
+    		SELECT gov_jur_id INTO myGovtJurisdictionID FROM eng.governmental_jurisdiction_mast WHERE	
+			UPPER(description) = UPPER(vGovtJurisdiction);
+		ELSE
+			myGovtJurisdictionID:=NULL;
+		END IF;
+	*/
+		
+		-- Check to see if the address  exists
+		-- only checking STREET address types
+		errorblock:='J';
+		SELECT COUNT(*) INTO myNum FROM eng.mast_address  WHERE street_id = myStreetID
+		   AND street_number = vStreetNumber
+		   AND address_type = 'STREET';
+		   
+		IF myNum = 0 THEN RAISE address_not_found;
+		END IF;
+
+
+		-- Get old address street_address_id
+		errorblock:='K';
+		SELECT street_address_id INTO myStreetAddressID FROM eng.mast_address  WHERE street_id = myStreetID
+		   AND street_number = vStreetNumber
+		   AND address_type = 'STREET';
+	    
+	    
+		-- Create the address  - Using existing address, no need
+		/*
+		errorblock:='I';		 
+		INSERT INTO ENG.MAST_ADDRESS (STREET_ADDRESS_ID, STREET_NUMBER, STREET_ID, ADDRESS_TYPE, 
+			TAX_JURISDICTION, JURISDICTION_ID, GOV_JUR_ID, TOWNSHIP_ID, SECTION, 
+			QUARTER_SECTION, SUBDIVISION_ID, PLAT_ID, PLAT_LOT_NUMBER, 
+			STREET_ADDRESS_2, CITY, STATE, ZIP, ZIPPLUS4, CENSUS_BLOCK_FIPS_CODE, 
+			STATE_PLANE_X_COORDINATE, STATE_PLANE_Y_COORDINATE, LATITUDE, LONGITUDE, 
+			NOTES)
+		VALUES (myStreetAddressID, vStreetNumber, myStreetID, vAddressType, 
+			vTaxJurisdiction, myAddressJurisdictionID, myGovtJurisdictionID, myTownshipID, vSection,
+			vQuarterSection, nSubdivisionID, nPlatID, vPlatLotNumber, 
+			vStreetAddress2, vCity, 'IN', vZip, vZipPlus4, vCensusBlock, nX, nY, nLat, nLong, vNotes); 
+		*/	
+			
+		-- Need a new location Location 
+		errorblock:='J';
+		SELECT eng.location_id_s.nextval INTO myLocationID FROM DUAL;
+		
+		INSERT INTO eng.address_location (location_id, location_type_id, street_address_id, mailable_flag,livable_flag, active)
+		 VALUES (myLocationID, vLocationType ,myStreetAddressID, nMailable, nLivable, 'Y');
+		 
+		-- Assignment History		                                                                  
+		-- Note that we defaulted the contact to NULL
+		              
+		errorblock:='K';
+		INSERT INTO eng.mast_address_assignment_hist (location_id, action_date, action, contact_id, notes, street_address_id)
+		 VALUES (myLocationID, SYSDATE, 'RE-ASSIGN', nContactID, vAssignmentNotes, myStreetAddressID); 
+		
+		-- Create the status for the location
+		errorblock := 'L';
+		INSERT INTO eng.mast_address_location_status (status_code, effective_start_date, location_id)
+		 VALUES (1, SYSDATE, myLocationID);
+		                     
+		-- Update the status for the address
+		errorblock := 'M';
+		UPDATE eng.mast_address_status SET status_code = 1, end_date = NULL, start_date = SYSDATE
+			WHERE street_address_id = myStreetAddressID;
+
+
+		 
+		-- Generate the status message
+		 
+		vMessage:=vStreetNumber||' '||cStreet_direction||' '||vStreetName||' '||vStreetSuffix||' '||cPost_direction||' StreetAddressID'|| ' ' ||myStreetAddressID|| ' successfully reassigned as Location ID '||myLocationID;
+        
+	COMMIT;
+		
+	EXCEPTION
+		WHEN address_not_found THEN
+			vMessage:=vStreetNumber||' '||cStreet_direction||' '||vStreetName||' '||vStreetSuffix||' '||cPost_direction||' not found';
+		WHEN street_not_found THEN
+			vMessage:=cStreet_direction||' '||vStreetName||' '||vStreetSuffix||' '||cPost_direction||' not found';
+		WHEN no_data_found THEN
+			vMessage:='Some other error has occurred in block '||errorblock;
+	END;
+	
+
+
+	
+</string>
+			<comment> <![CDATA[Standalone procedure or function]]> </comment>
+		</procedure>
+		<procedure name="RETIRE_INACTIVE_CORNER_ADDRESS" >
+			<string>PROCEDURE     retire_inactive_corner_address (
+	nGoodStreetAddressID		IN	NUMBER,
+	nInactiveStreetAddressID		IN	NUMBER,
+	nLocationID				IN	NUMBER,	
+	nContactID				IN	NUMBER,
+	vMessage				OUT	VARCHAR2)
+	 IS
+	 
+	good_address_not_found	EXCEPTION;
+	inactive_address_not_found	EXCEPTION;
+	location_not_found	EXCEPTION;
+	myNum					NUMBER;
+	errorblock				CHAR(1);
+	
+	BEGIN     
+
+
+	-- Check to see if the active address  exists
+	errorblock:='A';
+	SELECT COUNT(*) INTO myNum FROM eng.mast_address  WHERE street_address_id = nGoodStreetAddressID;		   
+	IF myNum = 0 THEN RAISE good_address_not_found;
+	END IF;
+
+
+
+
+	-- Check to see if the inactive address  exists
+	errorblock:='B';
+	SELECT COUNT(*) INTO myNum FROM eng.mast_address  WHERE street_address_id = nInactiveStreetAddressID;
+		   
+	IF myNum = 0 THEN RAISE inactive_address_not_found;
+	END IF;
+
+
+	-- Check to see if location exists for good address
+	errorblock:='C';
+	SELECT COUNT(*) INTO myNum FROM eng.address_location  WHERE location_id = nLocationID;
+
+
+	IF myNum = 0 THEN RAISE location_not_found;
+	END IF;
+
+
+	--Set good corner lot address status code current
+	errorblock:='D'; 
+	UPDATE eng.mast_address_status set status_code = '1' 
+		WHERE street_address_id = '&#38;GoodStreetAddressID';
+
+
+	-- Append address notes for inactive corner lot to indicate it is not being used
+	errorblock:='E'; 
+	UPDATE eng.mast_address SET notes = notes || ' ' || 'NOT USED' 
+		WHERE street_address_id = '&#38;InactiveStreetAddressID' ;
+
+
+	-- Insert retired action record into assignment history for inactive address
+	errorblock:='F'; 
+		INSERT INTO eng.mast_address_assignment_hist
+	VALUES ('&#38;nLocationID', SYSDATE,  'RETIRED', '&#38;nContactID', 'UNUSED CORNER LOT', '&#38;InactiveStreeAddressID', NULL) ;
+
+
+	-- Set inactive corner address lot status code as retired and insert end date
+	errorblock:='G'; 
+	UPDATE eng.mast_address_status SET status_code = '3', end_date = SYSDATE
+	 	WHERE street_address_id = '&#38;InactiveStreetAddressID';
+
+
+	-- Set location record for inactive corner lot address as inactive
+	errorblock:='H'; 
+	UPDATE eng.address_location SET active = 'N' 
+		WHERE location_id = '&#38;LocationID' AND street_address_id = '&#38;InactiveStreetAddressID'
+   		AND subunit_id is NULL;
+		
+	COMMIT;
+
+
+	-- Set location record for good corner lot address as active
+	errorblock:='I'; 
+	SELECT count(location_id) INTO myNum FROM eng.address_location
+		WHERE location_id = '&#38;LocationID' AND street_address_id = '&#38;GoodStreetAddressID' and active = 'Y';
+	
+		IF myNum = 0 THEN
+		UPDATE eng.address_location set active = 'Y'
+			WHERE location_id = '&#38;LocationID' and street_address_id = '&#38;GoodStreetAddressID' and subunit_id is NULL;
+    	END IF;
+    	
+
+
+	-- Generate the status message	 
+	vMessage:='Inactive Corner lot '||nInactiveStreetAddressID||' successfully retired';
+
+
+	COMMIT;
+
+
+
+
+	EXCEPTION
+		WHEN good_address_not_found THEN
+			vMessage:=nGoodStreetAddressID||' good address not found';
+		WHEN inactive_address_not_found THEN
+			vMessage:=nInactiveStreetAddressID||' inactive address not found';
+		WHEN location_not_found THEN
+			vMessage:=nLocationID||' good location not found';
+		WHEN no_data_found THEN
+			vMessage:='Some other error has occurred in block '||errorblock;
+END ;
+</string>
+			<comment> <![CDATA[Standalone procedure or function]]> </comment>
+		</procedure>
+	</schema>
+	<schema schemaname="GIS" defo="false" >
+		<table name="ANNEXATIONS" >
+			<column name="ORDINANCE_NUMBER" type="VARCHAR2" java_type="12" length="12" mandatory="true" />
+			<column name="TOWNSHIP_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="NAME" type="VARCHAR2" java_type="12" length="40" />
+			<column name="PASSED_DATE" type="DATE" java_type="91" length="7" />
+			<column name="EFFECTIVE_START_DATE" type="NUMBER" java_type="2" length="22" />
+			<column name="ANNEXATION_TYPE" type="NUMBER" java_type="2" length="22" />
+			<column name="ACRES" type="NUMBER" java_type="2" length="6" decimal="2" />
+			<column name="SQUARE_MILES" type="NUMBER" java_type="2" length="4" decimal="2" />
+			<column name="ESTIMATE_POPULATION" type="NUMBER" java_type="2" length="22" />
+			<column name="DWELLING_UNITS" type="NUMBER" java_type="2" length="22" />
+			<index name="SYS_C004380" unique="PRIMARY_KEY" >
+				<column name="ORDINANCE_NUMBER" />
+			</index>
+		</table>
+		<table name="BUILDINGS" >
+			<column name="BUILDING_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="BUILDING_TYPE_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="GIS_TAG" type="VARCHAR2" java_type="12" length="20" />
+			<column name="BUILDING_NAME" type="VARCHAR2" java_type="12" length="40" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" java_type="91" length="7" curdate="true" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" java_type="91" length="7" />
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="3" >
+				<defo>1</defo>
+			</column>
+			<index name="SYS_C004384" unique="PRIMARY_KEY" >
+				<column name="BUILDING_ID" />
+			</index>
+			<fk name="BUILDINGS_STATUS_CODE_FK" to_schema="GIS" to_table="BUILDINGS_STATUS_LOOKUP" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="STATUS_CODE" pk="STATUS_CODE" />
+			</fk>
+			<fk name="SYS_C004424" to_schema="GIS" to_table="BUILDING_TYPES_MASTER" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="BUILDING_TYPE_ID" pk="BUILDING_TYPE_ID" />
+			</fk>
+		</table>
+		<table name="BUILDINGS_STATUS_LOOKUP" >
+			<column name="STATUS_CODE" type="NUMBER" java_type="2" length="3" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="240" />
+			<index name="BUILDINGS_STATUS_LOOKUP_PK" unique="PRIMARY_KEY" >
+				<column name="STATUS_CODE" />
+			</index>
+		</table>
+		<table name="BUILDING_ADDRESS_LOCATION" >
+			<column name="BUILDING_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<index name="SYS_C004390" unique="PRIMARY_KEY" >
+				<column name="BUILDING_ID" />
+				<column name="LOCATION_ID" />
+			</index>
+			<fk name="SYS_C004425" to_schema="GIS" to_table="BUILDINGS" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="BUILDING_ID" pk="BUILDING_ID" />
+			</fk>
+		</table>
+		<table name="BUILDING_TYPES_MASTER" >
+			<column name="BUILDING_TYPE_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="20" />
+			<index name="SYS_C004393" unique="PRIMARY_KEY" >
+				<column name="BUILDING_TYPE_ID" />
+			</index>
+		</table>
+		<table name="CENSUS_LUCA_ACTION_CODES" >
+			<column name="ACTION_CODE" type="VARCHAR2" java_type="12" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="40" mandatory="true" />
+			<index name="PK_ACTION_CODE" unique="PRIMARY_KEY" >
+				<column name="ACTION_CODE" />
+			</index>
+		</table>
+		<table name="CENSUS_LUCA_ADDRESS" >
+			<column name="ID" type="VARCHAR2" java_type="12" length="12" mandatory="true" />
+			<column name="ENTITY_ID_CODE" type="VARCHAR2" java_type="12" length="12" />
+			<column name="LINE_NUMBER" type="VARCHAR2" java_type="12" length="7" />
+			<column name="MAFID" type="VARCHAR2" java_type="12" length="9" />
+			<column name="ACTION_CODE" type="VARCHAR2" java_type="12" length="1" />
+			<column name="STATE_CODE" type="VARCHAR2" java_type="12" length="2" />
+			<column name="COUNTY_CODE" type="VARCHAR2" java_type="12" length="3" />
+			<column name="CENSUS_TRACT_NUMBER" type="VARCHAR2" java_type="12" length="7" />
+			<column name="CENSUS_BLOCK_NUMBER" type="VARCHAR2" java_type="12" length="5" />
+			<column name="GROUP_QUARTERS_FLAG" type="CHAR" java_type="1" length="1" />
+			<column name="HOUSE_NUMBER" type="VARCHAR2" java_type="12" length="35" />
+			<column name="STREET_NAME_PREFIX_QUALIFIER" type="VARCHAR2" java_type="12" length="3" />
+			<column name="STREET_NAME_PREFIX_DIRECTION" type="VARCHAR2" java_type="12" length="2" />
+			<column name="STREET_NAME_PREFIX_TYPE" type="VARCHAR2" java_type="12" length="14" />
+			<column name="STREET_NAME" type="VARCHAR2" java_type="12" length="100" />
+			<column name="STREET_NAME_SUFFIX_TYPE" type="VARCHAR2" java_type="12" length="14" />
+			<column name="STREET_NAME_SUFFIX_DIRECTION" type="VARCHAR2" java_type="12" length="2" />
+			<column name="STREET_NAME_SUFFIX_QUALIFIER" type="VARCHAR2" java_type="12" length="3" />
+			<column name="LOCATION_DESCRIPTION_NAME" type="VARCHAR2" java_type="12" length="100" />
+			<column name="APARTMENT_UNIT_NUMBER" type="VARCHAR2" java_type="12" length="53" />
+			<column name="CITY_ZIPCODE" type="VARCHAR2" java_type="12" length="5" />
+			<column name="NON_CITY_STYLE_ADDRESS" type="VARCHAR2" java_type="12" length="50" />
+			<column name="NON_CITY_STYLE_ZIPCODE" type="VARCHAR2" java_type="12" length="5" />
+			<column name="STRUCTURE_POINT" type="VARCHAR2" java_type="12" length="5" />
+			<column name="STRUCTURE_LATITUDE" type="VARCHAR2" java_type="12" length="11" />
+			<column name="STRUCTURE_LONGITUDE" type="VARCHAR2" java_type="12" length="12" />
+			<column name="CITY_STYLE_ADDRESS_FLAG" type="CHAR" java_type="1" length="1" />
+			<column name="UPDATE_STATUS" type="CHAR" java_type="1" length="1" />
+			<column name="USERNAME" type="VARCHAR2" java_type="12" length="10" />
+			<column name="NOTES" type="VARCHAR2" java_type="12" length="100" />
+			<index name="PK_ID" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<fk name="FK_ACTION" to_schema="GIS" to_table="CENSUS_LUCA_ACTION_CODES" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="ACTION_CODE" pk="ACTION_CODE" />
+			</fk>
+		</table>
+		<table name="CENSUS_LUCA_STATUS_CODES" >
+			<column name="STATUS" type="VARCHAR2" java_type="12" length="2" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="40" mandatory="true" />
+			<index name="PK_STATUS" unique="PRIMARY_KEY" >
+				<column name="STATUS" />
+			</index>
+		</table>
+		<table name="LOCATIONS_CLASSES" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="LOCATION_CLASS" type="VARCHAR2" java_type="12" length="40" />
+			<index name="LOCATIONS_CLASSES_UK1" unique="NORMAL" >
+				<column name="LOCATION_ID" />
+			</index>
+		</table>
+		<table name="LOCATIONS_CLASSES_07JUL2006" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="LOCATION_CLASS" type="VARCHAR2" java_type="12" length="40" />
+		</table>
+		<table name="LOCATIONS_CLASSES_24MAY2007" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="LOCATION_CLASS" type="VARCHAR2" java_type="12" length="40" />
+		</table>
+		<table name="LOCATIONS_CLASSES_27DEC2005" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="LOCATION_CLASS" type="VARCHAR2" java_type="12" length="40" />
+		</table>
+		<table name="LOCATION_TYPES_NEW" >
+			<column name="TYPE_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="30" />
+			<index name="PK_LOCATION_TYPES_NEW" unique="PRIMARY_KEY" >
+				<column name="TYPE_ID" />
+			</index>
+		</table>
+		<table name="LOCATION_TYPE_CLASS_NEW" >
+			<column name="CLASS_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="TYPE_ID" type="NUMBER" java_type="2" length="22" />
+			<column name="DESCRIPTION" type="VARCHAR2" java_type="12" length="40" />
+			<index name="PK_LOCATION_TYPE_CLASS_NEW" unique="PRIMARY_KEY" >
+				<column name="CLASS_ID" />
+			</index>
+		</table>
+		<table name="MAST_ADDRESS_PARCEL" >
+			<column name="PARCEL_ID" type="CHAR" java_type="1" length="18" mandatory="true" />
+			<column name="STREET_ADDRESS_ID" type="NUMBER" java_type="2" length="22" />
+			<index name="SYS_C004411" unique="PRIMARY_KEY" >
+				<column name="PARCEL_ID" />
+			</index>
+			<fk name="SYS_C004427" to_schema="GIS" to_table="PARCEL" delete_action="RESTRICT" update_action="CASCADE" >
+				<fk_column name="PARCEL_ID" pk="PARCEL_ID" />
+			</fk>
+		</table>
+		<table name="PARCEL" >
+			<column name="PARCEL_ID" type="CHAR" java_type="1" length="18" mandatory="true" />
+			<column name="EFFECTIVE_START_DATE" type="DATE" java_type="91" length="7" />
+			<column name="EFFECTIVE_END_DATE" type="DATE" java_type="91" length="7" />
+			<index name="SYS_C004414" unique="PRIMARY_KEY" >
+				<column name="PARCEL_ID" />
+			</index>
+		</table>
+		<table name="PRECINCT_ADDRESS_LOCATION" >
+			<column name="LOCATION_ID" type="NUMBER" java_type="2" length="22" mandatory="true" />
+			<column name="PRECINCT" type="VARCHAR2" java_type="12" length="6" />
+			<column name="PRECINCT_OLD" type="VARCHAR2" java_type="12" length="6" />
+			<index name="UNQ_LOCATION_ID" unique="UNIQUE" >
+				<column name="LOCATION_ID" />
+			</index>
+		</table>
+		<table name="VOTING_PRECINCTS" >
+			<column name="PRECINCT" type="VARCHAR2" java_type="12" length="6" mandatory="true" />
+			<column name="PRECINCT_NAME" type="VARCHAR2" java_type="12" length="20" />
+			<column name="ACTIVE" type="CHAR" java_type="1" length="1" mandatory="true" />
+			<index name="PK_PRECINCT" unique="PRIMARY_KEY" >
+				<column name="PRECINCT" />
+			</index>
+			<constraint name="UPPER_PRECINCT_NAME" >
+				<string>precinct_name = UPPER(precinct_name)</string>
+			</constraint>
+		</table>
+		<view name="ADDRESS_COUNCIL_DISTRICT" >
+			<view_script> <![CDATA[select
+
+al.LOCATION_ID,
+al.STREET_ADDRESS_ID,
+al.SUBUNIT_ID,
+lp.location_purpose_id,
+lpm.description,
+bal.BUILDING_ID,
+b.gis_tag,
+ma.STREET_NUMBER "STREET_NUMBER",
+msn.street_direction_code "STREET_DIRECTION",
+msn.street_name "STREET_NAME",
+msn.street_type_suffix_code "STREET_SUFFIX",
+msn.post_direction_suffix_code "POST_DIRECTION",
+masu.SUDTYPE,
+masu.STREET_SUBUNIT_IDENTIFIER
+
+
+from eng.address_location al, eng.mast_address ma, eng.mast_address_subunits masu,
+eng.addr_location_purposes lp, eng.addr_location_purpose_mast lpm,
+eng.mast_address_location_status als, eng.mast_address_status mas,
+eng.mast_street ms, eng.mast_street_names msn,
+gis.building_address_location bal, gis.buildings b
+
+where al.street_address_id = ma.street_address_id
+and (al.subunit_id = masu.subunit_id or al.subunit_id is NULL)
+and ma.street_address_id = masu.street_address_id (+)
+and al.location_id = als.location_id
+and al.location_id (+)= lp.location_id
+and lp.location_purpose_id = lpm.location_purpose_id (+)
+and lpm.type = 'CITY COUNCIL DISTRICT'
+and ma.street_address_id = mas.street_address_id
+and ma.street_id = ms.street_id
+and ms.street_id = msn.street_id
+and msn.street_name_type = 'STREET'
+and al.location_id = bal.location_id(+)
+and bal.building_id = b.building_id(+)
+]]> </view_script>
+			<column name="LOCATION_ID" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_ID" type="UNDEFINED" />
+			<column name="SUBUNIT_ID" type="UNDEFINED" />
+			<column name="LOCATION_PURPOSE_ID" type="UNDEFINED" />
+			<column name="DESCRIPTION" type="UNDEFINED" />
+			<column name="BUILDING_ID" type="UNDEFINED" />
+			<column name="GIS_TAG" type="UNDEFINED" />
+			<column name="STREET_NUMBER" type="UNDEFINED" />
+			<column name="STREET_DIRECTION" type="UNDEFINED" />
+			<column name="STREET_NAME" type="UNDEFINED" />
+			<column name="STREET_SUFFIX" type="UNDEFINED" />
+			<column name="POST_DIRECTION" type="UNDEFINED" />
+			<column name="SUDTYPE" type="UNDEFINED" />
+			<column name="STREET_SUBUNIT_IDENTIFIER" type="UNDEFINED" />
+		</view>
+		<view name="ADDRESS_PURPOSES" >
+			<view_script> <![CDATA[select
+
+al.LOCATION_ID,
+al.STREET_ADDRESS_ID,
+al.SUBUNIT_ID,
+lp.location_purpose_id,
+lpm.description,
+lpm.type,
+bal.BUILDING_ID,
+b.gis_tag,
+ma.STREET_NUMBER "STREET_NUMBER",
+msn.street_direction_code "STREET_DIRECTION",
+msn.street_name "STREET_NAME",
+msn.street_type_suffix_code "STREET_SUFFIX",
+msn.post_direction_suffix_code "POST_DIRECTION",
+masu.SUDTYPE,
+masu.STREET_SUBUNIT_IDENTIFIER
+
+
+from eng.address_location al, eng.mast_address ma, eng.mast_address_subunits masu,
+eng.addr_location_purposes lp, eng.addr_location_purpose_mast lpm,
+eng.mast_address_location_status als, eng.mast_address_status mas,
+eng.mast_street ms, eng.mast_street_names msn,
+gis.building_address_location bal, gis.buildings b
+
+where al.street_address_id = ma.street_address_id
+and (al.subunit_id = masu.subunit_id or al.subunit_id is NULL)
+and ma.street_address_id = masu.street_address_id (+)
+and al.location_id = als.location_id
+and al.location_id (+)= lp.location_id
+and lp.location_purpose_id = lpm.location_purpose_id (+)
+and ma.street_address_id = mas.street_address_id
+and ma.street_id = ms.street_id
+and ms.street_id = msn.street_id
+and msn.street_name_type = 'STREET'
+and al.location_id = bal.location_id(+)
+and bal.building_id = b.building_id(+)
+]]> </view_script>
+			<column name="LOCATION_ID" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_ID" type="UNDEFINED" />
+			<column name="SUBUNIT_ID" type="UNDEFINED" />
+			<column name="LOCATION_PURPOSE_ID" type="UNDEFINED" />
+			<column name="DESCRIPTION" type="UNDEFINED" />
+			<column name="TYPE" type="UNDEFINED" />
+			<column name="BUILDING_ID" type="UNDEFINED" />
+			<column name="GIS_TAG" type="UNDEFINED" />
+			<column name="STREET_NUMBER" type="UNDEFINED" />
+			<column name="STREET_DIRECTION" type="UNDEFINED" />
+			<column name="STREET_NAME" type="UNDEFINED" />
+			<column name="STREET_SUFFIX" type="UNDEFINED" />
+			<column name="POST_DIRECTION" type="UNDEFINED" />
+			<column name="SUDTYPE" type="UNDEFINED" />
+			<column name="STREET_SUBUNIT_IDENTIFIER" type="UNDEFINED" />
+		</view>
+		<view name="GISADDRESS" >
+			<view_script> <![CDATA[select
+al.LOCATION_ID,
+--al.LOCATION_TYPE_ID,
+al.STREET_ADDRESS_ID,
+al.SUBUNIT_ID,
+--al.MAILABLE_FLAG,
+--al.LIVABLE_FLAG,
+--al.COMMON_NAME,
+al.ACTIVE,
+
+--als.location_id,
+als.status_code "LOCATION_STATUS",
+
+--mas.STREET_ADDRESS_ID,
+mas.STATUS_CODE "ADDRESS_STATUS",
+
+mass.STATUS_CODE "SUBUNIT_STATUS",
+
+--bal.LOCATION_ID,
+bal.BUILDING_ID,
+
+--b.building_id,
+b.gis_tag,
+
+--ma.STREET_ADDRESS_ID,
+ma.STREET_NUMBER "STREET_NUMBER",
+
+msn.street_direction_code "STREET_DIRECTION",
+
+--msn.street_name || '  ' || msn.street_type_suffix_code || ' ' ||
+--msn.post_direction_suffix_code "STREET_NAME",
+msn.street_name "STREET_NAME",
+msn.street_type_suffix_code "STREET_SUFFIX",
+msn.post_direction_suffix_code "POST_DIRECTION",
+
+--masu.SUBUNIT_ID
+--masu.STREET_ADDRESS_ID
+masu.SUDTYPE,
+masu.STREET_SUBUNIT_IDENTIFIER,
+
+ma.STREET_ID,
+tm.description "TOWN" ,
+
+
+ma.ADDRESS_TYPE,
+ma.TAX_JURISDICTION,
+ma.JURISDICTION_ID,
+ma.GOV_JUR_ID,
+ma.TOWNSHIP_ID,
+ma.SECTION,
+ma.QUARTER_SECTION,
+--ma.SUBDIVISION_ID,
+ma.PLAT_ID,
+ma.PLAT_LOT_NUMBER,
+ma.STREET_ADDRESS_2,
+ma.CITY,
+ma.STATE,
+ma.ZIP,
+ma.ZIPPLUS4,
+
+ma.CENSUS_BLOCK_FIPS_CODE,
+ma.STATE_PLANE_X_COORDINATE,
+ma.STATE_PLANE_Y_COORDINATE,
+
+ma.latitude, ma.longitude,
+
+ma.STREET_NUMBER || ' ' || msn.street_direction_code || ' ' || msn.street_name || ' ' ||
+msn.street_type_suffix_code || ' ' || msn.post_direction_suffix_code || ' ' || masu.SUDTYPE
+|| ' ' || masu.STREET_SUBUNIT_IDENTIFIER "ADDR_LINE1",
+
+ma.CITY || ', ' || ma.STATE || '  ' || ma.ZIP || '-' || ma.ZIPPLUS4 "ADDR_LINE2"
+
+from eng.address_location al, eng.mast_address ma, eng.mast_address_subunits masu,
+eng.mast_address_location_status als, eng.mast_address_status mas, eng.mast_address_subunit_status mass,
+eng.mast_street ms, eng.mast_street_names msn, eng.towns_master tm,
+gis.building_address_location bal, gis.buildings b
+
+where al.street_address_id = ma.street_address_id
+and (al.subunit_id = masu.subunit_id or al.subunit_id is NULL)
+and ma.street_address_id = masu.street_address_id (+)
+and al.location_id = als.location_id
+and ma.street_address_id = mas.street_address_id
+
+and al.subunit_id = mass.subunit_id (+)
+
+
+and ma.street_id = ms.street_id
+and ms.street_id = msn.street_id
+and msn.street_name_type = 'STREET'
+and ms.town_id = tm.town_id(+)
+and al.location_id = bal.location_id(+)
+and bal.building_id = b.building_id(+)
+
+--order by
+--al.location_id
+--"STREET_NAME", "DIRECTION", "NUMBER",
+--masu.SUDTYPE,
+--masu.STREET_SUBUNIT_IDENTIFIER
+]]> </view_script>
+			<column name="LOCATION_ID" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_ID" type="UNDEFINED" />
+			<column name="SUBUNIT_ID" type="UNDEFINED" />
+			<column name="ACTIVE" type="UNDEFINED" />
+			<column name="LOCATION_STATUS" type="UNDEFINED" />
+			<column name="ADDRESS_STATUS" type="UNDEFINED" />
+			<column name="SUBUNIT_STATUS" type="UNDEFINED" />
+			<column name="BUILDING_ID" type="UNDEFINED" />
+			<column name="GIS_TAG" type="UNDEFINED" />
+			<column name="STREET_NUMBER" type="UNDEFINED" />
+			<column name="STREET_DIRECTION" type="UNDEFINED" />
+			<column name="STREET_NAME" type="UNDEFINED" />
+			<column name="STREET_SUFFIX" type="UNDEFINED" />
+			<column name="POST_DIRECTION" type="UNDEFINED" />
+			<column name="SUDTYPE" type="UNDEFINED" />
+			<column name="STREET_SUBUNIT_IDENTIFIER" type="UNDEFINED" />
+			<column name="STREET_ID" type="UNDEFINED" />
+			<column name="TOWN" type="UNDEFINED" />
+			<column name="ADDRESS_TYPE" type="UNDEFINED" />
+			<column name="TAX_JURISDICTION" type="UNDEFINED" />
+			<column name="JURISDICTION_ID" type="UNDEFINED" />
+			<column name="GOV_JUR_ID" type="UNDEFINED" />
+			<column name="TOWNSHIP_ID" type="UNDEFINED" />
+			<column name="SECTION" type="UNDEFINED" />
+			<column name="QUARTER_SECTION" type="UNDEFINED" />
+			<column name="PLAT_ID" type="UNDEFINED" />
+			<column name="PLAT_LOT_NUMBER" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_2" type="UNDEFINED" />
+			<column name="CITY" type="UNDEFINED" />
+			<column name="STATE" type="UNDEFINED" />
+			<column name="ZIP" type="UNDEFINED" />
+			<column name="ZIPPLUS4" type="UNDEFINED" />
+			<column name="CENSUS_BLOCK_FIPS_CODE" type="UNDEFINED" />
+			<column name="STATE_PLANE_X_COORDINATE" type="UNDEFINED" />
+			<column name="STATE_PLANE_Y_COORDINATE" type="UNDEFINED" />
+			<column name="LATITUDE" type="UNDEFINED" />
+			<column name="LONGITUDE" type="UNDEFINED" />
+			<column name="ADDR_LINE1" type="UNDEFINED" />
+			<column name="ADDR_LINE2" type="UNDEFINED" />
+		</view>
+		<view name="GISADDRESS2" >
+			<view_script> <![CDATA[select
+al.LOCATION_ID,
+al.STREET_ADDRESS_ID,
+al.SUBUNIT_ID,
+al.ACTIVE,
+als.status_code "LOCATION_STATUS",
+mas.STATUS_CODE "ADDRESS_STATUS",
+mass.STATUS_CODE "SUBUNIT_STATUS",
+bal.BUILDING_ID,
+b.gis_tag,
+ma.STREET_NUMBER "STREET_NUMBER",
+msn.street_direction_code "STREET_DIRECTION",
+msn.street_name "STREET_NAME",
+msn.street_type_suffix_code "STREET_SUFFIX",
+msn.post_direction_suffix_code "POST_DIRECTION",
+masu.SUDTYPE,
+masu.STREET_SUBUNIT_IDENTIFIER,
+ma.STREET_ID,
+tm.description "TOWN" ,
+ma.ADDRESS_TYPE,
+ma.JURISDICTION_ID,
+ma.GOV_JUR_ID,
+ma.TAX_JURISDICTION,
+ma.TOWNSHIP_ID,
+ma.SECTION,
+ma.QUARTER_SECTION,
+ma.CITY,
+ma.STATE,
+ma.ZIP,
+ma.ZIPPLUS4,
+ma.SUBDIVISION_ID,
+ma.PLAT_ID,
+ma.PLAT_LOT_NUMBER,
+ma.STREET_ADDRESS_2,
+ma.CENSUS_BLOCK_FIPS_CODE,
+ma.STATE_PLANE_X_COORDINATE,
+ma.STATE_PLANE_Y_COORDINATE,
+ma.latitude, ma.longitude,
+ma.STREET_NUMBER || ' ' || msn.street_direction_code || ' ' || msn.street_name || ' ' ||
+msn.street_type_suffix_code || ' ' || msn.post_direction_suffix_code || ' ' || masu.SUDTYPE
+|| ' ' || masu.STREET_SUBUNIT_IDENTIFIER "ADDR_LINE1",
+ma.CITY || ', ' || ma.STATE || '  ' || ma.ZIP || '-' || ma.ZIPPLUS4 "ADDR_LINE2"
+
+from eng.address_location al, eng.mast_address ma, eng.mast_address_subunits masu,
+eng.mast_address_location_status als, eng.mast_address_status mas, eng.mast_address_subunit_status mass,
+eng.mast_street ms, eng.mast_street_names msn, eng.towns_master tm,
+gis.building_address_location bal, gis.buildings b
+
+-- orig multi records on subunits
+--where al.street_address_id = ma.street_address_id
+--and ma.street_address_id = masu.street_address_id(+)
+--and (al.subunit_id = masu.subunit_id or al.subunit_id is NULL)
+
+-- works 4 / 1
+where al.street_address_id = ma.street_address_id
+and al.street_address_id = masu.street_address_id(+)
+and al.subunit_id = masu.subunit_id (+)
+
+-- doesn't work
+--where al.street_address_id = ma.street_address_id
+--and al.street_address_id = masu.street_address_id
+--and ma.street_address_id = masu.street_address_id(+)
+--and al.subunit_id (+) = masu.subunit_id
+
+
+--- subunits right, but no single addresses
+--where al.street_address_id = ma.street_address_id
+--and ma.street_address_id = masu.street_address_id
+--and al.subunit_id = masu.subunit_id (+)
+
+--- subunits right, but no single addresses
+--where al.street_address_id = ma.street_address_id
+--and ma.street_address_id = masu.street_address_id(+)
+--and al.subunit_id = masu.subunit_id
+
+--- many records of both types
+--where al.street_address_id = ma.street_address_id
+--and (al.subunit_id = masu.subunit_id or al.subunit_id is NULL)
+
+--- many records of both types
+--where al.street_address_id = ma.street_address_id
+--and (al.subunit_id = masu.subunit_id or al.subunit_id is NULL)
+--and (ma.street_address_id = masu.street_address_id or al.subunit_id is NULL)
+
+and al.location_id = als.location_id
+and ma.street_address_id = mas.street_address_id
+and al.subunit_id = mass.subunit_id (+)
+and ma.street_id = ms.street_id
+and ms.street_id = msn.street_id
+and msn.street_name_type = 'STREET'
+and ms.town_id = tm.town_id(+)
+and al.location_id = bal.location_id(+)
+and bal.building_id = b.building_id(+)
+]]> </view_script>
+			<column name="LOCATION_ID" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_ID" type="UNDEFINED" />
+			<column name="SUBUNIT_ID" type="UNDEFINED" />
+			<column name="ACTIVE" type="UNDEFINED" />
+			<column name="LOCATION_STATUS" type="UNDEFINED" />
+			<column name="ADDRESS_STATUS" type="UNDEFINED" />
+			<column name="SUBUNIT_STATUS" type="UNDEFINED" />
+			<column name="BUILDING_ID" type="UNDEFINED" />
+			<column name="GIS_TAG" type="UNDEFINED" />
+			<column name="STREET_NUMBER" type="UNDEFINED" />
+			<column name="STREET_DIRECTION" type="UNDEFINED" />
+			<column name="STREET_NAME" type="UNDEFINED" />
+			<column name="STREET_SUFFIX" type="UNDEFINED" />
+			<column name="POST_DIRECTION" type="UNDEFINED" />
+			<column name="SUDTYPE" type="UNDEFINED" />
+			<column name="STREET_SUBUNIT_IDENTIFIER" type="UNDEFINED" />
+			<column name="STREET_ID" type="UNDEFINED" />
+			<column name="TOWN" type="UNDEFINED" />
+			<column name="ADDRESS_TYPE" type="UNDEFINED" />
+			<column name="JURISDICTION_ID" type="UNDEFINED" />
+			<column name="GOV_JUR_ID" type="UNDEFINED" />
+			<column name="TAX_JURISDICTION" type="UNDEFINED" />
+			<column name="TOWNSHIP_ID" type="UNDEFINED" />
+			<column name="SECTION" type="UNDEFINED" />
+			<column name="QUARTER_SECTION" type="UNDEFINED" />
+			<column name="CITY" type="UNDEFINED" />
+			<column name="STATE" type="UNDEFINED" />
+			<column name="ZIP" type="UNDEFINED" />
+			<column name="ZIPPLUS4" type="UNDEFINED" />
+			<column name="SUBDIVISION_ID" type="UNDEFINED" />
+			<column name="PLAT_ID" type="UNDEFINED" />
+			<column name="PLAT_LOT_NUMBER" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_2" type="UNDEFINED" />
+			<column name="CENSUS_BLOCK_FIPS_CODE" type="UNDEFINED" />
+			<column name="STATE_PLANE_X_COORDINATE" type="UNDEFINED" />
+			<column name="STATE_PLANE_Y_COORDINATE" type="UNDEFINED" />
+			<column name="LATITUDE" type="UNDEFINED" />
+			<column name="LONGITUDE" type="UNDEFINED" />
+			<column name="ADDR_LINE1" type="UNDEFINED" />
+			<column name="ADDR_LINE2" type="UNDEFINED" />
+		</view>
+		<view name="RESIDENTIAL_LOCATION_VIEW" >
+			<view_script> <![CDATA[select
+al.LOCATION_ID, al.LOCATION_TYPE_ID, als.status_code "LOCATION_STATUS", al.ACTIVE, al.STREET_ADDRESS_ID,
+mas.STATUS_CODE "ADDRESS_STATUS", al.SUBUNIT_ID, masus.status_code "SUBNIT_STAUTS",
+ma.STREET_NUMBER "STREET_NUMBER", msn.street_direction_code "STREET_DIRECTION",
+msn.street_name "STREET_NAME", msn.street_type_suffix_code "STREET_SUFFIX",
+msn.post_direction_suffix_code "POST_DIRECTION", masu.SUDTYPE, masu.STREET_SUBUNIT_IDENTIFIER "SUDNUM",
+ma.city, ma.zip,
+lc.location_class, ma.ADDRESS_TYPE, ma.STREET_ID, ma.GOV_JUR_ID, ma.CENSUS_BLOCK_FIPS_CODE, ma.notes
+--masus.status_code "SUBNIT_STAUTS",
+	from eng.address_location al, eng.mast_address ma, eng.mast_address_subunits masu,
+eng.mast_address_location_status als, eng.mast_address_status mas,
+eng.mast_street ms, eng.mast_street_names msn, GIS.LOCATIONS_CLASSES lc
+,ENG.MAST_ADDRESS_SUBUNIT_STATUS masus
+	where al.street_address_id = ma.street_address_id
+	and al.subunit_id = masu.subunit_id (+)
+
+	and al.location_id = als.location_id
+	and ma.street_address_id = mas.street_address_id
+	and ma.street_id = ms.street_id
+	and ms.street_id = msn.street_id
+	and msn.street_name_type = 'STREET'
+	and al.subunit_id = masus.subunit_id (+)
+	and al.location_id = lc.location_id (+)
+]]> </view_script>
+			<column name="LOCATION_ID" type="UNDEFINED" />
+			<column name="LOCATION_TYPE_ID" type="UNDEFINED" />
+			<column name="LOCATION_STATUS" type="UNDEFINED" />
+			<column name="ACTIVE" type="UNDEFINED" />
+			<column name="STREET_ADDRESS_ID" type="UNDEFINED" />
+			<column name="ADDRESS_STATUS" type="UNDEFINED" />
+			<column name="SUBUNIT_ID" type="UNDEFINED" />
+			<column name="SUBNIT_STAUTS" type="UNDEFINED" />
+			<column name="STREET_NUMBER" type="UNDEFINED" />
+			<column name="STREET_DIRECTION" type="UNDEFINED" />
+			<column name="STREET_NAME" type="UNDEFINED" />
+			<column name="STREET_SUFFIX" type="UNDEFINED" />
+			<column name="POST_DIRECTION" type="UNDEFINED" />
+			<column name="SUDTYPE" type="UNDEFINED" />
+			<column name="SUDNUM" type="UNDEFINED" />
+			<column name="CITY" type="UNDEFINED" />
+			<column name="ZIP" type="UNDEFINED" />
+			<column name="LOCATION_CLASS" type="UNDEFINED" />
+			<column name="ADDRESS_TYPE" type="UNDEFINED" />
+			<column name="STREET_ID" type="UNDEFINED" />
+			<column name="GOV_JUR_ID" type="UNDEFINED" />
+			<column name="CENSUS_BLOCK_FIPS_CODE" type="UNDEFINED" />
+			<column name="NOTES" type="UNDEFINED" />
+		</view>
+		<sequence name="BUILDING_ID_S" start="1" />
+		<sequence name="BUILDING_TYPE_ID_S" start="1" />
+		<sequence name="LUCA_ADDRESS_ID_S" start="1" />
+	</schema>
+	<schema schemaname="MASTER_ADDRESS" defo="false" />
+	<schema schemaname="MASTER_ADDRESS" defo="false" />
+	<connector name="XE" database="Oracle" driver_class="oracle.jdbc.driver.OracleDriver" driver_jar="oracle10g-10.2.0.1.jar" host="10.20.2.11" port="1521" instance="xe" user="master_address" read_only="false" />
+	<layout name="Default" active="true" joined_routing="true" opened="0" >
+		<entity schema="ENG" name="ACTION" show_types="false" x="1131" y="806" />
+		<entity schema="ENG" name="ADDRESS_LOCATION" show_types="false" x="1352" y="728" />
+		<entity schema="ENG" name="ADDR_JURISDICTION_MASTER" show_types="false" x="1352" y="949" />
+		<entity schema="ENG" name="ADDR_LOCATION_PURPOSES" show_types="false" x="1352" y="1482" />
+		<entity schema="ENG" name="ADDR_LOCATION_PURPOSE_MAST" show_types="false" x="1352" y="1664" />
+		<entity schema="ENG" name="ADDR_LOCATION_TYPES_MASTER" show_types="false" x="845" y="949" />
+		<entity schema="ENG" name="CAUSE" show_types="false" x="1131" y="1664" />
+		<entity schema="ENG" name="COLLISION" show_types="false" x="1131" y="663" />
+		<entity schema="ENG" name="COUNCIL_MEMBERS_MAST" show_types="false" x="1352" y="585" />
+		<entity schema="ENG" name="COUNT" show_types="false" x="1612" y="507" />
+		<entity schema="ENG" name="COUNT_TYPES" show_types="false" x="1612" y="949" />
+		<entity schema="ENG" name="DVRPHY" show_types="false" x="1612" y="1092" />
+		<entity schema="ENG" name="GOVERNMENTAL_JURISDICTION_MAST" show_types="false" x="1352" y="1339" />
+		<entity schema="ENG" name="LIGHT" show_types="false" x="1612" y="1482" />
+		<entity schema="ENG" name="LOCATION" show_types="false" x="1638" y="1664" />
+		<entity schema="ENG" name="MAPREQ" show_types="false" x="1638" y="1820" />
+		<entity schema="ENG" name="MAST_ADDRESS" show_types="false" x="1352" y="1820" />
+		<entity schema="ENG" name="MAST_ADDRESS_ANNEXATION" show_types="false" x="1079" y="1820" />
+		<entity schema="ENG" name="MAST_ADDRESS_ASSIGNMENT_HIST" show_types="false" x="546" y="572" />
+		<entity schema="ENG" name="MAST_ADDRESS_LOCATION_CHANGE" show_types="false" x="533" y="949" />
+		<entity schema="ENG" name="MAST_ADDRESS_LOCATION_STATUS" show_types="false" x="546" y="780" />
+		<entity schema="ENG" name="MAST_ADDRESS_SANITATION" show_types="false" x="845" y="611" />
+		<entity schema="ENG" name="MAST_ADDRESS_STATUS" show_types="false" x="832" y="1495" />
+		<entity schema="ENG" name="MAST_ADDRESS_STATUS_LOOKUP" show_types="false" x="546" y="1521" />
+		<entity schema="ENG" name="MAST_ADDRESS_SUBUNITS" show_types="false" x="559" y="1794" />
+		<entity schema="ENG" name="MAST_ADDRESS_SUBUNIT_STATUS" show_types="false" x="845" y="1092" />
+		<entity schema="ENG" name="MAST_ADDR_ASSGN_HIST_TEMP" show_types="false" x="1079" y="403" />
+		<entity schema="ENG" name="MAST_ADDR_ASSIGNMENT_CONTACT" show_types="false" x="1612" y="312" />
+		<entity schema="ENG" name="MAST_ADDR_COMBO" show_types="false" x="1820" y="507" />
+		<entity schema="ENG" name="MAST_ADDR_SUBUNIT_TYPES_MAST" show_types="false" x="1820" y="806" />
+		<entity schema="ENG" name="MAST_STREET" show_types="false" x="1820" y="949" />
+		<entity schema="ENG" name="MAST_STREET_ADDR_JURISDICTIONS" show_types="false" x="1794" y="1235" />
+		<entity schema="ENG" name="MAST_STREET_DIRECTION_MASTER" show_types="false" x="1794" y="1482" />
+		<entity schema="ENG" name="MAST_STREET_GOV_JURISDICTIONS" show_types="false" x="1820" y="1664" />
+		<entity schema="ENG" name="MAST_STREET_NAMES" show_types="false" x="1833" y="1820" />
+		<entity schema="ENG" name="MAST_STREET_NAME_TYPE_MASTER" show_types="false" x="1833" y="2665" />
+		<entity schema="ENG" name="MAST_STREET_PLAT" show_types="false" x="1833" y="2808" />
+		<entity schema="ENG" name="MAST_STREET_SECTION" show_types="false" x="117" y="949" />
+		<entity schema="ENG" name="MAST_STREET_STATE_ROAD" show_types="false" x="1378" y="2808" />
+		<entity schema="ENG" name="MAST_STREET_STATUS_LOOKUP" show_types="false" x="1352" y="2262" />
+		<entity schema="ENG" name="MAST_STREET_SUBDIVISION" show_types="false" x="1092" y="2262" />
+		<entity schema="ENG" name="MAST_STREET_TOWNSHIPS" show_types="false" x="1079" y="1963" />
+		<entity schema="ENG" name="MAST_STREET_TYPE_SUFFIX_MASTER" show_types="false" x="546" y="429" />
+		<entity schema="ENG" name="NEWMASTSTREET" show_types="false" x="845" y="364" />
+		<entity schema="ENG" name="NEWMASTSTREETALIAS" show_types="false" x="312" y="390" />
+		<entity schema="ENG" name="NEWMASTSTREETHISTORY" show_types="false" x="299" y="572" />
+		<entity schema="ENG" name="NEWMASTSTREETNAMES" show_types="false" x="533" y="1131" />
+		<entity schema="ENG" name="OFFENSE" show_types="false" x="351" y="806" />
+		<entity schema="ENG" name="PLAN_TABLE" show_types="false" x="312" y="1131" />
+		<entity schema="ENG" name="PLAT_MASTER" show_types="false" x="299" y="1664" />
+		<entity schema="ENG" name="QUARTER_SECTION_MASTER" show_types="false" x="546" y="1391" />
+		<entity schema="ENG" name="RCL" show_types="false" x="832" y="1794" />
+		<entity schema="ENG" name="ROADSURF" show_types="false" x="559" y="1976" />
+		<entity schema="ENG" name="STATE_ROAD_MASTER" show_types="false" x="338" y="1976" />
+		<entity schema="ENG" name="STORM_BASIN" show_types="false" x="845" y="1274" />
+		<entity schema="ENG" name="STORM_COMPON" show_types="false" x="1079" y="260" />
+		<entity schema="ENG" name="STORM_COND" show_types="false" x="1352" y="260" />
+		<entity schema="ENG" name="STORM_DESC" show_types="false" x="1612" y="91" />
+		<entity schema="ENG" name="STORM_IMAGE" show_types="false" x="1924" y="39" />
+		<entity schema="ENG" name="STORM_LOCATE" show_types="false" x="1924" y="312" />
+		<entity schema="ENG" name="STORM_MAT" show_types="false" x="2054" y="507" />
+		<entity schema="ENG" name="STORM_MAT2" show_types="false" x="2119" y="806" />
+		<entity schema="ENG" name="STORM_NODE" show_types="false" x="2106" y="1144" />
+		<entity schema="ENG" name="STORM_NODE_COMPON" show_types="false" x="2106" y="1001" />
+		<entity schema="ENG" name="STORM_NODE_OLDTAG" show_types="false" x="2119" y="1664" />
+		<entity schema="ENG" name="STORM_NODE_PROB" show_types="false" x="2119" y="1807" />
+		<entity schema="ENG" name="STORM_PIPE" show_types="false" x="1833" y="2054" />
+		<entity schema="ENG" name="STORM_PIPE_OLDTAG" show_types="false" x="2132" y="2522" />
+		<entity schema="ENG" name="STORM_PIPE_PROB" show_types="false" x="2132" y="2665" />
+		<entity schema="ENG" name="STORM_PROBLEM" show_types="false" x="1638" y="2808" />
+		<entity schema="ENG" name="STORM_RCL" show_types="false" x="2041" y="2951" />
+		<entity schema="ENG" name="STORM_SHAPE" show_types="false" x="1833" y="2951" />
+		<entity schema="ENG" name="STORM_SOURCE" show_types="false" x="1638" y="2951" />
+		<entity schema="ENG" name="STORM_SURFACE" show_types="false" x="1378" y="2665" />
+		<entity schema="ENG" name="STORM_SYSNAME" show_types="false" x="1183" y="2665" />
+		<entity schema="ENG" name="STREET_CLASS" show_types="false" x="1378" y="2951" />
+		<entity schema="ENG" name="SUBDIVISION_MASTER" show_types="false" x="1157" y="2951" />
+		<entity schema="ENG" name="SUBDIVISION_NAMES" show_types="false" x="1352" y="2405" />
+		<entity schema="ENG" name="SURFCOND" show_types="false" x="1170" y="2119" />
+		<entity schema="ENG" name="THOROUGHFARE" show_types="false" x="1157" y="2405" />
+		<entity schema="ENG" name="TOWNSHIP_MASTER" show_types="false" x="832" y="2405" />
+		<entity schema="ENG" name="TOWNS_MASTER" show_types="false" x="897" y="2106" />
+		<entity schema="ENG" name="TRAFCTRL" show_types="false" x="910" y="2262" />
+		<entity schema="ENG" name="TRASH_LARGE_ITEM_PICKUP_MASTER" show_types="false" x="533" y="234" />
+		<entity schema="ENG" name="TRASH_PICKUP_MASTER" show_types="false" x="845" y="234" />
+		<entity schema="ENG" name="TRASH_RECYCLE_WEEK_MASTER" show_types="false" x="39" y="260" />
+		<entity schema="ENG" name="USE" show_types="false" x="312" y="247" />
+		<entity schema="ENG" name="USERS" show_types="false" x="143" y="390" />
+		<entity schema="ENG" name="VEHICLE" show_types="false" x="117" y="780" />
+		<entity schema="ENG" name="VEHUSE" show_types="false" x="117" y="572" />
+		<entity schema="ENG" name="WEATHER" show_types="false" x="351" y="988" />
+		<entity schema="GIS" name="ANNEXATIONS" show_types="false" x="702" y="442" />
+		<entity schema="GIS" name="BUILDINGS" show_types="false" x="780" y="520" />
+		<entity schema="GIS" name="BUILDINGS_STATUS_LOOKUP" show_types="false" x="858" y="611" />
+		<entity schema="GIS" name="BUILDING_ADDRESS_LOCATION" show_types="false" x="936" y="689" />
+		<entity schema="GIS" name="BUILDING_TYPES_MASTER" show_types="false" x="1014" y="767" />
+		<entity schema="GIS" name="CENSUS_LUCA_ACTION_CODES" show_types="false" x="1105" y="845" />
+		<entity schema="GIS" name="CENSUS_LUCA_ADDRESS" show_types="false" x="1183" y="923" />
+		<entity schema="GIS" name="CENSUS_LUCA_STATUS_CODES" show_types="false" x="1261" y="1001" />
+		<entity schema="GIS" name="LOCATIONS_CLASSES" show_types="false" x="1339" y="1079" />
+		<entity schema="GIS" name="LOCATIONS_CLASSES_07JUL2006" show_types="false" x="1417" y="1170" />
+		<entity schema="GIS" name="LOCATIONS_CLASSES_24MAY2007" show_types="false" x="1495" y="1248" />
+		<entity schema="GIS" name="LOCATIONS_CLASSES_27DEC2005" show_types="false" x="1573" y="1326" />
+		<entity schema="GIS" name="LOCATION_TYPES_NEW" show_types="false" x="1664" y="1404" />
+		<entity schema="GIS" name="LOCATION_TYPE_CLASS_NEW" show_types="false" x="1742" y="1482" />
+		<entity schema="GIS" name="MAST_ADDRESS_PARCEL" show_types="false" x="1820" y="1560" />
+		<entity schema="GIS" name="PARCEL" show_types="false" x="1898" y="1651" />
+		<entity schema="GIS" name="PRECINCT_ADDRESS_LOCATION" show_types="false" x="1976" y="1729" />
+		<entity schema="GIS" name="VOTING_PRECINCTS" show_types="false" x="2054" y="1807" />
+	</layout>
+	<layout name="MasterAddress" active="false" joined_routing="true" opened="0" >
+		<entity schema="ENG" name="ADDRESS_LOCATION" show_types="false" x="1443" y="520" />
+		<entity schema="ENG" name="MAST_ADDRESS" show_types="false" x="845" y="637" />
+		<entity schema="ENG" name="MAST_STREET" show_types="false" x="806" y="234" />
+		<entity schema="ENG" name="ADDR_JURISDICTION_MASTER" show_types="false" x="169" y="325" />
+		<entity schema="ENG" name="GOVERNMENTAL_JURISDICTION_MAST" show_types="false" x="117" y="234" />
+		<entity schema="ENG" name="TOWNSHIP_MASTER" show_types="false" x="221" y="767" />
+		<entity schema="ENG" name="QUARTER_SECTION_MASTER" show_types="false" x="572" y="1157" />
+		<entity schema="ENG" name="MAST_STREET_ADDR_JURISDICTIONS" show_types="false" x="494" y="325" />
+		<entity schema="ENG" name="MAST_STREET_GOV_JURISDICTIONS" show_types="false" x="494" y="247" />
+		<entity schema="ENG" name="SUBDIVISION_MASTER" show_types="false" x="169" y="1027" />
+		<entity schema="ENG" name="PLAT_MASTER" show_types="false" x="130" y="481" />
+		<entity schema="ENG" name="MAST_STREET_DIRECTION_MASTER" show_types="false" x="1183" y="286" />
+		<entity schema="ENG" name="TOWNS_MASTER" show_types="false" x="1443" y="416" />
+		<entity schema="ENG" name="MAST_STREET_STATUS_LOOKUP" show_types="false" x="832" y="390" />
+		<entity schema="ENG" name="ADDR_LOCATION_TYPES_MASTER" show_types="false" x="1742" y="546" />
+		<entity schema="ENG" name="MAST_ADDRESS_SUBUNITS" show_types="false" x="1274" y="728" />
+		<entity schema="ENG" name="MAST_ADDR_SUBUNIT_TYPES_MAST" show_types="false" x="1703" y="923" />
+		<entity schema="ENG" name="MAST_ADDRESS_SUBUNIT_STATUS" show_types="false" x="1417" y="910" />
+		<entity schema="ENG" name="MAST_ADDRESS_STATUS_LOOKUP" show_types="false" x="1170" y="1092" />
+		<entity schema="ENG" name="MAST_ADDRESS_STATUS" show_types="false" x="1105" y="910" />
+		<entity schema="ENG" name="MAST_ADDRESS_SANITATION" show_types="false" x="806" y="1287" />
+		<entity schema="ENG" name="TRASH_PICKUP_MASTER" show_types="false" x="507" y="1313" />
+		<entity schema="ENG" name="MAST_STREET_PLAT" show_types="false" x="572" y="442" />
+		<entity schema="ENG" name="TRASH_RECYCLE_WEEK_MASTER" show_types="false" x="507" y="1404" />
+		<entity schema="ENG" name="TRASH_LARGE_ITEM_PICKUP_MASTER" show_types="false" x="507" y="1508" />
+		<entity schema="ENG" name="MAST_ADDRESS_LOCATION_STATUS" show_types="false" x="1443" y="1196" />
+		<entity schema="ENG" name="NEWMASTSTREET" show_types="false" x="1859" y="234" />
+		<entity schema="ENG" name="NEWMASTSTREETALIAS" show_types="false" x="2132" y="247" />
+		<entity schema="ENG" name="NEWMASTSTREETNAMES" show_types="false" x="2080" y="481" />
+		<entity schema="ENG" name="MAST_STREET_TYPE_SUFFIX_MASTER" show_types="false" x="1534" y="39" />
+		<entity schema="ENG" name="MAST_STREET_NAMES" show_types="false" x="1209" y="52" />
+		<entity schema="ENG" name="NEWMASTSTREETHISTORY" show_types="false" x="2119" y="65" />
+		<entity schema="ENG" name="MAST_STREET_NAME_TYPE_MASTER" show_types="false" x="1534" y="143" />
+		<entity schema="ENG" name="MAST_STREET_SECTION" show_types="false" x="585" y="117" />
+		<entity schema="ENG" name="MAST_STREET_STATE_ROAD" show_types="false" x="325" y="91" />
+		<entity schema="ENG" name="MAST_STREET_SUBDIVISION" show_types="false" x="325" y="910" />
+		<entity schema="ENG" name="MAST_STREET_TOWNSHIPS" show_types="false" x="546" y="598" />
+		<entity schema="ENG" name="STATE_ROAD_MASTER" show_types="false" x="130" y="65" />
+		<entity schema="ENG" name="ADDR_LOCATION_PURPOSES" show_types="false" x="2431" y="1027" />
+		<entity schema="ENG" name="ADDR_LOCATION_PURPOSE_MAST" show_types="false" x="2457" y="871" />
+		<entity schema="ENG" name="MAST_ADDRESS_ANNEXATION" show_types="false" x="1144" y="1352" />
+		<entity schema="ENG" name="MAST_ADDRESS_ASSIGNMENT_HIST" show_types="false" x="2405" y="1560" />
+		<entity schema="ENG" name="MAST_ADDRESS_LOCATION_CHANGE" show_types="false" x="2106" y="1560" />
+		<entity schema="ENG" name="MAST_ADDR_ASSIGNMENT_CONTACT" show_types="false" x="2665" y="1560" />
+		<entity schema="ENG" name="SUBDIVISION_NAMES" show_types="false" x="39" y="1170" />
+		<entity schema="GIS" name="ANNEXATIONS" show_types="false" x="1482" y="1456" />
+		<entity schema="GIS" name="BUILDINGS" show_types="false" x="715" y="1794" />
+		<entity schema="GIS" name="BUILDING_ADDRESS_LOCATION" show_types="false" x="1053" y="1742" />
+		<entity schema="GIS" name="BUILDING_TYPES_MASTER" show_types="false" x="1066" y="1937" />
+		<entity schema="GIS" name="MAST_ADDRESS_PARCEL" show_types="false" x="390" y="1859" />
+		<entity schema="GIS" name="PARCEL" show_types="false" x="637" y="1989" />
+		<entity schema="GIS" name="VOTING_PRECINCTS" show_types="false" x="78" y="1768" />
+		<entity schema="GIS" name="PRECINCT_ADDRESS_LOCATION" show_types="false" x="182" y="1963" />
+		<entity schema="GIS" name="BUILDINGS_STATUS_LOOKUP" show_types="false" x="949" y="2067" />
+	</layout>
+</project>
