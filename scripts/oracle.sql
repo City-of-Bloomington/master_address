@@ -165,6 +165,25 @@ select buildings_status_code_seq.nextval into :new.status_code from dual;
 end;
 /
 
+create table buildings (
+	building_id number not null primary key,
+	building_type_id number not null,
+	gis_tag varchar2(20),
+	building_name varchar2(40),
+	effective_start_date date not null default to_date('01-JAN-2002','DD-MON-YYYY'),
+	effective_end_date date,
+	status_code number not null default 1,
+	foreign key (building_type_id) references building_types_master(building_type_id),
+	foreign key (status_code) references buildings_status_lookup(status_code)
+);
+create sequence building_id_s nocache;
+create trigger buildings_trigger
+before insert on buildings
+for each row
+begin
+select building_id_s.nextval into :new.building_id from dual;
+end;
+/
 
 
 create table mast_street_direction_master (

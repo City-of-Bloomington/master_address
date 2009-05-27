@@ -81,6 +81,18 @@ create table buildings_status_lookup (
 	description varchar2(240) not null
 );
 
+create table buildings (
+	building_id int unsigned not null primary key auto_increment,
+	building_type_id int unsigned not null,
+	gis_tag varchar(20),
+	building_name varchar(40),
+	effective_start_date date not null default '2002-01-01',
+	effective_end_date date,
+	status_code number not null default 1,
+	foreign key (building_type_id) references building_types_master(building_type_id),
+	foreign key (status_code) references buildings_status_lookup(status_code)
+);
+
 create table mast_street_direction_master (
 	direction_code char(2) not null primary key,
 	description varchar(12) not null
