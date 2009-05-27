@@ -66,13 +66,13 @@ class BuildingTypeList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Hydrates all the BuildingTypesMaster objects from a database result set
+	 * Hydrates all the BuildingType objects from a database result set
 	 *
 	 * This is a callback function, called from ZendDbResultIterator.  It is
 	 * called once per row of the result.
 	 *
 	 * @param int $key The index of the result row to load
-	 * @return BuildingTypesMaster
+	 * @return BuildingType
 	 */
 	protected function loadResult($key)
 	{

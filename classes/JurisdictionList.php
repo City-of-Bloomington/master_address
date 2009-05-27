@@ -66,13 +66,13 @@ class JurisdictionList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Hydrates all the GovernmentalJurisdiction objects from a database result set
+	 * Hydrates all the Jurisdiction objects from a database result set
 	 *
 	 * This is a callback function, called from ZendDbResultIterator.  It is
 	 * called once per row of the result.
 	 *
 	 * @param int $key The index of the result row to load
-	 * @return GovernmentalJurisdiction
+	 * @return Jurisdiction
 	 */
 	protected function loadResult($key)
 	{
