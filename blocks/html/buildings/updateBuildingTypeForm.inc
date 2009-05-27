@@ -20,7 +20,7 @@
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/buildingTypes';">
+		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/buildings';">
 			Cancel
 		</button>
 	</fieldset>

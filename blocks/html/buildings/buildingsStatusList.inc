@@ -9,20 +9,20 @@
 	<h1>
 		<?php
 			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuildingType.php\">Add</a>";
+				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuildingsStatus.php\">Add</a>";
 			}
 		?>
-		Building Types
+		BuildingsStatusLookups
 	</h1>
 	<ul><?php
-			foreach ($this->buildingTypeList as $buildingType) {
+			foreach ($this->buildingsStatusList as $buildingsStatus) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/buildingTypes/updateBuildingType.php');
-					$url->buildingType_id = $buildingType->getId();
+					$url = new URL(BASE_URL.'/buildings/updateBuildingsStatus.php');
+					$url->status_code = $buildingsStatus->getStatusCode();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $buildingType</li>";
+				echo "<li>$editButton $buildingsStatus</li>";
 			}
 		?>
 	</ul>

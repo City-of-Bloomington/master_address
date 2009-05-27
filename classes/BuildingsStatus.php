@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Jurisdiction
+class BuildingsStatus
 {
-	private $jurisdiction_id;
+	private $status_code;
 	private $description;
 
 	/**
@@ -19,18 +19,18 @@ class Jurisdiction
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $jurisdiction_id
+	 * @param int|array $status_code
 	 */
-	public function __construct($jurisdiction_id=null)
+	public function __construct($status_code=null)
 	{
-		if ($jurisdiction_id) {
-			if (is_array($jurisdiction_id)) {
-				$result = $jurisdiction_id;
+		if ($status_code) {
+			if (is_array($status_code)) {
+				$result = $status_code;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from addr_jurisdiction_master where jurisdiction_id=?';
-				$result = $zend_db->fetchRow($sql,array($jurisdiction_id));
+				$sql = 'select * from buildings_status_lookup where status_code=?';
+				$result = $zend_db->fetchRow($sql,array($status_code));
 			}
 
 			if ($result) {
@@ -41,7 +41,7 @@ class Jurisdiction
 				}
 			}
 			else {
-				throw new Exception('jurisdictions/unknownJurisdiction');
+				throw new Exception('buildings_status/unknownBuildingsStatusLookup');
 			}
 		}
 		else {
@@ -49,7 +49,7 @@ class Jurisdiction
 			// Set any default values for properties that need it here
 		}
 	}
-
+	
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -58,7 +58,7 @@ class Jurisdiction
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->description) {
-			throw new Exception('missingRequiredFields');
+			throw new Exception('missingRequriedFields');
 		}
 
 	}
@@ -71,9 +71,9 @@ class Jurisdiction
 		$this->validate();
 
 		$data = array();
-		$data['description'] = $this->description;
+		$data['description'] = $this->description ? $this->description : null;
 
-		if ($this->jurisdiction_id) {
+		if ($this->status_code) {
 			$this->update($data);
 		}
 		else {
@@ -84,41 +84,26 @@ class Jurisdiction
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('addr_jurisdiction_master',$data,"jurisdiction_id='{$this->jurisdiction_id}'");
+		$zend_db->update('buildings_status_lookup',$data,"status_code='{$this->status_code}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('addr_jurisdiction_master',$data);
-		if (Database::getType()=='oracle') {
-			$this->jurisdiction_id = $zend_db->lastSequenceId('jurisdiction_id_s');
-		}
-		else {
-			$this->jurisdiction_id = $zend_db->lastInsertId();
-		}
-
+		$zend_db->insert('buildings_status_lookup',$data);
+		$this->status_code = $zend_db->lastInsertId('buildings_status_lookup','status_code');
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-	/**
-	 * Alias of getJurisdiction_id()
-	 *
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->getJurisdiction_id();
-	}
 
 	/**
 	 * @return number
 	 */
-	public function getJurisdiction_id()
+	public function getStatus_code()
 	{
-		return $this->jurisdiction_id;
+		return $this->status_code;
 	}
 
 	/**
@@ -129,6 +114,14 @@ class Jurisdiction
 		return $this->description;
 	}
 
+	/**
+	 * @return number
+	 */
+	public function getId()
+	{
+		return $this->status_code;
+	}
+	
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -141,12 +134,9 @@ class Jurisdiction
 		$this->description = trim($string);
 	}
 
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->description;
-	}
 }
