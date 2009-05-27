@@ -85,3 +85,13 @@ create table mast_street_direction_master (
 	direction_code char(2) not null primary key,
 	description varchar(12) not null
 );
+
+create table mast_street_direction_master (
+	direction_code char(2) not null primary key,
+	description varchar(12) not null
+);
+
+create table mast_street_type_suffix_master (
+	suffix_code varchar(8) not null primary key,
+	description varchar(240) not null
+);

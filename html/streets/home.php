@@ -4,11 +4,17 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$template = new Template();
+
 
 $streetStatusList = new StreetStatusList();
 $streetStatusList->find();
-
-$template = new Template();
 $template->blocks[] = new Block('streets/streetStatusList.inc',
 								array('streetStatusList'=>$streetStatusList));
+
+$suffixList = new SuffixList();
+$suffixList->find();
+$template->blocks[] = new Block('streets/suffixList.inc',array('suffixList'=>$suffixList));
+
+
 echo $template->render();
