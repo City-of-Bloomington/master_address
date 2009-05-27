@@ -88,7 +88,10 @@ class BuildingType
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('building_types_master',$data);
-		$this->building_type_id = $zend_db->lastInsertId('building_types_master','building_type_id');
+		if (Database::getType()=='oracle') {
+			$this->building_type_id = $zend_db->lastSequenceId('building_type_id_s');
+		}
+		$this->building_type_id = $zend_db->lastInsertId();
 	}
 
 	//----------------------------------------------------------------
