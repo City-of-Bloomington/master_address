@@ -9,7 +9,7 @@
 	<h1>
 		<?php
 			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuildingsStatus.php\">Add</a>";
+				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuildingStatus.php\">Add</a>";
 			}
 		?>
 		BuildingsStatusLookups
@@ -18,11 +18,11 @@
 			foreach ($this->buildingsStatusList as $buildingsStatus) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/buildings/updateBuildingsStatus.php');
-					$url->status_code = $buildingsStatus->getStatus_code();
+					$url = new URL(BASE_URL.'/buildings/updateBuildingStatus.php');
+					$url->status_code = $buildingStatus->getStatus_code();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $buildingsStatus</li>";
+				echo "<li>$editButton $buildingStatus</li>";
 			}
 		?>
 	</ul>

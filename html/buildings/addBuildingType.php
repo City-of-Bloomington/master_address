@@ -25,5 +25,5 @@ if (isset($_POST['buildingType'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('buildingTypes/addBuildingTypeForm.inc');
+$template->blocks[] = new Block('building/addBuildingTypeForm.inc');
 echo $template->render();

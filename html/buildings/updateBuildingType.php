@@ -17,7 +17,7 @@ if (isset($_POST['buildingType'])) {
 
 	try {
 		$buildingType->save();
-		header('Location: '.BASE_URL.'/buildingTypes');
+		header('Location: '.BASE_URL.'/buildings');
 		exit();
 	}
 	catch (Exception $e) {
@@ -26,6 +26,6 @@ if (isset($_POST['buildingType'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('buildingTypes/updateBuildingTypeForm.inc',
+$template->blocks[] = new Block('buildings/updateBuildingTypeForm.inc',
 								array('buildingType'=>$buildingType));
 echo $template->render();
