@@ -18,7 +18,7 @@
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/streetStatuses';">
+		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/streets';">
 			Cancel
 		</button>
 	</fieldset>
