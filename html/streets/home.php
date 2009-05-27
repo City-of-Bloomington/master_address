@@ -9,6 +9,6 @@ $streetStatusList = new StreetStatusList();
 $streetStatusList->find();
 
 $template = new Template();
-$template->blocks[] = new Block('streetStatuses/streetStatusList.inc',
+$template->blocks[] = new Block('streets/streetStatusList.inc',
 								array('streetStatusList'=>$streetStatusList));
 echo $template->render();

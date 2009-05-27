@@ -6,7 +6,7 @@
 		<li><a href="<?php echo BASE_URL; ?>/plats">Plats</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/precincts">Precincts</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/jurisdictions">Jurisdictions</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/buildingTypes">Building Types</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/streetStatuses">Street Statuses</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/buildings">Buildings</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/streets">Streets</a></li>
 	</ul>
 </div>
