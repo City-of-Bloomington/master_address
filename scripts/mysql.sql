@@ -77,7 +77,7 @@ create table building_types_master (
 );
 
 create table buildings_status_lookup (
-	status_code tinyint unsigned not null primary key auto_increment,
+	status_code int unsigned not null primary key auto_increment,
 	description varchar2(240) not null
 );
 

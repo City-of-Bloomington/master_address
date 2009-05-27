@@ -153,11 +153,49 @@ end;
 /
 
 create table buildings_status_lookup (
-	status_code number(3,0) not null primary key,
+	status_code number not null primary key,
 	description varchar2(240) not null
 );
+create sequence buildings_status_code_seq nocache;
+create trigger buildings_status_code_trigger
+before insert on buildings_status_lookup
+for each row
+begin
+select buildings_status_code_seq.nextval into :new.status_code from dual;
+end;
+/
+
+
 
 create table mast_street_direction_master (
 	direction_code char(2) not null primary key,
 	description varchar2(12) not null
 );
+
+
+create table mast_street_status_lookup (
+	status_code number not null primary key,
+	description varchar2(240) not null
+);
+create sequence street_status_code_seq nocache;
+create trigger street_status_code_trigger
+before insert on mast_street_status_lookup
+for each row
+begin
+select street_status_code_seq.nextval into :new.status_code from dual;
+end;
+/
+
+
+create table mast_address_status_lookup (
+	status_code number not null primary key,
+	description varchar2(240) not null
+);
+create sequence address_status_code_seq nocache;
+create trigger address_status_code_trigger
+before insert on mast_address_status_lookup
+for each row
+begin
+select address_status_code_seq.nextval into :new.status_code from dual;
+end;
+/
