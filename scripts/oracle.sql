@@ -152,3 +152,18 @@ begin
 select gov_jur_id_s.nextval into :new.gov_jur_id from dual;
 end;
 /
+
+create table building_types_master (
+	building_type_id number not null primary key,
+	description varchar2(20) not null
+);
+
+create sequence building_type_id_s nocache;
+
+create trigger building_type_trigger
+before insert on building_types_master
+for each row
+begin
+select building_type_id_s.nextval into :new.building_type_id from dual;
+end;
+/

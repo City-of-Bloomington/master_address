@@ -76,3 +76,8 @@ create table governmental_jurisdiction_mast (
 	gov_jur_id int not null primary key,
 	description varchar(20)
 );
+
+create table building_types_master (
+	building_type_id int unsigned not null primary key autoincrement,
+	description varchar(20) not null
+);
