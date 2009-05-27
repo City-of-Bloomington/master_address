@@ -8,7 +8,7 @@
 <h1>Update Building Status</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Building Status Info</legend>
-		<input name="status_code" type="hidden" value="<?php echo $this->buildingsStatus->getStatusCode(); ?>" />
+		<input name="status_code" type="hidden" value="<?php echo $this->buildingsStatus->getStatus_code(); ?>" />
 		<table>
 
 			<tr><td><label for="buildingsStatus-description">description</label></td>

@@ -19,7 +19,7 @@
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/buildings/updateBuildingsStatus.php');
-					$url->status_code = $buildingsStatus->getStatusCode();
+					$url->status_code = $buildingsStatus->getStatus_code();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				echo "<li>$editButton $buildingsStatus</li>";
