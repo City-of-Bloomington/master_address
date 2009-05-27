@@ -16,7 +16,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class BuildingsStatusList extends ZendDbResultIterator
+class BuildingStatusList extends ZendDbResultIterator
 {
 	/**
 	 * Creates a basic select statement for the collection.
@@ -77,6 +77,6 @@ class BuildingsStatusList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new BuildingsStatus($this->result[$key]);
+		return new BuildingStatus($this->result[$key]);
 	}
 }

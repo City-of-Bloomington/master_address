@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class BuildingsStatus
+class BuildingStatus
 {
 	private $status_code;
 	private $description;
@@ -92,6 +92,13 @@ class BuildingsStatus
 		$zend_db = Database::getConnection();
 		$zend_db->insert('buildings_status_lookup',$data);
 		$this->status_code = $zend_db->lastInsertId('buildings_status_lookup','status_code');
+		if (Database::getType()=='oracle') {
+			$this->status_code = $zend_db->lastSequenceId('buildings_status_code_seq');
+		}
+		else {
+			$this->status_code = $zend_db->lastInsertId();
+		}
+		
 	}
 
 	//----------------------------------------------------------------
