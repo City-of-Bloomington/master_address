@@ -71,7 +71,6 @@ grant select on eng.users_id_seq to master_address;
 
 
 create synonym master_address.address_location for eng.address_location;
-create synonym master_address.addr_jurisdiction_master for eng.addr_jurisdiction_master;
 create synonym master_address.addr_location_purpose_mast for eng.addr_location_purpose_mast;
 create synonym master_address.addr_location_purposes for eng.addr_location_purposes;
 create synonym master_address.addr_location_rel_types_mast for eng.addr_location_rel_types_mast;
@@ -123,7 +122,6 @@ create synonym master_address.user_roles for eng.user_roles;
 
 
 create synonym master_address.gov_jur_id_s for eng.gov_jur_id_s;
-create synonym master_address.jurisdiction_id_s for eng.jurisdiction_id_s;
 create synonym master_address.location_change_id_s for eng.location_change_id_s;
 create synonym master_address.location_id_s for eng.location_id_s;
 create synonym master_address.location_purpose_id_s for eng.location_purpose_id_s;

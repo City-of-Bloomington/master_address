@@ -5,11 +5,7 @@ create table people (
 	email varchar2(255) not null
 );
 
-create sequence people_id_seq
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence people_id_seq nocache;
 
 create trigger people_autoincrement_trigger
 before insert on people
@@ -28,11 +24,7 @@ create table users (
 	foreign key (person_id) references people(id)
 );
 
-create sequence users_id_seq
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence users_id_seq nocache;
 
 create trigger users_autoincrement_trigger
 before insert on users
@@ -48,11 +40,7 @@ create table roles (
 	name varchar(30) not null unique
 );
 
-create sequence roles_id_seq
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence roles_id_seq nocache;
 
 create trigger roles_autoincrement_trigger
 before insert on roles
@@ -77,11 +65,7 @@ create table towns_master (
 	town_code varchar2(9)
 );
 
-create sequence town_id_s
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence town_id_s nocache;
 
 create trigger towns_autoincrement_trigger
 before insert on towns_master
@@ -98,11 +82,7 @@ create table township_master (
 	quarter_code char(1)
 );
 
-create sequence township_id_s
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence township_id_s nocache;
 
 create trigger township_autoincrement_trigger
 before insert on township_master
@@ -125,11 +105,7 @@ create table plat_master (
 	foreign key (township_id) references townships_master(township_id)
 );
 
-create sequence plat_id_s
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence plat_id_s nocache;
 
 create trigger plat_autoincrement_trigger
 before insert on plat_master
@@ -152,11 +128,7 @@ create table state_road_master (
 	abbreviation varchar2(10)
 );
 
-create sequence state_road_id_s
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence state_road_id_s nocache;
 
 create trigger state_road_autoincrement_trigger
 before insert on state_road_master
@@ -166,22 +138,17 @@ select state_road_id_s.nextval into :new.state_road_id from dual;
 end;
 /
 
-
-create table addr_jurisdiction_master (
-	jurisdiction_id number not null primary key,
+create table governmental_jurisdiction_mast (
+	gov_jur_id number not null primary key,
 	description varchar2(20)
 );
 
-create sequence jurisdiction_id_s
-start with 1
-increment by 1
-nomaxvalue
-nocache;
+create sequence gov_jur_id_s nocache;
 
-create trigger jurisdiction_autoincrement_trigger
-before insert on addr_jurisdiction_master
+create trigger gov_jur_trigger
+before insert on governmental_jurisdiction_mast
 for each row
 begin
-select jurisdiction_id_s.nextval into :new.jurisdiction_id from dual;
+select gov_jur_id_s.nextval into :new.gov_jur_id from dual;
 end;
 /

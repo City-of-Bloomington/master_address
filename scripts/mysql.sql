@@ -72,7 +72,7 @@ create table state_road_master (
 	abbreviation varchar(10)
 );
 
-create table addr_jurisdiction_master (
-	jurisdiction_id int unsigned not null primary key,
+create table governmental_jurisdiction_mast (
+	gov_jur_id int not null primary key,
 	description varchar(20)
 );

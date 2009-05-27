@@ -39,11 +39,11 @@ class JurisdictionList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='jurisdiction_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='gov_jur_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('addr_jurisdiction_master');
+		$this->select->from('governmental_jurisdiction_mast');
 
-		// Finding on fields from the addr_jurisdiction_master table is handled here
+		// Finding on fields from the governmental_jurisdiction_mast table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				$this->select->where("$key=?",$value);
@@ -53,7 +53,7 @@ class JurisdictionList extends ZendDbResultIterator
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the addr_jurisdiction_master table.
+		// above foreach only handles fields from the governmental_jurisdiction_mast table.
 
 		$this->select->order($order);
 		if ($limit) {
@@ -66,13 +66,13 @@ class JurisdictionList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Hydrates all the Jurisdiction objects from a database result set
+	 * Hydrates all the GovernmentalJurisdiction objects from a database result set
 	 *
 	 * This is a callback function, called from ZendDbResultIterator.  It is
 	 * called once per row of the result.
 	 *
 	 * @param int $key The index of the result row to load
-	 * @return Jurisdiction
+	 * @return GovernmentalJurisdiction
 	 */
 	protected function loadResult($key)
 	{

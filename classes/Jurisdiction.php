@@ -6,7 +6,7 @@
  */
 class Jurisdiction
 {
-	private $jurisdiction_id;
+	private $gov_jur_id;
 	private $description;
 
 	/**
@@ -19,18 +19,18 @@ class Jurisdiction
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $jurisdiction_id
+	 * @param int|array $gov_jur_id
 	 */
-	public function __construct($jurisdiction_id=null)
+	public function __construct($gov_jur_id=null)
 	{
-		if ($jurisdiction_id) {
-			if (is_array($jurisdiction_id)) {
-				$result = $jurisdiction_id;
+		if ($gov_jur_id) {
+			if (is_array($gov_jur_id)) {
+				$result = $gov_jur_id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from addr_jurisdiction_master where jurisdiction_id=?';
-				$result = $zend_db->fetchRow($sql,array($jurisdiction_id));
+				$sql = 'select * from governmental_jurisdiction_mast where gov_jur_id=?';
+				$result = $zend_db->fetchRow($sql,array($gov_jur_id));
 			}
 
 			if ($result) {
@@ -57,7 +57,7 @@ class Jurisdiction
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->description) {
+		if (!$this->gov_jur_id) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -73,7 +73,7 @@ class Jurisdiction
 		$data = array();
 		$data['description'] = $this->description;
 
-		if ($this->jurisdiction_id) {
+		if ($this->gov_jur_id) {
 			$this->update($data);
 		}
 		else {
@@ -84,41 +84,35 @@ class Jurisdiction
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('addr_jurisdiction_master',$data,"jurisdiction_id='{$this->jurisdiction_id}'");
+		$zend_db->update('governmental_jurisdiction_mast',$data,"gov_jur_id='{$this->gov_jur_id}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('addr_jurisdiction_master',$data);
-		if (Database::getType()=='oracle') {
-			$this->jurisdiction_id = $zend_db->lastSequenceId('jurisdiction_id_s');
-		}
-		else {
-			$this->jurisdiction_id = $zend_db->lastInsertId();
-		}
-
+		$zend_db->insert('governmental_jurisdiction_mast',$data);
+		$this->gov_jur_id = $zend_db->lastInsertId('governmental_jurisdiction_mast','gov_jur_id');
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * Alias of getJurisdiction_id()
+	 * Alias for getGov_jur_id()
 	 *
 	 * @return int
 	 */
 	public function getId()
 	{
-		return $this->getJurisdiction_id();
+		return $this->getGov_jur_id();
 	}
 
 	/**
-	 * @return number
+	 * @return int
 	 */
-	public function getJurisdiction_id()
+	public function getGov_jur_id()
 	{
-		return $this->jurisdiction_id;
+		return $this->gov_jur_id;
 	}
 
 	/**
@@ -128,6 +122,7 @@ class Jurisdiction
 	{
 		return $this->description;
 	}
+
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -140,6 +135,7 @@ class Jurisdiction
 	{
 		$this->description = trim($string);
 	}
+
 
 	//----------------------------------------------------------------
 	// Custom Functions
