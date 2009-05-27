@@ -1,5 +1,4 @@
 grant select,insert,update,delete on eng.address_location to master_address;
-grant select,insert,update,delete on eng.addr_jurisdiction_master to master_address;
 grant select,insert,update,delete on eng.addr_location_purpose_mast to master_address;
 grant select,insert,update,delete on eng.addr_location_purposes to master_address;
 grant select,insert,update,delete on eng.addr_location_rel_types_mast to master_address;
@@ -25,7 +24,6 @@ grant select,insert,update,delete on eng.mast_street_name_type_master to master_
 grant select,insert,update,delete on eng.mast_street_names to master_address;
 grant select,insert,update,delete on eng.mast_street_plat to master_address;
 grant select,insert,update,delete on eng.mast_street_section to master_address;
-grant select,insert,update,delete on eng.mast_street_state_road to master_address;
 grant select,insert,update,delete on eng.mast_street_status_lookup to master_address;
 grant select,insert,update,delete on eng.mast_street_subdivision to master_address;
 grant select,insert,update,delete on eng.mast_street_townships to master_address;
@@ -107,7 +105,6 @@ create synonym master_address.newmaststreethistory for eng.newmaststreethistory;
 create synonym master_address.newmaststreetnames for eng.newmaststreetnames;
 create synonym master_address.plat_master for eng.plat_master;
 create synonym master_address.quarter_section_master for eng.quarter_section_master;
-create synonym master_address.state_road_master for eng.state_road_master;
 create synonym master_address.subdivision_master for eng.subdivision_master;
 create synonym master_address.subdivision_names for eng.subdivision_names;
 create synonym master_address.towns_master for eng.towns_master;

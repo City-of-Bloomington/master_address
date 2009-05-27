@@ -35,20 +35,20 @@ create table user_roles (
 insert user_roles values(1,1);
 
 create table towns_master (
-	town_id int unsigned not null primary key autoincrement,
+	town_id int unsigned not null primary key auto_increment,
 	description varchar(40),
 	town_code varchar(9)
 );
 
 create table township_master (
-	township_id int unsigned not null primary key autoincrement,
+	township_id int unsigned not null primary key auto_increment,
 	name varchar(40),
 	township_abbreviation char(2),
 	quarter_code char(1)
 );
 
 create table plat_master (
-	plat_id int unsigned not null primary key autoincrement,
+	plat_id int unsigned not null primary key auto_increment,
 	name varchar(120),
 	township_id int unsigned not null,
 	effective_start_date date,
@@ -66,18 +66,22 @@ create table voting_precincts (
 	active char(1) not null
 );
 
-create table state_road_master (
-	state_road_id int unsigned not null primary key autoincrement,
-	description varchar(40),
-	abbreviation varchar(10)
-);
-
 create table governmental_jurisdiction_mast (
 	gov_jur_id int not null primary key,
 	description varchar(20)
 );
 
 create table building_types_master (
-	building_type_id int unsigned not null primary key autoincrement,
+	building_type_id int unsigned not null primary key auto_increment,
 	description varchar(20) not null
+);
+
+create table buildings_status_lookup (
+	status_code tinyint unsigned not null primary key auto_increment,
+	description varchar2(240) not null
+);
+
+create table mast_street_direction_master (
+	direction_code char(2) not null primary key,
+	description varchar(12) not null
 );

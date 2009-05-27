@@ -122,22 +122,6 @@ create table voting_precincts (
 	active char(1) not null
 );
 
-create table state_road_master (
-	state_road_id number not null primary key,
-	description varchar2(40),
-	abbreviation varchar2(10)
-);
-
-create sequence state_road_id_s nocache;
-
-create trigger state_road_autoincrement_trigger
-before insert on state_road_master
-for each row
-begin
-select state_road_id_s.nextval into :new.state_road_id from dual;
-end;
-/
-
 create table governmental_jurisdiction_mast (
 	gov_jur_id number not null primary key,
 	description varchar2(20)
@@ -167,3 +151,13 @@ begin
 select building_type_id_s.nextval into :new.building_type_id from dual;
 end;
 /
+
+create table buildings_status_lookup (
+	status_code number(3,0) not null primary key,
+	description varchar2(240) not null
+);
+
+create table mast_street_direction_master (
+	direction_code char(2) not null primary key,
+	description varchar2(12) not null
+);
