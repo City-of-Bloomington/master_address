@@ -156,3 +156,37 @@ create table subdivision_names (
 	effective_end_date date,
 	foreign key (subdivision_id) references subdivision_master(subdivision_id)
 );
+
+create table mast_street_name_type_master (
+	street_name_type varchar(20) not null primary key,
+	description varchar(240) not null
+);
+
+create table mast_street (
+	street_id int unsigned not null primary key auto_increment,
+	street_direction_code char(2),
+	post_direction_suffix_code char(2),
+	town_id int unsigned,
+	status_code int unsigned not null,
+	notes varchar(240),
+	foreign key (street_direction_code) references mast_street_direction_master(direction_code),
+	foreign key (post_direction_suffix_code) references mast_street_direction_master(direction_code),
+	foreign key (town_id) references towns_master(town_id),
+	foreign key (status_code) references mast_street_status_lookup(status_code)
+);
+
+create table mast_street_names (
+	street_id int unsigned not null,
+	street_name varchar(60) not null,
+	street_type_suffix_code varchar(8),
+	street_name_type varchar(20),
+	effective_start_date date not null default CURRENT_DATE,
+	effective_end_date date,
+	notes varchar(240),
+	street_direction_code char(2),
+	post_direction_suffix_code char(2),
+	primary key (street_id,street_name),
+	foreign key (street_id) references mast_street(street_id),
+	foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code),
+	foreign key (street_name_type) references mast_street_name_type_master(street_name_type)
+);

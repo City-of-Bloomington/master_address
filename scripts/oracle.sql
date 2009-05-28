@@ -321,3 +321,45 @@ begin
 select subdivision_id_s.nextval into :new.subdivision_id from dual;
 end;
 /
+
+create table mast_street_name_type_master (
+	street_name_type varchar2(20) not null primary key,
+	description varchar2(240) not null
+);
+
+create table mast_street (
+	street_id number not null primary key,
+	street_direction_code char(2),
+	post_direction_suffix_code char(2),
+	town_id number,
+	status_code number not null,
+	notes varchar2(240),
+	foreign key (street_direction_code) references mast_street_direction_master(direction_code),
+	foreign key (post_direction_suffix_code) references mast_street_direction_master(direction_code),
+	foreign key (town_id) references towns_master(town_id),
+	foreign key (status_code) references mast_street_status_lookup(status_code)
+);
+create sequence street_id_s nocache;
+create trigger street_trigger
+before insert on mast_street
+for each row
+begin
+select street_id_s.nextval into :new.street_id from dual;
+end;
+/
+
+create table mast_street_names (
+	street_id number not null,
+	street_name varchar2(60) not null,
+	street_type_suffix_code varchar2(8),
+	street_name_type varchar2(20),
+	effective_start_date date not null default sysdate,
+	effective_end_date date,
+	notes varchar2(240),
+	street_direction_code char(2),
+	post_direction_suffix_code char(2),
+	primary key (street_id,street_name),
+	foreign key (street_id) references mast_street(street_id),
+	foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code),
+	foreign key (street_name_type) references mast_street_name_type_master(street_name_type)
+);
