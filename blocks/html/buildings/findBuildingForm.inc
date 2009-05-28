@@ -10,55 +10,52 @@
 	<fieldset><legend>Building Info</legend>
 		<table>
 
-			<tr><td><label for="plat-name">Name</label></td>
-				<td><input name="plat[name]" id="plat-name" value="<?php if (isset($_GET['plat']['name'])) echo View::escape($_GET['plat']['name']); ?>" />
+			<tr><td><label for="building-building_name">Name</label></td>
+				<td><input name="building[building_name]" id="building-building_name" value="<?php if (isset($_GET['building']['building_name'])) echo View::escape($_GET['building']['building_name']); ?>" />
+				</td>
+			</tr>
+   			<tr><td><label for="building-gis_tag">GIS Tag</label></td>
+				<td><input name="building[gis_tag]" id="building-gis_tag" value="<?php if (isset($_GET['building']['gis_tag'])) echo View::escape($_GET['building']['gis_tag']); ?>" />
 				</td>
 			</tr>
 
-			<tr><td><label for="plat-township_id">Township</label></td>
-				<td><select name="plat[township_id]" id="plat-township_id">
+			<tr><td><label for="building-building_type_id">Building Type</label></td>
+				<td><select name="building[building_type_id]" id="building-building_type_id">
 						<option></option>
 						<?php
-							$list = new TownshipList();
+							$list = new BuildingTypeList();
 							$list->find();
-							foreach ($list as $township) {
-								$name = View::escape($township->getName());
-								$selected = (isset($_GET['plat']['township_id'])
-											 && $_GET['plat']['township_id']==$township->getId())
+							foreach ($list as $type) {
+								$name = View::escape($type->getDescription());
+								$selected = (isset($_GET['building']['building_type_id'])
+											 && $_GET['building']['building_type_id']==$type->getId())
 											? 'selected="selected"'
 											: '';
-								echo "<option value=\"{$township->getId()}\" $selected>$name</option>";
+								echo "<option value=\"{$type->getId()}\" $selected>$name</option>";
 							}
 						?>
 					</select>
 				</td>
 			</tr>
-
-			<tr><td><label for="plat-plat_type">Type</label></td>
-				<td><select name="plat[plat_type]" id="plat-plat_type">
+			<tr><td><label for="building-status_code">Building Status</label></td>
+				<td><select name="building[status_code]" id="building-status_code">
 						<option></option>
 						<?php
-							foreach (Plat::getPlat_types() as $type) {
-								$selected = (isset($_GET['plat']['plat_type'])
-											 && $_GET['plat']['plat_type']==$type)
+							$list = new BuildingStatusList();
+							$list->find();
+							foreach ($list as $status) {
+								$name = View::escape($status->getDescription());
+								$selected = (isset($_GET['building']['status_code'])
+											 && $_GET['building']['status_code']==$status->getId())
 											? 'selected="selected"'
 											: '';
-								echo "<option $selected>$type</option>";
+								echo "<option value=\"{$status->getId()}\" $selected>$name</option>";
 							}
 						?>
 					</select>
 				</td>
 			</tr>
-
-			<tr><td><label for="plat-plat_cabinet">Cabinet</label></td>
-				<td><input name="plat[plat_cabinet]" id="plat-plat_cabinet" value="<?php if (isset($_GET['plat']['plat_cabinet'])) echo View::escape($_GET['plat']['plat_cabinet']); ?>" />
-				</td>
-			</tr>
-
-			<tr><td><label for="plat-envelope">Envelope</label></td>
-				<td><input name="plat[envelope]" id="plat-envelope" value="<?php if (isset($_GET['plat']['envelope'])) echo View::escape($_GET['plat']['envelope']); ?>" />
-				</td>
-			</tr>
+					
 
 		</table>
 
