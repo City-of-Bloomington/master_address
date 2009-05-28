@@ -7,14 +7,13 @@
 class Building
 {
 	private $building_id;
-	private $buildingType_id;
+	private $building_type_id;
 	private $gis_tag;
-	private $buildingName;
-	private $effectiveStartDate;
-	private $effectiveEndDate;
+	private $building_name;
+	private $effective_start_date;
+	private $effective_end_date;
 	private $status_code;
 
-	private $building;
 	private $buildingType;
 	private $buildingStatus;
 
@@ -66,7 +65,10 @@ class Building
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->building_name) {
+			throw new Exception('missingRequriedFields');
+		}
+	  
 	}
 
 	/**
@@ -77,11 +79,11 @@ class Building
 		$this->validate();
 
 		$data = array();
-		$data['building_type_id'] = $this->buildingType_id ? $this->buildingType_id : null;
+		$data['building_type_id'] = $this->building_type_id ? $this->building_type_id : null;
 		$data['gis_tag'] = $this->gis_tag ? $this->gis_tag : null;
-		$data['building_name'] = $this->buildingName ? $this->buildingName : null;
-		$data['effective_start_date'] = $this->effectiveStartDate ? $this->effectiveStartDate : null;
-		$data['effective_end_date'] = $this->effectiveEndDate ? $this->effectiveEndDate : null;
+		$data['building_name'] = $this->building_name ? $this->building_name : null;
+		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date : null;
+		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date : null;
 		$data['status_code'] = $this->status_code ? $this->status_code : null;
 
 		if ($this->building_id) {
@@ -102,7 +104,12 @@ class Building
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('buildings',$data);
-		$this->building_id = $zend_db->lastInsertId('buildings','building_id');
+		if (Database::getType()=='oracle') {
+		  $this->building_id = $zend_db->lastSequenceId('building_id_s');
+		}
+		else {
+		  $this->building_id = $zend_db->lastInsertId('buildings','building_id');
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -120,9 +127,9 @@ class Building
 	/**
 	 * @return number
 	 */
-	public function getBuildingType_id()
+	public function getBuilding_type_id()
 	{
-		return $this->buildingType_id;
+		return $this->building_type_id;
 	}
 
 	/**
@@ -136,9 +143,9 @@ class Building
 	/**
 	 * @return string
 	 */
-	public function getBuildingName()
+	public function getBuilding_name()
 	{
-		return $this->buildingName;
+		return $this->building_name;
 	}
 
 	/**
@@ -147,18 +154,18 @@ class Building
 	 *
 	 * @param string $format
 	 */
-	public function getEffectiveStartDate($format=null)
+	public function getEffective_start_date($format=null)
 	{
-		if ($format && $this->effectiveStartDate) {
+		if ($format && $this->effective_start_date) {
 			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effectiveStartDate);
+				return strftime($format,$this->effective_start_date);
 			}
 			else {
-				return date($format,$this->effectiveStartDate);
+				return date($format,$this->effective_start_date);
 			}
 		}
 		else {
-			return $this->effectiveStartDate;
+			return $this->effective_start_date;
 		}
 	}
 
@@ -168,18 +175,18 @@ class Building
 	 *
 	 * @param string $format
 	 */
-	public function getEffectiveEndDate($format=null)
+	public function getEffective_end_date($format=null)
 	{
-		if ($format && $this->effectiveEndDate) {
+		if ($format && $this->effective_end_date) {
 			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effectiveEndDate);
+				return strftime($format,$this->effective_end_date);
 			}
 			else {
-				return date($format,$this->effectiveEndDate);
+				return date($format,$this->effective_end_date);
 			}
 		}
 		else {
-			return $this->effectiveEndDate;
+			return $this->effective_end_date;
 		}
 	}
 
@@ -192,33 +199,32 @@ class Building
 	}
 
 	/**
-	 * @return Building
-	 */
-	public function getBuilding()
-	{
-		if ($this->building_id) {
-			if (!$this->building) {
-				$this->building = new Building($this->building_id);
-			}
-			return $this->building;
-		}
-		return null;
-	}
-
-	/**
-	 * @return Building_type
+	 * @return BuildingType
 	 */
 	public function getBuildingType()
 	{
-		if ($this->buildingType_id) {
+		if ($this->building_type_id) {
 			if (!$this->buildingType) {
-				$this->buildingType = new BuildingType($this->buildingType_id);
+				$this->buildingType = new BuildingType($this->building_type_id);
 			}
 			return $this->buildingType;
 		}
 		return null;
 	}
-
+	/**
+	 * @return BuildingStatus
+	 */
+	public function getBuildingStatus()
+	{
+		if ($this->status_code) {
+			if (!$this->buildingStatus) {
+				$this->buildingStatus = new BuildingStatus($this->status_code);
+			}
+			return $this->buildingStatus;
+		}
+		return null;
+	}
+	
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -226,9 +232,9 @@ class Building
 	/**
 	 * @param number $number
 	 */
-	public function setBuildingType_id($number)
+	public function setBuilding_type_id($number)
 	{
-		$this->buildingType_id = $number;
+		$this->building_type_id = $number;
 	}
 
 	/**
@@ -242,9 +248,9 @@ class Building
 	/**
 	 * @param string $string
 	 */
-	public function setBuildingName($string)
+	public function setBuilding_name($string)
 	{
-		$this->buildingName = trim($string);
+		$this->building_name = trim($string);
 	}
 
 	/**
@@ -258,16 +264,16 @@ class Building
 	 *		string - anything strtotime understands
 	 * @param date $date
 	 */
-	public function setEffectiveStartDate($date)
+	public function setEffective_start_date($date)
 	{
 		if (is_array($date)) {
-			$this->effectiveStartDate = $this->dateArrayToTimestamp($date);
+			$this->effective_start_date = $this->dateArrayToTimestamp($date);
 		}
 		elseif (ctype_digit($date)) {
-			$this->effectiveStartDate = $date;
+			$this->effective_start_date = $date;
 		}
 		else {
-			$this->effectiveStartDate = strtotime($date);
+			$this->effective_start_date = strtotime($date);
 		}
 	}
 
@@ -282,16 +288,16 @@ class Building
 	 *		string - anything strtotime understands
 	 * @param date $date
 	 */
-	public function setEffectiveEndDate($date)
+	public function setEffective_end_date($date)
 	{
 		if (is_array($date)) {
-			$this->effectiveEndDate = $this->dateArrayToTimestamp($date);
+			$this->effective_end_date = $this->dateArrayToTimestamp($date);
 		}
 		elseif (ctype_digit($date)) {
-			$this->effectiveEndDate = $date;
+			$this->effective_end_date = $date;
 		}
 		else {
-			$this->effectiveEndDate = strtotime($date);
+			$this->effective_end_date = strtotime($date);
 		}
 	}
 
@@ -303,26 +309,18 @@ class Building
 		$this->status_code = $number;
 	}
 
-	/**
-	 * @param Building $building
-	 */
-	public function setBuilding($building)
-	{
-		$this->building_id = $building->getId();
-		$this->building = $building;
-	}
 
 	/**
-	 * @param Building_type $building_type
+	 * @param BuildingType $buildingType
 	 */
 	public function setBuildingType($buildingType)
 	{
-		$this->buildingType_id = $buildingType->getId();
+		$this->building_type_id = $buildingType->getId();
 		$this->buildingType = $buildingType;
 	}
 
 	/**
-	 * @param Building_type $buildingStatus
+	 * @param BuildingStatus $buildingStatus
 	 */
 	public function setBuildingStatus($buildingStatus)
 	{
