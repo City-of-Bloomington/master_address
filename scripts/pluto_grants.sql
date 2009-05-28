@@ -49,6 +49,7 @@ grant select,insert,update,delete on eng.user_roles to master_address;
 
 
 grant select on eng.address_status_code_seq to master_address;
+grant select on eng.contact_id_s to master_address;
 grant select on eng.gov_jur_id_s to master_address;
 grant select on eng.jurisdiction_id_s to master_address;
 grant select on eng.location_change_id_s to master_address;
@@ -121,6 +122,7 @@ create synonym master_address.user_roles for eng.user_roles;
 
 
 create synonym master_address.address_status_code_seq for eng.address_status_code_seq;
+create synonym master_address.contact_id_s for eng.contact_id_s;
 create synonym master_address.gov_jur_id_s for eng.gov_jur_id_s;
 create synonym master_address.location_change_id_s for eng.location_change_id_s;
 create synonym master_address.location_id_s for eng.location_id_s;

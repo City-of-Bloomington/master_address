@@ -229,3 +229,95 @@ create table mast_street_type_suffix_master (
 	suffix_code varchar2(8) not null primary key,
 	description varchar2(240) not null
 );
+
+
+create table mast_addr_subunit_types_mast (
+	sudtype varchar2(20) not null primary key,
+	description varchar2(40) not null
+);
+
+create table addr_location_types_master (
+	location_type_id varchar2(40) not null primary key,
+	description varchar2(240) not null
+);
+
+
+create table addr_location_purpose_mast (
+	location_purpose_id number not null primary key,
+	description varchar2(80) not null,
+	type varchar2(32) not null
+);
+create sequence location_purpose_id_s nocache;
+create trigger location_purpose_trigger
+before insert on addr_location_purpose_mast
+for each row
+begin
+select location_purpose_id_s.nextval into :new.location_purpose_id from dual;
+end;
+/
+
+create table mast_addr_assignment_contact (
+	contact_id number not null primary key,
+	last_name varchar2(30) not null,
+	first_name varchar2(20) not null,
+	contact_type varchar2(20) not null,
+	phone_number varchar2(12) not null,
+	agency varchar2(40) not null
+);
+create sequence contact_id_s nocache;
+create trigger contact_id_trigger
+before insert on mast_addr_assignment_contact
+for each row
+begin
+select contact_id_s.nextval into :new.contact_id from dual;
+end;
+/
+
+
+create table mast_address_location_change (
+	location_change_id number not null primary key,
+	location_id number not null,
+	change_date date not null,
+	notes varchar2(240)
+);
+create sequence location_change_id_s nocache;
+create trigger location_change_id_trigger
+before insert on mast_address_location_change
+for each row
+begin
+select location_change_id_s.nextval into :new.location_change_id from dual;
+end;
+/
+
+create table subdivision_master (
+	subdivision_id number not null primary key,
+	township_id number not null,
+	foreign key (township_id) references township_master(township_id)
+);
+create sequence subdivision_id_s nocache;
+create trigger subdivision_trigger
+before insert on subdivision_master
+for each row
+begin
+select subdivision_id_s.nextval into :new.subdivision_id from dual;
+end;
+/
+
+create table subdivision_names (
+	subdivision_name_id number not null primary key,
+	subdivision_id number not null,
+	name varchar2(100) not null,
+	phase varchar2(20),
+	status varchar2(20) not null,
+	effective_start_date date,
+	effective_end_date date,
+	foreign key (subdivision_id) references subdivision_master(subdivision_id)
+);
+create sequence subdivision_name_id_s nocache;
+create trigger subdivision_name_trigger
+before insert on subdivision_names
+for each row
+begin
+select subdivision_id_s.nextval into :new.subdivision_id from dual;
+end;
+/

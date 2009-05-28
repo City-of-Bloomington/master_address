@@ -107,3 +107,52 @@ create table mast_street_type_suffix_master (
 	suffix_code varchar(8) not null primary key,
 	description varchar(240) not null
 );
+
+create table mast_addr_subunit_types_mast (
+	sudtype varchar(20) not null primary key,
+	description varchar(40) not null
+);
+
+create table addr_location_types_master (
+	location_type_id varchar(40) not null primary key,
+	description varchar(240) not null
+);
+
+create table addr_location_purpose_mast (
+	location_purpose_id int unsigned not null primary key auto_increment,
+	description varchar(80) not null,
+	type varchar(32) not null
+);
+
+create table mast_addr_assignment_contact (
+	contact_id int unsigned not null primary key auto_increment,
+	last_name varchar(30) not null,
+	first_name varchar(20) not null,
+	contact_type varchar(20) not null,
+	phone_number varchar(12) not null,
+	agency varchar(40) not null
+);
+
+create table mast_address_location_change (
+	location_change_id int unsigned not null primary key auto_increment,
+	location_id int unsigned not null,
+	change_date date not null,
+	notes varchar(240)
+);
+
+create table subdivision_master (
+	subdivision_id int unsigned not null primary key auto_increment,
+	township_id int unsigned not null,
+	foreign key (township_id) references township_master(township_id)
+);
+
+create table subdivision_names (
+	subdivision_name_id int unsigned not null primary key auto_increment,
+	subdivision_id int not null,
+	name varchar(100) not null,
+	phase varchar(20),
+	status varchar(20) not null,
+	effective_start_date date,
+	effective_end_date date,
+	foreign key (subdivision_id) references subdivision_master(subdivision_id)
+);
