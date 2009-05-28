@@ -363,3 +363,74 @@ create table mast_street_names (
 	foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code),
 	foreign key (street_name_type) references mast_street_name_type_master(street_name_type)
 );
+
+create table mast_street_townships (
+	street_id number not null,
+	township_id number not null,
+	primary key (street_id,township_id),
+	foreign key (street_id) references mast_street(street_id),
+	foreign key (township_id) references township_master(township_id)
+);
+
+create table mast_street_subdivision (
+	street_id number not null,
+	subdivision_id number not null,
+	primary key (street_id,subdivision_id),
+	foreign key (street_id) references mast_street(street_id),
+	foreign key (subdivision_id) references subdivision_master(subdivision_id)
+);
+
+create table quarter_section_master (
+	quarter_section char(2) not null primary key
+);
+
+create table trash_pickup_master (
+	trash_pickup_day varchar2(20) not null primary key
+);
+
+create table trash_recycle_week_master (
+	recycle_week varchar2(20) not null primary key
+);
+
+create table mast_address (
+	street_address_id number not null primary key,
+	street_number varchar2(20),
+	street_id number not null,
+	address_type varchar2(20) not null,
+	tax_jurisdiction char(3),
+	jurisdiction_id number not null,
+	gov_jur_id number not null,
+	township_id number,
+	section varchar2(20),
+	quarter_section char(2),
+	subdivision_id number,
+	plat_id number,
+	plat_lot_number number,
+	street_address_2 varchar2(40),
+	city varchar2(20),
+	state varchar2(3),
+	zip varchar2(6),
+	zipplus4 varchar2(6),
+	census_block_fips_code varchar2(20),
+	state_plane_x_coordinate number,
+	state_plane_y_coordinate number,
+	latitude number,
+	longitude number,
+	notes varchar2(240),
+	status_code number,
+	foreign key (street_id) references mast_street(street_id),
+	foreign key (quarter_section) references quarter_section_master(quarter_section),
+	foreign key (township_id) references township_master(township_id),
+	foreign key (subdivision_id) references subdivision_master(subdivision_id),
+	foreign key (jurisdiction_id) references addr_jurisdiction_master(jurisdiction_id),
+	foreign key (gov_jur_id) references governmental_jurisdiction_mast(gov_jur_id),
+	foreign key (plat_id) references plat_master(plat_id)
+);
+create table street_address_id_s nocache;
+create trigger mast_address_trigger
+before insert on mast_address
+for each row
+begin
+select street_address_id_s.nextval into :new.street_address_id from dual;
+end;
+/
