@@ -50,7 +50,7 @@ class SubunitTypeList extends ZendDbResultIterator
 			  if($key == 'description')
 				$this->select->where("$key like ?",$value);
 			  else
-				$this->select->where("$key like =",$value);
+				$this->select->where("$key =",$value);
 			}
 		}
 
