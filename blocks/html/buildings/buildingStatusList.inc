@@ -12,7 +12,7 @@
 				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuildingStatus.php\">Add</a>";
 			}
 		?>
-		BuildingsStatusLookups
+		Building Statuses
 	</h1>
 	<ul><?php
 			foreach ($this->buildingStatusList as $buildingStatus) {

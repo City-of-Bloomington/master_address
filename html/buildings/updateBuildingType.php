@@ -3,12 +3,12 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param GET buildingType_id
+ * @param GET building_type_id
  */
 
 verifyUser('Administrator');
 
-$buildingType = new BuildingType($_REQUEST['buildingType_id']);
+$buildingType = new BuildingType($_REQUEST['building_type_id']);
 if (isset($_POST['buildingType'])) {
 	foreach ($_POST['buildingType'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);

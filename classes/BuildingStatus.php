@@ -41,7 +41,7 @@ class BuildingStatus
 				}
 			}
 			else {
-				throw new Exception('buildings_status/unknownBuildingsStatusLookup');
+				throw new Exception('buildings/unknownBuildingsStatus');
 			}
 		}
 		else {
@@ -91,7 +91,6 @@ class BuildingStatus
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('buildings_status_lookup',$data);
-		$this->status_code = $zend_db->lastInsertId('buildings_status_lookup','status_code');
 		if (Database::getType()=='oracle') {
 			$this->status_code = $zend_db->lastSequenceId('buildings_status_code_seq');
 		}

@@ -331,4 +331,15 @@ class Building
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+	  if($this->building_name)
+		return $this->building_name;
+	  elseif($this->gis_tag)
+		return "GIS Tag:".$this->gis_tag;
+	  else
+		return "ID: ".$this->building_id;
+	}
+
+	
 }

@@ -18,8 +18,8 @@
 			foreach ($this->buildingTypeList as $buildingType) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/buildingTypes/updateBuildingType.php');
-					$url->buildingType_id = $buildingType->getId();
+					$url = new URL(BASE_URL.'/buildings/updateBuildingType.php');
+					$url->building_type_id = $buildingType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				echo "<li>$editButton $buildingType</li>";

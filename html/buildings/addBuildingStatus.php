@@ -7,7 +7,7 @@
 
 verifyUser('Administrator');
 
-if (isset($_POST['buildings_status_lookup'])) {
+if (isset($_POST['buildingStatus'])) {
 	$buildingStatus = new BuildingStatus();
 	foreach ($_POST['buildingStatus'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);

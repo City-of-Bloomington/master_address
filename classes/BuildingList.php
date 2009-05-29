@@ -50,7 +50,7 @@ class BuildingList extends ZendDbResultIterator
 			  if($key == 'building_name')
 				$this->select->where("$key like ?",$value);
 			  else
-				$this->select->where("$key =",$value);
+				$this->select->where("$key = ?",$value);
 			}
 		}
 
@@ -79,7 +79,7 @@ class BuildingList extends ZendDbResultIterator
 			  if($key == 'building_name')
 				$this->select->where("$key like ?",$value);
 			  else
-				$this->select->where("$key =",$value);
+				$this->select->where("$key = ?",$value);
 			}
 		}
 

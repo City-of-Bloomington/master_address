@@ -9,7 +9,7 @@
 <h1>Update Building Type</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Building Type Info</legend>
-		<input name="buildingType_id" type="hidden" value="<?php echo $this->buildingType->getId(); ?>" />
+		<input name="building_type_id" type="hidden" value="<?php echo $this->buildingType->getId(); ?>" />
 		<table>
 
 			<tr><td><label for="buildingType-description" class="required">Description</label></td>
