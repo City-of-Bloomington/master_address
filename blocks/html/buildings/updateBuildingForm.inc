@@ -12,9 +12,6 @@
 		<table>
 
 			<tr><td><label for="building-building_type_id">building_type_id</label></td>
-				<td><input name="building[building_type_id]" id="building-building_type_id" value="<?php echo $this->building->getBuilding_type_id(); ?>" />
-				</td>
-
 				<td><select name="building[building_type_id]" id="building-building_type_id">
 					<?php
 						$list = new BuildingTypeList();
@@ -48,6 +45,7 @@
 				</td>
 			</tr>
 			<tr><td><label for="building-status_code">Status</label></td>
+				<td><select name="building[status_code]" id="building-status_code">
 					<?php
 						$list = new BuildingStatusList();
 						$list->find();

@@ -41,7 +41,7 @@ class BuildingStatus
 				}
 			}
 			else {
-				throw new Exception('buildings/unknownBuildingsStatus');
+				throw new Exception('buildings/unknownBuildingStatus');
 			}
 		}
 		else {
@@ -58,7 +58,7 @@ class BuildingStatus
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->description) {
-			throw new Exception('missingRequriedFields');
+			throw new Exception('missingRequiredFields');
 		}
 
 	}
@@ -68,7 +68,7 @@ class BuildingStatus
 	 */
 	public function save()
 	{
-		$this->validate();
+	    $this->validate();
 
 		$data = array();
 		$data['description'] = $this->description ? $this->description : null;
