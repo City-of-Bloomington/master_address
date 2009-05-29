@@ -141,7 +141,13 @@ class BuildingStatus
 		$this->description = trim($string);
 	}
 
-
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+	  return $this->getDescription();
+	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom

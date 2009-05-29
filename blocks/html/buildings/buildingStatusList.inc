@@ -15,7 +15,7 @@
 		BuildingsStatusLookups
 	</h1>
 	<ul><?php
-			foreach ($this->buildingsStatusList as $buildingsStatus) {
+			foreach ($this->buildingStatusList as $buildingStatus) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/buildings/updateBuildingStatus.php');

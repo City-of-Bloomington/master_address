@@ -40,7 +40,7 @@ class BuildingList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function search($fields=null,$order='building_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='building_id',$limit=null,$groupBy=null)
 	{
 		$this->select->from('buildings');
 		
@@ -69,6 +69,34 @@ class BuildingList extends ZendDbResultIterator
 		$this->populateList();
 	}
 
+   	public function search($fields=null,$order='building_id',$limit=null,$groupBy=null)
+	{
+		$this->select->from('buildings');
+		
+		// Finding on fields from the buildings table is handled here
+		if (count($fields)) {
+		   foreach ($fields as $key=>$value) {
+			  if($key == 'building_name')
+				$this->select->where("$key like ?",$value);
+			  else
+				$this->select->where("$key =",$value);
+			}
+		}
+
+		// Finding on fields from other tables requires joining those tables.
+		// You can handle fields from other tables by adding the joins here
+		// If you add more joins you probably want to make sure that the
+		// above foreach only handles fields from the buildings table.
+
+		$this->select->order($order);
+		if ($limit) {
+			$this->select->limit($limit);
+		}
+		if ($groupBy) {
+			$this->select->group($groupBy);
+		}
+		$this->populateList();
+	}
 	/**
 	 * Hydrates all the Building objects from a database result set
 	 *
