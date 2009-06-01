@@ -12,7 +12,7 @@
 		<table>
 
 			<tr><td><label for="buildingStatus-description">description</label></td>
-				<td><input name="buildingsStatus[description]" id="buildingStatus-description" value="<?php echo View::escape($this->buildingStatus->getDescription()); ?>" />
+				<td><input name="buildingStatus[description]" id="buildingStatus-description" value="<?php echo View::escape($this->buildingStatus->getDescription()); ?>" />
 				</td>
 			</tr>
 				

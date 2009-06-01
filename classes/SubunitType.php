@@ -29,7 +29,7 @@ class SubunitType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_addr_subunit_types_master where sudtype=?';
+				$sql = 'select * from mast_addr_subunit_types_mast where sudtype=?';
 				$result = $zend_db->fetchRow($sql,array($sudtype));
 			}
 
@@ -41,7 +41,7 @@ class SubunitType
 				}
 			}
 			else {
-				throw new Exception('buildingTypes/unknownBuildingType');
+				throw new Exception('buildings/unknownSubunitType');
 			}
 		}
 		else {
@@ -82,7 +82,7 @@ class SubunitType
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('mast_addr_subunit_types_master',$data,"sudtype='{$this->sudtype}'");
+		$zend_db->update('mast_addr_subunit_types_mast',$data,"sudtype='{$this->sudtype}'");
 	}
 	/*
 	private function insert($data)

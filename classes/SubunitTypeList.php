@@ -31,7 +31,6 @@ class SubunitTypeList extends ZendDbResultIterator
 			$this->find($fields);
 		}
 	}
-
 	/**
 	 * Populates the collection
 	 *
@@ -42,7 +41,7 @@ class SubunitTypeList extends ZendDbResultIterator
 	 */
 	public function search($fields=null,$order='sudtype',$limit=null,$groupBy=null)
 	{
-		$this->select->from('buildings');
+		$this->select->from('mast_addr_subunit_types_mast');
 		
 		// Finding on fields from the buildings table is handled here
 		if (count($fields)) {
@@ -50,7 +49,7 @@ class SubunitTypeList extends ZendDbResultIterator
 			  if($key == 'description')
 				$this->select->where("$key like ?",$value);
 			  else
-				$this->select->where("$key =",$value);
+				$this->select->where("$key =?",$value);
 			}
 		}
 
@@ -68,7 +67,34 @@ class SubunitTypeList extends ZendDbResultIterator
 		}
 		$this->populateList();
 	}
+	public function find($fields=null,$order='sudtype',$limit=null,$groupBy=null)
+	{
+		$this->select->from('mast_addr_subunit_types_mast');
+		
+		// Finding on fields from the buildings table is handled here
+		if (count($fields)) {
+		   foreach ($fields as $key=>$value) {
+			  if($key == 'description')
+				$this->select->where("$key like ?",$value);
+			  else
+				$this->select->where("$key =?",$value);
+			}
+		}
 
+		// Finding on fields from other tables requires joining those tables.
+		// You can handle fields from other tables by adding the joins here
+		// If you add more joins you probably want to make sure that the
+		// above foreach only handles fields from the buildings table.
+
+		$this->select->order($order);
+		if ($limit) {
+			$this->select->limit($limit);
+		}
+		if ($groupBy) {
+			$this->select->group($groupBy);
+		}
+		$this->populateList();
+	}
 	/**
 	 * Hydrates all the Building objects from a database result set
 	 *

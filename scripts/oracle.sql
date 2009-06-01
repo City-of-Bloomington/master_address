@@ -230,12 +230,15 @@ create table mast_street_type_suffix_master (
 	description varchar2(240) not null
 );
 
-
+;;
+;; sudtype is not a number
 create table mast_addr_subunit_types_mast (
 	sudtype varchar2(20) not null primary key,
 	description varchar2(40) not null
 );
 
+;;
+;;location_type_id not a number
 create table addr_location_types_master (
 	location_type_id varchar2(40) not null primary key,
 	description varchar2(240) not null
