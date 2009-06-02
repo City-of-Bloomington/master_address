@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class BuildingType
+class AddrLocationType
 {
-	private $building_type_id;
+    private $location_type_id; // not a number
 	private $description;
 
 	/**
@@ -19,18 +19,18 @@ class BuildingType
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $building_type_id
+	 * @param int|array $location_type_id
 	 */
-	public function __construct($building_type_id=null)
+	public function __construct($location_type_id=null)
 	{
-		if ($building_type_id) {
-			if (is_array($building_type_id)) {
-				$result = $building_type_id;
+		if ($location_type_id) {
+			if (is_array($location_type_id)) {
+				$result = $location_type_id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from building_types_master where building_type_id=?';
-				$result = $zend_db->fetchRow($sql,array($building_type_id));
+				$sql = 'select * from addr_location_types_master where location_type_id=?';
+				$result = $zend_db->fetchRow($sql,array($location_type_id));
 			}
 
 			if ($result) {
@@ -41,7 +41,7 @@ class BuildingType
 				}
 			}
 			else {
-				throw new Exception('buildingTypes/unknownBuildingType');
+				throw new Exception('address/unknownAddrLocationType');
 			}
 		}
 		else {
@@ -49,15 +49,18 @@ class BuildingType
 			// Set any default values for properties that need it here
 		}
 	}
-
+	
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
 	 */
 	public function validate()
 	{
+	  
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->description) {
+			throw new Exception('missingRequiredFields');
+		}
 	}
 
 	/**
@@ -70,7 +73,7 @@ class BuildingType
 		$data = array();
 		$data['description'] = $this->description ? $this->description : null;
 
-		if ($this->building_type_id) {
+		if ($this->location_type_id) {
 			$this->update($data);
 		}
 		else {
@@ -81,40 +84,30 @@ class BuildingType
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('building_types_master',$data,"building_type_id='{$this->building_type_id}'");
+		$zend_db->update('addr_location_types_master',$data,"location_type_id='{$this->location_type_id}'");
 	}
-
+	/*
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('building_types_master',$data);
+		$zend_db->insert('addr_location_types_master',$data);
 		if (Database::getType()=='oracle') {
-		  $this->building_type_id = $zend_db->lastSequenceId('building_type_id_s');
+		  $this->location_type_id = $zend_db->lastSequenceId(' ');
 		}
 		else{
-		  $this->building_type_id = $zend_db->lastInsertId();
-		}
+		  $this->location_type_id = $zend_db->lastInsertId('addr_location_types_master','location_type_id');
 	}
-
+	*/
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-	/**
-	 * Alias of getBuilding_type_id()
-	 *
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->getBuilding_type_id();
-	}
 
 	/**
-	 * @return int
+	 * @return string
 	 */
-	public function getBuilding_type_id()
+	public function getLocation_type_id()
 	{
-		return $this->building_type_id;
+		return $this->location_type_id;
 	}
 
 	/**
@@ -124,6 +117,7 @@ class BuildingType
 	{
 		return $this->description;
 	}
+
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -137,12 +131,18 @@ class BuildingType
 		$this->description = trim($string);
 	}
 
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->getDescription();
+
+    public function __toString(){
+	  $ret = $this->location_type_id;
+
+	  if($this->description){
+		$ret .=' : '.$this->description;
+	  }
+	  return $ret;
 	}
 }

@@ -9,5 +9,6 @@
 		<li><a href="<?php echo BASE_URL; ?>/buildings">Buildings</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/streets">Streets</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/addresses">Addresses</a></li>
+        <li><a href="<?php echo BASE_URL; ?>/addressChange">Address Change</a></li>
 	</ul>
 </div>
