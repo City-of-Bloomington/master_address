@@ -7,8 +7,12 @@
 
 $addressStatusList = new AddressStatusList();
 $addressStatusList->find();
+$addrLocationTypeList = new AddrLocationTypeList();
+$addrLocationTypeList->find();
 
 $template = new Template();
 $template->blocks[] = new Block('addresses/addressStatusList.inc',
 								array('addressStatusList'=>$addressStatusList));
+$template->blocks[] = new Block('addresses/addrLocationTypeList.inc',
+								array('addrLocationTypeList'=>$addrLocationTypeList));
 echo $template->render();
