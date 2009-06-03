@@ -14,16 +14,31 @@
 		?>
 		Address Location Change
 	</h1>
-	<ul><?php
+	    <table>
+		<tr><th></th>
+			<th>Location ID</th>
+			<th>Old Location ID</th>
+			<th>Change date</th>
+		    <th>Notes</th>
+		</tr>
+	<?php
 			foreach ($this->addressLocationChangeList as $change) {
-				$editButton = '';
+			    $editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/addressChange/updateAddressLocationChange.php');
 					$url->location_change_id = $change->getLocation_change_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $change</li>";
+				echo
+				  "<tr>
+				    <td>$editButton</td>
+					<td>{$change->getLocation_id()}</td>
+					<td>{$change->getOld_location_id()}</td>
+					<td>{$change->getChange_date()}</td>
+					<td>{$change->getNotes()}</td>
+				   </tr>
+				";
 			}
 		?>
-	</ul>
+	</table>
 </div>

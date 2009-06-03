@@ -64,7 +64,6 @@ class Plat
 			// Set any default values for properties that need it here
 		}
 	}
-
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -120,11 +119,10 @@ class Plat
 			$this->plat_id = $zend_db->lastInsertId();
 		}
 	}
-
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
+	
 	/**
 	 * @return number
 	 */

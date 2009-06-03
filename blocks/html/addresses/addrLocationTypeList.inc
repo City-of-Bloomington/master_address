@@ -14,16 +14,30 @@
 		?>
 		Address Location Types
 	</h1>
-	<ul><?php
-			foreach ($this->addrLocationTypeList as $type) {
+		<table>
+		<tr>
+		    <th></th>
+		    <th>Type</th>
+		    <th>Description</th>
+		</tr>
+	    <?php
+			foreach ($this->addrLocationTypeList as $addrType) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/addresses/updateAddrLocationType.php');
-					$url->location_type_id = $type->getLocation_type_id();
+					$url->location_type_id = $addrType->getLocation_type_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $type</li>";
+				$type = View::escape($addrType->getLocation_type_id());
+				$description = View::escape($addrType->getDescription());
+				
+				echo
+				  "<tr>
+				      <td>$editButton</td>
+                      <td>$type</td>
+                      <td>$description</td>
+                  </tr>";
 			}
 		?>
-	</ul>
+	</table>
 </div>

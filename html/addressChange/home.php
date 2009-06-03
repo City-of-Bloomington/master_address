@@ -7,7 +7,11 @@
 
 $addressLocationChangeList = new AddressLocationChangeList();
 $addressLocationChangeList->find();
+$addrAssignmentContactList = new AddrAssignmentContactList();
+$addrAssignmentContactList->find();
 
 $template = new Template();
 $template->blocks[] = new Block('addressChange/addressLocationChangeList.inc',array('addressLocationChangeList'=>$addressLocationChangeList));
+$template->blocks[] = new Block('addressChange/addrAssignmentContactList.inc',array('addrAssignmentContactList'=>$addrAssignmentContactList));
+
 echo $template->render();

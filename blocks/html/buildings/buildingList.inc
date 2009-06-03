@@ -14,6 +14,15 @@
 		?>
 		Buildings
 	</h1>
+	  <table>
+		<tr><th></th>
+			<th>Type</th>
+			<th>GIS tag</th>
+			<th>Name </th>
+		    <th>Effective Start Date</th>
+	   	    <th>Effective End Date</th>
+			<th>Status</th>
+		</tr>
 	<ul><?php
 			foreach ($this->buildingList as $building) {
 				$editButton = '';
@@ -22,8 +31,18 @@
 					$url->building_id = $building->getBuilding_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $building</li>";
+				echo
+				  "<tr>
+				    <td>$editButton</td>
+					<td>{$building->getBuildingType()}</td>
+					<td>{$building->getGis_tag()}</td>
+					<td>{$building->getBuilding_name()}</td>
+					<td>{$building->getEffective_start_date()}</td>
+					<td>{$building->getEffective_end_date()}</td>
+					<td>{$building->getBuildingStatus()}</td>
+				   </tr>
+				";
 			}
 		?>
-	</ul>
+	</table>
 </div>

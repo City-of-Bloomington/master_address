@@ -9,10 +9,14 @@ $addressStatusList = new AddressStatusList();
 $addressStatusList->find();
 $addrLocationTypeList = new AddrLocationTypeList();
 $addrLocationTypeList->find();
+$addrLocationPurposeList = new AddrLocationPurposeList();
+$addrLocationPurposeList->find();
 
 $template = new Template();
 $template->blocks[] = new Block('addresses/addressStatusList.inc',
 								array('addressStatusList'=>$addressStatusList));
 $template->blocks[] = new Block('addresses/addrLocationTypeList.inc',
 								array('addrLocationTypeList'=>$addrLocationTypeList));
+$template->blocks[] = new Block('addresses/addrLocationPurposeList.inc',
+								array('addrLocationPurposeList'=>$addrLocationPurposeList));
 echo $template->render();

@@ -191,11 +191,9 @@ class AddressLocationChange
 		}
 		return null;
 	}
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param number $number
 	 */
@@ -203,7 +201,6 @@ class AddressLocationChange
 	{
 		$this->location_id = $number;
 	}
-
 	/**
 	 * @param number $number
 	 */
@@ -211,7 +208,6 @@ class AddressLocationChange
 	{
 		$this->old_location_id = $number;
 	}
-
 	/**
 	 * Sets the date
 	 *

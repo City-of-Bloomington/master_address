@@ -23,6 +23,7 @@
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				echo "<li>$editButton $addressStatus</li>";
+				
 			}
 		?>
 	</ul>
