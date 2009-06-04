@@ -437,3 +437,11 @@ begin
 select street_address_id_s.nextval into :new.street_address_id from dual;
 end;
 /
+
+create table mast_address_sanitation (
+	street_address_id number not null primary key,
+	trash_pickup_day varchar2(20),
+	recycle_week varchar2(20),
+	large_item_pickup_day varchar2(20), 
+	foreign key(street_address_id) references mast_address(street_address_id)
+);
