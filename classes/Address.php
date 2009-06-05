@@ -32,7 +32,6 @@ class MastAddress
 	private $notes;
 	private $status_code;
 
-
 	private $street;
 	private $jurisdiction;
 	private $govJur;
@@ -40,8 +39,7 @@ class MastAddress
 	private $subdivision;
 	private $plat;
 
-
-
+	public static $addressTypes = array("STREET","UTILITY","PROPERTY","PARCEL","FACILITY","TEMPORARY");
 	/**
 	 * Populates the object with data
 	 *

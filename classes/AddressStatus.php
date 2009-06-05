@@ -111,7 +111,16 @@ class AddressStatus
 	{
 		return $this->getStatus_code();
 	}
-
+	
+	/**
+	 * Alias for getStatus_code()
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->getStatus_code();
+	}
 	/**
 	 * @return int
 	 */
