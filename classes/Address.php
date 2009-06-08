@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class MastAddress
+class Address
 {
 	private $street_address_id;
 	private $street_number;
@@ -38,6 +38,7 @@ class MastAddress
 	private $township;
 	private $subdivision;
 	private $plat;
+	private $status;
 
 	public static $addressTypes = array("STREET","UTILITY","PROPERTY","PARCEL","FACILITY","TEMPORARY");
 	/**
@@ -305,7 +306,18 @@ class MastAddress
 	{
 		return $this->zipplus4;
 	}
-
+	
+	/**
+	 * @return string
+	 */
+	public function getZips()
+	{
+		$ret = $this->zip;
+		if($this->zipplus4){
+		    $ret .=" - ".$this->zipplus4;
+		}
+		return $ret;
+	}
 	/**
 	 * @return string
 	 */
@@ -331,6 +343,18 @@ class MastAddress
 	}
 
 	/**
+	 * @return string of pair of numbers
+	 */
+	public function getState_plane_xy_coordinate()
+	{
+		$ret =  $this->state_plane_x_coordinate;
+		if($this->state_plane_y_coordinate){
+		    if($ret) $ret .=', ';
+		    $ret .= $this->state_plane_y_coordinate;
+		}
+		return $ret;
+	}
+	/**
 	 * @return number
 	 */
 	public function getLatitude()
@@ -344,6 +368,19 @@ class MastAddress
 	public function getLongitude()
 	{
 		return $this->longitude;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getLatLong()
+	{
+	    $ret = $this->latitude;
+	    if($this->longitude){
+		    $ret .=', ';
+		    $ret .= $this->longitude;
+	    }
+	    return $ret;
 	}
 
 	/**
@@ -369,13 +406,28 @@ class MastAddress
 	{
 		if ($this->street_id) {
 			if (!$this->street) {
-				$this->street = new Street($this->street_id);
+			  //  TODO Street Obj not created yet
+			  //$this->street = new Street($this->street_id);
+			  return null;
 			}
 			return $this->street;
 		}
 		return null;
 	}
-
+	
+	/**
+	 * @return AddressStatus
+	 */
+	public function getStatus()
+	{
+		if ($this->status_code) {
+			if (!$this->status) {
+			    $this->status = new AddressStatus($this->status_code);
+			}
+			return $this->status;
+		}
+		return null;
+	}
 	/**
 	 * @return Jurisdiction
 	 */

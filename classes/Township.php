@@ -190,4 +190,9 @@ class Township
 	{
 		return $this->getTownship_abbreviation();
 	}
+
+	public function __toString()
+	{
+	    return $this->getName();
+	}
 }

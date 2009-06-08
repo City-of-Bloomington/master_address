@@ -7,17 +7,16 @@
 //$strTypes = new AddressTypeList();
 //$strTypes.find();
 $statuses = new AddressStatusList();
-$statuses.find();
+$statuses->find();
 $townships = new TownshipList();
-$townships.find();
-
+$townships->find();
+$types = Address::$addressTypes;
 
 ?>
 <h1>Add Address</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Address Info</legend>
 		<table>
-
 			<tr><td><label for="address-street_number">Street Number</label></td>
 				<td><input name="address[street_number]" id="address-street_number" />
 				</td>
@@ -29,8 +28,14 @@ $townships.find();
 			</tr>
 				
 			<tr><td><label for="address-address_type">Address Type</label></td>
-				<td><input name="address[address_type]" id="address-address_type" />
-				</td>
+				<td><select name="address[address_type]" id="address-address_type" >
+                <?php
+                     foreach($types as $type){
+		                 echo "<option>$type</option>";
+	                 }
+                ?>
+                  </select>
+               </td>
 			</tr>
 				
 			<tr><td><label for="address-tax_jurisdiction">Tax Jurisdiction</label></td>
@@ -55,7 +60,7 @@ $townships.find();
                     <?php
                          foreach ($townships as $township){
 				               echo "<option value='{$township->getId()}'>
-                                    {$township->getDescription()}</option>";
+                                    {$township->getName()}</option>";
 			            }
 		            ?>
                    </select>
@@ -147,7 +152,7 @@ $townships.find();
                     <option></option>
                     <?php
                          foreach($statuses as $status){
-						   	  echo "<option value=\"{$status->getId()}\">{$status->getDescription}</option>";
+						   	  echo "<option value=\"{$status->getId()}\">{$status->getDescription()}</option>";
 					     }
                      ?>
 				    </select>				
@@ -156,7 +161,7 @@ $townships.find();
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/addressses';">
+		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/addresses';">
 			Cancel
 		</button>
 	</fieldset>

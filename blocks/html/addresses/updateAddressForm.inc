@@ -4,137 +4,167 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$statuses = new AddressStatusList();
+$statuses->find();
+$townships = new TownshipList();
+$townships->find();
+$types = Address::$addressTypes;
 ?>
-<h1>Update MastAddress</h1>
+<h1>Update Address</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>MastAddress Info</legend>
-		<input name="street_address_id" type="hidden" value="<?php echo $this->mast_address->getStreet_address_id(); ?>" />
+	<fieldset><legend>Address Info</legend>
+		<input name="street_address_id" type="hidden" value="<?php echo $this->address->getStreet_address_id(); ?>" />
 		<table>
 
-			<tr><td><label for="mast_address-street_number">street_number</label></td>
-				<td><input name="mast_address[street_number]" id="mast_address-street_number" value="<?php echo $this->mast_address->getStreet_number(); ?>" />
+			<tr><td><label for="address-street_number">Street Number</label></td>
+				<td><input name="address[street_number]" id="address-street_number" value="<?php echo $this->address->getStreet_number(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-street_id">street_id</label></td>
-				<td><input name="mast_address[street_id]" id="mast_address-street_id" value="<?php echo $this->mast_address->getStreet_id(); ?>" />
+			<tr><td><label for="address-street_id">Street ID</label></td>
+				<td><input name="address[street_id]" id="address-street_id" value="<?php echo $this->address->getStreet_id(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-address_type">address_type</label></td>
-				<td><input name="mast_address[address_type]" id="mast_address-address_type" value="<?php echo $this->mast_address->getAddress_type(); ?>" />
+			<tr><td><label for="address-address_type">Address Type</label></td>
+				<td><select name="address[address_type]" id="address-address_type">
+                <?php
+                     foreach($types as $type){
+		             
+		                  $selected=($this->address->getAddress_type() == $type)?"selected=\"selected\"":"";
+		                 echo "<option $selected>$type</option>";
+	                 }
+                ?>
+                  </select>
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-tax_jurisdiction">tax_jurisdiction</label></td>
-				<td><input name="mast_address[tax_jurisdiction]" id="mast_address-tax_jurisdiction" value="<?php echo $this->mast_address->getTax_jurisdiction(); ?>" />
+			<tr><td><label for="address-tax_jurisdiction">Tax Jurisdiction</label></td>
+				<td><input name="address[tax_jurisdiction]" id="address-tax_jurisdiction" value="<?php echo $this->address->getTax_jurisdiction(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-jurisdiction_id">jurisdiction_id</label></td>
-				<td><input name="mast_address[jurisdiction_id]" id="mast_address-jurisdiction_id" value="<?php echo $this->mast_address->getJurisdiction_id(); ?>" />
+			<tr><td><label for="address-jurisdiction_id">Jurisdiction ID</label></td>
+				<td><input name="address[jurisdiction_id]" id="address-jurisdiction_id" value="<?php echo $this->address->getJurisdiction_id(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-gov_jur_id">gov_jur_id</label></td>
-				<td><input name="mast_address[gov_jur_id]" id="mast_address-gov_jur_id" value="<?php echo $this->mast_address->getGov_jur_id(); ?>" />
+			<tr><td><label for="address-gov_jur_id">Gov Jur ID</label></td>
+				<td><input name="address[gov_jur_id]" id="address-gov_jur_id" value="<?php echo $this->address->getGov_jur_id(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-township_id">township_id</label></td>
-				<td><input name="mast_address[township_id]" id="mast_address-township_id" value="<?php echo $this->mast_address->getTownship_id(); ?>" />
+			<tr><td><label for="address-township_id">Township</label></td>
+				<td><select name="address[township_id]" id="address-township_id" >
+                    <option></option>
+                    <?php
+                         foreach ($townships as $township){
+                               $selected=($this->address->getTownship_id()==$township->getId())?"selected=\"selected\"":"";                              
+				               echo "<option $selected value='{$township->getId()}'>
+                                    {$township->getName()}</option>";
+			            }
+		            ?>
+                   </select>
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-section">section</label></td>
-				<td><input name="mast_address[section]" id="mast_address-section" value="<?php echo $this->mast_address->getSection(); ?>" />
+			<tr><td><label for="address-section">Section</label></td>
+				<td><input name="address[section]" id="address-section" value="<?php echo $this->address->getSection(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-quarter_section">quarter_section</label></td>
-				<td><input name="mast_address[quarter_section]" id="mast_address-quarter_section" value="<?php echo $this->mast_address->getQuarter_section(); ?>" />
+			<tr><td><label for="address-quarter_section">Quarter Section</label></td>
+				<td><input name="address[quarter_section]" id="address-quarter_section" value="<?php echo $this->address->getQuarter_section(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-subdivision_id">subdivision_id</label></td>
-				<td><input name="mast_address[subdivision_id]" id="mast_address-subdivision_id" value="<?php echo $this->mast_address->getSubdivision_id(); ?>" />
+			<tr><td><label for="address-subdivision_id">Subdivision ID</label></td>
+				<td><input name="address[subdivision_id]" id="address-subdivision_id" value="<?php echo $this->address->getSubdivision_id(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-plat_id">plat_id</label></td>
-				<td><input name="mast_address[plat_id]" id="mast_address-plat_id" value="<?php echo $this->mast_address->getPlat_id(); ?>" />
+			<tr><td><label for="address-plat_id">Plat ID</label></td>
+				<td><input name="address[plat_id]" id="address-plat_id" value="<?php echo $this->address->getPlat_id(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-plat_lot_number">plat_lot_number</label></td>
-				<td><input name="mast_address[plat_lot_number]" id="mast_address-plat_lot_number" value="<?php echo $this->mast_address->getPlat_lot_number(); ?>" />
+			<tr><td><label for="address-plat_lot_number">Plat Lot Number</label></td>
+				<td><input name="address[plat_lot_number]" id="address-plat_lot_number" value="<?php echo $this->address->getPlat_lot_number(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-street_address_2">street_address_2</label></td>
-				<td><input name="mast_address[street_address_2]" id="mast_address-street_address_2" value="<?php echo $this->mast_address->getStreet_address_2(); ?>" />
+			<tr><td><label for="address-street_address_2">Street Address 2</label></td>
+				<td><input name="address[street_address_2]" id="address-street_address_2" value="<?php echo $this->address->getStreet_address_2(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-city">city</label></td>
-				<td><input name="mast_address[city]" id="mast_address-city" value="<?php echo $this->mast_address->getCity(); ?>" />
+			<tr><td><label for="address-city">City</label></td>
+				<td><input name="address[city]" id="address-city" value="<?php echo $this->address->getCity(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-state">state</label></td>
-				<td><input name="mast_address[state]" id="mast_address-state" value="<?php echo $this->mast_address->getState(); ?>" />
+			<tr><td><label for="address-state">State</label></td>
+				<td><input name="address[state]" id="address-state" value="<?php echo $this->address->getState(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-zip">zip</label></td>
-				<td><input name="mast_address[zip]" id="mast_address-zip" value="<?php echo $this->mast_address->getZip(); ?>" />
+			<tr><td><label for="address-zip">Zip</label></td>
+				<td><input name="address[zip]" id="address-zip" value="<?php echo $this->address->getZip(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-zipplus4">zipplus4</label></td>
-				<td><input name="mast_address[zipplus4]" id="mast_address-zipplus4" value="<?php echo $this->mast_address->getZipplus4(); ?>" />
+			<tr><td><label for="address-zipplus4">Zip Plus 4</label></td>
+				<td><input name="address[zipplus4]" id="address-zipplus4" value="<?php echo $this->address->getZipplus4(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-census_block_fips_code">census_block_fips_code</label></td>
-				<td><input name="mast_address[census_block_fips_code]" id="mast_address-census_block_fips_code" value="<?php echo $this->mast_address->getCensus_block_fips_code(); ?>" />
+			<tr><td><label for="address-census_block_fips_code">Census Nlock Fips Code</label></td>
+				<td><input name="address[census_block_fips_code]" id="address-census_block_fips_code" value="<?php echo $this->address->getCensus_block_fips_code(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-state_plane_x_coordinate">state_plane_x_coordinate</label></td>
-				<td><input name="mast_address[state_plane_x_coordinate]" id="mast_address-state_plane_x_coordinate" value="<?php echo $this->mast_address->getState_plane_x_coordinate(); ?>" />
+			<tr><td><label for="address-state_plane_x_coordinate">State Plane X Coordinate</label></td>
+				<td><input name="address[state_plane_x_coordinate]" id="address-state_plane_x_coordinate" value="<?php echo $this->address->getState_plane_x_coordinate(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-state_plane_y_coordinate">state_plane_y_coordinate</label></td>
-				<td><input name="mast_address[state_plane_y_coordinate]" id="mast_address-state_plane_y_coordinate" value="<?php echo $this->mast_address->getState_plane_y_coordinate(); ?>" />
+			<tr><td><label for="address-state_plane_y_coordinate">State Plane Y Coordinate</label></td>
+				<td><input name="address[state_plane_y_coordinate]" id="address-state_plane_y_coordinate" value="<?php echo $this->address->getState_plane_y_coordinate(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-latitude">latitude</label></td>
-				<td><input name="mast_address[latitude]" id="mast_address-latitude" value="<?php echo $this->mast_address->getLatitude(); ?>" />
+			<tr><td><label for="address-latitude">Latitude</label></td>
+				<td><input name="address[latitude]" id="address-latitude" value="<?php echo $this->address->getLatitude(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-longitude">longitude</label></td>
-				<td><input name="mast_address[longitude]" id="mast_address-longitude" value="<?php echo $this->mast_address->getLongitude(); ?>" />
+			<tr><td><label for="address-longitude">Longitude</label></td>
+				<td><input name="address[longitude]" id="address-longitude" value="<?php echo $this->address->getLongitude(); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-notes">notes</label></td>
-				<td><input name="mast_address[notes]" id="mast_address-notes" value="<?php echo $this->mast_address->getNotes(); ?>" />
+			<tr><td><label for="address-notes">Notes</label></td>
+				<td><input name="address[notes]" id="address-notes" value="<?php echo View::escape($this->address->getNotes()); ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="mast_address-status_code">status_code</label></td>
-				<td><input name="mast_address[status_code]" id="mast_address-status_code" value="<?php echo $this->mast_address->getStatus_code(); ?>" />
+			<tr><td><label for="address-status_code">Status</label></td>
+				<td><select name="address[status_code]" id="address-status_code" >
+                    <option></option>
+                    <?php
+                         foreach($statuses as $status){
+					   		$selected = ($this->address->getStatus_code()==$status)?"selected=\"selected\"":"";
+					   	    echo "<option $selected value=\"{$status->getId()}\">{$status->getDescription()}</option>";
+					     }
+                     ?>
+				    </select>	
 				</td>
 			</tr>
 				
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/mast_addresss';">
+		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/addresses';">
 			Cancel
 		</button>
 	</fieldset>
