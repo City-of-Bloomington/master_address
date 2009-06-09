@@ -21,5 +21,10 @@ $suffixList = new SuffixList();
 $suffixList->find();
 $template->blocks[] = new Block('streets/suffixList.inc',array('suffixList'=>$suffixList));
 
+$streetList = new StreetList();
+$streetList->find(null,null,15);
+$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streetList));
+
+
 
 echo $template->render();

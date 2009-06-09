@@ -9,20 +9,20 @@
 	<h1>
 		<?php
 			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/mast_street/addMastStreet.php\">Add</a>";
+				echo "<a class=\"add button\" href=\"".BASE_URL."/streets/addStreet.php\">Add</a>";
 			}
 		?>
-		MastStreets
+	    Streets
 	</h1>
 	<ul><?php
-			foreach ($this->mast_streetList as $mast_street) {
+			foreach ($this->streetList as $street) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/mast_street/updateMastStreet.php');
-					$url->street_id = $mast_street->getStreet_id();
+					$url = new URL(BASE_URL.'/streets/updateStreet.php');
+					$url->street_id = $street->getStreet_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $mast_street</li>";
+				echo "<li>$editButton $street</li>";
 			}
 		?>
 	</ul>
