@@ -7,7 +7,7 @@
 
 verifyUser('Administrator');
 
-$street = new MastStreet($_REQUEST['street_id']);
+$street = new Street($_REQUEST['street_id']);
 if (isset($_POST['street'])) {
 	foreach ($_POST['street'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);

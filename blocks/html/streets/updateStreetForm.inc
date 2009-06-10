@@ -6,11 +6,11 @@
  */
 
 $directions = new DirectionList();
-$directions.find();
+$directions->find();
 $statuses = new StreetStatusList();
-$statuses.find();
-$towns = new STownList();
-$towns.find();
+$statuses->find();
+$towns = new TownList();
+$towns->find();
 
 ?>
 <h1>Update Street</h1>
@@ -25,7 +25,7 @@ $towns.find();
                      <?php
                      foreach($directions as $direction){
 	                     $selected = ($direction->getId() == $this->street->getStreet_direction_code())?"selected=\"selected\"":"";
-	                     echo '<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>'; 
+	                     echo "<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
                       }
                   ?>
                  </select>
@@ -38,7 +38,7 @@ $towns.find();
                      <?php
                      foreach($directions as $direction){
 	                     $selected = ($direction->getId() == $this->street->getPost_direction_suffix_code())?"selected=\"selected\"":"";
-	                     echo '<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>'; 
+	                     echo "<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
                       }
                   ?>
                  </select>
@@ -51,7 +51,7 @@ $towns.find();
                    <?php
                        foreach($towns as $town){
 	                        $selected=($this->street->getTown_id() == $town->getId())?"selected=\"selected\"":"";
-	                        echo '<option $selected value=\"{$town->getId()}\">{$town->getDescription()}</option>'; 
+	                        echo "<option $selected value=\"{$town->getId()}\">{$town->getDescription()}</option>"; 
                        }
                     ?>
                 </select>
@@ -64,7 +64,7 @@ $towns.find();
                      <?php
                        foreach($statuses as $status){
 		                   $selected=($this->street->getStatus_code() == $status->getId())?"selected=\"selected\"":"";
-	                        echo '<option $selected value=\"{$status->getId()}\">{$status->getDescription()}</option>'; 
+	                        echo "<option $selected value=\"{$status->getId()}\">{$status->getDescription()}</option>"; 
 
                        }
                     ?>

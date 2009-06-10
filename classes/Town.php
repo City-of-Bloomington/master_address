@@ -30,7 +30,7 @@ class Town
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from towns_master where town_id=?';
+				$sql = 'select * from towns_master where town_id like ?';
 				$result = $zend_db->fetchRow($sql,array($town_id));
 			}
 

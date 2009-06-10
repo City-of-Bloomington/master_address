@@ -113,6 +113,16 @@ class StreetStatus
 	}
 
 	/**
+	 * Alias for getStatus_code()
+	 *
+	 * @return int
+	 */	
+	public function getId()
+	{
+		return $this->getStatus_code();
+	}
+	
+	/**
 	 * @return int
 	 */
 	public function getStatus_code()

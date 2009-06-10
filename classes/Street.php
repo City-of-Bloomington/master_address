@@ -183,7 +183,7 @@ class Street
 			}
 			return $this->town;
 		}
-		return null;
+		return new Town();
 	}
 
 	/**
@@ -197,7 +197,7 @@ class Street
 			}
 			return $this->streetStatus;
 		}
-		return null;
+		return new StreetStatus();
 	}
 
 	/**
@@ -211,7 +211,7 @@ class Street
 			}
 			return $this->direction;
 		}
-		return null;
+		return new Direction();
 	}
 	
 	/**
@@ -225,7 +225,7 @@ class Street
 			}
 			return $this->suffix;
 		}
-		return null;
+		return new Direction();
 	}
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -304,7 +304,7 @@ class Street
 	public function setSuffix($suffix)
 	{
 		$this->post_direction_suffix_code = $suffix->getId();
-		$this->suffix = $suffix
+		$this->suffix = $suffix;
 	}
 	//----------------------------------------------------------------
 	// Custom Functions

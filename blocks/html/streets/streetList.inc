@@ -14,7 +14,16 @@
 		?>
 	    Streets
 	</h1>
-	<ul><?php
+	<table>
+		<tr>
+		    <th></th>
+		    <th>Direction</th>
+		    <th>Post Direction</th>
+		    <th>Town</th>
+		    <th>Status</th>
+		    <th>Notes</th>
+		</tr>
+	<?php
 			foreach ($this->streetList as $street) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
@@ -22,8 +31,17 @@
 					$url->street_id = $street->getStreet_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				echo "<li>$editButton $street</li>";
+				$notes = View::escape($street->getNotes());
+				echo "
+				     <tr>
+                         <td>$editButton</td>
+				         <td>{$street->getDirection()->getDescription()}</td>
+					     <td>{$street->getSuffix()->getDescription()}</td>
+					     <td>{$street->getTown()->getDescription()}</td>
+                         <td>{$street->getStreetStatus()->getDescription()}</td>
+                         <td>$notes</td>
+				    </tr>";
 			}
 		?>
-	</ul>
+	</table>
 </div>

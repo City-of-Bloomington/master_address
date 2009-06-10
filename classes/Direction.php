@@ -29,7 +29,7 @@ class Direction
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_street_direction_master where direction_code=?';
+				$sql = 'select * from mast_street_direction_master where direction_code like ?';
 				$result = $zend_db->fetchRow($sql,array($direction_code));
 			}
 
@@ -104,6 +104,15 @@ class Direction
 		return $this->getDirection_code();
 	}
 
+	/**
+	 * Alias for getDirection_code()
+	 *
+	 * return $string
+	 */
+	public function getId()
+	{
+		return $this->getDirection_code();
+	}
 	/**
 	 * @return string
 	 */
