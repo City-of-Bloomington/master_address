@@ -352,6 +352,7 @@ end;
 /
 
 create table mast_street_names (
+	id number not null primary key,
 	street_id number not null,
 	street_name varchar2(60) not null,
 	street_type_suffix_code varchar2(8),
@@ -361,11 +362,19 @@ create table mast_street_names (
 	notes varchar2(240),
 	street_direction_code char(2),
 	post_direction_suffix_code char(2),
-	primary key (street_id,street_name),
+	unique (street_id,street_name),
 	foreign key (street_id) references mast_street(street_id),
 	foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code),
 	foreign key (street_name_type) references mast_street_name_type_master(street_name_type)
 );
+create sequence street_names_id_s nocache;
+create trigger street_names_trigger
+before insert on mast_street_names
+for each row
+begin
+select street_names_id_s.nextval into :new.id from dual;
+end;
+/
 
 create table mast_street_townships (
 	street_id number not null,
@@ -442,6 +451,6 @@ create table mast_address_sanitation (
 	street_address_id number not null primary key,
 	trash_pickup_day varchar2(20),
 	recycle_week varchar2(20),
-	large_item_pickup_day varchar2(20), 
+	large_item_pickup_day varchar2(20),
 	foreign key(street_address_id) references mast_address(street_address_id)
 );

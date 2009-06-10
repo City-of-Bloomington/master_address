@@ -176,6 +176,7 @@ create table mast_street (
 );
 
 create table mast_street_names (
+	id int unsigned not null primary key auto_increment,
 	street_id int unsigned not null,
 	street_name varchar(60) not null,
 	street_type_suffix_code varchar(8),
@@ -185,7 +186,7 @@ create table mast_street_names (
 	notes varchar(240),
 	street_direction_code char(2),
 	post_direction_suffix_code char(2),
-	primary key (street_id,street_name),
+	unique (street_id,street_name),
 	foreign key (street_id) references mast_street(street_id),
 	foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code),
 	foreign key (street_name_type) references mast_street_name_type_master(street_name_type)
