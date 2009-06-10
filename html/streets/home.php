@@ -16,6 +16,9 @@ $directionList = new DirectionList();
 $directionList->find();
 $template->blocks[] = new Block('streets/directionList.inc',array('directionList'=>$directionList));
 
+$streetNameTypeList = new StreetNameTypeList();
+$streetNameTypeList->find();
+$template->blocks[] = new Block('streets/streetNameTypeList.inc',array('streetNameTypeList'=>$streetNameTypeList));
 
 $suffixList = new SuffixList();
 $suffixList->find();
