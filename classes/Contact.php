@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class AddrAssignmentContact
+class Contact
 {
 	private $contact_id;
 	private $last_name;
@@ -53,7 +53,7 @@ class AddrAssignmentContact
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -200,22 +200,11 @@ class AddrAssignmentContact
 		$this->agency = trim($string);
 	}
 
-	/**
-	 * @param Contact $contact
-	 */
-	public function setContact($contact)
-	{
-		$this->contact_id = $contact->getId();
-		$this->contact = $contact;
-	}
-
-
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	public function __toString(){
-
 	  return $this->getFirst_name().' '.$this->getLast_name();
 	}
 }
