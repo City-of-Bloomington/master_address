@@ -248,9 +248,20 @@ end;
 ;;
 ;; sudtype is not a number
 create table mast_addr_subunit_types_mast (
-	sudtype varchar2(20) not null primary key,
-	description varchar2(40) not null
+	id number not null primary key,
+	sudtype varchar2(20) not null,
+	description varchar2(40) not null,
+	unique (sudtype)
 );
+create sequence subunit_type_id_s nocache;
+create trigger subunit_type_trigger
+before insert on mast_addr_subunit_types_mast
+for each row
+begin
+select subunit_type_id_s.nextval into :new.id from dual;
+end;
+/
+
 
 ;;
 ;;location_type_id not a number

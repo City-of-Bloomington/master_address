@@ -6,6 +6,7 @@ grant select,insert,update,delete on eng.addr_location_relationships to master_a
 grant select,insert,update,delete on eng.addr_location_types_master to master_address;
 grant select,insert,update,delete on eng.governmental_jurisdiction_mast to master_address;
 grant select,insert,update,delete on eng.mast_addr_assignment_contact to master_address;
+grant select,insert,update,delete on eng.mast_addr_subunit_types_mast to master_address;
 grant select,insert,update,delete on eng.mast_address to master_address;
 grant select,insert,update,delete on eng.mast_address_annexation to master_address;
 grant select,insert,update,delete on eng.mast_address_assignment_hist to master_address;
@@ -68,6 +69,7 @@ grant select on eng.street_status_code_seq to master_address;
 grant select on eng.subdivision_id_s to master_address;
 grant select on eng.subdivision_name_id_s to master_address;
 grant select on eng.subunit_id_s to master_address;
+grant select on eng.subunit_type_id_s to master_address;
 grant select on eng.suffix_id_seq to master_address;
 grant select on eng.town_id_s to master_address;
 grant select on eng.township_id_s to master_address;
@@ -84,6 +86,7 @@ create synonym master_address.addr_location_relationships for eng.addr_location_
 create synonym master_address.addr_location_types_master for eng.addr_location_types_master;
 create synonym master_address.governmental_jurisdiction_mast for eng.governmental_jurisdiction_mast;
 create synonym master_address.mast_addr_assignment_contact for eng.mast_addr_assignment_contact;
+create synonym master_address.mast_addr_subunit_types_mast for eng.mast_addr_subunit_types_mast;
 create synonym master_address.mast_address for eng.mast_address;
 create synonym master_address.mast_address_annexation for eng.mast_address_annexation;
 create synonym master_address.mast_address_assignment_hist for eng.mast_address_assignment_hist;
@@ -145,6 +148,7 @@ create synonym master_address.street_status_code_seq for eng.street_status_code_
 create synonym master_address.subdivision_id_s for eng.subdivision_id_s;
 create synonym master_address.subdivision_name_id_s for eng.subdivision_name_id_s;
 create synonym master_address.subunit_id_s for eng.subunit_id_s;
+create synonym master_address.subunit_type_id_s for eng.subunit_type_id_s;
 create synonym master_address.suffix_id_seq for eng.suffix_id_seq;
 create synonym master_address.town_id_s for eng.town_id_s;
 create synonym master_address.township_id_s for eng.township_id_s;

@@ -108,8 +108,10 @@ create table mast_street_type_suffix_master (
 );
 
 create table mast_addr_subunit_types_mast (
-	sudtype varchar(20) not null primary key,
-	description varchar(40) not null
+	id int unsigned not null primary key auto_increment,
+	sudtype varchar(20) not null,
+	description varchar(40) not null,
+	unique (sudtype)
 );
 
 create table addr_location_types_master (
