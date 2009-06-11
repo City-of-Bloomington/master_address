@@ -61,9 +61,11 @@ create table plat_master (
 );
 
 create table voting_precincts (
-	precinct varchar(6) not null primary key,
+	id int unsigned not null primary key auto_increment,
+	precinct varchar(6) not null,
 	precinct_name varchar(20),
-	active char(1) not null
+	active char(1) not null,
+	unique (precinct)
 );
 
 create table governmental_jurisdiction_mast (

@@ -117,10 +117,20 @@ end;
 
 
 create table voting_precincts (
-	precinct varchar2(6) not null primary key,
+	id number not null primary key,
+	precinct varchar2(6) not null,
 	precinct_name varchar2(20),
-	active char(1) not null
+	active char(1) not null,
+	unique (precinct)
 );
+create sequence precinct_id_seq nocache;
+create trigger precinct_id_trigger
+before insert on voting_precincts
+for each row
+begin
+select precinct_id_seq.nextval into :new.id from dual;
+end;
+/
 
 create table governmental_jurisdiction_mast (
 	gov_jur_id number not null primary key,
