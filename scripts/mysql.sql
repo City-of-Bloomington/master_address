@@ -262,3 +262,18 @@ create table mast_address (
 	foreign key (gov_jur_id) references governmental_jurisdiction_mast(gov_jur_id),
 	foreign key (plat_id) references plat_master(plat_id)
 );
+
+create table annexations (
+	id int not null primary key auto_increment,
+	ordinance_number varchar(12) not null,
+	township_id int unsigned,
+	name varchar(40),
+	passed_date date,
+	effective_start_date number,
+	annexation_type number,
+	acres decimal(6,2),
+	square_miles decimal(4,2),
+	estimate_population int unsigned,
+	dwelling_units int unsigned,
+	unique (ordinance_number)
+);

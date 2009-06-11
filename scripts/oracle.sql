@@ -180,7 +180,7 @@ create table buildings (
 	building_type_id number not null,
 	gis_tag varchar2(20),
 	building_name varchar2(40),
-	effective_start_date date not null default to_date('01-JAN-2002','DD-MON-YYYY'),
+	effective_start_date date default to_date('01-JAN-2002','DD-MON-YYYY'),
 	effective_end_date date,
 	status_code number not null default 1,
 	foreign key (building_type_id) references building_types_master(building_type_id),
@@ -511,3 +511,26 @@ create table mast_address_sanitation (
 	large_item_pickup_day varchar2(20),
 	foreign key(street_address_id) references mast_address(street_address_id)
 );
+
+create table annexations (
+	id number not null primary key,
+	ordinance_number varchar2(12) not null,
+	township_id number,
+	name varchar2(40),
+	passed_date date,
+	effective_start_date date,
+	annexation_type number,
+	acres number(6,2),
+	square_miles number(4,2),
+	estimate_population number,
+	dwelling_units number,
+	unique (ordinance_number)
+);
+create sequence annexations_id_seq nocache;
+create trigger annexations_trigger
+before insert on annexations
+for each row
+begin
+select annexations_id_seq.nextval into :new.id from dual;
+end;
+/

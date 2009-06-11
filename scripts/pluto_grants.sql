@@ -166,6 +166,7 @@ grant select,insert,update,delete on gis.precinct_address_location to master_add
 grant select,insert,update,delete on gis.voting_precincts to master_address;
 
 
+grant select on gis.annexations_id_seq to master_address;
 grant select on gis.building_id_s to master_address;
 grant select on gis.building_type_id_s to master_address;
 grant select on gis.buildings_status_code_seq to master_address;
@@ -183,6 +184,7 @@ create synonym master_address.precinct_address_location for gis.precinct_address
 create synonym master_address.voting_precincts for gis.voting_precincts;
 
 
+create synonym master_address.annexations_id_seq for gis.annexations_id_seq;
 create synonym master_address.building_id_s for gis.building_id_s;
 create synonym master_address.building_type_id_s for gis.building_type_id_s;
 create synonym master_address.buildings_status_code_seq for gis.buildings_status_code_seq;
