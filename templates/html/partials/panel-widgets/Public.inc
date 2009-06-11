@@ -10,6 +10,7 @@
 		<li><a href="<?php echo BASE_URL; ?>/streets">Streets</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/addresses">Addresses</a></li>
         <li><a href="<?php echo BASE_URL; ?>/addressChange">Address Change</a></li>
-   		<li><a href="<?php echo BASE_URL; ?>/sanitation">Sanitations</a></li>
+   		<li><a href="<?php echo BASE_URL; ?>/sanitation">Sanitation</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/locations">Locations</a></li>
 	</ul>
 </div>

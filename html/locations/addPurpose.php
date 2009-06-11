@@ -7,16 +7,16 @@
 
 verifyUser('Administrator');
 
-if (isset($_POST['addrLocationPurpose'])) {
-	$addrLocationPurpose = new AddrLocationPurpose();
-	foreach ($_POST['addrLocationPurpose'] as $field=>$value) {
+if (isset($_POST['purpose'])) {
+	$purpose = new Purpose();
+	foreach ($_POST['purpose'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
-		$addrLocationPurpose->$set($value);
+		$purpose->$set($value);
 	}
 
 	try {
-		$addrLocationPurpose->save();
-		header('Location: '.BASE_URL.'/addresses');
+		$purpose->save();
+		header('Location: '.BASE_URL.'/locations');
 		exit();
 	}
 	catch(Exception $e) {
@@ -25,5 +25,5 @@ if (isset($_POST['addrLocationPurpose'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('addresses/addAddrLocationPurposeForm.inc');
+$template->blocks[] = new Block('locations/addPurposeForm.inc');
 echo $template->render();

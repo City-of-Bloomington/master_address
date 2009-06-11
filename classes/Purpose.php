@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class AddrLocationPurpose
+class Purpose
 {
 	private $location_purpose_id;
 	private $description;
@@ -43,7 +43,7 @@ class AddrLocationPurpose
 				}
 			}
 			else {
-				throw new Exception('addr_location_purpose_mast/unknownAddrLocationPurposeMast');
+				throw new Exception('locations/unknownPurpose');
 			}
 		}
 		else {
@@ -51,7 +51,7 @@ class AddrLocationPurpose
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -59,7 +59,9 @@ class AddrLocationPurpose
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->description || !$this->type) {
+			throw new Exception('missingRequiredFields');
+		}
 	}
 
 	/**
@@ -70,8 +72,8 @@ class AddrLocationPurpose
 		$this->validate();
 
 		$data = array();
-		$data['description'] = $this->description ? $this->description : null;
-		$data['type'] = $this->type ? $this->type : null;
+		$data['description'] = $this->description;
+		$data['type'] = $this->type;
 
 		if ($this->location_purpose_id) {
 			$this->update($data);
@@ -151,4 +153,13 @@ class AddrLocationPurpose
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Alias for getLocation_purpose_id()
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->getLocation_purpose_id();
+	}
 }
