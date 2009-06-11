@@ -229,15 +229,21 @@ end;
 /
 
 
-create table mast_street_direction_master (
-	direction_code char(2) not null primary key,
-	description varchar2(12) not null
-);
-
 create table mast_street_type_suffix_master (
-	suffix_code varchar2(8) not null primary key,
-	description varchar2(240) not null
+	id number not null primary key,
+	suffix_code varchar2(8) not null,
+	description varchar2(240) not null,
+	unique (suffix_code)
 );
+create sequence suffix_id_seq nocache;
+create trigger suffix_id_trigger
+before insert on mast_street_type_suffix_master
+for each row
+begin
+select suffix_id_seq.nextval into :new.id from dual;
+end;
+/
+
 
 ;;
 ;; sudtype is not a number

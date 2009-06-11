@@ -100,14 +100,11 @@ create table mast_street_direction_master (
 	unique (direction_code)
 );
 
-create table mast_street_direction_master (
-	direction_code char(2) not null primary key,
-	description varchar(12) not null
-);
-
 create table mast_street_type_suffix_master (
-	suffix_code varchar(8) not null primary key,
-	description varchar(240) not null
+	id int unsigned not null primary key auto_increment,
+	suffix_code varchar(8) not null,
+	description varchar(240) not null,
+	unique (suffix_code)
 );
 
 create table mast_addr_subunit_types_mast (

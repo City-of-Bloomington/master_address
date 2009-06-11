@@ -67,6 +67,7 @@ grant select on eng.street_status_code_seq to master_address;
 grant select on eng.subdivision_id_s to master_address;
 grant select on eng.subdivision_name_id_s to master_address;
 grant select on eng.subunit_id_s to master_address;
+grant select on eng.suffix_id_seq to master_address;
 grant select on eng.town_id_s to master_address;
 grant select on eng.township_id_s to master_address;
 grant select on eng.users_id_seq to master_address;
@@ -142,6 +143,7 @@ create synonym master_address.street_status_code_seq for eng.street_status_code_
 create synonym master_address.subdivision_id_s for eng.subdivision_id_s;
 create synonym master_address.subdivision_name_id_s for eng.subdivision_name_id_s;
 create synonym master_address.subunit_id_s for eng.subunit_id_s;
+create synonym master_address.suffix_id_seq for eng.suffix_id_seq;
 create synonym master_address.town_id_s for eng.town_id_s;
 create synonym master_address.township_id_s for eng.township_id_s;
 create synonym master_address.users_id_seq for eng.users_id_seq;
