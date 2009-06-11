@@ -94,8 +94,10 @@ create table buildings (
 );
 
 create table mast_street_direction_master (
-	direction_code char(2) not null primary key,
-	description varchar(12) not null
+	id int unsigned not null primary key auto_increment,
+	direction_code char(2) not null,
+	description varchar(12) not null,
+	unique (direction_code)
 );
 
 create table mast_street_direction_master (
@@ -114,8 +116,11 @@ create table mast_addr_subunit_types_mast (
 );
 
 create table addr_location_types_master (
-	location_type_id varchar(40) not null primary key,
-	description varchar(240) not null
+	id int unsigned not null primary key auto_increment,
+	location_type_id varchar(40) not null,
+	description varchar(240),
+	unique(id)
+
 );
 
 create table addr_location_purpose_mast (

@@ -187,10 +187,19 @@ end;
 
 
 create table mast_street_direction_master (
-	direction_code char(2) not null primary key,
-	description varchar2(12) not null
+	id number not null primary key,
+	direction_code char(2) not null,
+	description varchar2(12) not null,
+	unique (direction_code)
 );
-
+create sequence direction_id_seq nocache;
+create trigger direction_id_trigger
+before insert on mast_street_direction_master
+for each row
+begin
+select direction_id_seq.nextval into :new.id from dual;
+end;
+/
 
 create table mast_street_status_lookup (
 	status_code number not null primary key,
@@ -240,9 +249,19 @@ create table mast_addr_subunit_types_mast (
 ;;
 ;;location_type_id not a number
 create table addr_location_types_master (
-	location_type_id varchar2(40) not null primary key,
-	description varchar2(240) not null
+	id number not null primary key,
+	location_type_id varchar2(40) not null,
+	description varchar2(240),
+	unique (location_type_id)
 );
+create sequence location_type_id_s nocache;
+create trigger location_type_trigger
+before insert on addr_location_types_master
+for each row
+begin
+select location_type_id_s.nextval into :new.id from dual;
+end;
+/
 
 
 create table addr_location_purpose_mast (
