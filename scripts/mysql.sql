@@ -160,8 +160,10 @@ create table subdivision_names (
 );
 
 create table mast_street_name_type_master (
-	street_name_type varchar(20) not null primary key,
-	description varchar(240) not null
+	id int unsigned not null primary key auto_increment,
+	street_name_type varchar(20) not null,
+	description varchar(240) not null,
+	unique (street_name_type)
 );
 
 create table mast_street (

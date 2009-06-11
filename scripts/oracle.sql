@@ -351,9 +351,20 @@ end;
 /
 
 create table mast_street_name_type_master (
-	street_name_type varchar2(20) not null primary key,
-	description varchar2(240) not null
+	id number not null primary key,
+	street_name_type varchar2(20) not null,
+	description varchar2(240) not null,
+	unique (street_name_type)
 );
+create sequence street_name_type_id_s nocache;
+create trigger street_name_type_trigger
+before insert on mast_street_name_type_master
+for each row
+begin
+select street_name_type_id_s.nextval into :new.id from dual;
+end;
+/
+
 
 create table mast_street (
 	street_id number not null primary key,
