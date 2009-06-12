@@ -198,7 +198,7 @@ end;
 
 create table mast_street_direction_master (
 	id number not null primary key,
-	direction_code char(2) not null,
+	direction_code varchar2(2) not null,
 	description varchar2(12) not null,
 	unique (direction_code)
 );
@@ -389,8 +389,8 @@ end;
 
 create table mast_street (
 	street_id number not null primary key,
-	street_direction_code char(2),
-	post_direction_suffix_code char(2),
+	street_direction_code varchar2(2),
+	post_direction_suffix_code varchar2(2),
 	town_id number,
 	status_code number not null,
 	notes varchar2(240),
@@ -417,8 +417,8 @@ create table mast_street_names (
 	effective_start_date date not null default sysdate,
 	effective_end_date date,
 	notes varchar2(240),
-	street_direction_code char(2),
-	post_direction_suffix_code char(2),
+	street_direction_code varchar2(2),
+	post_direction_suffix_code varchar2(2),
 	unique (street_id,street_name),
 	foreign key (street_id) references mast_street(street_id),
 	foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code),
