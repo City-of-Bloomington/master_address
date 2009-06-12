@@ -36,7 +36,7 @@
 				     <tr>
                          <td>$editButton</td>
 				         <td>{$street->getDirection()->getDescription()}</td>
-					     <td>{$street->getSuffix()->getDescription()}</td>
+					     <td>{$street->getPostDirection()->getDescription()}</td>
 					     <td>{$street->getTown()->getDescription()}</td>
                          <td>{$street->getStreetStatus()->getDescription()}</td>
                          <td>$notes</td>

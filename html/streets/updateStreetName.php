@@ -7,15 +7,16 @@
 
 verifyUser('Administrator');
 
-$street = new Street($_REQUEST['street_id']);
-if (isset($_POST['street'])) {
-	foreach ($_POST['street'] as $field=>$value) {
+$streetName = new StreetName($_REQUEST['id']);
+
+if (isset($_POST['streetName'])) {
+	foreach ($_POST['streetName'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
-		$street->$set($value);
+		$streetName->$set($value);
 	}
 
 	try {
-		$street->save();
+		$streetName->save();
 		header('Location: '.BASE_URL.'/streets');
 		exit();
 	}
@@ -23,9 +24,11 @@ if (isset($_POST['street'])) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
+
+$street = $streetName->getStreet();
 $streetNameList = $street->getStreetNameList();
 
 $template = new Template();
-$template->blocks[] = new Block('streets/updateStreetForm.inc',array('street'=>$street));
+$template->blocks[] = new Block('streets/updateStreetNameForm.inc',array('streetName'=>$streetName));
 $template->blocks[] = new Block('streets/streetNameList.inc',array('streetNameList'=>$streetNameList,'street'=>$street));
 echo $template->render();

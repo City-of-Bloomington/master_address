@@ -17,8 +17,8 @@ class Street
 	private $town;
 	private $streetStatus;
 	private $direction;  // street_direction_code
-	private $suffix; // post_direction_suffix_code
-
+	private $postDirection; // post_direction_suffix_code
+	private $streetNameList;
 
 
 	/**
@@ -217,7 +217,7 @@ class Street
 	/**
 	 * @return Direction
 	 */
-	public function getSuffix()
+	public function getPostDirection()
 	{
 		if ($this->post_direction_suffix_code) {
 			if (!$this->suffix) {
@@ -226,6 +226,21 @@ class Street
 			return $this->suffix;
 		}
 		return new Direction();
+	}
+	/**
+	 * @return StreetNameList
+	 */
+	public function getStreetNameList()
+	{
+		if ($this->street_id) {
+			if (!$this->streetNameList) {
+			    $streetNameList = new StreetNameList(array('street_id'=>$this->street_id));	  
+			  //$streetNameList->find();
+				$this->streetNameList = $streetNameList;
+			}
+			return $this->streetNameList;
+		}
+		return null;
 	}
 	//----------------------------------------------------------------
 	// Generic Setters

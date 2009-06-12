@@ -8,6 +8,11 @@
 ?>
 <div class="interfaceBox">
 	<h1>
+   		<?php
+			if (userHasRole('Administrator')) {
+				echo "<a class=\"add button\" href=\"".BASE_URL."/streets/addSuffix.php\">Add</a>";
+			}
+		?>
 		Suffixes
 	</h1>
 	<ul><?php
@@ -15,7 +20,7 @@
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/streets/updateSuffix.php');
-					$url->suffix_code = $suffix->getCode();
+					$url->id = $suffix->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				echo "<li>$editButton $suffix</li>";

@@ -3,6 +3,7 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @author W. Sibo <sibow@bloomington.in.gov>
  */
 
 $directions = new DirectionList();
@@ -18,14 +19,13 @@ $towns->find();
 	<fieldset><legend>Street Info</legend>
 		<input name="street_id" type="hidden" value="<?php echo $this->street->getStreet_id(); ?>" />
 		<table>
-
 			<tr><td><label for="street-street_direction_code">Direction</label></td>
 				<td><select name="street[street_direction_code]" id="street-street_direction_code">
                 <option></option>
                      <?php
                      foreach($directions as $direction){
-	                     $selected = ($direction->getId() == $this->street->getStreet_direction_code())?"selected=\"selected\"":"";
-	                     echo "<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
+	                     $selected = ($direction->getCode() == $this->street->getStreet_direction_code())?"selected=\"selected\"":"";
+	                     echo "<option $selected value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
                       }
                   ?>
                  </select>
@@ -37,8 +37,8 @@ $towns->find();
                   <option></option>
                      <?php
                      foreach($directions as $direction){
-	                     $selected = ($direction->getId() == $this->street->getPost_direction_suffix_code())?"selected=\"selected\"":"";
-	                     echo "<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
+	                     $selected = ($direction->getCode() == $this->street->getPost_direction_suffix_code())?"selected=\"selected\"":"";
+	                     echo "<option $selected value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
                       }
                   ?>
                  </select>

@@ -8,7 +8,7 @@ class Suffix
 {
 	private $suffix_code;
 	private $description;
-
+    private $id;
 	/**
 	 * Populates the object with data
 	 *
@@ -21,16 +21,21 @@ class Suffix
 	 *
 	 * @param int|array $suffix_code
 	 */
-	public function __construct($suffix_code=null)
+	public function __construct($id=null)
 	{
-		if ($suffix_code) {
-			if (is_array($suffix_code)) {
-				$result = $suffix_code;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_street_type_suffix_master where suffix_code=?';
-				$result = $zend_db->fetchRow($sql,array($suffix_code));
+				if(ctype_digit($id)){
+				  $sql = 'select * from mast_street_type_suffix_master where id=?';
+				}
+				else{
+				  $sql = 'select * from mast_street_type_suffix_master where suffix_code=?';
+				}
+				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
@@ -41,7 +46,7 @@ class Suffix
 				}
 			}
 			else {
-				throw new Exception('mast_street_type_suffix_master/unknownMastStreetTypeSuffixMaster');
+				throw new Exception('streets/unknownStreetTypeSuffix');
 			}
 		}
 		else {
@@ -57,7 +62,7 @@ class Suffix
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->description) {
+		if (!$this->description || !$this->suffix_code) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -72,8 +77,8 @@ class Suffix
 
 		$data = array();
 		$data['description'] = $this->description;
-
-		if ($this->suffix_code) {
+		$data['suffix_code'] = $this->suffix_code;
+		if ($this->id) {
 			$this->update($data);
 		}
 		else {
@@ -84,17 +89,32 @@ class Suffix
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('mast_street_type_suffix_master',$data,"suffix_code='{$this->suffix_code}'");
+		$zend_db->update('mast_street_type_suffix_master',$data,"id={$this->id}");
 	}
 
 	private function insert($data)
 	{
-		throw new Exception('streets/insertSuffixNotSupported');
+	  $zend_db = Database::getConnection();
+		$zend_db->insert('mast_street_type_suffix_master',$data);
+		if (Database::getType()=='oracle') {
+		    $this->id = $zend_db->lastSequenceId('suffix_id_seq');
+		}
+		else {
+		    $this->id = $zend_db->lastInsertId('mast_street_type_suffix_master','id');
+		}
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
+	/**
+	 * return $string
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+	
 	/**
 	 * Alias for getSuffix_code()
 	 *
@@ -133,7 +153,13 @@ class Suffix
 		$this->description = trim($string);
 	}
 
-
+	/**
+	 * @param string $string
+	 */
+	public function setSuffix_code($string)
+	{
+		$this->suffix_code = trim($string);
+	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom

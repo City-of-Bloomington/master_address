@@ -3,6 +3,7 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @author W. Sibo <sibow@bloomington.in.gov>
  */
 $directions = new DirectionList();
 $directions->find();
@@ -21,7 +22,7 @@ $towns->find();
                    <option></option>
                    <?php
                      foreach($directions as $direction){
-	                      echo "<option value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
+	                      echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
 
                       }
                   ?>
@@ -34,7 +35,7 @@ $towns->find();
                    <option></option>
                    <?php
                        foreach($directions as $direction){
-	                        echo "<option value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
+	                        echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
 
                        }
                     ?>

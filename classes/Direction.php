@@ -8,7 +8,7 @@ class Direction
 {
 	private $direction_code;
 	private $description;
-
+    private $id;
 	/**
 	 * Populates the object with data
 	 *
@@ -21,18 +21,22 @@ class Direction
 	 *
 	 * @param int|array $direction_code
 	 */
-	public function __construct($direction_code=null)
+	public function __construct($id=null)
 	{
-		if ($direction_code) {
-			if (is_array($direction_code)) {
-				$result = $direction_code;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_street_direction_master where direction_code like ?';
-				$result = $zend_db->fetchRow($sql,array($direction_code));
+				if(ctype_digit($id)){
+				    $sql = 'select * from mast_street_direction_master where id=?';
+				}
+				else{
+				    $sql = 'select * from mast_street_direction_master where direction_code = ?';
+				}
+				$result = $zend_db->fetchRow($sql,array($id));				
 			}
-
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
@@ -57,7 +61,7 @@ class Direction
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->description) {
+	  if (!$this->description || !$this->direction_code) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -70,9 +74,10 @@ class Direction
 		$this->validate();
 
 		$data = array();
+		$data['direction_code'] = $this->direction_code;
 		$data['description'] = $this->description;
 
-		if ($this->direction_code) {
+		if ($this->id) {
 			$this->update($data);
 		}
 		else {
@@ -83,12 +88,19 @@ class Direction
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('mast_street_direction_master',$data,"direction_code='{$this->direction_code}'");
+		$zend_db->update('mast_street_direction_master',$data,"id='{$this->id}'");
 	}
 
 	private function insert($data)
 	{
-		throw new Exception('streets/directionInsertNotSupported');
+	    $zend_db = Database::getConnection();
+		$zend_db->insert('mast_street_direction_master',$data);
+		if (Database::getType()=='oracle') {
+		    $this->id = $zend_db->lastSequenceId('direction_id_seq');
+		}
+		else {
+		    $this->id = $zend_db->lastInsertId('mast_street_direction_master','id');
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -105,13 +117,11 @@ class Direction
 	}
 
 	/**
-	 * Alias for getDirection_code()
-	 *
 	 * return $string
 	 */
 	public function getId()
 	{
-		return $this->getDirection_code();
+		return $this->id;
 	}
 	/**
 	 * @return string
@@ -132,7 +142,13 @@ class Direction
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
+	/**
+	 * @param string $string
+	 */
+	public function setDirection_code($string)
+	{
+		$this->direction_code = trim($string);
+	}
 	/**
 	 * @param string $string
 	 */
@@ -141,7 +157,13 @@ class Direction
 		$this->description = trim($string);
 	}
 
-
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+	  return ($this->description)?$this->description:"";
+	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom

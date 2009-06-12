@@ -8,7 +8,7 @@
 
 verifyUser('Administrator');
 
-$direction = new Direction($_REQUEST['direction_code']);
+$direction = new Direction($_REQUEST['id']);
 if (isset($_POST['direction'])) {
 	foreach ($_POST['direction'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);

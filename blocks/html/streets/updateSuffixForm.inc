@@ -6,12 +6,15 @@
  * @param Suffix $this->suffix
  */
 ?>
-<h1>Update Suffix</h1>
+<h1>Update Street Type Suffix</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Suffix Info</legend>
-		<input name="suffix_code" type="hidden" value="<?php echo $this->suffix->getCode(); ?>" />
+	<fieldset><legend>Street Type Suffix Info</legend>
+		<input name="id" type="hidden" value="<?php echo $this->suffix->getId(); ?>" />
 		<table>
-
+			<tr><td><label for="suffix-suffix_code" class="required">Suffix</label></td>
+				<td><input name="suffix[suffix_code]" id="suffix-suffix_code" value="<?php echo View::escape($this->suffix->getCode()); ?>" />
+				</td>
+			</tr>
 			<tr><td><label for="suffix-description" class="required">Description</label></td>
 				<td><input name="suffix[description]" id="suffix-description" value="<?php echo View::escape($this->suffix->getDescription()); ?>" />
 				</td>
