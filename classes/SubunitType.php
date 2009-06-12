@@ -6,8 +6,11 @@
  */
 class SubunitType
 {
+	private $id;
 	private $sudtype;
 	private $description;
+
+
 
 	/**
 	 * Populates the object with data
@@ -19,18 +22,23 @@ class SubunitType
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $building_type_id
+	 * @param int|array $id
 	 */
-	public function __construct($sudtype=null)
+	public function __construct($id=null)
 	{
-		if ($sudtype) {
-			if (is_array($sudtype)) {
-				$result = $sudtype;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_addr_subunit_types_mast where sudtype=?';
-				$result = $zend_db->fetchRow($sql,array($sudtype));
+				if (ctype_digit($id)) {
+					$sql = 'select * from mast_addr_subunit_types_mast where id=?';
+				}
+				else {
+					$sql = 'select * from mast_addr_subunit_types_mast where sudtype=?';
+				}
+				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
@@ -41,7 +49,7 @@ class SubunitType
 				}
 			}
 			else {
-				throw new Exception('buildings/unknownSubunitType');
+				throw new Exception('subunits/unknownSubunitType');
 			}
 		}
 		else {
@@ -57,6 +65,9 @@ class SubunitType
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
+		if (!$this->sudtype || !$this->description) {
+			throw new Exception('missingRequiredFields');
+		}
 
 	}
 
@@ -68,48 +79,49 @@ class SubunitType
 		$this->validate();
 
 		$data = array();
-		$data['description'] = $this->description ? $this->description : null;
+		$data['sudtype'] = $this->sudtype;
+		$data['description'] = $this->description;
 
-		if ($this->sudtype) {
+		if ($this->id) {
 			$this->update($data);
 		}
 		else {
-		  // no insert
-		  // $this->insert($data);
+			$this->insert($data);
 		}
 	}
 
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('mast_addr_subunit_types_mast',$data,"sudtype='{$this->sudtype}'");
+		$zend_db->update('mast_addr_subunit_types_mast',$data,"id='{$this->id}'");
 	}
-	/*
+
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('building_types_master',$data);
+		$zend_db->insert('mast_addr_subunit_types_mast',$data);
 		if (Database::getType()=='oracle') {
-			$this->building_type_id = $zend_db->lastSequenceId('building_type_id_s');
+			$this->id = $zend_db->lastSequenceId('subunit_type_id_s');
 		}
-		$this->building_type_id = $zend_db->lastInsertId();
+		else {
+			$this->id = $zend_db->lastInsertId();
+		}
+
 	}
-	*/
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * Alias of getBuilding_type_id()
-	 *
-	 * @return int
+	 * @return number
 	 */
 	public function getId()
 	{
-		return $this->getSudtype();
+		return $this->id;
 	}
 
 	/**
-	 * @return int
+	 * @return string
 	 */
 	public function getSudtype()
 	{
@@ -124,9 +136,18 @@ class SubunitType
 		return $this->description;
 	}
 
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
+
+	/**
+	 * @param string $string
+	 */
+	public function setSudtype($string)
+	{
+		$this->sudtype = trim($string);
+	}
 
 	/**
 	 * @param string $string
@@ -136,12 +157,17 @@ class SubunitType
 		$this->description = trim($string);
 	}
 
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	public function __toString()
+	/**
+	 * Alias of getSudtype()
+	 * @return string
+	 */
+	public function getType()
 	{
-		return $this->getDescription();
+		return $this->getSudtype();
 	}
 }

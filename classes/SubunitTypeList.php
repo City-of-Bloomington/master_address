@@ -1,12 +1,12 @@
 <?php
 /**
- * A collection class for Building objects
+ * A collection class for SubunitType objects
  *
  * This class creates a zend_db select statement.
  * ZendDbResultIterator handles iterating and paginating those results.
  * As the results are iterated over, ZendDbResultIterator will pass each desired
  * row back to this class's loadResult() which will be responsible for hydrating
- * each Building object
+ * each SubunitType object
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
@@ -31,6 +31,7 @@ class SubunitTypeList extends ZendDbResultIterator
 			$this->find($fields);
 		}
 	}
+
 	/**
 	 * Populates the collection
 	 *
@@ -39,52 +40,21 @@ class SubunitTypeList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function search($fields=null,$order='sudtype',$limit=null,$groupBy=null)
-	{
-		$this->select->from('mast_addr_subunit_types_mast');
-		
-		// Finding on fields from the buildings table is handled here
-		if (count($fields)) {
-		   foreach ($fields as $key=>$value) {
-			  if($key == 'description')
-				$this->select->where("$key like ?",$value);
-			  else
-				$this->select->where("$key =?",$value);
-			}
-		}
-
-		// Finding on fields from other tables requires joining those tables.
-		// You can handle fields from other tables by adding the joins here
-		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the buildings table.
-
-		$this->select->order($order);
-		if ($limit) {
-			$this->select->limit($limit);
-		}
-		if ($groupBy) {
-			$this->select->group($groupBy);
-		}
-		$this->populateList();
-	}
 	public function find($fields=null,$order='sudtype',$limit=null,$groupBy=null)
 	{
 		$this->select->from('mast_addr_subunit_types_mast');
-		
-		// Finding on fields from the buildings table is handled here
+
+		// Finding on fields from the mast_addr_subunit_types_mast table is handled here
 		if (count($fields)) {
-		   foreach ($fields as $key=>$value) {
-			  if($key == 'description')
-				$this->select->where("$key like ?",$value);
-			  else
-				$this->select->where("$key =?",$value);
+			foreach ($fields as $key=>$value) {
+				$this->select->where("$key=?",$value);
 			}
 		}
 
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the buildings table.
+		// above foreach only handles fields from the mast_addr_subunit_types_mast table.
 
 		$this->select->order($order);
 		if ($limit) {
@@ -95,14 +65,15 @@ class SubunitTypeList extends ZendDbResultIterator
 		}
 		$this->populateList();
 	}
+
 	/**
-	 * Hydrates all the Building objects from a database result set
+	 * Hydrates all the SubunitType objects from a database result set
 	 *
 	 * This is a callback function, called from ZendDbResultIterator.  It is
 	 * called once per row of the result.
 	 *
 	 * @param int $key The index of the result row to load
-	 * @return Building
+	 * @return SubunitType
 	 */
 	protected function loadResult($key)
 	{
