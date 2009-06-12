@@ -4,19 +4,18 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
 verifyUser('Administrator');
 
-if (isset($_POST['addrLocationType'])) {
-	$addrLocationType = new AddrLocationType();
-	foreach ($_POST['addrLocationType'] as $field=>$value) {
+if (isset($_POST['locationType'])) {
+	$locationType = new LocationType();
+	foreach ($_POST['locationType'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
-		$addrLocationType->$set($value);
+		$locationType->$set($value);
 	}
 
 	try {
-		$addrLocationType->save();
-		header('Location: '.BASE_URL.'/addresses');
+		$locationType->save();
+		header('Location: '.BASE_URL.'/locations');
 		exit();
 	}
 	catch(Exception $e) {
@@ -25,5 +24,5 @@ if (isset($_POST['addrLocationType'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('addresses/addAddrLocationTypeForm.inc');
+$template->blocks[] = new Block('locations/addLocationTypeForm.inc');
 echo $template->render();
