@@ -6,6 +6,7 @@
  */
 class Precinct
 {
+	private $id;
 	private $precinct;
 	private $precinct_name;
 	private $active;
@@ -20,18 +21,23 @@ class Precinct
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $precinct
+	 * @param int|array $id
 	 */
-	public function __construct($code=null)
+	public function __construct($id=null)
 	{
-		if ($code) {
-			if (is_array($code)) {
-				$result = $code;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from voting_precincts where precinct=?';
-				$result = $zend_db->fetchRow($sql,array($code));
+				if (ctype_digit($id)) {
+					$sql = 'select * from voting_precincts where id=?';
+				}
+				else {
+					$sql = 'select * from voting_precincts where precinct=?';
+				}
+				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
@@ -72,12 +78,11 @@ class Precinct
 		$this->validate();
 
 		$data = array();
+		$data['precinct'] = $this->precinct;
 		$data['precinct_name'] = $this->precinct_name;
 		$data['active'] = $this->active;
 
-		$zend_db = Database::getConnection();
-		$count = $zend_db->fetchOne('select count(*) from voting_precincts where precinct=?',$this->precinct);
-		if ($count) {
+		if ($this->id) {
 			$this->update($data);
 		}
 		else {
@@ -88,36 +93,33 @@ class Precinct
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('voting_precincts',$data,"precinct='{$this->precinct}'");
+		$zend_db->update('voting_precincts',$data,"id='{$this->id}'");
 	}
 
 	private function insert($data)
 	{
-		throw new Exception('precincts/insertNotSupported');
+		$zend_db = Database::getConnection();
+		$zend_db->insert('voting_precincts',$data);
+		$this->id = $zend_db->lastInsertId('voting_precincts','id');
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
+	 * @return number
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getPrecinct()
 	{
 		return $this->precinct;
-	}
-
-	/**
-	 * Alias for getPrecinct()
-	 *
-	 * Becuase of the naming confusion for precinct.precinct, we're
-	 * going to be using the word "code".  This will be an alias
-	 *
-	 * @return string
-	 */
-	public function getCode()
-	{
-		return $this->getPrecinct();
 	}
 
 	/**
@@ -133,12 +135,21 @@ class Precinct
 	 */
 	public function getActive()
 	{
-		return $this->active;
+		return $this->active=='Y' ? 'Y' : 'N';
 	}
+
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
+
+	/**
+	 * @param string $string
+	 */
+	public function setPrecinct($string)
+	{
+		$this->precinct = trim($string);
+	}
 
 	/**
 	 * @param string $string
@@ -161,6 +172,19 @@ class Precinct
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Alias for getPrecinct()
+	 *
+	 * Becuase of the naming confusion for precinct.precinct, we're
+	 * going to be using the word "code".  This will be an alias
+	 *
+	 * @return string
+	 */
+	public function getCode()
+	{
+		return $this->getPrecinct();
+	}
+
 	/**
 	 * Alias for getPrecinct_name()
 	 *

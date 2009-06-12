@@ -7,7 +7,14 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>Precincts</h1>
+	<h1>
+		<?php
+			if (userHasRole('Administrator')) {
+				echo "<a class=\"add button\" href=\"".BASE_URL."/precincts/addPrecinct.php\">Add</a>";
+			}
+		?>
+		Precincts
+	</h1>
 	<table>
 		<tr><th></th>
 			<th>Code</th>
@@ -19,16 +26,17 @@
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/precincts/updatePrecinct.php');
-					$url->code = $precinct->getCode();
+					$url->precinct_id = $precinct->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				$code = View::escape($precinct->getCode());
 				$name = View::escape($precinct->getName());
+				$active = View::escape($precinct->getActive());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$code</td>
 					<td>$name</td>
-					<td>{$precinct->getActive()}</td>
+					<td>$active</td>
 				</tr>
 				";
 			}

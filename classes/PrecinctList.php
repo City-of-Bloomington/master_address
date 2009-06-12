@@ -10,7 +10,8 @@
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
- *
+ */
+/**
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
@@ -43,7 +44,6 @@ class PrecinctList extends ZendDbResultIterator
 	{
 		$this->select->from('voting_precincts');
 
-
 		// precincts.code is an alias for precincts.precinct.  We're using the word, "code"
 		// to avoid confusion.  If they ask for a precinct.code, we need to
 		// translate that into a precinct.precinct.
@@ -75,13 +75,13 @@ class PrecinctList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Hydrates all the VotingPrecinct objects from a database result set
+	 * Hydrates all the Precinct objects from a database result set
 	 *
 	 * This is a callback function, called from ZendDbResultIterator.  It is
 	 * called once per row of the result.
 	 *
 	 * @param int $key The index of the result row to load
-	 * @return VotingPrecinct
+	 * @return Precinct
 	 */
 	protected function loadResult($key)
 	{
