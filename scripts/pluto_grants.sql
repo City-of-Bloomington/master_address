@@ -29,10 +29,6 @@ grant select,insert,update,delete on eng.mast_street_status_lookup to master_add
 grant select,insert,update,delete on eng.mast_street_subdivision to master_address;
 grant select,insert,update,delete on eng.mast_street_townships to master_address;
 grant select,insert,update,delete on eng.mast_street_type_suffix_master to master_address;
-grant select,insert,update,delete on eng.newmaststreet to master_address;
-grant select,insert,update,delete on eng.newmaststreetalias to master_address;
-grant select,insert,update,delete on eng.newmaststreethistory to master_address;
-grant select,insert,update,delete on eng.newmaststreetnames to master_address;
 grant select,insert,update,delete on eng.plat_master to master_address;
 grant select,insert,update,delete on eng.quarter_section_master to master_address;
 grant select,insert,update,delete on eng.state_road_master to master_address;
@@ -110,10 +106,6 @@ create synonym master_address.mast_street_status_lookup for eng.mast_street_stat
 create synonym master_address.mast_street_subdivision for eng.mast_street_subdivision;
 create synonym master_address.mast_street_townships for eng.mast_street_townships;
 create synonym master_address.mast_street_type_suffix_master for eng.mast_street_type_suffix_master;
-create synonym master_address.newmaststreet for eng.newmaststreet;
-create synonym master_address.newmaststreetalias for eng.newmaststreetalias;
-create synonym master_address.newmaststreethistory for eng.newmaststreethistory;
-create synonym master_address.newmaststreetnames for eng.newmaststreetnames;
 create synonym master_address.plat_master for eng.plat_master;
 create synonym master_address.quarter_section_master for eng.quarter_section_master;
 create synonym master_address.subdivision_master for eng.subdivision_master;
