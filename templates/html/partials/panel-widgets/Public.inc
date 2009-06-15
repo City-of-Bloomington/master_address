@@ -13,5 +13,6 @@
    		<li><a href="<?php echo BASE_URL; ?>/sanitation">Sanitation</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/locations">Locations</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/subunits">Subunits</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/annexations">Annexations</a></li>
 	</ul>
 </div>
