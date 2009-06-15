@@ -24,7 +24,7 @@ $types->find();
                        <?php
                          foreach($directions as $direction){
 	                         $selected = ($direction->getCode() == $this->streetName->getStreet_direction_code())?"selected=\"selected\"":"";
-	                         echo "<option $selected value=\"{$direction->getId()}\">{$direction->getDescription()}</option>"; 
+	                         echo "<option $selected value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
                          }
                        ?>
                      </select>
@@ -66,8 +66,8 @@ $types->find();
                        <option></option>
                        <?php
                          foreach($types as $type){
-	                         $selected = ($type->getId() == $this->streetName->getStreet_name_type())?"selected=\"selected\"":"";
-	                         echo "<option $selected value=\"{$type->getId()}\">$type</option>"; 
+	                         $selected = ($type->getType() == $this->streetName->getStreet_name_type())?"selected=\"selected\"":"";
+	                         echo "<option $selected value=\"{$type->getType()}\">$type</option>"; 
                          }
                        ?>
                      </select>

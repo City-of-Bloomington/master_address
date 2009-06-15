@@ -7,8 +7,8 @@
 
 verifyUser('Administrator');
 
-$streetNameType = new StreetNameType($_REQUEST['id']);
 if (isset($_POST['streetNameType'])) {
+	$streetNameType = new StreetNameType();
 	foreach ($_POST['streetNameType'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
 		$streetNameType->$set($value);
@@ -19,11 +19,11 @@ if (isset($_POST['streetNameType'])) {
 		header('Location: '.BASE_URL.'/streets');
 		exit();
 	}
-	catch (Exception $e) {
+	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
 
 $template = new Template();
-$template->blocks[] = new Block('streets/updateStreetNameTypeForm.inc',array('streetNameType'=>$streetNameType));
+$template->blocks[] = new Block('streets/addStreetNameTypeForm.inc');
 echo $template->render();

@@ -53,7 +53,7 @@ $types->find();
                     <option></option>
                 <?php
                     foreach($types as $type){
-	                    echo "<option value=\"{$type->getId()}\">$type</option>";
+	                    echo "<option value=\"{$type->getType()}\">$type</option>";
 	                }
                  ?>
                 </select>
