@@ -293,17 +293,7 @@ class Annexation
 	public function setPassed_date($date)
 	{
 		if ($date) {
-			if (false !== strpos($date,'-')) {
-				try {
-					$this->passed_date = new Zend_Date($date,Zend_Date::ISO_8601);
-				}
-				catch (Exception $e) {
-					$this->passed_date = new Zend_Date($date);
-				}
-			}
-			else {
-				$this->passed_date = new Zend_Date($date);
-			}
+			$this->passed_date = Date::toZend_Date($date);
 		}
 		else {
 			$this->passed_date = null;
@@ -324,17 +314,7 @@ class Annexation
 	public function setEffective_start_date($date)
 	{
 		if ($date) {
-			if (false !== strpos($date,'-')) {
-				try {
-					$this->effective_start_date = new Zend_Date($date,Zend_Date::ISO_8601);
-				}
-				catch (Exception $e) {
-					$this->effective_start_date = new Zend_Date($date);
-				}
-			}
-			else {
-				$this->effective_start_date = new Zend_Date($date);
-			}
+			$this->effective_start_date = Date::toZend_Date($date);
 		}
 		else {
 			$this->effective_start_date = null;
