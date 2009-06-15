@@ -11,7 +11,7 @@
 		<table>
 
 			<tr><td><label for="purpose-description" class="required">Description</label></td>
-				<td><input name="addrLocationPurpose[description]" id="purpose-description" />
+				<td><input name="purpose[description]" id="purpose-description" />
 				</td>
 			</tr>
 

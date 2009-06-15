@@ -5,9 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
-<h1>Add LocationType</h1>
+<h1>Add Location Type</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>LocationType Info</legend>
+	<fieldset><legend>Location Type Info</legend>
 		<table>
 
 			<tr><td><label for="locationType-location_type_id" class="required">Type</label></td>
