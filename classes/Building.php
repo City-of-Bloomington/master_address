@@ -44,6 +44,9 @@ class Building
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
+						if (preg_match('/date/',$field) && $value!='0000-00-00') {
+							$value = new Date($value);
+						}
 						$this->$field = $value;
 					}
 				}
@@ -57,7 +60,7 @@ class Building
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -65,10 +68,10 @@ class Building
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->building_name) {
+		if (!$this->building_type_id) {
 			throw new Exception('missingRequriedFields');
 		}
-	  
+
 	}
 
 	/**
@@ -79,11 +82,11 @@ class Building
 		$this->validate();
 
 		$data = array();
-		$data['building_type_id'] = $this->building_type_id ? $this->building_type_id : null;
+		$data['building_type_id'] = $this->building_type_id;
 		$data['gis_tag'] = $this->gis_tag ? $this->gis_tag : null;
 		$data['building_name'] = $this->building_name ? $this->building_name : null;
-		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date : null;
-		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date : null;
+		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-m-d') : null;
+		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date->format('Y-m-d') : null;
 		$data['status_code'] = $this->status_code ? $this->status_code : null;
 
 		if ($this->building_id) {
@@ -105,10 +108,10 @@ class Building
 		$zend_db = Database::getConnection();
 		$zend_db->insert('buildings',$data);
 		if (Database::getType()=='oracle') {
-		  $this->building_id = $zend_db->lastSequenceId('building_id_s');
+			$this->building_id = $zend_db->lastSequenceId('building_id_s');
 		}
 		else {
-		  $this->building_id = $zend_db->lastInsertId('buildings','building_id');
+			$this->building_id = $zend_db->lastInsertId('buildings','building_id');
 		}
 	}
 
@@ -150,19 +153,17 @@ class Building
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
 	 */
 	public function getEffective_start_date($format=null)
 	{
 		if ($format && $this->effective_start_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effective_start_date);
-			}
-			else {
-				return date($format,$this->effective_start_date);
-			}
+			return $this->effective_start_date->format($format);
 		}
 		else {
 			return $this->effective_start_date;
@@ -171,19 +172,17 @@ class Building
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
 	 */
 	public function getEffective_end_date($format=null)
 	{
 		if ($format && $this->effective_end_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effective_end_date);
-			}
-			else {
-				return date($format,$this->effective_end_date);
-			}
+			return $this->effective_end_date->format($format);
 		}
 		else {
 			return $this->effective_end_date;
@@ -224,7 +223,7 @@ class Building
 		}
 		return null;
 	}
-	
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -256,48 +255,40 @@ class Building
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_start_date($date)
 	{
-		if (is_array($date)) {
-			$this->effective_start_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->effective_start_date = $date;
+		if ($date) {
+			$this->effective_start_date = new Date($date);
 		}
 		else {
-			$this->effective_start_date = strtotime($date);
+			$this->effective_end_date = null;
 		}
 	}
 
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_end_date($date)
 	{
-		if (is_array($date)) {
-			$this->effective_end_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->effective_end_date = $date;
+		if ($date) {
+			$this->effective_end_date = new Date($date);
 		}
 		else {
-			$this->effective_end_date = strtotime($date);
+			$this->effective_end_date = null;
 		}
 	}
 
@@ -333,13 +324,14 @@ class Building
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-	  if($this->building_name)
-		return $this->building_name;
-	  elseif($this->gis_tag)
-		return "GIS Tag:".$this->gis_tag;
-	  else
-		return "ID: ".$this->building_id;
+		if($this->building_name) {
+			return $this->building_name;
+		}
+		elseif($this->gis_tag) {
+			return "GIS Tag:".$this->gis_tag;
+		}
+		else {
+			return "ID: ".$this->building_id;
+		}
 	}
-
-	
 }
