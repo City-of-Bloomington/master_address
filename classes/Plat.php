@@ -48,7 +48,7 @@ class Plat
 						// Convert the date fields into timestamps
 						if (($field=='effective_start_date' || $field=='effective_end_date')
 							&& $value != '0000-00-00') {
-							$value = strtotime($value);
+							$value = new Date($value);
 						}
 
 						$this->$field = $value;
@@ -87,8 +87,8 @@ class Plat
 		$data = array();
 		$data['name'] = $this->name;
 		$data['township_id'] = $this->township_id;
-		$data['effective_start_date'] = $this->effective_start_date ? date('Y-m-d',$this->effective_start_date) : null;
-		$data['effective_end_date'] = $this->effective_end_date ? date('Y-m-d',$this->effective_end_date) : null;
+		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-m-d') : null;
+		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date->format('Y-m-d') : null;
 		$data['plat_type'] = $this->plat_type;
 		$data['plat_cabinet'] = $this->plat_cabinet ? $this->plat_cabinet : null;
 		$data['envelope'] = $this->envelope ? $this->envelope : null;
@@ -122,7 +122,7 @@ class Plat
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-	
+
 	/**
 	 * @return number
 	 */
@@ -149,19 +149,18 @@ class Plat
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
+	 * @return string|DateTime
 	 */
 	public function getEffective_start_date($format=null)
 	{
 		if ($format && $this->effective_start_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effective_start_date);
-			}
-			else {
-				return date($format,$this->effective_start_date);
-			}
+			return $this->effective_start_date->format($format);
 		}
 		else {
 			return $this->effective_start_date;
@@ -170,19 +169,18 @@ class Plat
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
+	 * @return string|DateTime
 	 */
 	public function getEffective_end_date($format=null)
 	{
 		if ($format && $this->effective_end_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effective_end_date);
-			}
-			else {
-				return date($format,$this->effective_end_date);
-			}
+			return $this->effective_end_date->format($format);
 		}
 		else {
 			return $this->effective_end_date;
@@ -258,48 +256,40 @@ class Plat
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_start_date($date)
 	{
-		if (is_array($date)) {
-			$this->effective_start_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->effective_start_date = $date;
+		if ($date) {
+			$this->effective_start_date = new Date($date);
 		}
 		else {
-			$this->effective_start_date = strtotime($date);
+			$this->effective_start_date = null;
 		}
 	}
 
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_end_date($date)
 	{
-		if (is_array($date)) {
-			$this->effective_end_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->effective_end_date = $date;
+		if ($date) {
+			$this->effective_end_date = new Date($date);
 		}
 		else {
-			$this->effective_end_date = strtotime($date);
+			$this->effective_end_date = null;
 		}
 	}
 

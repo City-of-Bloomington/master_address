@@ -31,10 +31,12 @@
 
 			<tr><td><label for="plat-effective_start_date">Effective Start Date</label></td>
 				<td><input name="plat[effective_start_date]" id="plat-effective_start_date" size="11" maxlength="10" />
+					(m/d/Y)
 				</td>
 			</tr>
 			<tr><td><label for="plat-effective_end_date-mon">Effective End Date</label></td>
 				<td><input name="plat[effective_end_date]" id="plat-effective_end_date" size="11" maxlength="10" />
+					(m/d/Y)
 				</td>
 			</tr>
 			<tr><td><label for="plat-plat_type" class="required">Type</label></td>

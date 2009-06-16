@@ -37,6 +37,7 @@
 							id="plat-effective_start_date"
 							size="11" maxlength="10"
 							value="<?php echo $this->plat->getEffective_start_date('n/j/Y'); ?>" />
+					(m/d/Y)
 				</td>
 			</tr>
 			<tr><td><label for="plat-effective_end_date">Effective End Date</label></td>
@@ -44,6 +45,7 @@
 							id="plat-effective_end_date"
 							size="11" maxlength="10"
 							value="<?php echo $this->plat->getEffective_end_date('n/j/Y'); ?>" />
+					(m/d/Y)
 				</td>
 			</tr>
 			<tr><td><label for="plat-plat_type" class="required">Type</label></td>
