@@ -44,8 +44,8 @@
                          <td>{$streetName->getSuffix()}</td>
                          <td>{$streetName->getPostDirection()->getDescription()}</td>
 				         <td>{$streetName->getStreetNameType()}</td>
-                         <td>{$streetName->getEffective_start_date()}</td>
-                         <td>{$streetName->getEffective_end_date()}</td>
+                         <td>{$streetName->getEffective_start_date('n/j/Y')}</td>
+                         <td>{$streetName->getEffective_end_date('n/j/Y')}</td>
                          <td>$notes</td>
 				     </tr>";
 			}

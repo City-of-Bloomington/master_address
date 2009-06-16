@@ -53,6 +53,9 @@ class StreetName
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
+					    if (preg_match('/date/',$field) && $value!='0000-00-00') {
+							$value = new Date($value);
+						}
 						$this->$field = $value;
 					}
 				}
@@ -89,8 +92,8 @@ class StreetName
 		$data['street_name'] = $this->street_name ? $this->street_name : null;
 		$data['street_type_suffix_code'] = $this->street_type_suffix_code ? $this->street_type_suffix_code : null;
 		$data['street_name_type'] = $this->street_name_type ? $this->street_name_type : null;
-		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date : null;
-		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date : null;
+		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-m-d') : null;
+		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date->format('Y-m-d') : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 		$data['street_direction_code'] = $this->street_direction_code ? $this->street_direction_code : null;
 		$data['post_direction_suffix_code'] = $this->post_direction_suffix_code ? $this->post_direction_suffix_code : null;
@@ -166,12 +169,7 @@ class StreetName
 	public function getEffective_start_date($format=null)
 	{
 		if ($format && $this->effective_start_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effective_start_date);
-			}
-			else {
-				return date($format,$this->effective_start_date);
-			}
+		    return $this->effective_start_date->format($format);
 		}
 		else {
 			return $this->effective_start_date;
@@ -187,12 +185,7 @@ class StreetName
 	public function getEffective_end_date($format=null)
 	{
 		if ($format && $this->effective_end_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->effective_end_date);
-			}
-			else {
-				return date($format,$this->effective_end_date);
-			}
+		  return $this->effective_end_date->format($format);
 		}
 		else {
 			return $this->effective_end_date;
@@ -346,14 +339,11 @@ class StreetName
 	 */
 	public function setEffective_start_date($date)
 	{
-		if (is_array($date)) {
-			$this->effective_start_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->effective_start_date = $date;
+		if ($date) {
+			$this->effective_start_date = new Date($date);
 		}
 		else {
-			$this->effective_start_date = strtotime($date);
+			$this->effective_start_date = null;
 		}
 	}
 
@@ -370,14 +360,11 @@ class StreetName
 	 */
 	public function setEffective_end_date($date)
 	{
-		if (is_array($date)) {
-			$this->effective_end_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->effective_end_date = $date;
+		if ($date) {
+			$this->effective_end_date = new Date($date);
 		}
 		else {
-			$this->effective_end_date = strtotime($date);
+			$this->effective_end_date = null;
 		}
 	}
 

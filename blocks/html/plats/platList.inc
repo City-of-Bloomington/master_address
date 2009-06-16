@@ -43,8 +43,8 @@ if (!count($this->platList)) {
 				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$township</td>
-					<td>{$plat->getEffective_start_date('Y-m-d')}</td>
-					<td>{$plat->getEffective_end_date('Y-m-d')}</td>
+					<td>{$plat->getEffective_start_date('n/j/Y')}</td>
+					<td>{$plat->getEffective_end_date('n/j/Y')}</td>
 					<td>{$plat->getType()}</td>
 					<td>$cabinet</td>
 					<td>$envelope</td>

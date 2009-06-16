@@ -74,11 +74,11 @@ $types->find();
 				</td>
 			</tr>
 			<tr><td><label for="streetName-effective_start_date">Effective Start Date</label></td>
-				<td><input name="streetName[effective_start_date]" id="streetName-effective_start_date" value="<?php echo $this->streetName->getEffective_start_date(); ?>" />
+				<td><input name="streetName[effective_start_date]" id="streetName-effective_start_date" size="10" maxlenght="10" value="<?php echo $this->streetName->getEffective_start_date('n/j/Y'); ?>" />
 				</td>
 			</tr>
 			<tr><td><label for="streetName-effective_end_date">Effective End Date</label></td>
-				<td><input name="streetName[effective_end_date]" id="streetName-effective_end_date" value="<?php echo $this->streetName->getEffective_end_date(); ?>" />
+				<td><input name="streetName[effective_end_date]" id="streetName-effective_end_date" size="10" maxlength="10" value="<?php echo $this->streetName->getEffective_end_date('n/j/Y'); ?>" />
 				</td>
 			</tr>
 					 
