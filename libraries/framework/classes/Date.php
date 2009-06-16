@@ -1,39 +1,41 @@
 <?php
 /**
- * Helper functions to convert between database types and PHP types
- *
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Date
+class Date extends DateTime
 {
 	/**
-	 * Takes stuff in the form Zend_Date understands and returns a Zend_Date
+	 * Handles array dates passed in the constructor.
 	 *
-	 * Accepted formats are documented here:
-	 * http://framework.zend.com/manual/en/zend.date.html
-	 * http://framework.zend.com/manual/en/zend.date.creation.html
+	 * Wrapper for DateTime constructor.  If arrays are passed, they will be
+	 * handled here.  Anything else will be passed to the DateTime constructor.
+	 * Arrays should be in the form of PHP's getdate() array
 	 *
-	 * @return Zend_Date
+	 * @param array $date
 	 */
-	public static function toZend_Date($stuff)
+	public function __construct($date=null)
 	{
-		// Zend_Date's default parser differs from the ISO_8601 format
-		// Zend_Date's default is YYYY-DD-MM and ISO_8601 is YYYY-MM-DD
-		// If we're using dashes, then we need to explicitly tell Zend_Date
-		// we're using ISO_8601
-		if (false !== strpos($stuff,'-')) {
-			try {
-				$date = new Zend_Date($stuff,Zend_Date::ISO_8601);
-			}
-			catch (Exception $e) {
-				$date = new Zend_Date($stuff);
+		if (is_array($date)) {
+			if ($date['year'] && $date['mon'] && $date['mday']) {
+				$dateString = "$date[year]-$date[mon]-$date[mday]";
+
+				if (isset($date['hours']) || isset($date['minutes']) || isset($date['seconds'])) {
+					$time = (isset($date['hours']) && $date['hours']) ? "$date[hours]:" : '00:';
+					$time.= (isset($date['minutes']) && $date['minutes']) ? "$date[minutes]:" : '00:';
+					$time.= (isset($date['seconds']) && $date['seconds']) ? $date['seconds'] : '00';
+
+					$dateString.= " $time";
+				}
+				$date = $dateString;
 			}
 		}
-		else {
-			$date = new Zend_Date($stuff);
-		}
-		return $date;
+		parent::__construct($date);
+	}
+
+	public function __toString()
+	{
+		return $this->format('n/j/Y');
 	}
 }

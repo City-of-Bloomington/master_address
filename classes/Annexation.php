@@ -56,7 +56,7 @@ class Annexation
 				foreach ($result as $field=>$value) {
 					if ($value) {
 						if (preg_match('/date/',$field) && $value!='0000-00-00') {
-							$value = new Zend_Date($value,Zend_Date::ISO_8601);
+							$value = new Date($value);
 						}
 						$this->$field = $value;
 					}
@@ -95,8 +95,8 @@ class Annexation
 		$data['ordinance_number'] = $this->ordinance_number;
 		$data['township_id'] = $this->township_id ? $this->township_id : null;
 		$data['name'] = $this->name ? $this->name : null;
-		$data['passed_date'] = $this->passed_date ? $this->passed_date->get('YYYY-MM-dd 00:00:00') : null;
-		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->get('YYYY-MM-dd 00:00:00') : null;
+		$data['passed_date'] = $this->passed_date ? $this->passed_date->format('Y-m-d') : null;
+		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-m-d') : null;
 		$data['annexation_type'] = $this->annexation_type ? $this->annexation_type : null;
 		$data['acres'] = $this->acres ? $this->acres : null;
 		$data['square_miles'] = $this->square_miles ? $this->square_miles : null;
@@ -166,14 +166,18 @@ class Annexation
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
+	 * @return string|DateTime
 	 */
 	public function getPassed_date($format=null)
 	{
 		if ($format && $this->passed_date) {
-			return $this->passed_date->get($format);
+			return $this->passed_date->format($format);
 		}
 		else {
 			return $this->passed_date;
@@ -183,13 +187,16 @@ class Annexation
 	/**
 	 * Returns the date/time in the desired format
 	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
+	 *
 	 * @param string $format
-	 * @return Zend_Date|string
 	 */
 	public function getEffective_start_date($format=null)
 	{
 		if ($format && $this->effective_start_date) {
-			return $this->effective_start_date->get($format);
+			return $this->effective_start_date->format($format);
 		}
 		else {
 			return $this->effective_start_date;
@@ -282,18 +289,17 @@ class Annexation
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as Zend_Date internally.
-	 * Zend_Date accepts many formats
-	 * Accepted formats are documented here:
-	 * http://framework.zend.com/manual/en/zend.date.html
-	 * http://framework.zend.com/manual/en/zend.date.creation.html
+	 * Date arrays should match arrays produced by getdate()
 	 *
-	 * @param date $date
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setPassed_date($date)
 	{
 		if ($date) {
-			$this->passed_date = Date::toZend_Date($date);
+			$this->passed_date = new Date($date);
 		}
 		else {
 			$this->passed_date = null;
@@ -303,18 +309,17 @@ class Annexation
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as Zend_Date internally.
-	 * Zend_Date accepts many formats
-	 * Accepted formats are documented here:
-	 * http://framework.zend.com/manual/en/zend.date.html
-	 * http://framework.zend.com/manual/en/zend.date.creation.html
+	 * Date arrays should match arrays produced by getdate()
 	 *
-	 * @param date $date
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_start_date($date)
 	{
 		if ($date) {
-			$this->effective_start_date = Date::toZend_Date($date);
+			$this->effective_start_date = new Date($date);
 		}
 		else {
 			$this->effective_start_date = null;

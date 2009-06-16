@@ -37,10 +37,12 @@
 
 			<tr><td><label for="annexation-passed_date">Passed Date</label></td>
 				<td><input name="annexation[passed_date]" id="annexation-passed_date" size="10" maxlength="10" />
+					(m/d/Y)
 				</td>
 			</tr>
 			<tr><td><label for="annexation-effective_start_date">Effective Start Date</label></td>
 				<td><input name="annexation[effective_start_date]" id="annexation-effective_start_date" size="10" maxlength="10" />
+					(m/d/Y)
 				</td>
 			</tr>
 

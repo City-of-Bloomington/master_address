@@ -44,14 +44,16 @@
 				<td><input name="annexation[passed_date]"
 							id="annexation-passed_date"
 							size="10" maxlength="10"
-							value="<?php echo $this->annexation->getPassed_date('YYYY-MM-dd'); ?>" />
+							value="<?php echo $this->annexation->getPassed_date('n/j/Y'); ?>" />
+					(m/d/Y)
 				</td>
 			</tr>
 			<tr><td><label for="annexation-effective_start_date">Effective Start Date</label></td>
 				<td><input name="annexation[effective_start_date]"
 							id="annexation-effective_start_date"
 							size="10" maxlength="10"
-							value="<?php echo $this->annexation->getEffective_start_date('YYYY-MM-dd'); ?>" />
+							value="<?php echo $this->annexation->getEffective_start_date('n/j/Y'); ?>" />
+					(m/d/Y)
 				</td>
 			</tr>
 
