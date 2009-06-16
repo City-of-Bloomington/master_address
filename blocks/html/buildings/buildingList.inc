@@ -37,8 +37,8 @@
 					<td>{$building->getBuildingType()}</td>
 					<td>{$building->getGis_tag()}</td>
 					<td>{$building->getBuilding_name()}</td>
-					<td>{$building->getEffective_start_date()}</td>
-					<td>{$building->getEffective_end_date()}</td>
+					<td>{$building->getEffective_start_date('n/j/Y')}</td>
+					<td>{$building->getEffective_end_date('n/j/Y')}</td>
 					<td>{$building->getBuildingStatus()}</td>
 				   </tr>
 				";

@@ -34,7 +34,7 @@
 				    <td>$editButton</td>
 					<td>{$change->getLocation_id()}</td>
 					<td>{$change->getOld_location_id()}</td>
-					<td>{$change->getChange_date()}</td>
+					<td>{$change->getChange_date('n/j/Y')}</td>
 					<td>{$change->getNotes()}</td>
 				   </tr>
 				";

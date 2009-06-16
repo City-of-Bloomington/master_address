@@ -18,10 +18,7 @@ class Annexation
 	private $estimate_population;
 	private $dwelling_units;
 
-
 	private $township;
-
-
 
 	/**
 	 * Populates the object with data

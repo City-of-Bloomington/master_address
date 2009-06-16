@@ -22,7 +22,7 @@
 			</tr>
 				
 			<tr><td><label for="addressLocationChange-change_date">Change Date</label></td>
-                <td><input name="addressLocationChange[change_date]" id="addressLocationChange-change_date" value="<?php echo $this->addressLocationChange->getChange_date(); ?>" />
+                <td><input name="addressLocationChange[change_date]" id="addressLocationChange-change_date" size="10" maxlength="10" value="<?php echo $this->addressLocationChange->getChange_date('n/j/Y'); ?>" />
 				</td>
 			</tr>
 			<tr><td><label for="addressLocationChange-notes">Notes</label></td>

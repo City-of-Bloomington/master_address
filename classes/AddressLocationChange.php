@@ -44,12 +44,16 @@ class AddressLocationChange
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
-						$this->$field = $value;
+					  if (($field=='change_date')
+							&& $value != '0000-00-00') {
+							$value = new Date($value);
+					  }
+					  $this->$field = $value;
 					}
 				}
 			}
 			else {
-				throw new Exception('mast_address_location_change/unknownMastAddressLocationChange');
+				throw new Exception('addresses/unknownMastAddressLocationChange');
 			}
 		}
 		else {
@@ -78,7 +82,7 @@ class AddressLocationChange
 		$data = array();
 		$data['location_id'] = $this->location_id ? $this->location_id : null;
 		$data['old_location_id'] = $this->old_location_id ? $this->old_location_id : null;
-		$data['change_date'] = $this->change_date ? $this->change_date : null;
+		$data['change_date'] = $this->change_date ? $this->change_date->format('n/j/Y') : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->location_change_id) {
@@ -144,12 +148,7 @@ class AddressLocationChange
 	public function getChange_date($format=null)
 	{
 		if ($format && $this->change_date) {
-			if (strpos($format,'%')!==false) {
-				return strftime($format,$this->change_date);
-			}
-			else {
-				return date($format,$this->change_date);
-			}
+		    return $this->change_date->format($format);
 		}
 		else {
 			return $this->change_date;
@@ -221,14 +220,11 @@ class AddressLocationChange
 	 */
 	public function setChange_date($date)
 	{
-		if (is_array($date)) {
-			$this->change_date = $this->dateArrayToTimestamp($date);
-		}
-		elseif (ctype_digit($date)) {
-			$this->change_date = $date;
+		if ($date) {
+			$this->change_date = new Date($date);
 		}
 		else {
-			$this->change_date = strtotime($date);
+			$this->change_date = null;
 		}
 	}
 
@@ -275,7 +271,7 @@ class AddressLocationChange
 		if($this->getLocation_id()){
 		    $ret = $this->getLocation_id();
 	    }
-	    $ret .=' '.$this->getChange_date();
+	    $ret .=' '.$this->getChange_date('n/j/Y');
 	    return $ret;
 	}
 }

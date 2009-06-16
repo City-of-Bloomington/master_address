@@ -56,7 +56,7 @@ class Plat
 				}
 			}
 			else {
-				throw new Exception('plat_master/unknownPlatMaster');
+				throw new Exception('plats/unknownPlatMaster');
 			}
 		}
 		else {
