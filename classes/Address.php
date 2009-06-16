@@ -11,8 +11,8 @@ class Address
 	private $street_id;
 	private $address_type;
 	private $tax_jurisdiction;
-	private $jurisdiction_id;
-	private $gov_jur_id;
+	private $jurisdiction_id;	// jurisdiction_id is unused
+	private $gov_jur_id;		// This is the real jurisdiction
 	private $township_id;
 	private $section;
 	private $quarter_section;
@@ -40,7 +40,8 @@ class Address
 	private $plat;
 	private $status;
 
-	public static $addressTypes = array("STREET","UTILITY","PROPERTY","PARCEL","FACILITY","TEMPORARY");
+	private static $addressTypes = array("STREET","UTILITY","PROPERTY",
+										"PARCEL","FACILITY","TEMPORARY");
 	/**
 	 * Populates the object with data
 	 *
@@ -73,7 +74,7 @@ class Address
 				}
 			}
 			else {
-				throw new Exception('mast_address/unknownMastAddress');
+				throw new Exception('addresses/unknownAddress');
 			}
 		}
 		else {
@@ -81,7 +82,7 @@ class Address
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -89,7 +90,9 @@ class Address
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->street_id || !$this->address_type || !$this->gov_jur_id) {
+			throw new Exception('missingRequiredFields');
+		}
 	}
 
 	/**
@@ -101,11 +104,11 @@ class Address
 
 		$data = array();
 		$data['street_number'] = $this->street_number ? $this->street_number : null;
-		$data['street_id'] = $this->street_id ? $this->street_id : null;
-		$data['address_type'] = $this->address_type ? $this->address_type : null;
+		$data['street_id'] = $this->street_id;
+		$data['address_type'] = $this->address_type;
 		$data['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
-		$data['jurisdiction_id'] = $this->jurisdiction_id ? $this->jurisdiction_id : null;
-		$data['gov_jur_id'] = $this->gov_jur_id ? $this->gov_jur_id : null;
+		$data['jurisdiction_id'] = $this->jurisdiction_id;
+		$data['gov_jur_id'] = $this->gov_jur_id;
 		$data['township_id'] = $this->township_id ? $this->township_id : null;
 		$data['section'] = $this->section ? $this->section : null;
 		$data['quarter_section'] = $this->quarter_section ? $this->quarter_section : null;
@@ -154,6 +157,15 @@ class Address
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
+	/**
+	 * Alias for getStreet_address_id()
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->getStreet_address_id();
+	}
 
 	/**
 	 * @return number
@@ -163,14 +175,6 @@ class Address
 		return $this->street_address_id;
 	}
 
-	/**
-	 * @return number
-	 */
-	public function getId()
-	{
-		return $this->street_address_id;
-	}
-	
 	/**
 	 * @return string
 	 */
@@ -204,11 +208,14 @@ class Address
 	}
 
 	/**
-	 * @return number
+	 * Alias for getGov_jur_id()
+	 *
+	 * The real jurisdictions are the Governmental Jurisdictions
+	 * @return int
 	 */
 	public function getJurisdiction_id()
 	{
-		return $this->jurisdiction_id;
+		return $this->getGov_jur_id();
 	}
 
 	/**
@@ -306,7 +313,7 @@ class Address
 	{
 		return $this->zipplus4;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -404,17 +411,12 @@ class Address
 	 */
 	public function getStreet()
 	{
-		if ($this->street_id) {
-			if (!$this->street) {
-			  //  TODO Street Obj not created yet
-			  //$this->street = new Street($this->street_id);
-			  return null;
-			}
-			return $this->street;
+		if (!$this->street) {
+			$this->street = new Street($this->street_id);
 		}
-		return null;
+		return $this->street;
 	}
-	
+
 	/**
 	 * @return AddressStatus
 	 */
@@ -429,31 +431,15 @@ class Address
 		return null;
 	}
 	/**
+	 * The real jurisdictions are the Governmental Jurisdictions
 	 * @return Jurisdiction
 	 */
 	public function getJurisdiction()
 	{
-		if ($this->jurisdiction_id) {
-			if (!$this->jurisdiction) {
-				$this->jurisdiction = new Jurisdiction($this->jurisdiction_id);
-			}
-			return $this->jurisdiction;
+		if (!$this->jurisdiction) {
+			$this->jurisdiction = new Jurisdiction($this->gov_jur_id);
 		}
-		return null;
-	}
-
-	/**
-	 * @return Gov_jur
-	 */
-	public function getGovJur()
-	{
-		if ($this->gov_jur_id) {
-			if (!$this->govJur) {
-				$this->govJur = new GovJur($this->gov_jur_id);
-			}
-			return $this->govJur;
-		}
-		return null;
+		return $this->jurisdiction;
 	}
 
 	/**
@@ -535,11 +521,12 @@ class Address
 	}
 
 	/**
+	 * The real jurisdictions are the Governmental Jurisdictions
 	 * @param number $number
 	 */
 	public function setJurisdiction_id($number)
 	{
-		$this->jurisdiction_id = $number;
+		$this->setGov_jur_id($number);
 	}
 
 	/**
@@ -717,7 +704,7 @@ class Address
 	 */
 	public function setJurisdiction($jurisdiction)
 	{
-		$this->jurisdiction_id = $jurisdiction->getId();
+		$this->gov_jur_id = $jurisdiction->getId();
 		$this->jurisdiction = $jurisdiction;
 	}
 
@@ -762,4 +749,21 @@ class Address
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Alias for getAddress_type()
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->getAddress_type();
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function getAddressTypes()
+	{
+		return self::$addressTypes;
+	}
 }

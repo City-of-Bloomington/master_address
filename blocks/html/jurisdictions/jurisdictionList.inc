@@ -12,7 +12,7 @@
 				echo "<a class=\"add button\" href=\"".BASE_URL."/jurisdictions/addJurisdiction.php\">Add</a>";
 			}
 		?>
-		Jurisdiction
+		Jurisdictions
 	</h1>
 	<ul><?php
 			foreach ($this->jurisdictionList as $jurisdiction) {

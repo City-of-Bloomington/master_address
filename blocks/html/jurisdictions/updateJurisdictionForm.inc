@@ -8,7 +8,7 @@
 ?>
 <h1>Update Jurisdiction</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>AddrJurisdictionMaster Info</legend>
+	<fieldset><legend>Jurisdiction Info</legend>
 		<input name="jurisdiction_id" type="hidden" value="<?php echo $this->jurisdiction->getId(); ?>" />
 		<table>
 

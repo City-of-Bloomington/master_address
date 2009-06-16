@@ -3,11 +3,12 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param GET address_id
  */
 
 verifyUser('Administrator');
 
-$address = new Address($_REQUEST['street_address_id']);
+$address = new Address($_REQUEST['address_id']);
 if (isset($_POST['address'])) {
 	foreach ($_POST['address'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);

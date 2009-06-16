@@ -10,7 +10,8 @@
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
- *
+ */
+/**
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
@@ -39,11 +40,11 @@ class JurisdictionList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='jurisdiction_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='description',$limit=null,$groupBy=null)
 	{
-		$this->select->from('addr_jurisdiction_master');
+		$this->select->from('governmental_jurisdiction_mast');
 
-		// Finding on fields from the addr_jurisdiction_master table is handled here
+		// Finding on fields from the governmental_jurisdiction_mast table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				$this->select->where("$key=?",$value);
@@ -53,7 +54,7 @@ class JurisdictionList extends ZendDbResultIterator
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the addr_jurisdiction_master table.
+		// above foreach only handles fields from the governmental_jurisdiction_mast table.
 
 		$this->select->order($order);
 		if ($limit) {
