@@ -4,31 +4,17 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$subs = new SubdivsionList();
-$subs.find();
-$sub = new Subdivision();
-$statuses = $sub.getStatuses();
+$subs = new SubdivisionList();
+$subs->find();
+$sub = new SubdivisionName();
+$statuses = $sub->getStatuses();
 ?>
 <h1>Update Subdivision Name</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Subdivision Name Info</legend>
 		<input name="subdivision_name_id" type="hidden" value="<?php echo $this->subdivisionName->getSubdivision_name_id(); ?>" />
+  		<input name="subdivisionName[subdivision_id]" type="hidden" value="<?php echo $this->subdivisionName->getSubdivision_id(); ?>" />
 		<table>
-
-			<tr><td><label for="subdivisionName-subdivision_id">Subdivision</label></td>
-  
-				<td><select name="subdivisionName[subdivision_id]" id="subdivisionName-subdivision_id">
-                    <?php
-                         foreach ($subs as $subdivision){
-	                         $selected = $subdivision->getId()==$this->subdivisionName->getSubdivision_id?"selected=\"selected\"":"";
-				             echo "<option $selected value='{$subdivision->getId()}'>{$subdivision->getTownship()->getName()}</option>";
-			            }
-		            ?>
-                   </select>
-  
-				</td>
-			</tr>
-				
 			<tr><td><label for="subdivisionName-name">Name</label></td>
 				<td><input name="subdivisionName[name]" id="subdivisionName-name" value="<?php echo $this->subdivisionName->getName(); ?>" />
 				</td>
@@ -44,7 +30,8 @@ $statuses = $sub.getStatuses();
                       <option></option>
                     <?php
                          foreach ($statuses as $status){
-				             echo "<option>$status</option>";
+		                     $selected=($this->subdivisionName->getStatus() == $status)?"selected=\"selected\"":"";	
+				             echo "<option $selected>$status</option>";
 			            }
 		            ?>
                    </select>

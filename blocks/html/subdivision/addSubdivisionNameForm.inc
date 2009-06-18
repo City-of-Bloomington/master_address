@@ -4,26 +4,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$subs = new SubdivsionList();
-$subs.find();
-$sub = new Subdivision();
-$statuses = $sub.getStatuses();
+$subs = new SubdivisionList();
+$subs->find();
+$sub = new SubdivisionName();
+$statuses = $sub->getStatuses();
 ?>
 <h1>Add Subdivision Name</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+  
 	<fieldset><legend>Subdivision Name Info</legend>
+    	<input name="subdivisionName[subdivision_id]" type="hidden" value="<?php echo $this->subdivision->getSubdivision_id(); ?>" />
 		<table>
-			<tr><td><label for="subdivisioName-subdivision_id">Subdivision ID</label></td>
-				<td><select name="subdivisioName[subdivision_id]" id="subdivisioName-subdivision_id" >
-                    <option></option>
-                    <?php
-                         foreach ($subs as $subdivision){
-				               echo "<option value='{$subdivision->getId()}'>
-                                    {$subdivision->getTownship()->getName()}</option>";
-			            }
-		            ?>
-                   </select>
-				</td>
+			<tr><td><label>Township</label></td>
+                <td><?php echo $this->subdivision->getTownship()->getName(); ?></td>
 			</tr>
 				
 			<tr><td><label for="subdivisioName-name">Name</label></td>

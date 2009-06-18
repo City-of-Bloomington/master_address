@@ -5,12 +5,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $townships = new TownshipList();
-$townships.find();
+$townships->find();
 ?>
 <h1>Update Subdivision</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>SubdivisionMaster Info</legend>
-		<input name="subdivision_id" type="hidden" value="<?php echo $this->subdivision_master->getSubdivision_id(); ?>" />
+		<input name="subdivision_id" type="hidden" value="<?php echo $this->subdivision->getSubdivision_id(); ?>" />
 		<table>
 
 			<tr><td><label for="subdivision-township_id">Township</label></td>
@@ -18,9 +18,8 @@ $townships.find();
                       <option></option>
                     <?php
                          foreach ($townships as $township){
-	                         $selected=$this->subdivision->getTownship_id() == $township->getId()?"selected=\"selected\":"";
-				               echo "<option $selected value='{$township->getId()}'>
-                                    {$township->getName()}</option>";
+	                         $selected=$this->subdivision->getTownship_id() == $township->getId()?"selected=\"selected\"":"";
+				               echo "<option $selected value=\"{$township->getId()}\">{$township->getName()}</option>";
 			            }
 		            ?>
                    </select>

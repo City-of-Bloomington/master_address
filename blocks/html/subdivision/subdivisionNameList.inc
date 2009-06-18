@@ -9,7 +9,8 @@
 	<h1>
 		<?php
 			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/subdivisions/addSubdivisionName.php\">Add</a>";
+			  if(isset($this->subdivision))
+				echo "<a class=\"add button\" href=\"".BASE_URL."/subdivisions/addSubdivisionName.php?subdivision_id={$this->subdivision->getId()}\">Add</a>";
 			}
 		?>
 		Subdivision Names
@@ -21,20 +22,25 @@
                 <th>Name</th>
 		        <th>Phase</th>
 		        <th>Status</th>
-		        <th>Start Date</th>
-		        <th>End Date</th>
+		        <th>Effective Start Date</th>
+		        <th>Effective End Date</th>
 		    <tr>
 	   <?php
 			foreach ($this->subdivisionNameList as $subName) {
 				$editButton = '';
+				$editButton2 = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/subdivisions/updateSubdivisionName.php');
 					$url->subdivision_name_id = $subName->getSubdivision_name_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
+					$url = new URL(BASE_URL.'/subdivisions/updateSubdivision.php');
+					$url->subdivision_id = $subName->getSubdivision_id();
+					$editButton2 = "<a class=\"edit button\" href=\"$url\">Edit</a>";	
 				}
 				echo "<tr>
                          <td>$editButton</td>
-                         <td>{$subName->getSubdivision()}</td>
+                         <td>$editButton2 {$subName->getSubdivision()}</td>
+                         <td>{$subName->getName()}</td>
                          <td>{$subName->getPhase()}</td>
                          <td>{$subName->getStatus()}</td>
                          <td>{$subName->getEffective_start_date('n/j/Y')}</td>
@@ -42,5 +48,5 @@
                      </tr>";
 			}
 		?>
-	</ul>
+	</table>
 </div>
