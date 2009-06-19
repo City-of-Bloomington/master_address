@@ -17,6 +17,7 @@
  */
 class PlatList extends ZendDbResultIterator
 {
+	private $columns;
 	/**
 	 * Creates a basic select statement for the collection.
 	 * Populates the collection if you pass in $fields
@@ -26,6 +27,8 @@ class PlatList extends ZendDbResultIterator
 	public function __construct($fields=null)
 	{
 		parent::__construct();
+		$this->columns = $this->zend_db->describeTable('plats');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -41,12 +44,14 @@ class PlatList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='plat_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('plat_master');
+		$this->select->from(array('p'=>'plat_master'));
 
 		// Finding on fields from the plat_master table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$this->select->where("$key=?",$value);
+				if (array_key_exists($key,$this->columns)) {
+					$this->select->where("$key=?",$value);
+				}
 			}
 		}
 
@@ -54,6 +59,10 @@ class PlatList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the plat_master table.
+		if (isset($fields['quarter_code'])) {
+			$this->select->joinLeft(array('t'=>'township_master','p.town_id=t.id'));
+			$this->select->where('t.quarter_code=?',$value);
+		}
 
 		$this->select->order($order);
 		if ($limit) {
@@ -75,12 +84,14 @@ class PlatList extends ZendDbResultIterator
 	 */
 	public function search($fields=null,$order='plat_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('plat_master');
+		$this->select->from(array('p'=>'plat_master'));
 
 		// Finding on fields from the plat_master table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$this->select->where("$key like ?","$value%");
+				if (array_key_exists($key,$this->columns)) {
+					$this->select->where("$key=?",$value);
+				}
 			}
 		}
 
@@ -88,6 +99,10 @@ class PlatList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the plat_master table.
+		if (isset($fields['quarter_code'])) {
+			$this->select->joinLeft(array('t'=>'township_master','p.town_id=t.id'));
+			$this->select->where('t.quarter_code like ?',"$value%");
+		}
 
 		$this->select->order($order);
 		if ($limit) {
