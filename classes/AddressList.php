@@ -1,23 +1,28 @@
 <?php
 /**
- * A collection class for MastAddress objects
+ * A collection class for Address objects
  *
  * This class creates a zend_db select statement.
  * ZendDbResultIterator handles iterating and paginating those results.
  * As the results are iterated over, ZendDbResultIterator will pass each desired
  * row back to this class's loadResult() which will be responsible for hydrating
- * each MastAddress object
+ * each Address object
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
- */
-/**
+ *
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class AddressList extends ZendDbResultIterator
 {
+	private $columns;
+	private static $directions = array();
+	private static $suffixes = array();
+	private static $subunitTypes = array();
+	private static $cities = array();
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 * Populates the collection if you pass in $fields
@@ -27,6 +32,8 @@ class AddressList extends ZendDbResultIterator
 	public function __construct($fields=null)
 	{
 		parent::__construct();
+		$this->columns = $this->zend_db->describeTable('mast_address');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -40,14 +47,22 @@ class AddressList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='street_address_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
-		$this->select->from('mast_address');
-		
+		$this->select->from(array('a'=>'mast_address'));
+
+		// If we pass in an address, we should parse the address string into the fields
+		if (isset($fields['address'])) {
+			$fields = self::parseAddress($fields['address']);
+			unset($fields['address']);
+		}
+
 		// Finding on fields from the mast_address table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$this->select->where("$key=?",$value);
+				if (array_key_exists($key,$this->columns)) {
+					$this->select->where("a.$key=?",$value);
+				}
 			}
 		}
 
@@ -66,17 +81,232 @@ class AddressList extends ZendDbResultIterator
 		$this->populateList();
 	}
 
+	public function search($fields=null,$order='street_number',$limit=null,$groupBy=null)
+	{
+		$this->select->from(array('a'=>'mast_address'));
+
+		// If we pass in an address, we should parse the address string into the fields
+		if (isset($fields['address'])) {
+			$fields = self::parseAddress($fields['address']);
+			unset($fields['address']);
+		}
+
+		// Finding on fields from the mast_address table is handled here
+		if (count($fields)) {
+			foreach ($fields as $key=>$value) {
+				if (array_key_exists($key,$this->columns)) {
+					$this->select->where("a.$key=?",$value);
+				}
+			}
+		}
+
+		$this->select->order($order);
+		if ($limit) {
+			$this->select->limit($limit);
+		}
+		if ($groupBy) {
+			$this->select->group($groupBy);
+		}
+		echo $this->select;
+		$this->populateList();
+	}
+
 	/**
-	 * Hydrates all the MastAddress objects from a database result set
+	 * Hydrates all the Address objects from a database result set
 	 *
 	 * This is a callback function, called from ZendDbResultIterator.  It is
 	 * called once per row of the result.
 	 *
 	 * @param int $key The index of the result row to load
-	 * @return MastAddress
+	 * @return Address
 	 */
 	protected function loadResult($key)
 	{
 		return new Address($this->result[$key]);
+	}
+
+	/**
+	 * Creates an associative array for the parts of an address for a given string
+	 *
+	 * Only the parts of the address that are given in the string are returned
+	 * Example: $string = "410 W 4th"
+	 * Returns: array('street_number'=>'410',
+	 *					'street_direction_code'=>'W',
+	 *					'street_name'=>'4th'
+	 *				)
+	 *
+	 * Example: $string = "401 N Morton St, Bloomington, IN"
+	 * Returns: array('street_number'=>'401',
+	 *					'street_direction_code'=>'N',
+	 *					'street_name'=>'Morton',
+	 *					'street_type_suffix_code'=>'St',
+	 *					'city'=>'Bloomington',
+	 *					'state'=>'IN'
+	 *				)
+	 *
+	 *
+	 * @param string $string
+	 * @return array
+	 */
+	public function parseAddress($string)
+	{
+		$address = preg_replace('/[^\w\s\/\-]/',' ',$string);
+		$address = preg_replace('/\s+/',' ',$address);
+
+		//echo "Looking for fractions: $address\n";
+		if (preg_match("/(?<fraction>\d+\/\d+)/",$address,$matches)) {
+			$output['fraction'] = $matches['fraction'];
+			$address = preg_replace("/\d+\/\d+/",'',$address);
+		}
+
+		//echo "Looking for number: $address\n";
+		$directionCodePattern = implode('|',self::getDirections());
+		$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern])?)";
+		if (preg_match("/^$numberPattern/i",$address,$matches)) {
+			$output['street_number'] = $matches['number'];
+			$address = preg_replace("/^$matches[number]/i",'',$address);
+		}
+
+		//echo "Looking for Zip: $address\n";
+		$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
+		if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
+			$output['zip'] = $matches['zip'];
+			if (isset($matches['zipplus4']) && $matches['zipplus4']) {
+				$output['zipplus4'] = $matches['zipplus4'];
+			}
+			$address = trim(preg_replace("/\s$zipPattern$/i",'',$address));
+		}
+
+		//echo "Looking for State: $address\n";
+		if (preg_match("/\s(?<state>IN|INDIANA)\b/i",$address,$matches)) {
+			$output['state'] = $matches['state'];
+			$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
+		}
+
+		//echo "Looking for city: $address\n";
+		$cityPattern = implode('|',self::getCities());
+		if (preg_match("/\s(?<city>$cityPattern)$/i",$address,$matches)) {
+			$output['city'] = $matches['city'];
+			$address = trim(preg_replace("/\s$matches[city]$/i",'',$address));
+		}
+
+		//echo "Looking for subunit: $address\n";
+		$subunitTypePattern = implode('|',array_merge(self::getSubunitTypes(),
+														array_keys(self::getSubunitTypes())));
+		$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
+		if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
+			$output['subunitType'] = $matches['subunitType'];
+			$output['subunitIdentifier'] = $matches['subunitIdentifier'];
+			$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
+		}
+
+		//echo "Looking for Street Name: $address\n";
+		$fullDirectionPattern = implode('|',array_merge(self::getDirections(),
+														array_keys(self::getDirections())));
+		$streetTypePattern = implode('|',array_merge(self::getSuffixes(),
+													array_keys(self::getSuffixes())));
+		$streetPattern = "
+		(
+			(?<dir>$fullDirectionPattern)\s(?<type>$streetTypePattern)\b
+			|
+			((?<direction>$fullDirectionPattern)\s)?
+			(
+				(?<name>[\w\s]+)
+				(\s(?<streetType>$streetTypePattern)\b)
+				(\s(?<postdirection>$fullDirectionPattern)\b)?
+				|
+				(?<streetName>[\w\s]+)
+				(\s(?<postdir>$fullDirectionPattern))\b
+				|
+				(?<street>[\w\s]+)
+				(\s(?<stype>$streetTypePattern)\b)?
+				(\s(?<pdir>$fullDirectionPattern)\b)?
+			)
+		)
+		";
+		preg_match("/$streetPattern/ix",$address,$matches);
+		foreach ($matches as $key=>$value) {
+			if (!is_int($key) && trim($value)) {
+				// The regular expression for street names required some duplication.
+				// Since you cannot use the same named subpattern more than once,
+				// we came up with different names for the same things in the regex.
+				// We need to convert any of those names back into the real name
+				switch ($key) {
+					case 'dir':
+					case 'direction':
+						$output['direction'] = $value;
+						break;
+
+					case 'type':
+					case 'streetType':
+					case 'stype':
+						$output['streetType'] = $value;
+						break;
+
+					case 'name':
+					case 'street':
+					case 'streetName':
+						$output['streetName'] = $value;
+						break;
+
+					case 'postdirection':
+					case 'postdir':
+					case 'pdir':
+						$output['post_direction'] = $value;
+						break;
+				}
+			}
+		}
+
+		return $output;
+	}
+
+	private static function getDirections()
+	{
+		if (!count(self::$directions)) {
+			$list = new DirectionList();
+			$list->find();
+			foreach ($list as $direction) {
+				self::$directions[$direction->getDescription()] = $direction->getCode();
+			}
+		}
+		return self::$directions;
+	}
+
+	private static function getSuffixes()
+	{
+		if (!count(self::$suffixes)) {
+			$list = new SuffixList();
+			$list->find();
+			foreach ($list as $suffix) {
+				self::$suffixes[$suffix->getDescription()] = $suffix->getCode();
+			}
+		}
+		return self::$suffixes;
+	}
+
+	private static function getSubunitTypes()
+	{
+		if (!count(self::$subunitTypes)) {
+			$list = new SubunitTypeList();
+			$list->find();
+			foreach ($list as $subunitType) {
+				self::$subunitTypes[$subunitType->getType()] = $subunitType->getDescription();
+			}
+		}
+		return self::$subunitTypes;
+	}
+
+	private static function getCities()
+	{
+		if (!count(self::$cities)) {
+			$zend_db = Database::getConnection();
+			$query = $zend_db->query('select distinct city from mast_address');
+			$result = $query->fetchAll();
+			foreach ($result as $row) {
+				self::$cities[] = $row['city'];
+			}
+		}
+		return self::$cities;
 	}
 }
