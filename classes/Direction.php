@@ -29,13 +29,15 @@ class Direction
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if(ctype_digit($id)){
+				if (ctype_digit($id)) {
 				    $sql = 'select * from mast_street_direction_master where id=?';
+					$result = $zend_db->fetchRow($sql,array($id));
 				}
-				else{
-				    $sql = 'select * from mast_street_direction_master where direction_code = ?';
+				else {
+				    $sql = "select * from mast_street_direction_master
+							where direction_code=? or description=?";
+					$result = $zend_db->fetchRow($sql,array($id,$id));
 				}
-				$result = $zend_db->fetchRow($sql,array($id));				
 			}
 			if ($result) {
 				foreach ($result as $field=>$value) {

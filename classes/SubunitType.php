@@ -34,11 +34,13 @@ class SubunitType
 				$zend_db = Database::getConnection();
 				if (ctype_digit($id)) {
 					$sql = 'select * from mast_addr_subunit_types_mast where id=?';
+					$result = $zend_db->fetchRow($sql,array($id));
 				}
 				else {
-					$sql = 'select * from mast_addr_subunit_types_mast where sudtype=?';
+					$sql = "select * from mast_addr_subunit_types_mast
+							where sudtype=? or description=?";
+					$result = $zend_db->fetchRow($sql,array($id,$id));
 				}
-				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
