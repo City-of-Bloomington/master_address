@@ -5,21 +5,21 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
-<h1>Add Street Type Suffix</h1>
+<h1>Add Street Type</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Street Type Suffix Info</legend>
+	<fieldset><legend>Street Type Info</legend>
 		<table>
 
-			<tr><td><label for="suffix-suffix_code">Suffix</label></td>
-				<td><input name="suffix[suffix_code]" id="suffix-suffix_code" />
+			<tr><td><label for="streetType-streetType_code" class="required">Code</label></td>
+				<td><input name="streetType[streetType_code]" id="streetType-streetType_code" />
 				</td>
 			</tr>
-				
-			<tr><td><label for="suffix-description">Description</label></td>
-				<td><input name="suffix[description]" id="suffix-description" />
+
+			<tr><td><label for="streetType-description" class="required">Description</label></td>
+				<td><input name="streetType[description]" id="streetType-description" />
 				</td>
 			</tr>
-				
+
 		</table>
 
 		<button type="submit" class="submit">Submit</button>

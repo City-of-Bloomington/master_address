@@ -103,26 +103,6 @@ class StreetStatus
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * Alias for getStatus_code()
-	 *
-	 * @return int
-	 */
-	public function getCode()
-	{
-		return $this->getStatus_code();
-	}
-
-	/**
-	 * Alias for getStatus_code()
-	 *
-	 * @return int
-	 */	
-	public function getId()
-	{
-		return $this->getStatus_code();
-	}
-	
-	/**
 	 * @return int
 	 */
 	public function getStatus_code()
@@ -159,4 +139,25 @@ class StreetStatus
 	{
 		return $this->getDescription();
 	}
+
+	/**
+	 * Alias for getStatus_code()
+	 *
+	 * @return int
+	 */
+	public function getCode()
+	{
+		return $this->getStatus_code();
+	}
+
+	/**
+	 * Alias for getStatus_code()
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->getStatus_code();
+	}
+
 }

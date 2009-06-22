@@ -23,7 +23,7 @@ class StreetName
 	private $postDirection;
 	private $streetNameType;
 	private $street;
-	private $suffix;
+	private $streetType;
 
 
 	/**
@@ -69,7 +69,7 @@ class StreetName
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -77,7 +77,9 @@ class StreetName
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->street_id || !$this->street_name) {
+			throw new Exception('missingRequiredFields');
+		}
 	}
 
 	/**
@@ -88,8 +90,8 @@ class StreetName
 		$this->validate();
 
 		$data = array();
-		$data['street_id'] = $this->street_id ? $this->street_id : null;
-		$data['street_name'] = $this->street_name ? $this->street_name : null;
+		$data['street_id'] = $this->street_id;
+		$data['street_name'] = $this->street_name;
 		$data['street_type_suffix_code'] = $this->street_type_suffix_code ? $this->street_type_suffix_code : null;
 		$data['street_name_type'] = $this->street_name_type ? $this->street_name_type : null;
 		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-m-d') : null;
@@ -127,6 +129,13 @@ class StreetName
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
+	/**
+	 * @return number
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
 	/**
 	 * @return number
@@ -216,13 +225,6 @@ class StreetName
 		return $this->post_direction_suffix_code;
 	}
 
-	/**
-	 * @return number
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
 
 	/**
 	 * @return Street
@@ -237,7 +239,7 @@ class StreetName
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return Direction
 	 */
@@ -251,6 +253,7 @@ class StreetName
 		}
 		return new Direction();
 	}
+
 	/**
 	 * @return Direction
 	 */
@@ -264,19 +267,21 @@ class StreetName
 		}
 		return new Direction();
 	}
+
 	/**
-	 * @return Suffix
+	 * @return StreetType
 	 */
-	public function getSuffix()
+	public function getStreetType()
 	{
 		if ($this->street_type_suffix_code) {
-			if (!$this->suffix) {
-				$this->suffix = new Suffix($this->street_type_suffix_code);
+			if (!$this->streetType) {
+				$this->streetType = new StreetType($this->street_type_suffix_code);
 			}
-			return $this->suffix;
+			return $this->streetType;
 		}
-		return new Suffix();
+		return new StreetType();
 	}
+
 	/**
 	 * @return StreetNameType
 	 */
@@ -315,7 +320,8 @@ class StreetName
 	 */
 	public function setStreet_type_suffix_code($string)
 	{
-		$this->street_type_suffix_code = trim($string);
+		$this->streetType = new StreetType($string);
+		$this->street_type_suffix_code = $this->streetType->getCode();
 	}
 
 	/**
@@ -323,19 +329,19 @@ class StreetName
 	 */
 	public function setStreet_name_type($string)
 	{
-		$this->street_name_type = trim($string);
+		$this->streetNameType = new StreetNameType($string);
+		$this->street_name_type = $this->streetNameType->getType();
 	}
 
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_start_date($date)
 	{
@@ -350,13 +356,12 @@ class StreetName
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEffective_end_date($date)
 	{
@@ -381,7 +386,8 @@ class StreetName
 	 */
 	public function setStreet_direction_code($char)
 	{
-		$this->street_direction_code = $char;
+		$this->direction = new Direction($char);
+		$this->street_direction_code = $this->direction->getCode();
 	}
 
 	/**
@@ -389,7 +395,8 @@ class StreetName
 	 */
 	public function setPost_direction_suffix_code($char)
 	{
-		$this->post_direction_suffix_code = $char;
+		$this->postDirection = new Direction($char);
+		$this->post_direction_suffix_code = $this->postDirection->getCode();
 	}
 
 	/**
@@ -400,7 +407,7 @@ class StreetName
 		$this->street_id = $street->getId();
 		$this->street = $street;
 	}
-	
+
 	/**
 	 * @param Direction $direction
 	 */
@@ -409,7 +416,7 @@ class StreetName
 		$this->street_direction_code = $direction->getCode();
 		$this->direction = $direction;
 	}
-	
+
 	/**
 	 * @param Direction $postDirection
 	 */
@@ -429,15 +436,44 @@ class StreetName
 	}
 
 	/**
-	 * @param Direction $direction
+	 * @param Direction $streetType
 	 */
-	public function setSuffix($suffix)
+	public function setStreetType($streetType)
 	{
-		$this->street_type_suffix_code = $suffix->getCode();
-		$this->suffix = $suffix;
+		$this->street_type_suffix_code = $streetType->getCode();
+		$this->streetType = $streetType;
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Alias for getStreet_name()
+	 *
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->getStreet_name();
+	}
+
+	/**
+	 * Alias for getStreet_direction_code()
+	 *
+	 * @return string
+	 */
+	public function getDirectionCode()
+	{
+		return $this->getStreet_direction_code();
+	}
+
+	/**
+	 * Alias for getPost_direction_suffix_code()
+	 *
+	 * @return string
+	 */
+	public function getPostDirectionCode()
+	{
+		return $this->getPost_direction_suffix_code();
+	}
 }

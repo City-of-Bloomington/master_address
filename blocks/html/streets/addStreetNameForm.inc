@@ -5,12 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
  */
-$directions = new DirectionList();
-$directions->find();
-$suffixes = new SuffixList();
-$suffixes->find();
-$types = new StreetNameTypeList();
-$types->find();
 
 ?>
 <h1>Add Street Name</h1>
@@ -20,56 +14,61 @@ $types->find();
 		<table>
   			<tr><td><label for="streetName-street_direction_code">Direction</label></td>
 				<td><select name="streetName[street_direction_code]" id="streetName-street_direction_code">
-                   <option></option>
-                   <?php
-                       foreach($directions as $direction){
-	                        echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
-
-                       }
-                    ?>
-                 </select>
+						<option></option>
+						<?php
+							$directions = new DirectionList();
+							$directions->find();
+							foreach ($directions as $direction) {
+								echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
+							}
+						?>
+						</select>
 				</td>
 			</tr>
 
-			<tr><td><label for="streetName-street_name">Street Name</label></td>
+			<tr><td><label for="streetName-street_name" class="required">Name</label></td>
 				<td><input name="streetName[street_name]" id="streetName-street_name" />
 				</td>
 			</tr>
-				
+
 			<tr><td><label for="streetName-street_type_suffix_code">Street Type</label></td>
 				<td><select name="streetName[street_type_suffix_code]" id="streetName-street_type_suffix_code">
-                    <option></option>
-                <?php
-                    foreach($suffixes as $suffix){
-	                    echo "<option value=\"{$suffix->getCode()}\">$suffix</option>";
-	                }
-                 ?>
-                </select>
+						<option></option>
+						<?php
+							$types = new StreetTypeList();
+							$types->find();
+							foreach ($types as $type) {
+								echo "<option value=\"{$type->getCode()}\">$type</option>";
+							}
+						?>
+					</select>
 				</td>
 			</tr>
-				
+
 			<tr><td><label for="streetName-street_name_type">Street Name Type</label></td>
 				<td><select name="streetName[street_name_type]" id="streetName-street_name_type">
-                    <option></option>
-                <?php
-                    foreach($types as $type){
-	                    echo "<option value=\"{$type->getType()}\">$type</option>";
-	                }
-                 ?>
-                </select>
+						<option></option>
+						<?php
+							$types = new StreetNameTypeList();
+							$types->find();
+							foreach ($types as $type) {
+								echo "<option value=\"{$type->getType()}\">$type</option>";
+							}
+						?>
+					</select>
 				</td>
 			</tr>
-				
-				
+
+
 			<tr><td><label for="streetName-post_direction_suffix_code">Post Direction</label></td>
 				<td><select name="streetName[post_direction_suffix_code]" id="streetName-post_direction_suffix_code">
-                   <option></option>
-                   <?php
-                       foreach($directions as $direction){
-	                        echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>"; 
-                       }
-                    ?>
-                 </select>
+						<option></option>
+						<?php
+							foreach ($directions as $direction) {
+								echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
+							}
+						?>
+					</select>
 				</td>
 			</tr>
   			<tr><td><label for="streetName-effective_start_date">Effective Start Date</label></td>
@@ -81,7 +80,7 @@ $types->find();
 				</td>
 			</tr>
   			<tr><td><label for="streetName-notes">Notes</label></td>
-				<td><input name="streetName[notes]" id="streetName-notes" />
+				<td><textarea name="streetName[notes]" id="streetName-notes" rows="3" cols="50"></textarea>
 				</td>
 			</tr>
 		</table>

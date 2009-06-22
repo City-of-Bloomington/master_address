@@ -15,7 +15,7 @@ class Street
 
 
 	private $town;
-	private $streetStatus;
+	private $status;
 	private $direction;  // street_direction_code
 	private $postDirection; // post_direction_suffix_code
 	private $streetNameList;
@@ -61,7 +61,7 @@ class Street
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -69,6 +69,9 @@ class Street
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
+		if (!$this->status_code) {
+			throw new Exception('missingRequiredFields');
+		}
 
 	}
 
@@ -83,7 +86,7 @@ class Street
 		$data['street_direction_code'] = $this->street_direction_code ? $this->street_direction_code : null;
 		$data['post_direction_suffix_code'] = $this->post_direction_suffix_code ? $this->post_direction_suffix_code : null;
 		$data['town_id'] = $this->town_id ? $this->town_id : null;
-		$data['status_code'] = $this->status_code ? $this->status_code : null;
+		$data['status_code'] = $this->status_code;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->street_id) {
@@ -131,7 +134,7 @@ class Street
 	{
 		return $this->street_id;
 	}
-	
+
 	/**
 	 * @return char
 	 */
@@ -189,13 +192,13 @@ class Street
 	/**
 	 * @return StreetStatus
 	 */
-	public function getStreetStatus()
+	public function getStatus()
 	{
 		if ($this->status_code) {
-			if (!$this->streetStatus) {
-				$this->streetStatus = new StreetStatus($this->status_code);
+			if (!$this->status) {
+				$this->status = new StreetStatus($this->status_code);
 			}
-			return $this->streetStatus;
+			return $this->status;
 		}
 		return new StreetStatus();
 	}
@@ -213,7 +216,7 @@ class Street
 		}
 		return new Direction();
 	}
-	
+
 	/**
 	 * @return Direction
 	 */
@@ -227,21 +230,6 @@ class Street
 		}
 		return new Direction();
 	}
-	/**
-	 * @return StreetNameList
-	 */
-	public function getStreetNameList()
-	{
-		if ($this->street_id) {
-			if (!$this->streetNameList) {
-			    $streetNameList = new StreetNameList(array('street_id'=>$this->street_id));	  
-			  //$streetNameList->find();
-				$this->streetNameList = $streetNameList;
-			}
-			return $this->streetNameList;
-		}
-		return null;
-	}
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -251,7 +239,8 @@ class Street
 	 */
 	public function setStreet_direction_code($char)
 	{
-		$this->street_direction_code = $char;
+		$this->direction = new Direction($char);
+		$this->street_direction_code = $this->direction->getCode();
 	}
 
 	/**
@@ -259,7 +248,8 @@ class Street
 	 */
 	public function setPost_direction_suffix_code($char)
 	{
-		$this->post_direction_suffix_code = $char;
+		$this->postDirection = new Direction($char);
+		$this->post_direction_suffix_code = $this->postDirection->getCode();
 	}
 
 	/**
@@ -267,7 +257,8 @@ class Street
 	 */
 	public function setTown_id($number)
 	{
-		$this->town_id = $number;
+		$this->town = new Town($number);
+		$this->town_id = $this->town->getId();
 	}
 
 	/**
@@ -275,7 +266,8 @@ class Street
 	 */
 	public function setStatus_code($number)
 	{
-		$this->status_code = $number;
+		$this->status = new StreetStatus($number);
+		$this->status_code = $this->status->getCode();
 	}
 
 	/**
@@ -294,13 +286,13 @@ class Street
 		$this->town_id = $town->getId();
 		$this->town = $town;
 	}
-	
+
 	/**
-	 * @param StreetStatus $streetStatus
+	 * @param StreetStatus $status
 	 */
-	public function setStreetStatus($streetStatus)
+	public function setStatus($status)
 	{
-		$this->street_status_code = $streetStatus->getId();
+		$this->street_status_code = $status->getCode();
 		$this->streetStatus = $streetStatus;
 	}
 
@@ -316,13 +308,27 @@ class Street
 	/**
 	 * @param Direction $suffix
 	 */
-	public function setSuffix($suffix)
+	public function setPostDirection($direction)
 	{
-		$this->post_direction_suffix_code = $suffix->getId();
-		$this->suffix = $suffix;
+		$this->post_direction_suffix_code = $direction->getId();
+		$this->postDirection = $direction;
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * @return StreetNameList
+	 */
+	public function getStreetNameList()
+	{
+		if ($this->street_id) {
+			if (!$this->streetNameList) {
+			    $streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
+				$this->streetNameList = $streetNameList;
+			}
+			return $this->streetNameList;
+		}
+		return null;
+	}
 }

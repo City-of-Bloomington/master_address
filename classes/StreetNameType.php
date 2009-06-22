@@ -55,7 +55,7 @@ class StreetNameType
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -100,7 +100,7 @@ class StreetNameType
 		    $this->id = $zend_db->lastSequenceId('street_name_type_id_s');
 		}
 		else {
-		    $this->street_name_type = $zend_db->lastInsertId('mast_street_name_type_master','street_name_type');		  
+		    $this->street_name_type = $zend_db->lastInsertId('mast_street_name_type_master','street_name_type');
 		}
 
 	}
@@ -108,6 +108,13 @@ class StreetNameType
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
+	/**
+	 * @return string
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
 	/**
 	 * @return string
@@ -115,23 +122,6 @@ class StreetNameType
 	public function getStreet_name_type()
 	{
 		return $this->street_name_type;
-	}
-
-	/**
-	 * alias for street_name_type
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->street_name_type;
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getId()
-	{
-		return $this->id;
 	}
 
 	/**
@@ -165,9 +155,17 @@ class StreetNameType
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-
 	public function __toString()
 	{
-		return $this->street_name_type;
+		return $this->getStreet_name_type();
+	}
+
+	/**
+	 * alias for street_name_type
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->getStreet_name_type();
 	}
 }

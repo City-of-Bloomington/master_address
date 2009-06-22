@@ -18,11 +18,13 @@ $template->blocks[] = new Block('streets/directionList.inc',array('directionList
 
 $streetNameTypeList = new StreetNameTypeList();
 $streetNameTypeList->find();
-$template->blocks[] = new Block('streets/streetNameTypeList.inc',array('streetNameTypeList'=>$streetNameTypeList));
+$template->blocks[] = new Block('streets/streetNameTypeList.inc',
+								array('streetNameTypeList'=>$streetNameTypeList));
 
-$suffixList = new SuffixList();
-$suffixList->find();
-$template->blocks[] = new Block('streets/suffixList.inc',array('suffixList'=>$suffixList));
+$streetTypeList = new StreetTypeList();
+$streetTypeList->find();
+$template->blocks[] = new Block('streets/streetTypeList.inc',
+								array('streetTypeList'=>$streetTypeList));
 
 $streetList = new StreetList();
 $streetList->find(null,null,15);
