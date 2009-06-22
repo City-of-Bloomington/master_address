@@ -24,7 +24,7 @@
 			foreach ($this->streetTypeList as $streetType) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/streets/updatestreetType.php');
+					$url = new URL(BASE_URL.'/streets/updateStreetType.php');
 					$url->streetType_id = $streetType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
@@ -38,5 +38,5 @@
 				";
 			}
 		?>
-	</ul>
+	</table>
 </div>

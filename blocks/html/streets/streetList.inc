@@ -23,7 +23,7 @@
 		    <th>Status</th>
 		    <th>Notes</th>
 		</tr>
-	<?php
+		<?php
 			foreach ($this->streetList as $street) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
@@ -33,14 +33,15 @@
 				}
 				$notes = View::escape($street->getNotes());
 				echo "
-				     <tr>
-                         <td>$editButton</td>
-				         <td>{$street->getDirection()->getDescription()}</td>
-					     <td>{$street->getPostDirection()->getDescription()}</td>
-					     <td>{$street->getTown()->getDescription()}</td>
-                         <td>{$street->getStreetStatus()->getDescription()}</td>
-                         <td>$notes</td>
-				    </tr>";
+				<tr>
+					<td>$editButton</td>
+					<td>{$street->getDirection()->getDescription()}</td>
+					<td>{$street->getPostDirection()->getDescription()}</td>
+					<td>{$street->getTown()->getDescription()}</td>
+					<td>{$street->getStatus()->getDescription()}</td>
+					<td>$notes</td>
+				</tr>
+				";
 			}
 		?>
 	</table>

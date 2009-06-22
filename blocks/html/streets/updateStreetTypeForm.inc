@@ -11,8 +11,8 @@
 	<fieldset><legend>Street Type Info</legend>
 		<input name="streetType_id" type="hidden" value="<?php echo $this->streetType->getId(); ?>" />
 		<table>
-			<tr><td><label for="streetType-streetType_code" class="required">Code</label></td>
-				<td><input name="streetType[streetType_code]" id="streetType-streetType_code" value="<?php echo View::escape($this->streetType->getCode()); ?>" />
+			<tr><td><label for="streetType-suffix_code" class="required">Code</label></td>
+				<td><input name="streetType[suffix_code]" id="streetType-suffix_code" value="<?php echo View::escape($this->streetType->getCode()); ?>" />
 				</td>
 			</tr>
 			<tr><td><label for="streetType-description" class="required">Description</label></td>

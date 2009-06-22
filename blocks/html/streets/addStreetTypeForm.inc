@@ -10,8 +10,8 @@
 	<fieldset><legend>Street Type Info</legend>
 		<table>
 
-			<tr><td><label for="streetType-streetType_code" class="required">Code</label></td>
-				<td><input name="streetType[streetType_code]" id="streetType-streetType_code" />
+			<tr><td><label for="streetType-suffix_code" class="required">Code</label></td>
+				<td><input name="streetType[suffix_code]" id="streetType-suffix_code" />
 				</td>
 			</tr>
 
