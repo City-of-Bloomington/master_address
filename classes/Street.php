@@ -19,6 +19,7 @@ class Street
 	private $direction;  // street_direction_code
 	private $postDirection; // post_direction_suffix_code
 	private $streetNameList;
+	private $streetName;
 
 
 	/**
@@ -203,33 +204,6 @@ class Street
 		return new StreetStatus();
 	}
 
-	/**
-	 * @return Direction
-	 */
-	public function getDirection()
-	{
-		if ($this->street_direction_code) {
-			if (!$this->direction) {
-				$this->direction = new Direction($this->street_direction_code);
-			}
-			return $this->direction;
-		}
-		return new Direction();
-	}
-
-	/**
-	 * @return Direction
-	 */
-	public function getPostDirection()
-	{
-		if ($this->post_direction_suffix_code) {
-			if (!$this->suffix) {
-				$this->suffix = new Direction($this->post_direction_suffix_code);
-			}
-			return $this->suffix;
-		}
-		return new Direction();
-	}
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -318,6 +292,34 @@ class Street
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	/**
+	 * @return Direction
+	 */
+	public function getDirection()
+	{
+		if ($this->street_direction_code) {
+			if (!$this->direction) {
+				$this->direction = new Direction($this->street_direction_code);
+			}
+			return $this->direction;
+		}
+		return new Direction();
+	}
+
+	/**
+	 * @return Direction
+	 */
+	public function getPostDirection()
+	{
+		if ($this->post_direction_suffix_code) {
+			if (!$this->postDirection) {
+				$this->postDirection = new Direction($this->post_direction_suffix_code);
+			}
+			return $this->postDirection;
+		}
+		return new Direction();
+	}
+
+	/**
 	 * @return StreetNameList
 	 */
 	public function getStreetNameList()
@@ -330,5 +332,18 @@ class Street
 			return $this->streetNameList;
 		}
 		return null;
+	}
+
+	/**
+	 * @return StreetName
+	 */
+	public function getStreetName()
+	{
+		if (!$this->streetName) {
+			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
+														'street_name_type'=>'STREET'));
+			$this->streetName = $streetNameList[0];
+		}
+		return $this->streetName;
 	}
 }

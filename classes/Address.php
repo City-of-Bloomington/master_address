@@ -766,4 +766,15 @@ class Address
 	{
 		return self::$addressTypes;
 	}
+
+	public function getStreetAddress()
+	{
+		$address = array();
+		$address[] = $this->getStreet_number();
+		$address[] = $this->getStreet()->getDirection()->getCode();
+		$address[] = $this->getStreet()->getStreetName()->getStreet_name();
+		$address[] = $this->getStreet()->getPostDirection()->getCode();
+		$address = implode(' ',$address);
+		return preg_replace('/\s+/',' ',$address);
+	}
 }

@@ -17,9 +17,7 @@
 	</h1>
 	<table>
 		<tr><th></th>
-			<th>Type</th>
-			<th>Street ID</th>
-			<th>Jurisdiction</th>
+			<th>Address</th>
 		</tr>
 		<?php
 			foreach ($this->addressList as $address) {
@@ -29,11 +27,10 @@
 					$url->address_id = $address->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
+				$streetAddress = View::escape($address->getStreetAddress());
 				echo "
 				<tr><td>$editButton</td>
-					<td>{$address->getType()}</td>
-					<td>{$address->getStreet_id()}</td>
-					<td>{$address->getJurisdiction()}</td>
+					<td>$streetAddress</td>
 				</tr>
 				";
 			}
