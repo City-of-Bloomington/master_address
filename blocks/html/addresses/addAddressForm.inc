@@ -153,6 +153,30 @@
 				</td>
 			</tr>
 
+			<tr><td><label for="address-trash_pickup_day">Trash Pickup Day</label></td>
+				<td><select name="address[trash_pickup_day]" id="address-trash_pickup_day">
+						<option></option>
+						<?php
+							foreach (Address::getTrashDays() as $day) {
+								echo "<option>$day</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+
+			<tr><td><label for="address-recycle_week">Recycle Week</label></td>
+				<td><select name="address[recycle_week]" id="address-recycle_week">
+						<option></option>
+						<?php
+							foreach (Address::getRecycleWeeks() as $week) {
+								echo "<option>$week</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+
 			<tr><td colspan="2">
 					<label for="address-notes">Notes</label>
 					<div><textarea name="address[notes]" id="address-notes" rows="3" cols="50"></textarea>

@@ -7,8 +7,31 @@
  */
 echo "
 <h1>{$this->address->getStreetAddress()}</h1>
-<h2>Primary Location: {$this->address->getLocation()->getLocation_id()}</h2>
-<h2>Council District: {$this->address->getCityCouncilDistrict()}</h2>
+<table>
+	<tr><th>Address</th>
+		<td>{$this->address->getStreetAddress()},
+			{$this->address->getCity()}, {$this->address->getState()}
+			{$this->address->getZip()}
+		</td>
+	</tr>
+	<tr><th>Coordinates</th>
+		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
+	</tr>
+	<tr><th>State Plane</th>
+		<td>{$this->address->getState_plane_x_coordinate()},
+			{$this->address->getState_plane_y_coordinate()}
+		</td>
+	</tr>
+	<tr><th>Jurisdiction</th>
+		<td>{$this->address->getJurisdiction()->getDescription()}</td>
+	</tr>
+	<tr><th>Township</th>
+		<td>{$this->address->getTownship()->getName()}</td>
+	</tr>
+	<tr><th>Council District</th>
+		<td>{$this->address->getCityCouncilDistrict()}</td>
+	</tr>
+</table>
 <h2>Purposes</h2>
 <table>
 	<tr><th>Purpose</th>

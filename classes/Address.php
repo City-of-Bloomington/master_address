@@ -32,6 +32,9 @@ class Address
 	private $notes;
 	private $status_code;
 
+	private $trash_pickup_day;	// Comes from mast_address_sanitation
+	private $recycle_week;		// Comes from mast_address_sanitation
+
 	private $street;
 	private $jurisdiction;
 	private $govJur;
@@ -64,7 +67,10 @@ class Address
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_address where street_address_id=?';
+				$sql = "select a.*,trash_pickup_day,recycle_week
+						from mast_address a
+						left join mast_address_sanitation s on a.street_address_id=s.street_address_id
+						where a.street_address_id=?";
 				$result = $zend_db->fetchRow($sql,array($street_address_id));
 			}
 
@@ -105,30 +111,32 @@ class Address
 		$this->validate();
 
 		$data = array();
-		$data['street_number'] = $this->street_number ? $this->street_number : null;
-		$data['street_id'] = $this->street_id;
-		$data['address_type'] = $this->address_type;
-		$data['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
-		$data['jurisdiction_id'] = $this->jurisdiction_id;
-		$data['gov_jur_id'] = $this->gov_jur_id;
-		$data['township_id'] = $this->township_id ? $this->township_id : null;
-		$data['section'] = $this->section ? $this->section : null;
-		$data['quarter_section'] = $this->quarter_section ? $this->quarter_section : null;
-		$data['subdivision_id'] = $this->subdivision_id ? $this->subdivision_id : null;
-		$data['plat_id'] = $this->plat_id ? $this->plat_id : null;
-		$data['plat_lot_number'] = $this->plat_lot_number ? $this->plat_lot_number : null;
-		$data['street_address_2'] = $this->street_address_2 ? $this->street_address_2 : null;
-		$data['city'] = $this->city ? $this->city : null;
-		$data['state'] = $this->state ? $this->state : null;
-		$data['zip'] = $this->zip ? $this->zip : null;
-		$data['zipplus4'] = $this->zipplus4 ? $this->zipplus4 : null;
-		$data['census_block_fips_code'] = $this->census_block_fips_code ? $this->census_block_fips_code : null;
-		$data['state_plane_x_coordinate'] = $this->state_plane_x_coordinate ? $this->state_plane_x_coordinate : null;
-		$data['state_plane_y_coordinate'] = $this->state_plane_y_coordinate ? $this->state_plane_y_coordinate : null;
-		$data['latitude'] = $this->latitude ? $this->latitude : null;
-		$data['longitude'] = $this->longitude ? $this->longitude : null;
-		$data['notes'] = $this->notes ? $this->notes : null;
-		$data['status_code'] = $this->status_code ? $this->status_code : null;
+		$data['a']['street_number'] = $this->street_number ? $this->street_number : null;
+		$data['a']['street_id'] = $this->street_id;
+		$data['a']['address_type'] = $this->address_type;
+		$data['a']['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
+		$data['a']['jurisdiction_id'] = $this->jurisdiction_id;
+		$data['a']['gov_jur_id'] = $this->gov_jur_id;
+		$data['a']['township_id'] = $this->township_id ? $this->township_id : null;
+		$data['a']['section'] = $this->section ? $this->section : null;
+		$data['a']['quarter_section'] = $this->quarter_section ? $this->quarter_section : null;
+		$data['a']['subdivision_id'] = $this->subdivision_id ? $this->subdivision_id : null;
+		$data['a']['plat_id'] = $this->plat_id ? $this->plat_id : null;
+		$data['a']['plat_lot_number'] = $this->plat_lot_number ? $this->plat_lot_number : null;
+		$data['a']['street_address_2'] = $this->street_address_2 ? $this->street_address_2 : null;
+		$data['a']['city'] = $this->city ? $this->city : null;
+		$data['a']['state'] = $this->state ? $this->state : null;
+		$data['a']['zip'] = $this->zip ? $this->zip : null;
+		$data['a']['zipplus4'] = $this->zipplus4 ? $this->zipplus4 : null;
+		$data['a']['census_block_fips_code'] = $this->census_block_fips_code ? $this->census_block_fips_code : null;
+		$data['a']['state_plane_x_coordinate'] = $this->state_plane_x_coordinate ? $this->state_plane_x_coordinate : null;
+		$data['a']['state_plane_y_coordinate'] = $this->state_plane_y_coordinate ? $this->state_plane_y_coordinate : null;
+		$data['a']['latitude'] = $this->latitude ? $this->latitude : null;
+		$data['a']['longitude'] = $this->longitude ? $this->longitude : null;
+		$data['a']['notes'] = $this->notes ? $this->notes : null;
+		$data['a']['status_code'] = $this->status_code ? $this->status_code : null;
+		$data['s']['trash_pickup_day'] = $this->trash_pickup_day ? $this->trash_pickup_day : null;
+		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
 
 		if ($this->street_address_id) {
 			$this->update($data);
@@ -141,19 +149,24 @@ class Address
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('mast_address',$data,"street_address_id='{$this->street_address_id}'");
+		$zend_db->update('mast_address',$data['a'],"street_address_id='{$this->street_address_id}'");
+		$zend_db->update('mast_address_sanitation',$data['s'],"street_address_id='{$this->street_address_id}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('mast_address',$data);
+		$zend_db->insert('mast_address',$data['a']);
 		if (Database::getType()=='oracle') {
 			$this->street_address_id = $zend_db->lastSequenceId('street_address_id_s');
 		}
 		else{
 		     $this->street_address_id = $zend_db->lastInsertId('mast_address','street_address_id');
 		}
+
+		$data['s']['street_address_id'] = $this->street_address_id;
+		$zend_db->insert('mast_address_sanitation',$data['s']);
+
 	}
 
 	//----------------------------------------------------------------
@@ -406,6 +419,22 @@ class Address
 	public function getStatus_code()
 	{
 		return $this->status_code;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTrash_pickup_day()
+	{
+		return $this->trash_pickup_day;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRecycle_week()
+	{
+		return $this->recycle_week;
 	}
 
 	/**
@@ -684,6 +713,34 @@ class Address
 	}
 
 	/**
+	 * @param string $string
+	 */
+	public function setTrash_pickup_day($string)
+	{
+		$string = trim($string);
+		if (in_array($string,self::getTrashDays())) {
+			$this->trash_pickup_day = $string;
+		}
+		else {
+			$this->trash_pickup_day = null;
+		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setRecycle_week($string)
+	{
+		$string = trim($string);
+		if (in_array($string,self::getRecycleWeeks())) {
+			$this->recycle_week = $string;
+		}
+		else {
+			$this->recycle_week = null;
+		}
+	}
+
+	/**
 	 * @param Street_address $street_address
 	 */
 	public function setStreet_address($street_address)
@@ -813,9 +870,34 @@ class Address
 		return BASE_URL.'/addresses/viewAddress.php?address_id='.$this->street_address_id;
 	}
 
+	/**
+	 * Returns the name of the city council district
+	 *
+	 * @return string
+	 */
 	public function getCityCouncilDistrict()
 	{
 		$purpose = $this->getLocation()->getCityCouncilPurpose();
 		return $purpose ? $purpose->getDescription() : '';
+	}
+
+	/**
+	 * Returns the days the city does trash pickup
+	 *
+	 * @return array
+	 */
+	public static function getTrashDays()
+	{
+		return array('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY');
+	}
+
+	/**
+	 * Returns the letter code for the weeks that the city picks up recycling
+	 *
+	 * @return array
+	 */
+	public static function getRecycleWeeks()
+	{
+		return array('A','B');
 	}
 }

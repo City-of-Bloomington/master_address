@@ -167,6 +167,36 @@
 				</td>
 			</tr>
 
+			<tr><td><label for="address-trash_pickup_day">Trash Pickup Day</label></td>
+				<td><select name="address[trash_pickup_day]" id="address-trash_pickup_day">
+						<option></option>
+						<?php
+							foreach (Address::getTrashDays() as $day) {
+								$selected = $this->address->getTrash_pickup_day()==$day
+											? 'selected="selected"'
+											: '';
+								echo "<option $selected>$day</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+
+			<tr><td><label for="address-recycle_week">Recycle Week</label></td>
+				<td><select name="address[recycle_week]" id="address-recycle_week">
+						<option></option>
+						<?php
+							foreach (Address::getRecycleWeeks() as $week) {
+								$selected = $this->address->getRecycle_week() == $week
+											? 'selected="selected"'
+											: '';
+								echo "<option $selected>$week</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+
 			<tr><td colspan="2">
 					<label for="address-notes">Notes</label>
 					<div><textarea name="address[notes]" id="address-notes" rows="3" cols="50"><?php echo View::escape($this->address->getNotes()); ?></textarea>
