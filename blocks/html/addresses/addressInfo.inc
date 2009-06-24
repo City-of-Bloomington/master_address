@@ -31,20 +31,30 @@ echo "
 	<tr><th>Council District</th>
 		<td>{$this->address->getCityCouncilDistrict()}</td>
 	</tr>
-</table>
-<h2>Purposes</h2>
-<table>
-	<tr><th>Purpose</th>
+	<tr><th>Trash Day</th>
+		<td>{$this->address->getTrashDay()}</td>
 	</tr>
+	<tr><th>Recycle Week</th>
+		<td>{$this->address->getRecycleWeek()}</td>
+	</tr>
+</table>
 ";
-	foreach ($this->address->getLocation()->getPurposes() as $purpose) {
+	$purposes = $this->address->getLocation()->getPurposes();
+	if (count($purposes)) {
 		echo "
-		<tr><td>{$purpose->getDescription()}</td>
-		</tr>
+		<h2>Purposes</h2>
+		<table>
 		";
+		foreach ($purposes as $purpose) {
+			echo "
+			<tr><th>{$purpose->getType()}</th>
+				<td>{$purpose->getDescription()}</td>
+			</tr>
+			";
+		}
+		echo "</table>";
 	}
 echo "
-</table>
 <h2>Locations</h2>
 <table>
 	<tr><th>Location_id</th>

@@ -900,4 +900,22 @@ class Address
 	{
 		return array('A','B');
 	}
+
+	/**
+	 * Alias for getTrash_pickup_day()
+	 * @return string
+	 */
+	public function getTrashDay()
+	{
+		return $this->getTrash_pickup_day();
+	}
+
+	/**
+	 * Alias for getRecycle_week()
+	 * @return string
+	 */
+	public function getRecycleWeek()
+	{
+		return $this->getRecycle_week();
+	}
 }
