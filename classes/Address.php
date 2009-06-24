@@ -40,6 +40,8 @@ class Address
 	private $plat;
 	private $status;
 
+	private $location;
+
 	private static $addressTypes = array("STREET","UTILITY","PROPERTY",
 										"PARCEL","FACILITY","TEMPORARY");
 	/**
@@ -767,6 +769,9 @@ class Address
 		return self::$addressTypes;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getStreetAddress()
 	{
 		$address = array();
@@ -776,5 +781,41 @@ class Address
 		$address[] = $this->getStreet()->getPostDirection()->getCode();
 		$address = implode(' ',$address);
 		return preg_replace('/\s+/',' ',$address);
+	}
+
+	/**
+	 * @return LocationList
+	 */
+	public function getLocations()
+	{
+		return new LocationList(array('street_address_id'=>$this->street_address_id));
+	}
+
+	/**
+	 * @return Location
+	 */
+	public function getLocation()
+	{
+		if (!$this->location) {
+			$list = new LocationList(array('street_address_id'=>$this->street_address_id,
+											'subunit_id'=>null,
+											'active'=>'Y'));
+			$this->location = $list[0];
+		}
+		return $this->location;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getURL()
+	{
+		return BASE_URL.'/addresses/viewAddress.php?address_id='.$this->street_address_id;
+	}
+
+	public function getCityCouncilDistrict()
+	{
+		$purpose = $this->getLocation()->getCityCouncilPurpose();
+		return $purpose ? $purpose->getDescription() : '';
 	}
 }

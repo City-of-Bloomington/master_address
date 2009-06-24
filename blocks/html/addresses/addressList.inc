@@ -17,6 +17,7 @@
 	</h1>
 	<table>
 		<tr><th></th>
+			<th>ID</th>
 			<th>Address</th>
 		</tr>
 		<?php
@@ -30,7 +31,8 @@
 				$streetAddress = View::escape($address->getStreetAddress());
 				echo "
 				<tr><td>$editButton</td>
-					<td>$streetAddress</td>
+					<td><a href=\"{$address->getURL()}\">{$address->getId()}</a></td>
+					<td><a href=\"{$address->getURL()}\">$streetAddress</a></td>
 				</tr>
 				";
 			}

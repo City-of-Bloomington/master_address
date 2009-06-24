@@ -54,6 +54,10 @@ class AddressList extends ZendDbResultIterator
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
 			$fields = self::parseAddress($fields['address']);
+			// We don't support searching for fractions right now
+			if (isset($fields['fraction'])) {
+				unset($fields['fraction']);
+			}
 			unset($fields['address']);
 		}
 
@@ -70,6 +74,46 @@ class AddressList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the mast_address table.
+		$joins = array();
+		if (isset($fields['direction'])) {
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$this->select->where('s.street_direction_code=?',$fields['direction']->getCode());
+		}
+
+		if (isset($fields['postDirection'])) {
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$this->select->where('s.post_direction_suffix_code=?',
+								$fields['postDirection']->getCode());
+		}
+
+		if (isset($fields['street_name'])) {
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+		}
+
+		if (isset($fields['streetType'])) {
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+		}
+
+		if (isset($fields['subunitType'])) {
+			$joins['u'] = array('table'=>'mast_address_subunits',
+								'condition'=>'a.street_address_id=u.street_address_id');
+			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
+		}
+
+		// Add all the joins we've created to the select
+		foreach ($joins as $key=>$join) {
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition']);
+		}
 
 		$this->select->order($order);
 		if ($limit) {

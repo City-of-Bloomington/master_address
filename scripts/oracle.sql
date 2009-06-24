@@ -322,6 +322,29 @@ select contact_id_s.nextval into :new.contact_id from dual;
 end;
 /
 
+create table address_location (
+	id number not null primary key,
+	location_id number not null,
+	location_type_id varchar2(40) not null,
+	street_address_id number,
+	subunit_id number,
+	mailable_flag number,
+	livable_flag number,
+	common_name varchar2(100),
+	active char(1) check (active in ('Y','N')),
+	unique (location_id, street_address_id, subunit_id),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (subunit_id) references mast_address_subunits (subunit_id),
+	foreign key (location_type_id) references addr_location_types_master (location_type_id)
+);
+create sequence location_id_seq nocache;
+create trigger location_trigger
+before insert on address_location
+for each row
+begin
+select location_id_seq.nextval into :new.id from dual;
+end;
+/
 
 create table mast_address_location_change (
 	location_change_id number not null primary key,
