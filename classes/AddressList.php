@@ -50,6 +50,9 @@ class AddressList extends ZendDbResultIterator
 	public function find($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
 		$this->select->from(array('a'=>'mast_address'));
+		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
+										'a.street_address_id=trash.street_address_id',
+										array('trash_pickup_day','recycle_week'));
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
@@ -112,7 +115,7 @@ class AddressList extends ZendDbResultIterator
 
 		// Add all the joins we've created to the select
 		foreach ($joins as $key=>$join) {
-			$this->select->joinLeft(array($key=>$join['table']),$join['condition']);
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 		}
 
 		$this->select->order($order);
@@ -128,6 +131,9 @@ class AddressList extends ZendDbResultIterator
 	public function search($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
 		$this->select->from(array('a'=>'mast_address'));
+		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
+										'a.street_address_id=trash.street_address_id',
+										array('trash_pickup_day','recycle_week'));
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
