@@ -16,16 +16,3 @@
 		<button type="submit" class="search">Search</search>
 	</fieldset>
 </form>
-<?php
-	if (isset($_GET['address'])) {
-		$addresses = new AddressList();
-		$addresses->search(array('address'=>$_GET['address']));
-		if (count($addresses)) {
-			$block = new Block('addresses/addressList.inc',array('addressList'=>$addresses));
-			echo $block->render();
-		}
-		else {
-			echo "<h2>No addresses found</h2>";
-		}
-	}
-?>

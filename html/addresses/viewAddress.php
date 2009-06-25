@@ -7,6 +7,18 @@
  */
 $address = new Address($_GET['address_id']);
 
-$template = new Template();
+if (isset($_GET['format'])) {
+	switch ($_GET['format']) {
+		case 'xml':
+			$template = new Template('default','xml');
+			break;
+		default:
+			$template = new Template();
+	}
+}
+else {
+	$template = new Template();
+}
+
 $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 echo $template->render();

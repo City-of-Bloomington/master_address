@@ -5,22 +5,19 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param AddressList $this->addressList
  */
-?>
-<div class="interfaceBox">
-	<h1>
-		<?php
-			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/addresses/addAddress.php\">Add</a>";
-			}
-		?>
-		Addresss
-	</h1>
+if (count($this->addressList)) {
+	$addButton = userHasRole('Administrator')
+				? "<a class=\"add button\" href=\"".BASE_URL."/addresses/addAddress.php\">Add</a>"
+				: '';
+	echo "
+<div class=\"interfaceBox\">
+	<h1>$addButton Addresss</h1>
 	<table>
 		<tr><th></th>
 			<th>ID</th>
 			<th>Address</th>
 		</tr>
-		<?php
+	";
 			foreach ($this->addressList as $address) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
@@ -36,6 +33,11 @@
 				</tr>
 				";
 			}
-		?>
+	echo "
 	</table>
 </div>
+	";
+}
+else {
+	echo "<h2>No Addresses Found</h2>";
+}

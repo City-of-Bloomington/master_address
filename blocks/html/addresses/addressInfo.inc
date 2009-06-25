@@ -37,18 +37,25 @@ echo "
 	<tr><th>Recycle Week</th>
 		<td>{$this->address->getRecycleWeek()}</td>
 	</tr>
+	<tr><th>Census Block</th>
+		<td>{$this->address->getCensus_block_fips_code()}</td>
+	</tr>
 </table>
 ";
-	$purposes = $this->address->getLocation()->getPurposes();
+	$purposes = array();
+	foreach ($this->address->getLocation()->getPurposes() as $purpose) {
+		$purposes[$purpose->getType()][] = $purpose->getDescription();
+	}
 	if (count($purposes)) {
 		echo "
 		<h2>Purposes</h2>
 		<table>
 		";
-		foreach ($purposes as $purpose) {
+		foreach ($purposes as $type=>$descriptions) {
+			$descriptions = implode(', ',$descriptions);
 			echo "
-			<tr><th>{$purpose->getType()}</th>
-				<td>{$purpose->getDescription()}</td>
+			<tr><th>$type</th>
+				<td>$descriptions</td>
 			</tr>
 			";
 		}
