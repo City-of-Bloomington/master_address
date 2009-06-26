@@ -6,17 +6,17 @@
  */
 $template = new Template();
 $template->blocks[] = new Block('subdivisions/findSubdivisionForm.inc');
-if (isset($_GET['subdivisionName'])) {
+if (isset($_GET['sub'])) {
 	$search = array();
-	foreach ($_GET['subdivisionName'] as $field=>$val) {
+	foreach ($_GET['sub'] as $field=>$val) {
 		if ($val) {
 			$search[$field] = $val;
 		}
 	}
 	if (count($search)) {
-		$subdivisionNameList = new SubdivisionNameList();
-		$subdivisionNameList->search($search);
-		$template->blocks[] = new Block('subdivisions/subdivisionNameList.inc',array('subdivisionNameList'=>$subdivisionNameList));
+		$subdivisionList = new SubdivisionList();
+		$subdivisionList->search($search);
+		$template->blocks[] = new Block('subdivisions/subdivisionList.inc',array('subdivisionList'=>$subdivisionList));
 	}
 }
 

@@ -11,6 +11,8 @@ class Subdivision
 
 	private $township;
 	private $subdivisionNameList;
+	private $streetList;
+	private $addressList;
 	/**
 	 * Populates the object with data
 	 *
@@ -151,6 +153,32 @@ class Subdivision
 				$this->subdivisionNameList = $subdivisionNameList;
 			}
 			return $this->subdivisionNameList;
+		}
+		return null;
+	}
+	
+	public function getAddressList()
+	{
+		if ($this->subdivision_id) {
+			if (!$this->addressList) {
+			    $addressList = new AddressList();
+				$addressList->search(array('subdivision_id'=>$this->subdivision_id));
+				$this->addressList = $addressList;
+			}
+			return $this->addressList;
+		}
+		return null;
+	}
+	
+	public function getStreetList()
+	{
+		if ($this->subdivision_id) {
+			if (!$this->streetList) {
+			    $streetList = new StreetList();
+				$streetList->search(array('subdivision_id'=>$this->subdivision_id));
+				$this->streetList = $streetList;
+			}
+			return $this->streetList;
 		}
 		return null;
 	}

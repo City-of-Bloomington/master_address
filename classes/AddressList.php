@@ -193,7 +193,12 @@ class AddressList extends ZendDbResultIterator
 								'condition'=>'a.street_address_id=u.street_address_id');
 			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
 		}
-
+		
+		if (isset($fields['subdivision_id'])) {
+			$joins['su'] = array('table'=>'mast_street_subdivision',
+								'condition'=>'a.street_id=su.street_id');
+			$this->select->where('su.subdivision_id=?',$fields['subdivision_id']);
+		}
 		// Add all the joins we've created to the select
 		foreach ($joins as $key=>$join) {
 			$this->select->joinLeft(array($key=>$join['table']),$join['condition']);

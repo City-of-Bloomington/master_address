@@ -24,9 +24,10 @@ if (isset($_POST['subdivision'])) {
 	}
 }
 $subdivisionNameList = $subdivision->getSubdivisionNameList();
+$addressList = $subdivision->getAddressList();
 
 $template = new Template();
 $template->blocks[] = new Block('subdivisions/updateSubdivisionForm.inc',array('subdivision'=>$subdivision));
 $template->blocks[] = new Block('subdivisions/subdivisionNameList.inc',array('subdivisionNameList'=>$subdivisionNameList,'subdivision'=>$subdivision));
-
+$template->blocks[] = new Block('addresses/addressList.inc',array('addressList'=>$addressList));
 echo $template->render();
