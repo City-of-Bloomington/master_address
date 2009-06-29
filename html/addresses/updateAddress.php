@@ -8,7 +8,7 @@
 
 verifyUser('Administrator');
 
-$address = new Address($_REQUEST['address_id']);
+$address = new Address($_REQUEST['street_address_id']);
 if (isset($_POST['address'])) {
 	foreach ($_POST['address'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
@@ -23,8 +23,12 @@ if (isset($_POST['address'])) {
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
+	
 }
-
+$subunits = new SubunitList();
+$subunits->find(array('street_address_id'=>$address->getStreet_address_id()));
+			   
 $template = new Template();
 $template->blocks[] = new Block('addresses/updateAddressForm.inc',array('address'=>$address));
+$template->blocks[] = new Block('subunits/subunitList.inc',array('subunitList'=>$subunits, 'address'=>$address));
 echo $template->render();
