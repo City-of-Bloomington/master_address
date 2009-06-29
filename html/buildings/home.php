@@ -15,9 +15,16 @@ if (isset($_GET['building'])) {
 		}
 	}
 	if (count($search)) {
-		$buildingList = new BuildingList();
+		$page = isset($_GET['page']) ? $_GET['page'] : 1;
+		$buildingList = new BuildingList(null,10,$page);
 		$buildingList->search($search);
-		$template->blocks[] = new Block('buildings/buildingList.inc',array('buildingList'=>$buildingList));
+		$template->blocks[] = new Block('buildings/buildingList.inc',
+										array('buildingList'=>$buildingList));
+
+		$pageNavigation = new Block('pageNavigation.inc');
+		$pageNavigation->paginator = $buildingList->getPaginator()->getPages();
+		$pageNavigation->url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$template->blocks[] = $pageNavigation;
 	}
 }
 

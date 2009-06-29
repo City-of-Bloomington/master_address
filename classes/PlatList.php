@@ -18,15 +18,21 @@
 class PlatList extends ZendDbResultIterator
 {
 	private $columns;
+
 	/**
 	 * Creates a basic select statement for the collection.
+	 *
 	 * Populates the collection if you pass in $fields
+	 * Setting itemsPerPage turns on pagination mode
+	 * In pagination mode, this will only load the results for one page
 	 *
 	 * @param array $fields
+	 * @param int $itemsPerPage Turns on Pagination
+	 * @param int $currentPage
 	 */
-	public function __construct($fields=null)
+	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
-		parent::__construct();
+		parent::__construct($itemsPerPage,$currentPage);
 		$this->columns = $this->zend_db->describeTable('plats');
 
 		if (is_array($fields)) {

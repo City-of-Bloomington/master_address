@@ -3,6 +3,7 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param BuildingList $this->buildingList
  */
 ?>
 <div class="interfaceBox">
@@ -23,7 +24,7 @@
 	   	    <th>Effective End Date</th>
 			<th>Status</th>
 		</tr>
-	<ul><?php
+		<?php
 			foreach ($this->buildingList as $building) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {

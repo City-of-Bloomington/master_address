@@ -6,7 +6,7 @@
  * ZendDbResultIterator handles iterating and paginating those results.
  * As the results are iterated over, ZendDbResultIterator will pass each desired
  * row back to this class's loadResult() which will be responsible for hydrating
- * each TownsMaster object
+ * each Town object
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
@@ -19,13 +19,18 @@ class TownList extends ZendDbResultIterator
 {
 	/**
 	 * Creates a basic select statement for the collection.
+	 *
 	 * Populates the collection if you pass in $fields
+	 * Setting itemsPerPage turns on pagination mode
+	 * In pagination mode, this will only load the results for one page
 	 *
 	 * @param array $fields
+	 * @param int $itemsPerPage Turns on Pagination
+	 * @param int $currentPage
 	 */
-	public function __construct($fields=null)
+	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
-		parent::__construct();
+		parent::__construct($itemsPerPage,$currentPage);
 		if (is_array($fields)) {
 			$this->find($fields);
 		}

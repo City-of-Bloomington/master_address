@@ -1,17 +1,16 @@
 <?php
 /**
- * A collection class for MastStreetName objects
+ * A collection class for StreetName objects
  *
  * This class creates a zend_db select statement.
  * ZendDbResultIterator handles iterating and paginating those results.
  * As the results are iterated over, ZendDbResultIterator will pass each desired
  * row back to this class's loadResult() which will be responsible for hydrating
- * each MastStreetName object
+ * each StreetName object
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
- */
-/**
+ *
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
@@ -21,13 +20,18 @@ class StreetNameList extends ZendDbResultIterator
 {
 	/**
 	 * Creates a basic select statement for the collection.
+	 *
 	 * Populates the collection if you pass in $fields
+	 * Setting itemsPerPage turns on pagination mode
+	 * In pagination mode, this will only load the results for one page
 	 *
 	 * @param array $fields
+	 * @param int $itemsPerPage Turns on Pagination
+	 * @param int $currentPage
 	 */
-	public function __construct($fields=null)
+	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
-		parent::__construct();
+		parent::__construct($itemsPerPage,$currentPage);
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -44,7 +48,7 @@ class StreetNameList extends ZendDbResultIterator
 	public function find($fields=null,$order='id',$limit=null,$groupBy=null)
 	{
 		$this->select->from('mast_street_names');
-		
+
 		// Finding on fields from the mast_street_names table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {

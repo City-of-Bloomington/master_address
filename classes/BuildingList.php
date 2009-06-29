@@ -20,13 +20,19 @@ class BuildingList extends ZendDbResultIterator
 {
 	/**
 	 * Creates a basic select statement for the collection.
+	 *
 	 * Populates the collection if you pass in $fields
+	 * Setting itemsPerPage turns on pagination mode
+	 * In pagination mode, this will only load the results for one page
 	 *
 	 * @param array $fields
+	 * @param int $itemsPerPage Turns on Pagination
+	 * @param int $currentPage
 	 */
-	public function __construct($fields=null)
+	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
-		parent::__construct();
+		parent::__construct($itemsPerPage,$currentPage);
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -43,7 +49,7 @@ class BuildingList extends ZendDbResultIterator
 	public function find($fields=null,$order='building_id',$limit=null,$groupBy=null)
 	{
 		$this->select->from('buildings');
-		
+
 		// Finding on fields from the buildings table is handled here
 		if (count($fields)) {
 		   foreach ($fields as $key=>$value) {
@@ -72,7 +78,7 @@ class BuildingList extends ZendDbResultIterator
    	public function search($fields=null,$order='building_id',$limit=null,$groupBy=null)
 	{
 		$this->select->from('buildings');
-		
+
 		// Finding on fields from the buildings table is handled here
 		if (count($fields)) {
 		   foreach ($fields as $key=>$value) {

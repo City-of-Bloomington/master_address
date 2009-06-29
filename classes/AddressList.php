@@ -25,13 +25,18 @@ class AddressList extends ZendDbResultIterator
 
 	/**
 	 * Creates a basic select statement for the collection.
+	 *
 	 * Populates the collection if you pass in $fields
+	 * Setting itemsPerPage turns on pagination mode
+	 * In pagination mode, this will only load the results for one page
 	 *
 	 * @param array $fields
+	 * @param int $itemsPerPage Turns on Pagination
+	 * @param int $currentPage
 	 */
-	public function __construct($fields=null)
+	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
-		parent::__construct();
+		parent::__construct($itemsPerPage,$currentPage);
 		$this->columns = $this->zend_db->describeTable('mast_address');
 
 		if (is_array($fields)) {
@@ -193,7 +198,7 @@ class AddressList extends ZendDbResultIterator
 								'condition'=>'a.street_address_id=u.street_address_id');
 			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
 		}
-		
+
 		if (isset($fields['subdivision_id'])) {
 			$joins['su'] = array('table'=>'mast_street_subdivision',
 								'condition'=>'a.street_id=su.street_id');
