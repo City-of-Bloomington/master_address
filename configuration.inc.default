@@ -43,7 +43,7 @@ define('BASE_URL','http://localhost');
  * Used when there's an error on the site.  The Framework will
  * print out a nice error message, encouraging users to report any problems
  * See: FRAMEWORK/ITSFunctions.inc
- * 
+ *
  * This is also the default Admin user information that gets added to the database
  */
 define('ADMINISTRATOR_NAME','Site Admin');
@@ -97,6 +97,14 @@ define('LDAP_ADMIN_USER','username');
 define('LDAP_ADMIN_PASS','password');
 define('LDAP_SERVER','ldap.somewhere.com');
 define('LDAP_PASSWORD_ATTRIBUTE','userpassword');
+
+/**
+ * Google Map Key
+ * The addresses are mapped using Google Maps.
+ * If you want this functionality, you must provide your own Google Map Key
+ * Google issues these on a per-server basis
+ */
+define('GOOGLE_API_KEY','');
 
 /**
  * Import global functions that we use for many applications we write
