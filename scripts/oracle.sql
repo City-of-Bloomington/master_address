@@ -272,6 +272,25 @@ select subunit_type_id_s.nextval into :new.id from dual;
 end;
 /
 
+create table mast_address_subunits (
+	subunit_id number not null primary key,
+	street_address_id number not null,
+	sudtype varchar2(20) not null,
+	street_subunit_identifier varchar2(20) not null,
+	notes varchar2(240),
+	foreign key references mast_address (street_address_id),
+	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
+);
+create sequence subunit_id_s nocache;
+create trigger subunit_id_trigger
+before insert on mast_address_subunits
+for each row
+begin
+select subunit_id_s.nextval into :new.subunit_id from dual;
+end;
+/
+
+
 
 ;;
 ;;location_type_id not a number

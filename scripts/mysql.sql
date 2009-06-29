@@ -116,6 +116,16 @@ create table mast_addr_subunit_types_mast (
 	unique (sudtype)
 );
 
+create table mast_address_subunits (
+	subunit_id int unsigned not null primary key auto_increment,
+	street_address_id int unsigned not null,
+	sudtype varchar(20) not null,
+	street_subunit_identifier varchar(20) not null,
+	notes varchar(240),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
+);
+
 create table addr_location_types_master (
 	id int unsigned not null primary key auto_increment,
 	location_type_id varchar(40) not null,
