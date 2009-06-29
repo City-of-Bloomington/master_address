@@ -9,20 +9,20 @@ $statuses = $sub->getStatuses();
 $townships = new TownshipList();
 $townships->find();
 ?>
+
 <h1>Find Subdivisions</h1>
 <form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Subdivision Info</legend>
 		<table>
-        <!--
-			<tr><td><label for="subdivisionName-township_id">Township</label></td>
-				<td><select name="subdivisionName[township_id]" id="subdivisionName-township_id">
+			<tr><td><label for="sub-township_id">Township</label></td>
+				<td><select name="sub[township_id]" id="sub-township_id">
                         <option></option>
                         <?php
-  						 	$selected = (isset($_GET['subdivisionName']['township_id'])
-								   		 && $_GET['subdivisionName']['township_id']==$township->getId())
-											? 'selected="selected"'
-											: '';
                             foreach ($townships as $township){
+	                                $selected = (isset($_GET['sub']['township_id']) && $_GET['sub']['township_id'] == $township->getId())
+											? 'selected=\"selected\"'
+											: '';
+							  
 				               echo "<option $selected value=\"{$township->getId()}\">
                                     {$township->getName()}</option>";
 			            }
@@ -30,22 +30,21 @@ $townships->find();
                    </select>
 				</td>
 			</tr>
-				   -->
-			<tr><td><label for="subdivisionName-name">Name</label></td>
-				<td><input name="subdivisionName[name]" id="subdivisionName-name" value="<?php if (isset($_GET['subdivisionName']['name'])) echo View::escape($_GET['subdivisionName']['name']); ?>" />
+			<tr><td><label for="sub-name">Name</label></td>
+				<td><input name="sub[name]" id="sub-name" value="<?php if (isset($_GET['sub']['name'])) echo View::escape($_GET['sub']['name']); ?>" />
 				</td>
 			</tr>
-   			<tr><td><label for="subdivisionName-phase">Phase</label></td>
-				<td><input name="subdivisionName[phase]" id="subdivisionName-phase" value="<?php if (isset($_GET['subdivisionName']['phase'])) echo View::escape($_GET['subdivisionName']['phase']); ?>" />
+   			<tr><td><label for="sub-phase">Phase</label></td>
+				<td><input name="sub[phase]" id="sub-phase" value="<?php if (isset($_GET['sub']['phase'])) echo View::escape($_GET['sub']['phase']); ?>" />
 				</td>
 			</tr>
-			<tr><td><label for="subdivisionName-status">Status</label></td>
-				<td><select name="subdivisionName[status]" id="subdivisionName-status">
+			<tr><td><label for="sub-status">Status</label></td>
+				<td><select name="sub[status]" id="sub-status">
 						<option></option>
 						<?php
                            foreach ($statuses as $status){
-								$selected = (isset($_GET['subdivisionName']['status'])
-											 && $_GET['subdivisionName']['status']==$status)
+								$selected = (isset($_GET['sub']['status'])
+											 && $_GET['sub']['status']==$status)
 											? 'selected="selected"'
 											: '';
 								echo "<option $selected>$status</option>";
@@ -54,9 +53,7 @@ $townships->find();
 					</select>
 				</td>
 			</tr>
-
 		</table>
-
 		<button type="submit" class="search">Search</button>
 	</fieldset>
 </form>
