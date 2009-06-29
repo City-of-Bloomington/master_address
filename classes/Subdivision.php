@@ -194,7 +194,6 @@ class Subdivision
 		$this->township_id = $number;
 	}
 
-
 	/**
 	 * @param Township $township
 	 */
