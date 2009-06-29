@@ -24,7 +24,7 @@ $types->find();
                          <option></option>
                          <?php
                           foreach($types as $type){
-	                          $selected = $type == $this->subunit->getSudtype()?"selected=\"selected\"":"";
+	                              $selected = $type->getSudtype() == $this->subunit->getSudtype()?"selected=\"selected\"":"";
 	                          echo "<option $selected value=\"{$type->getSudtype()}\">{$type->getDescription()}</option>";
                           }
                           ?>
