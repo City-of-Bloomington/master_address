@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
+$township = $this->address->getTownship()
+			? View::escape($this->address->getTownship()->getName())
+			: '';
 echo "
 <h1>{$this->address->getStreetAddress()}</h1>
 <table>
@@ -26,7 +29,7 @@ echo "
 		<td>{$this->address->getJurisdiction()->getDescription()}</td>
 	</tr>
 	<tr><th>Township</th>
-		<td>{$this->address->getTownship()->getName()}</td>
+		<td>$township</td>
 	</tr>
 	<tr><th>Council District</th>
 		<td>{$this->address->getCityCouncilDistrict()}</td>
