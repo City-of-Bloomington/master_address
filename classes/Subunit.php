@@ -123,6 +123,14 @@ class Subunit
 	/**
 	 * @return number
 	 */
+	public function getId()
+	{
+		return $this->subunit_id;
+	}
+
+	/**
+	 * @return number
+	 */
 	public function getStreet_address_id()
 	{
 		return $this->street_address_id;

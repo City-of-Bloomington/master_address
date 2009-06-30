@@ -23,7 +23,10 @@ if (isset($_POST['subunit'])) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
+$subunitStatusList = new SubunitStatusList(array('subunit_id'=>$subunit->getId()));
 
 $template = new Template();
 $template->blocks[] = new Block('subunits/updateSubunitForm.inc',array('subunit'=>$subunit));
+$template->blocks[] = new Block('subunits/subunitStatusList.inc',array('subunitStatusList'=>$subunitStatusList, 'subunit'=>$subunit));
+
 echo $template->render();

@@ -22,7 +22,7 @@ if (count($this->addressList)) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/addresses/updateAddress.php');
-					$url->address_id = $address->getId();
+					$url->street_address_id = $address->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				$streetAddress = View::escape($address->getStreetAddress());
