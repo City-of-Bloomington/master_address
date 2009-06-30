@@ -22,7 +22,7 @@ if (isset($_GET['building'])) {
 										array('buildingList'=>$buildingList));
 
 		$pageNavigation = new Block('pageNavigation.inc');
-		$pageNavigation->paginator = $buildingList->getPaginator()->getPages();
+		$pageNavigation->pages = $buildingList->getPaginator()->getPages();
 		$pageNavigation->url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$template->blocks[] = $pageNavigation;
 	}
