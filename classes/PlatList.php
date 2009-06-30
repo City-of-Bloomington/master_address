@@ -33,7 +33,7 @@ class PlatList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('plats');
+		$this->columns = $this->zend_db->describeTable('plat_master');
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -56,7 +56,7 @@ class PlatList extends ZendDbResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if (array_key_exists($key,$this->columns)) {
-					$this->select->where("$key=?",$value);
+					$this->select->where("p.$key=?",$value);
 				}
 			}
 		}
@@ -70,7 +70,7 @@ class PlatList extends ZendDbResultIterator
 			$this->select->where('t.quarter_code=?',$value);
 		}
 
-		$this->select->order($order);
+		$this->select->order("p.$order");
 		if ($limit) {
 			$this->select->limit($limit);
 		}
@@ -96,7 +96,7 @@ class PlatList extends ZendDbResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if (array_key_exists($key,$this->columns)) {
-					$this->select->where("$key=?",$value);
+					$this->select->where("p.$key=?",$value);
 				}
 			}
 		}
@@ -110,7 +110,7 @@ class PlatList extends ZendDbResultIterator
 			$this->select->where('t.quarter_code like ?',"$value%");
 		}
 
-		$this->select->order($order);
+		$this->select->order("p.$order");
 		if ($limit) {
 			$this->select->limit($limit);
 		}

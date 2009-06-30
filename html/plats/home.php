@@ -15,9 +15,15 @@ if (isset($_GET['plat'])) {
 		}
 	}
 	if (count($search)) {
-		$platList = new PlatList();
+		$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+		$platList = new PlatList(null,10,$page);
 		$platList->search($search);
 		$template->blocks[] = new Block('plats/platList.inc',array('platList'=>$platList));
+
+		$pageNavigation = new Block('pageNavigation.inc');
+		$pageNavigation->pages = $platList->getPaginator()->getPages();
+		$pageNavigation->url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$template->blocks[] = $pageNavigation;
 	}
 }
 

@@ -52,5 +52,5 @@ if (!count($this->platList)) {
 				";
 			}
 		?>
-	</ul>
+	</table>
 </div>
