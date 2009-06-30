@@ -43,7 +43,7 @@ $statuses = $sub->getStatuses();
   
 				</td>
 			</tr>
-			<tr><td><label for="subdivisionName-effective_end_date-mon">effective_end_date</label></td>
+			<tr><td><label for="subdivisionName-effective_end_date-mon">Effective End Date</label></td>
 				<td><input name="subdivisionName[effective_end_date]" id="subdivisionName-effective_end_date" size="10" maxlength="10" value="<?php echo $this->subdivisionName->getEffective_end_date('n/j/Y'); ?>" />
   
 				</td>
