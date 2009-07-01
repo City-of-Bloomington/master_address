@@ -84,8 +84,8 @@ class SubdivisionName
 		$data['name'] = $this->name ? $this->name : null;
 		$data['phase'] = $this->phase ? $this->phase : null;
 		$data['status'] = $this->status ? $this->status : null;
-		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('n/j/Y') : null;
-		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date->format('n/j/Y') : null;
+		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-n-j') : null;
+		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date->format('Y-n-j') : null;
 
 		if ($this->subdivision_name_id) {
 			$this->update($data);

@@ -95,8 +95,8 @@ class SubunitStatus
 		$data['subunit_id'] = $this->subunit_id; // primary key pre-assinged
 		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
 		$data['status_code'] = $this->status_code ? $this->status_code : null;
-		$data['start_date'] = $this->start_date ? $this->start_date->format('n/j/Y') : null;
-		$data['end_date'] = $this->end_date ? $this->end_date->format('n/j/Y') : null;
+		$data['start_date'] = $this->start_date ? $this->start_date->format('Y-n-j') : null;
+		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-n-j') : null;
 		if($this->exists()){
 			$this->update($data);
 		}
