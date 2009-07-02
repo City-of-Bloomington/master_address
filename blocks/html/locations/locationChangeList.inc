@@ -9,10 +9,10 @@
 	<h1>
 		<?php
 			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/addressChange/addAddressLocationChange.php\">Add</a>";
+				echo "<a class=\"add button\" href=\"".BASE_URL."/locations/addLocationChange.php\">Add</a>";
 			}
 		?>
-		Address Location Change
+		Location Change
 	</h1>
 	    <table>
 		<tr><th></th>
@@ -22,10 +22,10 @@
 		    <th>Notes</th>
 		</tr>
 	<?php
-			foreach ($this->addressLocationChangeList as $change) {
+			foreach ($this->locationChangeList as $change) {
 			    $editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/addressChange/updateAddressLocationChange.php');
+					$url = new URL(BASE_URL.'/locations/updateLocationChange.php');
 					$url->location_change_id = $change->getLocation_change_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}

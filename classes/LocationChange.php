@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class AddressLocationChange
+class LocationChange
 {
 	private $location_change_id;
 	private $location_id;
@@ -53,7 +53,7 @@ class AddressLocationChange
 				}
 			}
 			else {
-				throw new Exception('addresses/unknownMastAddressLocationChange');
+				throw new Exception('locations/LocationChange');
 			}
 		}
 		else {
@@ -82,7 +82,7 @@ class AddressLocationChange
 		$data = array();
 		$data['location_id'] = $this->location_id ? $this->location_id : null;
 		$data['old_location_id'] = $this->old_location_id ? $this->old_location_id : null;
-		$data['change_date'] = $this->change_date ? $this->change_date->format('n/j/Y') : null;
+		$data['change_date'] = $this->change_date ? $this->change_date->format('Y-n-j') : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->location_change_id) {
