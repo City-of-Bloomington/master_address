@@ -126,6 +126,19 @@ create table mast_address_subunits (
 	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
 );
 
+create table mast_address_subunit_status (
+	id int unsigned not null primary key auto_increment,
+	subunit_id int unsigned not null,
+	street_address_id int unsigned not null,
+	status_code int unsigned not null,
+	start_date date not null default CURRENT_DATE,
+	end_date date,
+	foreign key (status_code) references mast_address_status_lookup (status_code),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (subunit_id) references mast_address_subunits (subunit_id)
+);
+
+
 create table addr_location_types_master (
 	id int unsigned not null primary key auto_increment,
 	location_type_id varchar(40) not null,
@@ -271,6 +284,16 @@ create table mast_address (
 	foreign key (jurisdiction_id) references addr_jurisdiction_master(jurisdiction_id),
 	foreign key (gov_jur_id) references governmental_jurisdiction_mast(gov_jur_id),
 	foreign key (plat_id) references plat_master(plat_id)
+);
+
+create table mast_address_status (
+	id int unsigned not null primary key auto_increment,
+	street_address_id int unsigned not null,
+	status_code int unsigned not null,
+	start_date date not null default CURRENT_DATE,
+	end_date date,
+	foreign key (status_code) references mast_address_status_lookup (status_code),
+	foreign key (street_address_id) references mast_address (street_address_id)
 );
 
 create table annexations (

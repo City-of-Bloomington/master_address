@@ -46,6 +46,7 @@ grant select,insert,update,delete on eng.user_roles to master_address;
 
 
 grant select on eng.address_status_code_seq to master_address;
+grant select on eng.address_status_id_seq to master_address;
 grant select on eng.contact_id_s to master_address;
 grant select on eng.direction_id_seq to master_address;
 grant select on eng.gov_jur_id_s to master_address;
@@ -54,6 +55,7 @@ grant select on eng.location_change_id_s to master_address;
 grant select on eng.location_id_s to master_address;
 grant select on eng.location_id_seq to master_address;
 grant select on eng.location_purpose_id_s to master_address;
+grant select on eng.location_status_id_seq to master_address;
 grant select on eng.location_type_id_s to master_address;
 grant select on eng.people_id_seq to master_address;
 grant select on eng.plat_id_s to master_address;
@@ -66,6 +68,7 @@ grant select on eng.street_status_code_seq to master_address;
 grant select on eng.subdivision_id_s to master_address;
 grant select on eng.subdivision_name_id_s to master_address;
 grant select on eng.subunit_id_s to master_address;
+grant select on eng.subunit_status_id_seq to master_address;
 grant select on eng.subunit_type_id_s to master_address;
 grant select on eng.suffix_id_seq to master_address;
 grant select on eng.town_id_s to master_address;
@@ -123,6 +126,7 @@ create synonym master_address.user_roles for eng.user_roles;
 
 
 create synonym master_address.address_status_code_seq for eng.address_status_code_seq;
+create synonym master_address.address_status_id_seq for eng.address_status_id_seq;
 create synonym master_address.contact_id_s for eng.contact_id_s;
 create synonym master_address.direction_id_seq for eng.direction_id_seq;
 create synonym master_address.gov_jur_id_s for eng.gov_jur_id_s;
@@ -130,6 +134,7 @@ create synonym master_address.location_change_id_s for eng.location_change_id_s;
 create synonym master_address.location_id_s for eng.location_id_s;
 create synonym master_address.location_id_seq for eng.location_id_seq;
 create synonym master_address.location_purpose_id_s for eng.location_purpose_id_s;
+create synonym master_address.location_status_id_seq for eng.location_status_id_seq;
 create synonym master_address.location_type_id_s for eng.location_type_id_s;
 create synonym master_address.people_id_seq for eng.people_id_seq;
 create synonym master_address.plat_id_s for eng.plat_id_s;
@@ -142,6 +147,7 @@ create synonym master_address.street_status_code_seq for eng.street_status_code_
 create synonym master_address.subdivision_id_s for eng.subdivision_id_s;
 create synonym master_address.subdivision_name_id_s for eng.subdivision_name_id_s;
 create synonym master_address.subunit_id_s for eng.subunit_id_s;
+create synonym master_address.subunit_status_id_seq for eng.subunit_status_id_seq;
 create synonym master_address.subunit_type_id_s for eng.subunit_type_id_s;
 create synonym master_address.suffix_id_seq for eng.suffix_id_seq;
 create synonym master_address.town_id_s for eng.town_id_s;

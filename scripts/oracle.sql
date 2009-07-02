@@ -291,6 +291,26 @@ end;
 /
 
 
+create table mast_address_subunit_status (
+	id number not null primary key,
+	subunit_id number not null,
+	street_address_id number not null,
+	status_code number not null,
+	start_date date default sysdate,
+	end_date date,
+	foreign key (status_code) references mast_address_status_lookup (status_code),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (subunit_id) references mast_address_subunits (subunit_id)
+);
+create sequence subunit_status_id_seq;
+create trigger subunit_status_trigger
+before insert on mast_address_subunit_status
+for each row
+begin
+select subunit_status_id_seq.nextval into :new.id from dual;
+end;
+/
+
 
 ;;
 ;;location_type_id not a number
@@ -380,6 +400,25 @@ select location_change_id_s.nextval into :new.location_change_id from dual;
 end;
 /
 
+create table mast_address_location_status (
+	id number not null primary key,
+	status_code number not null enable,
+	effective_start_date date not null enable,
+	location_id number not null enable,
+	effective_end_date date,
+	unique (status_code,effective_start_date,location_id),
+	foreign key (status_code) references mast_address_status_lookup (status_code)
+);
+create sequence location_status_id_seq nocache;
+create trigger location_status_trigger
+before insert on mast_address_location_status
+for each row
+begin
+select location_status_id_seq.nextval into :new.id from dual;
+end;
+/
+
+
 create table subdivision_master (
 	subdivision_id number not null primary key,
 	township_id number not null,
@@ -456,7 +495,7 @@ create table mast_street_names (
 	street_name varchar2(60) not null,
 	street_type_suffix_code varchar2(8),
 	street_name_type varchar2(20),
-	effective_start_date date not null default sysdate,
+	effective_start_date date default sysdate,
 	effective_end_date date,
 	notes varchar2(240),
 	street_direction_code varchar2(2),
@@ -545,6 +584,25 @@ begin
 select street_address_id_s.nextval into :new.street_address_id from dual;
 end;
 /
+
+create table mast_address_status (
+	id number not null primary key,
+	street_address_id number not null,
+	status_code number not null,
+	start_date date default sysdate,
+	end_date date,
+	foreign key (status_code) references mast_address_status_lookup (status_code),
+	foreign key (street_address_id) references mast_address (street_address_id)
+);
+create sequence address_status_id_seq nocache;
+create trigger address_status_trigger
+before insert on mast_address_status
+for each row
+begin
+select address_status_id_seq.nextval into :new.id from dual;
+end;
+/
+
 
 create table mast_address_sanitation (
 	street_address_id number not null primary key,
