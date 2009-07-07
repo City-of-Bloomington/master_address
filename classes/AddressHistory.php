@@ -4,17 +4,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class SubunitStatus
+class AddressHistory
 {
-	private $subunit_id;
+	private $id;
 	private $street_address_id;
 	private $status_code;
 	private $start_date;
 	private $end_date;
-	private id;
 
-	private $subunit;
+
 	private $address;
+	private $addressStatus;
+
+
 
 	/**
 	 * Populates the object with data
@@ -26,7 +28,7 @@ class SubunitStatus
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $subunit_id
+	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -36,23 +38,19 @@ class SubunitStatus
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_address_subunit_status where id=?';
+				$sql = 'select * from mast_address_status where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
-					  if (($field=='start_date' || $field=='end_date')
-						  && $value != '0000-00-00') {
-							$value = new Date($value);
-					  }
-					  $this->$field = $value;
+						$this->$field = $value;
 					}
 				}
 			}
 			else {
-				throw new Exception('subunits/unknownMastAddressSubunitStatus');
+				throw new Exception('addresses/unknownAddressHistory');
 			}
 		}
 		else {
@@ -60,17 +58,7 @@ class SubunitStatus
 			// Set any default values for properties that need it here
 		}
 	}
-
-	public function exists(){
-	  
-	  $zend_db = Database::getConnection();
-	  $sql = 'select * from mast_address_subunit_status where subunit_id=?';
-	  $result = $zend_db->fetchRow($sql,array($this->subunit_id));
-	  if ($result) {
-		  return true;
-	  }
-	  return false;
-	}
+	
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -78,10 +66,7 @@ class SubunitStatus
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-	  if(!$this->subunit_id){
-		  throw new Exception('missing_fields');
-	  }
-	  
+
 	}
 
 	/**
@@ -92,12 +77,12 @@ class SubunitStatus
 		$this->validate();
 
 		$data = array();
-		$data['subunit_id'] = $this->subunit_id; // primary key pre-assinged
 		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
 		$data['status_code'] = $this->status_code ? $this->status_code : null;
-		$data['start_date'] = $this->start_date ? $this->start_date->format('Y-n-j') : null;
-		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-n-j') : null;
-		if($this->id){
+		$data['start_date'] = $this->start_date ? $this->start_date->format('Y-m-d') : null;
+		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-m-d') : null;
+
+		if ($this->id) {
 			$this->update($data);
 		}
 		else {
@@ -108,18 +93,18 @@ class SubunitStatus
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('mast_address_subunit_status',$data,"id='{$this->id}'");
+		$zend_db->update('mast_address_status',$data,"id='{$this->id}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('mast_address_subunit_status',$data);		
+		$zend_db->insert('mast_address_status',$data);
 		if (Database::getType()=='oracle') {
-			$this->id = $zend_db->lastSequenceId('subunit_status_id_seq');
+			$this->id = $zend_db->lastSequenceId('address_status_id_seq');
 		}
-		else{
-		    $this->id = $zend_db->lastInsertId('mast_address_subunit_status','id');	
+		else {
+			$this->id = $zend_db->lastInsertId('mast_address_status','id');
 		}
 	}
 
@@ -130,24 +115,11 @@ class SubunitStatus
 	/**
 	 * @return number
 	 */
-	public function getSubunit_id()
-	{
-		return $this->subunit_id;
-	}
-
-	/**
-	 * @return number
-	 */
 	public function getId()
 	{
 		return $this->id;
 	}
 
-	
-	public function setSubunit_id($val)
-	{
-	  $this->subunit_id = $val;
-	}
 	/**
 	 * @return number
 	 */
@@ -166,14 +138,18 @@ class SubunitStatus
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
+	 * @return string|DateTime
 	 */
 	public function getStart_date($format=null)
 	{
 		if ($format && $this->start_date) {
-		    return $this->start_date->format($format);
+			return $this->start_date->format($format);
 		}
 		else {
 			return $this->start_date;
@@ -182,14 +158,18 @@ class SubunitStatus
 
 	/**
 	 * Returns the date/time in the desired format
-	 * Format can be specified using either the strftime() or the date() syntax
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
+	 * @return string|DateTime
 	 */
 	public function getEnd_date($format=null)
 	{
 		if ($format && $this->end_date) {
-		    return $this->end_date->format($format);
+			return $this->end_date->format($format);
 		}
 		else {
 			return $this->end_date;
@@ -197,29 +177,29 @@ class SubunitStatus
 	}
 
 	/**
-	 * @return Subunit
+	 * @return Saddress
 	 */
-	public function getSubunit()
+	public function getAddress()
 	{
-		if ($this->subunit_id) {
-			if (!$this->subunit) {
-				$this->subunit = new Subunit($this->subunit_id);
+		if ($this->street_address_id) {
+			if (!$this->address) {
+				$this->address = new Address($this->street_address_id);
 			}
-			return $this->subunit;
+			return $this->address;
 		}
 		return null;
 	}
 
 	/**
-	 * @return Street_address
+	 * @return Saddress
 	 */
-	public function getAddress()
+	public function getAddressStatus()
 	{
-		if ($this->street_address_id) {
-			if (!$this->street_address) {
-				$this->address = new Address($this->street_address_id);
+		if ($this->status_code) {
+			if (!$this->addressStatus) {
+				$this->addressStatus = new AddressStatus($this->status_code);
 			}
-			return $this->address;
+			return $this->addressStatus;
 		}
 		return null;
 	}
@@ -247,68 +227,62 @@ class SubunitStatus
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setStart_date($date)
 	{
-	  if ($date) {
-		  $this->start_date = new Date($date);
-	  }
-	  else {
-		  $this->start_date = null;
-	  }
+		if ($date) {
+			$this->start_date = new Date($date);
+		}
+		else {
+			$this->start_date = null;
+		}
 	}
 
 	/**
 	 * Sets the date
 	 *
-	 * Dates and times should be stored as timestamps internally.
-	 * This accepts dates and times in multiple formats and sets the internal timestamp
-	 * Accepted formats are:
-	 * 		array - in the form of PHP getdate()
-	 *		timestamp
-	 *		string - anything strtotime understands
-	 * @param date $date
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
 	 */
 	public function setEnd_date($date)
 	{
 		if ($date) {
-		  $this->end_date = new Date($date);
+			$this->end_date = new Date($date);
 		}
 		else {
-		  $this->end_date = null;
+			$this->end_date = null;
 		}
 	}
 
 	/**
-	 * @param Subunit $subunit
-	 */
-	public function setSubunit($subunit)
-	{
-		$this->subunit_id = $subunit->getId();
-		$this->subunit = $subunit;
-	}
-
-	/**
-	 * @param Street_address $street_address
+	 * @param Address $address
 	 */
 	public function setAddress($address)
 	{
 		$this->street_address_id = $address->getId();
-		$this->street_address = $address;
+		$this->address = $address;
 	}
 
-
+	/**
+	 * @param AddressStatus $addressStatus
+	 */
+	public function setAddressStatus($addressStatus)
+	{
+		$this->status_code = $addressStatus->getStatus_code();
+		$this->addressStatus = $addressStatus;
+	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-
-	
 }

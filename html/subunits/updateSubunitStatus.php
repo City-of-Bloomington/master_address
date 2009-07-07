@@ -7,7 +7,7 @@
 
 verifyUser('Administrator');
 
-$subunitStatus = new SubunitStatus($_REQUEST['subunit_id']);
+$subunitStatus = new SubunitStatus($_REQUEST['id']);
 if (isset($_POST['subunitStatus'])) {
 	foreach ($_POST['subunitStatus'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);

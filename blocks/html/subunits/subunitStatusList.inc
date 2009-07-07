@@ -29,12 +29,12 @@ $subunit_id=$this->subunit->getId();
 				$editButton = '';
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/subunits/updateSubunitStatus.php');
-					$url->subunit_id = $subunitStatus->getSubunit_id();
+					$url->id = $subunitStatus->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				echo "<tr>
 				          <td>$editButton</td>
-                          <td>{$subunitStatus->getId()}</td>
+                          <td>{$subunitStatus->getSubunit_id()}</td>
                           <td>{$subunitStatus->getStreet_address_id()}</td>
                           <td>{$subunitStatus->getStatus_code()}</td>
                           <td>{$subunitStatus->getStart_date()}</td>

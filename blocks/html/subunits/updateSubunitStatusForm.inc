@@ -8,7 +8,7 @@
 <h1>Update Subunit Status</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Subunit Status Info</legend>
-		<input name="subunit_id" type="hidden" value="<?php echo $this->subunitStatus->getSubunit_id(); ?>" />
+		<input name="id" type="hidden" value="<?php echo $this->subunitStatus->getId(); ?>" />
 		<table>
 
 			<tr><td><label>Street Address ID</label></td>
