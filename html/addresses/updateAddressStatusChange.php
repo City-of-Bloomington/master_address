@@ -7,23 +7,23 @@
 
 verifyUser('Administrator');
 
-if (isset($_POST['addressHistory'])) {
-	$addressHistory = new AddressHistory();
-	foreach ($_POST['addressHistory'] as $field=>$value) {
+$addressStatusChange = new AddressStatusChange($_REQUEST['id']);
+if (isset($_POST['addressStatusChange'])) {
+	foreach ($_POST['addressStatusChange'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
-		$addressHistory->$set($value);
+		$addressStatusChange->$set($value);
 	}
 
 	try {
-		$addressHistory->save();
+		$addressStatusChange->save();
 		header('Location: '.BASE_URL.'/addresses');
 		exit();
 	}
-	catch(Exception $e) {
+	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
-$address_street_id = $_REQUEST['address_street_id'];
+
 $template = new Template();
-$template->blocks[] = new Block('addresses/addAddressHistoryForm.inc', array('address_street_id'=>$address_street_id));
+$template->blocks[] = new Block('addresses/updateAddressStatusChangeForm.inc',array('addressStatusChange'=>$addressStatusChange));
 echo $template->render();

@@ -22,18 +22,18 @@
 		     <th>End Date</th>
 		  </tr>
 		    <?php
-			foreach ($this->addressHistoryList as $addressHistory) {
+			foreach ($this->addressStatusChangeList as $addressStatusChange) {
 				$editButton = '';
 				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/addresses/updateAddressHistory.php');
-					$url->id = $addressHistory->getId();
+					$url = new URL(BASE_URL.'/addresses/updateAddressStatusChange.php');
+					$url->id = $addressStatusChange->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				echo "<tr><td>$editButton</td>
-                          <td>{$addressHistory->getStreet_address_id()}</td>
-                          <td>{$addressHistory->getStatus()}</td>
-                          <td>{$addressHistory->getStart_date('n/j/Y')}</td>
-                          <td>{$addressHistory->getEnd_date('n/j/Y')}</td>
+                          <td>{$addressStatusChange->getStreet_address_id()}</td>
+                          <td>{$addressStatusChange->getStatus()}</td>
+                          <td>{$addressStatusChange->getStart_date('n/j/Y')}</td>
+                          <td>{$addressStatusChange->getEnd_date('n/j/Y')}</td>
                      </tr>";
 			}
 		?>

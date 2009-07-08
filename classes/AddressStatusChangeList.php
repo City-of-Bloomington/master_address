@@ -16,7 +16,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class AddressHistoryList extends ZendDbResultIterator
+class AddressStatusChangeList extends ZendDbResultIterator
 {
 	/**
 	 * Creates a basic select statement for the collection.
@@ -82,6 +82,6 @@ class AddressHistoryList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new AddressHistory($this->result[$key]);
+		return new AddressStatusChange($this->result[$key]);
 	}
 }

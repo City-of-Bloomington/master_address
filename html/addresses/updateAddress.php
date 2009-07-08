@@ -27,11 +27,11 @@ if (isset($_POST['address'])) {
 }
 $subunits = new SubunitList();
 $subunits->find(array('street_address_id'=>$address->getStreet_address_id()));
-$addressHistory = new AddressHistory();
-$addressHistory->find(array('street_address_id'=>$address->getStreet_address_id());
+$addressStatusChange = new AddressStatusChange();
+$addressStatusChange->find(array('street_address_id'=>$address->getStreet_address_id());
 
 $template = new Template();
 $template->blocks[] = new Block('addresses/updateAddressForm.inc',array('address'=>$address));
-$template->blocks[] = new Block('addresses/addressHistoryList.inc',array('addressHistoryList'=>$addressHistory));					  
+$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',array('addressStatusChangeList'=>$addressStatusChange));					  
 $template->blocks[] = new Block('subunits/subunitList.inc',array('subunitList'=>$subunits, 'address'=>$address));
 echo $template->render();

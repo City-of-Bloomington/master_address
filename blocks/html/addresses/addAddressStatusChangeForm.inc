@@ -10,18 +10,18 @@ $statuses->find();
 ?>
 <h1>Add Address Status Change</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Address History Info</legend>
+	<fieldset><legend>Address Status Change Info</legend>
 		<table>
 
 			<tr><td><label>Street Address ID</label></td>
    
                  <td><?php  echo $this->street_address_id; ?>
-   				     <input name="addressHistory[street_address_id]" type="hidden" value="<?php echo $this->street_address_id; ?>" />
+   				     <input name="addressStatusChange[street_address_id]" type="hidden" value="<?php echo $this->street_address_id; ?>" />
 				</td>
 			</tr>
 				
-			<tr><td><label for="addressHistory-status_code">Status</label></td>
-				<td><select name="addressHistory[status_code]" id="addressHistory-status_code" />
+			<tr><td><label for="addressStatusChange-status_code">Status</label></td>
+				<td><select name="addressStatusChange[status_code]" id="addressStatusChange-status_code" />
                      <option></option>
                      <?php
                          foreach($status in $statuses){
@@ -31,12 +31,12 @@ $statuses->find();
 				</td>
 			</tr>
 				
-			<tr><td><label for="addressHistory-start_date">Start Date</label></td>
-				<td><input name="addressHistory[start_date]" id="addressHistory-start_date" size="10" maxlength="10" />
+			<tr><td><label for="addressStatusChange-start_date">Start Date</label></td>
+				<td><input name="addressStatusChange[start_date]" id="addressStatusChange-start_date" size="10" maxlength="10" />
 				</td>
 			</tr>
-			<tr><td><label for="addressHistory-end_date">End Date</label></td>
-				<td><input name="addressHistory[end_date]" id="addressHistory-end_date" size="10" maxlength="10" />
+			<tr><td><label for="addressStatusChange-end_date">End Date</label></td>
+				<td><input name="addressStatusChange[end_date]" id="addressStatusChange-end_date" size="10" maxlength="10" />
 				</td>
 			</tr>
 		</table>

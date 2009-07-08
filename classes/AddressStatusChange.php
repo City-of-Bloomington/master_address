@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class AddressHistory
+class AddressStatusChange
 {
 	private $id;
 	private $street_address_id;
@@ -12,10 +12,8 @@ class AddressHistory
 	private $start_date;
 	private $end_date;
 
-
 	private $address;
 	private $addressStatus;
-
 
 
 	/**
