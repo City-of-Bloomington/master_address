@@ -23,10 +23,11 @@ $statuses->find();
 				<td><select name="addressStatusChange[status_code]" id="addressStatusChange-status_code">
                      <option></option>
                      <?php
-                         foreach($status in $statuses){
+                         foreach($statuses as $status){
 	                         $selected = $status->getStatus_code() == $this->addressStatusChange->getStatus_code()? "selected=\"selected\"":"";
-	                         echo "<option $selected value=\"{$status->getStatus_code()\">$status</option>";
+	                         echo "<option $selected value=\"{$status->getStatus_code()}\">$status</option>";
                          }
+                      ?>
                   </select> 
 				</td>
 			</tr>

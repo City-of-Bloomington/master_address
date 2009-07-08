@@ -31,6 +31,7 @@ class Address
 	private $longitude;
 	private $notes;
 	private $status_code;
+	private $new_status;
 
 	private $trash_pickup_day;	// Comes from mast_address_sanitation
 	private $recycle_week;		// Comes from mast_address_sanitation
@@ -134,7 +135,7 @@ class Address
 		$data['a']['latitude'] = $this->latitude ? $this->latitude : null;
 		$data['a']['longitude'] = $this->longitude ? $this->longitude : null;
 		$data['a']['notes'] = $this->notes ? $this->notes : null;
-		$data['a']['status_code'] = $this->status_code ? $this->status_code : null;
+		$data['a']['status_code'] = $this->new_status ? $this->new_status : null;
 		$data['s']['trash_pickup_day'] = $this->trash_pickup_day ? $this->trash_pickup_day : null;
 		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
 
@@ -144,6 +145,7 @@ class Address
 		else {
 			$this->insert($data);
 		}
+		$this->updateStatus();
 	}
 
 	private function update($data)
@@ -168,7 +170,30 @@ class Address
 		$zend_db->insert('mast_address_sanitation',$data['s']);
 
 	}
-
+	private function updateStatus(){
+	  if($this->new_status && $this->new_status != $this->status_code){
+		//
+		// need to add end date to the old status change record
+		//
+		$list = new AddressStatusChangeList();
+		$data = array();
+		$data['street_address_id'] = $this->street_address_id;
+		if($this->status_code)
+		  $date['status_code'] = $this->status_code;
+		$date['end_date']= null;
+		$list->find($data);
+		foreach($list as $addressStatusChange){
+		  $addressStatusChange->setEnd_date(date("Y-m-d"));
+		  $addressStatusChange->save();
+		}
+		$addrChange = new AddressStatusChange();
+		$addrChange->setStreet_address_id($this->street_address_id);
+		$addrChange->setStatus_code($this->new_status);
+		$addrChange->setStart_date(date("Y-m-d"));
+		$addrChange->save();
+		$this->status_code = $this->new_status;
+	  }
+	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -709,7 +734,7 @@ class Address
 	 */
 	public function setStatus_code($number)
 	{
-		$this->status_code = $number;
+		$this->new_status = $number;
 	}
 
 	/**

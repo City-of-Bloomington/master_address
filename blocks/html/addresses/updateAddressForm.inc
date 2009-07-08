@@ -157,10 +157,10 @@
 							$list = new AddressStatusList();
 							$list->find();
 							foreach ($list as $status) {
-								$selected = $this->address->getStatus_code() == $status
+							  $selected = $this->address->getStatus_code() == $status->getStatus_code()
 											? 'selected="selected"'
 											: '';
-								echo "<option value=\"{$status->getId()}\" $selected>$status</option>";
+								echo "<option value=\"{$status->getStatus_code()}\" $selected>$status</option>";
 							}
 						?>
 				    </select>

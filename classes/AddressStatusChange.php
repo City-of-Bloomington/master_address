@@ -38,13 +38,21 @@ class AddressStatusChange
 				$zend_db = Database::getConnection();
 				$sql = 'select * from mast_address_status where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
+				
 			}
 
 			if ($result) {
 				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
+				  if (preg_match('/date/',$field) && $value!='0000-00-00') {
+					if(!$value)
+					  $value = null;
+					else
+					  $value = new Date($value);
+					$this->$field = $value;					  
+				  }
+				  elseif ($value){
+					$this->$field = $value;
+				  }
 				}
 			}
 			else {

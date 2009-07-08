@@ -23,7 +23,7 @@ if (isset($_POST['addressStatusChange'])) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
-$address_street_id = $_REQUEST['address_street_id'];
+$street_address_id = $_REQUEST['street_address_id'];
 $template = new Template();
-$template->blocks[] = new Block('addresses/addAddressStatusChangeForm.inc', array('address_street_id'=>$address_street_id));
+$template->blocks[] = new Block('addresses/addAddressStatusChangeForm.inc', array('street_address_id'=>$street_address_id));
 echo $template->render();

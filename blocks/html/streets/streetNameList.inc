@@ -41,7 +41,7 @@
                          <td>$editButton</td>
                          <td>{$streetName->getDirection()->getCode()}</td>
                          <td>$name</td>
-                         <td>{$streetName->getSuffix()}</td>
+                         <td>{$streetName->getStreetType()->getDescription()}</td>
                          <td>{$streetName->getPostDirection()->getDescription()}</td>
 				         <td>{$streetName->getStreetNameType()}</td>
                          <td>{$streetName->getEffective_start_date('n/j/Y')}</td>

@@ -7,31 +7,27 @@
 ?>
 <div class="interfaceBox">
 	<h1>
-		<?php
-			if (userHasRole('Administrator')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/addresses/addAddressHistory.php?street_address_id={$this->street_address_id}\">Add</a>";
-			}
-		?>
 		Address Status Changes
 	</h1>
 	<table>
 		 <tr><th></th>
-		     <th>Street Address ID</th>
 		     <th>Status</th>
 		     <th>Start Date</th>
 		     <th>End Date</th>
 		  </tr>
 		    <?php
 			foreach ($this->addressStatusChangeList as $addressStatusChange) {
+
 				$editButton = '';
+			  /*				
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/addresses/updateAddressStatusChange.php');
 					$url->id = $addressStatusChange->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
+			  */
 				echo "<tr><td>$editButton</td>
-                          <td>{$addressStatusChange->getStreet_address_id()}</td>
-                          <td>{$addressStatusChange->getStatus()}</td>
+                          <td>{$addressStatusChange->getAddressStatus()}</td>
                           <td>{$addressStatusChange->getStart_date('n/j/Y')}</td>
                           <td>{$addressStatusChange->getEnd_date('n/j/Y')}</td>
                      </tr>";

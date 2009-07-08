@@ -12,9 +12,7 @@ $statuses->find();
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Address Status Change Info</legend>
 		<table>
-
 			<tr><td><label>Street Address ID</label></td>
-   
                  <td><?php  echo $this->street_address_id; ?>
    				     <input name="addressStatusChange[street_address_id]" type="hidden" value="<?php echo $this->street_address_id; ?>" />
 				</td>
@@ -24,9 +22,10 @@ $statuses->find();
 				<td><select name="addressStatusChange[status_code]" id="addressStatusChange-status_code" />
                      <option></option>
                      <?php
-                         foreach($status in $statuses){
-	                           echo "<option value=\"{$status->getStatus_code()\">$status</option>";
+                         foreach($statuses as $status){
+	                           echo "<option value=\"{$status->getStatus_code()}\">$status</option>";
                          }
+                       ?>
                   </select> 
 				</td>
 			</tr>

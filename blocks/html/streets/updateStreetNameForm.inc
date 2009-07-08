@@ -20,7 +20,7 @@
 							$directions = new DirectionList();
 							$directions->find();
 							foreach ($directions as $direction) {
-								$selected = ($direction->getCode() == $this->streetName->getDirectionCode())
+								$selected = ($direction->getCode() == $this->streetName->getStreet_direction_code())
 											? 'selected="selected"'
 											: '';
 								echo "<option $selected value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
@@ -31,7 +31,7 @@
 			</tr>
 
 			<tr><td><label for="streetName-street_name" class="required">Name</label></td>
-				<td><input name="streetName[street_name]" id="streetName-street_name" value="<?php echo View::escape($this->streetName->getName()); ?>" />
+				<td><input name="streetName[street_name]" id="streetName-street_name" value="<?php echo View::escape($this->streetName->getStreet_name()); ?>" />
 				</td>
 			</tr>
 
