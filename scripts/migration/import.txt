@@ -1,0 +1,6 @@
+exp owner=CE,DP,E2,ENG,GIS,JAVA,UENG,UCS,UTDB file=proto.dmp
+
+imp fromuser=CE,DP,E2,ENG,GIS,JAVA,UENG,UCS,UTDB \
+touser=CE,DP,E2,ENG,GIS,JAVA,UENG,UCS,UTDB \
+ignore=y \
+file=proto.dmp
