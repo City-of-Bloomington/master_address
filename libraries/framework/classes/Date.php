@@ -31,7 +31,12 @@ class Date extends DateTime
 				$date = $dateString;
 			}
 		}
-		parent::__construct($date);
+		if (is_int($date)) {
+			$date = date('Y-m-d',$date);
+		}
+		if (!$date instanceof DateTime) {
+			parent::__construct($date);
+		}
 	}
 
 	public function __toString()
