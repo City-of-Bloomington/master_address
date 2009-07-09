@@ -52,10 +52,23 @@ class AddressStatusChangeList extends ZendDbResultIterator
 		// Finding on fields from the mast_address_status table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
+			  //  echo " **  $key $value";
+			  if (preg_match('/date/',$key)) {
+				if($value){
+				  $date = new Date($value);
+				  $value = $date->format("Y-m-d");
+				}
+				else
+				  $this->select->where("$key is null");
+			  }
+			  elseif($value){
 				$this->select->where("$key=?",$value);
+			  }				
 			}
 		}
-
+		// echo $this->select->__toString();
+		// throw new Exception('addresses/unknownAddressHistory');
+		//
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the

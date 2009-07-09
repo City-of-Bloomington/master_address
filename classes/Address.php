@@ -171,6 +171,7 @@ class Address
 
 	}
 	private function updateStatus(){
+	  
 	  if($this->new_status && $this->new_status != $this->status_code){
 		//
 		// need to add end date to the old status change record
@@ -179,8 +180,9 @@ class Address
 		$data = array();
 		$data['street_address_id'] = $this->street_address_id;
 		if($this->status_code)
-		  $date['status_code'] = $this->status_code;
-		$date['end_date']= null;
+		  $data['status_code'] = $this->status_code;
+		$data['end_date'] = null;
+		// print_r($data);
 		$list->find($data);
 		foreach($list as $addressStatusChange){
 		  $addressStatusChange->setEnd_date(date("Y-m-d"));

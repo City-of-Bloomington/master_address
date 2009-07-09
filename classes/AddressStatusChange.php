@@ -44,11 +44,10 @@ class AddressStatusChange
 			if ($result) {
 				foreach ($result as $field=>$value) {
 				  if (preg_match('/date/',$field) && $value!='0000-00-00') {
-					if(!$value)
-					  $value = null;
-					else
+					if($value){
 					  $value = new Date($value);
-					$this->$field = $value;					  
+					  $this->$field = $value;
+					}
 				  }
 				  elseif ($value){
 					$this->$field = $value;

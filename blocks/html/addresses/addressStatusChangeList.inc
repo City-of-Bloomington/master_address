@@ -19,13 +19,13 @@
 			foreach ($this->addressStatusChangeList as $addressStatusChange) {
 
 				$editButton = '';
-			  /*				
+
 				if (userHasRole('Administrator')) {
 					$url = new URL(BASE_URL.'/addresses/updateAddressStatusChange.php');
 					$url->id = $addressStatusChange->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-			  */
+
 				echo "<tr><td>$editButton</td>
                           <td>{$addressStatusChange->getAddressStatus()}</td>
                           <td>{$addressStatusChange->getStart_date('n/j/Y')}</td>
