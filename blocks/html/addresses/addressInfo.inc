@@ -46,7 +46,7 @@ echo "
 </table>
 ";
 	$purposes = array();
-	foreach ($this->address->getLocation()->getPurposes() as $purpose) {
+	foreach ($this->address->getPurposes() as $purpose) {
 		$purposes[$purpose->getType()][] = $purpose->getDescription();
 	}
 	if (count($purposes)) {

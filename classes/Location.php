@@ -348,7 +348,10 @@ class Location
 	 */
 	public function getPurposes()
 	{
-		return new PurposeList(array('location_id'=>$this->location_id));
+		if ($this->location_id) {
+			return new PurposeList(array('location_id'=>$this->location_id));
+		}
+		return array();
 	}
 
 	public function getCityCouncilPurpose()

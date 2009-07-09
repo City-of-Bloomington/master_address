@@ -882,9 +882,19 @@ class Address
 			$list = new LocationList(array('street_address_id'=>$this->street_address_id,
 											'subunit_id'=>null,
 											'active'=>'Y'));
-			$this->location = $list[0];
+			if (count($list)) {
+				$this->location = $list[0];
+			}
 		}
 		return $this->location;
+	}
+
+	public function getPurposes()
+	{
+		if ($this->getLocation()) {
+			return $this->getLocation()->getPurposes();
+		}
+		return array();
 	}
 
 	/**

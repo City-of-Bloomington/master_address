@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
+$township = $this->address->getTownship()
+			? View::escape($this->address->getTownship()->getName())
+			: '';
 echo "
 <address>
 	<id>{$this->address->getId()}</id>
@@ -19,12 +22,12 @@ echo "
 		<y>{$this->address->getState_plane_y_coordinate()}</y>
 	</statePlane>
 	<jurisdiction>{$this->address->getJurisdiction()->getDescription()}</jurisdiction>
-	<township>{$this->address->getTownship()->getName()}</township>
+	<township>$township</township>
 	<trashDay>{$this->address->getTrashDay()}</trashDay>
 	<recycleWeek>{$this->address->getRecycleWeek()}</recycleWeek>
 	<censusBlock>{$this->address->getCensus_block_fips_code()}</censusBlock>
 ";
-	$purposes = $this->address->getLocation()->getPurposes();
+	$purposes = $this->address->getPurposes();
 	if (count($purposes)) {
 		echo "<purposes>";
 		foreach ($purposes as $purpose) {
