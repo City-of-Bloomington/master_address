@@ -170,31 +170,29 @@ class Address
 		$zend_db->insert('mast_address_sanitation',$data['s']);
 
 	}
-	private function updateStatus(){
-	  
-	  if($this->new_status && $this->new_status != $this->status_code){
-		//
-		// need to add end date to the old status change record
-		//
-		$list = new AddressStatusChangeList();
-		$data = array();
-		$data['street_address_id'] = $this->street_address_id;
-		if($this->status_code)
-		  $data['status_code'] = $this->status_code;
-		$data['end_date'] = null;
-		// print_r($data);
-		$list->find($data);
-		foreach($list as $addressStatusChange){
-		  $addressStatusChange->setEnd_date(date("Y-m-d"));
-		  $addressStatusChange->save();
+
+	private function updateStatus()
+	{
+		if ($this->new_status && $this->new_status != $this->status_code) {
+			// Set the end date for the old status to today
+			$data = array('street_address_id'=>$this->street_address_id,'end_date'=>null);
+			if($this->status_code) {
+				$data['status_code'] = $this->status_code;
+			}
+			$list = new AddressStatusChangeList($data);
+			foreach ($list as $addressStatusChange) {
+				$addressStatusChange->setEnd_date(date("Y-m-d"));
+				$addressStatusChange->save();
+			}
+
+			// Create the new status starting today
+			$addrChange = new AddressStatusChange();
+			$addrChange->setStreet_address_id($this->street_address_id);
+			$addrChange->setStatus_code($this->new_status);
+			$addrChange->setStart_date(date("Y-m-d"));
+			$addrChange->save();
+			$this->status_code = $this->new_status;
 		}
-		$addrChange = new AddressStatusChange();
-		$addrChange->setStreet_address_id($this->street_address_id);
-		$addrChange->setStatus_code($this->new_status);
-		$addrChange->setStart_date(date("Y-m-d"));
-		$addrChange->save();
-		$this->status_code = $this->new_status;
-	  }
 	}
 	//----------------------------------------------------------------
 	// Generic Getters
