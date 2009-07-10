@@ -257,7 +257,7 @@ class AddressList extends ZendDbResultIterator
 	 * @param string $string
 	 * @return array
 	 */
-	public function parseAddress($string)
+	public static function parseAddress($string)
 	{
 		//echo "Starting with $string\n";
 		$address = preg_replace('/[^\w\s\/\-]/',' ',$string);
@@ -271,7 +271,7 @@ class AddressList extends ZendDbResultIterator
 
 		//echo "Looking for number: $address\n";
 		$directionCodePattern = implode('|',self::getDirections());
-		$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern])?)";
+		$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern]\s)?)";
 		if (preg_match("/^$numberPattern/i",$address,$matches)) {
 			$output['street_number'] = trim($matches['number']);
 			$address = preg_replace("/^$matches[number]/i",'',$address);
