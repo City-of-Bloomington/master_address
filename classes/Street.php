@@ -20,6 +20,7 @@ class Street
 	private $postDirection; // post_direction_suffix_code
 	private $streetNameList;
 	private $streetName;
+	private $addresses;
 
 
 	/**
@@ -333,7 +334,31 @@ class Street
 		}
 		return null;
 	}
+	
+	/**
+	 * @return StreetNameList
+	 */
+	
+	public function getNames()
+	{
+	  return  $this->getStreetNameList();
+	}
 
+
+	/**
+	 * @return AddressList
+	 */
+	public function getAddresses()
+	{
+		if ($this->street_id) {
+			if (!$this->addresses) {
+			    $addresses = new AddressList(array('street_id'=>$this->street_id));
+				$this->addresses = $addresses;
+			}
+			return $this->addresses;
+		}
+		return null;
+	}
 	/**
 	 * @return StreetName
 	 */

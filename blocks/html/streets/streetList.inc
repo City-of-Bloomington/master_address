@@ -12,14 +12,17 @@ if (count($this->streetList)) {
 		<tr>
 		    <th>Street Name</th>
 			<th>Status</th>
+            <th>Town</th>
 		</tr>
 	";
 		foreach ($this->streetList as $street) {
 			$name = View::escape($street->getStreetName());
 			$status = View::escape($street->getStatus()->getDescription());
+			$town = View::escape($street->getTown()->getDescription());
 			echo "
 			<tr><td><a href=\"{$street->getURL()}\">$name</a></th>
 				<td>$status</td>
+                <td>$town</td>
 			</tr>
 			";
 		}

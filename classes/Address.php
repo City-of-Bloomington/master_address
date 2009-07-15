@@ -147,7 +147,7 @@ class Address
 		}
 		$this->updateStatus();
 	}
-
+	//
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
