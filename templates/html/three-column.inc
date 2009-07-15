@@ -21,7 +21,9 @@
 			<?php
 				include FRAMEWORK.'/errorMessages.php';
 
+				// This is the default panel
 				echo $this->includeBlocks();
+				echo $this->includeBlocks('content-panel');
 			?>
 		</div>
 	</div>
