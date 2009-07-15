@@ -346,4 +346,12 @@ class Street
 		}
 		return $this->streetName;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getURL()
+	{
+		return BASE_URL.'/streets/viewStreet.php?street_id='.$this->street_id;
+	}
 }

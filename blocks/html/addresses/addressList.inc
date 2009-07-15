@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param AddressList $this->addressList
  */
+echo $this->addressList->getSQL();
 if (count($this->addressList)) {
 	$addButton = userHasRole('Administrator')
 				? "<a class=\"add button\" href=\"".BASE_URL."/addresses/addAddress.php\">Add</a>"

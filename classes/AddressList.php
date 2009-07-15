@@ -102,6 +102,10 @@ class AddressList extends ZendDbResultIterator
 			$joins['n'] = array('table'=>'mast_street_names',
 								'condition'=>'s.street_id=n.street_id');
 			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+
+			if ($order == 'street_number') {
+				$order = 'n.street_name,a.street_number';
+			}
 		}
 
 		if (isset($fields['streetType'])) {
@@ -123,6 +127,7 @@ class AddressList extends ZendDbResultIterator
 			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 		}
 
+		$order = (substr($order,1,1) == '.') ? $order : "a.$order";
 		$this->select->order($order);
 		if ($limit) {
 			$this->select->limit($limit);
@@ -183,6 +188,10 @@ class AddressList extends ZendDbResultIterator
 			$joins['n'] = array('table'=>'mast_street_names',
 								'condition'=>'s.street_id=n.street_id');
 			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+
+			if ($order == 'street_number') {
+				$order = 'n.street_name,a.street_number';
+			}
 		}
 
 		if (isset($fields['streetType'])) {
@@ -206,10 +215,11 @@ class AddressList extends ZendDbResultIterator
 		}
 		// Add all the joins we've created to the select
 		foreach ($joins as $key=>$join) {
-			$this->select->joinLeft(array($key=>$join['table']),$join['condition']);
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 		}
 
 
+		$order = (substr($order,1,1) == '.') ? $order : "a.$order";
 		$this->select->order($order);
 		if ($limit) {
 			$this->select->limit($limit);
@@ -306,14 +316,13 @@ class AddressList extends ZendDbResultIterator
 		$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
 		if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
 			try {
-				$output['subunitType'] = $matches['subunitType'];
+				$output['subunitType'] = new SubunitType($matches['subunitType']);
+				$output['subunitIdentifier'] = $matches['subunitIdentifier'];
+				$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 			}
 			catch (Exception $e) {
-				// Just ignore anything that's not a know type
+				// Just ignore anything that's not a known type
 			}
-
-			$output['subunitIdentifier'] = $matches['subunitIdentifier'];
-			$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 		}
 
 		//echo "Looking for Street Name: $address\n";

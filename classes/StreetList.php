@@ -17,6 +17,7 @@
  */
 class StreetList extends ZendDbResultIterator
 {
+	private $columns;
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -31,6 +32,7 @@ class StreetList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
+		$this->columns = $this->zend_db->describeTable('mast_street');
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -46,21 +48,29 @@ class StreetList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='street_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('mast_street');
+		$this->select->from(array('s'=>'mast_street'));
 
 		// Finding on fields from the mast_street table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$this->select->where("$key=?",$value);
+				if (array_key_exists($key,$this->columns)) {
+					$this->select->where("s.$key=?",$value);
+				}
 			}
 		}
+
+		if (isset($fields['streetName'])) {
+			$this->select->joinLeft(array('n'=>'mast_street_names'),'s.street_id=n.street_id',array());
+			$this->select->where('n.street_name like ?',"$fields[streetName]%");
+		}
+
 
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the mast_street table.
 
-		$this->select->order($order);
+		$this->select->order("s.$order");
 		if ($limit) {
 			$this->select->limit($limit);
 		}

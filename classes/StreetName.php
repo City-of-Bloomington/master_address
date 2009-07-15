@@ -447,6 +447,13 @@ class StreetName
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		$name = $this->getDirectionCode() ? $this->getDirectionCode().' ' : '';
+		$name.= $this->getName();
+		$name.= $this->getPostDirectionCode() ? ' '.$this->getPostDirectionCode() : '';
+		return $name;
+	}
 	/**
 	 * Alias for getStreet_name()
 	 *

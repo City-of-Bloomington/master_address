@@ -7,29 +7,7 @@
 $template = new Template();
 
 
-$streetStatusList = new StreetStatusList();
-$streetStatusList->find();
-$template->blocks[] = new Block('streets/streetStatusList.inc',
-								array('streetStatusList'=>$streetStatusList));
-
-$directionList = new DirectionList();
-$directionList->find();
-$template->blocks[] = new Block('streets/directionList.inc',array('directionList'=>$directionList));
-
-$streetNameTypeList = new StreetNameTypeList();
-$streetNameTypeList->find();
-$template->blocks[] = new Block('streets/streetNameTypeList.inc',
-								array('streetNameTypeList'=>$streetNameTypeList));
-
-$streetTypeList = new StreetTypeList();
-$streetTypeList->find();
-$template->blocks[] = new Block('streets/streetTypeList.inc',
-								array('streetTypeList'=>$streetTypeList));
-
-$streetList = new StreetList();
-$streetList->find(null,null,15);
-$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streetList));
-
+$template->blocks[] = new Block('streets/findStreetForm.inc');
 
 
 echo $template->render();

@@ -23,8 +23,26 @@ if ($template->outputFormat == 'html') {
 if (isset($_GET['address'])) {
 	$addresses = new AddressList();
 	$addresses->search(array('address'=>$_GET['address']));
-	$template->blocks[] = new Block('addresses/addressList.inc',
-									array('addressList'=>$addresses));
+
+	// If there's only one address returned, we should display the address
+	if (count($addresses) != 1) {
+		$template->blocks[] = new Block('addresses/addressList.inc',
+										array('addressList'=>$addresses));
+	}
+	else {
+		$address = $addresses[0];
+	}
+}
+// If they ask for an address, we should display the address
+if (isset($_GET['address_id'])) {
+	try {
+		$address = new Address($_GET['address_id']);
+	}
+	catch (Exception $e) {
+	}
+}
+if (isset($address)) {
+	$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 }
 
 echo $template->render();
