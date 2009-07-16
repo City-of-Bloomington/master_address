@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$street_id="";
+if(isset($_GET['street_id'])){
+  $street_id=$_GET['street_id'];
+}
 ?>
 <h1>Add Address</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
@@ -15,8 +19,19 @@
 			</tr>
 
 			<tr><td><label for="address-street_id" class="required">Street ID</label></td>
-				<td><input name="address[street_id]" id="address-street_id" />
-				</td>
+                <?php
+                   if($street_id){
+	                  echo "<td>$street_id 
+	                        <input type=\"hidden\" value=\"$street_id\"></td>
+                            ";
+				   }
+                   else{
+					   echo "
+				            <td><input name=\"address[street_id]\" id=\"address-street_id\" />
+				            </td>
+                            ";
+				   }
+				 ?>
 			</tr>
 
 			<tr><td><label for="address-address_type" class="required">Type</label></td>

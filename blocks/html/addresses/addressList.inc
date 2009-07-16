@@ -5,13 +5,17 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param AddressList $this->addressList
  */
-echo $this->addressList->getSQL();
+$street_id="";
+if(isset($this->street)){
+  $street_id=$this->street->getStreet_id();
+}
 if (count($this->addressList)) {
 	$addButton = userHasRole('Administrator')
-				? "<a class=\"add button\" href=\"".BASE_URL."/addresses/addAddress.php\">Add</a>"
+				? "<a class=\"add button\" href=\"".BASE_URL."/addresses/addAddress.php?street_id=$street_id\">Add</a>"
 				: '';
 	echo "
-<div class=\"interfaceBox\">
+
+  <div class=\"interfaceBox\">
 	<h1>$addButton Addresss</h1>
 	<table>
 		<tr><th></th>
