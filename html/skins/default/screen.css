@@ -151,9 +151,13 @@ ul.pageNavigation li { margin-right:2px; }
 
 
 /* Menu Bars */
-.menuBar { border-top:2px solid black; border-bottom:2px solid black; }
-.menuBar ul { list-style:none; }
-.menuBar li { display:inline; }
+.menuBar { height:30px; border-top:2px solid black; border-bottom:2px solid black; }
+.menuBar ul { list-style:none; width:400px; margin:5px 0 0 0; padding:0; }
+.menuBar li { display:inline; font-weight:bold; font-size:16px; margin-right:1em; }
+.menuBar form { height:30px; margin:5px 5px 0 0; padding:0; float:right; }
+.menuBar fieldset { border:none; margin:0; padding:0; }
+.menuBar legend { display:none; }
+.menuBar button { display:none; }
 
 
 
