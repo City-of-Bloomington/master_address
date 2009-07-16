@@ -45,6 +45,7 @@ class Address
 	private $status;
 
 	private $location;
+	private $subunits;
 
 	private static $addressTypes = array("STREET","UTILITY","PROPERTY",
 										"PARCEL","FACILITY","TEMPORARY");
@@ -540,6 +541,32 @@ class Address
 		return null;
 	}
 
+	/**
+	 * @return SubunitList
+	 */
+	public function getSubunits()
+	{
+		if ($this->street_address_id) {
+			if (!$this->subunits) {
+			  $this->subunits = new SubunitList(array('street_address_id'=>$this->street_address_id));
+			}
+			return $this->subunits;
+		}
+		return null;
+	}
+	/**
+	 * @return number
+	 */
+	public function getSubunitCount()
+	{
+	  if (!$this->subunits) {
+		$this->getSubunits();
+	  }
+	  if($this->subunits){
+		return count($this->subunits);
+	  }
+	  return null;
+	}
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------

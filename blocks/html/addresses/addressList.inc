@@ -20,7 +20,12 @@ if (count($this->addressList)) {
 	<table>
 		<tr><th></th>
 			<th>ID</th>
-			<th>Address</th>
+            <th>Street Number</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Jurisdiction</th>
+			<th>Zip Code</th>
+            <th>Sub Units</th>
 		</tr>
 	";
 			foreach ($this->addressList as $address) {
@@ -31,10 +36,21 @@ if (count($this->addressList)) {
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
 				$streetAddress = View::escape($address->getStreetAddress());
+				$street_number = $address->getStreet_number();
+				$type = $address->getAddress_type();
+				$status = $address->getStatus();
+				$jurisdiction = $address->getJurisdiction();
+				$zip = $address->getZip();
+				$count = $address->getSubunitCount();
 				echo "
 				<tr><td>$editButton</td>
 					<td><a href=\"{$address->getURL()}\">{$address->getId()}</a></td>
-					<td><a href=\"{$address->getURL()}\">$streetAddress</a></td>
+                    <td>$street_number</td>
+                    <td>$type</td>
+                    <td>$status</td>
+                    <td>$jurisdiction</td>
+                    <td>$zip</td>
+                    <td>$count</td>
 				</tr>
 				";
 			}
