@@ -78,6 +78,13 @@ ul.pageNavigation li { margin-right:2px; }
 	}
 	#banner a { color:white; text-decoration:none; }
 
+	#banner .loginForm { position:absolute; top:5px; right:5px; }
+	#banner .loginForm h1 { display:none; }
+	#banner .loginForm fieldset { border:none; margin:0; padding:0; }
+	#banner .loginForm legend { display:none; }
+	#banner .loginForm button { display:none; }
+	#banner .loginForm a { font-weight:bold; color:blue; }
+
 /* Side Panels */
 #panel-container { padding-top:2px; padding-bottom:2px; }
 #panel-one { }

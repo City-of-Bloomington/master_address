@@ -26,4 +26,9 @@ catch (Exception $e) {
 }
 
 // The user has successfully logged in.  Redirect them wherever you like
-header('Location: '.BASE_URL);
+if ($_POST['return_url']) {
+	header('Location: '.$_POST['return_url']);
+}
+else {
+	header('Location: '.BASE_URL);
+}
