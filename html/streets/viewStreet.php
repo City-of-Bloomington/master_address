@@ -8,12 +8,13 @@
 $street = new Street($_GET['street_id']);
 
 $template = new Template('two-column');
-$template->blocks['content-panel'][] = new Block('streets/streetInfo.inc',
-								array('street'=>$street));
-
-$template->blocks['content-panel'][] = new Block('streets/streetNameList.inc',
-								array('streetNameList'=>$street->getNames(),'street'=>$street));
+$template->blocks[] = new Block('streets/breadcrumbs.inc',array('street'=>$street));
+$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$street));
+$template->blocks[] = new Block('streets/streetNameList.inc',
+								array('streetNameList'=>$street->getNames(),
+										'street'=>$street));
 
 $template->blocks['panel-one'][] = new Block('addresses/addressList.inc',
-											 array('addressList'=>$street->getAddresses(),'street'=>$street));
+											 array('addressList'=>$street->getAddresses(),
+													'street'=>$street));
 echo $template->render();

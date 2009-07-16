@@ -7,6 +7,7 @@
 $template = isset($_GET['format']) ? new Template('default',$_GET['format']) : new Template();
 
 if ($template->outputFormat == 'html') {
+	$template->blocks[] = new Block('streets/breadcrumbs.inc');
 	$template->blocks[] = new Block('streets/findStreetForm.inc');
 }
 

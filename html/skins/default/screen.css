@@ -90,7 +90,7 @@ ul.pageNavigation li { margin-right:2px; }
 #panel-one { }
 
 /* Main Content */
-#content-panel {  }
+#content-panel { }
 
 /* Interface Boxes */
 .interfaceBox img { margin-bottom:.5em; }
@@ -141,6 +141,12 @@ ul.pageNavigation li { margin-right:2px; }
 .menuBar fieldset { border:none; margin:0; padding:0; }
 .menuBar legend { display:none; }
 .menuBar button { display:none; }
+
+.breadcrumbs ul { list-style:none; margin:0; padding:0; }
+.breadcrumbs li {
+	display:inline; font-size:18px; font-weight:bold;
+	padding-right:12px; background:url('images/buttons/breadcrumb.gif') no-repeat right;
+}
 
 
 
