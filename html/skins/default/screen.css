@@ -21,7 +21,7 @@ a:hover { color:#0066CC; background-color:transparent; text-decoration:underline
 
 img { border:0; padding:2px; }
 
-h1 { display:table; text-align:left; font-size:2em; border-bottom:6px double #99cccc; margin-top:3px; margin-bottom:12px; }
+h1 { text-align:left; font-size:2em; margin-top:3px; margin-bottom:12px; }
 h2 { margin-top:3px; font-size:1.75em;  }
 h3 { margin-top:3px; font-size:1.5em; }
 h4 { margin-top:3px; font-size:1em; font-weight:bold; }
@@ -88,31 +88,17 @@ ul.pageNavigation li { margin-right:2px; }
 /* Side Panels */
 #panel-container { padding-top:2px; padding-bottom:2px; }
 #panel-one { }
-	#panel-one fieldset { border:none; }
-	#panel-one legend { display:none; }
-	#panel-one div { margin: 0 0 7px 4px; border:1px solid black; }
-	#panel-one ul { list-style:none; margin:0; padding-left:10px; }
-	#panel-one h1 {
-		font-size:16px;
-		color:black; background-color:#99CCCC;
-		border:1px solid black;
-		margin:-1px; padding: 8px 8px 8px 8px;
-	}
 
 /* Main Content */
-#content-panel { padding-right:1px; padding-left:4px; }
-	#content-panel .interfaceBox img { margin-bottom:.5em; }
-	#content-panel .interfaceBox h1 { font-size:1.25em; margin-top:4px; height:20px; }
-	#content-panel .interfaceBox h1 a { margin:0px; height:20px; }
-	#content-panel .interfaceBox h1 a:link,.titleBar a:visited {
-		color:white; background-color:transparent;
-	}
-	#content-panel .interfaceBox h1 form {
-		margin:0; padding:0; display:inline; height:1em;
-	}
-	#content-panel .interfaceBox h1 form fieldset {
-		margin:0; padding:0; border:0; display:inline;
-	}
+#content-panel {  }
+
+/* Interface Boxes */
+.interfaceBox img { margin-bottom:.5em; }
+.interfaceBox h1 { font-size:1.25em; margin-top:4px; height:20px; }
+.interfaceBox h1 a { margin:0px; height:20px; }
+.interfaceBox h1 a:link,.titleBar a:visited { color:white; background-color:transparent; }
+.interfaceBox h1 form { margin:0; padding:0; display:inline; height:1em; }
+.interfaceBox h1 form fieldset { margin:0; padding:0; border:0; display:inline; }
 
 
 /* Controls how error messages are displayed */
