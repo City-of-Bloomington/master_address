@@ -11,17 +11,17 @@ foreach ($this->streetList as $street) {
 	$town = addslashes($street->getTown()->getDescription());
 	$notes = addslashes($street->getNotes());
 	$string = <<<EOD
-	"street":{
+	{
 		"id":"{$street->getId()}",
 		"direction":"{$street->getDirection()}",
 		"name":"$name",
 		"postDirection":"{$street->getPostDirection()}",
 		"town":"$town",
 		"status":"{$street->getStatus_code()}",
-		"notes":"$notes",
+		"notes":"$notes"
 	}
 EOD;
 	$streets[] = $string;
 }
 $streets = implode(",\n",$streets);
-echo '{'.$streets.'}';
+echo '{"streets":['.$streets.']}';

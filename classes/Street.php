@@ -334,11 +334,11 @@ class Street
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return StreetNameList
 	 */
-	
+
 	public function getNames()
 	{
 	  return  $this->getStreetNameList();
@@ -367,7 +367,17 @@ class Street
 		if (!$this->streetName) {
 			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
 														'street_name_type'=>'STREET'));
-			$this->streetName = $streetNameList[0];
+			if (count($streetNameList)) {
+				$this->streetName = $streetNameList[0];
+			}
+			else {
+				# We couldn't find a name of the TYPE:STREET for this street.
+				# Do another search and see if we can find any name at all
+				$streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
+				if (count($streetNameList)) {
+					$this->streetName = $streetNameList[0];
+				}
+			}
 		}
 		return $this->streetName;
 	}

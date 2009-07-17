@@ -50,6 +50,15 @@ class StreetList extends ZendDbResultIterator
 	{
 		$this->select->from(array('s'=>'mast_street'));
 
+		if (isset($fields['direction'])) {
+			$fields['street_direction_code'] = $fields['direction']->getCode();
+			unset($fields['direction']);
+		}
+		if (isset($fields['postDirection'])) {
+			$fields['post_direction_suffix_code'] = $fields['postDirection']->getCode();
+			unset($fields['postDirection']);
+		}
+
 		// Finding on fields from the mast_street table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
@@ -59,9 +68,9 @@ class StreetList extends ZendDbResultIterator
 			}
 		}
 
-		if (isset($fields['streetName'])) {
+		if (isset($fields['street_name'])) {
 			$this->select->joinLeft(array('n'=>'mast_street_names'),'s.street_id=n.street_id',array());
-			$this->select->where('n.street_name like ?',"$fields[streetName]%");
+			$this->select->where('n.street_name like ?',"$fields[street_name]%");
 		}
 
 

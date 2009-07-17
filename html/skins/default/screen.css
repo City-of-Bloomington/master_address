@@ -188,3 +188,5 @@ a.unsubscribe { width:22px; height:22px; background-image:url('images/buttons/ma
 .total td { padding-bottom:1em; }
 .instructions { }
 .unpublished { text-decoration:line-through; }
+
+.yui-skin-sam .yui-ac { font-size:100%; margin-bottom:1em; }

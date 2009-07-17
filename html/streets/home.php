@@ -12,8 +12,11 @@ if ($template->outputFormat == 'html') {
 }
 
 if (isset($_GET['streetName'])) {
-	$streets = new StreetList(array('streetName'=>$_GET['streetName']));
-	$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));
+	$fields = AddressList::parseAddress($_GET['streetName']);
+	if (count($fields)) {
+		$streets = new StreetList($fields);
+		$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));
+	}
 }
 
 echo $template->render();
