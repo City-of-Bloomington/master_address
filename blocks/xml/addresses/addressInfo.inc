@@ -31,8 +31,10 @@ echo "
 	if (count($purposes)) {
 		echo "<purposes>";
 		foreach ($purposes as $purpose) {
+			$type = View::escape($purpose->getType());
+			$description = View::escape($purpose->getDescription());
 			echo "
-			<purpose type=\"{$purpose->getType()}\">{$purpose->getDescription()}</purpose>
+			<purpose type=\"$type\">$description</purpose>
 			";
 		}
 		echo "</purposes>";
