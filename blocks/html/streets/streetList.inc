@@ -10,7 +10,6 @@ if (count($this->streetList)) {
 	echo "
 	<table>
 		<tr>
-			<th>ID</th>
 		    <th>Street Name</th>
 			<th>Status</th>
             <th>Town</th>
@@ -21,7 +20,7 @@ if (count($this->streetList)) {
 			$status = View::escape($street->getStatus()->getDescription());
 			$town = View::escape($street->getTown()->getDescription());
 			echo "
-			<tr><td><a href=\"{$street->getURL()}\">{$street->getId()}</a></td>
+			<tr>
 				<td><a href=\"{$street->getURL()}\">$name</a></td>
 				<td>$status</td>
                 <td>$town</td>
