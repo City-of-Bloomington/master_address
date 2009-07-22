@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET building_type_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('BuildingType')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/buildings');
+	exit();
+}
 
 $buildingType = new BuildingType($_REQUEST['building_type_id']);
 if (isset($_POST['buildingType'])) {

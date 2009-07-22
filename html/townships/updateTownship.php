@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET township_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Township')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/townships');
+	exit();
+}
 
 $township = new Township($_REQUEST['township_id']);
 if (isset($_POST['township'])) {

@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET address_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Address')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/addresses');
+	exit();
+}
 
 $address = new Address($_REQUEST['street_address_id']);
 if (isset($_POST['address'])) {
@@ -23,20 +26,19 @@ if (isset($_POST['address'])) {
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
-	
 }
-$subunits = new SubunitList();
-$subunits->find(array('street_address_id'=>$address->getStreet_address_id()));
-$addressStatusChangeList = new AddressStatusChangeList();
-$addressStatusChangeList->find(array('street_address_id'=>$address->getStreet_address_id()));
+
+$subunits = new SubunitList(array('street_address_id'=>$address->getStreet_address_id()));
+$addressStatusChangeList = new AddressStatusChangeList(array('street_address_id'=>$address->getStreet_address_id()));
 
 $template = new Template();
 $template->blocks[] = new Block('addresses/updateAddressForm.inc',array('address'=>$address));
-
-$template->blocks[] = new Block('subunits/subunitList.inc',array('subunitList'=>$subunits, 'address'=>$address));
+$template->blocks[] = new Block('subunits/subunitList.inc',
+								array('subunitList'=>$subunits,'address'=>$address));
 
 if(count($addressStatusChangeList)){
-    $template->blocks[] = new Block('addresses/addressStatusChangeList.inc',array('addressStatusChangeList'=>$addressStatusChangeList));
+	$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
+	array('addressStatusChangeList'=>$addressStatusChangeList));
 }
 
 echo $template->render();

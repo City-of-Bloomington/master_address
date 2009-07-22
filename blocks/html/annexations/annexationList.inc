@@ -9,7 +9,7 @@
 <div class="interfaceBox">
 	<h1>
 		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Annexation')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/annexations/addAnnexation.php\">Add</a>";
 			}
 		?>
@@ -19,7 +19,7 @@
 		<?php
 			foreach ($this->annexationList as $annexation) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('Annexation')) {
 					$url = new URL(BASE_URL.'/annexations/updateAnnexation.php');
 					$url->annexation_id = $annexation->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

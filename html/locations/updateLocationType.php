@@ -5,7 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET locationType_id
  */
-verifyUser('Administrator');
+if (!userIsAllowed('LocationType')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/locations');
+	exit();
+}
 
 $locationType = new LocationType($_REQUEST['locationType_id']);
 if (isset($_POST['locationType'])) {

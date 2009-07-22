@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Town')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/towns');
+	exit();
+}
 
 if (isset($_POST['town'])) {
 	$town = new Town();

@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET annexation_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Annexation')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/annexations');
+	exit();
+}
 
 $annexation = new Annexation($_REQUEST['annexation_id']);
 if (isset($_POST['annexation'])) {

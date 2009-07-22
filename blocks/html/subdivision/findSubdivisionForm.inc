@@ -6,8 +6,6 @@
  */
 $sub = new SubdivisionName();
 $statuses = $sub->getStatuses();
-$townships = new TownshipList();
-$townships->find();
 ?>
 
 <h1>Find Subdivisions</h1>
@@ -18,13 +16,19 @@ $townships->find();
 				<td><select name="sub[township_id]" id="sub-township_id">
                         <option></option>
                         <?php
-                            foreach ($townships as $township){
-	                                $selected = (isset($_GET['sub']['township_id']) && $_GET['sub']['township_id'] == $township->getId())
-											? 'selected=\"selected\"'
-											: '';
-							  
-				               echo "<option $selected value=\"{$township->getId()}\">
-                                    {$township->getName()}</option>";
+							$townships = new TownshipList();
+							$townships->find();
+                            foreach ($townships as $township) {
+								$selected = (isset($_GET['sub']['township_id'])
+												&& $_GET['sub']['township_id'] == $township->getId())
+										? 'selected=\"selected\"'
+										: '';
+
+								echo "
+								<option $selected value=\"{$township->getId()}\">
+									{$township->getName()}
+								</option>
+								";
 			            }
 		            ?>
                    </select>
@@ -42,9 +46,9 @@ $townships->find();
 				<td><select name="sub[status]" id="sub-status">
 						<option></option>
 						<?php
-                           foreach ($statuses as $status){
+							foreach ($statuses as $status) {
 								$selected = (isset($_GET['sub']['status'])
-											 && $_GET['sub']['status']==$status)
+												&& $_GET['sub']['status']==$status)
 											? 'selected="selected"'
 											: '';
 								echo "<option $selected>$status</option>";

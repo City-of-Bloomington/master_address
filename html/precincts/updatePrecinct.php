@@ -5,7 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET precinct_id
  */
-verifyUser('Administrator');
+if (!userIsAllowed('Precinct')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/precincts');
+	exit();
+}
 
 $precinct = new Precinct($_REQUEST['precinct_id']);
 if (isset($_POST['precinct'])) {

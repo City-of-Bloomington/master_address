@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET contact_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Contact')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/addressChange');
+	exit();
+}
 
 $contact = new Contact($_REQUEST['contact_id']);
 if (isset($_POST['contact'])) {

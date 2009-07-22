@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Annexation')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/annexations');
+	exit();
+}
 
 if (isset($_POST['annexation'])) {
 	$annexation = new Annexation();

@@ -5,7 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Request person_id
  */
-verifyUser('Administrator');
+if (!userIsAllowed('Person')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/people');
+	exit();
+}
 $person = new Person($_REQUEST['person_id']);
 
 if (isset($_POST['person'])) {

@@ -9,7 +9,7 @@
 <div class="interfaceBox">
 	<h1>
    		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('StreetType')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/streets/addStreetType.php\">Add</a>";
 			}
 		?>
@@ -23,7 +23,7 @@
 		<?php
 			foreach ($this->streetTypeList as $streetType) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('StreetType')) {
 					$url = new URL(BASE_URL.'/streets/updateStreetType.php');
 					$url->streetType_id = $streetType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

@@ -11,7 +11,7 @@ if (!count($this->platList)) {
 ?>
 <div class="interfaceBox">
 	<h1><?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Plat')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/plats/addPlat.php\">Add</a>";
 			}
 		?>
@@ -30,7 +30,7 @@ if (!count($this->platList)) {
 		<?php
 			foreach ($this->platList as $plat) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('Plat')) {
 					$url = new URL(BASE_URL.'/plats/updatePlat.php');
 					$url->plat_id = $plat->getPlat_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

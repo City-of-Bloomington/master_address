@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET purpose_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Purpose')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/locations');
+	exit();
+}
 
 $purpose = new Purpose($_REQUEST['purpose_id']);
 if (isset($_POST['purpose'])) {

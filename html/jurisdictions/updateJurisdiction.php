@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET jurisdiction_id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Jurisdiction')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/jurisdictions');
+	exit();
+}
 
 $jurisdiction = new Jurisdiction($_REQUEST['jurisdiction_id']);
 if (isset($_POST['jurisdiction'])) {

@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param streetType $this->streetType
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('StreetType')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/streets');
+	exit();
+}
 
 $streetType = new StreetType($_REQUEST['streetType_id']);
 if (isset($_POST['streetType'])) {

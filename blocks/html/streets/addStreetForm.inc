@@ -18,7 +18,6 @@
 							$directions->find();
 							foreach ($directions as $direction) {
 								echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
-
 							}
 						?>
 					</select>

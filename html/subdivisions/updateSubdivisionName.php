@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('SubdivisionName')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/subdivisions');
+	exit();
+}
 
 $subdivisionName = new SubdivisionName($_REQUEST['subdivision_name_id']);
 if (isset($_POST['subdivisionName'])) {

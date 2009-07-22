@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('BuildingStatus')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/buildings');
+	exit();
+}
 
 $buildingStatus = new BuildingStatus($_REQUEST['status_code']);
 if (isset($_POST['buildingStatus'])) {
@@ -25,5 +28,6 @@ if (isset($_POST['buildingStatus'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('buildings/updateBuildingStatusForm.inc',array('buildingStatus'=>$buildingStatus));
+$template->blocks[] = new Block('buildings/updateBuildingStatusForm.inc',
+								array('buildingStatus'=>$buildingStatus));
 echo $template->render();

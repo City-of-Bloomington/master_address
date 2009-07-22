@@ -121,3 +121,12 @@ if (!defined('STDIN')) {
 	ini_set('session.save_path',APPLICATION_HOME.'/data/sessions');
 	session_start();
 }
+
+/**
+ * Load the Zend_Acl
+ * Access control is going to handled using the Zend_Acl
+ * We only need to load it, if someone is logged in
+ */
+if (isset($_SESSION['USER'])) {
+	include APPLICATION_HOME.'/access_control.inc';
+}

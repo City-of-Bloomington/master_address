@@ -8,7 +8,7 @@
 ?>
 <div class="interfaceBox">
 	<h1><?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Town')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/towns/addTown.php\">Add</a>";
 			}
 		?>
@@ -18,7 +18,7 @@
 	<?php
 		foreach ($this->townList as $town) {
 			$editButton = '';
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Town')) {
 				$url = new URL(BASE_URL.'/towns/updateTown.php');
 				$url->town_id = $town->getId();
 				$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

@@ -8,7 +8,7 @@
 <div class="interfaceBox">
 	<h1>
    		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Direction')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/streets/addDirection.php\">Add</a>";
 			}
 		?>
@@ -22,7 +22,7 @@
 		<?php
 			foreach ($this->directionList as $direction) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('Direction')) {
 					$url = new URL(BASE_URL.'/streets/updateDirection.php');
 					$url->id = $direction->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

@@ -4,9 +4,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$statuses = new AddressStatusList();
-$statuses->find();
-
 ?>
 <h1>Add Address Status Change</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
@@ -17,19 +14,21 @@ $statuses->find();
    				     <input name="addressStatusChange[street_address_id]" type="hidden" value="<?php echo $this->street_address_id; ?>" />
 				</td>
 			</tr>
-				
+
 			<tr><td><label for="addressStatusChange-status_code">Status</label></td>
 				<td><select name="addressStatusChange[status_code]" id="addressStatusChange-status_code" />
-                     <option></option>
-                     <?php
-                         foreach($statuses as $status){
-	                           echo "<option value=\"{$status->getStatus_code()}\">$status</option>";
-                         }
-                       ?>
-                  </select> 
+						<option></option>
+						<?php
+							$statuses = new AddressStatusList();
+							$statuses->find();
+							foreach($statuses as $status){
+								echo "<option value=\"{$status->getCode()}\">$status</option>";
+							}
+						?>
+                  </select>
 				</td>
 			</tr>
-				
+
 			<tr><td><label for="addressStatusChange-start_date">Start Date</label></td>
 				<td><input name="addressStatusChange[start_date]" id="addressStatusChange-start_date" size="10" maxlength="10" />
 				</td>

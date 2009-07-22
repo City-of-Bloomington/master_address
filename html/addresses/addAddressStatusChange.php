@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('AddressStatusChange')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/addresses');
+	exit();
+}
 
 if (isset($_POST['addressStatusChange'])) {
 	$addressStatusChange = new AddressStatusChange();
@@ -25,5 +28,6 @@ if (isset($_POST['addressStatusChange'])) {
 }
 $street_address_id = $_REQUEST['street_address_id'];
 $template = new Template();
-$template->blocks[] = new Block('addresses/addAddressStatusChangeForm.inc', array('street_address_id'=>$street_address_id));
+$template->blocks[] = new Block('addresses/addAddressStatusChangeForm.inc',
+								array('street_address_id'=>$street_address_id));
 echo $template->render();

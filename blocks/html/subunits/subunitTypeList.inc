@@ -9,7 +9,7 @@
 <div class="interfaceBox">
 	<h1>
 		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('SubunitType')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/subunits/addSubunitType.php\">Add</a>";
 			}
 		?>
@@ -23,7 +23,7 @@
 		<?php
 			foreach ($this->subunitTypeList as $subunitType) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('SubunitType')) {
 					$url = new URL(BASE_URL.'/subunits/updateSubunitType.php');
 					$url->subunitType_id = $subunitType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

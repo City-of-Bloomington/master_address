@@ -8,7 +8,7 @@
 ?>
 <div class="interfaceBox">
 	<h1><?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Person')) {
 				echo "
 				<a class=\"add button\" href=\"".BASE_URL."/people/addPerson.php\" title=\"Add a person\">
 					Add
@@ -19,30 +19,29 @@
 		People
 	</h1>
 	<table>
-		<?php
-			foreach ($this->personList as $person) {
-				$editButton = '';
+	<?php
+		foreach ($this->personList as $person) {
+			$editButton = '';
 
-				if (userHasRole('Administrator')) {
-					$url = new URL(BASE_URL.'/people/updatePerson.php');
-					$url->person_id = $person->getId();
-					$editButton = "
-					<a class=\"edit button\" href=\"$url\" title=\"Edit Person\">
-						Edit
-					</a>
-					";
-
-				}
-
-				$name = View::escape($person->getFullname());
-				echo "
-				<tr><td>$editButton</td>
-					<td>{$person->getUsername()}</td>
-					<td><a href=\"{$person->getURL()}\">$name</a></td>
-					<td>{$person->getEmail()}</td>
-				</tr>
+			if (userIsAllowed('Person')) {
+				$url = new URL(BASE_URL.'/people/updatePerson.php');
+				$url->person_id = $person->getId();
+				$editButton = "
+				<a class=\"edit button\" href=\"$url\" title=\"Edit Person\">
+					Edit
+				</a>
 				";
 			}
-		?>
+
+			$name = View::escape($person->getFullname());
+			echo "
+			<tr><td>$editButton</td>
+				<td>{$person->getUsername()}</td>
+				<td><a href=\"{$person->getURL()}\">$name</a></td>
+				<td>{$person->getEmail()}</td>
+			</tr>
+			";
+		}
+	?>
 	</table>
 </div>

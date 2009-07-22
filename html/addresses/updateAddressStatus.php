@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET status_code
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('AddressStatus')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/addresses');
+	exit();
+}
 
 $addressStatus = new AddressStatus($_REQUEST['status_code']);
 if (isset($_POST['addressStatus'])) {

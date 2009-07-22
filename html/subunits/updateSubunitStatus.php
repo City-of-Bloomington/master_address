@@ -3,9 +3,13 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param GET id
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('SubunitStatus')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/subunits');
+	exit();
+}
 
 $subunitStatus = new SubunitStatus($_REQUEST['id']);
 if (isset($_POST['subunitStatus'])) {

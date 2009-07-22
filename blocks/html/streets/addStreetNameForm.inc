@@ -5,7 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
  */
-
 ?>
 <h1>Add Street Name</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">

@@ -14,7 +14,7 @@ $notes = View::escape($street->getNotes());
 <div class="interfaceBox">
 	<h2>Street Information
 		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Street')) {
 				$url = new URL(BASE_URL.'/streets/updateStreet.php');
 				$url->street_id = $street->getId();
 				echo "<a class=\"edit button\" href=\"$url\">Edit</a>";

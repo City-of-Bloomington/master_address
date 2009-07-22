@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('LocationChange')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/locations');
+	exit();
+}
 
 $locationChange = new LocationChange($_REQUEST['location_change_id']);
 if (isset($_POST['locationChange'])) {
@@ -25,5 +28,6 @@ if (isset($_POST['locationChange'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('locations/updateLocationChangeForm.inc',array('locationChange'=>$locationChange));
+$template->blocks[] = new Block('locations/updateLocationChangeForm.inc',
+								array('locationChange'=>$locationChange));
 echo $template->render();

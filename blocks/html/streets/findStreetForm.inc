@@ -21,8 +21,7 @@
 </div>
 
 <script type="text/javascript">
-//YAHOO.example.BasicRemote = function() {
-something = function() {
+findStreetForm_autosuggest = function() {
     var streetService = new YAHOO.util.XHRDataSource("<?php echo BASE_URL; ?>/streets/home.php");
     streetService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
     streetService.responseSchema = {

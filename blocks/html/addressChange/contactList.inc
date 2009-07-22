@@ -9,7 +9,7 @@
 <div class="interfaceBox">
 	<h1>
 		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Contact')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/addressChange/addContact.php\">Add</a>";
 			}
 		?>
@@ -26,7 +26,7 @@
 		<?php
 			foreach ($this->contactList as $contact) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('Contact')) {
 					$url = new URL(BASE_URL.'/addressChange/updateContact.php');
 					$url->contact_id = $contact->getContact_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

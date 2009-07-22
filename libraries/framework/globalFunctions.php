@@ -194,6 +194,27 @@ function userHasRole($roles)
 }
 
 /**
+ * Checks if the user is logged in and is supposed to have acces to the resource
+ *
+ * This is implemented by checking against a Zend_Acl object
+ * The Zend_Acl should be created in configuration.inc
+ * @param Zend_Acl_Resource|string $resource
+ * @return boolean
+ */
+function userIsAllowed($resource)
+{
+	global $ZEND_ACL;
+	if (isset($_SESSION['USER'])) {
+		foreach ($_SESSION['USER']->getRoles() as $role) {
+			if ($ZEND_ACL->isAllowed($role,$resource)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
  * Browsers still use & when creating the url's when posting a form.
  * This will convert those into XHTML-compliant semicolons for using inside the markup
  *

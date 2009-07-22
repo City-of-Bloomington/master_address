@@ -34,13 +34,14 @@ if (count($this->streetList)) {
 else {
 	echo "<h2>No Streets Found</h2>";
 }
-	if (userHasRole('Administrator')) {
-		$addURL = BASE_URL.'/streets/addStreet.php';
-		echo "
-		<p>Can't find what you're looking for?
-			<a href=\"$addURL\">Create New Street</a>
-		</p>
-		";
-	}
+
+if (userIsAllowed('Street')) {
+	$addURL = BASE_URL.'/streets/addStreet.php';
+	echo "
+	<p>Can't find what you're looking for?
+		<a href=\"$addURL\">Create New Street</a>
+	</p>
+	";
+}
 ?>
 </div>

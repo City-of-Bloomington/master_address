@@ -8,7 +8,7 @@
 ?>
 <div class="interfaceBox">
 	<h1><?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('LocationType')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/locations/addLocationType.php\">Add</a>";
 			}
 		?>
@@ -22,7 +22,7 @@
 		<?php
 			foreach ($this->locationTypeList as $locationType) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('LocationType')) {
 					$url = new URL(BASE_URL.'/locations/updateLocationType.php');
 					$url->locationType_id = $locationType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

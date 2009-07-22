@@ -6,7 +6,7 @@
  * @param Town $this->town
  */
 ?>
-<h1>Update TownsMaster</h1>
+<h1>Update Town</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Town Info</legend>
 		<input name="town_id" type="hidden" value="<?php echo $this->town->getTown_id(); ?>" />

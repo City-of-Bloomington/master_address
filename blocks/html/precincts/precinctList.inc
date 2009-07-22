@@ -9,7 +9,7 @@
 <div class="interfaceBox">
 	<h1>
 		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('Precinct')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/precincts/addPrecinct.php\">Add</a>";
 			}
 		?>
@@ -24,7 +24,7 @@
 		<?php
 			foreach ($this->precinctList as $precinct) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('Precinct')) {
 					$url = new URL(BASE_URL.'/precincts/updatePrecinct.php');
 					$url->precinct_id = $precinct->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";

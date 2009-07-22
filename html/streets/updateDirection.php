@@ -5,8 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET direction_code
  */
-
-verifyUser('Administrator');
+if (!userIsAllowed('Direction')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/streets');
+	exit();
+}
 
 $direction = new Direction($_REQUEST['id']);
 if (isset($_POST['direction'])) {

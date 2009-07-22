@@ -37,4 +37,8 @@ if ($count == 0) {
 
 	$zend_db->insert('user_roles',array('user_id'=>$user_id,'role_id'=>$role_id));
 	echo "User $user_id now has role $role_id\n";
+
+	// Populate the rest of the roles
+	$zend_db->insert('roles',array('name'=>'Engineering'));
+	$zend_db->insert('roles',array('name'=>'GIS'));
 }

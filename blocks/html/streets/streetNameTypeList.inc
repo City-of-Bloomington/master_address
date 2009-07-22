@@ -3,12 +3,13 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param StreeNameTypeList $this->streetNameTypeList
  */
 ?>
 <div class="interfaceBox">
 	<h1>
    		<?php
-			if (userHasRole('Administrator')) {
+			if (userIsAllowed('StreeNameType')) {
 				echo "<a class=\"add button\" href=\"".BASE_URL."/streets/addStreetNameType.php\">Add</a>";
 			}
 		?>
@@ -22,7 +23,7 @@
 		<?php
 			foreach ($this->streetNameTypeList as $nameType) {
 				$editButton = '';
-				if (userHasRole('Administrator')) {
+				if (userIsAllowed('StreeNameType')) {
 					$url = new URL(BASE_URL.'/streets/updateStreetNameType.php');
 					$url->id = $nameType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
