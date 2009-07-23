@@ -162,72 +162,72 @@ class AddressList extends ZendDbResultIterator
 					$this->select->where("a.$key like ?","$value%");
 				}
 			}
-		}
 
-		// Finding on fields from other tables requires joining those tables.
-		// You can handle fields from other tables by adding the joins here
-		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the mast_address table.
-		$joins = array();
-		if (isset($fields['direction'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$this->select->where('s.street_direction_code=?',$fields['direction']->getCode());
-		}
-
-		if (isset($fields['postDirection'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$this->select->where('s.post_direction_suffix_code=?',
-								$fields['postDirection']->getCode());
-		}
-
-		if (isset($fields['street_name'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_name like ?',"$fields[street_name]%");
-
-			if ($order == 'street_number') {
-				$order = 'n.street_name,a.street_number';
+			// Finding on fields from other tables requires joining those tables.
+			// You can handle fields from other tables by adding the joins here
+			// If you add more joins you probably want to make sure that the
+			// above foreach only handles fields from the mast_address table.
+			$joins = array();
+			if (isset($fields['direction'])) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$this->select->where('s.street_direction_code=?',$fields['direction']->getCode());
 			}
-		}
 
-		if (isset($fields['streetType'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
-		}
+			if (isset($fields['postDirection'])) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$this->select->where('s.post_direction_suffix_code=?',
+									$fields['postDirection']->getCode());
+			}
 
-		if (isset($fields['subunitType'])) {
-			$joins['u'] = array('table'=>'mast_address_subunits',
-								'condition'=>'a.street_address_id=u.street_address_id');
-			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
-		}
+			if (isset($fields['street_name'])) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.street_name like ?',"$fields[street_name]%");
 
-		if (isset($fields['subdivision_id'])) {
-			$joins['su'] = array('table'=>'mast_street_subdivision',
-								'condition'=>'a.street_id=su.street_id');
-			$this->select->where('su.subdivision_id=?',$fields['subdivision_id']);
-		}
-		// Add all the joins we've created to the select
-		foreach ($joins as $key=>$join) {
-			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
-		}
+				if ($order == 'street_number') {
+					$order = 'n.street_name,a.street_number';
+				}
+			}
+
+			if (isset($fields['streetType'])) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+			}
+
+			if (isset($fields['subunitType'])) {
+				$joins['u'] = array('table'=>'mast_address_subunits',
+									'condition'=>'a.street_address_id=u.street_address_id');
+				$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
+			}
+
+			if (isset($fields['subdivision_id'])) {
+				$joins['su'] = array('table'=>'mast_street_subdivision',
+									'condition'=>'a.street_id=su.street_id');
+				$this->select->where('su.subdivision_id=?',$fields['subdivision_id']);
+			}
+			// Add all the joins we've created to the select
+			foreach ($joins as $key=>$join) {
+				$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
+			}
 
 
-		$order = (substr($order,1,1) == '.') ? $order : "a.$order";
-		$this->select->order($order);
-		if ($limit) {
-			$this->select->limit($limit);
+			$order = (substr($order,1,1) == '.') ? $order : "a.$order";
+			$this->select->order($order);
+			if ($limit) {
+				$this->select->limit($limit);
+			}
+			if ($groupBy) {
+				$this->select->group($groupBy);
+			}
+			$this->populateList();
 		}
-		if ($groupBy) {
-			$this->select->group($groupBy);
-		}
-		$this->populateList();
 	}
 
 	/**
@@ -269,6 +269,8 @@ class AddressList extends ZendDbResultIterator
 	 */
 	public static function parseAddress($string)
 	{
+		$output = array();
+
 		//echo "Starting with $string\n";
 		$address = preg_replace('/[^\w\s\/\-]/',' ',$string);
 		$address = preg_replace('/\s+/',' ',$address);
