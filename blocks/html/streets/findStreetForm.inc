@@ -7,7 +7,7 @@
 ?>
 <div id="findStreetForm" class="yui-skin-sam">
 	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend>Search Streets</legend>
+		<fieldset><legend>Search</legend>
 			<label for="streetName">Street Name</label>
 			<div id="findStreetForm-autocomplete" style="width:15em;">
 				<input name="streetName" id="streetName"

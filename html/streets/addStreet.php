@@ -16,11 +16,11 @@ if (isset($_POST['street'])) {
 		$set = 'set'.ucfirst($field);
 		$street->$set($value);
 	}
-
 	try {
 		$street->save();
 		header('Location: '.BASE_URL.'/streets');
 		exit();
+		
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
