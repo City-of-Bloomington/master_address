@@ -18,6 +18,15 @@ if (isset($_POST['street'])) {
 	}
 	try {
 		$street->save();
+        if (isset($_POST['streetName'])) {
+        	$streetName = new StreetName(); 
+            foreach ($_POST['streetName'] as $field=>$value) {
+                $set = 'set'.ucfirst($field);
+                $streetName->$set($value);
+            }
+        }
+        $streetName->setStreet_id($street->getStreet_id());
+        $streetName->save();
 		header('Location: '.BASE_URL.'/streets');
 		exit();
 		
@@ -26,6 +35,7 @@ if (isset($_POST['street'])) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
+
 
 $template = new Template();
 $template->blocks[] = new Block('streets/addStreetForm.inc');

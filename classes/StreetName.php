@@ -119,7 +119,7 @@ class StreetName
 		$zend_db = Database::getConnection();
 		$zend_db->insert('mast_street_names',$data);
 		if (Database::getType()=='oracle') {
-			$this->id = $zend_db->lastSequenceId('street_name_s');
+			$this->id = $zend_db->lastSequenceId('street_names_id_s');
 		}
 		else {
 		    $this->id = $zend_db->lastInsertId('mast_street_names','id');

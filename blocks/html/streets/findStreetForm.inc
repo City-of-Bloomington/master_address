@@ -37,7 +37,7 @@ findStreetForm_autosuggest = function() {
 		return '?format=json;streetName=' + query;
 	}
 
-    return {
+    return{ 
         streetService: streetService,
 		findStreetFormAC: findStreetFormAC
     };

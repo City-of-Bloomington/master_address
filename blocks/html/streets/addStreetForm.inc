@@ -6,9 +6,9 @@
  * @author W. Sibo <sibow@bloomington.in.gov>
  */
 ?>
-<h1>Add Street</h1>
+<h1>Streets / Add Street</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Street Info</legend>
+	<fieldset><legend>Street Information</legend>
 		<table>
 			<tr><td><label for="street-street_direction_code">Direction</label></td>
 				<td><select name="street[street_direction_code]" id="street-street_direction_code" >
@@ -18,6 +18,25 @@
 							$directions->find();
 							foreach ($directions as $direction) {
 								echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+
+			<tr><td><label for="street-name">Name</label></td>
+				<td><input name="streetName[street_name]" id="street-name" />
+				</td>
+			</tr>
+			
+			<tr><td><label for="street-suffix">Suffix</label></td>
+				<td><select name="streetName[street_type_suffix_code]" id="street-suffix" >
+						<option></option>
+						<?php
+							$suffixes = new StreetTypeList();
+							$suffixes->find();
+							foreach ($suffixes as $suffix) {
+								echo "<option value=\"{$suffix->getSuffix_code()}\">{$suffix->getDescription()}</option>";
 							}
 						?>
 					</select>
@@ -66,14 +85,29 @@
 				</td>
 			</tr>
 
+			<tr><td><label for="street-type">Type</label></td>
+				<td><select name="streetName[street_name_type]" id="street-type" >
+						<option></option>
+						<?php
+							$types = new StreetNameTypeList();
+							$types->find();
+							foreach ($types as $type) {
+								echo "<option value=\"{$type->getStreet_name_type()}\">{$type->getDescription()}</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>			
+
 			<tr><td><label for="street-notes">Notes</label></td>
-				<td><input name="street[notes]" id="street-notes" />
+				<td><textarea name="street[notes]" id="street-notes" rows="4" cols="30" wrap="wrap">
+				</textarea>
 				</td>
 			</tr>
 
 		</table>
 
-		<button type="submit" class="submit">Submit</button>
+		<button type="submit" class="submit">Submit Street</button>
 		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/streets';">
 			Cancel
 		</button>

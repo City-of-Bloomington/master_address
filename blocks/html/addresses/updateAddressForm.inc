@@ -22,21 +22,25 @@
 						</td>
 						</tr>
 						<tr><td><label for="address-address_type" class="required">Type</label></td>
-							<td><select name="address[address_type]" id="address-address_type">
-							<?php
-								foreach (Address::getAddressTypes() as $type) {
-									$selected = $this->address->getAddress_type() == $type
+							<td>
+								<select name="address[address_type]" id="address-address_type">
+								<?php
+									foreach (Address::getAddressTypes() as $type) {
+										$selected = $this->address->getAddress_type() == $type
 											? 'selected="selected"'
 											: '';
-									echo "<option $selected>$type</option>";
-								}
-							?>	
-		                  </select>
-						</td></tr>
+										echo "<option $selected>$type</option>";
+									}
+								?>	
+								</select>
+							</td>
+						</tr>
+						
 						<tr><td><label for="address-city">City</label></td>
 							<td><input name="address[city]" id="address-city" value="<?php echo $this->address->getCity(); ?>" />
 							</td>
 						</tr>
+						
 						<tr><td><label for="address-zip">Zip</label></td>
 							<td><input name="address[zip]" id="address-zip" value="<?php echo $this->address->getZip(); ?>" />
 							</td>
@@ -46,6 +50,7 @@
 							<td><input name="address[zipplus4]" id="address-zipplus4" value="<?php echo $this->address->getZipplus4(); ?>" />
 							</td>
 						</tr>
+						
 						<tr><td><label for="address-status_code">Status</label></td>
 							<td><select name="address[status_code]" id="address-status_code" >
 								<option></option>
@@ -62,16 +67,19 @@
 								</select>
 							</td>
 						</tr>
+						
 						<tr><td><label for="address-mailable">Mailable</label></td>
 							<td><checkbox name="location[mailable]" id="address-mailable" value="Y" <?php echo $this->address->getLocation()->getMailable()?"checked=\"checked\"":"";  ?> />
 							</td>
 						</tr>
+						
 						<tr><td><label for="address-livable">Livable</label></td>
 							<td><checkbox name="location[livable]" id="address-livable" value="Y" <?php echo $this->address->getLocation()->getLivable()?"checked=\"checked\"":"";  ?> />
 							</td>
 						</tr>						
 						<!-- 1 checkboxes here -->
 					</td>
+				
 					<td><table> <!-- middle table -->
 						<tr><td><label for="address-jurisdiction_id">Jurisdiction</label></td>
 							<td><select name="address[jurisdiction_id]" id="address-jurisdiction_id">
