@@ -1,0 +1,50 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf460
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 ADDED   -  An existing address or subunit that is missing from the database is added to the database.\
+\
+ASSIGN - New Address or Subunit Address is Assigned\
+\
+CORRECTED - Something incorrect in the address or subunit record is corrected, but it isn\'92t a change of address. The details should go in the NOTES field. Examples include typo in the street number, related to the wrong street_id, fixing the zip code, correcting the subunit numbering from 1, 2, 3 to A, B, C.\
+\
+MOVED TO LOCATION \'96 Address or Subunit is moved from one location to another. This mostly done with corner lot cleanup where each address was assigned to its own location instead of sharing the same location.\
+\
+READDRESSED \'96 Change of Address or Subunit\
+\
+REASSIGNED \'96 An address or subunit that was retired is reassigned to a new address location.\
+\
+RETIRED \'96 Address Location, Address, or Subunit is retired. Details of the reason why should be put in the NOTES field.  Common reasons are buildings demolished, unused corner lot addresses, apartment conversion to single family or remodel with less. If we can come up with a standard of retired reasons, we could make more action values.\
+\
+UNRETIRED \'96 Address or Subunit is unretired for some reason. It could be temporarily so something else can be done with the address such as CBU move services in CUBS or because it was a retired by mistake in the first place. Details should be put in the NOTES field.  If we can come up with some standard unretired reasons, we could make move action values.\
+\
+VERIFIED \'96 This is something we\'92ve been doing, but Eli gets requests to re-notify people of existing address. Sometimes its because people aren\'92t using the correct address or the address was changed and was not adopted. Eli uses the term Clarification to describe this action. The County uses the term verified, which is a bit shorter. Either would work.\
+\
+OTHER \'96 something other than what\'92s in the list of values \'96 details should go in the NOTES field.\
+\
+\
+\
+ADDED STREET \'96 An existing street is added to the database, but is not a new street.\
+\
+ADDED ALIAS \'96 An alias street name was related to the street.\
+\
+CHANGED RANGE \'96 The address range for this street was changed.\
+\
+CORRECTED RANGE \'96 The address range of this street was corrected because it was wrong\
+\
+CORRECTED \'96 Something in the street or street name was changed, but it isn\'92t considered a street name change. Perhaps we had the wrong directional.  Details can be added in the NOTES field.\
+\
+NEW STREET \'96 A new street is going to be built and is added to the database\
+\
+PROPOSED STREET \'96 A street is proposed, but not finalized.\
+\
+RENAMED \'96 A street has a name change.\
+\
+RETIRED \'96 A street is removed from the road network. It doesn\'92t happen often, but it does happen with some new construction.\
+\
+VERIFIED \'96 The correct street name and/or range needs to be reported.\
+\
+ \
+You may have noticed that there are ACTIONS values in both tables that aren\'92t related to actually something changing with the database. (VERIFIED, CHANGED RANGE, CORRECTED RANGE). I put these in case the reporting is related to the history tables.}
