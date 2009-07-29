@@ -6,18 +6,30 @@
  * @param StreetNameList $this->streetNameList
  * @param Street $this->street
  */
+$addButton = '';
+if (userIsAllowed('Street')) {
+	$url = new URL(BASE_URL.'/streets/addStreetName.php');
+	$url->street_id = $this->street->getId();
+	$addButton = "
+		<div>
+			<button type=\"button\" onclick=\"document.location.href='$url';\">
+				Add Street Name
+			</button>
+		</div>
+		";
+}
 ?>
 <div class="interfaceBox">
 	<h1>Street Names</h1>
+	<?php echo $addButton; ?>
 	<table>
-		<tr>
-		    <th>Direction</th>
-		    <th>Street Name</th>
-		    <th>Street Type</th>
-		    <th>Post Direction</th>
-		    <th>Name Type</th>
-		    <th></th>
-		 </tr>
+		<tr><th>Direction</th>
+			<th>Street Name</th>
+			<th>Street Type</th>
+			<th>Post Direction</th>
+			<th>Name Type</th>
+			<th></th>
+		</tr>
 		<?php
 			foreach ($this->streetNameList as $streetName) {
 				$editButton = '';
@@ -40,10 +52,4 @@
 		?>
 
 	</table>
-	<?php
-		$street_id = $this->street->getId();
-		if (userIsAllowed('Street')) {
-			echo "<a class=\"add button\" href=\"".BASE_URL."/streets/addStreetName.php?street_id=$street_id\">Add Street Name</a>";
-		}
-	?>
 </div>
