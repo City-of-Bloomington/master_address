@@ -4,27 +4,35 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SubunitList $this->subunitList
+ * @param Address $this->address
  */
 ?>
-<div class="interfaceBox">
-	<h1>
+<div class="interfaceBox subunitList">
+	<h1>Subunits</h1>
+	<?php
+		if (isset($this->address) && userIsAllowed('Subunit')) {
+			echo "
+			<div>
+				<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/subunits/addSubunit.php?street_address_id={$this->address->getId()}';\">
+					Add Subunit
+				</button>
+			</div>
+			";
+		}
+	?>
+	<table>
+		<tr><th>Type</th>
+			<th>#</th>
+		</tr>
 		<?php
-			if (userIsAllowed('Subunit')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/subunits/addSubunit.php?street_address_id={$this->address->getId()}\">Add</a>";
-			}
-		?>
-		Subunits
-	</h1>
-	<ul><?php
 			foreach ($this->subunitList as $subunit) {
-				$editButton = '';
-				if (userIsAllowed('Subunit')) {
-					$url = new URL(BASE_URL.'/subunits/updateSubunit.php');
-					$url->subunit_id = $subunit->getSubunit_id();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
-				echo "<li>$editButton $subunit</li>";
+				$number = View::escape($subunit->getIdentifier());
+				echo "
+				<tr><td>{$subunit->getType()}</td>
+					<td>$number</td>
+				</tr>
+				";
 			}
 		?>
-	</ul>
+	</table>
 </div>

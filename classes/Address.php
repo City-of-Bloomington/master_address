@@ -30,7 +30,7 @@ class Address
 	private $latitude;
 	private $longitude;
 	private $notes;
-	private $status_code;
+	private $status_code;	// Unused
 	private $new_status;
 
 	private $trash_pickup_day;	// Comes from mast_address_sanitation
@@ -136,7 +136,6 @@ class Address
 		$data['a']['latitude'] = $this->latitude ? $this->latitude : null;
 		$data['a']['longitude'] = $this->longitude ? $this->longitude : null;
 		$data['a']['notes'] = $this->notes ? $this->notes : null;
-		$data['a']['status_code'] = $this->new_status ? $this->new_status : null;
 		$data['s']['trash_pickup_day'] = $this->trash_pickup_day ? $this->trash_pickup_day : null;
 		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
 
@@ -440,14 +439,6 @@ class Address
 	}
 
 	/**
-	 * @return number
-	 */
-	public function getStatus_code()
-	{
-		return $this->status_code;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getTrash_pickup_day()
@@ -479,12 +470,6 @@ class Address
 	 */
 	public function getStatus()
 	{
-		if ($this->status_code) {
-			if (!$this->status) {
-			    $this->status = new AddressStatus($this->status_code);
-			}
-			return $this->status;
-		}
 		return null;
 	}
 	/**

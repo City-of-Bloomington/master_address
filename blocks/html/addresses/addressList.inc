@@ -18,7 +18,7 @@ if (userIsAllowed('Address')) {
 }
 echo "
 <div class=\"interfaceBox addressList\">
-	<h1>Addresss</h1>
+	<h1>Addresses</h1>
 	$addButton
 ";
 	if (count($this->addressList)) {

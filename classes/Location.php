@@ -388,6 +388,9 @@ class Location
 		return array();
 	}
 
+	/**
+	 * @return Purpose
+	 */
 	public function getCityCouncilPurpose()
 	{
 		$list = new PurposeList(array('location_id'=>$this->location_id,
@@ -395,5 +398,13 @@ class Location
 		if (count($list)) {
 			return $list[0];
 		}
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isActive()
+	{
+		return $this->getActive() == 'Y' ? true : false;
 	}
 }

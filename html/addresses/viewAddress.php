@@ -24,4 +24,7 @@ $template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$ad
 $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 $template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
 												array('address'=>$address));
+$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
+												array('address'=>$address,
+														'subunitList'=>$address->getSubunits()));
 echo $template->render();

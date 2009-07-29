@@ -57,7 +57,7 @@ class Subunit
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -98,12 +98,12 @@ class Subunit
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('mast_address_subunits',$data);		
+		$zend_db->insert('mast_address_subunits',$data);
 		if (Database::getType()=='oracle') {
 			$this->subunit_id = $zend_db->lastSequenceId('subunit_id_s');
 		}
 		else{
-		  $this->subunit_id = $zend_db->lastInsertId('mast_address_subunits','subunit_id');		  
+		  $this->subunit_id = $zend_db->lastInsertId('mast_address_subunits','subunit_id');
 		}
 
 	}
@@ -173,7 +173,7 @@ class Subunit
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return SubunitType
 	 */
@@ -239,7 +239,26 @@ class Subunit
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-	  return $this->sudtype." ".$this->street_subunit_identifier;
+		return "{$this->getType()} {$this->getIdentifier()}";
+	}
 
+	/**
+	 * Alias for getSudtype()
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->getSudtype();
+	}
+
+	/**
+	 * Alias for getStreet_subunit_identifier()
+	 *
+	 * @return string
+	 */
+	public function getIdentifier()
+	{
+		return $this->getStreet_subunit_identifier();
 	}
 }

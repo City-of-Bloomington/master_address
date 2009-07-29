@@ -44,7 +44,7 @@ class SubunitList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='subunit_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='street_subunit_identifier',$limit=null,$groupBy=null)
 	{
 		$this->select->from('mast_address_subunits');
 
