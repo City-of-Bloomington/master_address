@@ -109,7 +109,7 @@ ul.pageNavigation li { margin-right:2px; }
 .interfaceBox h1 a:link,.titleBar a:visited { color:white; background-color:transparent; }
 .interfaceBox h1 form { margin:0; padding:0; display:inline; height:1em; }
 .interfaceBox h1 form fieldset { margin:0; padding:0; border:0; display:inline; }
-	.addressList { height:300px; overflow:auto; }
+	.addressList,.subunitList { height:300px; overflow:auto; }
 
 
 /* Controls how error messages are displayed */
@@ -128,14 +128,6 @@ ul.pageNavigation li { margin-right:2px; }
 
 
 /* For pages with tab-type system on them */
-.tabBar ul { list-style: none; margin:0; padding-bottom:7px; border-bottom:1px solid gray; font-weight:bold; white-space:nowrap; }
-.tabBar li { display:inline; margin:0 2px; }
-.tabBar a { border-bottom:4px solid white; color:#999999; }
-.tabBar a.current { border-color:#ff6600; color:#0066ff; }
-.tabBar a:hover { border-color:#ff6600; color:#666666; }
-
-.tabPage { }
-.tabPage > .interfaceBox { margin-left:1em; margin-right:1em; }
 
 /* Page Navigation Stuff */
 .pageNavigation { }

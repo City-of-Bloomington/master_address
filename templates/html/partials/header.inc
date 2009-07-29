@@ -29,6 +29,7 @@
 		@import url('<?php echo BASE_URL; ?>/js/yui/build/assets/skins/sam/skin.css');
 		@import url('<?php echo BASE_URL; ?>/js/yui/build/calendar/assets/skins/sam/calendar.css');
 		@import url('<?php echo BASE_URL; ?>/js/yui/build/autocomplete/assets/skins/sam/autocomplete.css');
+		@import url('<?php echo BASE_URL; ?>/js/yui/build/tabview/assets/skins/sam/tabview.css');
 	</style>
 
 	<title>Master Address</title>
