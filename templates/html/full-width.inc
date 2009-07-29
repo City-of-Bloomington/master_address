@@ -12,7 +12,7 @@
 		include $dir.'/partials/menubar.inc';
 	?>
 
-	<div id="panel-container">
+	<div id="panel-container" class="yui-skin-sam">
 		<div id="content-panel">
 			<?php
 				include FRAMEWORK.'/errorMessages.php';

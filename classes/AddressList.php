@@ -122,6 +122,12 @@ class AddressList extends ZendDbResultIterator
 			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
 		}
 
+		if (isset($fields['location_id'])) {
+			$joins['l'] = array('table'=>'address_location',
+								'condition'=>'a.street_address_id=l.street_address_id');
+			$this->select->where('l.location_id=?',$fields['location_id']);
+		}
+
 		// Add all the joins we've created to the select
 		foreach ($joins as $key=>$join) {
 			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
@@ -211,6 +217,12 @@ class AddressList extends ZendDbResultIterator
 				$joins['su'] = array('table'=>'mast_street_subdivision',
 									'condition'=>'a.street_id=su.street_id');
 				$this->select->where('su.subdivision_id=?',$fields['subdivision_id']);
+			}
+
+			if (isset($fields['location_id'])) {
+				$joins['l'] = array('table'=>'address_location',
+									'condition'=>'a.street_address_id=l.street_address_id');
+				$this->select->where('l.location_id=?',$fields['location_id']);
 			}
 			// Add all the joins we've created to the select
 			foreach ($joins as $key=>$join) {

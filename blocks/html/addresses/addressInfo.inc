@@ -8,31 +8,40 @@
 $township = $this->address->getTownship()
 			? View::escape($this->address->getTownship()->getName())
 			: '';
+$action = '';
+if (userIsAllowed('Address')) {
+	$action = "
+		<tr><th>Action</th>
+			<td><select>
+					<option>change</option>
+					<option>correct</option>
+					<option>update</option>
+					<option>verify</option>
+					<option>retire</option>
+					<option>unretire</option>
+				</select>
+			</td>
+		</tr>
+	";
+}
 echo "
-<h1>{$this->address->getStreetAddress()}</h1>
+<h1>Address Information</h1>
 <table>
-	<tr><th>Address</th>
-		<td>{$this->address->getStreetAddress()},
-			{$this->address->getCity()}, {$this->address->getState()}
-			{$this->address->getZip()}
-		</td>
+	$action
+	<tr><th>Street</th>
+		<td>{$this->address->getStreet()->getStreetName()}</td>
 	</tr>
-	<tr><th>Coordinates</th>
-		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
+	<tr><th>Number</th>
+		<td>{$this->address->getStreet_number()}</td>
 	</tr>
-	<tr><th>State Plane</th>
-		<td>{$this->address->getState_plane_x_coordinate()},
-			{$this->address->getState_plane_y_coordinate()}
-		</td>
+	<tr><th>Status</th>
+		<td>{$this->address->getStatus()}</td>
 	</tr>
-	<tr><th>Jurisdiction</th>
-		<td>{$this->address->getJurisdiction()->getDescription()}</td>
+	<tr><th>Type</th>
+		<td>{$this->address->getType()}</td>
 	</tr>
-	<tr><th>Township</th>
-		<td>$township</td>
-	</tr>
-	<tr><th>Council District</th>
-		<td>{$this->address->getCityCouncilDistrict()}</td>
+	<tr><th>Zip Code</th>
+		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
 	</tr>
 	<tr><th>Trash Day</th>
 		<td>{$this->address->getTrashDay()}</td>
@@ -40,43 +49,30 @@ echo "
 	<tr><th>Recycle Week</th>
 		<td>{$this->address->getRecycleWeek()}</td>
 	</tr>
+	<tr><th>Jurisdiction</th>
+		<td>{$this->address->getJurisdiction()->getDescription()}</td>
+	</tr>
+	<tr><th>Township</th>
+		<td>$township</td>
+	</tr>
+	<tr><th>Section</th>
+		<td>{$this->address->getSection()}
+			Quarter Section
+			{$this->address->getQuarter_section()}
+		</td>
+	</tr>
 	<tr><th>Census Block</th>
 		<td>{$this->address->getCensus_block_fips_code()}</td>
 	</tr>
-</table>
-";
-	$purposes = array();
-	foreach ($this->address->getPurposes() as $purpose) {
-		$purposes[$purpose->getType()][] = $purpose->getDescription();
-	}
-	if (count($purposes)) {
-		echo "
-		<h2>Purposes</h2>
-		<table>
-		";
-		foreach ($purposes as $type=>$descriptions) {
-			$descriptions = implode(', ',$descriptions);
-			echo "
-			<tr><th>$type</th>
-				<td>$descriptions</td>
-			</tr>
-			";
-		}
-		echo "</table>";
-	}
-echo "
-<h2>Locations</h2>
-<table>
-	<tr><th>Location_id</th>
+
+	<tr><th colspan=\"2\">Coordinates</th></tr>
+	<tr><th>Lat/Long</th>
+		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
 	</tr>
-";
-$locations = $this->address->getLocations();
-foreach ($locations as $location) {
-	echo "
-	<tr><td>{$location->getLocation_id()}</td>
+	<tr><th>State Plane X/Y</th>
+		<td>{$this->address->getState_plane_x_coordinate()},
+			{$this->address->getState_plane_y_coordinate()}
+		</td>
 	</tr>
-	";
-}
-echo "
 </table>
 ";

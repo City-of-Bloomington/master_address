@@ -13,12 +13,15 @@ if (isset($_GET['format'])) {
 			$template = new Template('default','xml');
 			break;
 		default:
-			$template = new Template();
+			$template = new Template('two-column');
 	}
 }
 else {
-	$template = new Template();
+	$template = new Template('two-column');
 }
 
+$template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));
 $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
+$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
+												array('address'=>$address));
 echo $template->render();

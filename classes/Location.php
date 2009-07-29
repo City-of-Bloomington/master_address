@@ -213,6 +213,12 @@ class Location
 	}
 
 	/**
+	 * Looks up the Address associated with this Location.id
+	 *
+	 * Not to be confused with looking for addresses with Location.location_id
+	 * There will only be one address for each Location.id, but
+	 * there will be multiple addresses for each Location.location_id
+	 *
 	 * @return Address
 	 */
 	public function getAddress()
@@ -224,6 +230,34 @@ class Location
 			return $this->address;
 		}
 		return null;
+	}
+
+	/**
+	 * Looks up all the address having this Location.location_id
+	 *
+	 * Not to be confused with looking for addresses that have Location.id
+	 * There will only be one address per Location.id (see: getAddress())
+	 *
+	 * @return AddressList
+	 */
+	public function getAddresses()
+	{
+		return new AddressList(array('location_id'=>$this->location_id));
+	}
+
+	/**
+	 * Returns all the locations with this Location.location_id
+	 *
+	 * Location.location_id is not a unique field.  There can be multiple
+	 * locations with the same Location.location_id.
+	 */
+	public function getLocations(array $fields=null)
+	{
+		$search = array('location_id'=>$this->location_id);
+		if ($fields) {
+			$search = array_merge($search,$fields);
+		}
+		return new LocationList($search);
 	}
 
 	/**

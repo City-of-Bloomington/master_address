@@ -360,6 +360,8 @@ class Street
 		return null;
 	}
 	/**
+	 * Returns the primary name for this street
+	 *
 	 * @return StreetName
 	 */
 	public function getStreetName()

@@ -895,9 +895,13 @@ class Address
 	/**
 	 * @return LocationList
 	 */
-	public function getLocations()
+	public function getLocations(array $fields=null)
 	{
-		return new LocationList(array('street_address_id'=>$this->street_address_id));
+		$search = array('street_address_id'=>$this->street_address_id);
+		if ($fields) {
+			$search = array_merge($search,$fields);
+		}
+		return new LocationList($search);
 	}
 
 	/**

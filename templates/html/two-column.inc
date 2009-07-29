@@ -12,7 +12,7 @@
 		include $dir.'/partials/menubar.inc';
 	?>
 
-	<div id="panel-container">
+	<div id="panel-container" class="yui-skin-sam">
 		<?php
 			include $dir.'/partials/panel-one.inc';
 		?>
