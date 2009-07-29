@@ -120,9 +120,10 @@ ul.pageNavigation li { margin-right:2px; }
 
 
 /* Footer */
-#footer { text-align:center; clear:both; margin-top:8px; }
-#footer p { font-size: 9px; color: #666666; margin:0 12px 12px 0; }
-
+#footer { clear:both; margin-top:2em; }
+#footer h1 { display:inline; font-size: 16px; color: #666666; margin:0 12px 12px 0; }
+#footer ul { display:inline; list-style:none; margin:5px 0 0 0; padding:0; }
+#footer li { display:inline; font-weight:bold; font-size:16px; margin-right:1em; }
 
 
 
