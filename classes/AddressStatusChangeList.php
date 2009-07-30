@@ -56,6 +56,9 @@ class AddressStatusChangeList extends ZendDbResultIterator
 			foreach ($fields as $key=>$value) {
 				if (array_key_exists($key,$this->columns)) {
 					if ($value) {
+						if ($value instanceof Date) {
+							$value = $value->format('Y-m-d');
+						}
 						$this->select->where("$key=?",$value);
 					}
 					else {

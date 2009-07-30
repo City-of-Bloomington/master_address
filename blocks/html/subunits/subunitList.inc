@@ -23,6 +23,7 @@
 	<table>
 		<tr><th>Type</th>
 			<th>#</th>
+			<th>Status</th>
 		</tr>
 		<?php
 			foreach ($this->subunitList as $subunit) {
@@ -30,6 +31,7 @@
 				echo "
 				<tr><td>{$subunit->getType()}</td>
 					<td>$number</td>
+					<td>{$subunit->getStatus()}</td>
 				</tr>
 				";
 			}

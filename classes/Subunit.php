@@ -15,8 +15,6 @@ class Subunit
 	private $subunitType;
 	private $address;
 
-
-
 	/**
 	 * Populates the object with data
 	 *
@@ -49,7 +47,7 @@ class Subunit
 				}
 			}
 			else {
-				throw new Exception('mast_address_subunits/unknownMastAddressSubunit');
+				throw new Exception('subunits/unknownSubunit');
 			}
 		}
 		else {
@@ -65,7 +63,9 @@ class Subunit
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->street_address_id || !$this->sudtype || !$this->street_subunit_identifier) {
+			throw new Exception('missingRequiredFields');
+		}
 	}
 
 	/**
@@ -76,9 +76,9 @@ class Subunit
 		$this->validate();
 
 		$data = array();
-		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
-		$data['sudtype'] = $this->sudtype ? $this->sudtype : null;
-		$data['street_subunit_identifier'] = $this->street_subunit_identifier ? $this->street_subunit_identifier : null;
+		$data['street_address_id'] = $this->street_address_id;
+		$data['sudtype'] = $this->sudtype;
+		$data['street_subunit_identifier'] = $this->street_subunit_identifier;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->subunit_id) {
@@ -111,17 +111,10 @@ class Subunit
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
 	/**
-	 * @return number
-	 */
-	public function getSubunit_id()
-	{
-		return $this->subunit_id;
-	}
-
-	/**
-	 * @return number
+	 * Alias of getSubunit_id()
+	 *
+	 * @return int
 	 */
 	public function getId()
 	{
@@ -129,7 +122,16 @@ class Subunit
 	}
 
 	/**
-	 * @return number
+	 * @return int
+	 */
+	public function getSubunit_id()
+	{
+		return $this->subunit_id;
+	}
+
+
+	/**
+	 * @return int
 	 */
 	public function getStreet_address_id()
 	{
@@ -161,17 +163,14 @@ class Subunit
 	}
 
 	/**
-	 * @return Subunit
+	 * @return Address
 	 */
 	public function getAddress()
 	{
-		if ($this->street_address_id) {
-			if (!$this->address) {
-				$this->address = new Address($this->street_address_id);
-			}
-			return $this->address;
+		if (!$this->address) {
+			$this->address = new Address($this->street_address_id);
 		}
-		return null;
+		return $this->address;
 	}
 
 	/**
@@ -179,13 +178,10 @@ class Subunit
 	 */
 	public function getSubunitType()
 	{
-		if ($this->sudtype) {
-			if (!$this->subunitType) {
-				$this->subunitType = new SubunitType($this->sudtype);
-			}
-			return $this->subunitType;
+		if (!$this->subunitType) {
+			$this->subunitType = new SubunitType($this->sudtype);
 		}
-		return null;
+		return $this->subunitType;
 	}
 
 	//----------------------------------------------------------------
@@ -193,7 +189,7 @@ class Subunit
 	//----------------------------------------------------------------
 
 	/**
-	 * @param number $number
+	 * @param int $number
 	 */
 	public function setStreet_address_id($number)
 	{
@@ -225,7 +221,7 @@ class Subunit
 	}
 
 	/**
-	 * @param Street_address $street_address
+	 * @param Address $address
 	 */
 	public function setAddress($address)
 	{
@@ -260,5 +256,22 @@ class Subunit
 	public function getIdentifier()
 	{
 		return $this->getStreet_subunit_identifier();
+	}
+
+	/**
+	 * Returns the StatusChange for this subunit that was active on the given date
+	 *
+	 * Defaults to the current date
+	 *
+	 * @param Date $date
+	 */
+	public function getStatus(Date $date=null)
+	{
+		$targetDate = $date ? $date : new Date();
+		$list = new SubunitStatusChangeList();
+		$list->find(array('subunit_id'=>$this->subunit_id,'current'=>$targetDate));
+		if (count($list)) {
+			return $list[0];
+		}
 	}
 }
