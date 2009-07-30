@@ -38,20 +38,20 @@ class AddressStatusChange
 				$zend_db = Database::getConnection();
 				$sql = 'select * from mast_address_status where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
-				
+
 			}
 
 			if ($result) {
 				foreach ($result as $field=>$value) {
-				  if (preg_match('/date/',$field) && $value!='0000-00-00') {
-					if($value){
-					  $value = new Date($value);
-					  $this->$field = $value;
+					if (preg_match('/date/',$field) && $value!='0000-00-00') {
+						if($value){
+							$value = new Date($value);
+							$this->$field = $value;
+						}
 					}
-				  }
-				  elseif ($value){
-					$this->$field = $value;
-				  }
+					elseif ($value){
+						$this->$field = $value;
+					}
 				}
 			}
 			else {
@@ -63,7 +63,7 @@ class AddressStatusChange
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -71,7 +71,9 @@ class AddressStatusChange
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-
+		if (!$this->street_address_id || !$this->status_code || !$this->start_date) {
+			throw new Exception('missingRequiredFields');
+		}
 	}
 
 	/**
@@ -82,9 +84,9 @@ class AddressStatusChange
 		$this->validate();
 
 		$data = array();
-		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
-		$data['status_code'] = $this->status_code ? $this->status_code : null;
-		$data['start_date'] = $this->start_date ? $this->start_date->format('Y-m-d') : null;
+		$data['street_address_id'] = $this->street_address_id;
+		$data['status_code'] = $this->status_code;
+		$data['start_date'] = $this->start_date->format('Y-m-d');
 		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-m-d') : null;
 
 		if ($this->id) {
@@ -116,13 +118,14 @@ class AddressStatusChange
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
 	/**
+	 * Alias of getStreet_address_id()
+	 *
 	 * @return number
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->getStreet_address_id();
 	}
 
 	/**
@@ -212,7 +215,6 @@ class AddressStatusChange
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param number $number
 	 */
@@ -290,4 +292,8 @@ class AddressStatusChange
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->getAddressStatus()->__toString();
+	}
 }

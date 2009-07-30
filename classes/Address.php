@@ -30,8 +30,7 @@ class Address
 	private $latitude;
 	private $longitude;
 	private $notes;
-	private $status_code;	// Unused
-	private $new_status;
+	private $status_code;	// Unused - We now store status codes in a seperate table
 
 	private $trash_pickup_day;	// Comes from mast_address_sanitation
 	private $recycle_week;		// Comes from mast_address_sanitation
@@ -42,7 +41,7 @@ class Address
 	private $township;
 	private $subdivision;
 	private $plat;
-	private $status;
+	private $status;	// Stores the latest AddressStatus
 
 	private $location;
 	private $subunits;
@@ -145,9 +144,8 @@ class Address
 		else {
 			$this->insert($data);
 		}
-		$this->updateStatus();
 	}
-	//
+
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
@@ -175,7 +173,7 @@ class Address
 	{
 		if ($this->new_status && $this->new_status != $this->status_code) {
 			// Set the end date for the old status to today
-			$data = array('street_address_id'=>$this->street_address_id,'end_date'=>null);
+			$search = array('street_address_id'=>$this->street_address_id,'end_date'=>null);
 			if($this->status_code) {
 				$data['status_code'] = $this->status_code;
 			}
@@ -466,12 +464,24 @@ class Address
 	}
 
 	/**
+	 * Returns the status for this Address on a give date
+	 *
+	 * @param Date $date
 	 * @return AddressStatus
 	 */
-	public function getStatus()
+	public function getStatus(Date $date=null)
 	{
-		return null;
+		if (!$this->status) {
+			$targetDate = $date ? $date : new Date();
+			$list = new AddressStatusChangeList();
+			$list->find(array('street_address_id'=>$this->street_address_id,'current'=>$targetDate),null,1);
+			if (count($list)) {
+				$this->status = $list[0];
+			}
+		}
+		return $this->status;
 	}
+
 	/**
 	 * The real jurisdictions are the Governmental Jurisdictions
 	 * @return Jurisdiction
@@ -739,14 +749,6 @@ class Address
 	public function setNotes($string)
 	{
 		$this->notes = trim($string);
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setStatus_code($number)
-	{
-		$this->new_status = $number;
 	}
 
 	/**

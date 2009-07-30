@@ -10,14 +10,14 @@
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
- */
-/**
+ *
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class AddressStatusChangeList extends ZendDbResultIterator
 {
+	private $columns;
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,6 +32,8 @@ class AddressStatusChangeList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
+		$this->columns = $this->zend_db->describeTable('mast_address_status');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -52,23 +54,23 @@ class AddressStatusChangeList extends ZendDbResultIterator
 		// Finding on fields from the mast_address_status table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-			  //  echo " **  $key $value";
-			  if (preg_match('/date/',$key)) {
-				if($value){
-				  $date = new Date($value);
-				  $value = $date->format("Y-m-d");
+				if (array_key_exists($key,$this->columns)) {
+					if ($value) {
+						$this->select->where("$key=?",$value);
+					}
+					else {
+						$this->select->where("$key is null");
+					}
 				}
-				else
-				  $this->select->where("$key is null");
-			  }
-			  elseif($value){
-				$this->select->where("$key=?",$value);
-			  }				
 			}
 		}
-		// echo $this->select->__toString();
-		// throw new Exception('addresses/unknownAddressHistory');
-		//
+
+		if (isset($fields['current'])) {
+			$date = $fields['current']->format('Y-m-d');
+			$this->select->where('start_date<=?',$date);
+			$this->select->where('end_date is null or end_date>=?',$date);
+		}
+
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the

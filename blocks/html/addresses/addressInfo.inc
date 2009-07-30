@@ -56,16 +56,14 @@ echo "
 		<td>$township</td>
 	</tr>
 	<tr><th>Section</th>
-		<td>{$this->address->getSection()}
-			Quarter Section
-			{$this->address->getQuarter_section()}
-		</td>
+		<td>{$this->address->getSection()}</td>
+	</tr>
+	<tr><th>Quarter Section</th>
+		<td>{$this->address->getQuarter_section()}</td>
 	</tr>
 	<tr><th>Census Block</th>
 		<td>{$this->address->getCensus_block_fips_code()}</td>
 	</tr>
-
-	<tr><th colspan=\"2\">Coordinates</th></tr>
 	<tr><th>Lat/Long</th>
 		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
 	</tr>
