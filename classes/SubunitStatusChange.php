@@ -44,10 +44,8 @@ class SubunitStatusChange
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
-						if (preg_match('/date/',$field)) {
-							if ($value && $value != '0000-00-00') {
-								$value = new Date($value);
-							}
+						if (preg_match('/date/',$field) && !preg_match('/0000/',$value)) {
+							$value = new Date($value);
 						}
 						$this->$field = $value;
 					}
@@ -88,8 +86,8 @@ class SubunitStatusChange
 		$data['subunit_id'] = $this->subunit_id;
 		$data['street_address_id'] = $this->street_address_id;
 		$data['status_code'] = $this->status_code;
-		$data['start_date'] = $this->start_date->format('Y-m-d');
-		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-m-d') : null;
+		$data['start_date'] = $this->start_date->format('Y-m-d H:i:s');
+		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-m-d H:i:s') : null;
 
 		if ($this->id) {
 			$this->update($data);

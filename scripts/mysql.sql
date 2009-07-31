@@ -131,13 +131,21 @@ create table mast_address_subunit_status (
 	subunit_id int unsigned not null,
 	street_address_id int unsigned not null,
 	status_code int unsigned not null,
-	start_date date not null default CURRENT_DATE,
-	end_date date,
+	start_date datetime not null default CURRENT_DATE,
+	end_date datetime,
+	unique (subunit_id,start_date),
 	foreign key (status_code) references mast_address_status_lookup (status_code),
 	foreign key (street_address_id) references mast_address (street_address_id),
 	foreign key (subunit_id) references mast_address_subunits (subunit_id)
 );
 
+create view latest_subunit_status as
+select z.*,s.status_code,l.description from mast_address_subunit_status s
+left join mast_address_status_lookup l on s.status_code=l.status_code
+right join (
+	select subunit_id,max(start_date) as start_date
+	from mast_address_subunit_status group by subunit_id
+) z on (s.subunit_id=z.subunit_id and s.start_date=z.start_date);
 
 create table addr_location_types_master (
 	id int unsigned not null primary key auto_increment,
@@ -290,8 +298,8 @@ create table mast_address_status (
 	id int unsigned not null primary key auto_increment,
 	street_address_id int unsigned not null,
 	status_code int unsigned not null,
-	start_date date not null default CURRENT_DATE,
-	end_date date,
+	start_date datetime not null default CURRENT_DATE,
+	end_date datetime,
 	unique (street_address_id,start_date),
 	foreign key (status_code) references mast_address_status_lookup (status_code),
 	foreign key (street_address_id) references mast_address (street_address_id)

@@ -15,6 +15,10 @@ class Subunit
 	private $subunitType;
 	private $address;
 
+	private $status_code;	// Used for pre-loading the latest status
+	private $description; 	// Used for pre-loading the latest status
+	private $status;	// Stores the latest AddressStatus object
+
 	/**
 	 * Populates the object with data
 	 *
@@ -35,7 +39,10 @@ class Subunit
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_address_subunits where subunit_id=?';
+				$sql = "select s.*,l.status_code,l.description
+						from mast_address_subunits s
+						left join latest_subunit_status l on s.subunit_id=l.subunit_id
+						where s.subunit_id=?";
 				$result = $zend_db->fetchRow($sql,array($subunit_id));
 			}
 
