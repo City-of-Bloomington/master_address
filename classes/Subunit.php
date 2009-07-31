@@ -52,6 +52,8 @@ class Subunit
 						$this->$field = $value;
 					}
 				}
+				$this->status = new AddressStatus(array('status_code'=>$this->status,
+														'description'=>$this->description));
 			}
 			else {
 				throw new Exception('subunits/unknownSubunit');
@@ -274,11 +276,15 @@ class Subunit
 	 */
 	public function getStatus(Date $date=null)
 	{
-		$targetDate = $date ? $date : new Date();
-		$list = new SubunitStatusChangeList();
-		$list->find(array('subunit_id'=>$this->subunit_id,'current'=>$targetDate));
-		if (count($list)) {
-			return $list[0];
+		if (!$date) {
+			return $this->status;
+		}
+		else {
+			$list = new SubunitStatusChangeList();
+			$list->find(array('subunit_id'=>$this->subunit_id,'current'=>$date));
+			if (count($list)) {
+				return $list[0];
+			}
 		}
 	}
 }
