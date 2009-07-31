@@ -153,6 +153,11 @@ class Purpose
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->description;
+	}
+
 	/**
 	 * Alias for getLocation_purpose_id()
 	 *

@@ -893,12 +893,12 @@ class Address
 		return $this->location;
 	}
 
+	/**
+	 * @return PurposeList
+	 */
 	public function getPurposes()
 	{
-		if ($this->getLocation()) {
-			return $this->getLocation()->getPurposes();
-		}
-		return array();
+		return new PurposeList(array('street_address_id'=>$this->street_address_id));
 	}
 
 	/**

@@ -30,4 +30,6 @@ $template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
 												array('address'=>$address,
 														'subunitList'=>$address->getSubunits()));
+$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
+												array('purposeList'=>$address->getPurposes()));
 echo $template->render();

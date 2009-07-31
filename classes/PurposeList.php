@@ -64,9 +64,22 @@ class PurposeList extends ZendDbResultIterator
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the addr_location_purpose_mast table.
 		if (isset($fields['location_id'])) {
-			$this->select->joinLeft(array('l'=>'addr_location_purposes'),
-									'p.location_purpose_id=l.location_purpose_id');
+			$joins['l'] = array('table'=>'addr_location_purposes',
+								'condition'=>'p.location_purpose_id=l.location_purpose_id');
 			$this->select->where('l.location_id=?',$fields['location_id']);
+		}
+
+		if (isset($fields['street_address_id'])) {
+			$joins['l'] = array('table'=>'addr_location_purposes',
+								'condition'=>'p.location_purpose_id=l.location_purpose_id');
+			$joins['a'] = array('table'=>'address_location',
+								'condition'=>'l.location_id=a.location_id');
+			$this->select->where('a.street_address_id=?',$fields['street_address_id']);
+		}
+
+		// Add all the joins we've created to the select
+		foreach ($joins as $key=>$join) {
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 		}
 
 		$this->select->order($order);
