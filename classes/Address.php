@@ -553,6 +553,14 @@ class Address
 		return $this->subunits;
 	}
 
+	public function getSubunitCount()
+	{
+		$zend_db = Database::getConnection();
+		$sql = 'select count(*) from mast_address_subunits where street_address_id=?';
+		$count = $zend_db->fetchOne($sql,$this->street_address_id);
+		return $count;
+	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------

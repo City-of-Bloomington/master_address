@@ -38,7 +38,7 @@ echo "
 			$status = $address->getStatus();
 			$jurisdiction = $address->getJurisdiction();
 			$zip = $address->getZip();
-			$count = count($address->getSubunits());
+			$count = $address->getSubunitCount();
 			$count = $count ? $count : '';
 			echo "
 			<tr><td><a href=\"{$address->getURL()}\">$street_number</a></td>
