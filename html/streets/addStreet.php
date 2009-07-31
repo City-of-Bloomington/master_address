@@ -3,6 +3,7 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @author W. Sibo <sibow@bloomington.in.gov>
  */
 if (!userIsAllowed('Street')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -38,5 +39,6 @@ if (isset($_POST['street'])) {
 
 
 $template = new Template();
+
 $template->blocks[] = new Block('streets/addStreetForm.inc');
 echo $template->render();

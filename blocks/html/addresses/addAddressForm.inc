@@ -5,48 +5,29 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
  */
-$street_id="";
-if(isset($_GET['street_id'])){
-	$street_id=$_GET['street_id'];
-	$street = new Street($street_id);
-}
+
+$street = $this->street;
+$address = $this->address;
+$location = $this->location;
 
 ?>
 
-<h1>Streets/Add Address</h1>
+<h1>Add Address</h1>
 
-<?php
-
-$addresses = new AddressList(array('street_id'=>$street_id));
-if(count($addresses)){
-	echo "<table>";
-	foreach($addresses as $address){
-		$editButton = '';
-		if (userIsAllowed('Address')) {
-			$url = new URL(BASE_URL.'/addresses/updateAddress.php');
-			$url->street_address_id = $address->getId();
-			$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-		}
-		echo "<tr><td>{$address->getStreet_number()} {$street->getStreet_direction_code()} {$street->getStreetName()->getStreet_name()}</td><td> $editButton </td></tr>";
-	  
-	}
-	echo "</table>"
-}
-?>
-
+<div id="addAddressForm" class="yui-skin-sam">
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 <fieldset><legend>Address Information</legend>
 	<?php
-		if($street_id){
-			echo "<input type=\"hidden\" value=\"$street_id\">";
-		}
+		echo "<input type=\"hidden\" id=\"street_id\" name=\"address[street_id]\" value=\"{$street->getStreet_id()}\">";
 	?>
 	<table>
 		<tr><td>
 				<table> <!-- left table -->
 					<tr><td><label>Street</label></td>
-						<td><?php echo "{$street->getStreet_direction_code()} {$street->getStreetName()->getStreet_name()} {$street->getStreet_type_suffix_code()"; ?>
-						<!-- search option here -->
+						<td><div id="findStreetForm-autocomplete" style="width:15em;">
+							<input name="streetName" id="streetName" value="<?php echo "{$street->getStreet_direction_code()} {$street->getStreetName()->getStreet_name()} {$street->getStreet_type_suffix_code()"; ?>" />
+							<div id="container"></div>	
+							</div>	
 						</td>
 					</tr>
 					<tr><td><label for="address-street_number">Number</label></td>
@@ -65,12 +46,12 @@ if(count($addresses)){
 					</tr>
 			  
 					<tr><td><label for="address-zip">Zip</label></td>
-						<td><input name="address[zip]" id="address-zip" />
+						<td><input name="address[zip]" id="address-zip" value="<?php echo address->getZip(); ?>"/>
 						</td>
 					</tr>
 
 					<tr><td><label for="address-zipplus4">Zip Plus 4</label></td>
-						<td><input name="address[zipplus4]" id="address-zipplus4" />
+						<td><input name="address[zipplus4]" id="address-zipplus4" value="<?php echo $address->getZipplus4(); ?>"/>
 						</td>
 					</tr>
 
@@ -81,7 +62,8 @@ if(count($addresses)){
 								$list = new AddressStatusList();
 								$list->find();
 								foreach($list as $status){
-									echo "<option value=\"{$status->getId()}\">$status</option>";
+									$selected = $address->getStatus_code() == $status->getId() ? "selected=\"selected\"":"";
+									echo "<option $selected value=\"{$status->getId()}\">$status</option>";
 								}
 							?>
 							</select>
@@ -95,7 +77,8 @@ if(count($addresses)){
 								$list->find();
 								foreach ($list as $jurisdiction) {
 									$name = View::escape($jurisdiction);
-									echo "<option>$name</option>";
+									$selected = $jurisdiction->getId()== $address->getJurisdiction_id() ? "selected=\"selected\"":"";
+									echo "<option $selected value=\"{$jurisdiction->getId()}\">$name</option>";
 								}
 							?>
 							</select>
@@ -109,8 +92,9 @@ if(count($addresses)){
 								$townships = new TownshipList();
 								$townships->find();
 								foreach ($townships as $township) {
+									$selected = $address->getTownship_id() == $township->getId() ? "selected=\"selected\"":"";
 									$name = View::escape($township->getName());
-									echo "<option value='{$township->getId()}'>$name</option>";
+									echo "<option $selected value='{$township->getId()}'>$name</option>";
 								}
 							?>
 							</select>
@@ -126,22 +110,30 @@ if(count($addresses)){
 			<td>
 				<table> <!-- middle table -->
 					<tr><td><label>Location ID</label></td>
-						<td><?php echo $location->getId(); ?>
+						<td><input name="location[id]" value="<?php echo $location->getId(); ?>">
 						</td>
 					</tr>
 					
 					<tr><td><label for="location-mailable">Mailable</label></td>
-						<td><checkbox name="location[mailable_flag]" value="y" id="location-mailable" />
+						<?php
+							$checked = $location->getMailable_flag()?"checked=\"checked\"":"";
+							echo "<td><checkbox name=\"location[mailable_flag]\" value=\"y\" id=\"location-mailable\" $checked />";
+						?>
 						</td>
 					</tr>
 
-					<tr><td><label for="location-livable">Livable</label></td>
-						<td><checkbox name="location[livable_flag]" value="y" id="location-livable" />
+					<tr><td><label for="location-livable">Livable</label></td						<?php
+							$checked = $location->getLivable_flag()?"checked=\"checked\"":"";
+							echo "<td><checkbox name=\"location[livable_flag]\" value=\"y\" id=\"location-livable\" $checked />";
+						?>
 						</td>
 					</tr>					
 
 					<tr><td><label for="location-active">Current Address</label></td>
-						<td><checkbox name="location[active]" value="y" id="location-active" />
+						<?php
+							$checked = $location->getActive()?"checked=\"checked\"":"";
+							echo "<td><checkbox name=\"location[active]\" value=\"y\" id=\"location-active\" $checked />";
+							?>
 						</td>
 					</tr>
 					
@@ -177,14 +169,14 @@ if(count($addresses)){
 				<table><!-- right table -->
 				
 					<tr><td><label for="address-latitude">Coordinates </label></td>
-						<td><input name="address[latitude]" id="address-latitude" />
-							<input name="address[longitude]" id="address-longitude" />
+						<td><input name="address[latitude]" id="address-latitude" value="<?php echo $address->getLatitude(); ?>" />
+							<input name="address[longitude]" id="address-longitude" value="<?php echo $address->getLongitude(); ?>" />
 						</td>
 					</tr>
 
 					<tr><td><label for="address-state_plane_x_coordinate">State Plane </label></td>
-						<td><input name="address[state_plane_x_coordinate]" id="address-state_plane_x_coordinate" />
-							<input name="address[state_plane_y_coordinate]" id="address-state_plane_y_coordinate" />
+						<td><input name="address[state_plane_x_coordinate]" id="address-state_plane_x_coordinate" value="<?php echo $address->getState_plane_x_coordiante(); ?>" />
+							<input name="address[state_plane_y_coordinate]" id="address-state_plane_y_coordinate" value="<?php echo $address->getState_plane_y_coordiante(); ?>" />
 						</td>
 					</tr>
 					
@@ -193,7 +185,8 @@ if(count($addresses)){
 							<option></option>
 							<?php
 								foreach (Address::getTrashDays() as $day) {
-									echo "<option>$day</option>";
+									$selected = $day == $address->getTrash_pickup_day?"selected=\"selected\"":"";
+									echo "<option $selected>$day</option>";
 								}
 							?>
 							</select>
@@ -205,6 +198,7 @@ if(count($addresses)){
 							<option></option>
 							<?php
 								foreach (Address::getRecycleWeeks() as $week) {
+									$selected = $week == $address->getRecycle_week()?"selected=\"selected\"":"";	
 									echo "<option>$week</option>";
 								}	
 							?>
@@ -217,14 +211,13 @@ if(count($addresses)){
 						</td>
 					</tr>
 
-
 					<tr><td><label for="address-street_address_2">Street Address 2</label></td>
 						<td><input name="address[street_address_2]" id="address-street_address_2" />
 						</td>
 					</tr>
 
 					<tr><td><label for="address-city">City</label></td>
-						<td><input name="address[city]" id="address-city" />
+						<td><input name="address[city]" id="address-city" value="<?php echo $address->getCity(); ?>" />
 						</td>
 					</tr>
 
@@ -240,8 +233,45 @@ if(count($addresses)){
 		</table>
 
 		<button type="submit" class="submit">Submit Address</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/addresses';">
-			Cancel
+		<checkbox name="batch_mode" id="batch_mode" value="y" /><label for="batch_mode">Submit in Batch Mode</label>
+			
 		</button>
 	</fieldset>
 </form>
+</div>
+
+<script type="text/javascript">
+addAddressForm_autosuggest = function() {
+	var streetService = new YAHOO.util.XHRDataSource("<?php echo BASE_URL; ?>/streets/home.php");
+	streetService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+	streetService.responseSchema = {
+		resultsList: "streets",
+		fields: ["name","id"]
+	};
+	streetService.maxCacheEntries = 5;
+
+	var findStreetFormAC = new YAHOO.widget.AutoComplete("streetName",
+														"container",
+														streetService);
+	findStreetFormAC.resultTypeList = false;
+	var myHiddenField = YAHOO.util.Dom.get("street_id"); 
+	var myHandler = function(sType, aArgs) { 
+		var myAC = aArgs[0]; // reference back to the AC instance 
+		var elLI = aArgs[1]; // reference to the selected LI element 
+		var oData = aArgs[2]; // object literal of selected item's result data 
+			 
+			// update hidden form field with the selected item's ID 
+			myHiddenField.value = oData.id; 
+		}; 
+	findStreetFormAC.itemSelectEvent.subscribe(myHandler); 
+		 
+	findStreetFormAC.generateRequest = function(query) {
+		return '?format=json;streetName=' + query;
+	}
+
+	return{ 
+		streetService: streetService,
+		findStreetFormAC: findStreetFormAC
+	};
+}();
+</script>
