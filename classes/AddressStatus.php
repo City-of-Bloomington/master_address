@@ -111,7 +111,7 @@ class AddressStatus
 	{
 		return $this->getStatus_code();
 	}
-	
+
 	/**
 	 * Alias for getStatus_code()
 	 *
@@ -156,6 +156,6 @@ class AddressStatus
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return $this->getDescription();
+		return "{$this->getDescription()}";
 	}
 }

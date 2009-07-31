@@ -56,8 +56,11 @@ class AddressList extends ZendDbResultIterator
 	{
 		$this->select->from(array('a'=>'mast_address'));
 		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
-										'a.street_address_id=trash.street_address_id',
-										array('trash_pickup_day','recycle_week'));
+								'a.street_address_id=trash.street_address_id',
+								array('trash_pickup_day','recycle_week'));
+		$this->select->joinLeft(array('status'=>'mast_address_latest_status'),
+								'a.street_address_id=status.street_address_id',
+								array('status_code','description'));
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {

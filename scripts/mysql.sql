@@ -292,9 +292,18 @@ create table mast_address_status (
 	status_code int unsigned not null,
 	start_date date not null default CURRENT_DATE,
 	end_date date,
+	unique (street_address_id,start_date),
 	foreign key (status_code) references mast_address_status_lookup (status_code),
 	foreign key (street_address_id) references mast_address (street_address_id)
 );
+
+create view mast_address_latest_status as
+select z.*,s.status_code,l.description from mast_address_status s
+left join mast_address_status_lookup l on s.status_code=l.status_code
+right join (
+	select street_address_id,max(start_date) as start_date
+	from mast_address_status group by street_address_id
+) z on (s.street_address_id=z.street_address_id and s.start_date=z.start_date);
 
 create table annexations (
 	id int not null primary key auto_increment,

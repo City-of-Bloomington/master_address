@@ -30,7 +30,10 @@ class Address
 	private $latitude;
 	private $longitude;
 	private $notes;
-	private $status_code;	// Unused - We now store status codes in a seperate table
+
+	private $status_code;	// Used for pre-loading the latest status
+	private $description; 	// Used for pre-loading the latest status
+	private $status;	// Stores the latest AddressStatus object
 
 	private $trash_pickup_day;	// Comes from mast_address_sanitation
 	private $recycle_week;		// Comes from mast_address_sanitation
@@ -41,7 +44,6 @@ class Address
 	private $township;
 	private $subdivision;
 	private $plat;
-	private $status;	// Stores the latest AddressStatus
 
 	private $location;
 	private $subunits;
@@ -68,9 +70,10 @@ class Address
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = "select a.*,trash_pickup_day,recycle_week
+				$sql = "select a.*,trash_pickup_day,recycle_week,l.status_code,l.description
 						from mast_address a
 						left join mast_address_sanitation s on a.street_address_id=s.street_address_id
+						left join mast_address_latest_status l on a.street_address_id=l.street_address_id
 						where a.street_address_id=?";
 				$result = $zend_db->fetchRow($sql,array($street_address_id));
 			}
@@ -81,6 +84,8 @@ class Address
 						$this->$field = $value;
 					}
 				}
+				$this->status = new AddressStatus(array('status_code'=>$this->status_code,
+														'description'=>$this->description));
 			}
 			else {
 				throw new Exception('addresses/unknownAddress');
@@ -471,15 +476,16 @@ class Address
 	 */
 	public function getStatus(Date $date=null)
 	{
-		if (!$this->status) {
-			$targetDate = $date ? $date : new Date();
+		if (!$date) {
+			return $this->status;
+		}
+		else {
 			$list = new AddressStatusChangeList();
-			$list->find(array('street_address_id'=>$this->street_address_id,'current'=>$targetDate),null,1);
+			$list->find(array('street_address_id'=>$this->street_address_id,'current'=>$date),null,1);
 			if (count($list)) {
-				$this->status = $list[0];
+				return $list[0];
 			}
 		}
-		return $this->status;
 	}
 
 	/**

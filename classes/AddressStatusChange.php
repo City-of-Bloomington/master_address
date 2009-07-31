@@ -15,7 +15,6 @@ class AddressStatusChange
 	private $address;
 	private $addressStatus;
 
-
 	/**
 	 * Populates the object with data
 	 *
@@ -36,31 +35,29 @@ class AddressStatusChange
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_address_status where id=?';
+				$sql = "select *,l.description from mast_address_status where id=?";
 				$result = $zend_db->fetchRow($sql,array($id));
 
 			}
 
 			if ($result) {
 				foreach ($result as $field=>$value) {
-					if (preg_match('/date/',$field) && $value!='0000-00-00') {
-						if($value){
+					if ($value) {
+						if (preg_match('/date/',$field) && !preg_match('/0000/',$value)) {
 							$value = new Date($value);
-							$this->$field = $value;
 						}
-					}
-					elseif ($value){
 						$this->$field = $value;
 					}
 				}
 			}
 			else {
-				throw new Exception('addresses/unknownAddressHistory');
+				throw new Exception('addresses/unknownStatusChange');
 			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->start_date = new Date();
 		}
 	}
 
@@ -86,8 +83,8 @@ class AddressStatusChange
 		$data = array();
 		$data['street_address_id'] = $this->street_address_id;
 		$data['status_code'] = $this->status_code;
-		$data['start_date'] = $this->start_date->format('Y-m-d');
-		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-m-d') : null;
+		$data['start_date'] = $this->start_date->format('Y-m-d H:i:s');
+		$data['end_date'] = $this->end_date ? $this->end_date->format('Y-m-d H:i:s') : null;
 
 		if ($this->id) {
 			$this->update($data);
