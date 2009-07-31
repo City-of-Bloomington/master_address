@@ -7,26 +7,17 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>Address Status Changes</h1>
+	<h1>Status History</h1>
 	<table>
-		<tr><th></th>
+		<tr>
 			<th>Status</th>
 			<th>Start Date</th>
 			<th>End Date</th>
 		</tr>
 		<?php
 			foreach ($this->addressStatusChangeList as $addressStatusChange) {
-
-				$editButton = '';
-				if (userIsAllowed('AddressStatusChange')) {
-					$url = new URL(BASE_URL.'/addresses/updateAddressStatusChange.php');
-					$url->id = $addressStatusChange->getId();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
-
 				echo "
-				<tr><td>$editButton</td>
-					<td>{$addressStatusChange->getAddressStatus()}</td>
+				<tr><td>{$addressStatusChange->getAddressStatus()}</td>
 					<td>{$addressStatusChange->getStart_date('n/j/Y')}</td>
 					<td>{$addressStatusChange->getEnd_date('n/j/Y')}</td>
 				</tr>

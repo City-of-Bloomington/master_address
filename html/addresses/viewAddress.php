@@ -22,6 +22,9 @@ else {
 
 $template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));
 $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
+$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
+								array('addressStatusChangeList'=>$address->getStatusChangeList()));
+
 $template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
 												array('address'=>$address));
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',

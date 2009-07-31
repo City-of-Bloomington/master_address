@@ -174,29 +174,6 @@ class Address
 
 	}
 
-	private function updateStatus()
-	{
-		if ($this->new_status && $this->new_status != $this->status_code) {
-			// Set the end date for the old status to today
-			$search = array('street_address_id'=>$this->street_address_id,'end_date'=>null);
-			if($this->status_code) {
-				$data['status_code'] = $this->status_code;
-			}
-			$list = new AddressStatusChangeList($data);
-			foreach ($list as $addressStatusChange) {
-				$addressStatusChange->setEnd_date(date("Y-m-d"));
-				$addressStatusChange->save();
-			}
-
-			// Create the new status starting today
-			$addrChange = new AddressStatusChange();
-			$addrChange->setStreet_address_id($this->street_address_id);
-			$addrChange->setStatus_code($this->new_status);
-			$addrChange->setStart_date(date("Y-m-d"));
-			$addrChange->save();
-			$this->status_code = $this->new_status;
-		}
-	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -486,6 +463,16 @@ class Address
 				return $list[0];
 			}
 		}
+	}
+
+	/**
+	 * Returns the status history for this address
+	 *
+	 * @return AddressStatusChangeList
+	 */
+	public function getStatusChangeList()
+	{
+		return new AddressStatusChangeList(array('street_address_id'=>$this->street_address_id));
 	}
 
 	/**
