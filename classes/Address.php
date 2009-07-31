@@ -547,27 +547,12 @@ class Address
 	 */
 	public function getSubunits()
 	{
-		if ($this->street_address_id) {
-			if (!$this->subunits) {
-			  $this->subunits = new SubunitList(array('street_address_id'=>$this->street_address_id));
-			}
-			return $this->subunits;
+		if (!$this->subunits) {
+			$this->subunits = new SubunitList(array('street_address_id'=>$this->street_address_id));
 		}
-		return null;
+		return $this->subunits;
 	}
-	/**
-	 * @return number
-	 */
-	public function getSubunitCount()
-	{
-	  if (!$this->subunits) {
-		$this->getSubunits();
-	  }
-	  if($this->subunits){
-		return count($this->subunits);
-	  }
-	  return null;
-	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
