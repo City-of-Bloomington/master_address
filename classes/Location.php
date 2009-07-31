@@ -407,4 +407,21 @@ class Location
 	{
 		return $this->getActive() == 'Y' ? true : false;
 	}
+
+	/**
+	 * Returns the StatusChange that was active on the given date
+	 *
+	 * Defaults to the current date
+	 *
+	 * @param Date $date
+	 */
+	public function getStatus(Date $date=null)
+	{
+		$targetDate = $date ? $date : new Date();
+		$list = new LocationStatusChangeList();
+		$list->find(array('location_id'=>$this->location_id,'current'=>$targetDate));
+		if (count($list)) {
+			return $list[0];
+		}
+	}
 }

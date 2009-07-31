@@ -20,7 +20,7 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 	}
 	$content = "
 	<div id=\"#locationTab_{$location->getId()}\">
-		<h1>Location Addresses</h1>
+		<h1>Location Status {$location->getStatus()}</h1>
 		$buttons
 		<table>
 			<tr><th>#</th>
