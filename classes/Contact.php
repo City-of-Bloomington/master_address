@@ -13,6 +13,8 @@ class Contact
 	private $phone_number;
 	private $agency;
 
+	private $types = array('GIS','CBU BILLING','ADDRESS COORDINATOR','E911 ADMINISTRATOR');
+
 	/**
 	 * Populates the object with data
 	 *
@@ -61,7 +63,14 @@ class Contact
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
+		if (!$this->last_name || !$this->first_name || !$this->contact_type
+			|| !$this->phone_number || !$this->agency) {
+			throw new Exception('missingRequiredFields');
+		}
 
+		if (!in_array($this->contact_type,$this->types)) {
+			throw new Exception('contacts/invalidType');
+		}
 	}
 
 	/**
@@ -72,11 +81,11 @@ class Contact
 		$this->validate();
 
 		$data = array();
-		$data['last_name'] = $this->last_name ? $this->last_name : null;
-		$data['first_name'] = $this->first_name ? $this->first_name : null;
-		$data['contact_type'] = $this->contact_type ? $this->contact_type : null;
-		$data['phone_number'] = $this->phone_number ? $this->phone_number : null;
-		$data['agency'] = $this->agency ? $this->agency : null;
+		$data['last_name'] = $this->last_name;
+		$data['first_name'] = $this->first_name;
+		$data['contact_type'] = $this->contact_type;
+		$data['phone_number'] = $this->phone_number;
+		$data['agency'] = $this->agency;
 
 		if ($this->contact_id) {
 			$this->update($data);
@@ -100,16 +109,25 @@ class Contact
 		  $this->contact_id = $zend_db->lastSequenceId('contact_id_s');
 		}
 		else{
-		  $this->contact_id = $zend_db->lastInsertId('mast_addr_assignment_contact','contact_id');
+		  $this->contact_id = $zend_db->lastInsertId();
 		}
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
+	/**
+	 * Alias of getConact_id()
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->getContact_id();
+	}
 
 	/**
-	 * @return number
+	 * @return int
 	 */
 	public function getContact_id()
 	{
@@ -204,7 +222,43 @@ class Contact
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	public function __toString(){
-	  return $this->getFirst_name().' '.$this->getLast_name();
+	/**
+	 * Alias for getLast_name()
+	 *
+	 * @return string
+	 */
+	public function getLastname()
+	{
+		return $this->getLast_name();
+	}
+
+	/**
+	 * Alias for getFirst_name()
+	 *
+	 * @return string
+	 */
+	public function getFirstname()
+	{
+		return $this->getFirst_name();
+	}
+
+	/**
+	 * Returns the list of valid types for contacts
+	 *
+	 * @return array
+	 */
+	public static function getTypes()
+	{
+		return $this->types;
+	}
+
+	/**
+	 * Alias for getContact_type()
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->getContact_type();
 	}
 }
