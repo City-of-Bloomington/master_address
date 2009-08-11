@@ -1,6 +1,7 @@
 -- @copyright 2006-2009 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 -- @author Cliff Ingham <inghamn@bloomington.in.gov>
+/* set FOREIGN_KEY_CHECKS=0 */
 create table people (
 	id int unsigned not null primary key auto_increment,
 	firstname varchar(128) not null,
@@ -80,7 +81,7 @@ create table building_types_master (
 
 create table buildings_status_lookup (
 	status_code int unsigned not null primary key auto_increment,
-	description varchar2(240) not null
+	description varchar(240) not null
 );
 
 create table buildings (
@@ -90,7 +91,7 @@ create table buildings (
 	building_name varchar(40),
 	effective_start_date date not null default '2002-01-01',
 	effective_end_date date,
-	status_code number not null default 1,
+	status_code int unsigned not null default 1,
 	foreign key (building_type_id) references building_types_master(building_type_id),
 	foreign key (status_code) references buildings_status_lookup(status_code)
 );
@@ -114,29 +115,6 @@ create table mast_addr_subunit_types_mast (
 	sudtype varchar(20) not null,
 	description varchar(40) not null,
 	unique (sudtype)
-);
-
-create table mast_address_subunits (
-	subunit_id int unsigned not null primary key auto_increment,
-	street_address_id int unsigned not null,
-	sudtype varchar(20) not null,
-	street_subunit_identifier varchar(20) not null,
-	notes varchar(240),
-	foreign key (street_address_id) references mast_address (street_address_id),
-	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
-);
-
-create table mast_address_subunit_status (
-	id int unsigned not null primary key auto_increment,
-	subunit_id int unsigned not null,
-	street_address_id int unsigned not null,
-	status_code int unsigned not null,
-	start_date datetime not null default CURRENT_DATE,
-	end_date datetime,
-	unique (subunit_id,start_date),
-	foreign key (status_code) references mast_address_status_lookup (status_code),
-	foreign key (street_address_id) references mast_address (street_address_id),
-	foreign key (subunit_id) references mast_address_subunits (subunit_id)
 );
 
 create view latest_subunit_status as
@@ -313,14 +291,37 @@ right join (
 	from mast_address_status group by street_address_id
 ) z on (s.street_address_id=z.street_address_id and s.start_date=z.start_date);
 
+create table mast_address_subunit_status (
+	id int unsigned not null primary key auto_increment,
+	subunit_id int unsigned not null,
+	street_address_id int unsigned not null,
+	status_code int unsigned not null,
+	start_date datetime not null,
+	end_date datetime,
+	unique (subunit_id,start_date),
+	foreign key (status_code) references mast_address_status_lookup (status_code),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (subunit_id) references mast_address_subunits (subunit_id)
+);
+
+create table mast_address_subunits (
+	subunit_id int unsigned not null primary key auto_increment,
+	street_address_id int unsigned not null,
+	sudtype varchar(20) not null,
+	street_subunit_identifier varchar(20) not null,
+	notes varchar(240),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
+);
+
 create table annexations (
 	id int not null primary key auto_increment,
 	ordinance_number varchar(12) not null,
 	township_id int unsigned,
 	name varchar(40),
 	passed_date date,
-	effective_start_date number,
-	annexation_type number,
+	effective_start_date date,
+	annexation_type int unsigned,
 	acres decimal(6,2),
 	square_miles decimal(4,2),
 	estimate_population int unsigned,
