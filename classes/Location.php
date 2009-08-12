@@ -6,7 +6,7 @@
  */
 class Location
 {
-	private $id;
+	private $lid;
 	private $location_id;
 	private $location_type_id;
 	private $street_address_id;
@@ -34,18 +34,18 @@ class Location
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $id
+	 * @param int|array $lid
 	 */
-	public function __construct($id=null)
+	public function __construct($lid=null)
 	{
-		if ($id) {
-			if (is_array($id)) {
-				$result = $id;
+		if ($lid) {
+			if (is_array($lid)) {
+				$result = $lid;
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from address_location where id=?';
-				$result = $zend_db->fetchRow($sql,array($id));
+				$result = $zend_db->fetchRow($sql,array($lid));
 			}
 
 			if ($result) {
@@ -107,7 +107,7 @@ class Location
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('address_location',$data,"id='{$this->id}'");
+		$zend_db->update('address_location',$data,"lid='{$this->lid}'");
 	}
 
 	private function insert($data)
@@ -115,7 +115,7 @@ class Location
 		$zend_db = Database::getConnection();
 		$zend_db->insert('address_location',$data);
 		if (Database::getType()=='oracle') {
-			$this->id = $zend_db->lastSequenceId('location_id_seq');
+			$this->id = $zend_db->lastSequenceId('location_lid_seq');
 		}
 		else {
 			$this->id = $zend_db->lastInsertId();
@@ -126,15 +126,23 @@ class Location
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * @return number
+	 * @return int
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->getLid();
 	}
 
 	/**
-	 * @return number
+	 * @return int
+	 */
+	public function getLid()
+	{
+		return $this->lid;
+	}
+
+	/**
+	 * @return int
 	 */
 	public function getLocation_id()
 	{

@@ -331,7 +331,7 @@ end;
 /
 
 create table address_location (
-	id number not null primary key,
+	lid number not null primary key,
 	location_id number not null,
 	location_type_id varchar2(40) not null,
 	street_address_id number,
@@ -345,12 +345,12 @@ create table address_location (
 	foreign key (subunit_id) references mast_address_subunits (subunit_id),
 	foreign key (location_type_id) references addr_location_types_master (location_type_id)
 );
-create sequence location_id_seq nocache;
+create sequence location_lid_seq nocache;
 create trigger location_trigger
 before insert on address_location
 for each row
 begin
-select location_id_seq.nextval into :new.id from dual;
+select location_lid_seq.nextval into :new.lid from dual;
 end;
 /
 
