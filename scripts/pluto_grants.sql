@@ -1,3 +1,4 @@
+grant select,insert,update,delete on eng.address_change_log to master_address;
 grant select,insert,update,delete on eng.address_location to master_address;
 grant select,insert,update,delete on eng.addr_location_purpose_mast to master_address;
 grant select,insert,update,delete on eng.addr_location_purposes to master_address;
@@ -80,6 +81,7 @@ grant select on eng.users_id_seq to master_address;
 
 
 
+create synonym master_address.address_change_log for eng.address_change_log;
 create synonym master_address.address_location for eng.address_location;
 create synonym master_address.addr_location_purpose_mast for eng.addr_location_purpose_mast;
 create synonym master_address.addr_location_purposes for eng.addr_location_purposes;

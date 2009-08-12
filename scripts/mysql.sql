@@ -276,7 +276,7 @@ create table mast_address_status (
 	id int unsigned not null primary key auto_increment,
 	street_address_id int unsigned not null,
 	status_code int unsigned not null,
-	start_date datetime not null default CURRENT_DATE,
+	start_date datetime not null,
 	end_date datetime,
 	unique (street_address_id,start_date),
 	foreign key (status_code) references mast_address_status_lookup (status_code),
@@ -290,6 +290,18 @@ right join (
 	select street_address_id,max(start_date) as start_date
 	from mast_address_status group by street_address_id
 ) z on (s.street_address_id=z.street_address_id and s.start_date=z.start_date);
+
+create table address_change_log (
+	street_address_id int unsigned not null,
+	user_id int unsigned not null,
+	action varchar(20) not null,
+	contact_id int unsigned not null,
+	rationale varchar(255),
+	date_changed timestamp not null default CURRENT_DATE,
+	foreign key (street_address_id) references mast_address(street_address_id),
+	foreign key (user_id) references users(id),
+	foreign key (contact_id) references mast_addr_assignment_contact(contact_id)
+);
 
 create table mast_address_subunit_status (
 	id int unsigned not null primary key auto_increment,

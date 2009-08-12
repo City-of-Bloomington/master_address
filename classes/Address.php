@@ -111,8 +111,9 @@ class Address
 
 	/**
 	 * Saves this record back to the database
+	 * @param Rationale $rationale Data for the change log entry
 	 */
-	public function save()
+	public function save(ChangeLogEntry $changeLogEntry)
 	{
 		$this->validate();
 
@@ -149,6 +150,8 @@ class Address
 		else {
 			$this->insert($data);
 		}
+
+		$this->updateChangeLog($changeLogEntry);
 	}
 
 	private function update($data)
@@ -171,7 +174,15 @@ class Address
 
 		$data['s']['street_address_id'] = $this->street_address_id;
 		$zend_db->insert('mast_address_sanitation',$data['s']);
+	}
 
+	private function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	{
+		$logEntry = (array)$changeLogEntry;
+		$logEntry['street_address_id'] = $this->street_address_id;
+
+		$zend_db = Database::getConnection();
+		$zend_db->insert('address_change_log',$logEntry);
 	}
 
 	//----------------------------------------------------------------
@@ -561,11 +572,12 @@ class Address
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $int
 	 */
-	public function setStreet_id($number)
+	public function setStreet_id($int)
 	{
-		$this->street_id = $number;
+		$this->street = new Street($int);
+		$this->street_id = $this->street->getId();
 	}
 
 	/**
@@ -602,27 +614,28 @@ class Address
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $int
 	 */
-	public function setTownship_id($number)
+	public function setTownship_id($int)
 	{
-		$this->township_id = $number;
+		$this->township = new Township($int);
+		$this->township_id = $this->township->getId();
+	}
+
+	/**
+	 * @param int $int
+	 */
+	public function setSection($int)
+	{
+		$this->section = preg_replace('/[^0-9]/','',$int);
 	}
 
 	/**
 	 * @param string $string
 	 */
-	public function setSection($string)
+	public function setQuarter_section($string)
 	{
-		$this->section = trim($string);
-	}
-
-	/**
-	 * @param char $char
-	 */
-	public function setQuarter_section($char)
-	{
-		$this->quarter_section = $char;
+		$this->quarter_section = preg_replace('/[^NSEW]/','',strtoupper($string));
 	}
 
 	/**

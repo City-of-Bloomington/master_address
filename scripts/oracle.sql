@@ -272,46 +272,6 @@ select subunit_type_id_s.nextval into :new.id from dual;
 end;
 /
 
-create table mast_address_subunits (
-	subunit_id number not null primary key,
-	street_address_id number not null,
-	sudtype varchar2(20) not null,
-	street_subunit_identifier varchar2(20) not null,
-	notes varchar2(240),
-	foreign key references mast_address (street_address_id),
-	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
-);
-create sequence subunit_id_s nocache;
-create trigger subunit_id_trigger
-before insert on mast_address_subunits
-for each row
-begin
-select subunit_id_s.nextval into :new.subunit_id from dual;
-end;
-/
-
-
-create table mast_address_subunit_status (
-	id number not null primary key,
-	subunit_id number not null,
-	street_address_id number not null,
-	status_code number not null,
-	start_date date default sysdate,
-	end_date date,
-	unique (subunit_id,start_date),
-	foreign key (status_code) references mast_address_status_lookup (status_code),
-	foreign key (street_address_id) references mast_address (street_address_id),
-	foreign key (subunit_id) references mast_address_subunits (subunit_id)
-);
-create sequence subunit_status_id_seq;
-create trigger subunit_status_trigger
-before insert on mast_address_subunit_status
-for each row
-begin
-select subunit_status_id_seq.nextval into :new.id from dual;
-end;
-/
-
 create view latest_subunit_status as
 select z.*,s.status_code,l.description from mast_address_subunit_status s
 left join mast_address_status_lookup l on s.status_code=l.status_code
@@ -621,6 +581,19 @@ right join (
 	from mast_address_status group by street_address_id
 ) z on (s.street_address_id=z.street_address_id and s.start_date=z.start_date);
 
+
+create table address_change_log (
+	street_address_id number not null,
+	user_id number not null,
+	action varchar2(20) not null,
+	contact_id number not null,
+	rationale varchar2(255),
+	date_changed date default sysdate,
+	foreign key (street_address_id) references mast_address(street_address_id),
+	foreign key (user_id) references users(id),
+	foreign key (contact_id) references mast_addr_assignment_contact(contact_id)
+);
+
 create table mast_address_sanitation (
 	street_address_id number not null primary key,
 	trash_pickup_day varchar2(20),
@@ -628,6 +601,46 @@ create table mast_address_sanitation (
 	large_item_pickup_day varchar2(20),
 	foreign key(street_address_id) references mast_address(street_address_id)
 );
+
+create table mast_address_subunits (
+	subunit_id number not null primary key,
+	street_address_id number not null,
+	sudtype varchar2(20) not null,
+	street_subunit_identifier varchar2(20) not null,
+	notes varchar2(240),
+	foreign key references mast_address (street_address_id),
+	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)
+);
+create sequence subunit_id_s nocache;
+create trigger subunit_id_trigger
+before insert on mast_address_subunits
+for each row
+begin
+select subunit_id_s.nextval into :new.subunit_id from dual;
+end;
+/
+
+
+create table mast_address_subunit_status (
+	id number not null primary key,
+	subunit_id number not null,
+	street_address_id number not null,
+	status_code number not null,
+	start_date date default sysdate,
+	end_date date,
+	unique (subunit_id,start_date),
+	foreign key (status_code) references mast_address_status_lookup (status_code),
+	foreign key (street_address_id) references mast_address (street_address_id),
+	foreign key (subunit_id) references mast_address_subunits (subunit_id)
+);
+create sequence subunit_status_id_seq;
+create trigger subunit_status_trigger
+before insert on mast_address_subunit_status
+for each row
+begin
+select subunit_status_id_seq.nextval into :new.id from dual;
+end;
+/
 
 create table annexations (
 	id number not null primary key,

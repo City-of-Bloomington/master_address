@@ -12,10 +12,10 @@ $action = '';
 if (userIsAllowed('Address')) {
 	$action = "
 		<tr><th>Action</th>
-			<td><select>
-					<option>change</option>
+			<td><select onchange=\"handleActionChoice(this);\">
+					<option value=\"\">Action to Apply</option>
 					<option>correct</option>
-					<option>update</option>
+					<option>change</option>
 					<option>verify</option>
 					<option>retire</option>
 					<option>unretire</option>
@@ -25,6 +25,12 @@ if (userIsAllowed('Address')) {
 	";
 }
 echo "
+<script type=\"text/javascript\">
+	function handleActionChoice(select) {
+		action = select.options[select.selectedIndex].value + '.php?address_id={$this->address->getId()}';
+		document.location.href='".BASE_URL."/addresses/actions/' + action;
+	}
+</script>
 <h1>Address Information</h1>
 <table>
 	$action
