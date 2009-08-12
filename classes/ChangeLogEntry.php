@@ -15,13 +15,53 @@ class ChangeLogEntry
 	public $rationale;
 	public $date_changed;
 
-	public function __construct(User $user,array $data)
+	private $user;
+	private $contact;
+
+	/**
+	 * Creates a new entry for the change log
+	 *
+	 * Only the User is required.  You must pass the user in the first parameter.
+	 * You can pass all the of the data as an array in the first paramter....
+	 * Or you can pass the User and the data seperately
+	 *
+	 * @param User|array $user
+	 * @param array $data
+	 */
+	public function __construct($user,array $data=null)
 	{
-		$this->user_id = $user->getId();
-		$this->action = $data['action'];
-		$this->contact_id = $data['contact_id'];
-		$this->rationale = $data['rationale'];
-		$this->date_changed = date('Y-m-d H:i:s');
+		if ($user instanceof User) {
+			$this->user = $user;
+			$this->user_id = $user->getId();
+		}
+		elseif (is_array($user)) {
+			foreach ($user as $field=>$value) {
+				if ($field == 'date_changed') {
+					$value = new Date($value);
+				}
+				$this->$field = $value;
+			}
+		}
+		else {
+			$this->user_id = $user;
+		}
+
+
+
+		if ($data) {
+			foreach ($data as $field=>$value) {
+				$this->$field = $value;
+			}
+		}
+
+
+		if (!$this->date_changed) {
+			$this->date_changed = new Date();
+		}
+
+		if (!$this->user_id) {
+			throw new Exception('logEntry/missingUser');
+		}
 	}
 
 	/**
@@ -33,6 +73,28 @@ class ChangeLogEntry
 	{
 		return array('user_id'=>$this->user_id,'action'=>$this->action,
 						'contact_id'=>$this->contact_id,'rationale'=>$this->rationale,
-						'date_changed'=>$this->date_changed);
+						'date_changed'=>$this->date_changed->format('Y-m-d H:i:s'));
+	}
+
+	/**
+	 * @return User
+	 */
+	public function getUser()
+	{
+		if (!$this->user) {
+			$this->user = new User($this->user_id);
+		}
+		return $this->user;
+	}
+
+	/**
+	 * @return Contact
+	 */
+	public function getContact()
+	{
+		if (!$this->contact) {
+			$this->contact = new Contact($this->contact_id);
+		}
+		return $this->contact;
 	}
 }

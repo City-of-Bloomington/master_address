@@ -178,7 +178,7 @@ class Address
 
 	private function updateChangeLog(ChangeLogEntry $changeLogEntry)
 	{
-		$logEntry = (array)$changeLogEntry;
+		$logEntry = $changeLogEntry->getData();
 		$logEntry['street_address_id'] = $this->street_address_id;
 
 		$zend_db = Database::getConnection();
@@ -969,5 +969,23 @@ class Address
 	public function getRecycleWeek()
 	{
 		return $this->getRecycle_week();
+	}
+
+	/**
+	 * Returns an array of ChangeLogEntries
+	 *
+	 * @return array
+	 */
+	public function getChangeLog()
+	{
+		$changeLog = array();
+
+		$zend_db = Database::getConnection();
+		$sql = 'select * from address_change_log where street_address_id=?';
+		$result = $zend_db->fetchAll($sql,$this->street_address_id);
+		foreach ($result as $row) {
+			$changeLog[] = new ChangeLogEntry($row);
+		}
+		return $changeLog;
 	}
 }

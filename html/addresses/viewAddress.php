@@ -20,16 +20,23 @@ else {
 	$template = new Template('two-column');
 }
 
-$template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));
-$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
-$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
-								array('addressStatusChangeList'=>$address->getStatusChangeList()));
+if ($template->outputFormat=='html') {
+	$template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));
+}
 
-$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
-												array('address'=>$address));
-$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
-												array('address'=>$address,
-														'subunitList'=>$address->getSubunits()));
-$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
-												array('purposeList'=>$address->getPurposes()));
+$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
+
+if ($template->outputFormat=='html') {
+	$template->blocks[] = new Block('addresses/changeLog.inc',array('address'=>$address));
+	$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
+									array('addressStatusChangeList'=>$address->getStatusChangeList()));
+
+	$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
+													array('address'=>$address));
+	$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
+													array('address'=>$address,
+															'subunitList'=>$address->getSubunits()));
+	$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
+													array('purposeList'=>$address->getPurposes()));
+}
 echo $template->render();
