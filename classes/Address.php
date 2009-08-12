@@ -94,6 +94,8 @@ class Address
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->city="BLOOMINGTON";
+			$this->state="IN";
 		}
 	}
 
