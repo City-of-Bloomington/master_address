@@ -17,13 +17,16 @@ $location = $this->location;
 <div id="addAddressForm" class="yui-skin-sam">
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 <fieldset><legend>Address Information</legend>
-	<?php
-		echo "<input type=\"hidden\" id=\"street_id\" name=\"street_id\" value=\"{$street->getStreet_id()}\">";
-		
-	?>
+		<input type="hidden" id="street_id2" name="street_id2" value="<?php echo $street->getStreet_id(); ?>">
+
 	<table>
 		<tr><td>
 				<table> <!-- left table -->
+					<tr><td><label>Street ID</label></td>
+						<td><input id="street_id" name="street_id" value="<?php echo $street->getStreet_id(); ?>" disabled="disabled" />
+						</td>
+					</tr>
+							
 					<tr><td><label>Street</label></td>
 						<td><div id="findStreetForm-autocomplete" style="width:15em;">
 							<input name="streetName" id="streetName" value="<?php echo $street->getStreetName(); ?>" />
@@ -50,7 +53,7 @@ $location = $this->location;
 			  
 					<tr><td><label for="address-zip">Zip</label></td>
 						<td><input name="address[zip]" size="5" maxlength="5" id="address-zip" value="<?php echo $address->getZip(); ?>"/> - 
-						<input name="address[zipplus4]" id="address-zipplus4" value="<?php echo $address->getZipplus4(); ?>"/>
+						<input name="address[zipplus4]" id="address-zipplus4" value="<?php echo $address->getZipplus4(); ?>" size="4" maxlength="4" />
 						</td>
 					</tr>
 					
@@ -95,23 +98,6 @@ $location = $this->location;
 							</select>
 						</td>
 					</tr>
-					
-
-					<tr><td><label for="address-gov_jur_id">Gov. Jurisdiction</label></td>
-						<td><select name="address[gov_jur_id]" id="address-gov_jur_id">
-							<?php
-								$list = new JurisdictionList();
-								$list->find();
-								foreach ($list as $jurisdiction) {
-									$name = View::escape($jurisdiction);
-									$selected = $jurisdiction->getId()== $address->getGov_jur_id() ? "selected=\"selected\"":"";
-									echo "<option $selected value=\"{$jurisdiction->getId()}\">$name</option>";
-								}
-							?>
-							</select>
-						</td>
-					</tr>
-					
 
 					<tr><td><label for="address-township_id">Township</label></td>
 						<td><select name="address[township_id]" id="address-township_id" >
@@ -206,8 +192,7 @@ $location = $this->location;
 						?>
 				<tr><td colspan="2">
 					<label for="address-notes">Notes</label>
-					<div><textarea name="address[notes]" id="address-notes" rows="5" cols="50" wrap="wrap">
-						<?php echo View::escape($address->getNotes()); ?>
+					<div><textarea name="address[notes]" id="address-notes" rows="5" cols="50" wrap="wrap"><?php echo View::escape($address->getNotes()); ?>
 						</textarea>
 					</div>
 				</td>

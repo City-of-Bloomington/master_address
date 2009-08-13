@@ -40,7 +40,6 @@ class Address
 
 	private $street;
 	private $jurisdiction;
-	private $govJur;
 	private $township;
 	private $subdivision;
 	private $plat;
@@ -605,17 +604,12 @@ class Address
 	public function setJurisdiction_id($number)
 	{
 		$this->setGov_jur_id($number);
-		$this->jurisdiction_id = $number;
 	}
 
-	/**
-	 * @param number $number
-	 */
 	public function setGov_jur_id($number)
 	{
 		$this->gov_jur_id = $number;
 	}
-
 	/**
 	 * @param int $int
 	 */
@@ -806,15 +800,6 @@ class Address
 	{
 		$this->gov_jur_id = $jurisdiction->getId();
 		$this->jurisdiction = $jurisdiction;
-	}
-
-	/**
-	 * @param Gov_jur $gov_jur
-	 */
-	public function setGovJur($govJur)
-	{
-		$this->gov_jur_id = $govJur->getId();
-		$this->gov_jur = $govJur;
 	}
 
 	/**
