@@ -586,7 +586,7 @@ create table address_change_log (
 	street_address_id number not null,
 	user_id number not null,
 	action varchar2(20) not null,
-	contact_id number not null,
+	contact_id number,
 	rationale varchar2(255),
 	date_changed date default sysdate,
 	foreign key (street_address_id) references mast_address(street_address_id),
