@@ -23,8 +23,7 @@ if (userIsAllowed('Address')) {
 	</table>
 	<script type=\"text/javascript\">
 		function handleActionChoice(select) {
-			action = select.options[select.selectedIndex].value + '.php?address_id={$this->address->getId()}';
-			document.location.href='".BASE_URL."/addresses/actions/' + action;
+			document.location.href = '".BASE_URL."/addresses/actions.php?action=' + select.options[select.selectedIndex].value + ';address_id={$this->address->getId()}';
 		}
 	</script>
 	";

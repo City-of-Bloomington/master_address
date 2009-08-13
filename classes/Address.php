@@ -983,7 +983,7 @@ class Address
 		$changeLog = array();
 
 		$zend_db = Database::getConnection();
-		$sql = 'select * from address_change_log where street_address_id=?';
+		$sql = 'select * from address_change_log where street_address_id=? order by date_changed desc';
 		$result = $zend_db->fetchAll($sql,$this->street_address_id);
 		foreach ($result as $row) {
 			$changeLog[] = new ChangeLogEntry($row);
