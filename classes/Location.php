@@ -73,7 +73,8 @@ class Location
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->location_id || !$this->street_address_id
+		if (// !$this->location_id ||
+			!$this->street_address_id
 			|| !$this->location_type_id || !$this->active) {
 			throw new Exception('missingRequiredFields');
 		}
@@ -113,12 +114,13 @@ class Location
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
+		if (Database::getType()=='oracle') {
+			$this->location_id = $zend_db->fetchOne('select location_id_s.nextval from dual');
+			$data['location_id']=$this->location_id;
+		}		
 		$zend_db->insert('address_location',$data);
 		if (Database::getType()=='oracle') {
 			$this->lid = $zend_db->lastSequenceId('location_lid_seq');
-
-			// We also need to create a new location_id
-			$this->location_id = $zend_db->fetchOne('select location_id_s.nextval from dual');
 		}
 		else {
 			throw new Exception('locations/unsupportedDatabaseCall');
