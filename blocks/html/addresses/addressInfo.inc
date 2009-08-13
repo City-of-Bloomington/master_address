@@ -5,12 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
-$township = $this->address->getTownship()
-			? View::escape($this->address->getTownship()->getName())
-			: '';
-$action = '';
+echo "<h1>Address Information</h1>";
 if (userIsAllowed('Address')) {
-	$action = "
+	echo "
+	<table>
 		<tr><th>Action</th>
 			<td><select onchange=\"handleActionChoice(this);\">
 					<option value=\"\">Action to Apply</option>
@@ -22,61 +20,14 @@ if (userIsAllowed('Address')) {
 				</select>
 			</td>
 		</tr>
+	</table>
+	<script type=\"text/javascript\">
+		function handleActionChoice(select) {
+			action = select.options[select.selectedIndex].value + '.php?address_id={$this->address->getId()}';
+			document.location.href='".BASE_URL."/addresses/actions/' + action;
+		}
+	</script>
 	";
 }
-echo "
-<script type=\"text/javascript\">
-	function handleActionChoice(select) {
-		action = select.options[select.selectedIndex].value + '.php?address_id={$this->address->getId()}';
-		document.location.href='".BASE_URL."/addresses/actions/' + action;
-	}
-</script>
-<h1>Address Information</h1>
-<table>
-	$action
-	<tr><th>Street</th>
-		<td>{$this->address->getStreet()->getStreetName()}</td>
-	</tr>
-	<tr><th>Number</th>
-		<td>{$this->address->getStreet_number()}</td>
-	</tr>
-	<tr><th>Status</th>
-		<td>{$this->address->getStatus()}</td>
-	</tr>
-	<tr><th>Type</th>
-		<td>{$this->address->getType()}</td>
-	</tr>
-	<tr><th>Zip Code</th>
-		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
-	</tr>
-	<tr><th>Trash Day</th>
-		<td>{$this->address->getTrashDay()}</td>
-	</tr>
-	<tr><th>Recycle Week</th>
-		<td>{$this->address->getRecycleWeek()}</td>
-	</tr>
-	<tr><th>Jurisdiction</th>
-		<td>{$this->address->getJurisdiction()->getDescription()}</td>
-	</tr>
-	<tr><th>Township</th>
-		<td>$township</td>
-	</tr>
-	<tr><th>Section</th>
-		<td>{$this->address->getSection()}</td>
-	</tr>
-	<tr><th>Quarter Section</th>
-		<td>{$this->address->getQuarter_section()}</td>
-	</tr>
-	<tr><th>Census Block</th>
-		<td>{$this->address->getCensus_block_fips_code()}</td>
-	</tr>
-	<tr><th>Lat/Long</th>
-		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
-	</tr>
-	<tr><th>State Plane X/Y</th>
-		<td>{$this->address->getState_plane_x_coordinate()},
-			{$this->address->getState_plane_y_coordinate()}
-		</td>
-	</tr>
-</table>
-";
+include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
+include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
