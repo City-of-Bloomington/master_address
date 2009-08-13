@@ -6,9 +6,13 @@
  */
 class LocationType
 {
-	private $id;
 	private $location_type_id;
 	private $description;
+
+
+	private $location_type;
+
+
 
 	/**
 	 * Populates the object with data
@@ -20,23 +24,18 @@ class LocationType
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $id
+	 * @param int|array $location_type_id
 	 */
-	public function __construct($id=null)
+	public function __construct($location_type_id=null)
 	{
-		if ($id) {
-			if (is_array($id)) {
-				$result = $id;
+		if ($location_type_id) {
+			if (is_array($location_type_id)) {
+				$result = $location_type_id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if (ctype_digit($id)) {
-					$sql = 'select * from addr_location_types_master where id=?';
-				}
-				else {
-					$sql = 'select * from addr_location_types_master where location_type_id=?';
-				}
-				$result = $zend_db->fetchRow($sql,array($id));
+				$sql = 'select * from addr_location_types_master where location_type_id=?';
+				$result = $zend_db->fetchRow($sql,array($location_type_id));
 			}
 
 			if ($result) {
@@ -75,45 +74,46 @@ class LocationType
 	{
 		$this->validate();
 
-		$data = array();
-		$data['location_type_id'] = $this->location_type_id;
-		$data['description'] = $this->description;
+		$zend_db = Database::getConnection();
+		$sql = 'select count(*) from addr_location_types_master where location_type_id=?';
+		$count = $zend_db->fetchOne($sql,$this->location_type_id);
 
-		if ($this->id) {
-			$this->update($data);
+		if ($count) {
+			$this->update();
 		}
 		else {
-			$this->insert($data);
+			$this->insert();
 		}
 	}
 
-	private function update($data)
+	private function update()
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('addr_location_types_master',$data,"id='{$this->id}'");
+		$data = array('description'=>$this->description);
+		$zend_db->update('addr_location_types_master',
+						$data,
+						"location_type_id='{$this->location_type_id}'");
 	}
 
-	private function insert($data)
+	private function insert()
 	{
+		$data = array('location_type_id'=>$this->location_type_id,
+						'description'=>$this->description);
+
 		$zend_db = Database::getConnection();
 		$zend_db->insert('addr_location_types_master',$data);
-		if (Database::getType()=='oracle') {
-			$this->id = $zend_db->lastSequenceId('location_type_id_s');
-		}
-		else {
-			$this->id = $zend_db->lastInsertId();
-		}
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * @return number
+	 * Alias for getLocation_type_id()
+	 * @return string
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->getLocation_type_id();
 	}
 
 	/**
@@ -140,7 +140,7 @@ class LocationType
 	 */
 	public function setLocation_type_id($string)
 	{
-		$this->location_type_id = trim($string);
+		$this->location_type_id = preg_replace('/[^a-zA-Z0-9\s]/','',$string);
 	}
 
 	/**
@@ -150,16 +150,13 @@ class LocationType
 	{
 		$this->description = trim($string);
 	}
+
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * Alias for getLocation_type_id()
-	 *
-	 * @return string
-	 */
-	public function getType()
+	public function __toString()
 	{
 		return $this->getLocation_type_id();
 	}

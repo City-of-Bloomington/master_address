@@ -63,6 +63,7 @@ class PurposeList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the addr_location_purpose_mast table.
+		$joins = array();
 		if (isset($fields['location_id'])) {
 			$joins['l'] = array('table'=>'addr_location_purposes',
 								'condition'=>'p.location_purpose_id=l.location_purpose_id');
