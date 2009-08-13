@@ -121,7 +121,7 @@ class Location
 			$this->location_id = $zend_db->fetchOne('select location_id_s.nextval from dual');
 		}
 		else {
-			$this->lid = $zend_db->lastInsertId();
+			throw new Exception('locations/unsupportedDatabaseCall');
 		}
 	}
 
