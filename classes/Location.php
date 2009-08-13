@@ -96,7 +96,7 @@ class Location
 		$data['common_name'] = $this->common_name ? $this->common_name : null;
 		$data['active'] = $this->active;
 
-		if ($this->id) {
+		if ($this->lid) {
 			$this->update($data);
 		}
 		else {
@@ -115,10 +115,13 @@ class Location
 		$zend_db = Database::getConnection();
 		$zend_db->insert('address_location',$data);
 		if (Database::getType()=='oracle') {
-			$this->id = $zend_db->lastSequenceId('location_lid_seq');
+			$this->lid = $zend_db->lastSequenceId('location_lid_seq');
+
+			// We also need to create a new location_id
+			$this->location_id = $zend_db->fetchOne('select location_id_s.nextval from dual');
 		}
 		else {
-			$this->id = $zend_db->lastInsertId();
+			$this->lid = $zend_db->lastInsertId();
 		}
 	}
 
@@ -309,7 +312,7 @@ class Location
 	public function setStreet_address_id($number)
 	{
 		$this->address = new Address($number);
-		$this->street_address_id = $address->getId();
+		$this->street_address_id = $this->address->getId();
 	}
 
 	/**
