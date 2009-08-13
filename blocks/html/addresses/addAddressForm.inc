@@ -18,7 +18,8 @@ $location = $this->location;
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 <fieldset><legend>Address Information</legend>
 	<?php
-		echo "<input type=\"hidden\" id=\"street_id\" name=\"address[street_id]\" value=\"{$street->getStreet_id()}\">";
+		echo "<input type=\"hidden\" id=\"street_id\" name=\"street_id\" value=\"{$street->getStreet_id()}\">";
+		
 	?>
 	<table>
 		<tr><td>
@@ -38,7 +39,9 @@ $location = $this->location;
 						<td><select name="address[address_type]" id="address-address_type" 							<option></option>	
 							<?php
 								foreach(Address::getAddressTypes() as $type){
-									echo "<option>$type</option>";
+									$selected="";
+									$address->getAddress_type() == $type?$selected="selected=\"selected\"":"";
+									echo "<option $selected>$type</option>";
 								}
 							?>
 							</select>
@@ -79,6 +82,7 @@ $location = $this->location;
 					
 					<tr><td><label for="address-jurisdiction_id">Jurisdiction</label></td>
 						<td><select name="address[jurisdiction_id]" id="address-jurisdiction_id">
+						<option></option>
 							<?php
 								$list = new JurisdictionList();
 								$list->find();
@@ -91,6 +95,23 @@ $location = $this->location;
 							</select>
 						</td>
 					</tr>
+					
+
+					<tr><td><label for="address-gov_jur_id">Gov. Jurisdiction</label></td>
+						<td><select name="address[gov_jur_id]" id="address-gov_jur_id">
+							<?php
+								$list = new JurisdictionList();
+								$list->find();
+								foreach ($list as $jurisdiction) {
+									$name = View::escape($jurisdiction);
+									$selected = $jurisdiction->getId()== $address->getGov_jur_id() ? "selected=\"selected\"":"";
+									echo "<option $selected value=\"{$jurisdiction->getId()}\">$name</option>";
+								}
+							?>
+							</select>
+						</td>
+					</tr>
+					
 
 					<tr><td><label for="address-township_id">Township</label></td>
 						<td><select name="address[township_id]" id="address-township_id" >
@@ -130,7 +151,7 @@ $location = $this->location;
 					</tr>
 					
 					<tr><td><label for="address-tax_jurisdiction">Tax Jurisdiction</label></td>
-						<td><input name="address[tax_jurisdiction]" id="address-tax_jurisdiction" size="6" maxlength="6" />
+						<td><input name="address[tax_jurisdiction]" id="address-tax_jurisdiction" value="<?php echo $address->getTax_jurisdiction(); ?>" size="6" maxlength="6" />
 						</td>
 					</tr>
 
@@ -140,7 +161,7 @@ $location = $this->location;
 				<table> <!-- right table -->
 				
 					<tr><td><label>Location ID</label></td>
-						<td><input type="hidden" name="lid" value="<?php echo $location->getLid(); ?>"> <?php echo $location->getLid(); ?>
+						<td><input type="hidden" name="lid" value="<?php echo $location->getLid(); ?>" /> <?php echo $location->getLid(); ?>
 						</td>
 					</tr>
 					
@@ -178,15 +199,15 @@ $location = $this->location;
 								$ltypes->find();
 								foreach($ltypes as $type){
 									$selected="";
-									if($location->getLocation_type_id() == $type->getLocation_type_id())$selected="selected=\"selected\"";							
-									echo "<option $selected id=\"{$type->getLocation_type_id()}\">{$type->getLocation_type_id()}</option>";
+									if($location->getLocation_type_id() == $type->getLocation_type_id())$selected="selected=\"selected\"";													echo "<option $selected >{$type->getLocation_type_id()}</option>";
 								}
 								echo "</select></td></tr>";
 							}										
 						?>
 				<tr><td colspan="2">
 					<label for="address-notes">Notes</label>
-					<div><textarea name="address[notes]" id="address-notes" rows="5" cols="50" wrap="warp"><?php echo View::escape($address->getNotes()); ?>
+					<div><textarea name="address[notes]" id="address-notes" rows="5" cols="50" wrap="wrap">
+						<?php echo View::escape($address->getNotes()); ?>
 						</textarea>
 					</div>
 				</td>
@@ -194,10 +215,9 @@ $location = $this->location;
 		</table>
 		</td></tr>
 	</table>
-				
 
 		<button type="submit" class="submit">Submit Address</button>
-		<input type="checkbox" name="batch_mode" id="batch_mode" value="y" /><label for="batch_mode">Submit in Batch Mode</label>
+		<input type="checkbox" name="batch_mode" id="batch_mode" value="y" /><label for="batch_mode" />Submit in Batch Mode</label>
 			
 		</button>
 	</fieldset>

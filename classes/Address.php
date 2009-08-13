@@ -605,6 +605,7 @@ class Address
 	public function setJurisdiction_id($number)
 	{
 		$this->setGov_jur_id($number);
+		$this->jurisdiction_id = $number;
 	}
 
 	/**

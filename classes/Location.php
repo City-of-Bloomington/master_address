@@ -325,19 +325,20 @@ class Location
 	}
 
 	/**
-	 * @param number $number
+	 * @param boolean bool
 	 */
-	public function setMailable_flag($number)
+	public function setMailable_flag($bool)
 	{
-		$this->mailable_flag = $number;
+		
+		$this->mailable_flag = $bool?1:0;
 	}
 
 	/**
-	 * @param number $number
+	 * @param boolean bool
 	 */
-	public function setLivable_flag($number)
+	public function setLivable_flag($bool)
 	{
-		$this->livable_flag = $number;
+		$this->livable_flag = $bool?1:0;
 	}
 
 	/**
@@ -435,4 +436,23 @@ class Location
 			return $list[0];
 		}
 	}
+	
+	/**
+	 * @param string string
+	 * eithe Y or N
+	 */
+	public function setMailable($string)
+	{
+		$this->mailable_flag = $string == "y" ?1:0;
+	}
+
+	/**
+	 * @param string string
+	 */
+	public function setLivable($string)
+	{
+		$this->livable_flag = $string == "y" ?1:0;
+	}
+
+	
 }

@@ -15,26 +15,23 @@ if (!userIsAllowed('Address')) {
 $street = new Street();
 $location = new Location();
 $address = new Address();
-if (isset($_GET['street_id'])) {
-	$street = new Street($_GET['street_id']);
+if (isset($_REQUEST['street_id'])) {
+	$street = new Street($_REQUEST['street_id']);
 }
-if(isset($_GET['location_id'])){ // meant the location id
-	$location = new Location($_GET['location_id']);
+if (isset($_REQUEST['lid']) && $_REQUEST['lid']){ // meant the location id
+	$location = new Location($_REQUEST['lid']);
 }
 if (isset($_POST['address'])) {
 	foreach ($_POST['address'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
 		$address->$set($value);
 	}
-
+	$address->setStreet_id($street->getId());
 	try {
 		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'add'));
 		$address->save($changeLog);
-		$street_id = $address->getStreet_id();
-		if(isset($_POST['lid'])){
-			$location = new Location($_POST['lid']);// location id
-		}
-		else{
+		
+		if(!isset($_POST['lid']) || !$_POST['lid']){
 			$location = new Location();
 			$location->setStreet_address_id($address->getStreet_address_id());
 		}
@@ -43,14 +40,14 @@ if (isset($_POST['address'])) {
 				$set = 'set'.ucfirst($field);
 				$location->$set($value);
 			}
+			$location->save();			
 		}
-		$location->save();
 		
 		if(!isset($_POST['batch_mode'])){
-			$address = new Address(); // an empty one to populate the form
+			header('Location: '.$address->getStreet()->getURL());			
+			exit();			
 		}	
-		//	header('Location: '.BASE_URL.'/addresses');
-		//	exit();
+
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -58,6 +55,7 @@ if (isset($_POST['address'])) {
 }
 
 $template = new Template();
+
 $template->blocks[] = new Block('addresses/breadcrumbs.inc',array('street'=>$street));
 
 $template->blocks[] = new Block('addresses/addAddressForm.inc',array('street'=>$street,'address'=>$address,'location'=>$location));
