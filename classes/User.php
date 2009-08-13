@@ -171,27 +171,6 @@ class User extends SystemUser
 		}
 		return null;
 	}
-	/**
-	 * @return string
-	 */
-	public function getFirstname()
-	{
-		return $this->getPerson()->getFirstname();
-	}
-	/**
-	 * @return string
-	 */
-	public function getLastname()
-	{
-		return $this->getPerson()->getLastname();
-	}
-	/**
-	 * @return string
-	 */
-	public function getEmail()
-	{
-		return $this->getPerson()->getEmail();
-	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -371,5 +350,37 @@ class User extends SystemUser
 		$id = $zend_db->fetchOne('select id from users where username=? and password=?',
 								array($this->username,$md5));
 		return $id ? true : false;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFirstname()
+	{
+		return $this->getPerson()->getFirstname();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastname()
+	{
+		return $this->getPerson()->getLastname();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $this->getPerson()->getEmail();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFullname()
+	{
+		return $this->getPerson()->getFullname();
 	}
 }

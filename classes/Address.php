@@ -178,7 +178,7 @@ class Address
 		$zend_db->insert('mast_address_sanitation',$data['s']);
 	}
 
-	private function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
 	{
 		$logEntry = $changeLogEntry->getData();
 		$logEntry['street_address_id'] = $this->street_address_id;

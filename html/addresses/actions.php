@@ -30,25 +30,34 @@ catch (Exception $e) {
 $action = $_REQUEST['action'];
 
 
-
-if (isset($_POST['address'])) {
-	$actionFields = array('correct'=>array('street_number','address_type','zip','zipplus4',
-											'trash_pickup_day','recycle_week','jurisdiction_id',
-											'township_id','section','quarter_section',
-											'census_block_fips_code','tax_jurisdiction',
-											'latitude','longitude',
-											'state_plane_x_coordinate','state_plane_y_coordinate'),
-							'change'=>array('street_number'));
-	foreach ($actionFields[$action] as $field) {
-		if (isset($_POST[$field])) {
-			$set = 'set'.ucfirst($field);
-			$address->$set($_POST[$field]);
-		}
-	}
-
+// All actions will involve updating the change log
+// Some actions do not involve changing any fields of an address.
+// However, we still want to update the change log when these actions occur.
+if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
-		$address->save($changeLogEntry);
+
+		if (isset($_POST['address'])) {
+			$actionFields = array('correct'=>array('street_number','address_type','zip','zipplus4',
+													'trash_pickup_day','recycle_week','jurisdiction_id',
+													'township_id','section','quarter_section',
+													'census_block_fips_code','tax_jurisdiction',
+													'latitude','longitude',
+													'state_plane_x_coordinate','state_plane_y_coordinate'),
+									'change'=>array('street_number')
+									);
+			foreach ($actionFields[$action] as $field) {
+				if (isset($_POST[$field])) {
+					$set = 'set'.ucfirst($field);
+					$address->$set($_POST[$field]);
+				}
+			}
+
+			$address->save($changeLogEntry);
+		}
+		else {
+			$address->updateChangeLog($changeLogEntry);
+		}
 		header('Location: '.$address->getURL());
 		exit();
 	}

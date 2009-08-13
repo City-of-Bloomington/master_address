@@ -20,7 +20,7 @@ class ChangeLogEntry
 
 	private $actions = array('correct'=>'corrected','change'=>'changed',
 							'add'=>'added','assign'=>'assigned','move'=>'moved',
-							'retire'=>'retired','unretire'=>'unretired');
+							'verify'=>'verified','retire'=>'retired','unretire'=>'unretired');
 
 	/**
 	 * Creates a new entry for the change log
