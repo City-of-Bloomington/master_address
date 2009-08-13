@@ -18,6 +18,10 @@ class ChangeLogEntry
 	private $user;
 	private $contact;
 
+	private $actions = array('correct'=>'corrected','change'=>'changed',
+							'add'=>'added','assign'=>'assigned','move'=>'moved',
+							'retire'=>'retired','unretire'=>'unretired');
+
 	/**
 	 * Creates a new entry for the change log
 	 *
@@ -35,23 +39,14 @@ class ChangeLogEntry
 			$this->user_id = $user->getId();
 		}
 		elseif (is_array($user)) {
-			foreach ($user as $field=>$value) {
-				if ($field == 'date_changed') {
-					$value = new Date($value);
-				}
-				$this->$field = $value;
-			}
+			$this->parseArray($user);
 		}
 		else {
 			$this->user_id = $user;
 		}
 
-
-
 		if ($data) {
-			foreach ($data as $field=>$value) {
-				$this->$field = $value;
-			}
+			$this->parseArray($data);
 		}
 
 
@@ -61,6 +56,32 @@ class ChangeLogEntry
 
 		if (!$this->user_id) {
 			throw new Exception('logEntry/missingUser');
+		}
+		if (!$this->action) {
+			throw new Exception('logEntry/missingAction');
+		}
+	}
+
+	/**
+	 * @param array $data
+	 */
+	private function parseArray(array $data)
+	{
+		foreach ($data as $field=>$value) {
+			switch ($field) {
+				case 'date_changed':
+					$value = new Date($value);
+					break;
+				case 'action':
+					if (in_array($value,array_keys($this->actions))) {
+						$value = $this->actions[$value];
+					}
+					elseif (!in_array($value,$this->actions)) {
+						throw new Exception('logEntry/unknownAction');
+					}
+					break;
+			}
+			$this->$field = $value;
 		}
 	}
 
