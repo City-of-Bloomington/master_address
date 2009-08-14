@@ -12,15 +12,21 @@ class ChangeLogEntry
 	public $user_id;
 	public $action;
 	public $contact_id;
-	public $rationale;
-	public $date_changed;
+	public $notes;
+	public $action_date;
 
 	private $user;
 	private $contact;
 
-	private $actions = array('correct'=>'corrected','change'=>'changed',
-							'add'=>'added','assign'=>'assigned','move'=>'moved',
-							'verify'=>'verified','retire'=>'retired','unretire'=>'unretired');
+	private $actions = array('activate'=>'activated','assign'=>'assigned',
+							 'change'=>'changed','correct'=>'corrected',
+							 'move'=>'moved to location',
+							 'readdress'=>'readdressed','reassign'=>'reassigned',
+							 'remove'=>'removed','retire'=>'retired',
+							 'retire location'=>'retired location',
+							 'unretire'=>'unretired',
+							 'unretire location'=>'unretired location',
+							 'verify'=>'verified');
 
 	/**
 	 * Creates a new entry for the change log
@@ -50,13 +56,14 @@ class ChangeLogEntry
 		}
 
 
-		if (!$this->date_changed) {
-			$this->date_changed = new Date();
+		if (!$this->action_date) {
+			$this->action_date = new Date();
 		}
 
 		if (!$this->user_id) {
 			throw new Exception('logEntry/missingUser');
 		}
+
 		if (!$this->action) {
 			throw new Exception('logEntry/missingAction');
 		}
@@ -69,7 +76,7 @@ class ChangeLogEntry
 	{
 		foreach ($data as $field=>$value) {
 			switch ($field) {
-				case 'date_changed':
+				case 'action_date':
 					$value = new Date($value);
 					break;
 				case 'action':
@@ -93,8 +100,8 @@ class ChangeLogEntry
 	public function getData()
 	{
 		return array('user_id'=>$this->user_id,'action'=>$this->action,
-						'contact_id'=>$this->contact_id,'rationale'=>$this->rationale,
-						'date_changed'=>$this->date_changed->format('Y-m-d H:i:s'));
+					 'contact_id'=>$this->contact_id,'notes'=>$this->notes,
+					 'action_date'=>$this->action_date->format('Y-m-d H:i:s'));
 	}
 
 	/**

@@ -123,7 +123,6 @@ class Address
 		$data['a']['street_id'] = $this->street_id;
 		$data['a']['address_type'] = $this->address_type;
 		$data['a']['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
-		$data['a']['jurisdiction_id'] = $this->jurisdiction_id;
 		$data['a']['gov_jur_id'] = $this->gov_jur_id;
 		$data['a']['township_id'] = $this->township_id ? $this->township_id : null;
 		$data['a']['section'] = $this->section ? $this->section : null;
@@ -969,7 +968,7 @@ class Address
 		$changeLog = array();
 
 		$zend_db = Database::getConnection();
-		$sql = 'select * from address_change_log where street_address_id=? order by date_changed desc';
+		$sql = "select * from address_change_log where street_address_id=? order by action_date desc";
 		$result = $zend_db->fetchAll($sql,$this->street_address_id);
 		foreach ($result as $row) {
 			$changeLog[] = new ChangeLogEntry($row);

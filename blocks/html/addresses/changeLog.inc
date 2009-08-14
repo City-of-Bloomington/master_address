@@ -12,12 +12,12 @@ echo "
 ";
 foreach ($this->address->getChangeLog() as $logEntry) {
 	$username = $logEntry->getUser()->getUsername();
-	$rationale = View::escape($logEntry->rationale);
+	$notes = View::escape($logEntry->notes);
 
 	echo "
-	<tr><td>{$logEntry->date_changed}</td>
+	<tr><td>{$logEntry->action_date}</td>
 		<td>{$logEntry->action}</td>
-		<td>$rationale</td>
+		<td>$notes</td>
 		<td>$username</td>
 	</tr>
 	";
