@@ -28,7 +28,7 @@ if (isset($_POST['address'])) {
 	}
 	$address->setStreet_id($street->getId());
 	try {
-		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'add'));
+		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'assign'));
 		$address->save($changeLog);
 		
 		if(!isset($_POST['lid']) || !$_POST['lid']){

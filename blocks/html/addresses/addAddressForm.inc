@@ -215,7 +215,7 @@ addAddressForm_autosuggest = function() {
 	streetService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
 	streetService.responseSchema = {
 		resultsList: "streets",
-		fields: ["name","id"]
+		fields: ["name","id","town"]
 	};
 	streetService.maxCacheEntries = 5;
 
@@ -223,6 +223,21 @@ addAddressForm_autosuggest = function() {
 														"container",
 														streetService);
 	findStreetFormAC.resultTypeList = false;
+	//
+	 // Custom formatter of the results
+	findStreetFormAC.formatResult = function(oResultData, sQuery, sResultMatch) {
+		
+	   var name = oResultData.name, 
+           town = oResultData.town;
+		   
+		if(town){
+			town = town.charAt(0)+town.substr(1,town.length).toLowerCase();
+			return name + " ("+town+")";
+		}
+		else
+			return name;
+	}; 
+	//
 	var myHiddenField = YAHOO.util.Dom.get("street_id"); 
 	var myHandler = function(sType, aArgs) { 
 		var myAC = aArgs[0]; // reference back to the AC instance 
