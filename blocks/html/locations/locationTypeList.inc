@@ -27,7 +27,7 @@
 					$url->locationType_id = $locationType->getId();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
-				$type = View::escape($locationType->getType());
+				$type = View::escape($locationType->getId());
 				$description = View::escape($locationType->getDescription());
 				echo "
 				<tr><td>$editButton</td>

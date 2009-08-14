@@ -12,11 +12,6 @@
 		<input name="locationType_id" type="hidden" value="<?php echo $this->locationType->getId(); ?>" />
 		<table>
 
-			<tr><td><label for="locationType-location_type_id" class="required">Type</label></td>
-				<td><input name="locationType[location_type_id]" id="locationType-location_type_id" value="<?php echo View::escape($this->locationType->getLocation_type_id()); ?>" />
-				</td>
-			</tr>
-
 			<tr><td><label for="locationType-description" class="required">Description</label></td>
 				<td><input name="locationType[description]" id="locationType-description" value="<?php echo View::escape($this->locationType->getDescription()); ?>" />
 				</td>

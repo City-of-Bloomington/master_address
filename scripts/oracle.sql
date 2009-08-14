@@ -284,20 +284,9 @@ right join (
 ;;
 ;;location_type_id not a number
 create table addr_location_types_master (
-	id number not null primary key,
-	location_type_id varchar2(40) not null,
-	description varchar2(240),
-	unique (location_type_id)
+	location_type_id varchar2(40) not null primary key,
+	description varchar2(240)
 );
-create sequence location_type_id_s nocache;
-create trigger location_type_trigger
-before insert on addr_location_types_master
-for each row
-begin
-select location_type_id_s.nextval into :new.id from dual;
-end;
-/
-
 
 create table addr_location_purpose_mast (
 	location_purpose_id number not null primary key,
