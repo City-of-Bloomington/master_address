@@ -8,7 +8,12 @@
 ?>
 <table>
 	<tr><td><label>Street</label></td>
-		<td><?php echo $this->address->getStreet()->getStreetName(); ?></td>
+		<td><?php
+				$block = new Block('addresses/partials/streetSelector.inc',
+									array('street'=>$address->getStreet()));
+				echo $block->render();
+			?>
+		</td>
 	</tr>
 	<tr><td><label for="address-street_number" class="required">Number</label></td>
 		<td><input name="address[street_number]" id="address-street_number"

@@ -12,18 +12,18 @@
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/actions/streetFields.inc'; ?>
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
 	<fieldset>
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/actions/addressFields.inc'; ?>
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 	<fieldset id="changeLogEntry_fields">
 		<legend>Change Log Entry</legend>
 		<?php
-			$block = new Block('addresses/actions/changeLogEntryFields.inc',
+			$block = new Block('addresses/partials/changeLogEntryFields.inc',
 								array('action'=>'correct'));
 			echo $block->render('html');
 		?>
