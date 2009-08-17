@@ -329,7 +329,7 @@ class Location
 	 */
 	public function setMailable_flag($bool)
 	{
-		
+
 		$this->mailable_flag = $bool?1:0;
 	}
 
@@ -436,7 +436,7 @@ class Location
 			return $list[0];
 		}
 	}
-	
+
 	/**
 	 * @param string string
 	 * eithe Y or N
@@ -454,5 +454,29 @@ class Location
 		$this->livable_flag = $string == "y" ?1:0;
 	}
 
-	
+	/**
+	 * @return boolean
+	 */
+	public function isMailable()
+	{
+		return $this->getMailable_flag() ? true : false;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isLivable()
+	{
+		return $this->getLivable_flag() ? true : false;
+	}
+
+	/**
+	 * Alias for getLocationType()
+	 *
+	 * @return LocationType
+	 */
+	public function getType()
+	{
+		return $this->getLocationType();
+	}
 }

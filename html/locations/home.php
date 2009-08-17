@@ -6,6 +6,13 @@
  */
 $template = new Template();
 
+$template->blocks[] = new Block('locations/findLocationForm.inc');
+if (isset($_GET['address'])) {
+	$locations = new LocationList();
+	$locations->find(array('address'=>$_GET['address']),'street_number');
+	$template->blocks[] = new Block('locations/locationList.inc',array('locationList'=>$locations));
+}
+
 $purposeList = new PurposeList();
 $purposeList->find();
 $template->blocks[] = new Block('locations/purposeList.inc',array('purposeList'=>$purposeList));

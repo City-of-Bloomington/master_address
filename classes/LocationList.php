@@ -17,6 +17,7 @@
  */
 class LocationList extends ZendDbResultIterator
 {
+	private $columns;
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -31,6 +32,8 @@ class LocationList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
+		$this->columns = $this->zend_db->describeTable('address_location');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -46,25 +49,52 @@ class LocationList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='location_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('address_location');
+		$this->select->from(array('l'=>'address_location'));
+
+		// If we pass in an address, we should parse the address string into the fields
+		if (isset($fields['address'])) {
+			$fields = AddressList::parseAddress($fields['address']);
+			// We don't support searching for fractions right now
+			if (isset($fields['fraction'])) {
+				unset($fields['fraction']);
+			}
+			unset($fields['address']);
+		}
 
 		// Finding on fields from the address_location table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if ($value) {
-					$this->select->where("$key=?",$value);
-				}
-				else {
-					$this->select->where("$key is null");
+				if (array_key_exists($key,$this->columns)) {
+					if ($value) {
+						$this->select->where("l.$key=?",$value);
+					}
+					else {
+						$this->select->where("l.$key is null");
+					}
 				}
 			}
 		}
 
-		// Finding on fields from other tables requires joining those tables.
-		// You can handle fields from other tables by adding the joins here
-		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the address_location table.
+		// Add any joins for extra fields to the select
+		foreach ($this->getJoins($fields) as $key=>$join) {
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
+		}
 
+		if ($order == 'street_number' && isset($fields['street_name'])) {
+			$order = 'n.street_name,a.street_number';
+		}
+		$this->runSelection($order,$limit,$groupBy);
+	}
+
+	/**
+	 * Adds the order, limit, and groupBy to the select, then sends the select to the database
+	 *
+	 * @param string $order
+	 * @param string $limit
+	 * @param string $groupBy
+	 */
+	private function runSelection($order,$limit=null,$groupBy=null)
+	{
 		$this->select->order($order);
 		if ($limit) {
 			$this->select->limit($limit);
@@ -73,6 +103,74 @@ class LocationList extends ZendDbResultIterator
 			$this->select->group($groupBy);
 		}
 		$this->populateList();
+	}
+
+	/**
+	 * Function for handling any joins that are needed
+	 *
+	 * Finding on fields from other tables requires joining those tables.
+	 * You can handle fields from other tables by adding the joins here
+	 * If you add more joins you probably want to make sure that the
+	 * above foreach only handles fields from the address_location table.
+	 *
+	 * Right now, find and search both do the same comparisons.  However, there
+	 * may come a time when we want find to do exact matching and for search
+	 * to do loose matching
+	 *
+	 * @param array $fields
+	 * @param string $queryType find|search
+	 */
+	private function getJoins(array $fields,$queryType='find')
+	{
+		$joins = array();
+
+		if (isset($fields['direction'])) {
+			$joins['a'] = array('table'=>'mast_address',
+								'condition'=>'l.street_address_id=a.street_address_id');
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$this->select->where('s.street_direction_code=?',$fields['direction']->getCode());
+		}
+
+		if (isset($fields['postDirection'])) {
+			$joins['a'] = array('table'=>'mast_address',
+								'condition'=>'l.street_address_id=a.street_address_id');
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$this->select->where('s.post_direction_suffix_code=?',
+								$fields['postDirection']->getCode());
+		}
+
+		if (isset($fields['street_name'])) {
+			$joins['a'] = array('table'=>'mast_address',
+								'condition'=>'l.street_address_id=a.street_address_id');
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+
+		}
+
+		if (isset($fields['streetType'])) {
+			$joins['a'] = array('table'=>'mast_address',
+								'condition'=>'l.street_address_id=a.street_address_id');
+			$joins['s'] = array('table'=>'mast_street',
+								'condition'=>'a.street_id=s.street_id');
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+		}
+
+		if (isset($fields['subunitType'])) {
+			$joins['a'] = array('table'=>'mast_address',
+								'condition'=>'l.street_address_id=a.street_address_id');
+			$joins['u'] = array('table'=>'mast_address_subunits',
+								'condition'=>'a.street_address_id=u.street_address_id');
+			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
+		}
+
+		return $joins;
 	}
 
 	/**
