@@ -7,10 +7,10 @@
  */
 ?>
 <table>
-	<tr><td><label>Street</label></td>
+	<tr><td><label for="streetName" class="required">Street</label></td>
 		<td><?php
 				$block = new Block('addresses/partials/streetSelector.inc',
-									array('street'=>$address->getStreet()));
+									array('street'=>$this->address->getStreet()));
 				echo $block->render();
 			?>
 		</td>
