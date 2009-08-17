@@ -21,7 +21,7 @@
 		<legend>Change Log Entry</legend>
 		<?php
 			$block = new Block('addresses/actions/changeLogEntryFields.inc',
-								array('action'=>'change'));
+								array('action'=>'readdress'));
 			echo $block->render('html');
 		?>
 	</fieldset>

@@ -13,7 +13,7 @@ if (userIsAllowed('Address')) {
 			<td><select onchange=\"handleActionChoice(this);\">
 					<option value=\"\">Action to Apply</option>
 					<option>correct</option>
-					<option>change</option>
+					<option>readdress</option>
 					<option>verify</option>
 					<option>retire</option>
 					<option>unretire</option>

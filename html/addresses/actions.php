@@ -44,7 +44,7 @@ if (isset($_POST['changeLogEntry'])) {
 													'census_block_fips_code','tax_jurisdiction',
 													'latitude','longitude',
 													'state_plane_x_coordinate','state_plane_y_coordinate'),
-									'change'=>array('street_number')
+									'readdress'=>array('street_number')
 									);
 			foreach ($actionFields[$action] as $field) {
 				if (isset($_POST[$field])) {
