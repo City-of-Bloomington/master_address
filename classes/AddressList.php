@@ -120,6 +120,9 @@ class AddressList extends ZendDbResultIterator
 
 		}
 
+		if ($order == 'street_number') {
+			$order = 'n.street_name,a.street_number';
+		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
@@ -182,9 +185,6 @@ class AddressList extends ZendDbResultIterator
 								'condition'=>'s.street_id=n.street_id');
 			$this->select->where('n.street_name like ?',"$fields[street_name]%");
 
-			if ($order == 'street_number') {
-				$order = 'n.street_name,a.street_number';
-			}
 		}
 
 		if (isset($fields['streetType'])) {
