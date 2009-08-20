@@ -387,6 +387,11 @@ class AddressList extends ZendDbResultIterator
 			}
 		}
 
+		// Sanity Checking
+		if (!isset($output['street_name']) && isset($output['streetType'])) {
+			$output['street_name'] = $output['streetType']->__toString();
+			unset($output['streetType']);
+		}
 		return $output;
 	}
 
