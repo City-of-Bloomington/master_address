@@ -452,6 +452,7 @@ class StreetName
 		$name = $this->getDirectionCode() ? $this->getDirectionCode().' ' : '';
 		$name.= $this->getName();
 		$name.= $this->getPostDirectionCode() ? ' '.$this->getPostDirectionCode() : '';
+		$name.= ' '.$this->getStreet_type_suffix_code();
 		return $name;
 	}
 	/**
