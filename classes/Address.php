@@ -112,7 +112,8 @@ class Address
 
 	/**
 	 * Saves this record back to the database
-	 * @param Rationale $rationale Data for the change log entry
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
 	 */
 	public function save(ChangeLogEntry $changeLogEntry)
 	{

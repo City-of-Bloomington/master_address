@@ -79,8 +79,10 @@ class Street
 
 	/**
 	 * Saves this record back to the database
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function save()
+	public function save(ChangeLogEntry $changeLogEntry)
 	{
 		$this->validate();
 
@@ -97,6 +99,8 @@ class Street
 		else {
 			$this->insert($data);
 		}
+
+		$this->updateChangeLog($changeLogEntry);
 	}
 
 	private function update($data)
@@ -113,10 +117,18 @@ class Street
 			$this->street_id = $zend_db->lastSequenceId('street_id_s');
 		}
 		else {
-		  $this->street_id = $zend_db->lastInsertId('mast_street','street_id');
+			$this->street_id = $zend_db->lastInsertId('mast_street','street_id');
 		}
 	}
 
+	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	{
+		$logEntry = $changeLogEntry->getData();
+		$logEntry['street_id'] = $this->street_id;
+
+		$zend_db = Database::getConnection();
+		$zend_db->insert('street_change_log',$logEntry);
+	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -338,10 +350,9 @@ class Street
 	/**
 	 * @return StreetNameList
 	 */
-
 	public function getNames()
 	{
-	  return  $this->getStreetNameList();
+		return $this->getStreetNameList();
 	}
 
 

@@ -1,4 +1,3 @@
-grant select,insert,update,delete on eng.address_change_log to master_address;
 grant select,insert,update,delete on eng.address_location to master_address;
 grant select,insert,update,delete on eng.addr_location_purpose_mast to master_address;
 grant select,insert,update,delete on eng.addr_location_purposes to master_address;
@@ -45,6 +44,11 @@ grant select,insert,update,delete on eng.users to master_address;
 grant select,insert,update,delete on eng.roles to master_address;
 grant select,insert,update,delete on eng.user_roles to master_address;
 
+grant select,insert,update,delete on eng.address_change_log to master_address;
+grant select,insert,update,delete on eng.street_change_log to master_address;
+grant select,insert,update,delete on eng.subunit_change_log to master_address;
+grant select,insert,update,delete on eng.location_change_log to master_address;
+
 
 grant select on eng.address_status_code_seq to master_address;
 grant select on eng.address_status_id_seq to master_address;
@@ -80,7 +84,6 @@ grant select on eng.users_id_seq to master_address;
 
 
 
-create synonym master_address.address_change_log for eng.address_change_log;
 create synonym master_address.address_location for eng.address_location;
 create synonym master_address.addr_location_purpose_mast for eng.addr_location_purpose_mast;
 create synonym master_address.addr_location_purposes for eng.addr_location_purposes;
@@ -127,6 +130,10 @@ create synonym master_address.users for eng.users;
 create synonym master_address.roles for eng.roles;
 create synonym master_address.user_roles for eng.user_roles;
 
+create synonym master_address.address_change_log for eng.address_change_log;
+create synonym master_address.street_change_log for eng.street_change_log;
+create synonym master_address.subunit_change_log for eng.subunit_change_log;
+create synonym master_address.location_change_log for eng.location_change_log;
 
 create synonym master_address.address_status_code_seq for eng.address_status_code_seq;
 create synonym master_address.address_status_id_seq for eng.address_status_id_seq;

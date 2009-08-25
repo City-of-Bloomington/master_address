@@ -80,8 +80,10 @@ class Location
 
 	/**
 	 * Saves this record back to the database
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function save()
+	public function save(ChangeLogEntry $changeLogEntry)
 	{
 		$this->validate();
 
@@ -101,6 +103,8 @@ class Location
 		else {
 			$this->insert($data);
 		}
+
+		$this->updateChangeLog($changeLogEntry);
 	}
 
 	private function update($data)
@@ -125,6 +129,14 @@ class Location
 		}
 	}
 
+	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	{
+		$logEntry = $changeLogEntry->getData();
+		$logEntry['lid'] = $this->lid;
+
+		$zend_db = Database::getConnection();
+		$zend_db->insert('location_change_log',$logEntry);
+	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -438,12 +450,11 @@ class Location
 	}
 
 	/**
-	 * @param string string
-	 * eithe Y or N
+	 * @param string string (y or n)
 	 */
 	public function setMailable($string)
 	{
-		$this->mailable_flag = $string == "y" ?1:0;
+		$this->mailable_flag = $string == 'y' ? 1 : 0;
 	}
 
 	/**
@@ -451,7 +462,7 @@ class Location
 	 */
 	public function setLivable($string)
 	{
-		$this->livable_flag = $string == "y" ?1:0;
+		$this->livable_flag = $string == 'y' ? 1 : 0;
 	}
 
 	/**

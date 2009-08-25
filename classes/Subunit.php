@@ -79,8 +79,10 @@ class Subunit
 
 	/**
 	 * Saves this record back to the database
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function save()
+	public function save(ChangeLogEntry $changeLogEntry)
 	{
 		$this->validate();
 
@@ -96,6 +98,8 @@ class Subunit
 		else {
 			$this->insert($data);
 		}
+
+		$this->updateChangeLog($changeLogEntry);
 	}
 
 	private function update($data)
@@ -111,12 +115,20 @@ class Subunit
 		if (Database::getType()=='oracle') {
 			$this->subunit_id = $zend_db->lastSequenceId('subunit_id_s');
 		}
-		else{
-		  $this->subunit_id = $zend_db->lastInsertId('mast_address_subunits','subunit_id');
+		else {
+			$this->subunit_id = $zend_db->lastInsertId('mast_address_subunits','subunit_id');
 		}
 
 	}
 
+	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	{
+		$logEntry = $changeLogEntry->getData();
+		$logEntry['subunit_id'] = $this->subunit_id;
+
+		$zend_db = Database::getConnection();
+		$zend_db->insert('subunit_change_log',$logEntry);
+	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
