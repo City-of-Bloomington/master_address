@@ -6,15 +6,17 @@
  */
 $types = new SubunitTypeList();
 $types->find();
+
 ?>
+
 <h1>Add Subunit</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Subunit Info</legend>
+	<fieldset><legend>Subunit Information</legend>
 		<table>
 
 			<tr><td><label>Address</label></td>
                 <td><?php echo $this->address->getId(); ?>
-                    <input name="subunit[street_address_id]" type="hidden" value="<?php echo $this->address->getId() ?>" />
+                    <input name="street_address_id" type="hidden" value="<?php echo $this->address->getId() ?>" />
 				</td>
 			</tr>
 				
@@ -30,11 +32,15 @@ $types->find();
 				</td>
 			</tr>
 				
-			<tr><td><label for="subunit-street_subunit_identifier">Number</label></td>
+			<tr><td><label for="subunit-street_subunit_identifier">Unit</label></td>
 				<td><input name="subunit[street_subunit_identifier]" id="subunit-street_subunit_identifier" />
 				</td>
 			</tr>
-				
+			<tr><td>&nbsp;</td>
+				<td>Comma separated for multiple subunts (Ex. A, B, C)
+				</td>
+			</tr>
+			
 			<tr><td><label for="subunit-notes">notes</label></td>
 				<td><input name="subunit[notes]" id="subunit-notes" />
 				</td>
@@ -43,8 +49,7 @@ $types->find();
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/addresses';">
-			Cancel
-		</button>
+        <input type="checkbox" name="batch" value="y" />Submit in Batch Mode
+
 	</fieldset>
 </form>

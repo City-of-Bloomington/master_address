@@ -9,24 +9,58 @@ if (!userIsAllowed('Subunit')) {
 	header('Location: '.BASE_URL.'/subunits');
 	exit();
 }
-
+$address = new Address($_REQUEST['street_address_id']);
 if (isset($_POST['subunit'])) {
-	$subunit = new Subunit();
+	$sudtype = "";
+	$values = "";
+	$notes = "";
 	foreach ($_POST['subunit'] as $field=>$value) {
-		$set = 'set'.ucfirst($field);
-		$subunit->$set($value);
+		if($field == "sudtype"){
+			$sudtype = $value;
+		}
+		elseif($field == "street_subunit_identifier"){
+			$values = $value;
+		}
+		elseif($field == "notes"){
+			$notes = $value;
+		}
 	}
+	$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'assign'));
+	$arr = explode(",", $values);
+	foreach ($arr as $value){
+		if($value){            // avoid empty strings
+			$subunit = new Subunit();
+			$subunit->setStreet_address_id($address->getId());
+			$subunit->setSudtype($sudtype);
+			$subunit->setStreet_subunit_identifier($value);
+			$subunit->setNotes($notes);	
+			try{
+				$subunit->save($changeLog);
+				$subStatus = new SubunitStatusChange();
+				$subStatus->setStreet_address_id($address->getId());
+				$subStatus->setSubunit_id($subunit->getId());
+				$subStatus->setStatus_code(1);
+				$subStatus->save();
+			}
+			catch(Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+				header('Location: '.$address->getStreet()->getURL());			
+				exit();							
+			}	
+		}
+	}
+	
+	if(!isset($_POST['batch_mode'])){
+		header('Location: '.$address->getStreet()->getURL());			
+		exit();			
+	}	
 
-	try {
-		$subunit->save();
-		header("Location: ".BASE_URL."/addresses/updateAddress.php?street_address_id=".$subunit->getStreet_address_id());
-		exit();
-	}
-	catch(Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
-	}
 }
-$address = new Address($_GET['street_address_id']);
-$template = new Template();
+
+$template = new Template('two-column');
+$template->blocks[] = new Block('subunits/breadcrumbs.inc',array('address'=>$address));
+
 $template->blocks[] = new Block('subunits/addSubunitForm.inc', array('address'=>$address));
+$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
+													array('subunitList'=>$address->getSubunits()));
 echo $template->render();

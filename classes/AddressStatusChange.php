@@ -225,6 +225,9 @@ class AddressStatusChange
 	 */
 	public function setStatus_code($number)
 	{
+		if(!$this->addressStatus){
+			$this->addressStatus = new AddressStatus($number);
+		}
 		$this->status_code = $number;
 	}
 

@@ -30,11 +30,17 @@ if (isset($_POST['address'])) {
 	try {
 		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'assign'));
 		$address->save($changeLog);
+		//
+		$status = new AddressStatusChange();
+		$status->setStreet_address_id($address->getId());
+		$status->setStatus_code(1);
+		$status->save();
 		
 		if(!isset($_POST['lid']) || !$_POST['lid']){
 			$location = new Location();
 			$location->setStreet_address_id($address->getStreet_address_id());
 		}
+		
 		if($_POST['location']){
 			foreach ($_POST['location'] as $field=>$value) {
 				$set = 'set'.ucfirst($field);

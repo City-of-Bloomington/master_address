@@ -254,7 +254,7 @@ class SubunitStatusChange
 	public function setStatus_code($status_code)
 	{
 		$this->addressStatus = new AddressStatus($status_code);
-		$this->status_code = $addressStatus->getStatus_code();
+		$this->status_code = $this->addressStatus->getStatus_code();
 	}
 
 	/**
