@@ -26,15 +26,17 @@ echo "
 		<table>
 			<tr><th>#</th>
 				<th>Type</th>
+				<th>Street</th>
 				<th>Status</th>
 				<th>Jurisdiction</th>
-				<th>Zip Code</th>
-				<th>Sub Units</th>
+				<th>Zip</th>
+				<th>Units</th>
 			</tr>
 	";
 		foreach ($this->addressList as $address) {
 			$street_number = $address->getStreet_number();
 			$type = $address->getAddress_type();
+			$street = View::escape($address->getStreetName());
 			$status = $address->getStatus();
 			$jurisdiction = $address->getJurisdiction();
 			$zip = $address->getZip();
@@ -43,6 +45,7 @@ echo "
 			echo "
 			<tr><td><a href=\"{$address->getURL()}\">$street_number</a></td>
 				<td><a href=\"{$address->getURL()}\">$type</a></td>
+				<td><a href=\"{$address->getURL()}\">$street</a></td>
 				<td><a href=\"{$address->getURL()}\">$status</a></td>
 				<td><a href=\"{$address->getURL()}\">$jurisdiction</a></td>
 				<td><a href=\"{$address->getURL()}\">$zip</a></td>

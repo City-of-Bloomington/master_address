@@ -45,6 +45,21 @@ class AddressList extends ZendDbResultIterator
 	}
 
 	/**
+	 * Creates the base select query that this class uses.
+	 * Both find() and search() will use the same select query.
+	 */
+	private function createSelection()
+	{
+		$this->select->from(array('a'=>'mast_address'));
+		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
+								'a.street_address_id=trash.street_address_id',
+								array('trash_pickup_day','recycle_week'));
+		$this->select->joinLeft(array('status'=>'mast_address_latest_status'),
+								'a.street_address_id=status.street_address_id',
+								array('status_code','description'));
+	}
+
+	/**
 	 * Populates the collection
 	 *
 	 * @param array $fields
@@ -54,13 +69,7 @@ class AddressList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('a'=>'mast_address'));
-		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
-								'a.street_address_id=trash.street_address_id',
-								array('trash_pickup_day','recycle_week'));
-		$this->select->joinLeft(array('status'=>'mast_address_latest_status'),
-								'a.street_address_id=status.street_address_id',
-								array('status_code','description'));
+		$this->createSelection();
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
@@ -90,10 +99,7 @@ class AddressList extends ZendDbResultIterator
 
 	public function search($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('a'=>'mast_address'));
-		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
-										'a.street_address_id=trash.street_address_id',
-										array('trash_pickup_day','recycle_week'));
+		$this->createSelection();
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
@@ -125,6 +131,7 @@ class AddressList extends ZendDbResultIterator
 		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
+
 
 	/**
 	 * Adds the order, limit, and groupBy to the select, then sends the select to the database

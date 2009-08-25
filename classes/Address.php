@@ -469,9 +469,8 @@ class Address
 			return $this->status;
 		}
 		else {
-			$list = new AddressStatusChangeList();
-			$list->find(array('street_address_id'=>$this->street_address_id,'current'=>$date),null,1);
-			if (count($list)) {
+			$statusHistory = $this->getStatusChangeList(array('current'=>$date));
+			if (count($statusHistory)) {
 				return $list[0];
 			}
 		}
@@ -482,9 +481,13 @@ class Address
 	 *
 	 * @return AddressStatusChangeList
 	 */
-	public function getStatusChangeList()
+	public function getStatusChangeList(array $fields=null)
 	{
-		return new AddressStatusChangeList(array('street_address_id'=>$this->street_address_id));
+		$search = array('street_address_id'=>$this->street_address_id);
+		if ($fields) {
+			$search = array_merge($search,$fields);
+		}
+		return new AddressStatusChangeList($search);
 	}
 
 	/**
@@ -864,6 +867,14 @@ class Address
 		$address[] = $this->getStreet()->getPostDirection()->getCode();
 		$address = implode(' ',$address);
 		return preg_replace('/\s+/',' ',$address);
+	}
+
+	/**
+	 * @return StreetName
+	 */
+	public function getStreetName()
+	{
+		return $this->getStreet()->getStreetName();
 	}
 
 	/**
