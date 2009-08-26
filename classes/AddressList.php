@@ -94,6 +94,11 @@ class AddressList extends ZendDbResultIterator
 			}
 		}
 
+		if ($order == 'street_number') {
+			$order = array_key_exists('n',$this->getJoins($fields))
+					? 'n.street_name,a.street_number'
+					: 'a.street_number';
+		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
@@ -127,7 +132,9 @@ class AddressList extends ZendDbResultIterator
 		}
 
 		if ($order == 'street_number') {
-			$order = 'n.street_name,a.street_number';
+			$order = array_key_exists('n',$this->getJoins($fields,'search'))
+					? 'n.street_name,a.street_number'
+					: 'a.street_number';
 		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
