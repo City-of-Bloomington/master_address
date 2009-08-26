@@ -49,7 +49,7 @@ $types->find();
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
-        <input type="checkbox" name="batch" value="y" />Submit in Batch Mode
+        <input type="checkbox" name="batch_mode" value="y" />Submit in Batch Mode
 
 	</fieldset>
 </form>

@@ -44,14 +44,14 @@ if (isset($_POST['subunit'])) {
 			}
 			catch(Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
-				header('Location: '.$address->getStreet()->getURL());			
+				header('Location: '.$address->getURL());			
 				exit();							
 			}	
 		}
 	}
 	
 	if(!isset($_POST['batch_mode'])){
-		header('Location: '.$address->getStreet()->getURL());			
+		header('Location: '.$address->getURL());			
 		exit();			
 	}	
 

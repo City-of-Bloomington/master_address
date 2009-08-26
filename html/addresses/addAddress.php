@@ -46,7 +46,7 @@ if (isset($_POST['address'])) {
 				$set = 'set'.ucfirst($field);
 				$location->$set($value);
 			}
-			$location->save();			
+			$location->save($changeLog);			
 		}
 		
 		if(!isset($_POST['batch_mode'])){
