@@ -865,6 +865,7 @@ class Address
 		$address[] = $this->getStreet()->getDirection()->getCode();
 		$address[] = $this->getStreet()->getStreetName()->getStreet_name();
 		$address[] = $this->getStreet()->getPostDirection()->getCode();
+		$address[] = $this->getStreet()->getStreetName()->getStreet_type_suffix_code();
 		$address = implode(' ',$address);
 		return preg_replace('/\s+/',' ',$address);
 	}
