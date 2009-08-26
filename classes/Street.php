@@ -6,22 +6,22 @@
  */
 class Street
 {
+	// The direction and post-direction in this table are bad data.
+	// They are left over from long ago.
+	// The direction and post-direction for a street should come from whatever
+	// StreetName is being used for that street.
 	private $street_id;
-	private $street_direction_code;
-	private $post_direction_suffix_code;
+	private $street_direction_code;			// Unused - see StreetName class
+	private $post_direction_suffix_code;	// Unused - see StreetName class
 	private $town_id;
 	private $status_code;
 	private $notes;
 
-
 	private $town;
 	private $status;
-	private $direction;  // street_direction_code
-	private $postDirection; // post_direction_suffix_code
 	private $streetNameList;
 	private $streetName;
 	private $addresses;
-
 
 	/**
 	 * Populates the object with data
@@ -74,7 +74,6 @@ class Street
 		if (!$this->status_code) {
 			throw new Exception('missingRequiredFields');
 		}
-
 	}
 
 	/**
@@ -87,8 +86,6 @@ class Street
 		$this->validate();
 
 		$data = array();
-		$data['street_direction_code'] = $this->street_direction_code ? $this->street_direction_code : null;
-		$data['post_direction_suffix_code'] = $this->post_direction_suffix_code ? $this->post_direction_suffix_code : null;
 		$data['town_id'] = $this->town_id ? $this->town_id : null;
 		$data['status_code'] = $this->status_code;
 		$data['notes'] = $this->notes ? $this->notes : null;
@@ -132,17 +129,10 @@ class Street
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
 	/**
-	 * @return number
-	 */
-	public function getStreet_id()
-	{
-		return $this->street_id;
-	}
-
-	/**
-	 * @return number
+	 * Alias for getStreet_id()
+	 *
+	 * @return int
 	 */
 	public function getId()
 	{
@@ -150,23 +140,16 @@ class Street
 	}
 
 	/**
-	 * @return char
+	 * @return int
 	 */
-	public function getStreet_direction_code()
+	public function getStreet_id()
 	{
-		return $this->street_direction_code;
+		return $this->street_id;
 	}
 
-	/**
-	 * @return char
-	 */
-	public function getPost_direction_suffix_code()
-	{
-		return $this->post_direction_suffix_code;
-	}
 
 	/**
-	 * @return number
+	 * @return int
 	 */
 	public function getTown_id()
 	{
@@ -174,7 +157,7 @@ class Street
 	}
 
 	/**
-	 * @return number
+	 * @return int
 	 */
 	public function getStatus_code()
 	{
@@ -220,25 +203,6 @@ class Street
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
-	/**
-	 * @param char $char
-	 */
-	public function setStreet_direction_code($char)
-	{
-		$this->direction = new Direction($char);
-		$this->street_direction_code = $this->direction->getCode();
-	}
-
-	/**
-	 * @param char $char
-	 */
-	public function setPost_direction_suffix_code($char)
-	{
-		$this->postDirection = new Direction($char);
-		$this->post_direction_suffix_code = $this->postDirection->getCode();
-	}
-
 	/**
 	 * @param number $number
 	 */
@@ -283,54 +247,10 @@ class Street
 		$this->streetStatus = $streetStatus;
 	}
 
-	/**
-	 * @param Direction $direction
-	 */
-	public function setDirection($direction)
-	{
-		$this->street_direction_code = $direction->getId();
-		$this->direction = $direction;
-	}
-
-	/**
-	 * @param Direction $suffix
-	 */
-	public function setPostDirection($direction)
-	{
-		$this->post_direction_suffix_code = $direction->getId();
-		$this->postDirection = $direction;
-	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * @return Direction
-	 */
-	public function getDirection()
-	{
-		if ($this->street_direction_code) {
-			if (!$this->direction) {
-				$this->direction = new Direction($this->street_direction_code);
-			}
-			return $this->direction;
-		}
-		return new Direction();
-	}
-
-	/**
-	 * @return Direction
-	 */
-	public function getPostDirection()
-	{
-		if ($this->post_direction_suffix_code) {
-			if (!$this->postDirection) {
-				$this->postDirection = new Direction($this->post_direction_suffix_code);
-			}
-			return $this->postDirection;
-		}
-		return new Direction();
-	}
 
 	/**
 	 * @return StreetNameList

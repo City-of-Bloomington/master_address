@@ -39,6 +39,15 @@ class StreetList extends ZendDbResultIterator
 	}
 
 	/**
+	 * Creates the base select query that this class uses.
+	 * Both find() and search() will use the same select query.
+	 */
+	private function createSelection()
+	{
+		$this->select->from(array('s'=>'mast_street'));
+	}
+
+	/**
 	 * Populates the collection
 	 *
 	 * @param array $fields
@@ -48,16 +57,7 @@ class StreetList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='street_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('s'=>'mast_street'));
-
-		if (isset($fields['direction'])) {
-			$fields['street_direction_code'] = $fields['direction']->getCode();
-			unset($fields['direction']);
-		}
-		if (isset($fields['postDirection'])) {
-			$fields['post_direction_suffix_code'] = $fields['postDirection']->getCode();
-			unset($fields['postDirection']);
-		}
+		$this->createSelection();
 
 		// Finding on fields from the mast_street table is handled here
 		if (count($fields)) {
@@ -68,17 +68,23 @@ class StreetList extends ZendDbResultIterator
 			}
 		}
 
-		if (isset($fields['street_name'])) {
-			$this->select->joinLeft(array('n'=>'mast_street_names'),'s.street_id=n.street_id',array());
-			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+		// Add all the joins we've created to the select
+		foreach ($this->getJoins($fields,'search') as $key=>$join) {
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 		}
 
+		$this->runSelection($order,$limit,$groupBy);
+	}
 
-		// Finding on fields from other tables requires joining those tables.
-		// You can handle fields from other tables by adding the joins here
-		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the mast_street table.
-
+	/**
+	 * Adds the order, limit, and groupBy to the select, then sends the select to the database
+	 *
+	 * @param string $order
+	 * @param string $limit
+	 * @param string $groupBy
+	 */
+	private function runSelection($order,$limit=null,$groupBy=null)
+	{
 		$this->select->order("s.$order");
 		if ($limit) {
 			$this->select->limit($limit);
@@ -87,6 +93,53 @@ class StreetList extends ZendDbResultIterator
 			$this->select->group($groupBy);
 		}
 		$this->populateList();
+	}
+
+	/**
+	 * Function for handling any joins that are needed
+	 *
+	 * Finding on fields from other tables requires joining those tables.
+	 * You can handle fields from other tables by adding the joins here
+	 * If you add more joins you probably want to make sure that the
+	 * above foreach only handles fields from the address_location table.
+	 *
+	 * Right now, find and search both do the same comparisons.  However, there
+	 * may come a time when we want find to do exact matching and for search
+	 * to do loose matching
+	 *
+	 * @param array $fields
+	 * @param string $queryType find|search
+	 */
+	private function getJoins(array $fields,$queryType='find')
+	{
+		$joins = array();
+
+		if (isset($fields['street_name'])) {
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+		}
+
+		if (isset($fields['direction'])) {
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
+		}
+
+		if (isset($fields['postDirection'])) {
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.post_direction_suffix_code=?',
+									$fields['postDirection']->getCode());
+		}
+
+		if (isset($fields['streetType'])) {
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+		}
+
+		return $joins;
 	}
 
 	/**

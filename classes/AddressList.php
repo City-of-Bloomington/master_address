@@ -182,13 +182,17 @@ class AddressList extends ZendDbResultIterator
 		if (isset($fields['direction'])) {
 			$joins['s'] = array('table'=>'mast_street',
 								'condition'=>'a.street_id=s.street_id');
-			$this->select->where('s.street_direction_code=?',$fields['direction']->getCode());
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
 		}
 
 		if (isset($fields['postDirection'])) {
 			$joins['s'] = array('table'=>'mast_street',
 								'condition'=>'a.street_id=s.street_id');
-			$this->select->where('s.post_direction_suffix_code=?',
+			$joins['n'] = array('table'=>'mast_street_names',
+								'condition'=>'s.street_id=n.street_id');
+			$this->select->where('n.post_direction_suffix_code=?',
 								$fields['postDirection']->getCode());
 		}
 
