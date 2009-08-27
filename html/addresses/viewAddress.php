@@ -17,6 +17,7 @@ if (isset($_GET['format'])) {
 	}
 }
 else {
+
 	$template = new Template('two-column');
 }
 

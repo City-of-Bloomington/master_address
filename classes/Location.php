@@ -44,7 +44,7 @@ class Location
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from address_location where id=?';
+				$sql = 'select * from address_location where lid=?';
 				$result = $zend_db->fetchRow($sql,array($lid));
 			}
 

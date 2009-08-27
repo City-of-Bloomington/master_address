@@ -13,8 +13,7 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 		$buttons = "
 		<div class=\"buttons\">
 			<button type=\"button\">Add New Address</button>
-			<button type=\"button\">Move to Existing Location</button>
-			<button type=\"button\">Move Another Address to This Location</button>
+			<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/addresses/moveAddress.php?lid={$location->getId()}&street_address_id={$this->address->getId()}';\">Move to Existing Location</button>
 		</div>
 		";
 	}
