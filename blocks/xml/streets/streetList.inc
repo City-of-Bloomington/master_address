@@ -13,9 +13,7 @@ foreach ($this->streetList as $street) {
 	echo "
 	<street>
 		<id>{$street->getId()}</id>
-		<direction>{$street->getDirection()}</direction>
 		<name>$name</name>
-		<postDirection>{$street->getPostDirection()}</postDirection>
 		<town>$town</town>
 		<status>{$street->getStatus_code()}</status>
 		<notes>$notes</notes>
