@@ -12,7 +12,6 @@ class LocationStatusChange
 	private $location_id;
 	private $effective_end_date;
 
-	private $location;
 	private $addressStatus;
 
 	/**
@@ -179,20 +178,6 @@ class LocationStatusChange
 	}
 
 	/**
-	 * @return Location
-	 */
-	public function getLocation()
-	{
-		if ($this->location_id) {
-			if (!$this->location) {
-				$this->location = new Location($this->location_id);
-			}
-			return $this->location;
-		}
-		return null;
-	}
-
-	/**
 	 * @return AddressStatus
 	 */
 	public function getStatus()
@@ -241,8 +226,8 @@ class LocationStatusChange
 	 */
 	public function setLocation_id($number)
 	{
-		$this->location = new Location($number);
-		$this->location_id = $this->location->getId();
+		// $this->location = new Location($number);
+		$this->location_id = $number;
 	}
 
 	/**
@@ -263,15 +248,6 @@ class LocationStatusChange
 		else {
 			$this->effective_end_date = null;
 		}
-	}
-
-	/**
-	 * @param Location $location
-	 */
-	public function setLocation($location)
-	{
-		$this->location_id = $location->getLocation_id();
-		$this->location = $location;
 	}
 
 	/**

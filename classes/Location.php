@@ -448,7 +448,6 @@ class Location
 		$this->active = $this->isActive()? 'N' : 'Y';
 	}
 
-
 	/**
 	 * Returns the StatusChange that was active on the given date
 	 *

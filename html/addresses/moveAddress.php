@@ -15,8 +15,8 @@ if (isset($_GET['new_address']) && $_GET['new_address']) {
 	$addresses->search(array('address'=>$_GET['new_address']));
 	//
 	$list = array();
-	foreach($addresses as $address){
-		$locList = $address->getLocations();
+	foreach($addresses as $addr){
+		$locList = $addr->getLocations();
 		foreach($locList as $loc){
 			$list[] = $loc;
 		}
@@ -36,31 +36,36 @@ if($new_lid){
 	// do the swap and change status
 	//
 	$newLocation = new Location($new_lid);
-	$loc = $newLocation->clone();
+	$loc = clone($newLocation);
 	$loc->setAddress($address);	
 	$loc->toggleActive();
 	try{
-		$loc->save();
+		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'assign'));
+		$loc->save($changeLog);
 		$status = $location->getStatus(); // locationStatusChange
-		$status->setEffective_end_date(new Date());
+		$status->setEffective_end_date(date('Y-m-d')); // today
 		$status->save();
 		//
 		$status = new LocationStatusChange();
 		$status->setStatus_code($_REQUEST['new_status']);
-		$status->setLocation($location);
+		$status->setLocation_id($location->getLocation_id());
 		$status->save();
 		//
-		$status = newLocation->getStatus();
-		$status->setEffective_end_date(new Date());
+		$status = $newLocation->getStatus();
+		$status->setEffective_end_date(date('Y-m-d')); // today
 		$status->save();
 		//
 		$status = new LocationStatusChange();
-		$status->setStatus_code($newLocation->getStatus()->getStatus_code());
-		$status->setLocation($newLocation);
+		$status->setStatus_code(1); // current
+		$status->setLocation_id($newLocation->getLocation_id());
 		$status->save();
+		//
+		header('Location: '.$address->getURL());			
+		exit();			
 	}
 	catch(Exception $e){
 		$_SESSION['errorMessages'][] = $e;
+		
 	}
 	
 }
