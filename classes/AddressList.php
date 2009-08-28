@@ -17,7 +17,13 @@
  */
 class AddressList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('street_address_id','street_number','street_id','address_type',
+							'tax_jurisdiction','jurisdiction_id','gov_jur_id','township_id',
+							'section','quarter_section','subdivision_id',
+							'plat_id','plat_lot_number','street_address_2',
+							'city','state','zip','zipplus4','census_block_fips_code',
+							'state_plane_x_coordinate','state_plane_y_coordinate',
+							'latitude','longitude','notes');
 	private static $directions = array();
 	private static $streetTypes = array();
 	private static $subunitTypes = array();
@@ -37,7 +43,6 @@ class AddressList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('mast_address');
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -83,21 +88,22 @@ class AddressList extends ZendDbResultIterator
 
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->colums)) {
 					$this->select->where("a.$key=?",$value);
 				}
 			}
 
 			// Add any joins for extra fields to the select
-			foreach ($this->getJoins($fields,'find') as $key=>$join) {
+			$joins = $this->getJoins($fields,'search');
+			foreach ($joins as $key=>$join) {
 				$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 			}
 		}
 
 		if ($order == 'street_number') {
-			$order = array_key_exists('n',$this->getJoins($fields))
-					? 'n.street_name,a.street_number'
-					: 'a.street_number';
+			$order = (isset($joins) && array_key_exists('n',$joins))
+				? 'n.street_name,a.street_number'
+				: 'a.street_number';
 		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
@@ -119,22 +125,23 @@ class AddressList extends ZendDbResultIterator
 		// Finding on fields from the mast_address table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("a.$key like ?","$value%");
 				}
 			}
 
 			// Add all the joins we've created to the select
-			foreach ($this->getJoins($fields,'search') as $key=>$join) {
+			$joins = $this->getJoins($fields,'search');
+			foreach ($joins as $key=>$join) {
 				$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 			}
 
 		}
 
 		if ($order == 'street_number') {
-			$order = array_key_exists('n',$this->getJoins($fields,'search'))
-					? 'n.street_name,a.street_number'
-					: 'a.street_number';
+			$order = (isset($joins) && array_key_exists('n',$joins))
+				? 'n.street_name,a.street_number'
+				: 'a.street_number';
 		}
 		$this->runSelection($order,$limit,$groupBy);
 	}

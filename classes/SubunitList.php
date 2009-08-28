@@ -17,7 +17,8 @@
  */
 class SubunitList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('subunit_id','street_address_id','sudtype',
+							'street_subunit_identifier','notes');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,7 +33,7 @@ class SubunitList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('mast_address_subunits');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -56,7 +57,7 @@ class SubunitList extends ZendDbResultIterator
 		// Finding on fields from the mast_address_subunits table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("s.$key=?",$value);
 				}
 			}

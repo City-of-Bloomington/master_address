@@ -17,7 +17,8 @@
  */
 class AddressStatusChangeList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('id','street_address_id','status_code','start_date','end_date');
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,7 +33,6 @@ class AddressStatusChangeList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('mast_address_status');
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -54,7 +54,7 @@ class AddressStatusChangeList extends ZendDbResultIterator
 		// Finding on fields from the mast_address_status table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					if ($value) {
 						if ($value instanceof Date) {
 							$value = $value->format('Y-m-d');

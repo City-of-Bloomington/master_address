@@ -17,7 +17,8 @@
  */
 class StreetList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('street_id','town_id','status_code','notes');
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,7 +33,7 @@ class StreetList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('mast_street');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -62,7 +63,7 @@ class StreetList extends ZendDbResultIterator
 		// Finding on fields from the mast_street table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("s.$key=?",$value);
 				}
 			}

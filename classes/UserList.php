@@ -17,7 +17,7 @@
  */
 class UserList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('id','person_id','username','password','authenticationmethod');
 
 	/**
 	 * Creates a basic select statement for the collection.
@@ -33,7 +33,6 @@ class UserList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('users');
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -55,7 +54,7 @@ class UserList extends ZendDbResultIterator
 		// Finding on fields from the Users table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("u.$key=?",$value);
 				}
 			}

@@ -17,7 +17,8 @@
  */
 class LocationStatusChangeList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('id','location_id','status_code',
+							'effective_start_date','effective_end_date');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,7 +33,7 @@ class LocationStatusChangeList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('mast_address_location_status');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -53,7 +54,7 @@ class LocationStatusChangeList extends ZendDbResultIterator
 		// Finding on fields from the mast_address_location_status table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					if ($value) {
 						if ($value instanceof Date) {
 							$value = $value->format('Y-m-d');

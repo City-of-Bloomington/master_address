@@ -17,7 +17,8 @@
  */
 class LocationList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('lid','location_id','location_type_id','street_address_id',
+							'subunit_id','mailable_flag','livable_flag','common_name','active');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,7 +33,6 @@ class LocationList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('address_location');
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -64,7 +64,7 @@ class LocationList extends ZendDbResultIterator
 		// Finding on fields from the address_location table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					if ($value) {
 						$this->select->where("l.$key=?",$value);
 					}

@@ -17,7 +17,9 @@
  */
 class PlatList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('plat_id','name','township_id',
+							'effective_start_date','effective_end_date',
+							'plat_type','plat_cabinet','envelope','notes');
 
 	/**
 	 * Creates a basic select statement for the collection.
@@ -33,7 +35,6 @@ class PlatList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('plat_master');
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -55,7 +56,7 @@ class PlatList extends ZendDbResultIterator
 		// Finding on fields from the plat_master table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("p.$key=?",$value);
 				}
 			}
@@ -95,7 +96,7 @@ class PlatList extends ZendDbResultIterator
 		// Finding on fields from the plat_master table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("p.$key=?",$value);
 				}
 			}

@@ -17,7 +17,7 @@
  */
 class PurposeList extends ZendDbResultIterator
 {
-	private $columns;
+	private $columns = array('location_purpose_id','description','type');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -32,7 +32,7 @@ class PurposeList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
-		$this->columns = $this->zend_db->describeTable('addr_location_purpose_mast');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -53,7 +53,7 @@ class PurposeList extends ZendDbResultIterator
 		// Finding on fields from the addr_location_purpose_mast table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("$key=?",$value);
 				}
 			}
