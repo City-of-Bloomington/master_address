@@ -65,6 +65,14 @@ class Location
 			$this->active = 'Y';
 		}
 	}
+	
+	/**
+	 * we are cloning this class except for lid paramerter
+	 *
+	 */
+	public function __clone(){
+		$this->lid = null;
+	}
 
 	/**
 	 * Throws an exception if anything's wrong
@@ -137,6 +145,7 @@ class Location
 		$zend_db = Database::getConnection();
 		$zend_db->insert('location_change_log',$logEntry);
 	}
+	
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -368,7 +377,7 @@ class Location
 	{
 		$this->active = $char=='Y' ? 'Y' : 'N';
 	}
-
+	
 	/**
 	 * @param LocationType $locationType
 	 */
@@ -431,6 +440,14 @@ class Location
 	{
 		return $this->getActive() == 'Y' ? true : false;
 	}
+
+	/**
+	 */
+	public function toggleActive()
+	{
+		$this->active = $this->isActive()? 'N' : 'Y';
+	}
+
 
 	/**
 	 * Returns the StatusChange that was active on the given date

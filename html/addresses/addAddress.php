@@ -56,6 +56,7 @@ if (isset($_POST['address'])) {
 
 	}
 	catch(Exception $e) {
+		
 		$_SESSION['errorMessages'][] = $e;
 	}
 }

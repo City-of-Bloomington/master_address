@@ -29,7 +29,7 @@ $address = $this->address;
 		</div>
 		<div>
 			<label>What to do with previous location?</label>
-			<select name="old_location_status" id="old_location_status">
+			<select name="new_status" id="old_location_status">
 				<?php
 				$statuses = new AddressStatusList();
 				$statuses->find();
@@ -61,7 +61,7 @@ $address = $this->address;
 		<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 		<input type="hidden" name="lid" value="<?php echo $location->getId(); ?>" />
 		<input type="hidden" name="street_address_id" value="<?php echo $address->getId(); ?>" />
-		<input type="hidden" name="old_location_status" id="old_location_status2" value="3" />
+		<input type="hidden" name="new_status" id="new_status2" value="3" />
 		<?php
 		if(isset($this->locationList)){
 			echo "<table><tr><th></th>

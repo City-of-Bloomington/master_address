@@ -35,7 +35,33 @@ if($new_lid){
 	//
 	// do the swap and change status
 	//
-	
+	$newLocation = new Location($new_lid);
+	$loc = $newLocation->clone();
+	$loc->setAddress($address);	
+	$loc->toggleActive();
+	try{
+		$loc->save();
+		$status = $location->getStatus(); // locationStatusChange
+		$status->setEffective_end_date(new Date());
+		$status->save();
+		//
+		$status = new LocationStatusChange();
+		$status->setStatus_code($_REQUEST['new_status']);
+		$status->setLocation($location);
+		$status->save();
+		//
+		$status = newLocation->getStatus();
+		$status->setEffective_end_date(new Date());
+		$status->save();
+		//
+		$status = new LocationStatusChange();
+		$status->setStatus_code($newLocation->getStatus()->getStatus_code());
+		$status->setLocation($newLocation);
+		$status->save();
+	}
+	catch(Exception $e){
+		$_SESSION['errorMessages'][] = $e;
+	}
 	
 }
 $template = new Template();

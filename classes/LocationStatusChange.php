@@ -270,7 +270,7 @@ class LocationStatusChange
 	 */
 	public function setLocation($location)
 	{
-		$this->location_id = $location->getId();
+		$this->location_id = $location->getLocation_id();
 		$this->location = $location;
 	}
 
