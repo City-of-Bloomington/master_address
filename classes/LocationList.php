@@ -124,6 +124,12 @@ class LocationList extends ZendDbResultIterator
 	{
 		$joins = array();
 
+		if (isset($fields['street_number'])) {
+			$joins['a'] = array('table'=>'mast_address',
+								'condition'=>'l.street_address_id=a.street_address_id');
+			$this->select->where('a.street_number like ?',"$fields[street_number]%");
+		}
+
 		if (isset($fields['direction'])) {
 			$joins['a'] = array('table'=>'mast_address',
 								'condition'=>'l.street_address_id=a.street_address_id');
