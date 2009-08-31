@@ -88,7 +88,7 @@ class AddressList extends ZendDbResultIterator
 
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (in_array($key,$this->colums)) {
+				if (in_array($key,$this->columns)) {
 					$this->select->where("a.$key=?",$value);
 				}
 			}
