@@ -34,6 +34,7 @@ class Direction
 					$result = $zend_db->fetchRow($sql,array($id));
 				}
 				else {
+					$id = trim($id);
 				    $sql = "select * from mast_street_direction_master
 							where direction_code=? or description=?";
 					$result = $zend_db->fetchRow($sql,array($id,$id));

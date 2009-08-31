@@ -56,7 +56,7 @@ class StreetName
 					    if (preg_match('/date/',$field) && $value!='0000-00-00') {
 							$value = new Date($value);
 						}
-						$this->$field = $value;
+						$this->$field = trim($value);
 					}
 				}
 			}
