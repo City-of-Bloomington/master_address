@@ -65,7 +65,7 @@ class Location
 			$this->active = 'Y';
 		}
 	}
-	
+
 	/**
 	 * we are cloning this class except for lid paramerter
 	 *
@@ -145,7 +145,7 @@ class Location
 		$zend_db = Database::getConnection();
 		$zend_db->insert('location_change_log',$logEntry);
 	}
-	
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -377,7 +377,7 @@ class Location
 	{
 		$this->active = $char=='Y' ? 'Y' : 'N';
 	}
-	
+
 	/**
 	 * @param LocationType $locationType
 	 */
@@ -464,6 +464,28 @@ class Location
 			return $list[0];
 		}
 	}
+
+	/**
+	 * Saves a new LocationStatusChange to the database
+	 *
+	 * @param AddressStatus|string $status
+	 */
+	 public function saveStatus($status)
+	 {
+		if (!$status instanceof AddressStatus) {
+			$status = new AddressStatus($status);
+		}
+		$currentStatus = $this->getStatus();
+		if ($currentStatus->getStatus_code() != $status->getStatus_code()) {
+			$currentStatus->setEnd_date(time());
+			$currentStatus->save();
+
+			$newStatus = new LocationStatusChange();
+			$newStatus->setLocation_id($this->getLocation_id());
+			$newStatus->setStatus($status);
+			$newStatus->save();
+		}
+	 }
 
 	/**
 	 * @param string string (y or n)

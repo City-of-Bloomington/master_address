@@ -837,6 +837,11 @@ class Address
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->getStreetAddress();
+	}
+
 	/**
 	 * Alias for getAddress_type()
 	 *

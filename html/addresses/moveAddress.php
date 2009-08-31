@@ -4,79 +4,73 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@boomington.in.gov>
- * @param GET address
+ * @param REQUEST address_id
+ * @param REQUEST old_lid
+ * @param REQUEST new_lid
+ * @param REQUEST new_location_id
  */
 
-$template = new Template();
-$location = new Location($_REQUEST['lid']);
-$address = new Address($_REQUEST['street_address_id']);
-if (isset($_GET['new_address']) && $_GET['new_address']) {
-	$addresses = new AddressList();
-	$addresses->search(array('address'=>$_GET['new_address']));
-	//
-	$list = array();
-	foreach($addresses as $addr){
-		$locList = $addr->getLocations();
-		foreach($locList as $loc){
-			$list[] = $loc;
-		}
+$address = new Address($_REQUEST['address_id']);
+$old_location = new Location($_REQUEST['old_lid']);
+
+// Check and use a new LID if they gave one
+if (isset($_REQUEST['new_lid']) && $_REQUEST['new_lid']) {
+	try {
+		$target_location = new Location($_REQUEST['new_lid']);
+	}
+	catch (Exception $e) {
+		// Just ignore it if the new lid is invalid
 	}
 }
 
-$new_lid="";
-if(isset($_REQUEST['new_lid']) && $_REQUEST['new_lid']){
-	$new_lid=$_REQUEST['new_lid'];
-}
-else if(isset($_REQUEST['new_lid2']) && $_REQUEST['new_lid2']){
-	$new_lid=$_REQUEST['new_lid2'];
+// Check for and use a Location_ID if they gave one
+if (!isset($target_location)
+	&& isset($_REQUEST['new_location_id']) && $_REQUEST['new_location_id']) {
+	$list = new LocationList(array('location_id'=>$_REQUEST['location_id']));
+	if (count($list)) {
+		$target_location = $list[0];
+	}
 }
 
-if($new_lid){
-	//
-	// do the swap and change status
-	//
-	$newLocation = new Location($new_lid);
-	$loc = clone($newLocation);
-	$loc->setAddress($address);	
-	$loc->toggleActive();
-	try{
-		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'assign'));
-		$loc->save($changeLog);
-		$status = $location->getStatus(); // locationStatusChange
-		$status->setEffective_end_date(date('Y-m-d')); // today
-		$status->save();
-		//
-		$status = new LocationStatusChange();
-		$status->setStatus_code($_REQUEST['new_status']);
-		$status->setLocation_id($location->getLocation_id());
-		$status->save();
-		//
-		$status = $newLocation->getStatus();
-		$status->setEffective_end_date(date('Y-m-d')); // today
-		$status->save();
-		//
-		$status = new LocationStatusChange();
-		$status->setStatus_code(1); // current
-		$status->setLocation_id($newLocation->getLocation_id());
-		$status->save();
-		//
-		header('Location: '.$address->getURL());			
-		exit();			
+
+// Once we know the location, do all the database work
+if (isset($target_location)) {
+	// Create a new LID for this address, using data copied from the target_location
+	// Update the status on the old location with the status the user chose
+	$newLocation = clone($target_location);
+	$newLocation->setAddress($address);
+	$newLocation->toggleActive();
+
+	try {
+		// Make sure they're not trying to move the address to the same location
+		if ($old_location->getLocation_id() != $newLocation->getLocation_id()) {
+			$old_location->saveStatus($_REQUEST['old_location_status']);
+
+			$newLocation->save();
+			$newLocation->saveStatus('CURRENT');
+			$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'move'));
+			$newLocation->save($changeLog);
+		}
+		header('Location: '.$address->getURL());
+		exit();
 	}
 	catch(Exception $e){
 		$_SESSION['errorMessages'][] = $e;
-		
 	}
-	
-}
-$template = new Template();
-if(isset($list)){
-	$template->blocks[] = new Block('addresses/moveAddressForm.inc',
-										array('locationList'=>$list,'location'=>$location,'address'=>$address));
-}
-else{
-	$template->blocks[] = new Block('addresses/moveAddressForm.inc',
-										array('location'=>$location,'address'=>$address));
 }
 
+
+
+$moveAddressForm = new Block('addresses/moveAddressForm.inc',
+							array('location'=>$old_location,'address'=>$address));
+// If they aren't sure, they may have done a search
+if (isset($_REQUEST['location_search'])) {
+	$list = new LocationList(array('address'=>$_REQUEST['location_search']));
+	$moveAddressForm->locationList = $list;
+}
+
+
+$template = new Template();
+$template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));
+$template->blocks[] = $moveAddressForm;
 echo $template->render();

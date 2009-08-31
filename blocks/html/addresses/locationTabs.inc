@@ -10,10 +10,20 @@ $activeIndex = 0;
 foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$location) {
 	$buttons = '';
 	if (userIsAllowed('Address')) {
+		$addURL = BASE_URL."/addresses/addAddress.php?lid={$location->getId()}";
+
+		$moveURL = new URL(BASE_URL.'/addresses/moveAddress.php');
+		$moveURL->address_id = $this->address->getId();
+		$moveURL->old_lid = $location->getId();
+
 		$buttons = "
 		<div class=\"buttons\">
-			<button type=\"button\">Add New Address</button>
-			<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/addresses/moveAddress.php?lid={$location->getId()}&street_address_id={$this->address->getId()}';\">Move to Existing Location</button>
+			<button type=\"button\" onclick=\"document.location.href='$addURL';\">
+				Add New Address
+			</button>
+			<button type=\"button\" onclick=\"document.location.href='$moveURL';\">
+				Move to Existing Location
+			</button>
 		</div>
 		";
 	}

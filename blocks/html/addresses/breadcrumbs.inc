@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address optional
  * @param Street $this->street optional
- * 
+ *
  */
 $name="";
 
@@ -13,7 +13,7 @@ if(isset($this->street)){
 	$street = $this->street;
 }
 else if(isset($this->address)){
-	$street = $this->address->getStreet();	
+	$street = $this->address->getStreet();
 }
 ?>
 <div class="breadcrumbs">
@@ -23,7 +23,11 @@ else if(isset($this->address)){
 			echo "<li><a href=\"{$street->getURL()}\">$name</a></li>";
 			if(isset($this->address)){
 				echo "
-				<li>{$this->address->getStreet_number()}</li>
+				<li>
+					<a href=\"{$this->address->getURL()}\">
+						{$this->address->getStreet_number()}
+					</a>
+				</li>
 				";
 			}
 		?>
