@@ -124,10 +124,14 @@ class Location
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		if (Database::getType()=='oracle') {
-			$this->location_id = $zend_db->fetchOne('select location_id_s.nextval from dual');
-			$data['location_id']=$this->location_id;
+
+		// Some new locations we want to generate a new location_id
+		// as well as a new LID.  First we grab the location_id from it's sequence
+		if (!$data['location_id']) {
+			$data['location_id'] = $zend_db->lastSequenceId('location_id_s');
+			$this->location_id = $data['location_id'];
 		}
+
 		$zend_db->insert('address_location',$data);
 		if (Database::getType()=='oracle') {
 			$this->lid = $zend_db->lastSequenceId('location_lid_seq');
@@ -476,14 +480,16 @@ class Location
 			$status = new AddressStatus($status);
 		}
 		$currentStatus = $this->getStatus();
-		if ($currentStatus->getStatus_code() != $status->getStatus_code()) {
-			$currentStatus->setEnd_date(time());
-			$currentStatus->save();
-
+		if (!$currentStatus) {
 			$newStatus = new LocationStatusChange();
 			$newStatus->setLocation_id($this->getLocation_id());
 			$newStatus->setStatus($status);
 			$newStatus->save();
+		}
+		if ($currentStatus
+			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
+			$currentStatus->setEnd_date(time());
+			$currentStatus->save();
 		}
 	 }
 
