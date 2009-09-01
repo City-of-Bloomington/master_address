@@ -28,7 +28,7 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 		";
 	}
 	$content = "
-	<div id=\"#locationTab_{$location->getId()}\">
+	<div id=\"lid_{$location->getId()}\">
 		<h1>Location Status {$location->getStatus()}</h1>
 		$buttons
 		<table>
@@ -62,7 +62,7 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 	</div>
 	";
 	$tab = "
-		<li><a href=\"#locationTab_{$location->getLocation_id()}\">
+		<li><a href=\"#lid_{$location->getId()}\">
 				<em>
 				Location ID
 				{$location->getLocation_id()}

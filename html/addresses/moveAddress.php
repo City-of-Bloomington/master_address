@@ -17,28 +17,29 @@ $old_location = new Location($_REQUEST['old_lid']);
 if (isset($_REQUEST['new_lid']) && $_REQUEST['new_lid']) {
 	try {
 		$target_location = new Location($_REQUEST['new_lid']);
+		$target_location_id = $target_location->getLocation_id();
 	}
 	catch (Exception $e) {
 		// Just ignore it if the new lid is invalid
 	}
 }
 
-// Check for and use a Location_ID if they gave one
+// If they gave us a location_id, make sure it's a real one
 if (!isset($target_location)
 	&& isset($_REQUEST['new_location_id']) && $_REQUEST['new_location_id']) {
 	$list = new LocationList(array('location_id'=>$_REQUEST['location_id']));
 	if (count($list)) {
-		$target_location = $list[0];
+		$target_location_id = (int)$_REQUEST['new_location_id'];
 	}
 }
 
 
 // Once we know the location, do all the database work
-if (isset($target_location)) {
-	// Create a new LID for this address, using data copied from the target_location
+if (isset($target_location_id)) {
+	// Create a new LID for this address, using data copied from the old location
 	// Update the status on the old location with the status the user chose
-	$newLocation = clone($target_location);
-	$newLocation->setAddress($address);
+	$newLocation = clone($old_location);
+	$newLocation->setLocation_id($target_location_id);
 	$newLocation->toggleActive();
 
 	try {
@@ -46,7 +47,6 @@ if (isset($target_location)) {
 		if ($old_location->getLocation_id() != $newLocation->getLocation_id()) {
 			$old_location->saveStatus($_REQUEST['old_location_status']);
 
-			$newLocation->save();
 			$newLocation->saveStatus('CURRENT');
 			$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'move'));
 			$newLocation->save($changeLog);
@@ -55,6 +55,7 @@ if (isset($target_location)) {
 		exit();
 	}
 	catch(Exception $e){
+		print_r($e);
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
