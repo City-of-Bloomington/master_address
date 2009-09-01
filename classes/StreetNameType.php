@@ -30,7 +30,7 @@ class StreetNameType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if(ctype_digit($id)){
+				if (is_numeric($id)) {
 				  $sql = 'select * from mast_street_name_type_master where id=?';
 				}
 				else{

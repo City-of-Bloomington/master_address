@@ -29,7 +29,7 @@ class StreetType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if (ctype_digit($id)){
+				if (is_numeric($id)) {
 					$sql = 'select * from mast_street_type_suffix_master where id=?';
 					$result = $zend_db->fetchRow($sql,array($id));
 				}

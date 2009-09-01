@@ -32,7 +32,7 @@ class SubunitType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if (ctype_digit($id)) {
+				if (is_numeric($id)) {
 					$sql = 'select * from mast_addr_subunit_types_mast where id=?';
 					$result = $zend_db->fetchRow($sql,array($id));
 				}

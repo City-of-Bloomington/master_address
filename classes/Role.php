@@ -29,7 +29,7 @@ class Role
 			else {
 				$zend_db = Database::getConnection();
 
-				if (is_int($id) || ctype_digit($id)) {
+				if (is_numeric($id)) {
 					$sql = 'select * from roles where id=?';
 				}
 				else {

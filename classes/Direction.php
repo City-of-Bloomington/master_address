@@ -29,7 +29,7 @@ class Direction
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if (ctype_digit($id)) {
+				if (is_numeric($id)) {
 				    $sql = 'select * from mast_street_direction_master where id=?';
 					$result = $zend_db->fetchRow($sql,array($id));
 				}

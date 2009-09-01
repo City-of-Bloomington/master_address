@@ -26,7 +26,7 @@ class User extends SystemUser
 				$result = $id;
 			}
 			else {
-				if (ctype_digit($id)) {
+				if (is_numeric($id)) {
 					$sql = 'select * from users where id=?';
 				}
 				else {
