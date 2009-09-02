@@ -47,9 +47,9 @@ if (isset($_POST['changeLogEntry'])) {
 									'readdress'=>array('street_number')
 									);
 			foreach ($actionFields[$action] as $field) {
-				if (isset($_POST[$field])) {
+				if (isset($_POST['address'][$field])) {
 					$set = 'set'.ucfirst($field);
-					$address->$set($_POST[$field]);
+					$address->$set($_POST['address'][$field]);
 				}
 			}
 
