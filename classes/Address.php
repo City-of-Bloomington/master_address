@@ -177,15 +177,6 @@ class Address
 		$zend_db->insert('mast_address_sanitation',$data['s']);
 	}
 
-	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
-	{
-		$logEntry = $changeLogEntry->getData();
-		$logEntry['street_address_id'] = $this->street_address_id;
-
-		$zend_db = Database::getConnection();
-		$zend_db->insert('address_change_log',$logEntry);
-	}
-
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -967,6 +958,20 @@ class Address
 	public function getRecycleWeek()
 	{
 		return $this->getRecycle_week();
+	}
+
+	/**
+	 * Saves a ChangeLogEntry to the database for this this address
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	{
+		$logEntry = $changeLogEntry->getData();
+		$logEntry['street_address_id'] = $this->street_address_id;
+
+		$zend_db = Database::getConnection();
+		$zend_db->insert('address_change_log',$logEntry);
 	}
 
 	/**

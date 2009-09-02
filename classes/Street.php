@@ -118,14 +118,6 @@ class Street
 		}
 	}
 
-	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
-	{
-		$logEntry = $changeLogEntry->getData();
-		$logEntry['street_id'] = $this->street_id;
-
-		$zend_db = Database::getConnection();
-		$zend_db->insert('street_change_log',$logEntry);
-	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -321,5 +313,37 @@ class Street
 	public function getURL()
 	{
 		return BASE_URL.'/streets/viewStreet.php?street_id='.$this->street_id;
+	}
+
+	/**
+	 * Saves a ChangeLogEntry to the database for this this street
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function updateChangeLog(ChangeLogEntry $changeLogEntry)
+	{
+		$logEntry = $changeLogEntry->getData();
+		$logEntry['street_id'] = $this->street_id;
+
+		$zend_db = Database::getConnection();
+		$zend_db->insert('street_change_log',$logEntry);
+	}
+
+	/**
+	 * Returns an array of ChangeLogEntries
+	 *
+	 * @return array
+	 */
+	public function getChangeLog()
+	{
+		$changeLog = array();
+
+		$zend_db = Database::getConnection();
+		$sql = 'select * from street_change_log where street_id=? order by action_date desc';
+		$result = $zend_db->fetchAll($sql,$this->street_id);
+		foreach ($result as $row) {
+			$changeLog[] = new ChangeLogEntry($row);
+		}
+		return $changeLog;
 	}
 }
