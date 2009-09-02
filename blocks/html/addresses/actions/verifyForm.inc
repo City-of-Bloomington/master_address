@@ -25,8 +25,7 @@
 	<fieldset id="changeLogEntry_fields">
 		<legend>Change Log Entry</legend>
 		<?php
-			$block = new Block('addresses/partials/changeLogEntryFields.inc',
-								array('action'=>'verify'));
+			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'verify'));
 			echo $block->render('html');
 		?>
 	</fieldset>

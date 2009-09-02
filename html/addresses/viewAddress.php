@@ -28,7 +28,8 @@ if ($template->outputFormat=='html') {
 $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 
 if ($template->outputFormat=='html') {
-	$template->blocks[] = new Block('addresses/changeLog.inc',array('address'=>$address));
+	$template->blocks[] = new Block('changeLogs/changeLog.inc',
+									array('changeLog'=>$address->getChangeLog()));
 	$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
 									array('addressStatusChangeList'=>$address->getStatusChangeList()));
 
