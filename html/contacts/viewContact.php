@@ -10,6 +10,9 @@
 
 $contact = new Contact($_GET['contact_id']);
 
-$template = new Template();
+$template = new Template('two-column');
+
 $template->blocks[] = new Block('contacts/viewContactForm.inc',array('contact'=>$contact));
+$template->blocks['panel-one'][] = new Block('changeLogs/changeLog.inc',array('changeLog'=>$contact->getChangeLog()));
+
 echo $template->render();
