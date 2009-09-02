@@ -13,7 +13,7 @@ class Contact
 	private $phone_number;
 	private $agency;
 
-	private $types = array('GIS','CBU BILLING','ADDRESS COORDINATOR','E911 ADMINISTRATOR');
+	private static $types = array('GIS','CBU BILLING','ADDRESS COORDINATOR','E911 ADMINISTRATOR');
 
 	/**
 	 * Populates the object with data
@@ -68,7 +68,7 @@ class Contact
 			throw new Exception('missingRequiredFields');
 		}
 
-		if (!in_array($this->contact_type,$this->types)) {
+		if (!in_array($this->contact_type,self::$types)) {
 			throw new Exception('contacts/invalidType');
 		}
 	}
@@ -249,7 +249,7 @@ class Contact
 	 */
 	public static function getTypes()
 	{
-		return $this->types;
+		return self::$types;
 	}
 
 	/**

@@ -10,11 +10,11 @@
 	<fieldset><legend>Contact Info</legend>
 		<table>
 
-			<tr><td><label for="contact-last_name" class="required">Lastname</label></td>
+			<tr><td><label for="contact-last_name" class="required">Last Name</label></td>
 				<td><input name="contact[last_name]" id="contact-last_name" /></td>
 			</tr>
 
-			<tr><td><label for="contact-first_name" class="required">Firstname</label></td>
+			<tr><td><label for="contact-first_name" class="required">First Name</label></td>
 				<td><input name="contact[first_name]" id="contact-first_name" /></td>
 			</tr>
 
@@ -33,7 +33,7 @@
 				<td><input name="contact[phone_number]" id="contact-phone_number" /></td>
 			</tr>
 
-			<tr><td><label for="contact-agency" class="required">Agency</label></td>
+			<tr><td><label for="contact-agency" class="required">Organization</label></td>
 				<td><input name="contact[agency]" id="contact-agency" /></td>
 			</tr>
 
