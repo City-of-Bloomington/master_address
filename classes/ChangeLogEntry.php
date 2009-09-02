@@ -15,6 +15,9 @@ class ChangeLogEntry
 	public $notes;
 	public $action_date;
 
+	public $type;
+	public $id;
+
 	private $user;
 	private $contact;
 
