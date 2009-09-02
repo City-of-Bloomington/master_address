@@ -272,18 +272,18 @@ class Contact
 		$changeLog = array();
 
 		$zend_db = Database::getConnection();
-		$sql = "(select 'address' as type,address_id as id,action,action_date,notes,user_id,contact_id
+		$sql = "(select 'address' as type,street_address_id as id,action,action_date,notes,user_id,contact_id
 				from address_change_log where contact_id=?)
 				union
 				(select 'street' as type,street_id as id,action,action_date,notes,user_id,contact_id
 				from street_change_log where contact_id=?)
 				union
-				(select 'location' as type,location_id as id,action,action_date,notes,user_id,contact_id
+				(select 'location' as type,lid as id,action,action_date,notes,user_id,contact_id
 				from location_change_log where contact_id=?)
 				union
 				(select 'subunit' as type,subunit_id as id,action,action_date,notes,user_id,contact_id
 				from subunit_change_log where contact_id=?)";
-		$result = $zend_db->fetchAll($sql,$this->contact_id);
+		$result = $zend_db->fetchAll($sql,array($this->contact_id,$this->contact_id,$this->contact_id,$this->contact_id));
 		foreach ($result as $row) {
 			$changeLog[] = new ChangeLogEntry($row);
 		}
