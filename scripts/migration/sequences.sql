@@ -28,6 +28,14 @@ select subunit_id_s.nextval into :new.subunit_id from dual;
 end;
 /
 
+create trigger contact_id_trigger
+before insert on mast_addr_assignment_contact
+for each row
+begin
+select contact_id_s.nextval into :new.contact_id from dual;
+end;
+/
+
 -- These are in GIS
 create sequence buildings_status_code_seq start with 6 nocache;
 
