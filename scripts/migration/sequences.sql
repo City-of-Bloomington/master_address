@@ -1,3 +1,14 @@
+-- These are in GIS
+create sequence buildings_status_code_seq start with 6 nocache;
+
+create trigger buildings_status_code_trigger
+before insert on buildings_status_lookup
+for each row
+begin
+select buildings_status_code_seq.nextval into :new.status_code from dual;
+end;
+/
+
 -- These are in ENG
 create sequence address_status_code_seq start with 6 nocache;
 
@@ -51,13 +62,11 @@ begin
 select street_address_id_s.nextval into :new.street_address_id from dual;
 end;
 /
--- These are in GIS
-create sequence buildings_status_code_seq start with 6 nocache;
 
-create trigger buildings_status_code_trigger
-before insert on buildings_status_lookup
+create trigger gov_jur_trigger
+before insert on governmental_jurisdiction_mast
 for each row
 begin
-select buildings_status_code_seq.nextval into :new.status_code from dual;
+select gov_jur_id_s.nextval into :new.gov_jur_id from dual;
 end;
 /
