@@ -28,13 +28,10 @@ if (isset($_POST['address'])) {
 	}
 	$address->setStreet_id($street->getId());
 	try {
-		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>'assign'));
+		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>$_POST['action']));
 		$address->save($changeLog);
 		//
-		$status = new AddressStatusChange();
-		$status->setStreet_address_id($address->getId());
-		$status->setStatus_code(1);
-		$status->save();
+		$address->saveStatus("Current");
 		
 		if(!isset($_POST['lid']) || !$_POST['lid']){
 			$location = new Location();

@@ -28,6 +28,7 @@ class ChangeLogEntry
 							 'readdress'=>'readdressed','reassign'=>'reassigned',
 							 'remove'=>'removed','retire'=>'retired',
 							 'retire location'=>'retired location',
+							 'new address'=>'new address',
 							 'unretire'=>'unretired',
 							 'unretire location'=>'unretired location',
 							 'verify'=>'verified');

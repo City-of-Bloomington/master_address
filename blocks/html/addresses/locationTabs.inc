@@ -10,7 +10,8 @@ $activeIndex = 0;
 foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$location) {
 	$buttons = '';
 	if (userIsAllowed('Address')) {
-		$addURL = BASE_URL."/addresses/addAddress.php?lid={$location->getId()}";
+		$street = $location->getAddress()->getStreet();
+		$addURL = BASE_URL."/addresses/addAddress.php?lid={$location->getId()}&street_id={$street->getStreet_id()}";
 
 		$moveURL = new URL(BASE_URL.'/addresses/moveAddress.php');
 		$moveURL->address_id = $this->address->getId();

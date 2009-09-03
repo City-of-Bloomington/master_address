@@ -21,6 +21,8 @@ $location = $this->location;
 			<table>
 				<tr><td>
 						<table> <!-- left table -->
+							<tr><td><label>Action</label></td>
+								<td><input type="radio" name="action" value="add" checked="checked" />Add<input type="radio" name="action" value="assign" />Assign</td></tr>
 							<tr><td><label>Street</label></td>
 								<td><?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetSelector.inc'; ?>
 								</td>
@@ -90,7 +92,7 @@ $location = $this->location;
 				</tr>
 			</table>
 
-			<button type="submit" class="submit">Submit Address</button>
+			<button type="submit" class="submit">Save</button>
 			<input type="checkbox" name="batch_mode" id="batch_mode" value="y" />
 			<label for="batch_mode" />Submit in Batch Mode</label>
 

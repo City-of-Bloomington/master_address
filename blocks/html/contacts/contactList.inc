@@ -16,7 +16,6 @@
 	</h1>
 	<table>
 		<tr><th></th>
-			<th></th>
 			<th>Name</th>
 			<th>Phone</th>
 			<th>Type</th>
@@ -24,21 +23,20 @@
 		</tr>
 		<?php
 			foreach ($this->contactList as $contact) {
-				$viewButton = '';
-				$url = new URL(BASE_URL.'/contacts/viewContact.php');
-				$url->contact_id = $contact->getContact_id();
-				$viewButton = "<a class=\"edit button\" href=\"$url\">View</a>";
-				//
+
 				$editButton = '';
 				if (userIsAllowed('Contact')) {
 					$url = new URL(BASE_URL.'/contacts/updateContact.php');
 					$url->contact_id = $contact->getContact_id();
 					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
 				}
+				$url = new URL(BASE_URL.'/contacts/viewContact.php');
+				$url->contact_id = $contact->getContact_id();
 				$name = View::escape("{$contact->getFirstname()} {$contact->getLastname()}");
+				$name = "<a href=\"$url\">$name</a>";
 				$phone = View::escape($contact->getPhone_number());
 				echo "
-				<tr><td>$viewButton</td>
+				<tr>
 					<td>$editButton</td>
 					<td>$name</td>
 					<td>$phone</td>
