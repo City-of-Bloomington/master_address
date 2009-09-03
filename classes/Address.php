@@ -124,6 +124,7 @@ class Address
 		$data['a']['street_id'] = $this->street_id;
 		$data['a']['address_type'] = $this->address_type;
 		$data['a']['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
+		$data['a']['jurisdiction_id'] = $this->gov_jur_id;
 		$data['a']['gov_jur_id'] = $this->gov_jur_id;
 		$data['a']['township_id'] = $this->township_id ? $this->township_id : null;
 		$data['a']['section'] = $this->section ? $this->section : null;
@@ -991,4 +992,28 @@ class Address
 		}
 		return $changeLog;
 	}
+
+	/**
+	 * Saves a new AddressStatusChange to the database
+	 *
+	 * @param AddressStatus|string $status
+	 */
+	 public function saveStatus($status)
+	 {
+		if (!$status instanceof AddressStatus) {
+			$status = new AddressStatus($status);
+		}
+		$currentStatus = $this->getStatus();
+		if (!$currentStatus) {
+			$newStatus = new AddressStatusChange();
+			$newStatus->setAddress($this);
+			$newStatus->setStatus($status);
+			$newStatus->save();
+		}
+		if ($currentStatus
+			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
+			$currentStatus->setEnd_date(time());
+			$currentStatus->save();
+		}
+	 }
 }

@@ -221,14 +221,21 @@ class AddressStatusChange
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $int
 	 */
-	public function setStatus_code($number)
+	public function setStatus_code($int)
 	{
-		if(!$this->addressStatus){
-			$this->addressStatus = new AddressStatus($number);
-		}
-		$this->status_code = $number;
+		$this->addressStatus = new AddressStatus($int);
+		$this->status_code = $this->addressStatus->getStatus_code();
+	}
+
+	/**
+	 * @param AddressStatus $status
+	 */
+	public function setStatus(AddressStatus $status)
+	{
+		$this->status_code = $status->getStatus_code();
+		$this->addressStatus = $status;
 	}
 
 	/**
