@@ -534,7 +534,7 @@ create table mast_address (
 	foreign key (gov_jur_id) references governmental_jurisdiction_mast(gov_jur_id),
 	foreign key (plat_id) references plat_master(plat_id)
 );
-create table street_address_id_s nocache;
+create sequence street_address_id_s nocache;
 create trigger mast_address_trigger
 before insert on mast_address
 for each row

@@ -44,6 +44,13 @@ select street_id_s.nextval into :new.street_id from dual;
 end;
 /
 
+create trigger mast_address_trigger
+before insert on mast_address
+for each row
+begin
+select street_address_id_s.nextval into :new.street_address_id from dual;
+end;
+/
 -- These are in GIS
 create sequence buildings_status_code_seq start with 6 nocache;
 
