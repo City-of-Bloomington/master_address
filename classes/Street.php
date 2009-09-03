@@ -231,12 +231,15 @@ class Street
 	}
 
 	/**
-	 * @param StreetStatus $status
+	 * @param StreetStatus|string $status
 	 */
 	public function setStatus($status)
 	{
-		$this->street_status_code = $status->getCode();
-		$this->streetStatus = $streetStatus;
+		if (!$status instanceof StreetStatus) {
+			$status = new StreetStatus($status);
+		}
+		$this->status_code = $status->getCode();
+		$this->streetStatus = $status;
 	}
 
 	//----------------------------------------------------------------

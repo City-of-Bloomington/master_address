@@ -29,7 +29,12 @@ class StreetStatus
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from mast_street_status_lookup where status_code=?';
+				if (is_numeric($status_code)) {
+					$sql = 'select * from mast_street_status_lookup where status_code=?';
+				}
+				else {
+					$sql = 'select * from mast_street_status_lookup where description=?';
+				}
 				$result = $zend_db->fetchRow($sql,array($status_code));
 			}
 

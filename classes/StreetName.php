@@ -80,6 +80,10 @@ class StreetName
 		if (!$this->street_id || !$this->street_name) {
 			throw new Exception('missingRequiredFields');
 		}
+
+		if (!$this->street_name_type) {
+			throw new Exception('streets/missingStreetNameType');
+		}
 	}
 
 	/**
@@ -93,7 +97,7 @@ class StreetName
 		$data['street_id'] = $this->street_id;
 		$data['street_name'] = $this->street_name;
 		$data['street_type_suffix_code'] = $this->street_type_suffix_code ? $this->street_type_suffix_code : null;
-		$data['street_name_type'] = $this->street_name_type ? $this->street_name_type : null;
+		$data['street_name_type'] = $this->street_name_type;
 		$data['effective_start_date'] = $this->effective_start_date ? $this->effective_start_date->format('Y-m-d') : null;
 		$data['effective_end_date'] = $this->effective_end_date ? $this->effective_end_date->format('Y-m-d') : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
@@ -427,7 +431,7 @@ class StreetName
 	}
 
 	/**
-	 * @param Direction $direction
+	 * @param StreetNameType $type
 	 */
 	public function setStreetNameType($type)
 	{
@@ -436,7 +440,7 @@ class StreetName
 	}
 
 	/**
-	 * @param Direction $streetType
+	 * @param StreetType $streetType
 	 */
 	public function setStreetType($streetType)
 	{

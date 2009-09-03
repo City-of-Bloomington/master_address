@@ -38,9 +38,18 @@ else {
 if (userIsAllowed('Street')) {
 	$addURL = BASE_URL.'/streets/addStreet.php';
 	echo "
-	<p>Can't find what you're looking for?
-		<a href=\"$addURL\">Create New Street</a>
-	</p>
+	<p>Can't find what you're looking for?</p>
+	<div>
+		<button type=\"button\" onclick=\"document.location.href='$addURL?action=add';\">
+			Add a Street
+		</button>
+		<button type=\"button\" onclick=\"document.location.href='$addURL?action=create';\">
+			Create a Street
+		</button>
+		<button type=\"button\" onclick=\"document.location.href='$addURL?action=propose';\">
+			Propose a Street
+		</button>
+	</div>
 	";
 }
 ?>
