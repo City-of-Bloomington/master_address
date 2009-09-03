@@ -128,7 +128,7 @@ class Location
 		// Some new locations we want to generate a new location_id
 		// as well as a new LID.  First we grab the location_id from it's sequence
 		if (!$data['location_id']) {
-			$data['location_id'] = $zend_db->lastSequenceId('location_id_s');
+			$data['location_id'] = $zend_db->nextSequenceId('location_id_s');
 			$this->location_id = $data['location_id'];
 		}
 
