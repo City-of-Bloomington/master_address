@@ -53,6 +53,16 @@ if (isset($_POST['changeLogEntry'])) {
 				}
 			}
 
+			// Mailable and Livable need to be saved to the Locations
+			if ($action == 'correct') {
+				foreach ($address->getLocations() as $location) {
+					$location->setMailable(isset($_POST['mailable']));
+					$location->setLivable(isset($_POST['livable']));
+					$location->save($changeLogEntry);
+				}
+			}
+
+
 			$address->save($changeLogEntry);
 		}
 		else {
@@ -65,9 +75,6 @@ if (isset($_POST['changeLogEntry'])) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
-
-
-
 
 $template = new Template('two-column');
 $template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));

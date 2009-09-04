@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
- * 
+ *
  */
 
 if (!userIsAllowed('Address')) {
@@ -30,30 +30,28 @@ if (isset($_POST['address'])) {
 	try {
 		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>$_POST['action']));
 		$address->save($changeLog);
-		//
 		$address->saveStatus("Current");
-		
-		if(!isset($_POST['lid']) || !$_POST['lid']){
+
+		if (!isset($_POST['lid']) || !$_POST['lid']) {
 			$location = new Location();
 			$location->setStreet_address_id($address->getStreet_address_id());
 		}
-		
-		if($_POST['location']){
+
+		if ($_POST['location']) {
 			foreach ($_POST['location'] as $field=>$value) {
 				$set = 'set'.ucfirst($field);
 				$location->$set($value);
 			}
-			$location->save($changeLog);			
+			$location->save($changeLog);
 		}
-		
+
 		if(!isset($_POST['batch_mode'])){
-			header('Location: '.$address->getStreet()->getURL());			
-			exit();			
-		}	
+			header('Location: '.$address->getStreet()->getURL());
+			exit();
+		}
 
 	}
 	catch(Exception $e) {
-		
 		$_SESSION['errorMessages'][] = $e;
 	}
 }

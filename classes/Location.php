@@ -375,11 +375,11 @@ class Location
 	}
 
 	/**
-	 * @param char $char
+	 * @param boolean
 	 */
-	public function setActive($char)
+	public function setActive($bool)
 	{
-		$this->active = $char=='Y' ? 'Y' : 'N';
+		$this->active = $bool ? 'Y' : 'N';
 	}
 
 	/**

@@ -20,6 +20,16 @@
 			</select>
 		</td>
 	</tr>
+	<tr><td><label for="mailable">Mailable</label></td>
+		<td><input type="checkbox" name="mailable" id="mailable"
+				<?php echo $this->address->isMailable() ? 'checked="checked"' : ''; ?> />
+		</td>
+	</tr>
+	<tr><td><label for="livable">Livable</label></td>
+		<td><input type="checkbox" name="livable" id="livable"
+				<?php echo $this->address->isLivable() ? 'checked="checked"' : ''; ?> />
+		</td>
+	</tr>
 	<tr><td><label for="address-zip">Zip Code</label></td>
 		<td><input name="address[zip]" id="address-zip"
 					value="<?php echo $this->address->getZip(); ?>"

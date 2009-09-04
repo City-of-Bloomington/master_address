@@ -897,6 +897,30 @@ class Address
 	}
 
 	/**
+	 * Returns the Mailable information from this address's primary location
+	 *
+	 * @return boolean
+	 */
+	public function isMailable()
+	{
+		$location = $this->getLocation();
+		if ($location && $location->isMailable()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the Livable information from this address's primary location
+	 *
+	 * @return boolean
+	 */
+	public function isLivable()
+	{
+		return ($this->getLocation()  && $this->getLocation()->isLivable());
+	}
+
+	/**
 	 * @return PurposeList
 	 */
 	public function getPurposes()

@@ -8,10 +8,18 @@
 $township = $this->address->getTownship()
 			? View::escape($this->address->getTownship()->getName())
 			: '';
+$mailable = $this->address->isMailable() ? 'Yes' : 'No';
+$livable = $this->address->isLivable() ? 'Yes' : 'No';
 echo "
 <table>
 	<tr><th>Type</th>
 		<td>{$this->address->getType()}</td>
+	</tr>
+	<tr><th>Mailable</th>
+		<td>$mailable</td>
+	</tr>
+	<tr><th>Livable</th>
+		<td>$livable</td>
 	</tr>
 	<tr><th>Zip Code</th>
 		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
