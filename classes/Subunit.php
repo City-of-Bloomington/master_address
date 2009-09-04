@@ -19,6 +19,7 @@ class Subunit
 	private $description; 	// Used for pre-loading the latest status
 	private $status;	// Stores the latest AddressStatus object
 
+
 	/**
 	 * Populates the object with data
 	 *
@@ -258,6 +259,21 @@ class Subunit
 	{
 		return "{$this->getType()} {$this->getIdentifier()}";
 	}
+	
+	/**
+	 * Returns the status history for this address
+	 *
+	 * @return AddressStatusChangeList
+	 */
+	public function getStatusChangeList(array $fields=null)
+	{
+		$search = array('subunit_id'=>$this->subunit_id);
+		if ($fields) {
+			$search = array_merge($search,$fields);
+		}
+		return new SubunitStatusChangeList($search);
+	}
+
 
 	/**
 	 * Alias for getSudtype()
@@ -299,4 +315,55 @@ class Subunit
 			}
 		}
 	}
+	/**
+	 * @return string
+	 */
+	public function getURL()
+	{
+		return BASE_URL.'/subunits/viewSubunit.php?subunit_id='.$this->subunit_id;
+	}
+
+	/**
+	 * Returns an array of ChangeLogEntries
+	 *
+	 * @return array
+	 */
+	public function getChangeLog()
+	{
+		$changeLog = array();
+
+		$zend_db = Database::getConnection();
+		$sql = "select * from subunit_change_log where subunit_id=? order by action_date desc";
+		$result = $zend_db->fetchAll($sql,$this->subunit_id);
+		foreach ($result as $row) {
+			$changeLog[] = new ChangeLogEntry($row);
+		}
+		return $changeLog;
+	}
+
+	/**
+	 * Saves a new AddressStatusChange to the database
+	 *
+	 * @param AddressStatus|string $status
+	 */
+	 public function saveStatus($status)
+	 {
+		if (!$status instanceof AddressStatus) {
+			$status = new AddressStatus($status);
+		}
+		$currentStatus = $this->getStatus();
+		if (!$currentStatus) {
+			$newStatus = new SubunitStatusChange();
+			$newStatus->setSubunit($this);			
+			$newStatus->setStreet_address_id($this->street_address_id);
+			$newStatus->setStatus($status);
+			$newStatus->save();
+		}
+		if ($currentStatus
+			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
+			$currentStatus->setEnd_date(time());
+			$currentStatus->save();
+		}
+	 }
+	
 }

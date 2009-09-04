@@ -28,6 +28,7 @@
 		<?php
 			foreach ($this->subunitList as $subunit) {
 				$number = View::escape($subunit->getIdentifier());
+				$number = "<a href=".BASE_URL."/subunits/viewSubunit.php?subunit_id=".$subunit->getId().">$number</a>";
 				echo "
 				<tr><td>{$subunit->getType()}</td>
 					<td>$number</td>

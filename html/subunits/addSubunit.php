@@ -3,6 +3,7 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @author W Sibo <sibow@bloomington.in.gov>
  */
 if (!userIsAllowed('Subunit')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -36,11 +37,7 @@ if (isset($_POST['subunit'])) {
 			$subunit->setNotes($notes);	
 			try{
 				$subunit->save($changeLog);
-				$subStatus = new SubunitStatusChange();
-				$subStatus->setStreet_address_id($address->getId());
-				$subStatus->setSubunit_id($subunit->getId());
-				$subStatus->setStatus_code(1);
-				$subStatus->save();
+				$subunit->saveStatus('Current');
 			}
 			catch(Exception $e) {
 				$_SESSION['errorMessages'][] = $e;

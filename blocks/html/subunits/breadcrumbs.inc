@@ -8,19 +8,24 @@
  * 
  */
 $name="";
-
-if(isset($this->address)){
-	$street = $this->address->getStreet();	
+if(isset($this->subunit)){
+	$address = $this->subunit->getAddress();
 }
+else if(isset($this->address)){
+	$address = $this->address;
+	
+}
+$street = $address->getStreet();	
+
 ?>
 <div class="breadcrumbs">
-	<ul><li><a href="<?php echo BASE_URL; ?>/streets">Streets</a></li>
+	<ul><li><a href="<?php echo BASE_URL; ?>/addresses">Addresses</a></li>
 		<?php
 			$name = View::escape($street->getStreetName());
-			echo "<li><a href=\"{$street->getURL()}\">$name</a></li>";
-			if(isset($this->address)){
+			echo "<li><a href=\"{$address->getURL()}\">$name</a></li>";
+			if(isset($address)){
 				echo "
-				<li>{$this->address->getStreet_number()}</li>
+				<li>{$address->getStreet_number()}</li>
 				";
 			}
 		?>
