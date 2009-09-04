@@ -46,23 +46,9 @@
 
 		<button type="submit" class="submit">Save Changes</button>
 	</fieldset>
-	<div id="changeLogEntry_fields">
-		<div class="hd">Change Log Entry</div>
-		<div class="bd">
-			<?php
-				$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
-				echo $block->render('html');
-			?>
-		</div>
-		<div class="ft"></div>
-	</div>
-</form>
-<script type="text/javascript">
-	var changeLogForm = new YAHOO.widget.Overlay("changeLogEntry_fields");
-	changeLogForm.center();
 
-	function getChangeLog(form) {
-		changeLogForm.render();
-		changeLogForm.show();
-	}
-</script>
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
+		echo $block->render('html');
+	?>
+</form>

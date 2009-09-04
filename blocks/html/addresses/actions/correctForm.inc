@@ -7,7 +7,8 @@
  */
 ?>
 <h1>Correct this address</h1>
-<form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php">
+<form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
+	onsubmit="getChangeLog(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -20,11 +21,9 @@
 		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
-	<fieldset id="changeLogEntry_fields">
-		<legend>Change Log Entry</legend>
-		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
-			echo $block->render('html');
-		?>
-	</fieldset>
+
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
+		echo $block->render('html');
+	?>
 </form>
