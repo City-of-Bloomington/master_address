@@ -21,18 +21,15 @@
 		<button type="submit" class="save">Save</button>
 	</fieldset>
 
-	<div class="yui-skin-sam">
-		<div id="changeLogEntry_fields">
-			<div class="hd">Change Log Entry</div>
-			<div class="bd">
-				<?php
-					$block = new Block('changeLogs/changeLogEntryFields.inc',
-										array('action'=>'verify'));
-					echo $block->render('html');
-				?>
-			</div>
-			<div class="ft"></div>
+	<div id="changeLogEntry_fields">
+		<div class="hd">Change Log Entry</div>
+		<div class="bd">
+			<?php
+				$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'verify'));
+				echo $block->render('html');
+			?>
 		</div>
+		<div class="ft"></div>
 	</div>
 </form>
 <script type="text/javascript">

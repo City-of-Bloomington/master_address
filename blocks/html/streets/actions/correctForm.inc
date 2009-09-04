@@ -8,7 +8,8 @@
  */
 ?>
 <h1>Update Street</h1>
-<form method="post" action="<?php echo BASE_URL; ?>/streets/actions.php">
+<form method="post" action="<?php echo BASE_URL; ?>/streets/actions.php"
+	onsubmit="getChangeLog(this); return false;">
 	<fieldset><legend>Street Info</legend>
 		<input name="street_id" type="hidden" value="<?php echo $this->street->getStreet_id(); ?>" />
 		<input name="action" type="hidden" value="correct" />
@@ -45,11 +46,23 @@
 
 		<button type="submit" class="submit">Save Changes</button>
 	</fieldset>
-	<fieldset id="changeLogEntry_fields">
-		<legend>Change Log Entry</legend>
-		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
-			echo $block->render('html');
-		?>
-	</fieldset>
+	<div id="changeLogEntry_fields">
+		<div class="hd">Change Log Entry</div>
+		<div class="bd">
+			<?php
+				$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
+				echo $block->render('html');
+			?>
+		</div>
+		<div class="ft"></div>
+	</div>
 </form>
+<script type="text/javascript">
+	var changeLogForm = new YAHOO.widget.Overlay("changeLogEntry_fields");
+	changeLogForm.center();
+
+	function getChangeLog(form) {
+		changeLogForm.render();
+		changeLogForm.show();
+	}
+</script>
