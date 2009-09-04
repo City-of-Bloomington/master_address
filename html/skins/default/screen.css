@@ -186,3 +186,5 @@ a.unsubscribe { width:22px; height:22px; background-image:url('images/buttons/ma
 .unpublished { text-decoration:line-through; }
 
 .yui-skin-sam .yui-ac { font-size:100%; margin-bottom:1em; }
+.yui-skin-sam .yui-overlay { color:white; background-color:#737373; padding:10px; }
+.yui-skin-sam .yui-overlay .hd { font-size:12pt; font-weight:bold; }
