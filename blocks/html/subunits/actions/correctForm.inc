@@ -7,7 +7,7 @@
  */
 ?>
 <h1>Correct this subunit</h1>
-<form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php">
+<form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php" onsubmit="getChangeLog(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
@@ -16,11 +16,9 @@
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
-	<fieldset id="changeLogEntry_fields">
-		<legend>Change Log Entry</legend>
-		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
-			echo $block->render('html');
-		?>
-	</fieldset>
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
+		echo $block->render('html');
+	?>
+
 </form>

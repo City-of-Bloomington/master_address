@@ -3,6 +3,7 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @author W Sibo <sibow@bloomington.in.gov>
  * @param GET subunit_id
  * @param GET action
  */
@@ -59,6 +60,8 @@ $address = $subunit->getAddress();
 $template = new Template('two-column');
 $template->blocks[] = new Block('subunits/breadcrumbs.inc',array('subunit'=>$subunit));
 $template->blocks[] = new Block("subunits/actions/{$action}Form.inc",array('subunit'=>$subunit));
+$template->blocks[] = new Block('changeLogs/changeLog.inc',
+									array('changeLog'=>$subunit->getChangeLog()));
 $template->blocks[] = new Block('subunits/subunitStatusChangeList.inc',
 								array('subunitStatusChangeList'=>$subunit->getStatusChangeList()));
 

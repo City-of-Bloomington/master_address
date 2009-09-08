@@ -10,7 +10,7 @@
 	<div class="hd">Change Log Entry</div>
 	<div class="bd">
 		<div><p>Before saving, you must specify your rationale for this change:</p>
-			<textarea name="changeLogEntry[rationale]" rows="4" cols="50"></textarea>
+			<textarea name="changeLogEntry[notes]" rows="4" cols="50"></textarea>
 			<input type="hidden" name="changeLogEntry[action]" id="changeLogEntry-action"
 					value="<?php echo View::escape($this->action); ?>" />
 		</div>

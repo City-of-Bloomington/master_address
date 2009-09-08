@@ -15,7 +15,7 @@
 
 		<div>
 		I, <?php echo View::escape($_SESSION['USER']->getFullname()); ?>,
-		verify that this subunit is accurate at this point in time.
+		verify that this subunit is to be retired at this point in time.
 		</div>
 
 		<button type="submit" class="save">Save</button>
@@ -24,7 +24,7 @@
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>
 
 		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'verify'));
+			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'retire'));
 			echo $block->render('html');
 		?>
 

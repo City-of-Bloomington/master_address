@@ -62,7 +62,6 @@ if (isset($_POST['changeLogEntry'])) {
 				}
 			}
 
-
 			$address->save($changeLogEntry);
 		}
 		else {
