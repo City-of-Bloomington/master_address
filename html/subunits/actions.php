@@ -30,7 +30,6 @@ catch (Exception $e) {
 
 $action = $_REQUEST['action'];
 
-
 // All actions will involve updating the change log
 // Some actions do not involve changing any fields of a subunit
 // However, we still want to update the change log when these actions occur.
@@ -48,13 +47,17 @@ if (isset($_POST['changeLogEntry'])) {
 		else{
 			$subunit->updateChangeLog($changeLogEntry);
 		}
-		header('Location: '.$subunit->getURL());
+		if($action == 'retire'){
+			$subunit->saveStatus('retired');
+		}
+		header('Location: '.$subunit->getAddress()->getURL());
 		exit();
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
+
 $address = $subunit->getAddress();
 
 $template = new Template('two-column');

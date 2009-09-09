@@ -18,7 +18,7 @@ class Subunit
 	private $status_code;	// Used for pre-loading the latest status
 	private $description; 	// Used for pre-loading the latest status
 	private $status;	// Stores the latest AddressStatus object
-
+	private $statusChange;// stores the latest SubunitStatusChange
 
 	/**
 	 * Populates the object with data
@@ -304,7 +304,7 @@ class Subunit
 	 */
 	public function getStatus(Date $date=null)
 	{
-		if (!$date) {
+		if (!$date && $this->status) {
 			return $this->status;
 		}
 		else {
@@ -314,7 +314,31 @@ class Subunit
 				return $list[0];
 			}
 		}
+		return null;
 	}
+
+	/**
+	 * Returns the StatusChange for this subunit that was active on the given date
+	 *
+	 * Defaults to the current date
+	 *
+	 * @param Date $date
+	 */
+	public function getStatusChange(Date $date=null)
+	{
+		if (!$date && $this->statusChange) {
+			return $this->statusChange;
+		}
+		else {
+			$list = new SubunitStatusChangeList();
+			$list->find(array('subunit_id'=>$this->subunit_id,'current'=>$date));
+			if (count($list)) {
+				return $list[0];
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * @return string
 	 */
@@ -340,7 +364,7 @@ class Subunit
 		}
 		return $changeLog;
 	}
-
+	 
 	/**
 	 * Saves a new AddressStatusChange to the database
 	 *
@@ -351,8 +375,9 @@ class Subunit
 		if (!$status instanceof AddressStatus) {
 			$status = new AddressStatus($status);
 		}
-		$currentStatus = $this->getStatus();
-		if (!$currentStatus) {
+		$currentStatus = $this->getStatusChange();
+		if (!$currentStatus ||
+			($currentStatus->getStatus_code() != $status->getStatus_code())) {
 			$newStatus = new SubunitStatusChange();
 			$newStatus->setSubunit($this);			
 			$newStatus->setStreet_address_id($this->street_address_id);

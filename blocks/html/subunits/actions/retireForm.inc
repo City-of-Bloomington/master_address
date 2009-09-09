@@ -6,11 +6,11 @@
  * @param Subunit $this->subunit
  */
 ?>
-<h1>Verify Address</h1>
+<h1>Retire Subunit</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php"
   onsubmit="getChangeLog(this); return false;">
 	<fieldset>
-		<input type="hidden" name="action" value="verify" />
+		<input type="hidden" name="action" value="retire" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
 
 		<div>

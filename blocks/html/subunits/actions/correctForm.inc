@@ -6,7 +6,7 @@
  * @param Address $this->address
  */
 ?>
-<h1>Correct this subunit</h1>
+<h1>Correct This Subunit</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php" onsubmit="getChangeLog(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="correct" />
