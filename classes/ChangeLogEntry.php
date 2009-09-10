@@ -21,7 +21,7 @@ class ChangeLogEntry
 	private $user;
 	private $contact;
 
-	private $actions = array('activate'=>'activated','assign'=>'assigned',
+	private $actions = array('add'=>'added','assign'=>'assigned','activate'=>'activated',
 							 'change'=>'changed','correct'=>'corrected',
 							 'move'=>'moved to location',
 							 'readdress'=>'readdressed','reassign'=>'reassigned',

@@ -44,7 +44,9 @@ tr { }
 td { padding:6px 4px 6px 4px; vertical-align:top; border-bottom:1px solid #dddddd; }
 th { text-align:left; background-color:#dddddd; padding:6px 4px 6px 4px; vertical-align: top; font-weight:bold; border-bottom:1px solid #dddddd; }
 th a:link,th a:visited { color:#3366cc; background-color:inherit; }
+
 form table { border:none; }
+form table th, form table td { border:none; }
 
 ul { margin-top:4px; }
 ul.compact,ul.compact li { list-style-type:none; margin:0; padding:0; }

@@ -1020,24 +1020,153 @@ class Address
 	/**
 	 * Saves a new AddressStatusChange to the database
 	 *
+	 * As we update the status history table, we need to clean up old data
+	 * If there is no current status, we just save the new status.
+	 * If there is a current status AND it's the same as the new status - then we don't do anything
+	 *
+	 * Data Cleanup: If there is a current status, and it's not the same as the
+	 * new status, we need to set end dates on ALL the old statuses that need them.
+	 * There maybe be multiple status changes in the database, that have not had
+	 * their end dates set.  They didn't use to do it that way, but now they do.
+	 *
 	 * @param AddressStatus|string $status
 	 */
-	 public function saveStatus($status)
-	 {
+	public function saveStatus($status)
+	{
 		if (!$status instanceof AddressStatus) {
 			$status = new AddressStatus($status);
 		}
 		$currentStatus = $this->getStatus();
-		if (!$currentStatus) {
+		// If we don't have a current status, or it's different than the new one.
+		// We create the new status change object.  We'll save it later
+		if (!$currentStatus ||
+			($currentStatus->getStatus_code() != $status->getStatus_code())) {
 			$newStatus = new AddressStatusChange();
 			$newStatus->setAddress($this);
 			$newStatus->setStatus($status);
-			$newStatus->save();
 		}
+
+		// If we have a current status, and it's not the same as the new one,
+		// Do our data cleanup - use today's date on all the empty end dates
 		if ($currentStatus
 			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
-			$currentStatus->setEnd_date(time());
-			$currentStatus->save();
+			$zend_db = Database::getConnection();
+			$zend_db->update('mast_address_status',
+								array('end_date'=>date('Y-m-d H:i:s')),
+								'end_date is null');
 		}
-	 }
+
+		// If we have a new status, go ahead and save it.
+		// The data should be nice and clean now
+		if (isset($newStatus)) {
+			$newStatus->save();
+		}
+	}
+
+	/**
+	 * Correct an error in the Address
+	 *
+	 * Corrections are for people to fix invalid data and other typos for the address.
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function correct($post,$changeLogEntry)
+	{
+		// These are the fields that are allowed to be set during a correction
+		$fields = array('street_number','address_type','zip','zipplus4',
+						'trash_pickup_day','recycle_week','jurisdiction_id',
+						'township_id','section','quarter_section',
+						'census_block_fips_code','tax_jurisdiction',
+						'latitude','longitude',
+						'state_plane_x_coordinate','state_plane_y_coordinate');
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$this->$set($post[$field]);
+			}
+		}
+
+		// Update the mailable, livable flags on all the locations for this address
+		foreach ($this->locations as $location) {
+			$location->setMailable(isset($post['mailable']));
+			$location->setLivable(isset($post['livable']));
+			$location->setLocation_type_id($_POST['location_type_id']);
+			$location->save();
+		}
+
+		$this->save($changeLogEntry);
+	}
+
+	/**
+	 * Process a change of address
+	 *
+	 * For a change of address, we need to preserve the old address.
+	 * We retire the old address, and create a new address at the same location
+	 * The new address will probably have a different street and street number.
+	 *
+	 * @param int $street_id
+	 * @param string $street_number
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function readdress($street_id,$street_number,ChangeLogEntry $changeLogEntry)
+	{
+		$newAddress = clone($this);
+		$newAddress->setStreet_id($street_id);
+		$newAddress->setStreet_number($street_number);
+		$newAddress->save($changeLogEntry);
+
+		$location = $this->getLocation();
+		$newLocation = clone($location);
+		$newLocation->setAddress($newAddress);
+		$newLocation->save();
+
+		$this->retire($changeLogEntry);
+	}
+
+	/**
+	 * Sets the latest status for this address to CURRENT
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function unretire(ChangeLogEntry $changeLogEntry)
+	{
+		$this->saveStatus('CURRENT');
+		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * Sets the latest status for this address to RETIRED
+	 *
+	 * If there are subunits, they will be retired as well.
+	 * If there are Locations with this address as the only CURRENT address,
+	 * the locations are retired.
+	 *
+	 * You must pass in the changeLogEntry to be used for updating the
+	 * subunits and locations
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function retire(ChangeLogEntry $changeLogEntry)
+	{
+		$retired = new AddressStatus('RETIRED');
+		$this->saveStatus($retired);
+
+		foreach ($this->getSubunits() as $subunit) {
+			$subunit->saveStatus($retired);
+			$subunit->save($changeLogEntry);
+		}
+
+		foreach ($this->getLocations() as $location) {
+			$weShouldRetireLocation = true;
+			foreach ($location->getAddresses() as $address) {
+				if ($address->getStatus()->getStatus_code() != $retired->getStatus_code()) {
+					$weShouldRetireLocation = false;
+				}
+			}
+			if ($weShouldRetireLocation) {
+				$location->saveStatus($retired);
+				$location->save();
+			}
+		}
+	}
 }

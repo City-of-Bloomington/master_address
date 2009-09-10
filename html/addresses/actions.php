@@ -33,40 +33,38 @@ $action = $_REQUEST['action'];
 // All actions will involve updating the change log
 // Some actions do not involve changing any fields of an address.
 // However, we still want to update the change log when these actions occur.
+// Each of these actions has been written into the Address class.
+// The Address class will handle saving whatever needs to be saved to the database.
 if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
 
-		if (isset($_POST['address'])) {
-			$actionFields = array('correct'=>array('street_number','address_type','zip','zipplus4',
-													'trash_pickup_day','recycle_week','jurisdiction_id',
-													'township_id','section','quarter_section',
-													'census_block_fips_code','tax_jurisdiction',
-													'latitude','longitude',
-													'state_plane_x_coordinate','state_plane_y_coordinate'),
-									'readdress'=>array('street_number')
-									);
-			foreach ($actionFields[$action] as $field) {
-				if (isset($_POST['address'][$field])) {
-					$set = 'set'.ucfirst($field);
-					$address->$set($_POST['address'][$field]);
-				}
-			}
+		switch ($action) {
+			case 'correct':
+				$address->correct($_POST,$changeLogEntry);
+				break;
 
-			// Mailable and Livable need to be saved to the Locations
-			if ($action == 'correct') {
-				foreach ($address->getLocations() as $location) {
-					$location->setMailable(isset($_POST['mailable']));
-					$location->setLivable(isset($_POST['livable']));
-					$location->save($changeLogEntry);
-				}
-			}
+			case 'readdress':
+				$address->readdress($_POST['street_id'],$_POST['street_number'],$changeLogEntry);
+				break;
 
-			$address->save($changeLogEntry);
+			case 'retire':
+				$address->retire($changeLogEntry);
+				break;
+
+			case 'unretire':
+				$address->unretire($changeLogEntry);
+				break;
+
+			case 'reassign':
+				$address->reassign($changeLogEntry);
+				break;
+
+			case 'verify':
+				$address->verify($changeLogEntry);
+				break;
 		}
-		else {
-			$address->updateChangeLog($changeLogEntry);
-		}
+
 		header('Location: '.$address->getURL());
 		exit();
 	}

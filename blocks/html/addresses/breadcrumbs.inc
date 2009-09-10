@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address optional
  * @param Street $this->street optional
- *
+ * @param string $this->action (optional)
  */
 $name="";
 
@@ -21,14 +21,17 @@ else if(isset($this->address)){
 		<?php
 			$name = View::escape($street->getStreetName());
 			echo "<li><a href=\"{$street->getURL()}\">$name</a></li>";
+
 			if(isset($this->address)){
-				echo "
-				<li>
-					<a href=\"{$this->address->getURL()}\">
-						{$this->address->getStreet_number()}
-					</a>
-				</li>
-				";
+				$number = $this->address->getStreet_number();
+				if ($number) {
+					echo "<li><a href=\"{$this->address->getURL()}\">$number</a></li>";
+				}
+			}
+
+			if (isset($this->action)) {
+				$action = View::escape(ucfirst($this->action));
+				echo "<li>$action</li>";
 			}
 		?>
 	</ul>

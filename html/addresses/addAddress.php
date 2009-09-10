@@ -4,52 +4,64 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
- *
  */
-
 if (!userIsAllowed('Address')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL.'/addresses');
 	exit();
 }
-$street = new Street();
-$location = new Location();
+
 $address = new Address();
-if (isset($_REQUEST['street_id'])) {
-	$street = new Street($_REQUEST['street_id']);
+if (isset($_REQUEST['street_id']) && $_REQUEST['street_id']) {
+	try {
+		$address->setStreet_id($_REQUEST['street_id']);
+	}
+	catch (Exception $e) {
+		// Ignore any bad streets
+	}
 }
-if (isset($_REQUEST['lid']) && $_REQUEST['lid']){ // meant the location id
+
+$location = new Location();
+if (isset($_REQUEST['lid']) && $_REQUEST['lid']) { // meant the location id
 	$location = new Location($_REQUEST['lid']);
 }
-if (isset($_POST['address'])) {
-	foreach ($_POST['address'] as $field=>$value) {
-		$set = 'set'.ucfirst($field);
-		$address->$set($value);
+
+$action = isset($_POST['action']) ? $_POST['action'] : 'add';
+
+if (isset($_POST['action'])) {
+	$fields = array('street_id','street_number',
+					'address_type','tax_jurisdiction','jurisdiction_id','township_id',
+					'section','quarter_section','subdivision_id','plat_id','plat_lot_number',
+					'street_address_2','city','state','zip','zipplus4',
+					'latitude','longitude','state_plane_x_coordinate','state_plane_y_coordinate',
+					'census_block_fips_code','notes');
+	foreach ($fields as $field) {
+		if (isset($_POST[$field])) {
+			$set = 'set'.ucfirst($field);
+			$address->$set($_POST[$field]);
+		}
 	}
-	$address->setStreet_id($street->getId());
+
+
 	try {
-		$changeLog = new ChangeLogEntry($_SESSION['USER'],array('action'=>$_POST['action']));
-		$address->save($changeLog);
-		$address->saveStatus("Current");
+		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],array('action'=>$action));
+		$address->save($changeLogEntry);
+		$address->saveStatus('CURRENT');
 
-		if (!isset($_POST['lid']) || !$_POST['lid']) {
+		if (!$_POST['lid']) {
 			$location = new Location();
-			$location->setStreet_address_id($address->getStreet_address_id());
+			$location->setAddress($address);
 		}
 
-		if ($_POST['location']) {
-			foreach ($_POST['location'] as $field=>$value) {
-				$set = 'set'.ucfirst($field);
-				$location->$set($value);
-			}
-			$location->save($changeLog);
-		}
+		$location->setMailable(isset($_POST['mailable']));
+		$location->setLivable(isset($_POST['livable']));
+		$location->setLocation_type_id($_POST['location_type_id']);
+		$location->save($changeLogEntry);
 
-		if(!isset($_POST['batch_mode'])){
+		if (!isset($_POST['batch_mode'])) {
 			header('Location: '.$address->getStreet()->getURL());
 			exit();
 		}
-
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -57,8 +69,14 @@ if (isset($_POST['address'])) {
 }
 
 $template = new Template();
+$template->blocks[] = new Block('addresses/breadcrumbs.inc',
+								array('address'=>$address,'action'=>$action));
 
-$template->blocks[] = new Block('addresses/breadcrumbs.inc',array('street'=>$street));
-
-$template->blocks[] = new Block('addresses/addAddressForm.inc',array('street'=>$street,'address'=>$address,'location'=>$location));
+// If we've successfully saved the address, let the user know
+if ($address->getId()) {
+	$template->blocks[] = new Block('addresses/partials/success.inc',
+									array('address'=>$address));
+}
+$template->blocks[] = new Block('addresses/addAddressForm.inc',
+								array('address'=>$address,'location'=>$location));
 echo $template->render();

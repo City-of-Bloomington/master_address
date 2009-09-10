@@ -15,8 +15,8 @@
 			?>
 		</td>
 	</tr>
-	<tr><td><label for="address-street_number" class="required">Number</label></td>
-		<td><input name="address[street_number]" id="address-street_number"
+	<tr><td><label for="street_number" class="required">Number</label></td>
+		<td><input name="street_number" id="street_number"
 					value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
 		</td>
 	</tr>

@@ -22,6 +22,14 @@
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
+	<fieldset>
+		<?php
+			$block = new Block('addresses/partials/locationFields.inc',
+								array('location'=>$this->address->getLocation()));
+			echo $block->render('html');
+		?>
+	</fieldset>
+
 	<?php
 		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
 		echo $block->render('html');
