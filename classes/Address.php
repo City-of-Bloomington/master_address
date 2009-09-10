@@ -886,11 +886,21 @@ class Address
 	public function getLocation()
 	{
 		if (!$this->location) {
+			// See if this address is the active location
 			$list = new LocationList(array('street_address_id'=>$this->street_address_id,
 											'subunit_id'=>null,
 											'active'=>'Y'));
 			if (count($list)) {
 				$this->location = $list[0];
+			}
+			// This address is not the active address for any location.
+			else {
+				// See if this address has any locations at all.
+				$list = new LocationList(array('street_address_id'=>$this->street_address_id,
+												'subunit_id'=>null));
+				if (count($list)) {
+					$this->location = $list[0];
+				}
 			}
 		}
 		return $this->location;
