@@ -18,7 +18,7 @@
 		verify that this address is accurate at this point in time.
 		</div>
 
-		<button type="submit" class="save">Save</button>
+		<button type="submit" class="save">Verify</button>
 	</fieldset>
 
 	<?php
