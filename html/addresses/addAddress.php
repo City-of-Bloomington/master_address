@@ -15,6 +15,7 @@ $address = new Address();
 if (isset($_REQUEST['street_id']) && $_REQUEST['street_id']) {
 	try {
 		$address->setStreet_id($_REQUEST['street_id']);
+		$street = new Street($_REQUEST['street_id']);
 	}
 	catch (Exception $e) {
 		// Ignore any bad streets
@@ -41,7 +42,6 @@ if (isset($_POST['action'])) {
 			$address->$set($_POST[$field]);
 		}
 	}
-
 
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],array('action'=>$action));
@@ -70,7 +70,7 @@ if (isset($_POST['action'])) {
 
 $template = new Template();
 $template->blocks[] = new Block('addresses/breadcrumbs.inc',
-								array('address'=>$address,'action'=>$action));
+								array('street'=>$street,'action'=>$action));
 
 // If we've successfully saved the address, let the user know
 if ($address->getId()) {

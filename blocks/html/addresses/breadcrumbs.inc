@@ -12,7 +12,7 @@ $name="";
 if(isset($this->street)){
 	$street = $this->street;
 }
-else if(isset($this->address)){
+elseif(isset($this->address)){
 	$street = $this->address->getStreet();
 }
 ?>

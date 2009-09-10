@@ -1063,7 +1063,7 @@ class Address
 			$zend_db = Database::getConnection();
 			$zend_db->update('mast_address_status',
 								array('end_date'=>date('Y-m-d H:i:s')),
-								'end_date is null');
+								"street_address_id='{$this->street_address_id}'  and end_date is null");
 		}
 
 		// If we have a new status, go ahead and save it.
@@ -1097,10 +1097,10 @@ class Address
 		}
 
 		// Update the mailable, livable flags on all the locations for this address
-		foreach ($this->locations as $location) {
+		foreach ($this->getLocations() as $location) {
 			$location->setMailable(isset($post['mailable']));
 			$location->setLivable(isset($post['livable']));
-			$location->setLocation_type_id($_POST['location_type_id']);
+			$location->setLocation_type_id($post['location_type_id']);
 			$location->save();
 		}
 

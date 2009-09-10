@@ -28,10 +28,11 @@ if ($template->outputFormat=='html') {
 $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 
 if ($template->outputFormat=='html') {
-	$template->blocks[] = new Block('changeLogs/changeLog.inc',
-									array('changeLog'=>$address->getChangeLog()));
 	$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
 									array('addressStatusChangeList'=>$address->getStatusChangeList()));
+	
+	$template->blocks[] = new Block('changeLogs/changeLog.inc',
+									array('changeLog'=>$address->getChangeLog()));
 
 	$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
 													array('address'=>$address));

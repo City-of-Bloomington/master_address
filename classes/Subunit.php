@@ -274,7 +274,6 @@ class Subunit
 		return new SubunitStatusChangeList($search);
 	}
 
-
 	/**
 	 * Alias for getSudtype()
 	 *
@@ -382,13 +381,19 @@ class Subunit
 			$newStatus->setSubunit($this);			
 			$newStatus->setStreet_address_id($this->street_address_id);
 			$newStatus->setStatus($status);
-			$newStatus->save();
 		}
 		if ($currentStatus
 			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
-			$currentStatus->setEnd_date(time());
-			$currentStatus->save();
+			$zend_db = Database::getConnection();
+			$zend_db->update('mast_address_subunit_status',
+								array('end_date'=>date('Y-m-d H:i:s')),
+								"end_date is null and subunit_id='{$this->subunit_id}'");
 		}
+		// If we have a new status, go ahead and save it.
+		// The data should be nice and clean now
+		if (isset($newStatus)) {
+			$newStatus->save();
+		}		
 	 }
 	
 }

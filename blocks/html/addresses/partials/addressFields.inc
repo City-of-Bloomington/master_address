@@ -81,9 +81,9 @@
 					foreach ($list as $township) {
 						$name = View::escape($township->getName());
 						$selected = $this->address->getTownship_id() == $township->getId()
-							? 'selected="selecte"'
+							? 'selected="selected"'
 							: '';
-						echo "<option value=\"{$township->getId()}\">$name</option>";
+						echo "<option $selected value=\"{$township->getId()}\">$name</option>";
 					}
 				?>
 			</select>

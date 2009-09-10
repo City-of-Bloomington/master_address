@@ -14,7 +14,7 @@
 	<tr><td><label for="mailable">Mailable</label></td>
 		<td><?php
 				$checked = $this->location->isMailable() ? 'checked="checked"' : '';
-				echo "<input name=\"mailable\" id=\"mailable\" type=\"checkbox\" $checked />";
+				echo "<input name=\"mailable\" value=\"y\" id=\"mailable\" type=\"checkbox\" $checked />";
 			?>
 		</td>
 	</tr>
@@ -22,7 +22,7 @@
 	<tr><td><label for="livable">Livable</label></td>
 		<td><?php
 				$checked = $this->location->isLivable() ? 'checked="checked"' : '';
-				echo "<input name=\"livable\" id=\"livable\" type=\"checkbox\" $checked />";
+				echo "<input name=\"livable\" value=\"y\" id=\"livable\" type=\"checkbox\" $checked />";
 			?>
 		</td>
 	</tr>
