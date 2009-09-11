@@ -20,12 +20,15 @@
 			";
 		}
 	?>
-	<table>
-		<tr><th>Type</th>
-			<th>#</th>
-			<th>Status</th>
-		</tr>
 		<?php
+	        if(count($this->subunitList)){
+				echo "
+				<table>
+					<tr><th>Type</th>
+						<th>#</th>
+						<th>Status</th>
+					</tr>";
+			}
 			foreach ($this->subunitList as $subunit) {
 				$number = View::escape($subunit->getIdentifier());
 				$number = "<a href=".BASE_URL."/subunits/viewSubunit.php?subunit_id=".$subunit->getId().">$number</a>";
@@ -36,6 +39,9 @@
 				</tr>
 				";
 			}
+			if(count($this->subunitList)){
+				echo "</table>";
+			}
 		?>
-	</table>
+
 </div>

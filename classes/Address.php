@@ -927,8 +927,20 @@ class Address
 	 */
 	public function isLivable()
 	{
-		return ($this->getLocation()  && $this->getLocation()->isLivable());
+		return ($this->getLocation() && $this->getLocation()->isLivable());
 	}
+	
+	
+	/**
+	 * Returns the Active information from this address's primary location
+	 *
+	 * @return boolean
+	 */
+	public function isActive()
+	{
+		return ($this->getLocation() && $this->getLocation()->isActive());
+	}
+	
 
 	/**
 	 * @return PurposeList

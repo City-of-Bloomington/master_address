@@ -10,6 +10,22 @@
 	<tr><th>Location</th>
 		<th><?php echo $this->location->getLocation_id(); ?></th>
 	</tr>
+	
+	<tr><td><label for="location_type_id">Location Type</label></td>
+		<td><select name="location_type_id">
+				<?php
+					$types = new LocationTypeList();
+					$types->find();
+					foreach ($types as $type) {
+						$selected = $this->location->getLocation_type_id()==$type->getId()
+									? $selected = 'selected="selected"'
+									: '';
+						echo "<option $selected >{$type->getId()}</option>";
+					}
+				?>
+			</select>
+		</td>
+	</tr>
 
 	<tr><td><label for="mailable">Mailable</label></td>
 		<td><?php
@@ -27,19 +43,9 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="location_type_id">Location Type</label></td>
-		<td><select name="location_type_id">
-				<?php
-					$types = new LocationTypeList();
-					$types->find();
-					foreach ($types as $type) {
-						$selected = $this->location->getLocation_type_id()==$type->getId()
-									? $selected = 'selected="selected"'
-									: '';
-						echo "<option $selected >{$type->getId()}</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
+	<tr><td><label for="active">Active</label></td>
+		<?php
+			$checked = $this->location->isActive()?'checked=\"checked\"':'';
+			echo "<td><input type=\"checkbox\" name=\"active\" value=\"Y\" $checked /></td></tr>";
+		?>
 </table>

@@ -10,6 +10,7 @@ $township = $this->address->getTownship()
 			: '';
 $mailable = $this->address->isMailable() ? 'Yes' : 'No';
 $livable = $this->address->isLivable() ? 'Yes' : 'No';
+$active = $this->address->isActive()? 'Yes' : 'No';
 echo "
 <table>
 	<tr><th>Type</th>
@@ -21,6 +22,10 @@ echo "
 	<tr><th>Livable</th>
 		<td>$livable</td>
 	</tr>
+	<tr><th>Active</th>
+		<td>$active</td>
+	</tr>
+	
 	<tr><th>Zip Code</th>
 		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
 	</tr>
