@@ -16,11 +16,11 @@
 				<table>
 					<tr><td>Action</td>
 						<td><label>
-								<input type="radio" name="action" value="add" checked="checked" />
+								<input type="radio" name="action" value="add" />
 								Add
 							</label>
 							<label>
-								<input type="radio" name="action" value="assign" />
+								<input type="radio" name="action" value="assign" checked="checked" />
 								Assign
 							</label>
 						</td>
