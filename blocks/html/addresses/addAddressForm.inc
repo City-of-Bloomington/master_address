@@ -40,7 +40,7 @@
 			</fieldset>
 
 			<fieldset>
-				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
+				<?php include APPLICATION_HOME.'/blocks/html/locations/partials/addressFields.inc'; ?>
 			</fieldset>
 		</td>
 		<td><fieldset>
