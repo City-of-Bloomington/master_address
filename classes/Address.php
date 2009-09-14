@@ -913,11 +913,7 @@ class Address
 	 */
 	public function isMailable()
 	{
-		$location = $this->getLocation();
-		if ($location && $location->isMailable()) {
-			return true;
-		}
-		return false;
+		return ($this->getLocation() && $this->getLocation()->isLivable($this));
 	}
 
 	/**
@@ -927,20 +923,8 @@ class Address
 	 */
 	public function isLivable()
 	{
-		return ($this->getLocation() && $this->getLocation()->isLivable());
+		return ($this->getLocation() && $this->getLocation()->isLivable($this));
 	}
-	
-	
-	/**
-	 * Returns the Active information from this address's primary location
-	 *
-	 * @return boolean
-	 */
-	public function isActive()
-	{
-		return ($this->getLocation() && $this->getLocation()->isActive());
-	}
-	
 
 	/**
 	 * @return PurposeList
@@ -1110,10 +1094,10 @@ class Address
 
 		// Update the mailable, livable flags on all the locations for this address
 		foreach ($this->getLocations() as $location) {
-			$location->setMailable(isset($post['mailable']));
-			$location->setLivable(isset($post['livable']));
-			$location->setLocation_type_id($post['location_type_id']);
-			$location->save();
+			$data['mailable'] = isset($post['mailable']);
+			$data['livable'] = isset($post['livable']);
+			$data['locationType'] = $post['location_type_id'];
+			$location->update($data,$this);
 		}
 
 		$this->save($changeLogEntry);
@@ -1138,9 +1122,14 @@ class Address
 		$newAddress->save($changeLogEntry);
 
 		$location = $this->getLocation();
-		$newLocation = clone($location);
-		$newLocation->setAddress($newAddress);
-		$newLocation->save();
+		$data['mailable'] = $location->isMailable($this);
+		$data['livable'] = $location->isLivable($this);
+		$data['locationType'] = $location->getLocationType($this);
+
+		$newLocation = new Location();
+		$newLocation->assign($newAddress);
+		$newLocation->update($data,$this);
+		$newLocation->saveStatus('CURRENT');
 
 		$this->retire($changeLogEntry);
 	}
@@ -1187,8 +1176,9 @@ class Address
 			}
 			if ($weShouldRetireLocation) {
 				$location->saveStatus($retired);
-				$location->save();
 			}
 		}
+
+		$this->updateChangeLog($changeLogEntry);
 	}
 }

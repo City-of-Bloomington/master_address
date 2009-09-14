@@ -23,8 +23,8 @@ if (isset($_REQUEST['street_id']) && $_REQUEST['street_id']) {
 }
 
 $location = new Location();
-if (isset($_REQUEST['lid']) && $_REQUEST['lid']) { // meant the location id
-	$location = new Location($_REQUEST['lid']);
+if (isset($_REQUEST['location_id']) && $_REQUEST['location_id']) {
+	$location = new Location($_REQUEST['location_id']);
 }
 
 $action = isset($_POST['action']) ? $_POST['action'] : 'add';
@@ -48,15 +48,19 @@ if (isset($_POST['action'])) {
 		$address->save($changeLogEntry);
 		$address->saveStatus('CURRENT');
 
-		if (!$_POST['lid']) {
+		$type = new LocationType($_POST['location_type_id']);
+		if ($_POST['location_id']) {
+			$location->assign($address,$type);
+		}
+		else {
 			$location = new Location();
-			$location->setAddress($address);
+			$location->assign($address,$type);
+			$location->activateAddress($address);
 		}
 
-		$location->setMailable(isset($_POST['mailable']));
-		$location->setLivable(isset($_POST['livable']));
-		$location->setLocation_type_id($_POST['location_type_id']);
-		$location->save($changeLogEntry);
+		$data['mailable'] = isset($_POST['mailable']);
+		$data['livable'] = isset($_POST['livable']);
+		$location->update($data,$address);
 
 		if (!isset($_POST['batch_mode'])) {
 			header('Location: '.$address->getStreet()->getURL());

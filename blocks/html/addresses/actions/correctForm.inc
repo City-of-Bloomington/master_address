@@ -25,7 +25,8 @@
 	<fieldset>
 		<?php
 			$block = new Block('addresses/partials/locationFields.inc',
-								array('location'=>$this->address->getLocation()));
+								array('address'=>$this->address,
+										'location'=>$this->address->getLocation()));
 			echo $block->render('html');
 		?>
 	</fieldset>

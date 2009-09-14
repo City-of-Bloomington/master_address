@@ -44,7 +44,7 @@
 			</fieldset>
 		</td>
 		<td><fieldset>
-				<input type="hidden" name="lid" value="<?php echo $this->location->getLid(); ?>" />
+				<input type="hidden" name="location_id" value="<?php echo $this->location->getId(); ?>" />
 				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/locationFields.inc'; ?>
 			</fieldset>
 		</td>

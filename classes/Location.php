@@ -6,23 +6,7 @@
  */
 class Location
 {
-	private $lid;
 	private $location_id;
-	private $location_type_id;
-	private $street_address_id;
-	private $subunit_id;
-	private $mailable_flag;
-	private $livable_flag;
-	private $common_name;
-	private $active;
-
-
-	private $location;
-	private $locationType;
-	private $address;
-	private $subunit;
-
-
 
 	/**
 	 * Populates the object with data
@@ -34,126 +18,17 @@ class Location
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $lid
+	 * @param int $location_id
 	 */
-	public function __construct($lid=null)
+	public function __construct($location_id=null)
 	{
-		if ($lid) {
-			if (is_array($lid)) {
-				$result = $lid;
-			}
-			else {
-				$zend_db = Database::getConnection();
-				$sql = 'select * from address_location where lid=?';
-				$result = $zend_db->fetchRow($sql,array($lid));
-			}
-
-			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
-			}
-			else {
-				throw new Exception('locations/unknownLocation');
-			}
+		if ($location_id) {
+			$this->location_id = $location_id;
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->active = 'Y';
 		}
-	}
-
-	/**
-	 * we are cloning this class except for lid paramerter
-	 *
-	 */
-	public function __clone(){
-		$this->lid = null;
-	}
-
-	/**
-	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
-	 */
-	public function validate()
-	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->street_address_id || !$this->location_type_id || !$this->active) {
-			throw new Exception('missingRequiredFields');
-		}
-	}
-
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-
-		$data = array();
-		$data['location_id'] = $this->location_id;
-		$data['location_type_id'] = $this->location_type_id;
-		$data['street_address_id'] = $this->street_address_id;
-		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
-		$data['mailable_flag'] = $this->mailable_flag ? $this->mailable_flag : null;
-		$data['livable_flag'] = $this->livable_flag ? $this->livable_flag : null;
-		$data['common_name'] = $this->common_name ? $this->common_name : null;
-		$data['active'] = $this->active;
-
-		if ($this->lid) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('address_location',$data,"lid='{$this->lid}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-
-		// Some new locations we want to generate a new location_id
-		// as well as a new LID.  First we grab the location_id from it's sequence
-		if (!$data['location_id']) {
-			$data['location_id'] = $zend_db->nextSequenceId('location_id_s');
-			$this->location_id = $data['location_id'];
-		}
-
-		$zend_db->insert('address_location',$data);
-		if (Database::getType()=='oracle') {
-			$this->lid = $zend_db->lastSequenceId('location_lid_seq');
-		}
-		else {
-			throw new Exception('locations/unsupportedDatabaseCall');
-		}
-	}
-
-	//----------------------------------------------------------------
-	// Generic Getters
-	//----------------------------------------------------------------
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->getLid();
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getLid()
-	{
-		return $this->lid;
 	}
 
 	/**
@@ -165,101 +40,17 @@ class Location
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getLocation_type_id()
-	{
-		return $this->location_type_id;
-	}
-
-	/**
-	 * @return number
-	 */
-	public function getStreet_address_id()
-	{
-		return $this->street_address_id;
-	}
-
-	/**
-	 * @return number
-	 */
-	public function getSubunit_id()
-	{
-		return $this->subunit_id;
-	}
-
-	/**
-	 * @return number
-	 */
-	public function getMailable_flag()
-	{
-		return $this->mailable_flag;
-	}
-
-	/**
-	 * @return number
-	 */
-	public function getLivable_flag()
-	{
-		return $this->livable_flag;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCommon_name()
-	{
-		return $this->common_name;
-	}
-
-	/**
-	 * @return char
-	 */
-	public function getActive()
-	{
-		return $this->active;
-	}
-
-
-	/**
-	 * @return LocationType
-	 */
-	public function getLocationType()
-	{
-		if ($this->location_type_id) {
-			if (!$this->locationType) {
-				$this->locationType = new LocationType($this->location_type_id);
-			}
-			return $this->locationType;
-		}
-		return null;
-	}
-
-	/**
-	 * Looks up the Address associated with this Location.id
+	 * Alias for getLocation_id()
 	 *
-	 * Not to be confused with looking for addresses with Location.location_id
-	 * There will only be one address for each Location.id, but
-	 * there will be multiple addresses for each Location.location_id
-	 *
-	 * @return Address
+	 * @return int
 	 */
-	public function getAddress()
+	public function getId()
 	{
-		if ($this->street_address_id) {
-			if (!$this->address) {
-				$this->address = new Address($this->street_address_id);
-			}
-			return $this->address;
-		}
-		return null;
+		return $this->getLocation_id();
 	}
 
 	/**
-	 * Looks up all the address having this Location.location_id
-	 *
-	 * Not to be confused with looking for addresses that have Location.id
-	 * There will only be one address per Location.id (see: getAddress())
+	 * Looks up all the address for this location
 	 *
 	 * @return AddressList
 	 */
@@ -269,138 +60,104 @@ class Location
 	}
 
 	/**
-	 * Returns all the locations with this Location.location_id
+	 * @param Address|Subunit $address
+	 * @param LocationType $type
+	 */
+	public function assign($address,LocationType $type)
+	{
+		if ($address instanceof Address) {
+			$data['street_address_id'] = $address->getId();
+		}
+		elseif ($address instanceof Subunit) {
+			$data['street_address_id'] = $address->getStreet_address_id();
+			$data['subunit_id'] = $address->getId();
+		}
+		else {
+			throw new Exception('locations/invalidAddress');
+		}
+
+		$zend_db = Database::getConnection();
+
+		if (!$this->location_id) {
+			$this->location_id = $zend_db->nextSequenceId('location_id_s');
+		}
+
+		// If it's not in the database already, add a new row
+		$sql = 'select count(*) from address_location where location_id=? and street_address_id=?';
+		$parameters = array($this->location_id,$data['street_address_id']);
+		if (isset($data['subunit_id'])) {
+			$sql.= ' and subunit_id=?';
+			$parameters[] = $data['street_address_id'];
+		}
+
+		$count = $zend_db->fetchOne($sql,$parameters);
+		if (!$count) {
+			$data['location_id'] = $this->location_id;
+			$data['location_type_id'] = $type->getId();
+			$zend_db->insert('address_location',$data);
+		}
+	}
+
+	/**
+	 * Sets the given address as active, and deactivates all the other addresses
 	 *
-	 * Location.location_id is not a unique field.  There can be multiple
-	 * locations with the same Location.location_id.
-	 */
-	public function getLocations(array $fields=null)
-	{
-		$search = array('location_id'=>$this->location_id);
-		if ($fields) {
-			$search = array_merge($search,$fields);
-		}
-		return new LocationList($search);
-	}
-
-	/**
-	 * @return Subunit
-	 */
-	public function getSubunit()
-	{
-		if ($this->subunit_id) {
-			if (!$this->subunit) {
-				$this->subunit = new Subunit($this->subunit_id);
-			}
-			return $this->subunit;
-		}
-		return null;
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-
-	/**
-	 * @param number $number
-	 */
-	public function setLocation_id($number)
-	{
-		$this->location_id = $number;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setLocation_type_id($string)
-	{
-		$this->locationType = new LocationType($string);
-		$this->location_type_id = $this->locationType->getId();
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setStreet_address_id($number)
-	{
-		$this->address = new Address($number);
-		$this->street_address_id = $this->address->getId();
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setSubunit_id($number)
-	{
-		$this->subunit = new Subunit($number);
-		$this->subunit_id = $this->subunit->getId();
-	}
-
-	/**
-	 * @param boolean bool
-	 */
-	public function setMailable_flag($bool)
-	{
-
-		$this->mailable_flag = $bool?1:0;
-	}
-
-	/**
-	 * @param boolean bool
-	 */
-	public function setLivable_flag($bool)
-	{
-		$this->livable_flag = $bool?1:0;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setCommon_name($string)
-	{
-		$this->common_name = trim($string);
-	}
-
-	/**
-	 * @param boolean
-	 */
-	public function setActive($bool)
-	{
-		$this->active = $bool ? 'Y' : 'N';
-	}
-
-	/**
-	 * @param LocationType $locationType
-	 */
-	public function setLocationType($locationType)
-	{
-		$this->location_type_id = $locationType->getId();
-		$this->locationType = $locationType;
-	}
-
-	/**
 	 * @param Address $address
 	 */
-	public function setAddress($address)
+	public function activateAddress(Address $address)
 	{
-		$this->street_address_id = $address->getId();
-		$this->address = $address;
+		$zend_db = Database::getConnection();
+
+		$zend_db->update('address_location',
+						array('active'=>'Y'),
+						"street_address_id={$address->getId()}");
+
+		$zend_db->update('address_location',
+						array('active'=>'N'),
+						"street_address_id!={$address->getId()}");
 	}
 
 	/**
-	 * @param Subunit $subunit
+	 * Allows you to set values for mailable,livable,locationType,common_name
+	 * @param array $post
+	 * @param Address|Subunit $address
 	 */
-	public function setSubunit($subunit)
+	public function update(array $post,$address)
 	{
-		$this->subunit_id = $subunit->getId();
-		$this->subunit = $subunit;
+		if ($this->location_id) {
+			if ($address instanceof Address || $address instanceof Subunit) {
+				$data = array();
+				if (isset($post['mailable'])) {
+					$data['mailable_flag'] = $post['mailable'] ? 1 : null;
+				}
+				if (isset($post['livable'])) {
+					$data['livable_flag'] = $post['livable'] ? 1 : null;
+				}
+				if (isset($post['common_name'])) {
+					$data['common_name'] = $post['common_name'];
+				}
+				if (isset($post['locationType'])) {
+					$locationType = $post['locationType'] instanceof LocationType
+									? $post['locationType']
+									: new LocationType($post['locationType']);
+					$data['location_type_id'] = $locationType->getId();
+				}
+
+				$field = $address instanceof Address ? 'street_address_id' : 'subunit_id';
+				$where = "location_id={$this->location_id} and $field={$address->getId()}";
+
+				$zend_db = Database::getConnection();
+				$zend_db->update('address_location',$data,$where);
+
+			}
+			else {
+				throw new Exception('locations/invalidAddress');
+			}
+		}
+		else {
+			throw new Exception('locations/unknownLocation');
+		}
 	}
 
-
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
 	/**
 	 * @return PurposeList
 	 */
@@ -417,108 +174,153 @@ class Location
 	 */
 	public function getCityCouncilPurpose()
 	{
-		$list = new PurposeList(array('location_id'=>$this->location_id,
-										'type'=>'CITY COUNCIL DISTRICT'));
-		if (count($list)) {
-			return $list[0];
+		if ($this->location_id) {
+			$list = new PurposeList(array('location_id'=>$this->location_id,
+											'type'=>'CITY COUNCIL DISTRICT'));
+			if (count($list)) {
+				return $list[0];
+			}
 		}
 	}
 
 	/**
-	 * @return boolean
-	 */
-	public function isActive()
-	{
-		return $this->getActive() == 'Y' ? true : false;
-	}
-
-	/**
-	 */
-	public function toggleActive()
-	{
-		$this->active = $this->isActive()? 'N' : 'Y';
-	}
-
-	/**
-	 * Returns the StatusChange that was active on the given date
+	 * Returns the AddressStatus that was active on the given date
 	 *
-	 * Defaults to the current date
+	 * Defaults to the latest statusChange, which might not be current according
+	 * to the dates.
 	 *
 	 * @param Date $date
+	 * @return AddressStatus
 	 */
 	public function getStatus(Date $date=null)
 	{
-		$targetDate = $date ? $date : new Date();
-		$list = new LocationStatusChangeList();
-		$list->find(array('location_id'=>$this->location_id,'current'=>$targetDate));
+		$search = array('location_id'=>$this->location_id);
+		if ($date) {
+			$search['current'] = $date;
+		}
+		$list = new LocationStatusChangeList($search);
 		if (count($list)) {
-			return $list[0];
+			$statusChange = $list[0];
+			return $statusChange->getStatus();
 		}
 	}
 
 	/**
 	 * Saves a new LocationStatusChange to the database
 	 *
+	 * As we update the status history table, we need to clean up old data
+	 * If there is no current status, we just save the new status.
+	 * If there is a current status AND it's the same as the new status - then we don't do anything
+	 *
+	 * Data Cleanup: If there is a current status, and it's not the same as the
+	 * new status, we need to set end dates on ALL the old statuses that need them.
+	 * There maybe be multiple status changes in the database, that have not had
+	 * their end dates set.  They didn't use to do it that way, but now they do.
+	 *
 	 * @param AddressStatus|string $status
 	 */
-	 public function saveStatus($status)
-	 {
+	public function saveStatus($status)
+	{
 		if (!$status instanceof AddressStatus) {
 			$status = new AddressStatus($status);
 		}
 		$currentStatus = $this->getStatus();
-		if (!$currentStatus) {
+		// If we don't have a current status, or it's different than the new one.
+		// We create the new status change object.  We'll save it later
+		if (!$currentStatus ||
+			($currentStatus->getStatus_code() != $status->getStatus_code())) {
 			$newStatus = new LocationStatusChange();
-			$newStatus->setLocation_id($this->getLocation_id());
+			$newStatus->setLocation($this);
 			$newStatus->setStatus($status);
-			$newStatus->save();
 		}
+
+		// If we have a current status, and it's not the same as the new one,
+		// Do our data cleanup - use today's date on all the empty end dates
 		if ($currentStatus
 			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
-			$currentStatus->setEnd_date(time());
-			$currentStatus->save();
+			$zend_db = Database::getConnection();
+			$zend_db->update('mast_address_location_status',
+							array('effective_end_date'=>date('Y-m-d H:i:s')),
+								"location_id='{$this->location_id}' and effective_end_date is null");
 		}
-	 }
 
-	/**
-	 * @param string string (y or n)
-	 */
-	public function setMailable($string)
-	{
-		$this->mailable_flag = $string == 'y' ? 1 : 0;
+		// If we have a new status, go ahead and save it.
+		// The data should be nice and clean now
+		if (isset($newStatus)) {
+			$newStatus->save();
+		}
 	}
 
 	/**
-	 * @param string string
-	 */
-	public function setLivable($string)
-	{
-		$this->livable_flag = $string == 'y' ? 1 : 0;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function isMailable()
-	{
-		return $this->getMailable_flag() ? true : false;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function isLivable()
-	{
-		return $this->getLivable_flag() ? true : false;
-	}
-
-	/**
-	 * Alias for getLocationType()
+	 * Queries the database for a single location property
 	 *
+	 * @param string $fieldname
+	 * @param Address|Subunit $address
+	 */
+	private function fieldLookup($fieldname,$address)
+	{
+		if ($this->location_id) {
+			if ($address instanceof Address) {
+				$lookup = 'street_address_id';
+			}
+			elseif ($address instanceof Subunit) {
+				$lookup = 'subunit_id';
+			}
+			else {
+				throw new Exception('locations/invalidAddress');
+			}
+
+			$zend_db = Database::getConnection();
+			$sql = "select $fieldname from address_location where location_id=? and $lookup=?";
+			return $zend_db->fetchOne($sql,array($this->location_id,$address->getId()));
+		}
+	}
+
+	/**
+	 * @param Address|Subunit $address
+	 * @return boolean
+	 */
+	public function isMailable($address)
+	{
+		return $this->fieldLookup('mailable_flag',$address) ? true : false;
+	}
+
+	/**
+	 * @param Address|Subunit $address
+	 * @return boolean
+	 */
+	public function isLivable($address)
+	{
+		return $this->fieldLookup('livable_flag',$address) ? true : false;
+	}
+
+	/**
+	 * @param Address|Subunit $address
+	 * @return boolean
+	 */
+	public function isActive($address)
+	{
+		return $this->fieldLookup('active',$address) ? true : false;
+	}
+
+	/**
+	 * @param Address|Subunit $address
 	 * @return LocationType
 	 */
-	public function getType()
+	public function getLocationType($address)
 	{
-		return $this->getLocationType();
+		$type_id = $this->fieldLookup('location_type_id',$address);
+		if ($type_id) {
+			return new LocationType($type_id);
+		}
+	}
+
+	/**
+	 * @param Address|Subunit $address
+	 * @return string
+	 */
+	public function getCommonName($address)
+	{
+		return $this->fieldLookup('common_name',$address);
 	}
 }

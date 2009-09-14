@@ -17,7 +17,7 @@
  */
 class LocationList extends ZendDbResultIterator
 {
-	private $columns = array('lid','location_id','location_type_id','street_address_id',
+	private $columns = array('location_id','location_type_id','street_address_id',
 							'subunit_id','mailable_flag','livable_flag','common_name','active');
 	/**
 	 * Creates a basic select statement for the collection.
@@ -49,7 +49,8 @@ class LocationList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='location_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('l'=>'address_location'));
+		$this->select->from(array('l'=>'address_location'),
+							array('location_id'));
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
@@ -190,6 +191,6 @@ class LocationList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new Location($this->result[$key]);
+		return new Location($this->result[$key]['location_id']);
 	}
 }

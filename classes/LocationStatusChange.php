@@ -12,6 +12,7 @@ class LocationStatusChange
 	private $location_id;
 	private $effective_end_date;
 
+	private $location;
 	private $addressStatus;
 
 	/**
@@ -222,12 +223,21 @@ class LocationStatusChange
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $int
 	 */
-	public function setLocation_id($number)
+	public function setLocation_id($int)
 	{
-		// $this->location = new Location($number);
-		$this->location_id = $number;
+		$this->location = new Location($int);
+		$this->location_id = $this->location->getId();
+	}
+
+	/**
+	 * @param Location $location
+	 */
+	public function setLocation(Location $location)
+	{
+		$this->location_id = $location->getId();
+		$this->location = $location;
 	}
 
 	/**

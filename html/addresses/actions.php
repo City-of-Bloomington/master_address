@@ -70,6 +70,8 @@ if (isset($_POST['changeLogEntry'])) {
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
+		print_r($e);
+		exit();
 	}
 }
 

@@ -7,11 +7,12 @@
  */
 $tabs = array();
 $activeIndex = 0;
-foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$location) {
+foreach ($this->address->getLocations() as $i=>$location) {
 	$buttons = '';
 	if (userIsAllowed('Address')) {
-		$street = $location->getAddress()->getStreet();
-		$addURL = BASE_URL."/addresses/addAddress.php?lid={$location->getId()}&street_id={$street->getStreet_id()}";
+		$addURL = new URL(BASE_URL.'/addresses/addAddress.php');
+		$addURL->location_id = $location->getId();
+		$addURL->street_id = $this->address->getStreet_id();
 
 		$moveURL = new URL(BASE_URL.'/addresses/moveAddress.php');
 		$moveURL->address_id = $this->address->getId();
@@ -29,7 +30,7 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 		";
 	}
 	$content = "
-	<div id=\"lid_{$location->getId()}\">
+	<div id=\"location_{$location->getId()}\">
 		<h1>Location Status {$location->getStatus()}</h1>
 		$buttons
 		<table>
@@ -42,9 +43,8 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 				<th>Zip</th>
 			</tr>
 	";
-			foreach ($location->getLocations(array('subunit_id'=>null)) as $location) {
-				$address = $location->getAddress();
-				$active = $location->isActive() ? 'Y' : '';
+			foreach ($location->getAddresses() as $address) {
+				$active = $location->isActive($address) ? 'Y' : '';
 				if ($active) { $activeIndex = $i; }
 
 				$content.= "
@@ -63,7 +63,7 @@ foreach ($this->address->getLocations(array('subunit_id'=>null)) as $i=>$locatio
 	</div>
 	";
 	$tab = "
-		<li><a href=\"#lid_{$location->getId()}\">
+		<li><a href=\"#location_{$location->getId()}\">
 				<em>
 				Location ID
 				{$location->getLocation_id()}
