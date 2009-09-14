@@ -927,6 +927,16 @@ class Address
 	}
 
 	/**
+	 * Returns the Active information from this address's primary location
+	 *
+	 * @return boolean
+	 */
+	public function isActive()
+	{
+		return ($this->getLocation() && $this->getLocation()->isActive());
+	}
+
+	/**
 	 * @return PurposeList
 	 */
 	public function getPurposes()
