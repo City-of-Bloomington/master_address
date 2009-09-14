@@ -5,6 +5,16 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
+// Set up all the valid actions based on the current status of the address
+$actions = array('correct','readdress','verify');
+if ($this->address->getStatus()->getDescription() == 'RETIRED') {
+	$actions[] = 'unretire';
+	$actions[] = 'reassign';
+}
+else {
+	$actions[] = 'retire';
+}
+
 echo "<h1>Address Information</h1>";
 if (userIsAllowed('Address')) {
 	echo "
@@ -12,11 +22,11 @@ if (userIsAllowed('Address')) {
 		<tr><th>Action</th>
 			<td><select onchange=\"handleActionChoice(this);\">
 					<option value=\"\">Action to Apply</option>
-					<option>correct</option>
-					<option>readdress</option>
-					<option>verify</option>
-					<option>retire</option>
-					<option>unretire</option>
+	";
+					foreach ($actions as $action) {
+						echo "<option>$action</option>";
+					}
+	echo "
 				</select>
 			</td>
 		</tr>
@@ -28,5 +38,6 @@ if (userIsAllowed('Address')) {
 	</script>
 	";
 }
+
 include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
