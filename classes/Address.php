@@ -933,7 +933,7 @@ class Address
 	 */
 	public function isActive()
 	{
-		return ($this->getLocation() && $this->getLocation()->isActive());
+		return ($this->getLocation() && $this->getLocation()->isActive($this));
 	}
 
 	/**
