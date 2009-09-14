@@ -6,9 +6,21 @@
  * @param Address $this->address
  */
 $notes = View::escape($this->subunit->getNotes());
+$location = $this->subunit->getLocation();
+$mailable="";
+$livable="";
+$active="";
+$type="";
+if($location){
+	$mailable = $location->isMailable($this->subunit) ? 'Yes' : 'No';
+	$livable = $location->isLivable($this->subunit) ? 'Yes' : 'No';
+	$active = $location->isActive($this->subunit)? 'Yes' : 'No';
+	$type = $location->getLocationType($this->subunit);
+}
 echo "
 <table>
-	<tr><th>Type</th>
+
+	<tr><th>Subunit Type</th>
 		<td>{$this->subunit->getSudtype()}</td>
 	</tr>
 	<tr><th>#</th>
@@ -20,5 +32,17 @@ echo "
 	<tr><th>Notes</th>
 		<td>{$notes}</td>
 	</tr>
+	<tr><th>Location Type</th>
+	    <td>$type</td>
+	</tr>
+	<tr><th>Mailable</th>
+		<td>$mailable</td>
+	</tr>
+	<tr><th>Livable</th>
+		<td>$livable</td>
+	</tr>
+	<tr><th>Active</th>
+		<td>$active</td>
+	</tr>	
 </table>
 ";

@@ -36,19 +36,34 @@ $action = $_REQUEST['action'];
 if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
+		if($action == 'correct'){
+			if (isset($_POST['subunit'])) {
+				foreach ($_POST['subunit'] as $field=>$value) {
+					$set = 'set'.ucfirst($field);
+					$subunit->$set($value);
+				}
+				$subunit->save($changeLogEntry);
+				$type = new LocationType($_POST['location_type_id']);
+				if ($_POST['location_id']) {
+					$location = new Location($_POST['location_id']);
+				}	
+				else {
+					$location = new Location();
+					$location->assign($subunit, $type);
+					// $location->activateAddress($subunit);
+				}	
 
-		if (isset($_POST['subunit'])) {
-			foreach ($_POST['subunit'] as $field=>$value) {
-				$set = 'set'.ucfirst($field);
-				$subunit->$set($value);
+				$data['mailable'] = isset($_POST['mailable']);
+				$data['livable'] = isset($_POST['livable']);
+				$data['type'] = $type;
+				$location->update($data,$subunit);
 			}
-			$subunit->save($changeLogEntry);			
 		}
-		else{
-			$subunit->updateChangeLog($changeLogEntry);
+		elseif(action == 'retire'){
+			$subunit->retire($changeLogEntry);		
 		}
-		if($action == 'retire'){
-			$subunit->saveStatus('retired');
+		elseif(action == 'verify'){
+			$subunit->verify($changeLogEntry);			
 		}
 		header('Location: '.$subunit->getAddress()->getURL());
 		exit();

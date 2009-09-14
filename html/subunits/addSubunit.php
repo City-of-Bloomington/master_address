@@ -11,6 +11,8 @@ if (!userIsAllowed('Subunit')) {
 	exit();
 }
 $address = new Address($_REQUEST['street_address_id']);
+$location = new Location();
+
 if (isset($_POST['subunit'])) {
 	$sudtype = "";
 	$values = "";
@@ -38,6 +40,20 @@ if (isset($_POST['subunit'])) {
 			try{
 				$subunit->save($changeLog);
 				$subunit->saveStatus('Current');
+				$type = new LocationType($_POST['location_type_id']);
+				if ($_POST['location_id']) {
+					$location->assign($subunit, $type);
+				}
+				else {
+					$location = new Location();
+					$location->assign($subunit, $type);
+					$location->activateAddress($subunit);
+				}
+
+				$data['mailable'] = isset($_POST['mailable']);
+				$data['livable'] = isset($_POST['livable']);
+				$location->update($data,$subunit);
+
 			}
 			catch(Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -57,7 +73,7 @@ if (isset($_POST['subunit'])) {
 $template = new Template('two-column');
 $template->blocks[] = new Block('subunits/breadcrumbs.inc',array('address'=>$address));
 
-$template->blocks[] = new Block('subunits/addSubunitForm.inc', array('address'=>$address));
+$template->blocks[] = new Block('subunits/addSubunitForm.inc', array('address'=>$address,'location'=>$location));
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
 													array('subunitList'=>$address->getSubunits()));
 echo $template->render();

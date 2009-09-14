@@ -20,6 +20,7 @@ class Subunit
 	private $status;	// Stores the latest AddressStatus object
 	private $statusChange;// stores the latest SubunitStatusChange
 
+	private $location; // stores the Location 
 	/**
 	 * Populates the object with data
 	 *
@@ -395,5 +396,50 @@ class Subunit
 			$newStatus->save();
 		}		
 	 }
+	 
+	public function getLocation()
+	{
+		if (!$this->location) {
+			// See if this address is the active location
+			$list = new LocationList(array('street_address_id'=>$this->street_address_id,
+											'subunit_id'=>$this->subunit_id,
+											'active'=>'Y'));
+			if (count($list)) {
+				$this->location = $list[0];
+			}
+			// This address is not the active address for any location.
+			else {
+				// See if this address has any locations at all.
+				$list = new LocationList(array('street_address_id'=>$this->street_address_id,
+												'subunit_id'=>$this->subunit_id));
+				if (count($list)) {
+					$this->location = $list[0];
+				}
+			}
+			
+		}
+		if(!$this->location){
+			throw new Exception("subunits/missingLocation");
+		}
+		return $this->location;
+	}
+	 
+	/**
+	 * changes the status to retired
+	 */
+	public function retire(ChangeLogEntry $changeLogEntry)
+	{
+		$this->saveStatus('retired');
+		$this->updateChangeLog($changeLogEntry);
+	}
+	
+	/**
+	 * add a log entry as verified
+	 */
+	public function verify(ChangeLogEntry $changeLogEntry)
+	{
+		$this->updateChangeLog($changeLogEntry);
+	}
+
 	
 }

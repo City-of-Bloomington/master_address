@@ -45,7 +45,12 @@ $types->find();
 				<td><input name="subunit[notes]" id="subunit-notes" />
 				</td>
 			</tr>
-				
+			<tr><td colspan="2">
+				<fieldset>
+				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/locationFields.inc'; ?>
+				</fieldset>
+				</td>
+			</tr>
 		</table>
 
 		<button type="submit" class="submit">Submit</button>
