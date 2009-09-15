@@ -102,8 +102,8 @@ class AddressList extends ZendDbResultIterator
 
 		if ($order == 'street_number') {
 			$order = (isset($joins) && array_key_exists('n',$joins))
-				? 'n.street_name,a.street_number'
-				: 'a.street_number';
+				? "n.street_name,to_number(regexp_substr(a.street_number,'\d+'))"
+				: "to_number(regexp_substr(a.street_number,'\d+'))";
 		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
@@ -140,8 +140,8 @@ class AddressList extends ZendDbResultIterator
 
 		if ($order == 'street_number') {
 			$order = (isset($joins) && array_key_exists('n',$joins))
-				? 'n.street_name,a.street_number'
-				: 'a.street_number';
+				? "n.street_name,to_number(regexp_substr(a.street_number,'\d+'))"
+				: "to_number(regexp_substr(a.street_number,'\d+'))";
 		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
@@ -156,7 +156,9 @@ class AddressList extends ZendDbResultIterator
 	 */
 	private function runSelection($order,$limit=null,$groupBy=null)
 	{
-		$order = (substr($order,1,1) == '.') ? $order : "a.$order";
+		if(substr($order,0,9) != 'to_number' && substr($order,1,1) != '.'){
+			$order = "a.$order";
+		}
 		$this->select->order($order);
 		if ($limit) {
 			$this->select->limit($limit);
