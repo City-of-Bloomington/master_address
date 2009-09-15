@@ -431,6 +431,10 @@ class Subunit
 	{
 		$this->saveStatus('retired');
 		$this->updateChangeLog($changeLogEntry);
+		$location = $this->getLocation();
+		if($location){
+			$location->saveStatus('retired');
+		}
 	}
 	
 	/**
