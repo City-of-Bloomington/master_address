@@ -41,15 +41,9 @@ if (isset($_POST['subunit'])) {
 				$subunit->save($changeLog);
 				$subunit->saveStatus('Current');
 				$type = new LocationType($_POST['location_type_id']);
-				if ($_POST['location_id']) {
-					$location->assign($subunit, $type);
-				}
-				else {
-					$location = new Location();
-					$location->assign($subunit, $type);
-					$location->activateAddress($subunit);
-				}
-
+				$location = new Location();
+				$location->assign($subunit, $type);
+				$location->activateAddress($subunit);
 				$data['mailable'] = isset($_POST['mailable']);
 				$data['livable'] = isset($_POST['livable']);
 				$location->update($data,$subunit);

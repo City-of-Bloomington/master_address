@@ -55,14 +55,14 @@ if (isset($_POST['changeLogEntry'])) {
 
 				$data['mailable'] = isset($_POST['mailable']);
 				$data['livable'] = isset($_POST['livable']);
-				$data['type'] = $type;
+				$data['locationType'] = $type;
 				$location->update($data,$subunit);
 			}
 		}
-		elseif(action == 'retire'){
+		elseif($action == 'retire'){
 			$subunit->retire($changeLogEntry);		
 		}
-		elseif(action == 'verify'){
+		elseif($action == 'verify'){
 			$subunit->verify($changeLogEntry);			
 		}
 		header('Location: '.$subunit->getAddress()->getURL());
