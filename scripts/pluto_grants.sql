@@ -47,7 +47,6 @@ grant select,insert,update,delete on eng.user_roles to master_address;
 grant select,insert,update,delete on eng.address_change_log to master_address;
 grant select,insert,update,delete on eng.street_change_log to master_address;
 grant select,insert,update,delete on eng.subunit_change_log to master_address;
-grant select,insert,update,delete on eng.location_change_log to master_address;
 
 
 grant select on eng.address_status_code_seq to master_address;
@@ -59,7 +58,6 @@ grant select on eng.jurisdiction_id_s to master_address;
 grant select on eng.latest_subunit_status to master_address;
 grant select on eng.location_change_id_s to master_address;
 grant select on eng.location_id_s to master_address;
-grant select on eng.location_lid_seq to master_address;
 grant select on eng.location_purpose_id_s to master_address;
 grant select on eng.location_status_id_seq to master_address;
 grant select on eng.mast_address_latest_status to master_address;
@@ -133,7 +131,6 @@ create synonym master_address.user_roles for eng.user_roles;
 create synonym master_address.address_change_log for eng.address_change_log;
 create synonym master_address.street_change_log for eng.street_change_log;
 create synonym master_address.subunit_change_log for eng.subunit_change_log;
-create synonym master_address.location_change_log for eng.location_change_log;
 
 create synonym master_address.address_status_code_seq for eng.address_status_code_seq;
 create synonym master_address.address_status_id_seq for eng.address_status_id_seq;
@@ -143,7 +140,6 @@ create synonym master_address.gov_jur_id_s for eng.gov_jur_id_s;
 create synonym master_address.latest_subunit_status for eng.latest_subunit_status;
 create synonym master_address.location_change_id_s for eng.location_change_id_s;
 create synonym master_address.location_id_s for eng.location_id_s;
-create synonym master_address.location_lid_seq for eng.location_lid_seq;
 create synonym master_address.location_purpose_id_s for eng.location_purpose_id_s;
 create synonym master_address.location_status_id_seq for eng.location_status_id_seq;
 create synonym master_address.mast_address_latest_status for eng.mast_address_latest_status;

@@ -320,7 +320,6 @@ end;
 /
 
 create table address_location (
-	lid number not null primary key,
 	location_id number not null,
 	location_type_id varchar2(40) not null,
 	street_address_id number,
@@ -334,14 +333,6 @@ create table address_location (
 	foreign key (subunit_id) references mast_address_subunits (subunit_id),
 	foreign key (location_type_id) references addr_location_types_master (location_type_id)
 );
-create sequence location_lid_seq nocache;
-create trigger location_trigger
-before insert on address_location
-for each row
-begin
-select location_lid_seq.nextval into :new.lid from dual;
-end;
-/
 
 create table mast_address_location_change (
 	location_change_id number not null primary key,
@@ -690,14 +681,3 @@ create table subunit_change_log (
 	foreign key (contact_id) references mast_addr_assignment_contact(contact_id)
 );
 
-create table location_change_log (
-	lid number not null,
-	user_id number not null,
-	action varchar2(20) not null,
-	contact_id number,
-	notes varchar2(255),
-	action_date date default sysdate,
-	foreign key (lid) references address_location(lid),
-	foreign key (user_id) references users(id),
-	foreign key (contact_id) references mast_addr_assignment_contact(contact_id)
-);
