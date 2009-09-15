@@ -873,7 +873,8 @@ class Address
 	 */
 	public function getLocations(array $fields=null)
 	{
-		$search = array('street_address_id'=>$this->street_address_id);
+		$search = array('street_address_id'=>$this->street_address_id,
+						'subunit_id'=>null);
 		if ($fields) {
 			$search = array_merge($search,$fields);
 		}
@@ -1152,6 +1153,7 @@ class Address
 	public function unretire(ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('CURRENT');
+		$this->getLocation()->saveStatus('CURRENT');
 		$this->updateChangeLog($changeLogEntry);
 	}
 
