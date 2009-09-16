@@ -20,7 +20,7 @@ class Subunit
 	private $status;	// Stores the latest AddressStatus object
 	private $statusChange;// stores the latest SubunitStatusChange
 
-	private $location; // stores the Location 
+	private $location; // stores the Location
 	/**
 	 * Populates the object with data
 	 *
@@ -260,7 +260,7 @@ class Subunit
 	{
 		return "{$this->getType()} {$this->getIdentifier()}";
 	}
-	
+
 	/**
 	 * Returns the status history for this address
 	 *
@@ -293,6 +293,15 @@ class Subunit
 	public function getIdentifier()
 	{
 		return $this->getStreet_subunit_identifier();
+	}
+
+	/**
+	 * Alias for setStreet_subunit_identifier()
+	 * @param string $string
+	 */
+	public function setIdentifier($string)
+	{
+		$this->setStreet_subunit_identifier($string);
 	}
 
 	/**
@@ -338,7 +347,7 @@ class Subunit
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -364,7 +373,7 @@ class Subunit
 		}
 		return $changeLog;
 	}
-	 
+
 	/**
 	 * Saves a new AddressStatusChange to the database
 	 *
@@ -379,7 +388,7 @@ class Subunit
 		if (!$currentStatus ||
 			($currentStatus->getStatus_code() != $status->getStatus_code())) {
 			$newStatus = new SubunitStatusChange();
-			$newStatus->setSubunit($this);			
+			$newStatus->setSubunit($this);
 			$newStatus->setStreet_address_id($this->street_address_id);
 			$newStatus->setStatus($status);
 		}
@@ -394,9 +403,9 @@ class Subunit
 		// The data should be nice and clean now
 		if (isset($newStatus)) {
 			$newStatus->save();
-		}		
+		}
 	 }
-	 
+
 	public function getLocation()
 	{
 		if (!$this->location) {
@@ -416,14 +425,14 @@ class Subunit
 					$this->location = $list[0];
 				}
 			}
-			
+
 		}
 		if(!$this->location){
 			throw new Exception("subunits/missingLocation");
 		}
 		return $this->location;
 	}
-	 
+
 	/**
 	 * changes the status to retired
 	 */
@@ -436,7 +445,7 @@ class Subunit
 			$location->saveStatus('retired');
 		}
 	}
-	
+
 	/**
 	 * add a log entry as verified
 	 */
@@ -444,6 +453,4 @@ class Subunit
 	{
 		$this->updateChangeLog($changeLogEntry);
 	}
-
-	
 }

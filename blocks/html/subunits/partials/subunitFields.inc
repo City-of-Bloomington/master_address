@@ -7,8 +7,8 @@
  */
 ?>
 <table>
-	<tr><td><label for="subunit-sudtype" class="required">Type</label></td>
-		<td><select name="subunit[sudtype]" id="subunit-sudtype">
+	<tr><td><label for="sudtype" class="required">Type</label></td>
+		<td><select name="sudtype" id="sudtype">
 			<?php
 				$types = new SubunitTypeList();
 				$types->find();
@@ -22,14 +22,14 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="subunit-identifier">#</label></td>
-		<td><input name="subunit[street_subunit_identifier]" id="subunit-identifier"
+	<tr><td><label for="street_subunit_identifier" class="required">Unit</label></td>
+		<td><input name="street_subunit_identifier" id="street_subunit_identifier"
 					size="10" maxlength="20"
 					value="<?php echo View::escape($this->subunit->getIdentifier()); ?>" />
 		</td>
 	</tr>
-	<tr><td><label for="subunit-notes">Notes</label></td>
-		<td><input name="subunit[notes]" id="subunit-notes"
+	<tr><td><label for="notes">Notes</label></td>
+		<td><input name="notes" id="notes"
 					value="<?php echo View::escape($this->subunit->getNotes()); ?>" />
 		</td>
 	</tr>

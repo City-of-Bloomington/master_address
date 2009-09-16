@@ -7,17 +7,18 @@
  */
 ?>
 <h1>Add Subunit</h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
+	onsubmit="getChangeLog(this); return false;">
 	<fieldset><legend>Subunit Information</legend>
 		<input name="street_address_id" type="hidden" value="<?php echo $this->address->getId() ?>" />
 		<table>
-			<tr><td><label for="subunit-sudtype">Type</label></td>
-				<td><select name="subunit[sudtype]" id="subunit-sudtype">
+			<tr><td><label for="sudtype" class="required">Type</label></td>
+				<td><select name="sudtype" id="sudtype">
 						<option></option>
 						<?php
 							$types = new SubunitTypeList();
 							$types->find();
-								foreach($types as $type) {
+								foreach ($types as $type) {
 									echo "<option value=\"{$type->getSudtype()}\">{$type->getDescription()}</option>";
 								}
 						?>
@@ -25,25 +26,32 @@
 				</td>
 			</tr>
 
-			<tr><td><label for="subunit-street_subunit_identifier">Unit</label></td>
-				<td><input name="subunit[street_subunit_identifier]" id="subunit-street_subunit_identifier" />
+			<tr><td><label for="street_subunit_identifier" class="required">Unit</label></td>
+				<td><input name="street_subunit_identifier" id="street_subunit_identifier" />
 					<div>Comma separated for multiple subunts (Ex. A, B, C)</div>
 				</td>
 			</tr>
 
-			<tr><td><label for="subunit-notes">notes</label></td>
-				<td><input name="subunit[notes]" id="subunit-notes" />
+			<tr><td><label for="notes">Notes</label></td>
+				<td><input name="notes" id="notes" />
 				</td>
 			</tr>
 		</table>
 	</fieldset>
 
 	<fieldset>
-		<?php include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc'; ?>
+		<?php
+			$block = new Block('locations/partials/locationFields.inc',
+								array('address'=>$this->address,
+										'location'=>$this->address->getLocation()));
+			echo $block->render('html');
+		?>
 	</fieldset>
-
 	<fieldset>
 		<button type="submit" class="submit">Submit</button>
-        <input type="checkbox" name="batch_mode" value="y" />Submit in Batch Mode
 	</fieldset>
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'assign'));
+		echo $block->render('html');
+	?>
 </form>

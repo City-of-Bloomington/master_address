@@ -36,36 +36,31 @@ $action = $_REQUEST['action'];
 if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
-		if($action == 'correct'){
-			if (isset($_POST['subunit'])) {
-				foreach ($_POST['subunit'] as $field=>$value) {
-					$set = 'set'.ucfirst($field);
-					$subunit->$set($value);
-				}
+		switch ($action) {
+			case 'correct':
+				$subunit->setSudType($_POST['sudtype']);
+				$subunit->setNotes($_POST['notes']);
+				$subunit->setIdentifier($_POST['street_subunit_identifier']);
 				$subunit->save($changeLogEntry);
-				$type = new LocationType($_POST['location_type_id']);
-				if ($_POST['location_id']) {
-					$location = new Location($_POST['location_id']);
-				}	
-				else {
-					$location = new Location();
-					$location->assign($subunit, $type);
-					// $location->activateAddress($subunit);
-				}	
 
+				$location = new Location($_POST['location_id']);
+				$data = array();
 				$data['mailable'] = isset($_POST['mailable']);
 				$data['livable'] = isset($_POST['livable']);
-				$data['locationType'] = $type;
+				$data['locationType'] = $_POST['location_type_id'];
 				$location->update($data,$subunit);
-			}
+				break;
+
+			case 'retire':
+				$subunit->retire($changeLogEntry);
+				break;
+
+			case 'verify':
+				$subunit->verify($changeLogEntry);
+				break;
 		}
-		elseif($action == 'retire'){
-			$subunit->retire($changeLogEntry);		
-		}
-		elseif($action == 'verify'){
-			$subunit->verify($changeLogEntry);			
-		}
-		header('Location: '.$subunit->getAddress()->getURL());
+
+		header('Location: '.$subunit->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -73,18 +68,18 @@ if (isset($_POST['changeLogEntry'])) {
 	}
 }
 
-$address = $subunit->getAddress();
-
 $template = new Template('two-column');
 $template->blocks[] = new Block('subunits/breadcrumbs.inc',array('subunit'=>$subunit));
 $template->blocks[] = new Block("subunits/actions/{$action}Form.inc",array('subunit'=>$subunit));
-
 $template->blocks[] = new Block('subunits/subunitStatusChangeList.inc',
 								array('subunitStatusChangeList'=>$subunit->getStatusChangeList()));
-
 $template->blocks[] = new Block('changeLogs/changeLog.inc',
-									array('changeLog'=>$subunit->getChangeLog()));
+								array('changeLog'=>$subunit->getChangeLog()));
 
-$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',array('address'=>$address,'subunitList'=>$address->getSubunits()));
+
+$address = $subunit->getAddress();
+$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
+											array('address'=>$address,
+											'subunitList'=>$address->getSubunits()));
 
 echo $template->render();
