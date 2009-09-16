@@ -10,17 +10,20 @@
 ?>
 <h1>Add Address</h1>
 
-<form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php">
+<form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
+	onsubmit="getChangeLog(this); return false;">
 	<table>
 	<tr><td><fieldset>
 				<table>
 					<tr><td>Action</td>
 						<td><label>
-								<input type="radio" name="action" value="add" />
+								<input type="radio" name="action" value="add"
+									onclick="document.getElementById('changeLogEntry-action').value='add';" />
 								Add
 							</label>
 							<label>
-								<input type="radio" name="action" value="assign" checked="checked" />
+								<input type="radio" name="action" value="assign" checked="checked"
+									onclick="document.getElementById('changeLogEntry-action').value='assign';" />
 								Assign
 							</label>
 						</td>
@@ -40,16 +43,20 @@
 			</fieldset>
 
 			<fieldset>
-				<?php include APPLICATION_HOME.'/blocks/html/locations/partials/addressFields.inc'; ?>
+				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
 			</fieldset>
 		</td>
 		<td><fieldset>
 				<input type="hidden" name="location_id" value="<?php echo $this->location->getId(); ?>" />
-				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/locationFields.inc'; ?>
+				<?php include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc'; ?>
 			</fieldset>
 		</td>
 	</tr>
 	</table>
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'assign'));
+		echo $block->render('html');
+	?>
 	<fieldset>
 		<button type="submit" class="submit">Save</button>
 		<label>

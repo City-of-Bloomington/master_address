@@ -27,9 +27,7 @@ if (isset($_REQUEST['location_id']) && $_REQUEST['location_id']) {
 	$location = new Location($_REQUEST['location_id']);
 }
 
-$action = isset($_POST['action']) ? $_POST['action'] : 'add';
-
-if (isset($_POST['action'])) {
+if (isset($_POST['changeLogEntry'])) {
 	$fields = array('street_id','street_number',
 					'address_type','tax_jurisdiction','jurisdiction_id','township_id',
 					'section','quarter_section','subdivision_id','plat_id','plat_lot_number',
@@ -44,7 +42,7 @@ if (isset($_POST['action'])) {
 	}
 
 	try {
-		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],array('action'=>$action));
+		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
 		$address->save($changeLogEntry);
 		$address->saveStatus('CURRENT');
 
@@ -74,7 +72,7 @@ if (isset($_POST['action'])) {
 
 $template = new Template();
 $template->blocks[] = new Block('addresses/breadcrumbs.inc',
-								array('street'=>$street,'action'=>$action));
+								array('street'=>$street,'action'=>'add'));
 
 // If we've successfully saved the address, let the user know
 if ($address->getId()) {
