@@ -17,10 +17,8 @@
 	</fieldset>
 	<fieldset>
 		<?php
-			$block = new Block('locations/partials/locationFields.inc',
-								array('subunit'=>$this->subunit,
-										'location'=>$this->subunit->getLocation()));
-			echo $block->render('html');
+			$this->locationData = $this->subunit->getLocation()->getUpdatableData($this->subunit);
+			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
 		?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>

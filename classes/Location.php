@@ -172,6 +172,22 @@ class Location
 	}
 
 	/**
+	 * Returns an array of current data that can be set using update()
+	 *
+	 * @param Address $address
+	 * @return array
+	 */
+	public function getUpdatableData($address)
+	{
+		$data = array();
+		$data['mailable'] = $this->isMailable($address);
+		$data['livable'] = $this->isLivable($address);
+		$data['locationType'] = $this->getLocationType($address);
+		$data['common_name'] = $this->getCommonName($address);
+		return $data;
+	}
+
+	/**
 	 * @return PurposeList
 	 */
 	public function getPurposes()

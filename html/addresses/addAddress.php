@@ -64,6 +64,13 @@ if (isset($_POST['changeLogEntry'])) {
 			header('Location: '.$address->getStreet()->getURL());
 			exit();
 		}
+		else {
+			$locationData = array();
+			$locationData['mailable'] = $location->isMailable($address);
+			$locationData['livable'] = $location->isLivable($address);
+			$locationData['locationType'] = $location->getLocationType($address);
+			unset($location);
+		}
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -79,6 +86,14 @@ if ($address->getId()) {
 	$template->blocks[] = new Block('addresses/partials/success.inc',
 									array('address'=>$address));
 }
-$template->blocks[] = new Block('addresses/addAddressForm.inc',
-								array('address'=>$address,'location'=>$location));
+
+$addAddressForm = new Block('addresses/addAddressForm.inc',array('address'=>$address));
+if (isset($location)) {
+	$addAddressForm->location = $location;
+}
+else {
+	$addAddressForm->locationData = $locationData;
+}
+$template->blocks[] = $addAddressForm;
+
 echo $template->render();

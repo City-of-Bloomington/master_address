@@ -1174,14 +1174,10 @@ class Address
 		$newAddress->save($changeLogEntry);
 		$newAddress->saveStatus('CURRENT');
 
-		$locationData = array();
-		$locationData['mailable'] = $this->getLocation()->isMailable($this);
-		$locationData['livable'] = $this->getLocation()->isLivable($this);
-		$locationData['common_name'] = $this->getLocation()->getCommonName($this);
-		$locationType = $this->getLocation()->getLocationType($this);
+		$locationData = $this->getLocation()->getUpdatableData($this);
 
 		$newLocation = new Location();
-		$newLocation->assign($newAddress,$locationType);
+		$newLocation->assign($newAddress,$locationData['locationType']);
 		$newLocation->update($locationData,$newAddress);
 		$newLocation->activate($newAddress);
 		$newLocation->saveStatus('CURRENT');

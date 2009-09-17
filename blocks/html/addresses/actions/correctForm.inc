@@ -24,10 +24,8 @@
 
 	<fieldset>
 		<?php
-			$block = new Block('locations/partials/locationFields.inc',
-								array('address'=>$this->address,
-										'location'=>$this->address->getLocation()));
-			echo $block->render('html');
+			$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
+			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
 		?>
 	</fieldset>
 

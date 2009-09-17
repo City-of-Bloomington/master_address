@@ -6,6 +6,7 @@
  * @author W. Sibo <sibow@bloomington.in.gov>
  * @param Address $this->address
  * @param Location $this->location
+ * @param array $this->locationData
  */
 ?>
 <h1>Add Address</h1>
@@ -47,8 +48,13 @@
 			</fieldset>
 		</td>
 		<td><fieldset>
-				<input type="hidden" name="location_id" value="<?php echo $this->location->getId(); ?>" />
-				<?php include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc'; ?>
+				<?php
+					if (isset($this->location)) {
+						echo "<input type=\"hidden\" name=\"location_id\" value=\"{$this->location->getId()}\" />";
+						$this->locationData = $this->location->getUpdatableData($this->address);
+					}
+					include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+				?>
 			</fieldset>
 		</td>
 	</tr>
