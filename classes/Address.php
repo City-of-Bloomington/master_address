@@ -1161,6 +1161,37 @@ class Address
 	}
 
 	/**
+	 * Returns a new address at a new location, with all the same information
+	 *
+	 * This is a special way of unretiring this address.
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 * @return Address
+	 */
+	public function reassign(ChangeLogEntry $changeLogEntry)
+	{
+		$newAddress = clone($this);
+		$newAddress->save($changeLogEntry);
+		$newAddress->saveStatus('CURRENT');
+
+		$locationData = array();
+		$locationData['mailable'] = $this->getLocation()->isMailable($this);
+		$locationData['livable'] = $this->getLocation()->isLivable($this);
+		$locationData['common_name'] = $this->getLocation()->getCommonName($this);
+		$locationType = $this->getLocation()->getLocationType($this);
+
+		$newLocation = new Location();
+		$newLocation->assign($newAddress,$locationType);
+		$newLocation->update($locationData,$newAddress);
+		$newLocation->activate($newAddress);
+		$newLocation->saveStatus('CURRENT');
+
+		$this->updateChangeLog($changeLogEntry);
+
+		return $newAddress;
+	}
+
+	/**
 	 * Sets the latest status for this address to RETIRED
 	 *
 	 * If there are subunits, they will be retired as well.

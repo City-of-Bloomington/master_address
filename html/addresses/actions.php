@@ -57,7 +57,7 @@ if (isset($_POST['changeLogEntry'])) {
 				break;
 
 			case 'reassign':
-				$address->reassign($changeLogEntry);
+				$address = $address->reassign($changeLogEntry);
 				break;
 
 			case 'verify':

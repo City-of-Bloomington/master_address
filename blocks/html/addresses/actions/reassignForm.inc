@@ -6,25 +6,27 @@
  * @param Address $this->address
  */
 ?>
-<h1>Unretire Address</h1>
+<h1>Reassign Address</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="getChangeLog(this); return false;">
 	<fieldset>
-		<input type="hidden" name="action" value="unretire" />
+		<input type="hidden" name="action" value="reassign" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<div>
-		This will bring this address out of retirement by simply changing it's status to CURRENT.
+		<p>This is a special way of unretiring this address.  We will keep this address as retired,
+			but we'll create a new address with all the same information as this address.
+		</p>
 		</div>
 
-		<button type="submit" class="save">Unretire</button>
+		<button type="submit" class="save">Reassign</button>
 	</fieldset>
 
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'unretire'));
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'reassign'));
 		echo $block->render('html');
 	?>
 </form>
