@@ -13,12 +13,9 @@ foreach ($this->streetList as $street) {
 	$string = <<<EOD
 	{
 		"id":"{$street->getId()}",
-		"direction":"{$street->getDirection()}",
 		"name":"$name",
-		"postDirection":"{$street->getPostDirection()}",
 		"town":"$town",
-		"status":"{$street->getStatus_code()}",
-		"notes":"$notes"
+		"status":"{$street->getStatus_code()}"
 	}
 EOD;
 	$streets[] = $string;
