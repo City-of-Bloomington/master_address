@@ -404,8 +404,16 @@ class Subunit
 		if (isset($newStatus)) {
 			$newStatus->save();
 		}
-	 }
+	}
 
+	/**
+	 * Returns the active location for this subunit.
+	 *
+	 * If we can't find an active location, we return the first of any locations
+	 * for this subunit
+	 *
+	 * @return Location
+	 */
 	public function getLocation()
 	{
 		if (!$this->location) {
@@ -427,21 +435,21 @@ class Subunit
 			}
 
 		}
-		if(!$this->location){
+		if (!$this->location) {
 			throw new Exception("subunits/missingLocation");
 		}
 		return $this->location;
 	}
 
 	/**
-	 * changes the status to retired
+	 * @param ChangeLogEntry $changeLogEntry
 	 */
 	public function retire(ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('retired');
 		$this->updateChangeLog($changeLogEntry);
 		$location = $this->getLocation();
-		if($location){
+		if ($location) {
 			$location->saveStatus('retired');
 		}
 	}
@@ -452,5 +460,25 @@ class Subunit
 	public function verify(ChangeLogEntry $changeLogEntry)
 	{
 		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * Associates this subunit with a new address, maintaining the existing locations
+	 *
+	 * @param Address $address
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function moveToAddress(Address $address,ChangeLogEntry $changeLogEntry)
+	{
+		$zend_db = Database::getConnection();
+
+		// Update the locations
+		$zend_db->update('address_location',
+						array('street_address_id'=>$address->getId()),
+						"subunit_id={$this->subunit_id}");
+
+		// change the address on this subunit
+		$this->setAddress($address);
+		$this->save($changeLogEntry);
 	}
 }

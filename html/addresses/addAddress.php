@@ -53,7 +53,7 @@ if (isset($_POST['changeLogEntry'])) {
 		else {
 			$location = new Location();
 			$location->assign($address,$type);
-			$location->activateAddress($address);
+			$location->activate($address);
 		}
 
 		$data['mailable'] = isset($_POST['mailable']);

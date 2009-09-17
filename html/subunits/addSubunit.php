@@ -33,7 +33,7 @@ if (isset($_POST['changeLogEntry'])) {
 				$locationType = new LocationType($_POST['location_type_id']);
 				$location = new Location();
 				$location->assign($subunit,$locationType);
-				$location->activateAddress($subunit);
+				$location->activate($subunit);
 				$data['mailable'] = isset($_POST['mailable']);
 				$data['livable'] = isset($_POST['livable']);
 				$location->update($data,$subunit);

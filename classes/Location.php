@@ -99,21 +99,34 @@ class Location
 	}
 
 	/**
-	 * Sets the given address as active, and deactivates all the other addresses
+	 * Sets the given address or subunit as active
+	 * Deactivates all the other addresses or subunits
 	 *
-	 * @param Address $address
+	 * @param Address|Subunit $address
 	 */
-	public function activateAddress(Address $address)
+	public function activate($address)
 	{
-		$zend_db = Database::getConnection();
+		if ($this->location_id) {
+			if ($address instanceof Address) {
+				$field = 'street_address_id';
+				$where = "$field!={$address->getId()}";
+			}
+			elseif ($address instanceof Subunit) {
+				$field = 'subunit_id';
+				$where = "$field is not null and $field!={$address->getId()}";
+			}
+			else {
+				throw new Exception('locations/invalidAddress');
+			}
 
-		$zend_db->update('address_location',
-						array('active'=>'Y'),
-						"street_address_id={$address->getId()}");
-
-		$zend_db->update('address_location',
-						array('active'=>'N'),
-						"street_address_id!={$address->getId()}");
+			$zend_db = Database::getConnection();
+			$zend_db->update('address_location',
+							array('active'=>'Y'),
+							"location_id={$this->location_id} and $field={$address->getId()}");
+			$zend_db->update('address_location',
+							array('active'=>'N'),
+							"location_id={$this->location_id} and $where");
+		}
 	}
 
 	/**
@@ -300,7 +313,7 @@ class Location
 	 */
 	public function isActive($address)
 	{
-		return $this->fieldLookup('active',$address) ? true : false;
+		return $this->fieldLookup('active',$address)=='Y' ? true : false;
 	}
 
 	/**

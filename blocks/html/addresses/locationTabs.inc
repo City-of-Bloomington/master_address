@@ -48,8 +48,11 @@ foreach ($this->address->getLocations() as $i=>$location) {
 				if ($active) { $activeIndex = $i; }
 
 				$content.= "
-				<tr><td>{$address->getStreet_number()}</td>
-					<td>{$address->getStreet()->getStreetName()}</td>
+				<tr><td><a href=\"{$address->getURL()}\">{$address->getStreet_number()}</a></td>
+					<td><a href=\"{$address->getURL()}\">
+							{$address->getStreet()->getStreetName()}
+						</a>
+					</td>
 					<td>{$address->getType()}</td>
 					<td>$active</td>
 					<td>{$address->getStatus()}</td>

@@ -45,7 +45,6 @@ class Address
 	private $plat;
 
 	private $location;
-	private $subunits;
 
 	private static $addressTypes = array("STREET","UTILITY","PROPERTY",
 										"PARCEL","FACILITY","TEMPORARY");
@@ -96,6 +95,11 @@ class Address
 			$this->city="BLOOMINGTON";
 			$this->state="IN";
 		}
+	}
+
+	public function __clone()
+	{
+		$this->street_address_id = null;
 	}
 
 	/**
@@ -541,10 +545,7 @@ class Address
 	 */
 	public function getSubunits()
 	{
-		if (!$this->subunits) {
-			$this->subunits = new SubunitList(array('street_address_id'=>$this->street_address_id));
-		}
-		return $this->subunits;
+		return new SubunitList(array('street_address_id'=>$this->street_address_id));
 	}
 
 	public function getSubunitCount()
@@ -1127,20 +1128,22 @@ class Address
 	 */
 	public function readdress($street_id,$street_number,ChangeLogEntry $changeLogEntry)
 	{
+		// Create the new address
 		$newAddress = clone($this);
 		$newAddress->setStreet_id($street_id);
 		$newAddress->setStreet_number($street_number);
 		$newAddress->save($changeLogEntry);
 
+		// Assign the new address to the same location
 		$location = $this->getLocation();
-		$data['mailable'] = $location->isMailable($this);
-		$data['livable'] = $location->isLivable($this);
-		$data['locationType'] = $location->getLocationType($this);
+		$location->assign($newAddress,$location->getLocationType($this));
+		$location->activate($newAddress);
+		$location->saveStatus('CURRENT');
 
-		$newLocation = new Location();
-		$newLocation->assign($newAddress);
-		$newLocation->update($data,$this);
-		$newLocation->saveStatus('CURRENT');
+		// Move all the subunits over to the new address
+		foreach ($this->getSubunits() as $subunit) {
+			$subunit->moveToAddress($newAddress,$changeLogEntry);
+		}
 
 		$this->retire($changeLogEntry);
 	}
