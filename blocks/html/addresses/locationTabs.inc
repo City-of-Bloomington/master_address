@@ -34,9 +34,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 		<h1>Location Status {$location->getStatus()}</h1>
 		$buttons
 		<table>
-			<tr><th>#</th>
-				<th>Street</th>
-				<th>Type</th>
+			<tr><th>Address</th>
 				<th>Active</th>
 				<th>Status</th>
 				<th>Jurisdiction</th>
@@ -44,17 +42,18 @@ foreach ($this->address->getLocations() as $i=>$location) {
 			</tr>
 	";
 			foreach ($location->getAddresses() as $address) {
-				$active = $location->isActive($address) ? 'Y' : '';
-				if ($active) { $activeIndex = $i; }
+				$checked = '';
+				if ($location->isActive($address)) {
+					$checked = 'checked="checked"';
+					$activeIndex = $i;
+				}
 
 				$content.= "
-				<tr><td><a href=\"{$address->getURL()}\">{$address->getStreet_number()}</a></td>
-					<td><a href=\"{$address->getURL()}\">
-							{$address->getStreet()->getStreetName()}
-						</a>
+				<tr><td><a href=\"{$address->getURL()}\">$address</a></td>
+					<td><input type=\"radio\" name=\"address_id\"
+							value=\"{$address->getId()}\" $checked
+							onchange=\"activateAddress({$location->getId()},{$address->getId()});\" />
 					</td>
-					<td>{$address->getType()}</td>
-					<td>$active</td>
 					<td>{$address->getStatus()}</td>
 					<td>{$address->getJurisdiction()}</td>
 					<td>{$address->getZip()}</td>
@@ -93,7 +92,25 @@ foreach ($this->address->getLocations() as $i=>$location) {
 	?>
 	</div>
 </div>
+<form id="activateAddressForm" method="post"
+		action="<?php echo BASE_URL; ?>/locations/activateAddress.php"
+		onsubmit="getChangeLog(this); return false;">
+	<fieldset>
+		<input name="location_id" id="location_id" type="hidden" />
+		<input name="address_id" id="address_id" type="hidden" />
+	</fieldset>
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'activate'));
+		echo $block->render('html');
+	?>
+</form>
 <script type="text/javascript">
 var locationTabs = new YAHOO.widget.TabView('locationTabs');
 locationTabs.set('activeIndex',<?php echo $activeIndex; ?>);
+
+function activateAddress(location_id,address_id) {
+	document.getElementById('location_id').value = location_id;
+	document.getElementById('address_id').value = address_id;
+	getChangeLog(document.getElementById('activateAddressForm'));
+}
 </script>
