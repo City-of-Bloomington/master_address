@@ -19,8 +19,6 @@ class Street
 
 	private $town;
 	private $status;
-	private $streetNameList;
-	private $streetName;
 	private $addresses;
 
 	/**
@@ -252,14 +250,7 @@ class Street
 	 */
 	public function getStreetNameList()
 	{
-		if ($this->street_id) {
-			if (!$this->streetNameList) {
-			    $streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
-				$this->streetNameList = $streetNameList;
-			}
-			return $this->streetNameList;
-		}
-		return null;
+		return new StreetNameList(array('street_id'=>$this->street_id));
 	}
 
 	/**
@@ -270,6 +261,29 @@ class Street
 		return $this->getStreetNameList();
 	}
 
+	/**
+	 * Returns the primary name for this street
+	 *
+	 * If it can't find a primary name, we see if we can return any name at all.
+	 *
+	 * @return StreetName
+	 */
+	public function getStreetName()
+	{
+		$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
+													'street_name_type'=>'STREET'));
+		if (count($streetNameList)) {
+			return $streetNameList[0];
+		}
+		else {
+			// We couldn't find a name of the TYPE:STREET for this street.
+			// Do another search and see if we can find any name at all
+			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
+			if (count($streetNameList)) {
+				return $streetNameList[0];
+			}
+		}
+	}
 
 	/**
 	 * @return AddressList
@@ -284,30 +298,6 @@ class Street
 			return $this->addresses;
 		}
 		return null;
-	}
-	/**
-	 * Returns the primary name for this street
-	 *
-	 * @return StreetName
-	 */
-	public function getStreetName()
-	{
-		if (!$this->streetName) {
-			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
-														'street_name_type'=>'STREET'));
-			if (count($streetNameList)) {
-				$this->streetName = $streetNameList[0];
-			}
-			else {
-				# We couldn't find a name of the TYPE:STREET for this street.
-				# Do another search and see if we can find any name at all
-				$streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
-				if (count($streetNameList)) {
-					$this->streetName = $streetNameList[0];
-				}
-			}
-		}
-		return $this->streetName;
 	}
 
 	/**

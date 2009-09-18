@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
- * @param REQUEST action
  */
 if (!userIsAllowed('Street')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -17,38 +16,32 @@ if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
 
-		if (isset($_POST['street'])) {
-			$street = new Street();
+		$street = new Street();
+		$street->setTown_id($_POST['town_id']);
+		$street->setNotes($_POST['notes']);
 
-			foreach ($_POST['street'] as $field=>$value) {
-				$set = 'set'.ucfirst($field);
-				$street->$set($value);
-			}
-
-			switch ($_POST['action']) {
-				case 'propose':
-					$street->setStatus('PROPOSED');
-					break;
-				default:
-					$street->setStatus('CURRENT');
-			}
-
-			$street->save($changeLogEntry);
-
-			if (isset($_POST['streetName'])) {
-				$streetName = new StreetName();
-				$streetName->setStreet_name_type('STREET');
-				foreach ($_POST['streetName'] as $field=>$value) {
-					$set = 'set'.ucfirst($field);
-					$streetName->$set($value);
-				}
-			}
-			$streetName->setStreet_id($street->getId());
-			$streetName->save();
-
-			header('Location: '.$street->getURL());
-			exit();
+		switch ($changeLogEntry->action) {
+			case 'propose':
+				$street->setStatus('PROPOSED');
+				break;
+			default:
+				$street->setStatus('CURRENT');
 		}
+		$street->save($changeLogEntry);
+
+		if (isset($_POST['streetName'])) {
+			$streetName = new StreetName();
+			$streetName->setStreet_name_type('STREET');
+			foreach ($_POST['streetName'] as $field=>$value) {
+				$set = 'set'.ucfirst($field);
+				$streetName->$set($value);
+			}
+		}
+		$streetName->setStreet_id($street->getId());
+		$streetName->save();
+
+		header('Location: '.$street->getURL());
+		exit();
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -57,7 +50,6 @@ if (isset($_POST['changeLogEntry'])) {
 
 
 $template = new Template();
-
-$template->blocks[] = new Block('streets/breadcrumbs.inc',array('action'=>$_REQUEST['action']));
-$template->blocks[] = new Block('streets/addStreetForm.inc',array('action'=>$_REQUEST['action']));
+$template->blocks[] = new Block('streets/breadcrumbs.inc',array('action'=>'add'));
+$template->blocks[] = new Block('streets/addStreetForm.inc');
 echo $template->render();
