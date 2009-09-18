@@ -1091,7 +1091,7 @@ class Address
 	public function correct($post,$changeLogEntry)
 	{
 		// These are the fields that are allowed to be set during a correction
-		$fields = array('street_number','address_type','zip','zipplus4',
+		$fields = array('street_id','street_number','address_type','zip','zipplus4',
 						'trash_pickup_day','recycle_week','jurisdiction_id',
 						'township_id','section','quarter_section',
 						'census_block_fips_code','tax_jurisdiction',
