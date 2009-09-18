@@ -7,7 +7,7 @@
  */
 echo "
 <div class=\"interfaceBox\">
-	<h1>History</h1>
+	<h1>Action History</h1>
 ";
 if (count($this->changeLog)) {
 	$type = $this->changeLog[0]->type ? '<th>Type</th>' : '';
@@ -23,7 +23,7 @@ if (count($this->changeLog)) {
 	foreach ($this->changeLog as $logEntry) {
 		$username = $logEntry->getUser()->getUsername();
 		$notes = View::escape($logEntry->notes);
-
+		$notes = $notes ? $notes:'&nbsp;';
 		$type = $logEntry->type ? "<td>{$logEntry->type}</td>" : '';
 
 		echo "

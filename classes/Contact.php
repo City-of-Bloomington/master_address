@@ -278,12 +278,9 @@ class Contact
 				(select 'Street' as type,street_id as id,action,action_date,notes,user_id,contact_id
 				from street_change_log where contact_id=?)
 				union
-				(select 'Location' as type,lid as id,action,action_date,notes,user_id,contact_id
-				from location_change_log where contact_id=?)
-				union
 				(select 'Subunit' as type,subunit_id as id,action,action_date,notes,user_id,contact_id
 				from subunit_change_log where contact_id=?)) order by action_date DESC ";
-		$result = $zend_db->fetchAll($sql,array($this->contact_id,$this->contact_id,$this->contact_id,$this->contact_id));
+		$result = $zend_db->fetchAll($sql,array($this->contact_id,$this->contact_id,$this->contact_id));
 		foreach ($result as $row) {
 			$changeLog[] = new ChangeLogEntry($row);
 		}
