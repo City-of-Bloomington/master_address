@@ -16,7 +16,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 
 		$moveURL = new URL(BASE_URL.'/addresses/moveAddress.php');
 		$moveURL->address_id = $this->address->getId();
-		$moveURL->old_lid = $location->getId();
+		$moveURL->old_location_id = $location->getId();
 
 		$buttons = "
 		<div class=\"buttons\">

@@ -9,9 +9,10 @@
  */
 ?>
 <h1>Move Address to This Location</h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
+	onsubmit="handleSubmit(this); return false;">
 	<fieldset><legend>From</legend>
-		<input type="hidden" name="old_lid" value="<?php echo $this->location->getId(); ?>" />
+		<input type="hidden" name="old_location_id" value="<?php echo $this->location->getId(); ?>" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<table>
@@ -68,17 +69,18 @@
 					foreach ($this->locationList as $location) {
 						// Don't display the old location in this list
 						if ($location->getId() != $this->location->getId()) {
-							$address = View::escape($location->getAddress());
-							echo "
-							<tr><td><input type=\"radio\" name=\"new_lid\"
-										value=\"{$location->getId()}\" />
-								</td>
-								<td>{$location->getLocation_id()}</td>
-								<td>{$location->getStatus()}</td>
-								<td>$address</td>
-								<td>{$location->getAddress()->getCity()}</td>
-							</tr>
-							";
+							foreach ($location->getAddresses() as $address) {
+								echo "
+								<tr><td><input type=\"radio\" name=\"new_lid\" value=\"{$location->getId()}\"
+											onclick=\"document.getElementById('new_location_id').value=this.value;\" />
+									</td>
+									<td>{$location->getId()}</td>
+									<td>{$location->getStatus()}</td>
+									<td>$address</td>
+									<td>{$address->getCity()}</td>
+								</tr>
+								";
+							}
 						}
 					}
 					echo "</table>";
@@ -90,4 +92,18 @@
 		?>
 		<button type="submit" class="submit">Move To Location</button>
 	</fieldset>
+	<?php
+		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'move'));
+		echo $block->render('html');
+	?>
 </form>
+<script type="text/javascript">
+	function handleSubmit(form) {
+		if (document.getElementById('new_location_id').value) {
+			getChangeLog(form);
+		}
+		else {
+			form.submit();
+		}
+	}
+</script>

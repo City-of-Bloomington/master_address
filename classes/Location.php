@@ -99,6 +99,36 @@ class Location
 	}
 
 	/**
+	 * Moves an address to a different location
+	 *
+	 * This is usually done in cleanup of bad records.
+	 * Moving an address to a different location will cause
+	 * this location to be purged from the database.
+	 *
+	 * @param Address $address
+	 * @param Location $newLocation
+	 */
+	public function moveAddress(Address $address,Location $newLocation)
+	{
+		if ($newLocation->getId() != $this->getId()) {
+			$zend_db = Database::getConnection();
+			$zend_db->update('address_location',
+							array('location_id'=>$newLocation->getId(),'active'=>'N'),
+							"location_id={$this->getId()} and street_address_id={$address->getId()}");
+
+			// If there are no more addresses at this location, purge this location
+			$count = $zend_db->fetchOne('select count(*) from address_location where location_id=?',
+										$this->getId());
+			if (!$count) {
+				$zend_db->delete('mast_address_location_change',"location_id={$this->getId()}");
+				$zend_db->delete('mast_address_location_status',"location_id={$this->getId()}");
+				$zend_db->delete('mast_address_assignment_hist',"location_id={$this->getId()}");
+				$zend_db->delete('building_address_location',"location_id={$this->getId()}");
+			}
+		}
+	}
+
+	/**
 	 * Sets the given address or subunit as active
 	 * Deactivates all the other addresses or subunits
 	 *
