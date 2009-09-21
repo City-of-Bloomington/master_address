@@ -48,6 +48,14 @@ class Address
 
 	private static $addressTypes = array("STREET","UTILITY","PROPERTY",
 										"PARCEL","FACILITY","TEMPORARY");
+    public static function getZipCodes()
+    {
+        $zend_db = Database::getConnection();
+		$sql = "select distinct zip from mast_address";
+        $result = $zend_db->fetchCol($sql);
+        return $result;        
+    }
+    
 	/**
 	 * Populates the object with data
 	 *
@@ -94,6 +102,7 @@ class Address
 			// Set any default values for properties that need it here
 			$this->city="BLOOMINGTON";
 			$this->state="IN";
+            $this->gov_jur_id=1;// bloomington
 		}
 	}
 

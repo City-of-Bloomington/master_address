@@ -7,17 +7,17 @@
  */
 ?>
 <table>
+	<tr><td><label for="street_number" class="required">Number</label></td>
+		<td><input name="street_number" id="street_number"
+					value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
+		</td>
+	</tr>	
 	<tr><td><label for="streetName" class="required">Street</label></td>
 		<td><?php
 				$block = new Block('addresses/partials/streetSelector.inc',
 									array('street'=>$this->address->getStreet()));
 				echo $block->render();
 			?>
-		</td>
-	</tr>
-	<tr><td><label for="street_number" class="required">Number</label></td>
-		<td><input name="street_number" id="street_number"
-					value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
 		</td>
 	</tr>
 	<tr><td><label>Status</label></td>

@@ -31,7 +31,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 	}
 	$content = "
 	<div id=\"location_{$location->getId()}\">
-		<h1>Location Status {$location->getStatus()}</h1>
+		<h1>Location Characteristics {$location->getStatus()}</h1>
 		$buttons
 		<table>
 			<tr><th>Address</th>

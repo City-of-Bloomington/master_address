@@ -20,7 +20,7 @@ if($location){
 echo "
 <table>
 
-	<tr><th>Subunit Type</th>
+	<tr><th>SUD Type</th>
 		<td>{$this->subunit->getSudtype()}</td>
 	</tr>
 	<tr><th>#</th>
@@ -32,7 +32,7 @@ echo "
 	<tr><th>Notes</th>
 		<td>{$notes}</td>
 	</tr>
-	<tr><th>Location Type</th>
+	<tr><th>Location Use Type</th>
 	    <td>$type</td>
 	</tr>
 	<tr><th>Mailable</th>

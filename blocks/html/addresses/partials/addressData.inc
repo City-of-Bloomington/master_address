@@ -13,7 +13,7 @@ $livable = $this->address->isLivable() ? 'Yes' : 'No';
 $active = $this->address->isActive()? 'Yes' : 'No';
 echo "
 <table>
-	<tr><th>Type</th>
+	<tr><th>Address Type</th>
 		<td>{$this->address->getType()}</td>
 	</tr>
 	<tr><th>Mailable</th>
@@ -26,20 +26,20 @@ echo "
 		<td>$active</td>
 	</tr>
 	
-	<tr><th>Zip Code</th>
+	<tr><th>Zip Code - Plus4</th>
 		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
-	</tr>
-	<tr><th>Trash Day</th>
-		<td>{$this->address->getTrashDay()}</td>
-	</tr>
-	<tr><th>Recycle Week</th>
-		<td>{$this->address->getRecycleWeek()}</td>
 	</tr>
 	<tr><th>Jurisdiction</th>
 		<td>{$this->address->getJurisdiction()->getDescription()}</td>
 	</tr>
 	<tr><th>Township</th>
 		<td>$township</td>
+	</tr>
+	<tr><th>Trash Day</th>
+		<td>{$this->address->getTrashDay()}</td>
+	</tr>
+	<tr><th>Recycle Week</th>
+		<td>{$this->address->getRecycleWeek()}</td>
 	</tr>
 	<tr><th>Section</th>
 		<td>{$this->address->getSection()}</td>

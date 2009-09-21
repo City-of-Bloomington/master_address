@@ -5,9 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
+
 ?>
 <table>
-	<tr><td><label for="address_type" class="required">Type</label></td>
+	<tr><td><label for="address_type" class="required">Address Type</label></td>
 		<td><select name="address_type" id="address_type">
 			<?php
 				foreach (Address::getAddressTypes() as $type) {
@@ -20,13 +21,55 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="zip">Zip Code</label></td>
-		<td><input name="zip" id="zip" size="5" maxlength="5"
-				value="<?php echo $this->address->getZip(); ?>" />
+	<tr><td><label for="zip" class"required">Zip Code - Plus4</label></td>
+		<td><select name="zip" id="zip">
+			<?php
+				$zips = Address::getZipCodes();
+				foreach($zips as $zip){
+					$selected = ($zip == $this->address->getZip())?"selected=\"selected\"":"";
+					echo "<option $selected>$zip</option>";		
+				}
+			?>
+			</select> - 
 			<input name="zipplus4" id="zipplus4" size="4" maxlength="4"
 					value="<?php echo $this->address->getZipplus4(); ?>" />
 		</td>
 	</tr>
+
+	<tr><td><label for="jurisdiction_id" class"required">Jurisdiction</label></td>
+		<td><select name="jurisdiction_id" id="jurisdiction_id">
+			<?php
+				$list = new JurisdictionList();
+				$list->find();
+				foreach ($list as $jurisdiction) {
+					$name = View::escape($jurisdiction);
+					$selected = $this->address->getJurisdiction_id() == $jurisdiction->getId()
+						? 'selected="selected"'
+						: '';
+					echo "<option value=\"{$jurisdiction->getId()}\" $selected>$name</option>";
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+	<tr><td><label for="township_id" class="required">Township</label></td>
+		<td><select name="township_id" id="township_id" >
+				<option></option>
+				<?php
+					$list = new TownshipList();
+					$list->find();
+					foreach ($list as $township) {
+						$name = View::escape($township->getName());
+						$selected = $this->address->getTownship_id() == $township->getId()
+							? 'selected="selected"'
+							: '';
+						echo "<option $selected value=\"{$township->getId()}\">$name</option>";
+					}
+				?>
+			</select>
+		</td>
+	</tr>
+	
 	<tr><td><label for="trash_pickup_day">Trash Schedule</label></td>
 		<td><select name="trash_pickup_day" id="trash_pickup_day">
 				<option></option>
@@ -56,39 +99,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="jurisdiction_id">Jurisdiction</label></td>
-		<td><select name="jurisdiction_id" id="jurisdiction_id">
-			<?php
-				$list = new JurisdictionList();
-				$list->find();
-				foreach ($list as $jurisdiction) {
-					$name = View::escape($jurisdiction);
-					$selected = $this->address->getJurisdiction_id() == $jurisdiction->getId()
-						? 'selected="selected"'
-						: '';
-					echo "<option value=\"{$jurisdiction->getId()}\" $selected>$name</option>";
-				}
-			?>
-			</select>
-		</td>
-	</tr>
-	<tr><td><label for="township_id">Township</label></td>
-		<td><select name="township_id" id="township_id" >
-				<option></option>
-				<?php
-					$list = new TownshipList();
-					$list->find();
-					foreach ($list as $township) {
-						$name = View::escape($township->getName());
-						$selected = $this->address->getTownship_id() == $township->getId()
-							? 'selected="selected"'
-							: '';
-						echo "<option $selected value=\"{$township->getId()}\">$name</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
+	
 	<tr><td><label for="section">Section</label></td>
 		<td><input name="section" id="section" size="2" maxlength="2"
 					value="<?php echo View::escape($this->address->getSection()); ?>" />
@@ -125,3 +136,40 @@
 		</td>
 	</tr>
 </table>
+<script type='text/javascript'>
+
+function checkAddrRequiredFields(){
+	
+	var ind = document.getElementById("address_type").selectedIndex;
+	var str = document.getElementById("address_type").options[ind].text;
+	if(str == ""){
+		alert("Address type is required");
+		document.getElementById("address_type").focus();
+		return false;
+	}
+	ind = document.getElementById("zip").selectedIndex;
+	str = document.getElementById('zip').options[ind].text;
+	if(str == ""){
+		alert("Zip code is required");
+		document.getElementById("zip").focus();		
+		return false;
+	}
+	ind = document.getElementById("township_id").selectedIndex;
+	str = document.getElementById('township_id').options[ind].value;
+	if(str == ""){
+		alert("Township is required");
+		document.getElementById("township_id").focus();		
+		return false;
+	}
+	ind = document.getElementById("jurisdiction_id").selectedIndex;
+	str = document.getElementById('jurisdiction_id').options[ind].value;
+	if(str == ""){
+		alert("Jurisdiction is required");
+		document.getElementById("jurisdiction_id").focus();		
+		return false;
+	}
+	return true;
+
+}
+
+</script>

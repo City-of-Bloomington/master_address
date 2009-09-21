@@ -7,11 +7,11 @@
  */
 echo "
 <table>
-	<tr><th>Street</th>
-		<td>{$this->address->getStreet()->getStreetName()}</td>
-	</tr>
 	<tr><th>Number</th>
 		<td>{$this->address->getStreet_number()}</td>
+	</tr>
+	<tr><th>Street</th>
+		<td>{$this->address->getStreet()->getStreetName()}</td>
 	</tr>
 	<tr><th>Status</th>
 		<td>{$this->address->getStatus()}</td>

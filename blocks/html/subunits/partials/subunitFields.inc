@@ -7,7 +7,7 @@
  */
 ?>
 <table>
-	<tr><td><label for="sudtype" class="required">Type</label></td>
+	<tr><td><label for="sudtype" class="required">SUD Type</label></td>
 		<td><select name="sudtype" id="sudtype">
 			<?php
 				$types = new SubunitTypeList();

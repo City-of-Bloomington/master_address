@@ -11,7 +11,7 @@ $mailable = isset($this->locationData['mailable']) ? $this->locationData['mailab
 $livable = isset($this->locationData['livable']) ? $this->locationData['livable'] : false;
 $locationType = isset($this->locationData['locationType'])
 				? $this->locationData['locationType']
-				: new LocationType();
+				: new LocationType("RESIDENTIAL SFR");
 ?>
 <table>
 	<tr><td><label for="mailable">Mailable</label></td>
@@ -30,7 +30,7 @@ $locationType = isset($this->locationData['locationType'])
 		</td>
 	</tr>
 
-	<tr><td><label for="location_type_id">Location Type</label></td>
+	<tr><td><label for="location_type_id">Location Use Type</label></td>
 		<td><select name="location_type_id">
 				<?php
 					$types = new LocationTypeList();

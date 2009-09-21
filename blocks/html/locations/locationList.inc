@@ -10,7 +10,7 @@
 <table>
 	<tr><th>LID</th>
 		<th>Location ID</th>
-		<th>Type</th>
+		<th>Use Type</th>
 		<th>Address</th>
 		<th>Name</th>
 		<th>Active</th>
