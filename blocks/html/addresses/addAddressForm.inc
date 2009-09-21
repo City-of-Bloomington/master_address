@@ -12,7 +12,7 @@
 <h1>Add Address</h1>
 
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
-	onsubmit="getChangeLog(this); return false;">
+	onsubmit="FRAMEWORK.getChangeLog(this,'addAddressForm'); return false;">
 	<table>
 	<tr><td><fieldset>
 				<table>
@@ -60,7 +60,8 @@
 	</tr>
 	</table>
 	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'assign'));
+		$block = new Block('changeLogs/changeLogEntryFields.inc',
+						   array('action'=>'assign','id'=>'addAddressForm'));
 		echo $block->render('html');
 	?>
 	<fieldset>

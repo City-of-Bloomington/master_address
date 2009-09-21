@@ -94,13 +94,14 @@ foreach ($this->address->getLocations() as $i=>$location) {
 </div>
 <form id="activateAddressForm" method="post"
 		action="<?php echo BASE_URL; ?>/locations/activateAddress.php"
-		onsubmit="getChangeLog(this); return false;">
+		onsubmit="FRAMEWORK.getChangeLog(this,'activateAddressChangeLog'); return false;">
 	<fieldset>
 		<input name="location_id" id="location_id" type="hidden" />
 		<input name="address_id" id="address_id" type="hidden" />
 	</fieldset>
 	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'activate'));
+		$block = new Block('changeLogs/changeLogEntryFields.inc',
+							array('action'=>'activate','id'=>'activateAddressChangeLog'));
 		echo $block->render('html');
 	?>
 </form>
@@ -111,6 +112,7 @@ locationTabs.set('activeIndex',<?php echo $activeIndex; ?>);
 function activateAddress(location_id,address_id) {
 	document.getElementById('location_id').value = location_id;
 	document.getElementById('address_id').value = address_id;
-	getChangeLog(document.getElementById('activateAddressForm'));
+	FRAMEWORK.getChangeLog(document.getElementById('activateAddressForm'),
+							'activateAddressChangeLog');
 }
 </script>

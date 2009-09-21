@@ -8,7 +8,7 @@
 ?>
 <h1>Retire Address</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="getChangeLog(this); return false;">
+	onsubmit="FRAMEWORK.getChangeLog(this,'retireForm'); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="retire" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -24,7 +24,8 @@
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'retire'));
+		$block = new Block('changeLogs/changeLogEntryFields.inc',
+							array('action'=>'retire','id'=>'retireForm'));
 		echo $block->render('html');
 	?>
 </form>

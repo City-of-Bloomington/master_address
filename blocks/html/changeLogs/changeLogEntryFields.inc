@@ -4,15 +4,20 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->action
+ * @param string $this->id
  */
+$action = View::escape($this->action);
 ?>
-<div id="changeLogEntry_fields">
-	<div class="hd">Change Log Entry</div>
+<div id="<?php echo $this->id; ?>" style="position:absolute; visibility:hidden;">
+	<div class="hd">Activity Log Entry</div>
 	<div class="bd">
-		<div><p>Before saving, you must specify your rationale for this change:</p>
-			<textarea name="changeLogEntry[notes]" rows="4" cols="50"></textarea>
+		<div><label for="changeLogEntry-action">Action:</label>
+			<?php echo $action ?>
 			<input type="hidden" name="changeLogEntry[action]" id="changeLogEntry-action"
-					value="<?php echo View::escape($this->action); ?>" />
+					value="<?php echo $action; ?>" />
+		</div>
+		<div><p>Enter comments or rationale for the activity log:</p>
+			<textarea name="changeLogEntry[notes]" rows="4" cols="50"></textarea>
 		</div>
 		<div><label for="changeLogEntry-contact_id">Contact</label>
 			<select name="changeLogEntry[contact_id]" id="changeLogEntry-contact_id">
@@ -32,12 +37,3 @@
 	</div>
 	<div class="ft"></div>
 </div>
-<script type="text/javascript">
-	var changeLogForm = new YAHOO.widget.Overlay("changeLogEntry_fields");
-	changeLogForm.center();
-
-	function getChangeLog(form) {
-		changeLogForm.render();
-		changeLogForm.show();
-	}
-</script>

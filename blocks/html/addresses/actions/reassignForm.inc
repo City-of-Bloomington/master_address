@@ -8,7 +8,7 @@
 ?>
 <h1>Reassign Address</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="getChangeLog(this); return false;">
+	onsubmit="FRAMEWORK.getChangeLog(this,'reassignForm'); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="reassign" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -26,7 +26,8 @@
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'reassign'));
+		$block = new Block('changeLogs/changeLogEntryFields.inc',
+							array('action'=>'reassign','id'=>'reassignForm'));
 		echo $block->render('html');
 	?>
 </form>
