@@ -12,7 +12,11 @@
 <h1>Add Address</h1>
 
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
-	onsubmit="FRAMEWORK.getChangeLog(this,'addAddressForm'); return false;">
+	onsubmit="checkRequiredFields(this); return false;">
+<!--								
+	onsubmit="checkRequiredFields(this);FRAMEWORK.getChangeLog(this,'addAddressForm'); return false;">
+	-->
+								
 	<table>
 	<tr><td><fieldset>
 				<table>
@@ -72,3 +76,35 @@
 		</label>
 	</fieldset>
 </form>
+
+<script type="text/javascript">
+function checkRequiredFields(form)
+{
+	var elements = document.getElementsByTagName("label");
+	for(var i=0;i<elements.length;i++){
+		if(elements[i].className && elements[i].className =='required'){
+			var id = elements[i].getAttribute('for');
+			alert('id '+id);
+			var obj = document.getElementById(id);
+			alert(' type '+obj.type);
+			switch(obj.type){
+				case 'text':
+					if(obj.value.length() == 0){
+						alert(id+" is required");
+						obj.focus();
+						return false;
+					}
+				break;				
+				case 'select-one':
+					if(obj.options[obj.selectedIndex].value == ""){
+						alert(id+" is required");
+						obj.focus();
+						return false;
+					}
+				break;	
+			}
+		}
+	}
+	return true;	
+}
+</script>

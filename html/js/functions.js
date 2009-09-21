@@ -24,3 +24,22 @@ FRAMEWORK.getChangeLog = function (form,div)
 	changeLogForm.render();
 	changeLogForm.show();
 }
+FRAMEWORK.checkRequiredFields = function(form)
+{
+	var elements = document.getElementByTagName("label");
+	for(var i=0;i<elements.length;i++){
+		if(elements[i].className=='required'){
+			var id = elements[i].getAttribute('for');
+			var obj = document.getElementById(id);
+			switch(obj.type){
+				case 'text':
+				alert(obj.value);		
+				break;				
+				case 'select-one':
+				alert(obj.selectedIndex);
+				break;	
+			}
+		}
+	}
+	return false;	
+}

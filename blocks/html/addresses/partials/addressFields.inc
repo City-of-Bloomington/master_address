@@ -21,7 +21,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="zip" class"required">Zip Code - Plus4</label></td>
+	<tr><td><label for="zip" class="required">Zip Code - Plus4</label></td>
 		<td><select name="zip" id="zip">
 			<?php
 				$zips = Address::getZipCodes();
@@ -36,7 +36,7 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="jurisdiction_id" class"required">Jurisdiction</label></td>
+	<tr><td><label for="jurisdiction_id" class="required">Jurisdiction</label></td>
 		<td><select name="jurisdiction_id" id="jurisdiction_id">
 			<?php
 				$list = new JurisdictionList();
