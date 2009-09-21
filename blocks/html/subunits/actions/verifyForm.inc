@@ -8,7 +8,7 @@
 ?>
 <h1>Verify Subunit</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php"
-  onsubmit="getChangeLog(this); return false;">
+  onsubmit="FRAMEWORK.getChangeLog(this,'verifySubunitForm'); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="verify" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
@@ -24,7 +24,8 @@
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>
 
 		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'verify'));
+			$block = new Block('changeLogs/changeLogEntryFields.inc',
+								array('action'=>'verify','id'=>'verifySubunitForm'));
 			echo $block->render('html');
 		?>
 

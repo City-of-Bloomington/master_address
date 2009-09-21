@@ -8,7 +8,7 @@
 ?>
 <h1>Retire Subunit</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php"
-  onsubmit="getChangeLog(this); return false;">
+  onsubmit="FRAMEWORK.getChangeLog(this,'retireSubunitForm'); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="retire" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
@@ -24,7 +24,8 @@
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>
 
 		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'retire'));
+			$block = new Block('changeLogs/changeLogEntryFields.inc',
+								array('action'=>'retire','id'=>'retireSubunitForm'));
 			echo $block->render('html');
 		?>
 
