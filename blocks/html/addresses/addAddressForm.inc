@@ -12,7 +12,7 @@
 <h1>Add Address</h1>
 
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
-	onsubmit="checkRequiredFields(this); return false;">
+	onsubmit="checkRequiredFields(); return false;">
 <!--								
 	onsubmit="checkRequiredFields(this);FRAMEWORK.getChangeLog(this,'addAddressForm'); return false;">
 	-->
@@ -78,15 +78,13 @@
 </form>
 
 <script type="text/javascript">
-function checkRequiredFields(form)
+function checkRequiredFields()
 {
 	var elements = document.getElementsByTagName("label");
 	for(var i=0;i<elements.length;i++){
 		if(elements[i].className && elements[i].className =='required'){
 			var id = elements[i].getAttribute('for');
-			alert('id '+id);
 			var obj = document.getElementById(id);
-			alert(' type '+obj.type);
 			switch(obj.type){
 				case 'text':
 					if(obj.value.length() == 0){

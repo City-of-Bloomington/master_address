@@ -24,22 +24,30 @@ FRAMEWORK.getChangeLog = function (form,div)
 	changeLogForm.render();
 	changeLogForm.show();
 }
-FRAMEWORK.checkRequiredFields = function(form)
+FRAMEWORK.checkRequiredFields = function()
 {
-	var elements = document.getElementByTagName("label");
+	var elements = document.getElementsByTagName("label");
 	for(var i=0;i<elements.length;i++){
-		if(elements[i].className=='required'){
+		if(elements[i].className && elements[i].className =='required'){
 			var id = elements[i].getAttribute('for');
 			var obj = document.getElementById(id);
 			switch(obj.type){
 				case 'text':
-				alert(obj.value);		
+					if(obj.value.length() == 0){
+						alert(id+" is required");
+						obj.focus();
+						return false;
+					}
 				break;				
 				case 'select-one':
-				alert(obj.selectedIndex);
+					if(obj.options[obj.selectedIndex].value == ""){
+						alert(id+" is required");
+						obj.focus();
+						return false;
+					}
 				break;	
 			}
 		}
 	}
-	return false;	
-}
+	return true;	
+}	
