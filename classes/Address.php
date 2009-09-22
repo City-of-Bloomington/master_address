@@ -53,9 +53,9 @@ class Address
         $zend_db = Database::getConnection();
 		$sql = "select distinct zip from mast_address";
         $result = $zend_db->fetchCol($sql);
-        return $result;        
+        return $result;
     }
-    
+
 	/**
 	 * Populates the object with data
 	 *
@@ -109,6 +109,7 @@ class Address
 	public function __clone()
 	{
 		$this->street_address_id = null;
+		$this->status = null;
 	}
 
 	/**
@@ -1142,6 +1143,7 @@ class Address
 		$newAddress->setStreet_id($street_id);
 		$newAddress->setStreet_number($street_number);
 		$newAddress->save($changeLogEntry);
+		$newAddress->saveStatus('CURRENT');
 
 		// Assign the new address to the same location
 		$location = $this->getLocation();
