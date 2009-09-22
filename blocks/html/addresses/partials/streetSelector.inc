@@ -6,14 +6,39 @@
  * @param Street $this->street
  */
 ?>
-<div id="findStreetForm-autosuggest" style="width:15em;">
+<div>
+	<span id="chosenStreetName"><?php echo $this->street; ?></span>
 	<input type="hidden" name="street_id" id="street_id"
-			value="<?php echo $this->street->getStreet_id(); ?>" />
-	<input name="streetName" id="streetName"
-			value="<?php echo View::escape($this->street->getStreetName()); ?>" />
-	<div id="container"></div>
+		value="<?php echo $this->street->getStreet_id(); ?>" />
 </div>
+<div><button type="button" onclick="openStreetSelector();">Choose Street</button></div>
+
+<div id="streetSelector" style="position:absolute; visibility:hidden;">
+	<div class="hd">Choose a Street</div>
+	<div class="bd">
+		<div id="findStreetForm-autosuggest" style="width:15em;">
+			<input name="streetName" id="streetName"
+					value="<?php echo View::escape($this->street->getStreetName()); ?>" />
+			<div id="container"></div>
+		</div>
+	</div>
+	<div class="ft">
+		<button type="button" class="cancel" onclick="streetSelector.hide();">
+			Cancel
+		</button>
+	</div>
+</div>
+
 <script type="text/javascript">
+var streetSelector;
+function openStreetSelector()
+{
+	streetSelector = new YAHOO.widget.Overlay('streetSelector');
+	streetSelector.center();
+	streetSelector.render();
+	streetSelector.show();
+}
+
 findStreetForm_autosuggest = function() {
 	var streetService = new YAHOO.util.XHRDataSource("<?php echo BASE_URL; ?>/streets/home.php");
 	streetService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
@@ -47,6 +72,8 @@ findStreetForm_autosuggest = function() {
 
 		// update hidden form field with the selected item's ID
 		document.getElementById('street_id').value = oData.id;
+		document.getElementById('chosenStreetName').textContent = oData.name;
+		streetSelector.hide();
 	};
 	findStreetFormAC.itemSelectEvent.subscribe(myHandler);
 
