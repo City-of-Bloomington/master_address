@@ -119,7 +119,8 @@ class Address
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->street_id || !$this->address_type || !$this->gov_jur_id) {
+		if (!$this->street_id || !$this->street_number || !$this->zip
+			|| !$this->address_type || !$this->gov_jur_id || !$this->township_id) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
