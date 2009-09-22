@@ -8,7 +8,7 @@
 ?>
 <h1>Correct this address</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.getChangeLog(this,'correctForm'); return false;">
+	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'correctForm'); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />

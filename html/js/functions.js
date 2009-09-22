@@ -33,15 +33,15 @@ FRAMEWORK.checkRequiredFields = function()
 			var obj = document.getElementById(id);
 			switch(obj.type){
 				case 'text':
-					if(obj.value.length() == 0){
-						alert(id+" is required");
+					if(obj.value.trim() == ""){
+						alert(elements[i].textContent+" is required");
 						obj.focus();
 						return false;
 					}
 				break;				
 				case 'select-one':
-					if(obj.options[obj.selectedIndex].value == ""){
-						alert(id+" is required");
+					if(obj.options[obj.selectedIndex].value.trim() == ""){
+						alert(elements[i].textContent+" is required");
 						obj.focus();
 						return false;
 					}
@@ -51,3 +51,14 @@ FRAMEWORK.checkRequiredFields = function()
 	}
 	return true;	
 }	
+FRAMEWORK.checkAndgetChangeLog = function (form,div)
+{
+	if(FRAMEWORK.checkRequiredFields(form,div)){
+		FRAMEWORK.getChangeLog(form,div);
+	}
+	
+}
+String.prototype.trim = function() 
+{
+	return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,"");
+}

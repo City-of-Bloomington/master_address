@@ -12,10 +12,7 @@
 <h1>Add Address</h1>
 
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
-	onsubmit="checkRequiredFields(); return false;">
-<!--								
-	onsubmit="checkRequiredFields(this);FRAMEWORK.getChangeLog(this,'addAddressForm'); return false;">
-	-->
+	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'addAddressForm'); return false;">
 								
 	<table>
 	<tr><td><fieldset>
@@ -33,6 +30,9 @@
 							</label>
 						</td>
 					</tr>
+					<tr><td><label for="street_number">Number</label></td>
+						<td><input name="street_number" id="street_number" /></td>
+					</tr>
 					<tr><td><label>Street</label></td>
 						<td><?php
 								$block = new Block('addresses/partials/streetSelector.inc',
@@ -41,9 +41,6 @@
 							?>
 						</td>
 					</tr>
-					<tr><td><label for="street_number">Number</label></td>
-						<td><input name="street_number" id="street_number" /></td>
-					</tr>
 				</table>
 			</fieldset>
 
@@ -51,7 +48,7 @@
 				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
 			</fieldset>
 		</td>
-		<td><fieldset>
+		<td><fieldset><legend>Location Characteristics</legend>
 				<?php
 					if (isset($this->location)) {
 						echo "<input type=\"hidden\" name=\"location_id\" value=\"{$this->location->getId()}\" />";
@@ -76,33 +73,3 @@
 		</label>
 	</fieldset>
 </form>
-
-<script type="text/javascript">
-function checkRequiredFields()
-{
-	var elements = document.getElementsByTagName("label");
-	for(var i=0;i<elements.length;i++){
-		if(elements[i].className && elements[i].className =='required'){
-			var id = elements[i].getAttribute('for');
-			var obj = document.getElementById(id);
-			switch(obj.type){
-				case 'text':
-					if(obj.value.length() == 0){
-						alert(id+" is required");
-						obj.focus();
-						return false;
-					}
-				break;				
-				case 'select-one':
-					if(obj.options[obj.selectedIndex].value == ""){
-						alert(id+" is required");
-						obj.focus();
-						return false;
-					}
-				break;	
-			}
-		}
-	}
-	return true;	
-}
-</script>
