@@ -6,16 +6,25 @@
  * @author W Sibo <sibow@bloomington.in.gov>
  * @param Subunit $this->subunit
  */
+$actions = array('correct','verify');
+if ($this->subunit->getStatus()->getDescription() == 'RETIRED') {
+	$actions[] = 'unretire';
+}
+else {
+	$actions[] = 'retire';
+}
+
 echo "<h1>Subunit Information</h1>";
 if (userIsAllowed('Address')) {
 	echo "
 	<table>
 		<tr><th>Action</th>
 			<td><select onchange=\"handleActionChoice(this);\">
-					<option value=\"\">Action to Apply</option>
-					<option value=\"correct\">Correct</option>
-					<option value=\"verify\">Verify</option>
-					<option value=\"retire\">Retire</option>
+					<option value=\"\">Action to Apply</option>";			
+	foreach($actions as $action){
+		echo "<option value=\"$action\">$action</option>";
+	}
+	echo "
 				</select>
 			</td>
 		</tr>

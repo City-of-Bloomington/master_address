@@ -453,6 +453,20 @@ class Subunit
 			$location->saveStatus('retired');
 		}
 	}
+	
+	/**
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function unretire(ChangeLogEntry $changeLogEntry)
+	{
+		$this->saveStatus('CURRENT');
+		$this->updateChangeLog($changeLogEntry);
+		$location = $this->getLocation();
+		if ($location) {
+			$location->saveStatus('CURRENT');
+		}
+	}
+	
 
 	/**
 	 * add a log entry as verified

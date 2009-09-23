@@ -54,7 +54,11 @@ if (isset($_POST['changeLogEntry'])) {
 			case 'retire':
 				$subunit->retire($changeLogEntry);
 				break;
-
+			
+			case 'unretire':
+				$subunit->unretire($changeLogEntry);
+				break;
+			
 			case 'verify':
 				$subunit->verify($changeLogEntry);
 				break;
