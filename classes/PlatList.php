@@ -97,7 +97,13 @@ class PlatList extends ZendDbResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if (in_array($key,$this->columns)) {
-					$this->select->where("p.$key=?",$value);
+					switch ($key) {
+						case 'name':
+							$this->select->where("p.name like ?","%$value%");
+							break;
+						default:
+							$this->select->where("p.$key=?",$value);
+					}
 				}
 			}
 		}

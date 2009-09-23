@@ -27,12 +27,25 @@
 				$zips = Address::getZipCodes();
 				foreach($zips as $zip){
 					$selected = ($zip == $this->address->getZip())?"selected=\"selected\"":"";
-					echo "<option $selected>$zip</option>";		
+					echo "<option $selected>$zip</option>";
 				}
 			?>
-			</select> - 
+			</select> -
 			<input name="zipplus4" id="zipplus4" size="4" maxlength="4"
 					value="<?php echo $this->address->getZipplus4(); ?>" />
+		</td>
+	</tr>
+	<tr><td><label for="plat_id">Plat</label></td>
+		<td><?php
+				$block = new Block('addresses/partials/platSelector.inc',
+									array('plat'=>$this->address->getPlat()));
+				echo $block->render('html');
+			?>
+		</td>
+	</tr>
+	<tr><td><label for="plat_lot_number">Lot Number</label></td>
+		<td><input name="plat_lot_number" id="plat_lot_number" size="4"
+				value="<?php echo $this->address->getPlat_lot_number(); ?>" />
 		</td>
 	</tr>
 
@@ -69,7 +82,7 @@
 			</select>
 		</td>
 	</tr>
-	
+
 	<tr><td><label for="trash_pickup_day">Trash Schedule</label></td>
 		<td><select name="trash_pickup_day" id="trash_pickup_day">
 				<option></option>
@@ -99,7 +112,7 @@
 			</select>
 		</td>
 	</tr>
-	
+
 	<tr><td><label for="section">Section</label></td>
 		<td><input name="section" id="section" size="2" maxlength="2"
 					value="<?php echo View::escape($this->address->getSection()); ?>" />
@@ -139,7 +152,7 @@
 <script type='text/javascript'>
 
 function checkAddrRequiredFields(){
-	
+
 	var ind = document.getElementById("address_type").selectedIndex;
 	var str = document.getElementById("address_type").options[ind].text;
 	if(str == ""){
@@ -151,21 +164,21 @@ function checkAddrRequiredFields(){
 	str = document.getElementById('zip').options[ind].text;
 	if(str == ""){
 		alert("Zip code is required");
-		document.getElementById("zip").focus();		
+		document.getElementById("zip").focus();
 		return false;
 	}
 	ind = document.getElementById("township_id").selectedIndex;
 	str = document.getElementById('township_id').options[ind].value;
 	if(str == ""){
 		alert("Township is required");
-		document.getElementById("township_id").focus();		
+		document.getElementById("township_id").focus();
 		return false;
 	}
 	ind = document.getElementById("jurisdiction_id").selectedIndex;
 	str = document.getElementById('jurisdiction_id').options[ind].value;
 	if(str == ""){
 		alert("Jurisdiction is required");
-		document.getElementById("jurisdiction_id").focus();		
+		document.getElementById("jurisdiction_id").focus();
 		return false;
 	}
 	return true;

@@ -8,6 +8,9 @@
 $township = $this->address->getTownship()
 			? View::escape($this->address->getTownship()->getName())
 			: '';
+$plat = $this->address->getPlat()
+		? View::escape($this->address->getPlat()->getName())
+		: '';
 $mailable = $this->address->isMailable() ? 'Yes' : 'No';
 $livable = $this->address->isLivable() ? 'Yes' : 'No';
 $active = $this->address->isActive()? 'Yes' : 'No';
@@ -25,9 +28,15 @@ echo "
 	<tr><th>Active</th>
 		<td>$active</td>
 	</tr>
-	
+
 	<tr><th>Zip Code - Plus4</th>
 		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
+	</tr>
+	<tr><th>Plat</th>
+		<td>$plat</td>
+	</tr>
+	<tr><th>Lot Number</th>
+		<td>{$this->address->getPlat_lot_number()}</td>
 	</tr>
 	<tr><th>Jurisdiction</th>
 		<td>{$this->address->getJurisdiction()->getDescription()}</td>

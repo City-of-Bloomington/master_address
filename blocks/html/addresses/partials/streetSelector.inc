@@ -19,7 +19,7 @@
 		<div id="findStreetForm-autosuggest" style="width:15em;">
 			<input name="streetName" id="streetName"
 					value="<?php echo View::escape($this->street->getStreetName()); ?>" />
-			<div id="container"></div>
+			<div id="street-container"></div>
 		</div>
 	</div>
 	<div class="ft">
@@ -49,7 +49,7 @@ findStreetForm_autosuggest = function() {
 	streetService.maxCacheEntries = 5;
 
 	var findStreetFormAC = new YAHOO.widget.AutoComplete("streetName",
-														"container",
+														"street-container",
 														streetService);
 	findStreetFormAC.resultTypeList = false;
 

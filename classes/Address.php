@@ -1103,6 +1103,7 @@ class Address
 	{
 		// These are the fields that are allowed to be set during a correction
 		$fields = array('street_id','street_number','address_type','zip','zipplus4',
+						'plat_id','plat_lot_number',
 						'trash_pickup_day','recycle_week','jurisdiction_id',
 						'township_id','section','quarter_section',
 						'census_block_fips_code','tax_jurisdiction',

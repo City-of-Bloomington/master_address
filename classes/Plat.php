@@ -378,4 +378,14 @@ class Plat
 	{
 		return $this->getPlat_cabinet();
 	}
+
+	/**
+	 * Returns the list of available cabinets
+	 * @return array
+	 */
+	public static function getCabinets()
+	{
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchCol('select distinct plat_cabinet from plat_master order by plat_cabinet');
+	}
 }

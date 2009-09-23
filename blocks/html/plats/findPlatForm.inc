@@ -51,7 +51,18 @@
 			</tr>
 
 			<tr><td><label for="plat-plat_cabinet">Cabinet</label></td>
-				<td><input name="plat[plat_cabinet]" id="plat-plat_cabinet" value="<?php if (isset($_GET['plat']['plat_cabinet'])) echo View::escape($_GET['plat']['plat_cabinet']); ?>" />
+				<td><select name="plat[plat_cabinet]" id="plat-plat_cabinet">
+						<option></option>
+						<?php
+							foreach (Plat::getCabinets() as $cabinet) {
+								$selected = (isset($_GET['plat']['plat_cabinet'])
+											&& $_GET['plat']['plat_cabinet'])
+											? 'selected="selected"'
+											: '';
+								echo "<option $selected>$cabinet</option>";
+							}
+						?>
+					</select>
 				</td>
 			</tr>
 
