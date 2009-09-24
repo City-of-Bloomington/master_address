@@ -1,3 +1,31 @@
+legend { border:1px solid black; }
+
+table { border-collapse:separate; margin:3px 0 8px 0; overflow:auto; }
+tr { }
+td { padding:6px 4px 6px 4px; vertical-align:top; border-bottom:1px solid #dddddd; }
+th { text-align:left; background-color:#dddddd; padding:6px 4px 6px 4px; vertical-align: top; font-weight:bold; border-bottom:1px solid #dddddd; }
+th a:link,th a:visited { color:#3366cc; background-color:inherit; }
+
+form table { border:none; }
+form table th, form table td { border:none; }
+
+
+ul.pageNavigation li { margin-right:2px; }
+
+
+/* Side Panels */
+#panel-container { overflow:auto; padding-top:10px; padding-bottom:2px; }
+
+/* Footer */
+#footer h1 { display:inline; font-size: 16px; color: #666666; }
+
+/*  Custom buttons for forms */
+button { margin:8px 5px 2px 0px; font-size:1em; }
+button.login { width:52px; height:15px; padding-top:15px; background: url('images/buttons/login.gif') no-repeat; border:0; }
+
+/* All hrefs that are to be rendered as buttons need to include the button class. */
+/* Technique taken from http://www.evotech.net/blog/2007/09/css-image-replacement-method */
+
 #banner .loginForm { position:absolute; top:5px; right:5px; }
 #banner .loginForm h1 { display:none; }
 #banner .loginForm fieldset { border:none; margin:0; padding:0; }
@@ -15,3 +43,5 @@
 .yui-skin-sam .yui-overlay { color:white; background-color:#737373; padding:10px; }
 .yui-skin-sam .yui-overlay .hd { font-size:12pt; font-weight:bold; }
 .yui-skin-sam .yui-overlay .bd { min-height:30px; }
+
+
