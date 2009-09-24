@@ -1,0 +1,17 @@
+#banner .loginForm { position:absolute; top:5px; right:5px; }
+#banner .loginForm h1 { display:none; }
+#banner .loginForm fieldset { border:none; margin:0; padding:0; }
+#banner .loginForm legend { display:none; }
+#banner .loginForm button { display:none; }
+#banner .loginForm a { font-weight:bold; color:blue; }
+
+.addressList,.subunitList { height:300px; overflow:auto; }
+
+/* YUI Auto-complete */
+.yui-skin-sam .yui-ac { font-size:100%; margin-bottom:1em; }
+.yui-skin-sam .yui-ac-content li { color:black; background-color:white; }
+
+/* YUI Overlay popups */
+.yui-skin-sam .yui-overlay { color:white; background-color:#737373; padding:10px; }
+.yui-skin-sam .yui-overlay .hd { font-size:12pt; font-weight:bold; }
+.yui-skin-sam .yui-overlay .bd { min-height:30px; }

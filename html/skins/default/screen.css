@@ -80,13 +80,6 @@ ul.pageNavigation li { margin-right:2px; }
 	}
 	#banner a { color:white; text-decoration:none; }
 
-	#banner .loginForm { position:absolute; top:5px; right:5px; }
-	#banner .loginForm h1 { display:none; }
-	#banner .loginForm fieldset { border:none; margin:0; padding:0; }
-	#banner .loginForm legend { display:none; }
-	#banner .loginForm button { display:none; }
-	#banner .loginForm a { font-weight:bold; color:blue; }
-
 /* Menu Bar */
 #menuBar { height:30px; border-top:2px solid black; border-bottom:2px solid black; }
 #menuBar ul { list-style:none; margin:5px 0 0 0; padding:0; }
@@ -111,7 +104,6 @@ ul.pageNavigation li { margin-right:2px; }
 .interfaceBox h1 a:link,.titleBar a:visited { color:white; background-color:transparent; }
 .interfaceBox h1 form { margin:0; padding:0; display:inline; height:1em; }
 .interfaceBox h1 form fieldset { margin:0; padding:0; border:0; display:inline; }
-	.addressList,.subunitList { height:300px; overflow:auto; }
 
 
 /* Controls how error messages are displayed */
@@ -187,11 +179,3 @@ a.unsubscribe { width:22px; height:22px; background-image:url('images/buttons/ma
 .instructions { }
 .unpublished { text-decoration:line-through; }
 
-/* YUI Auto-complete */
-.yui-skin-sam .yui-ac { font-size:100%; margin-bottom:1em; }
-.yui-skin-sam .yui-ac-content li { color:black; background-color:white; }
-
-/* YUI Overlay popups */
-.yui-skin-sam .yui-overlay { color:white; background-color:#737373; padding:10px; }
-.yui-skin-sam .yui-overlay .hd { font-size:12pt; font-weight:bold; }
-.yui-skin-sam .yui-overlay .bd { min-height:30px; }
