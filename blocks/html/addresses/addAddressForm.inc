@@ -13,7 +13,7 @@
 
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
 	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'addAddressForm'); return false;">
-								
+
 	<table>
 	<tr><td><fieldset>
 				<table>
@@ -30,18 +30,10 @@
 							</label>
 						</td>
 					</tr>
-					<tr><td><label for="street_number">Number</label></td>
-						<td><input name="street_number" id="street_number" /></td>
-					</tr>
-					<tr><td><label>Street</label></td>
-						<td><?php
-								$block = new Block('addresses/partials/streetSelector.inc',
-													array('street'=>$this->address->getStreet()));
-								echo $block->render('html');
-							?>
-						</td>
-					</tr>
 				</table>
+			</fieldset>
+			<fieldset>
+				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
 			</fieldset>
 
 			<fieldset>

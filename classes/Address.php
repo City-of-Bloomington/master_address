@@ -458,7 +458,7 @@ class Address
 	 */
 	public function getStreet()
 	{
-		if (!$this->street) {
+		if (!$this->street && $this->street_id) {
 			$this->street = new Street($this->street_id);
 		}
 		return $this->street;
@@ -1255,6 +1255,14 @@ class Address
 			}
 		}
 
+		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function verify(ChangeLogEntry $changeLogEntry)
+	{
 		$this->updateChangeLog($changeLogEntry);
 	}
 }

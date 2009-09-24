@@ -14,8 +14,10 @@
 	</tr>
 	<tr><td><label for="streetName" class="required">Street</label></td>
 		<td><?php
-				$block = new Block('addresses/partials/streetSelector.inc',
-									array('street'=>$this->address->getStreet()));
+				$block = new Block('addresses/partials/streetSelector.inc');
+				if ($this->address->getStreet()) {
+					$block->street = $this->address->getStreet();
+				}
 				echo $block->render();
 			?>
 		</td>

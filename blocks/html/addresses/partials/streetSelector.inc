@@ -5,11 +5,17 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Street $this->street
  */
+$id = '';
+$name = '';
+if (isset($this->street)) {
+	$id = $this->street->getId();
+	$name = View::escape($this->street->getStreetName());
+}
 ?>
 <div>
-	<span id="chosenStreetName"><?php echo $this->street; ?></span>
+	<span id="chosenStreetName"><?php echo $name ?></span>
 	<input type="hidden" name="street_id" id="street_id"
-		value="<?php echo $this->street->getStreet_id(); ?>" />
+		value="<?php echo $id; ?>" />
 </div>
 <div><button type="button" onclick="openStreetSelector();">Choose Street</button></div>
 
@@ -17,8 +23,7 @@
 	<div class="hd">Choose a Street</div>
 	<div class="bd">
 		<div id="findStreetForm-autosuggest" style="width:15em;">
-			<input name="streetName" id="streetName"
-					value="<?php echo View::escape($this->street->getStreetName()); ?>" />
+			<input name="streetName" id="streetName" value="<?php echo $name; ?>" />
 			<div id="street-container"></div>
 		</div>
 	</div>

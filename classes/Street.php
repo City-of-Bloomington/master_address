@@ -274,17 +274,19 @@ class Street
 	 */
 	public function getStreetName()
 	{
-		$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
-													'street_name_type'=>'STREET'));
-		if (count($streetNameList)) {
-			return $streetNameList[0];
-		}
-		else {
-			// We couldn't find a name of the TYPE:STREET for this street.
-			// Do another search and see if we can find any name at all
-			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
+		if ($this->street_id) {
+			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
+														'street_name_type'=>'STREET'));
 			if (count($streetNameList)) {
 				return $streetNameList[0];
+			}
+			else {
+				// We couldn't find a name of the TYPE:STREET for this street.
+				// Do another search and see if we can find any name at all
+				$streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
+				if (count($streetNameList)) {
+					return $streetNameList[0];
+				}
 			}
 		}
 	}
@@ -342,5 +344,51 @@ class Street
 			$changeLog[] = new ChangeLogEntry($row);
 		}
 		return $changeLog;
+	}
+
+	/**
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function correct($post,ChangeLogEntry $changeLogEntry)
+	{
+		$fields = array('town_id','notes');
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$this->$set($post[$field]);
+			}
+		}
+		$this->save($changeLogEntry);
+	}
+
+	/**
+	 * Sets the latest status for this street to RETIRED
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function retire(ChangeLogEntry $changeLogEntry)
+	{
+		$this->saveStatus('RETIRED');
+		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * Sets the latest status for this street to CURRENT
+	 *
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function unretire(ChangeLogEntry $changeLogEntry)
+	{
+		$this->saveStatus('CURRENT');
+		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function verify(ChangeLogEntry $changeLogEntry)
+	{
+		$this->updateChangeLog($changeLogEntry);
 	}
 }

@@ -12,17 +12,19 @@ $name="";
 if(isset($this->street)){
 	$street = $this->street;
 }
-elseif(isset($this->address)){
+elseif (isset($this->address)) {
 	$street = $this->address->getStreet();
 }
 ?>
 <div class="breadcrumbs">
 	<ul><li><a href="<?php echo BASE_URL; ?>/streets">Streets</a></li>
 		<?php
-			$name = View::escape($street->getStreetName());
-			echo "<li><a href=\"{$street->getURL()}\">$name</a></li>";
+			if (isset($street)) {
+				$name = View::escape($street->getStreetName());
+				echo "<li><a href=\"{$street->getURL()}\">$name</a></li>";
+			}
 
-			if(isset($this->address)){
+			if (isset($this->address)) {
 				$number = $this->address->getStreet_number();
 				if ($number) {
 					echo "<li><a href=\"{$this->address->getURL()}\">$number</a></li>";
