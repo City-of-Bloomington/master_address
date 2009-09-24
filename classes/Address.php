@@ -162,23 +162,23 @@ class Address
 		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
 
 		if ($this->street_address_id) {
-			$this->update($data);
+			$this->updateDB($data);
 		}
 		else {
-			$this->insert($data);
+			$this->insertDB($data);
 		}
 
 		$this->updateChangeLog($changeLogEntry);
 	}
 
-	private function update($data)
+	private function updateDB($data)
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->update('mast_address',$data['a'],"street_address_id='{$this->street_address_id}'");
 		$zend_db->update('mast_address_sanitation',$data['s'],"street_address_id='{$this->street_address_id}'");
 	}
 
-	private function insert($data)
+	private function insertDB($data)
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->insert('mast_address',$data['a']);
@@ -1093,17 +1093,16 @@ class Address
 	}
 
 	/**
-	 * Correct an error in the Address
+	 * Update an error in the Address
 	 *
-	 * Corrections are for people to fix invalid data and other typos for the address.
+	 * Updates are for people to fix invalid data and other typos for the address.
 	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function correct($post,$changeLogEntry)
+	public function update($post,ChangeLogEntry $changeLogEntry)
 	{
 		// These are the fields that are allowed to be set during a correction
-		$fields = array('street_id','street_number','address_type','zip','zipplus4',
-						'plat_id','plat_lot_number',
+		$fields = array('address_type','plat_id','plat_lot_number',
 						'trash_pickup_day','recycle_week','jurisdiction_id',
 						'township_id','section','quarter_section',
 						'census_block_fips_code','tax_jurisdiction',
@@ -1124,6 +1123,28 @@ class Address
 			$location->update($data,$this);
 		}
 
+		$this->save($changeLogEntry);
+	}
+
+	/**
+	 * Correct an error in the primary attributes of this address
+	 *
+	 * Changes to these fields of the address require special reporting and
+	 * have to be handled seperately.
+	 *
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function correct($post,ChangeLogEntry $changeLogEntry)
+	{
+		$fields = array('street_id','street_number','zip','zipplus4');
+
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$this->$set($post[$field]);
+			}
+		}
 		$this->save($changeLogEntry);
 	}
 

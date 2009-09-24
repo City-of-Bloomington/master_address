@@ -28,10 +28,6 @@ echo "
 	<tr><th>Active</th>
 		<td>$active</td>
 	</tr>
-
-	<tr><th>Zip Code - Plus4</th>
-		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
-	</tr>
 	<tr><th>Plat</th>
 		<td>$plat</td>
 	</tr>

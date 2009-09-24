@@ -6,19 +6,19 @@
  * @param Address $this->address
  */
 ?>
-<h1>Correct this address</h1>
+<h1>Update this address</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'correctForm'); return false;">
+	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'updateForm'); return false;">
 	<fieldset>
-		<input type="hidden" name="action" value="correct" />
+		<input type="hidden" name="action" value="update" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc'; ?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
 	<fieldset>
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc'; ?>
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
@@ -31,7 +31,7 @@
 
 	<?php
 		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'correct','id'=>'correctForm'));
+							array('action'=>'update','id'=>'updateForm'));
 		echo $block->render('html');
 	?>
 </form>

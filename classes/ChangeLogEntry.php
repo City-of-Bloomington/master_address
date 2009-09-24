@@ -23,12 +23,9 @@ class ChangeLogEntry
 
 	private $actions = array('add'=>'added','assign'=>'assigned','activate'=>'activated',
 							 'create'=>'created','change'=>'changed','correct'=>'corrected',
-							 'move'=>'moved to location',
+							 'update'=>'updated','move'=>'moved to location',
 							 'readdress'=>'readdressed','reassign'=>'reassigned',
-							 'remove'=>'removed','retire'=>'retired',
-							 'retire location'=>'retired location',
-							 'unretire'=>'unretired',
-							 'unretire location'=>'unretired location',
+							 'unretire'=>'unretired','retire'=>'retired',
 							 'verify'=>'verified');
 
 	/**

@@ -13,6 +13,9 @@ echo "
 	<tr><th>Street</th>
 		<td>{$this->address->getStreet()->getStreetName()}</td>
 	</tr>
+	<tr><th>Zip Code - Plus4</th>
+		<td>{$this->address->getZip()}-{$this->address->getZipplus4()}</td>
+	</tr>
 	<tr><th>Status</th>
 		<td>{$this->address->getStatus()}</td>
 	</tr>

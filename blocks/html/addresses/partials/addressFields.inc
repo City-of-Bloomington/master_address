@@ -21,20 +21,6 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="zip" class="required">Zip Code - Plus4</label></td>
-		<td><select name="zip" id="zip">
-			<?php
-				$zips = Address::getZipCodes();
-				foreach($zips as $zip){
-					$selected = ($zip == $this->address->getZip())?"selected=\"selected\"":"";
-					echo "<option $selected>$zip</option>";
-				}
-			?>
-			</select> -
-			<input name="zipplus4" id="zipplus4" size="4" maxlength="4"
-					value="<?php echo $this->address->getZipplus4(); ?>" />
-		</td>
-	</tr>
 	<tr><td><label for="plat_id">Plat</label></td>
 		<td><?php
 				$block = new Block('addresses/partials/platSelector.inc',

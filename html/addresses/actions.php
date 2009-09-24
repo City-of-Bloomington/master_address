@@ -41,7 +41,8 @@ if (isset($_POST['changeLogEntry'])) {
 
 		switch ($action) {
 			case 'correct':
-				$address->correct($_POST,$changeLogEntry);
+			case 'update':
+				$address->$action($_POST,$changeLogEntry);
 				break;
 
 			case 'readdress':
@@ -49,19 +50,10 @@ if (isset($_POST['changeLogEntry'])) {
 				break;
 
 			case 'retire':
-				$address->retire($changeLogEntry);
-				break;
-
 			case 'unretire':
-				$address->unretire($changeLogEntry);
-				break;
-
 			case 'reassign':
-				$address = $address->reassign($changeLogEntry);
-				break;
-
 			case 'verify':
-				$address->verify($changeLogEntry);
+				$address->$action($changeLogEntry);
 				break;
 		}
 

@@ -11,13 +11,27 @@
 		<td><input name="street_number" id="street_number"
 					value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
 		</td>
-	</tr>	
+	</tr>
 	<tr><td><label for="streetName" class="required">Street</label></td>
 		<td><?php
 				$block = new Block('addresses/partials/streetSelector.inc',
 									array('street'=>$this->address->getStreet()));
 				echo $block->render();
 			?>
+		</td>
+	</tr>
+	<tr><td><label for="zip" class="required">Zip Code - Plus4</label></td>
+		<td><select name="zip" id="zip">
+			<?php
+				$zips = Address::getZipCodes();
+				foreach($zips as $zip){
+					$selected = ($zip == $this->address->getZip())?"selected=\"selected\"":"";
+					echo "<option $selected>$zip</option>";
+				}
+			?>
+			</select> -
+			<input name="zipplus4" id="zipplus4" size="4" maxlength="4"
+					value="<?php echo $this->address->getZipplus4(); ?>" />
 		</td>
 	</tr>
 	<tr><td><label>Status</label></td>

@@ -6,24 +6,39 @@
  * @param Address $this->address
  */
 // Set up all the valid actions based on the current status of the address
-$actions = array('correct','readdress','verify');
+$actions = array('correct'=>"Correct something in the primary attributes of the address, but it isn't a change of address.",
+				'update'=>'Update any other address attributes that is not Re-Addressing',
+				'readdress'=>'Change of address, involves change in the Street and/or Street Number.',
+				'verify'=>'Confirm the address information is correct');
 if ($this->address->getStatus()->getDescription() == 'RETIRED') {
-	$actions[] = 'unretire';
-	$actions[] = 'reassign';
+	$actions['unretire'] = 'Unretire the address. Subunits will remain retired.';
+	$actions['reassign'] = 'Use this address at a new location';
 }
 else {
-	$actions[] = 'retire';
+	$actions['retire'] = 'Retires the address.  All subunits will be retired as well.';
 }
 
 echo "<h1>Address Information</h1>";
 if (userIsAllowed('Address')) {
 	echo "
 	<table>
+	";
+	foreach ($actions as $action=>$description) {
+		$action = ucfirst($action);
+		echo "
+		<tr><th>$action</th>
+			<td>$description</td>
+		</tr>
+		";
+	}
+	echo "
+	</table>
+	<table>
 		<tr><th>Action</th>
 			<td><select onchange=\"handleActionChoice(this);\">
 					<option value=\"\">Action to Apply</option>
 	";
-					foreach ($actions as $action) {
+					foreach (array_keys($actions) as $action) {
 						echo "<option>$action</option>";
 					}
 	echo "
