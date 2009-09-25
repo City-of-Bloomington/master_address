@@ -16,7 +16,7 @@
 
 	<table>
 	<tr><td><fieldset>
-				<table>
+				<table class="action">
 					<tr><td>Action</td>
 						<td><label>
 								<input type="radio" name="action" value="add"
@@ -40,7 +40,7 @@
 				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
 			</fieldset>
 		</td>
-		<td><fieldset><legend>Location Characteristics</legend>
+		<td><fieldset>
 				<?php
 					if (isset($this->location)) {
 						echo "<input type=\"hidden\" name=\"location_id\" value=\"{$this->location->getId()}\" />";
