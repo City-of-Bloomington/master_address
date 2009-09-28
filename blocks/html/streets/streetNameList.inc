@@ -8,12 +8,14 @@
  */
 $addButton = '';
 if (userIsAllowed('Street')) {
-	$url = new URL(BASE_URL.'/streets/addStreetName.php');
-	$url->street_id = $this->street->getId();
+	$url = BASE_URL.'/streets/actions.php?street_id='.$this->street->getId();
 	$addButton = "
 		<div>
-			<button type=\"button\" onclick=\"document.location.href='$url';\">
-				Add Street Name
+			<button type=\"button\" onclick=\"document.location.href='$url;action=alias';\">
+				Add Alias
+			</button>
+			<button type=\"button\" onclick=\"document.location.href='$url;action=change';\">
+				Change Name
 			</button>
 		</div>
 		";
@@ -23,29 +25,21 @@ if (userIsAllowed('Street')) {
 	<h1>Street Names</h1>
 	<?php echo $addButton; ?>
 	<table>
-		<tr><th>Direction</th>
-			<th>Street Name</th>
-			<th>Street Type</th>
-			<th>Post Direction</th>
-			<th>Name Type</th>
-			<th></th>
+		<tr>
+			<th>Type</th>
+			<th>Name</th>
+			<th>Start</th>
+			<th>End</th>
 		</tr>
 		<?php
 			foreach ($this->streetNameList as $streetName) {
-				$editButton = '';
-				if (userIsAllowed('StreetName')) {
-					$url = new URL(BASE_URL.'/streets/updateStreetName.php');
-					$url->id = $streetName->getId();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
-				$name = View::escape($streetName->getStreet_name());
+				$name = View::escape($streetName);
 				echo "
-				<tr><td>{$streetName->getDirection()->getCode()}</td>
-					<td>$name</td>
-					<td>{$streetName->getStreetType()->getDescription()}</td>
-					<td>{$streetName->getPostDirection()->getDescription()}</td>
+				<tr>
 					<td>{$streetName->getStreetNameType()}</td>
-					<td>$editButton</td>
+					<td>$name</td>
+					<td>{$streetName->getStartDate('n/j/Y')}</td>
+					<td>{$streetName->getEndDate('n/j/Y')}</td>
 				</tr>
 				";
 			}

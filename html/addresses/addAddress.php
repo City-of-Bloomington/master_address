@@ -78,8 +78,11 @@ if (isset($_POST['changeLogEntry'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('addresses/breadcrumbs.inc',
-								array('street'=>$street,'action'=>'add'));
+$breadcrumbs = new Block('addresses/breadcrumbs.inc',array('action'=>'add'));
+if (isset($street)) {
+	$breadcrumbs->street = $street;
+}
+$template->blocks[] = $breadcrumbs;
 
 // If we've successfully saved the address, let the user know
 if ($address->getId()) {

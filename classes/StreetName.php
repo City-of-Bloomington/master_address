@@ -54,9 +54,11 @@ class StreetName
 				foreach ($result as $field=>$value) {
 					if ($value) {
 					    if (preg_match('/date/',$field) && $value!='0000-00-00') {
-							$value = new Date($value);
+							$this->$field = new Date($value);
 						}
-						$this->$field = trim($value);
+						else {
+							$this->$field = trim($value);
+						}
 					}
 				}
 			}
@@ -67,6 +69,7 @@ class StreetName
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->effective_start_date = new Date();
 		}
 	}
 
@@ -487,5 +490,21 @@ class StreetName
 	public function getPostDirectionCode()
 	{
 		return $this->getPost_direction_suffix_code();
+	}
+
+	/**
+	 * Alias for getEffective_start_date()
+	 */
+	public function getStartDate($format=null)
+	{
+		return $this->getEffective_start_date($format);
+	}
+
+	/**
+	 * Alias for getEffective_end_date()
+	 */
+	public function getEndDate($format=null)
+	{
+		return $this->getEffective_end_date($format);
 	}
 }

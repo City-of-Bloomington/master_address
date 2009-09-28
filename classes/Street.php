@@ -292,6 +292,63 @@ class Street
 	}
 
 	/**
+	 * Creates a new name for a street
+	 *
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function addStreetName(array $post,ChangeLogEntry $changeLogEntry)
+	{
+		$fields = array('street_name','street_type_suffix_code','street_name_type',
+						'effective_start_date','effective_end_date','notes',
+						'street_direction_code','post_direction_suffix_code');
+		$streetName = new StreetName();
+		$streetName->setStreet($this);
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$streetName->$set($post[$field]);
+			}
+		}
+		$streetName->save();
+		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * Creates a new StreetName with type:"STREET"
+	 * Sets any old StreetNames of type:"STREET" to type:"HISTORIC"
+	 */
+	public function changeStreetName(array $post,ChangeLogEntry $changeLogEntry)
+	{
+		$fields = array('street_name','street_type_suffix_code',
+						'effective_start_date','effective_end_date','notes',
+						'street_direction_code','post_direction_suffix_code');
+		$streetName = new StreetName();
+		$streetName->setStreet($this);
+		$streetName->setStreet_name_type('STREET');
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$streetName->$set($post[$field]);
+			}
+		}
+		$streetName->save();
+
+		$zend_db = Database::getConnection();
+		$zend_db->update('mast_street_names',
+						array('street_name_type'=>'HISTORIC',
+								'effective_end_date'=>date('Y-m-d')),
+						"street_id={$this->street_id}
+						and street_name_type='STREET'
+						and id!={$streetName->getId()}");
+
+		$this->updateChangeLog($changeLogEntry);
+		foreach ($this->getAddresses() as $address) {
+			$address->updateChangeLog($changeLogEntry);
+		}
+	}
+
+	/**
 	 * @return AddressList
 	 */
 	public function getAddresses()

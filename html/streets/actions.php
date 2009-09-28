@@ -36,28 +36,30 @@ if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
 
-		if (isset($_POST['street'])) {
-			$actionFields = array('correct'=>array('town_id','notes'));
+		switch ($action) {
+			case 'correct':
+				$street->correct($_POST,$changeLogEntry);
+				break;
 
-			if (count($actionFields[$action])) {
-				foreach ($actionFields[$action] as $field) {
-					if (isset($_POST['street'][$field])) {
-						$set = 'set'.ucfirst($field);
-						$street->$set($_POST['street'][$field]);
-					}
-				}
-				$street->save($changeLogEntry);
-			}
-		}
-		else {
-			$street->updateChangeLog($changeLogEntry);
+			case 'alias':
+				$street->addStreetName($_POST,$changeLogEntry);
+				break;
+
+			case 'change':
+				$street->changeStreetName($_POST,$changeLogEntry);
+				break;
+
+			case 'retire':
+			case 'unretire':
+			case 'verify':
+				$street->$action($changeLogEntry);
+				break;
 		}
 		header('Location: '.$street->getURL());
 		exit();
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
-		exit();
 	}
 }
 

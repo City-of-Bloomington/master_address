@@ -9,7 +9,7 @@
 ?>
 <h1>Update Street</h1>
 <form method="post" action="<?php echo BASE_URL; ?>/streets/actions.php"
-	onsubmit="getChangeLog(this); return false;">
+	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'correctForm'); return false;">
 	<fieldset><legend>Street Info</legend>
 		<input name="street_id" type="hidden" value="<?php echo $this->street->getStreet_id(); ?>" />
 		<input name="action" type="hidden" value="correct" />
@@ -48,7 +48,8 @@
 	</fieldset>
 
 	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'correct'));
+		$block = new Block('changeLogs/changeLogEntryFields.inc',
+							array('action'=>'correct','id'=>'correctForm'));
 		echo $block->render('html');
 	?>
 </form>
