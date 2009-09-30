@@ -11,71 +11,53 @@ if (!userIsAllowed('Address')) {
 	exit();
 }
 
-$address = new Address();
-if (isset($_REQUEST['street_id']) && $_REQUEST['street_id']) {
-	try {
-		$address->setStreet_id($_REQUEST['street_id']);
-		$street = new Street($_REQUEST['street_id']);
-	}
-	catch (Exception $e) {
-		// Ignore any bad streets
-	}
-}
-
-$location = new Location();
-if (isset($_REQUEST['location_id']) && $_REQUEST['location_id']) {
-	$location = new Location($_REQUEST['location_id']);
-}
-
+// If they've submitted a valid post, create the new address.
 if (isset($_POST['changeLogEntry'])) {
-	$fields = array('street_id','street_number',
-					'address_type','tax_jurisdiction','jurisdiction_id','township_id',
-					'section','quarter_section','subdivision_id','plat_id','plat_lot_number',
-					'street_address_2','city','state','zip','zipplus4',
-					'latitude','longitude','state_plane_x_coordinate','state_plane_y_coordinate',
-					'census_block_fips_code','notes');
-	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
-			$set = 'set'.ucfirst($field);
-			$address->$set($_POST[$field]);
-		}
-	}
-
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
-		$address->save($changeLogEntry);
-		$address->saveStatus('CURRENT');
-
-		$type = new LocationType($_POST['location_type_id']);
-		if ($_POST['location_id']) {
-			$location->assign($address,$type);
-		}
-		else {
-			$location = new Location();
-			$location->assign($address,$type);
-			$location->activate($address);
-		}
-
-		$data['mailable'] = isset($_POST['mailable']);
-		$data['livable'] = isset($_POST['livable']);
-		$location->update($data,$address);
+		$address = Address::createNew($_POST,$changeLogEntry);
 
 		if (!isset($_POST['batch_mode'])) {
 			header('Location: '.$address->getStreet()->getURL());
 			exit();
-		}
-		else {
-			$locationData = array();
-			$locationData['mailable'] = $location->isMailable($address);
-			$locationData['livable'] = $location->isLivable($address);
-			$locationData['locationType'] = $location->getLocationType($address);
-			unset($location);
 		}
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
+
+// If they haven't submitted an address in batch_mode,
+// create an address with default information to start from
+if (!isset($address)) {
+	$address = new Address();
+
+	if (isset($_REQUEST['street_id']) && $_REQUEST['street_id']) {
+		try {
+			$address->setStreet_id($_REQUEST['street_id']);
+			$street = new Street($_REQUEST['street_id']);
+		}
+		catch (Exception $e) {
+			// Ignore any bad streets
+		}
+	}
+
+	$location = new Location();
+	if (isset($_REQUEST['location_id']) && $_REQUEST['location_id']) {
+		$location = new Location($_REQUEST['location_id']);
+	}
+}
+else {
+	$street = $address->getStreet();
+
+	$location = $address->getLocation();
+	$locationData = array();
+	$locationData['mailable'] = $location->isMailable($address);
+	$locationData['livable'] = $location->isLivable($address);
+	$locationData['locationType'] = $location->getLocationType($address);
+	unset($location);
+}
+
 
 $template = new Template();
 $breadcrumbs = new Block('addresses/breadcrumbs.inc',array('action'=>'add'));

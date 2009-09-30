@@ -159,9 +159,9 @@ class Address
 		$data['a']['latitude'] = $this->latitude ? $this->latitude : null;
 		$data['a']['longitude'] = $this->longitude ? $this->longitude : null;
 		$data['a']['notes'] = $this->notes ? $this->notes : null;
+		$data['a']['numeric_street_number'] = $this->numeric_street_number;
 		$data['s']['trash_pickup_day'] = $this->trash_pickup_day ? $this->trash_pickup_day : null;
 		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
-		$data['s']['numeric_street_number'] = $this->numeric_street_number;
 
 		if ($this->street_address_id) {
 			$this->updateDB($data);
@@ -1267,5 +1267,58 @@ class Address
 	public function verify(ChangeLogEntry $changeLogEntry)
 	{
 		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * Creates a new address in the database and returns the new address
+	 *
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 * @return Address
+	 */
+	public static function createNew(array $post,ChangeLogEntry $changeLogEntry)
+	{
+		$address = new Address();
+		$fields = array('street_id','street_number',
+						'address_type','tax_jurisdiction','jurisdiction_id','township_id',
+						'section','quarter_section','subdivision_id','plat_id','plat_lot_number',
+						'street_address_2','city','state','zip','zipplus4',
+						'latitude','longitude','state_plane_x_coordinate','state_plane_y_coordinate',
+						'census_block_fips_code','notes');
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$address->$set($post[$field]);
+			}
+		}
+
+		$zend_db = Database::getConnection();
+		$zend_db->beginTransaction();
+		try {
+			$address->save($changeLogEntry);
+			$address->saveStatus('CURRENT');
+
+			$type = new LocationType($post['location_type_id']);
+			if (isset($post['location_id']) && $post['location_id']) {
+				$location = new Location($post['location_id']);
+				$location->assign($address,$type);
+			}
+			else {
+				$location = new Location();
+				$location->assign($address,$type);
+				$location->activate($address);
+			}
+
+			$data['mailable'] = isset($post['mailable']);
+			$data['livable'] = isset($post['livable']);
+			$location->update($data,$address);
+		}
+		catch (Exception $e) {
+			print_r($e);
+			$zend_db->rollBack();
+			throw $e;
+		}
+		$zend_db->commit();
+		return $address;
 	}
 }

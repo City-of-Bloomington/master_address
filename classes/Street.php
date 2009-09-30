@@ -19,7 +19,6 @@ class Street
 
 	private $town;
 	private $status;
-	private $addresses;
 
 	/**
 	 * Populates the object with data
@@ -320,47 +319,70 @@ class Street
 	 */
 	public function changeStreetName(array $post,ChangeLogEntry $changeLogEntry)
 	{
-		$fields = array('street_name','street_type_suffix_code',
-						'effective_start_date','effective_end_date','notes',
-						'street_direction_code','post_direction_suffix_code');
-		$streetName = new StreetName();
-		$streetName->setStreet($this);
-		$streetName->setStreet_name_type('STREET');
-		foreach ($fields as $field) {
-			if (isset($post[$field])) {
-				$set = 'set'.ucfirst($field);
-				$streetName->$set($post[$field]);
+		$zend_db = Database::getConnection();
+		$zend_db->beginTransaction();
+
+		try {
+			$fields = array('street_name','street_type_suffix_code',
+							'effective_start_date','effective_end_date','notes',
+							'street_direction_code','post_direction_suffix_code');
+			$streetName = new StreetName();
+			$streetName->setStreet($this);
+			$streetName->setStreet_name_type('STREET');
+			foreach ($fields as $field) {
+				if (isset($post[$field])) {
+					$set = 'set'.ucfirst($field);
+					$streetName->$set($post[$field]);
+				}
+			}
+			$streetName->save();
+
+			$zend_db->update('mast_street_names',
+							array('street_name_type'=>'HISTORIC',
+									'effective_end_date'=>date('Y-m-d')),
+							"street_id={$this->street_id}
+							and street_name_type='STREET'
+							and id!={$streetName->getId()}");
+
+			$this->updateChangeLog($changeLogEntry);
+
+			// If they post new address street numbers, apply the new street numbers
+			// and save the changeLog for each address
+			if (isset($post['addresses'])) {
+				foreach ($post['addresses'] as $id=>$number) {
+					$address = new Address($id);
+					$address->setStreet_number($number);
+					$address->save($changeLogEntry);
+				}
+			}
+			else {
+				// Otherwise, just save the changeLogEntry against all the addresses
+				foreach ($this->getAddresses() as $address) {
+					$address->updateChangeLog($changeLogEntry);
+				}
 			}
 		}
-		$streetName->save();
-
-		$zend_db = Database::getConnection();
-		$zend_db->update('mast_street_names',
-						array('street_name_type'=>'HISTORIC',
-								'effective_end_date'=>date('Y-m-d')),
-						"street_id={$this->street_id}
-						and street_name_type='STREET'
-						and id!={$streetName->getId()}");
-
-		$this->updateChangeLog($changeLogEntry);
-		foreach ($this->getAddresses() as $address) {
-			$address->updateChangeLog($changeLogEntry);
+		catch (Exception $e) {
+			print_r($e);
+			$zend_db->rollBack();
+			throw $e;
 		}
+		$zend_db->commit();
 	}
 
 	/**
+	 * @param array $fields Extra fields to search on
 	 * @return AddressList
 	 */
-	public function getAddresses()
+	public function getAddresses(array $fields=null)
 	{
 		if ($this->street_id) {
-			if (!$this->addresses) {
-			    $addresses = new AddressList(array('street_id'=>$this->street_id));
-				$this->addresses = $addresses;
+			$search = array('street_id'=>$this->street_id);
+			if ($fields) {
+				$search = array_merge($search,$fields);
 			}
-			return $this->addresses;
+		    return new AddressList($search);
 		}
-		return null;
 	}
 
 	/**
@@ -447,5 +469,57 @@ class Street
 	public function verify(ChangeLogEntry $changeLogEntry)
 	{
 		$this->updateChangeLog($changeLogEntry);
+	}
+
+	/**
+	 * Creates a new street in the database and returns the new street
+	 *
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 * @return Street
+	 */
+	public static function createNew(array $post,ChangeLogEntry $changeLogEntry)
+	{
+		$zend_db = Database::getConnection();
+		$zend_db->beginTransaction();
+
+		try {
+			$street = new Street();
+			$street->setTown_id($post['town_id']);
+			$street->setNotes($post['notes']);
+
+			switch ($changeLogEntry->action) {
+				case 'propose':
+					$street->setStatus('PROPOSED');
+					break;
+				default:
+					$street->setStatus('CURRENT');
+			}
+			$street->save($changeLogEntry);
+
+			if (isset($post['street_name'])) {
+				$streetName = new StreetName();
+				$streetName->setStreet_name_type('STREET');
+
+				$fields = array('street_direction_code','street_name',
+								'street_type_suffix_code','post_direction_suffix_code');
+				foreach ($fields as $field) {
+					if (isset($post[$field])) {
+						$set = 'set'.ucfirst($field);
+						$streetName->$set($post[$field]);
+					}
+				}
+
+				$streetName->setStreet_id($street->getId());
+				$streetName->save();
+			}
+			$zend_db->commit();
+
+			return $street;
+		}
+		catch (Exception $e) {
+			$zend_db->rollBack();
+			throw $e;
+		}
 	}
 }

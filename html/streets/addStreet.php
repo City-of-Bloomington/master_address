@@ -15,30 +15,7 @@ if (!userIsAllowed('Street')) {
 if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
-
-		$street = new Street();
-		$street->setTown_id($_POST['town_id']);
-		$street->setNotes($_POST['notes']);
-
-		switch ($changeLogEntry->action) {
-			case 'propose':
-				$street->setStatus('PROPOSED');
-				break;
-			default:
-				$street->setStatus('CURRENT');
-		}
-		$street->save($changeLogEntry);
-
-		if (isset($_POST['streetName'])) {
-			$streetName = new StreetName();
-			$streetName->setStreet_name_type('STREET');
-			foreach ($_POST['streetName'] as $field=>$value) {
-				$set = 'set'.ucfirst($field);
-				$streetName->$set($value);
-			}
-		}
-		$streetName->setStreet_id($street->getId());
-		$streetName->save();
+		$street = Street::createNew($_POST,$changeLogEntry);
 
 		header('Location: '.$street->getURL());
 		exit();
