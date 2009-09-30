@@ -23,7 +23,7 @@ class AddressList extends ZendDbResultIterator
 							'plat_id','plat_lot_number','street_address_2',
 							'city','state','zip','zipplus4','census_block_fips_code',
 							'state_plane_x_coordinate','state_plane_y_coordinate',
-							'latitude','longitude','notes');
+							'latitude','longitude','notes','numeric_street_number');
 	private static $directions = array();
 	private static $streetTypes = array();
 	private static $subunitTypes = array();
@@ -72,7 +72,7 @@ class AddressList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='street_number',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
 	{
 		$this->createSelection();
 
@@ -100,15 +100,10 @@ class AddressList extends ZendDbResultIterator
 			}
 		}
 
-		if ($order == 'street_number') {
-			$order = (isset($joins) && array_key_exists('n',$joins))
-				? "n.street_name,to_number(regexp_substr(a.street_number,'\d+'))"
-				: "to_number(regexp_substr(a.street_number,'\d+'))";
-		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
-	public function search($fields=null,$order='street_number',$limit=null,$groupBy=null)
+	public function search($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
 	{
 		$this->createSelection();
 
@@ -138,11 +133,6 @@ class AddressList extends ZendDbResultIterator
 
 		}
 
-		if ($order == 'street_number') {
-			$order = (isset($joins) && array_key_exists('n',$joins))
-				? "n.street_name,to_number(regexp_substr(a.street_number,'\d+'))"
-				: "to_number(regexp_substr(a.street_number,'\d+'))";
-		}
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
@@ -156,9 +146,6 @@ class AddressList extends ZendDbResultIterator
 	 */
 	private function runSelection($order,$limit=null,$groupBy=null)
 	{
-		if(substr($order,0,9) != 'to_number' && substr($order,1,1) != '.'){
-			$order = "a.$order";
-		}
 		$this->select->order($order);
 		if ($limit) {
 			$this->select->limit($limit);
@@ -237,6 +224,13 @@ class AddressList extends ZendDbResultIterator
 			$joins['l'] = array('table'=>'address_location',
 								'condition'=>'a.street_address_id=l.street_address_id');
 			$this->select->where('l.location_id=?',$fields['location_id']);
+		}
+
+		if (isset($fields['status'])) {
+			$status = ($fields['status'] instanceof AddressStatus)
+					? $fields['status']
+					: new AddressStatus($fields['status']);
+			$this->select->where('status.status_code=?',$status->getCode());
 		}
 
 		return $joins;

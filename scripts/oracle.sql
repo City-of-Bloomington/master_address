@@ -517,6 +517,7 @@ create table mast_address (
 	longitude number,
 	notes varchar2(240),
 	status_code number,
+	numeric_street_number number,
 	foreign key (street_id) references mast_street(street_id),
 	foreign key (quarter_section) references quarter_section_master(quarter_section),
 	foreign key (township_id) references township_master(township_id),

@@ -30,6 +30,7 @@ class Address
 	private $latitude;
 	private $longitude;
 	private $notes;
+	private $numeric_street_number;
 
 	private $status_code;	// Used for pre-loading the latest status
 	private $description; 	// Used for pre-loading the latest status
@@ -135,13 +136,13 @@ class Address
 		$this->validate();
 
 		$data = array();
-		$data['a']['street_number'] = $this->street_number ? $this->street_number : null;
+		$data['a']['street_number'] = $this->street_number;
 		$data['a']['street_id'] = $this->street_id;
 		$data['a']['address_type'] = $this->address_type;
 		$data['a']['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
 		$data['a']['jurisdiction_id'] = $this->gov_jur_id;
 		$data['a']['gov_jur_id'] = $this->gov_jur_id;
-		$data['a']['township_id'] = $this->township_id ? $this->township_id : null;
+		$data['a']['township_id'] = $this->township_id;
 		$data['a']['section'] = $this->section ? $this->section : null;
 		$data['a']['quarter_section'] = $this->quarter_section ? $this->quarter_section : null;
 		$data['a']['subdivision_id'] = $this->subdivision_id ? $this->subdivision_id : null;
@@ -150,7 +151,7 @@ class Address
 		$data['a']['street_address_2'] = $this->street_address_2 ? $this->street_address_2 : null;
 		$data['a']['city'] = $this->city ? $this->city : null;
 		$data['a']['state'] = $this->state ? $this->state : null;
-		$data['a']['zip'] = $this->zip ? $this->zip : null;
+		$data['a']['zip'] = $this->zip;
 		$data['a']['zipplus4'] = $this->zipplus4 ? $this->zipplus4 : null;
 		$data['a']['census_block_fips_code'] = $this->census_block_fips_code ? $this->census_block_fips_code : null;
 		$data['a']['state_plane_x_coordinate'] = $this->state_plane_x_coordinate ? $this->state_plane_x_coordinate : null;
@@ -160,6 +161,7 @@ class Address
 		$data['a']['notes'] = $this->notes ? $this->notes : null;
 		$data['s']['trash_pickup_day'] = $this->trash_pickup_day ? $this->trash_pickup_day : null;
 		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
+		$data['s']['numeric_street_number'] = $this->numeric_street_number;
 
 		if ($this->street_address_id) {
 			$this->updateDB($data);
@@ -576,6 +578,7 @@ class Address
 	 */
 	public function setStreet_number($string)
 	{
+		$this->numeric_street_number = (int)$string;
 		$this->street_number = trim($string);
 	}
 
