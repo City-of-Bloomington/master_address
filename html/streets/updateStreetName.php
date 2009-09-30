@@ -4,23 +4,28 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-if (!userIsAllowed('StreetName')) {
+if (!userIsAllowed('Street')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL.'/streets');
 	exit();
 }
 
-$streetName = new StreetName($_REQUEST['id']);
+$streetName = new StreetName($_REQUEST['streetName_id']);
+$street = $streetName->getStreet();
 
-if (isset($_POST['streetName'])) {
-	foreach ($_POST['streetName'] as $field=>$value) {
-		$set = 'set'.ucfirst($field);
-		$streetName->$set($value);
+if (isset($_POST['street_name'])) {
+	$fields = array('street_direction_code','street_name','street_type_suffix_code',
+					'post_direction_suffix_code');
+	foreach ($fields as $field) {
+		if (isset($_POST[$field])) {
+			$set = 'set'.ucfirst($field);
+			$streetName->$set($_POST[$field]);
+		}
 	}
 
 	try {
 		$streetName->save();
-		header('Location: '.BASE_URL.'/streets');
+		header('Location: '.$street->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -28,10 +33,17 @@ if (isset($_POST['streetName'])) {
 	}
 }
 
-$street = $streetName->getStreet();
-$streetNameList = $street->getStreetNameList();
 
-$template = new Template();
-$template->blocks[] = new Block('streets/updateStreetNameForm.inc',array('streetName'=>$streetName));
-$template->blocks[] = new Block('streets/streetNameList.inc',array('streetNameList'=>$streetNameList,'street'=>$street));
+$template = new Template('two-column');
+$template->blocks[] = new Block('streets/breadcrumbs.inc',array('street'=>$street));
+$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$street));
+$template->blocks[] = new Block('changeLogs/changeLog.inc',
+								array('changeLog'=>$street->getChangeLog()));
+
+$template->blocks['panel-one'][] = new Block('streets/updateStreetNameForm.inc',
+											array('streetName'=>$streetName));
+
+$template->blocks['panel-one'][] = new Block('addresses/addressList.inc',
+											array('addressList'=>$street->getAddresses(),
+													'street'=>$street));
 echo $template->render();

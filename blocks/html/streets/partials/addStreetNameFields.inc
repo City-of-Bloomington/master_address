@@ -16,7 +16,7 @@
 						echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
 					}
 				?>
-				</select>
+			</select>
 		</td>
 	</tr>
 
