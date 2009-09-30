@@ -59,3 +59,14 @@ echo "
 		echo "<h2>No Addresses Found</h2>";
 	}
 echo "</div>";
+
+if (userIsAllowed('Address')) {
+	echo "
+	<p>Can't find what you're looking for?</p>
+	<div>
+		<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/addresses/addAddress.php';\">
+			Add an Address
+		</button>
+	</div>
+	";
+}
