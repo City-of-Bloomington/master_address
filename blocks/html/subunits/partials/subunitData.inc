@@ -29,9 +29,6 @@ echo "
 	<tr><th>Status</th>
 		<td>{$this->subunit->getStatus()}</td>
 	</tr>
-	<tr><th>Notes</th>
-		<td>{$notes}</td>
-	</tr>
 	<tr><th>Location Use Type</th>
 	    <td>$type</td>
 	</tr>
@@ -43,6 +40,7 @@ echo "
 	</tr>
 	<tr><th>Active</th>
 		<td>$active</td>
-	</tr>	
+	</tr>
 </table>
+<p>$notes</p>
 ";

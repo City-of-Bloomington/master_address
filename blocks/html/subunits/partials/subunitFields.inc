@@ -28,9 +28,8 @@
 					value="<?php echo View::escape($this->subunit->getIdentifier()); ?>" />
 		</td>
 	</tr>
-	<tr><td><label for="notes">Notes</label></td>
-		<td><input name="notes" id="notes"
-					value="<?php echo View::escape($this->subunit->getNotes()); ?>" />
-		</td>
-	</tr>
 </table>
+<div>
+	<div><label for="notes">Notes</label></div>
+	<textarea name="notes" id="notes" rows="3" cols="50"><?php echo View::escape($this->subunit->getNotes()); ?></textarea>
+</div>
