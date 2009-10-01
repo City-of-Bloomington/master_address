@@ -11,39 +11,16 @@
 	onsubmit="FRAMEWORK.getChangeLog(this,'addSubunitForm'); return false;">
 	<fieldset><legend>Subunit Information</legend>
 		<input name="street_address_id" type="hidden" value="<?php echo $this->address->getId() ?>" />
-		<table>
-			<tr><td><label for="sudtype" class="required">Type</label></td>
-				<td><select name="sudtype" id="sudtype">
-						<option></option>
-						<?php
-							$types = new SubunitTypeList();
-							$types->find();
-								foreach ($types as $type) {
-									echo "<option value=\"{$type->getSudtype()}\">{$type->getDescription()}</option>";
-								}
-						?>
-                   </select>
-				</td>
-			</tr>
-
-			<tr><td><label for="street_subunit_identifier" class="required">Unit</label></td>
-				<td><input name="street_subunit_identifier" id="street_subunit_identifier" />
-					<div>Comma separated for multiple subunts (Ex. A, B, C)</div>
-				</td>
-			</tr>
-
-			<tr><td><label for="notes">Notes</label></td>
-				<td><input name="notes" id="notes" />
-				</td>
-			</tr>
-		</table>
+		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitFields.inc'; ?>
 	</fieldset>
 
 	<fieldset>
 		<?php
-			$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
-			$this->locationData['locationType'] = new LocationType('RESIDENTIAL MULTI-FAMILY');
-			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+			$locationData = $this->address->getLocation()->getUpdatableData($this->address);
+			$locationData['locationType'] = new LocationType('RESIDENTIAL MULTI-FAMILY');
+			$block = new Block('locations/partials/locationFields.inc',
+								array('locationData'=>$locationData));
+			echo $block->render('html');
 		?>
 	</fieldset>
 	<fieldset>
