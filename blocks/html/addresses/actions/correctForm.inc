@@ -18,15 +18,11 @@
 	</fieldset>
 
 	<fieldset>
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc'; ?>
-		<button type="submit" class="save">Save Changes</button>
-	</fieldset>
-
-	<fieldset>
 		<?php
-			$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
-			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+			include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
+			include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
 		?>
+		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
 	<?php

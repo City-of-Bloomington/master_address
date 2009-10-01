@@ -47,6 +47,7 @@
 						$this->locationData = $this->location->getUpdatableData($this->address);
 					}
 					include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+					include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFields.inc';
 				?>
 			</fieldset>
 		</td>

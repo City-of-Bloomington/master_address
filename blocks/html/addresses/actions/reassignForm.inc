@@ -25,6 +25,7 @@
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
+		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
 
 		$block = new Block('changeLogs/changeLogEntryFields.inc',
 							array('action'=>'reassign','id'=>'reassignForm'));

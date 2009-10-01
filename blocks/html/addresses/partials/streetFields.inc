@@ -22,7 +22,7 @@
 			?>
 		</td>
 	</tr>
-	<tr><td><label for="zip" class="required">Zip Code - Plus4</label></td>
+	<tr><td><label for="zip" class="required">Zip Code</label></td>
 		<td><select name="zip" id="zip">
 			<?php
 				$zips = Address::getZipCodes();
@@ -32,8 +32,6 @@
 				}
 			?>
 			</select> -
-			<input name="zipplus4" id="zipplus4" size="4" maxlength="4"
-					value="<?php echo $this->address->getZipplus4(); ?>" />
 		</td>
 	</tr>
 	<tr><td><label>Status</label></td>
