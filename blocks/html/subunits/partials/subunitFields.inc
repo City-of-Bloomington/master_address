@@ -31,6 +31,9 @@ $subunit = $this->subunit ? $this->subunit : new Subunit();
 	</tr>
 </table>
 <div>
+	<p>If you are adding multiple subunits,
+		these notes will be entered on all the subunits you create.
+	</p>
 	<div><label for="notes">Notes</label></div>
 	<textarea name="notes" id="notes" rows="3" cols="50"><?php echo View::escape($subunit->getNotes()); ?></textarea>
 </div>
