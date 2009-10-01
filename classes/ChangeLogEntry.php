@@ -126,4 +126,20 @@ class ChangeLogEntry
 		}
 		return $this->contact;
 	}
+
+	/**
+	 * Returns the object that was the target of this action
+	 *
+	 * This will only work if it knows the type and id
+	 *
+	 * @return Address|Street|Subunit
+	 */
+	public function getTarget()
+	{
+		if ($this->type) {
+			if ($this->id) {
+				return new $this->type($this->id);
+			}
+		}
+	}
 }

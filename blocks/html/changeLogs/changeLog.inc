@@ -10,13 +10,13 @@ echo "
 	<h1>Action History</h1>
 ";
 if (count($this->changeLog)) {
-	$type = $this->changeLog[0]->type ? '<th>Type</th>' : '';
 	echo "
 	<table>
-	<tr>$type
-		<th>Action Date</th>
+	<tr><th>Action Date</th>
+		<th></th>
 		<th>Action</th>
 		<th>User</th>
+		<th>Contact</th>
 		<th>Notes</th>
 	</tr>
 	";
@@ -24,13 +24,15 @@ if (count($this->changeLog)) {
 		$username = $logEntry->getUser()->getUsername();
 		$notes = View::escape($logEntry->notes);
 		$notes = $notes ? $notes:'&nbsp;';
-		$type = $logEntry->type ? "<td>{$logEntry->type}</td>" : '';
-
 		echo "
-		<tr>$type
+		<tr>
 			<td>{$logEntry->action_date}</td>
+			<td>{$logEntry->getTarget()}</td>
 			<td>{$logEntry->action}</td>
 			<td>$username</td>
+			<td>{$logEntry->getContact()->getFirstname()}
+				{$logEntry->getContact()->getLastname()}
+			</td>
 			<td>$notes</td>
 		</tr>
 		";
