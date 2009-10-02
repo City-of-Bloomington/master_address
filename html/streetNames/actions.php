@@ -3,8 +3,9 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param REQUEST street_id
  * @param REQUEST action
+ * @param REQUEST street_id			You must provide either street or streetName
+ * @param REQUEST streetName_id		You must provide either street or streetName
  */
 $errorURL = BASE_URL.'/streets';
 if (!userIsAllowed('Street')) {
@@ -12,14 +13,21 @@ if (!userIsAllowed('Street')) {
 	header("Location: $errorURL");
 	exit();
 }
-if (!isset($_REQUEST['street_id']) || !$_REQUEST['street_id']
-	|| !isset($_REQUEST['action']) || !$_REQUEST['action']) {
+if (!isset($_REQUEST['action']) || !$_REQUEST['action']) {
 	header("Location: $errorURL");
 	exit();
 }
 
+$action = $_REQUEST['action'];
+
 try {
-	$street = new Street($_REQUEST['street_id']);
+	if (isset($_REQUEST['streetName_id'])) {
+		$streetName = new StreetName($_REQUEST['streetName_id']);
+		$street = $streetName->getStreet();
+	}
+	else {
+		$street = new Street($_REQUEST['street_id']);
+	}
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -27,7 +35,6 @@ catch (Exception $e) {
 	exit();
 }
 
-$action = $_REQUEST['action'];
 
 // All actions will involve updating the change log
 // Some actions do not involve changing any fields of an address.
@@ -38,13 +45,15 @@ if (isset($_POST['changeLogEntry'])) {
 
 		switch ($action) {
 			case 'correct':
-				$street->correct($_POST,$changeLogEntry);
+				$streetName->correct($_POST,$changeLogEntry);
 				break;
 
-			case 'retire':
-			case 'unretire':
-			case 'verify':
-				$street->$action($changeLogEntry);
+			case 'alias':
+				$street->addStreetName($_POST,$changeLogEntry);
+				break;
+
+			case 'change':
+				$street->changeStreetName($_POST,$changeLogEntry);
 				break;
 		}
 		header('Location: '.$street->getURL());
@@ -57,7 +66,17 @@ if (isset($_POST['changeLogEntry'])) {
 
 $template = new Template('two-column');
 $template->blocks[] = new Block('streets/breadcrumbs.inc',array('street'=>$street));
-$template->blocks[] = new Block("streets/actions/{$action}Form.inc",array('street'=>$street));
+$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$street));
+$template->blocks[] = new Block('changeLogs/changeLog.inc',
+								array('changeLog'=>$street->getChangeLog()));
+
+
+$parameters = array('street'=>$street);
+if (isset($streetName)) {
+	$parameters['streetName'] = $streetName;
+}
+$template->blocks['panel-one'][] = new Block("streets/actions/{$action}Form.inc",$parameters);
+
 $template->blocks['panel-one'][] = new Block('streets/streetNameList.inc',
 												array('streetNameList'=>$street->getNames(),
 														'street'=>$street));

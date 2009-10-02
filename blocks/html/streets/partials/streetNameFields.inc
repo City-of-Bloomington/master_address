@@ -3,7 +3,9 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param StreetName $this->streetName (optional)
  */
+$streetName = $this->streetName ? $this->streetName : new StreetName();
 ?>
 <table>
 	<tr><td><label for="street_direction_code">Direction</label></td>
@@ -13,7 +15,10 @@
 					$directions = new DirectionList();
 					$directions->find();
 					foreach ($directions as $direction) {
-						echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
+						$selected = $streetName->getDirectionCode()==$direction->getCode()
+									? 'selected="selected"'
+									: '';
+						echo "<option value=\"{$direction->getCode()}\" $selected>{$direction->getDescription()}</option>";
 					}
 				?>
 			</select>
@@ -21,7 +26,7 @@
 	</tr>
 
 	<tr><td><label for="street_name" class="required">Name</label></td>
-		<td><input name="street_name" id="street_name" />
+		<td><input name="street_name" id="street_name" value="<?php echo View::escape($streetName->getName()); ?>" />
 		</td>
 	</tr>
 
@@ -32,7 +37,10 @@
 					$types = new StreetTypeList();
 					$types->find();
 					foreach ($types as $type) {
-						echo "<option value=\"{$type->getCode()}\">$type</option>";
+						$selected = $streetName->getStreet_type_suffix_code()==$type->getCode()
+									? 'selected="selected"'
+									: '';
+						echo "<option value=\"{$type->getCode()}\" $selected>$type</option>";
 					}
 				?>
 			</select>
@@ -44,7 +52,10 @@
 				<option></option>
 				<?php
 					foreach ($directions as $direction) {
-						echo "<option value=\"{$direction->getCode()}\">{$direction->getDescription()}</option>";
+						$selected = $streetName->getPostDirectionCode()==$direction->getCode()
+									? 'selected="selected"'
+									: '';
+						echo "<option value=\"{$direction->getCode()}\" $selected>{$direction->getDescription()}</option>";
 					}
 				?>
 			</select>

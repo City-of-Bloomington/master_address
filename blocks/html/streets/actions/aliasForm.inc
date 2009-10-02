@@ -14,10 +14,11 @@
 		<input name="action" type="hidden" value="alias" />
 		<?php
 			include APPLICATION_HOME.'/blocks/html/streets/partials/streetNameTypeSelector.inc';
-			include APPLICATION_HOME.'/blocks/html/streets/partials/addStreetNameFields.inc';
+			include APPLICATION_HOME.'/blocks/html/streets/partials/streetNameFields.inc';
 		?>
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel" onclick="document.location.href='<?php echo BASE_URL; ?>/streets';">
+		<button type="button" class="cancel"
+			onclick="document.location.href='<?php echo $this->street->getURL(); ?>';">
 			Cancel
 		</button>
 	</fieldset>

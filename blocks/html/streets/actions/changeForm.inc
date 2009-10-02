@@ -37,7 +37,7 @@ $url = new URL(BASE_URL.'/streets/actions.php');
   		<input name="street_id" type="hidden" value="<?php echo $this->street->getId(); ?>" />
 		<input name="action" type="hidden" value="change" />
 		<?php
-			include APPLICATION_HOME.'/blocks/html/streets/partials/addStreetNameFields.inc';
+			include APPLICATION_HOME.'/blocks/html/streets/partials/streetNameFields.inc';
 		?>
 		<button type="submit" class="submit">Submit</button>
 		<button type="button" class="cancel"

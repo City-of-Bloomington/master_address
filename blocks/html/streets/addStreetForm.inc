@@ -27,7 +27,7 @@
 	</fieldset>
 
 	<fieldset><legend>Street Name</legend>
-	<?php include APPLICATION_HOME.'/blocks/html/streets/partials/addStreetNameFields.inc'; ?>
+	<?php include APPLICATION_HOME.'/blocks/html/streets/partials/streetNameFields.inc'; ?>
 	</fieldset>
 
 	<fieldset><legend>Street Information</legend>

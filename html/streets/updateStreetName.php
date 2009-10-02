@@ -42,7 +42,9 @@ $template->blocks[] = new Block('changeLogs/changeLog.inc',
 
 $template->blocks['panel-one'][] = new Block('streets/updateStreetNameForm.inc',
 											array('streetName'=>$streetName));
-
+$template->blocks['panel-one'][] = new Block('streets/streetNameList.inc',
+											array('streetNameList'=>$street->getNames(),
+													'street'=>$street));
 $template->blocks['panel-one'][] = new Block('addresses/addressList.inc',
 											array('addressList'=>$street->getAddresses(),
 													'street'=>$street));
