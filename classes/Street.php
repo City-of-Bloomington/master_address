@@ -497,16 +497,16 @@ class Street
 			}
 			$street->save($changeLogEntry);
 
-			if (isset($post['street_name'])) {
+			if (isset($post['streetName'])) {
 				$streetName = new StreetName();
 				$streetName->setStreet_name_type('STREET');
 
 				$fields = array('street_direction_code','street_name',
-								'street_type_suffix_code','post_direction_suffix_code');
+								'street_type_suffix_code','post_direction_suffix_code','notes');
 				foreach ($fields as $field) {
-					if (isset($post[$field])) {
+					if (isset($post['streetName'][$field])) {
 						$set = 'set'.ucfirst($field);
-						$streetName->$set($post[$field]);
+						$streetName->$set($post['streetName'][$field]);
 					}
 				}
 

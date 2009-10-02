@@ -13,13 +13,13 @@ if (!userIsAllowed('Street')) {
 $streetName = new StreetName($_REQUEST['streetName_id']);
 $street = $streetName->getStreet();
 
-if (isset($_POST['street_name'])) {
+if (isset($_POST['streetName'])) {
 	$fields = array('street_direction_code','street_name','street_type_suffix_code',
-					'post_direction_suffix_code');
+					'post_direction_suffix_code','notes');
 	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
+		if (isset($_POST['streetName'][$field])) {
 			$set = 'set'.ucfirst($field);
-			$streetName->$set($_POST[$field]);
+			$streetName->$set($_POST['streetName'][$field]);
 		}
 	}
 

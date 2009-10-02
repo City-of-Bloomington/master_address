@@ -1,6 +1,6 @@
 <table>
-	<tr><td><label for="street_name_type">Street Name Type</label></td>
-		<td><select name="street_name_type" id="street_name_type">
+	<tr><td><label for="streetName-street_name_type">Street Name Type</label></td>
+		<td><select name="streetName[street_name_type]" id="streetName-street_name_type">
 			<?php
 				$list = new StreetNameTypeList();
 				$list->find();

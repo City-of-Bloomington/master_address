@@ -8,8 +8,8 @@
 $streetName = $this->streetName ? $this->streetName : new StreetName();
 ?>
 <table>
-	<tr><td><label for="street_direction_code">Direction</label></td>
-		<td><select name="street_direction_code" id="street_direction_code">
+	<tr><td><label for="streetName-street_direction_code">Direction</label></td>
+		<td><select name="streetName[street_direction_code]" id="streetName-street_direction_code">
 				<option></option>
 				<?php
 					$directions = new DirectionList();
@@ -25,13 +25,14 @@ $streetName = $this->streetName ? $this->streetName : new StreetName();
 		</td>
 	</tr>
 
-	<tr><td><label for="street_name" class="required">Name</label></td>
-		<td><input name="street_name" id="street_name" value="<?php echo View::escape($streetName->getName()); ?>" />
+	<tr><td><label for="streetName-street_name" class="required">Name</label></td>
+		<td><input name="streetName[street_name]" id="streetName-street_name"
+				value="<?php echo View::escape($streetName->getName()); ?>" />
 		</td>
 	</tr>
 
-	<tr><td><label for="street_type_suffix_code">Street Type</label></td>
-		<td><select name="street_type_suffix_code" id="street_type_suffix_code">
+	<tr><td><label for="streetName-street_type_suffix_code">Street Type</label></td>
+		<td><select name="streetName[street_type_suffix_code]" id="streetName-street_type_suffix_code">
 				<option></option>
 				<?php
 					$types = new StreetTypeList();
@@ -47,8 +48,8 @@ $streetName = $this->streetName ? $this->streetName : new StreetName();
 		</td>
 	</tr>
 
-	<tr><td><label for="post_direction_suffix_code">Post Direction</label></td>
-		<td><select name="post_direction_suffix_code" id="post_direction_suffix_code">
+	<tr><td><label for="streetName-post_direction_suffix_code">Post Direction</label></td>
+		<td><select name="streetName[post_direction_suffix_code]" id="streetName-post_direction_suffix_code">
 				<option></option>
 				<?php
 					foreach ($directions as $direction) {
@@ -62,3 +63,7 @@ $streetName = $this->streetName ? $this->streetName : new StreetName();
 		</td>
 	</tr>
 </table>
+<div>
+	<div><label for="streetName-notes">Notes</label></div>
+	<textarea name="streetName[notes]" id="streetName-notes" rows="3" cols="50"><?php echo View::escape($streetName->getNotes()); ?></textarea>
+</div>
