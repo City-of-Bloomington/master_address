@@ -41,6 +41,14 @@ if (isset($_POST['changeLogEntry'])) {
 				$street->correct($_POST,$changeLogEntry);
 				break;
 
+			case 'alias':
+				$street->addStreetName($_POST,$changeLogEntry);
+				break;
+
+			case 'change':
+				$street->changeStreetName($_POST,$changeLogEntry);
+				break;
+
 			case 'retire':
 			case 'unretire':
 			case 'verify':
