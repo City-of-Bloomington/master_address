@@ -6,22 +6,30 @@
  * @author W. Sibo <sibow@bloomington.in.gov>
  */
 ?>
+<script type="text/javascript">
+var addStreetFormAction = 'create';
+function handleAddStreet(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,addStreetFormAction);
+	}
+}
+</script>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
-	onsubmit="getChangeLog(this); return false;">
+	onsubmit="handleAddStreet(this); return false;">
 	<fieldset>
 		<label>
 			<input type="radio" name="action" value="add"
-				onclick="document.getElementById('changeLogEntry-action').value='add';" />
+				onclick="addStreetFormAction='add';" />
 			Add
 		</label>
 		<label>
 			<input type="radio" name="action" value="create" checked="checked"
-				onclick="document.getElementById('changeLogEntry-action').value='create';" />
+				onclick="addStreetFormAction='create';" />
 			Create
 		</label>
 		<label>
 			<input type="radio" name="action" value="propose"
-				onclick="document.getElementById('changeLogEntry-action').value='propose';" />
+				onclick="addStreetFormAction='propose';" />
 			Propose
 		</label>
 	</fieldset>
@@ -56,9 +64,4 @@
 
 		<button type="submit" class="submit">Submit Street</button>
 	</fieldset>
-
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'create'));
-		echo $block->render('html');
-	?>
 </form>

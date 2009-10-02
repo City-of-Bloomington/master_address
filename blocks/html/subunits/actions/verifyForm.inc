@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Verify Subunit</h1>
+<script type="text/javascript">
+function handleVerifySubunit(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'verify');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php"
-  onsubmit="FRAMEWORK.getChangeLog(this,'verifySubunitForm'); return false;">
+	onsubmit="handleVerifySubunit(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="verify" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
@@ -20,13 +27,5 @@
 
 		<button type="submit" class="save">Save</button>
 	</fieldset>
-
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>
-
-		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',
-								array('action'=>'verify','id'=>'verifySubunitForm'));
-			echo $block->render('html');
-		?>
-
 </form>

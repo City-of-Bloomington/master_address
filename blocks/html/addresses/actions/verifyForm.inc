@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Verify Address</h1>
+<script type="text/javascript">
+function handleVerifyAddress(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'verify');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.getChangeLog(this,'verifyForm'); return false;">
+	onsubmit="handleVerifyAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="verify" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -25,9 +32,5 @@
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
-
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'verify','id'=>'verifyForm'));
-		echo $block->render('html');
 	?>
 </form>

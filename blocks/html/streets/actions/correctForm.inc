@@ -7,9 +7,16 @@
  * @param Street $this->street
  */
 ?>
-<h1>Update Street</h1>
+<h1>Correct Street</h1>
+<script type="text/javascript">
+function handleCorrectStreet(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'correct');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/streets/actions.php"
-	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'correctForm'); return false;">
+	onsubmit="handleCorrectStreet(this); return false;">
 	<fieldset><legend>Street Info</legend>
 		<input name="street_id" type="hidden" value="<?php echo $this->street->getStreet_id(); ?>" />
 		<input name="action" type="hidden" value="correct" />
@@ -46,10 +53,4 @@
 
 		<button type="submit" class="submit">Save Changes</button>
 	</fieldset>
-
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'correct','id'=>'correctForm'));
-		echo $block->render('html');
-	?>
 </form>

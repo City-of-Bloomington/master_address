@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Correct This Subunit</h1>
+<script type="text/javascript">
+function handleCorrectSubunit(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'correct');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php"
-	onsubmit="FRAMEWORK.getChangeLog(this,'correctSubunitForm'); return false;">
+	onsubmit="handleCorrectSubunit(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
@@ -23,9 +30,4 @@
 		?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'correct','id'=>'correctSubunitForm'));
-		echo $block->render('html');
-	?>
 </form>

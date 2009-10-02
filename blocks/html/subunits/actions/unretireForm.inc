@@ -7,9 +7,16 @@
  * @param Subunit $this->subunit
  */
 ?>
-<h1>Retire Subunit</h1>
+<h1>Unretire Subunit</h1>
+<script type="text/javascript">
+function handleUnretireSubunit(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'unretire');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/subunits/actions.php"
-  onsubmit="FRAMEWORK.getChangeLog(this,'unretireSubunitForm'); return false;">
+	onsubmit="handleUnretireSubunit(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="unretire" />
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
@@ -21,13 +28,5 @@
 
 		<button type="submit" class="save">Save</button>
 	</fieldset>
-
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>
-
-		<?php
-			$block = new Block('changeLogs/changeLogEntryFields.inc',
-								array('action'=>'unretire','id'=>'unretireSubunitForm'));
-			echo $block->render('html');
-		?>
-
 </form>

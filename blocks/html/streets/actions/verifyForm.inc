@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Verify Street</h1>
+<script type="text/javascript">
+function handleVerifyStreet(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'verify');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/streets/actions.php"
-	onsubmit="getChangeLog(this); return false;">
+	onsubmit="handleVerifyStreet(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="verify" />
 		<input type="hidden" name="street_id" value="<?php echo $this->street->getId(); ?>" />
@@ -20,9 +27,4 @@
 
 		<button type="submit" class="save">Save</button>
 	</fieldset>
-
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'verify'));
-		echo $block->render('html');
-	?>
 </form>

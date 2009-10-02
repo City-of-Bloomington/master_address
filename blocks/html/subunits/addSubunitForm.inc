@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Add Subunit</h1>
+<script type="text/javascript">
+function handleAddSubunit(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'assign');
+	}
+}
+</script>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
-	onsubmit="FRAMEWORK.getChangeLog(this,'addSubunitForm'); return false;">
+	onsubmit="handleAddSubunit(this); return false;">
 	<fieldset><legend>Subunit Information</legend>
 		<input name="street_address_id" type="hidden" value="<?php echo $this->address->getId() ?>" />
 		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitFields.inc'; ?>
@@ -26,9 +33,4 @@
 	<fieldset>
 		<button type="submit" class="submit">Submit</button>
 	</fieldset>
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'assign','id'=>'addSubunitForm'));
-		echo $block->render('html');
-	?>
 </form>

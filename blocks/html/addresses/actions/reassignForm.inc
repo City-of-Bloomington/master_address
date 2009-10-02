@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Reassign Address</h1>
+<script type="text/javascript">
+function handleReassignAddress(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'reassign');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.getChangeLog(this,'reassignForm'); return false;">
+	onsubmit="handleReassignAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="reassign" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -26,9 +33,5 @@
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
-
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'reassign','id'=>'reassignForm'));
-		echo $block->render('html');
 	?>
 </form>

@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Correct this address</h1>
+<script type="text/javascript">
+function handleCorrectAddress(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'correct');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'correctForm'); return false;">
+	onsubmit="handleCorrectAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -24,10 +31,4 @@
 		?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
-
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'correct','id'=>'correctForm'));
-		echo $block->render('html');
-	?>
 </form>

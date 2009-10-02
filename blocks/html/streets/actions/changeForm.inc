@@ -8,8 +8,15 @@
 $url = new URL(BASE_URL.'/streets/actions.php');
 ?>
 <h1>Change Street Name</h1>
+<script type="text/javascript">
+function handleChangeStreet(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'change');
+	}
+}
+</script>
 <form method="post" action="<?php echo $url; ?>"
-	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'changeForm'); return false;">
+	onsubmit="handleChangeStreet(this); return false;">
 	<fieldset><legend>Renumber Addresses</legend>
 		<p>Do you want to re-number the addresses on this street?</p>
 		<?php
@@ -49,8 +56,5 @@ $url = new URL(BASE_URL.'/streets/actions.php');
 		if ($yesChecked) {
 			include APPLICATION_HOME.'/blocks/html/streets/partials/renumberAddressesForm.inc';
 		}
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'change','id'=>'changeForm'));
-		echo $block->render('html');
 	?>
 </form>

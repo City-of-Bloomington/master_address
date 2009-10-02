@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Change Of Address</h1>
+<script type="text/javascript">
+function handleReaddressAddress(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'readdress');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.getChangeLog(this,'readdressForm'); return false;">
+	onsubmit="handleReaddressAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="readdress" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -20,9 +27,5 @@
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
-
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'readdress','id'=>'readdressForm'));
-		echo $block->render('html');
 	?>
 </form>

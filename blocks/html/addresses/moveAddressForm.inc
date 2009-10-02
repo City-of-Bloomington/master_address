@@ -9,8 +9,20 @@
  */
 ?>
 <h1>Move Address to This Location</h1>
+<script type="text/javascript">
+function handleMoveAddress(form) {
+	if (document.getElementById('new_location_id').value) {
+		if (FRAMEWORK.checkRequiredFields()) {
+			FRAMEWORK.getChangeLog(form,'verify');
+		}
+	}
+	else {
+		form.submit();
+	}
+}
+</script>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
-	onsubmit="handleSubmit(this); return false;">
+	onsubmit="handleMoveAddress(this); return false;">
 	<fieldset><legend>From</legend>
 		<input type="hidden" name="old_location_id" value="<?php echo $this->location->getId(); ?>" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -92,18 +104,4 @@
 		?>
 		<button type="submit" class="submit">Move To Location</button>
 	</fieldset>
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',array('action'=>'move'));
-		echo $block->render('html');
-	?>
 </form>
-<script type="text/javascript">
-	function handleSubmit(form) {
-		if (document.getElementById('new_location_id').value) {
-			getChangeLog(form);
-		}
-		else {
-			form.submit();
-		}
-	}
-</script>

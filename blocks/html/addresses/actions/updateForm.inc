@@ -7,8 +7,15 @@
  */
 ?>
 <h1>Update this address</h1>
+<script type="text/javascript">
+function handleUpdateAddress(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,'update');
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'updateForm'); return false;">
+	onsubmit="handleUpdateAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="update" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
@@ -28,11 +35,4 @@
 		?>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
-
-
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-							array('action'=>'update','id'=>'updateForm'));
-		echo $block->render('html');
-	?>
 </form>

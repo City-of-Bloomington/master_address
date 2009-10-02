@@ -10,22 +10,28 @@
  */
 ?>
 <h1>Add Address</h1>
-
+<script type="text/javascript">
+var addAddressFormAction = 'add';
+function handleAddAddress(form) {
+	if (FRAMEWORK.checkRequiredFields()) {
+		FRAMEWORK.getChangeLog(form,addAddressFormAction);
+	}
+}
+</script>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
-	onsubmit="FRAMEWORK.checkAndgetChangeLog(this,'addAddressForm'); return false;">
-
+	onsubmit="handleAddAddress(this); return false;">
 	<table>
 	<tr><td><fieldset>
 				<table class="action">
 					<tr><td>Action</td>
 						<td><label>
 								<input type="radio" name="action" value="add"
-									onclick="document.getElementById('changeLogEntry-action').value='add';" />
+									onclick="addAddressFormAction='add';" />
 								Add
 							</label>
 							<label>
 								<input type="radio" name="action" value="assign" checked="checked"
-									onclick="document.getElementById('changeLogEntry-action').value='assign';" />
+									onclick="addAddressFormAction='assign';" />
 								Assign
 							</label>
 						</td>
@@ -53,11 +59,6 @@
 		</td>
 	</tr>
 	</table>
-	<?php
-		$block = new Block('changeLogs/changeLogEntryFields.inc',
-						   array('action'=>'assign','id'=>'addAddressForm'));
-		echo $block->render('html');
-	?>
 	<fieldset>
 		<button type="submit" class="submit">Save</button>
 		<label>
