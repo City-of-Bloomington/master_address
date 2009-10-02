@@ -15,7 +15,8 @@ $street = $streetName->getStreet();
 
 if (isset($_POST['streetName'])) {
 	$fields = array('street_direction_code','street_name','street_type_suffix_code',
-					'post_direction_suffix_code','notes');
+					'post_direction_suffix_code','notes',
+					'effective_start_date','effective_end_date');
 	foreach ($fields as $field) {
 		if (isset($_POST['streetName'][$field])) {
 			$set = 'set'.ucfirst($field);

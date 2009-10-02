@@ -62,6 +62,16 @@ $streetName = $this->streetName ? $this->streetName : new StreetName();
 			</select>
 		</td>
 	</tr>
+	<tr><td><label for="streetName-effective_start_date">Start Date</label></td>
+		<td><input name="streetName[effective_start_date]" id="streetName-effective_start_date"
+				value="<?php echo $streetName->getEffective_start_date('n/j/Y'); ?>" />
+		</td>
+	</tr>
+	<tr><td><label for="streetName-effective_end_date">End Date</label></td>
+		<td><input name="streetName[effective_end_date]" id="streetName-effective_end_date"
+				value="<?php echo $streetName->getEffective_end_date('n/j/Y'); ?>" />
+		</td>
+	</tr>
 </table>
 <div>
 	<div><label for="streetName-notes">Notes</label></div>

@@ -501,8 +501,9 @@ class Street
 				$streetName = new StreetName();
 				$streetName->setStreet_name_type('STREET');
 
-				$fields = array('street_direction_code','street_name',
-								'street_type_suffix_code','post_direction_suffix_code','notes');
+				$fields = array('street_direction_code','street_name','street_type_suffix_code',
+								'post_direction_suffix_code','notes',
+								'effective_start_date','effective_end_date');
 				foreach ($fields as $field) {
 					if (isset($post['streetName'][$field])) {
 						$set = 'set'.ucfirst($field);
