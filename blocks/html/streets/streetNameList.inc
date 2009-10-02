@@ -27,13 +27,16 @@ if (userIsAllowed('Street')) {
 	<h1>Street Names</h1>
 	<?php echo $addButtons; ?>
 	<table>
-		<tr>
-			<th>Type</th>
-			<th>Name</th>
-			<th>Start</th>
-			<th>End</th>
-			<th></th>
-		</tr>
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Name</th>
+				<th>Start</th>
+				<th>End</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			foreach ($this->streetNameList as $streetName) {
 				$name = View::escape($streetName);
@@ -53,12 +56,14 @@ if (userIsAllowed('Street')) {
 						</button>
 						";
 					}
+					$notes = View::escape($streetName->getNotes());
 				echo "
 					</td>
 				</tr>
+				<tr><td colspan=\"5\">$notes</td></tr>
 				";
 			}
 		?>
-
+		</tbody>
 	</table>
 </div>
