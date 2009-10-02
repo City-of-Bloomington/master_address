@@ -31,15 +31,18 @@ foreach ($this->address->getLocations() as $i=>$location) {
 	}
 	$content = "
 	<div id=\"location_{$location->getId()}\">
-		<h1>Location Characteristics {$location->getStatus()}</h1>
+		<h4 align=\"left\">Location Addresses</h4>
+		<span style=\"float:right;\"><label>Location Status</label> <span>{$location->getStatus()}</span></span>
 		$buttons
 		<table>
+			<thead>
 			<tr><th>Address</th>
 				<th>Active</th>
 				<th>Status</th>
 				<th>Jurisdiction</th>
 				<th>Zip</th>
 			</tr>
+			</thead>
 	";
 			foreach ($location->getAddresses() as $address) {
 				$checked = '';
@@ -49,6 +52,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 				}
 
 				$content.= "
+				<tbody>
 				<tr><td><a href=\"{$address->getURL()}\">$address</a></td>
 					<td><input type=\"radio\" name=\"address_id\"
 							value=\"{$address->getId()}\" $checked
@@ -58,6 +62,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 					<td>{$address->getJurisdiction()}</td>
 					<td>{$address->getZip()}</td>
 				</tr>
+				</tbody>
 				";
 			}
 	$content.= "
