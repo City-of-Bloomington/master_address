@@ -8,27 +8,28 @@
  */
 ?>
 <div class="interfaceBox subunitList">
-	<h1>Subunits</h1>
-	<?php
-		if (isset($this->address) && userIsAllowed('Subunit')) {
-			echo "
-			<div>
-				<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/subunits/addSubunit.php?street_address_id={$this->address->getId()}';\">
-					Add Subunit
-				</button>
-			</div>
-			";
-		}
-	?>
-		<?php
-	        if(count($this->subunitList)){
-				echo "
-				<table>
-					<tr><th>Type</th>
-						<th>#</th>
-						<th>Status</th>
-					</tr>";
-			}
+<h1>Subunits</h1>
+<?php
+	if (isset($this->address) && userIsAllowed('Subunit')) {
+		echo "
+		<div>
+			<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/subunits/addSubunit.php?street_address_id={$this->address->getId()}';\">
+				Add Subunit
+			</button>
+		</div>
+		";
+	}
+	if (count($this->subunitList)) {
+		echo "
+		<table>
+			<thead>
+				<tr><th>Type</th>
+					<th>#</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+		";
 			foreach ($this->subunitList as $subunit) {
 				$number = View::escape($subunit->getIdentifier());
 				$number = "<a href=".BASE_URL."/subunits/viewSubunit.php?subunit_id=".$subunit->getId().">$number</a>";
@@ -39,9 +40,10 @@
 				</tr>
 				";
 			}
-			if(count($this->subunitList)){
-				echo "</table>";
-			}
-		?>
-
+		echo "
+			</tbody>
+		</table>
+		";
+	}
+?>
 </div>

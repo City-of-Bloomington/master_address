@@ -47,7 +47,7 @@ class Contact
 				}
 			}
 			else {
-				throw new Exception('addressChange/unknownAddrAssignmentContact');
+				throw new Exception('contacts/unknownContact');
 			}
 		}
 		else {

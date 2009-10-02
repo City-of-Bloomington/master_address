@@ -15,15 +15,17 @@
 		Contacts
 	</h1>
 	<table>
-		<tr><th></th>
-			<th>Name</th>
-			<th>Phone</th>
-			<th>Type</th>
-			<th>Organization</th>
-		</tr>
+		<thead>
+			<tr><th></th>
+				<th>Name</th>
+				<th>Phone</th>
+				<th>Type</th>
+				<th>Organization</th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			foreach ($this->contactList as $contact) {
-
 				$editButton = '';
 				if (userIsAllowed('Contact')) {
 					$url = new URL(BASE_URL.'/contacts/updateContact.php');
@@ -46,5 +48,6 @@
 				";
 			}
 		?>
+		</tbody>
 	</table>
 </div>

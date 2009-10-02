@@ -9,11 +9,14 @@
 if (count($this->streetList)) {
 	echo "
 	<table>
-		<tr>
-		    <th>Street Name</th>
-			<th>Status</th>
-            <th>Town</th>
-		</tr>
+		<thead>
+			<tr>
+				<th>Street Name</th>
+				<th>Status</th>
+				<th>Town</th>
+			</tr>
+		</thead>
+		<tbody>
 	";
 		foreach ($this->streetList as $street) {
 			$name = View::escape($street->getStreetName());
@@ -28,6 +31,7 @@ if (count($this->streetList)) {
 			";
 		}
 	echo "
+		</tbody>
 	</table>
 	";
 }

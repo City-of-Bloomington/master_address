@@ -24,36 +24,42 @@ echo "
 	if (count($this->addressList)) {
 		echo "
 		<table>
-			<tr><th>#</th>
-				<th>Type</th>
-				<th>Street</th>
-				<th>Status</th>
-				<th>Jurisdiction</th>
-				<th>Zip</th>
-				<th>Units</th>
-			</tr>
+			<thead>
+				<tr><th>#</th>
+					<th>Type</th>
+					<th>Street</th>
+					<th>Status</th>
+					<th>Jurisdiction</th>
+					<th>Zip</th>
+					<th>Units</th>
+				</tr>
+			</thead>
+			<tbody>
 	";
-		foreach ($this->addressList as $address) {
-			$street_number = $address->getStreet_number();
-			$type = $address->getAddress_type();
-			$street = View::escape($address->getStreetName());
-			$status = $address->getStatus();
-			$jurisdiction = $address->getJurisdiction();
-			$zip = $address->getZip();
-			$count = $address->getSubunitCount();
-			$count = $count ? $count : '';
-			echo "
-			<tr><td><a href=\"{$address->getURL()}\">$street_number</a></td>
-				<td><a href=\"{$address->getURL()}\">$type</a></td>
-				<td><a href=\"{$address->getURL()}\">$street</a></td>
-				<td><a href=\"{$address->getURL()}\">$status</a></td>
-				<td><a href=\"{$address->getURL()}\">$jurisdiction</a></td>
-				<td><a href=\"{$address->getURL()}\">$zip</a></td>
-				<td>$count</td>
-			</tr>
-			";
-		}
-		echo "</table>";
+			foreach ($this->addressList as $address) {
+				$street_number = $address->getStreet_number();
+				$type = $address->getAddress_type();
+				$street = View::escape($address->getStreetName());
+				$status = $address->getStatus();
+				$jurisdiction = $address->getJurisdiction();
+				$zip = $address->getZip();
+				$count = $address->getSubunitCount();
+				$count = $count ? $count : '';
+				echo "
+				<tr><td><a href=\"{$address->getURL()}\">$street_number</a></td>
+					<td><a href=\"{$address->getURL()}\">$type</a></td>
+					<td><a href=\"{$address->getURL()}\">$street</a></td>
+					<td><a href=\"{$address->getURL()}\">$status</a></td>
+					<td><a href=\"{$address->getURL()}\">$jurisdiction</a></td>
+					<td><a href=\"{$address->getURL()}\">$zip</a></td>
+					<td>$count</td>
+				</tr>
+				";
+			}
+		echo "
+			</tbody>
+		</table>
+		";
 	}
 	else {
 		echo "<h2>No Addresses Found</h2>";

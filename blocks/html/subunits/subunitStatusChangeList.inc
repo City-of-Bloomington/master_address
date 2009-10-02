@@ -9,11 +9,14 @@
 <div class="interfaceBox">
 	<h1>Status History</h1>
 	<table>
-		<tr>
-			<th>Status</th>
-			<th>Start Date</th>
-			<th>End Date</th>
-		</tr>
+		<thead>
+			<tr>
+				<th>Status</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			foreach ($this->subunitStatusChangeList as $subunitStatusChange) {
 				echo "
@@ -24,5 +27,6 @@
 				";
 			}
 		?>
+		</tbody>
 	</table>
 </div>

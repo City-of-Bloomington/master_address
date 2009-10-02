@@ -18,15 +18,18 @@ if (!count($this->platList)) {
 		Plats
 	</h1>
 	<table>
-		<tr><th></th>
-			<th>Name</th>
-			<th>Township</th>
-			<th>Start Date</th>
-			<th>End Date</th>
-			<th>Type</th>
-			<th>Cabinet</th>
-			<th>Envelope</th>
-		</tr>
+		<thead>
+			<tr><th></th>
+				<th>Name</th>
+				<th>Township</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Type</th>
+				<th>Cabinet</th>
+				<th>Envelope</th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			foreach ($this->platList as $plat) {
 				$editButton = '';
@@ -52,5 +55,6 @@ if (!count($this->platList)) {
 				";
 			}
 		?>
+		</tbody>
 	</table>
 </div>
