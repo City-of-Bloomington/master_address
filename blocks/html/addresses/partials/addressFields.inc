@@ -5,7 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
-
 ?>
 <table>
 	<tr><td><label for="address_type" class="required">Address Type</label></td>
@@ -21,7 +20,6 @@
 			</select>
 		</td>
 	</tr>
-
 	<tr><td><label for="trash_pickup_day">Trash Schedule</label></td>
 		<td><select name="trash_pickup_day" id="trash_pickup_day">
 				<option></option>
@@ -36,4 +34,17 @@
 			</select>
 		</td>
 	</tr>
-</table>
+	<tr><td><label for="recycle_week">Recycle Week</label></td>
+		<td><select name="recycle_week" id="recycle_week">
+				<option></option>
+				<?php
+					foreach (Address::getRecycleWeeks() as $week) {
+						$selected = $this->address->getRecycle_week() == $week
+							? 'selected="selected"'
+							: '';
+						echo "<option $selected>$week</option>";
+					}
+				?>
+			</select>
+		</td>
+	</tr>

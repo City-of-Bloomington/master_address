@@ -39,20 +39,24 @@ function handleAddAddress(form) {
 				</table>
 			</fieldset>
 			<fieldset>
-				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
+				<?php
+					include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc';
+				?>
 			</fieldset>
 
 			<fieldset>
-				<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc'; ?>
-			</fieldset>
-		</td>
-		<td><fieldset>
 				<?php
+					include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc';
 					if (isset($this->location)) {
 						echo "<input type=\"hidden\" name=\"location_id\" value=\"{$this->location->getId()}\" />";
 						$this->locationData = $this->location->getUpdatableData($this->address);
 					}
 					include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+				?>
+			</fieldset>
+		</td>
+		<td><fieldset>
+				<?php
 					include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFields.inc';
 				?>
 			</fieldset>

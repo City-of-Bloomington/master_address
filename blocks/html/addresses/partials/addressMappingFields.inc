@@ -57,21 +57,6 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="recycle_week">Recycle Week</label></td>
-		<td><select name="recycle_week" id="recycle_week">
-				<option></option>
-				<?php
-					foreach (Address::getRecycleWeeks() as $week) {
-						$selected = $this->address->getRecycle_week() == $week
-							? 'selected="selected"'
-							: '';
-						echo "<option $selected>$week</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-
 	<tr><td><label for="section">Section</label></td>
 		<td><input name="section" id="section" size="2" maxlength="2"
 					value="<?php echo View::escape($this->address->getSection()); ?>" />
