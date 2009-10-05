@@ -44,6 +44,36 @@ FRAMEWORK.getChangeLog = function (form,action)
 	changeLogForm.render(form);
 	changeLogForm.show();
 
+
+	var callbacks = {
+		// Successful XHR response handler
+		success : function (o) {
+			var messages = [];
+
+			// Use the JSON Utility to parse the data returned from the server
+			try {
+				response = YAHOO.lang.JSON.parse(o.responseText);
+				var contacts = response.contacts;
+			}
+			catch (x) {
+				alert("Failed to load contacts!");
+			}
+
+			// The returned data was parsed into an array of objects.
+			// Add a P element for each received message
+			for (var i = 0, len = contacts.length; i < len; ++i) {
+				var c = contacts[i];
+				var option = document.createElement('option');
+				option.setAttribute('value',c.id);
+				option.appendChild(document.createTextNode(c.name));
+				document.getElementById('changeLogEntry-contact_id').appendChild(option);
+			}
+		}
+	};
+
+	// Make the call to the server for JSON data
+	YAHOO.util.Connect.asyncRequest('GET',"/master_address/contacts/home.php?format=json", callbacks);
+
 	function changeLogSubmit() {
 		form.submit();
 	}

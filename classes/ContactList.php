@@ -44,7 +44,7 @@ class ContactList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='contact_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='last_name,first_name',$limit=null,$groupBy=null)
 	{
 		$this->select->from('mast_addr_assignment_contact');
 

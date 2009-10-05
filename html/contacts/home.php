@@ -4,10 +4,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$template = isset($_GET['format']) ? new Template('default',$_GET['format']) : new Template();
 
 $contacts = new ContactList();
 $contacts->find();
 
-$template = new Template();
 $template->blocks[] = new Block('contacts/contactList.inc',array('contactList'=>$contacts));
 echo $template->render();
