@@ -32,7 +32,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 	$content = "
 	<div id=\"location_{$location->getId()}\">
 		<h4 align=\"left\">Location Addresses</h4>
-		<span style=\"float:right;\"><label>Location Status</label> <span>{$location->getStatus()}</span></span>
+		<p><label>Location Status</label> <span>{$location->getStatus()}</span></p>
 		$buttons
 		<table>
 			<thead>
