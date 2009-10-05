@@ -427,13 +427,24 @@ class AddressList extends ZendDbResultIterator
 		return self::$directions;
 	}
 
+	/**
+	 * Returns only the streetTypes that are actually in use in the system.
+	 *
+	 * Limiting to only those in use provides more accurate parsing of typed addresses.
+	 *
+	 * @return array
+	 */
 	private static function getStreetTypes()
 	{
 		if (!count(self::$streetTypes)) {
-			$list = new StreetTypeList();
-			$list->find();
-			foreach ($list as $streetType) {
-				self::$streetTypes[$streetType->getDescription()] = $streetType->getCode();
+			$zend_db = Database::getConnection();
+			$sql = "select distinct n.street_type_suffix_code,t.description,t.id
+					from mast_street_names n
+					left join mast_street_type_suffix_master t on n.street_type_suffix_code=t.suffix_code
+					where street_type_suffix_code is not null";
+			$result = $zend_db->fetchAll($sql);
+			foreach ($result as $row) {
+				self::$streetTypes[$row['description']] = $row['street_type_suffix_code'];
 			}
 		}
 		return self::$streetTypes;
