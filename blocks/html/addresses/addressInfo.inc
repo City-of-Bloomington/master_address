@@ -18,7 +18,7 @@ else {
 	$actions['retire'] = 'Retires the address.  All subunits will be retired as well.';
 }
 
-echo "<h1>Address Information</h1>";
+echo "<div class=\"interfaceBox\"><h1>Address Information</h1>";
 if (userIsAllowed('Address')) {
 	echo "
 	<table>
@@ -45,7 +45,7 @@ if (userIsAllowed('Address')) {
 				</select>
 			</td>
 		</tr>
-	</table>
+	</table></div>
 	<script type=\"text/javascript\">
 		function handleActionChoice(select) {
 			document.location.href = '".BASE_URL."/addresses/actions.php?action=' + select.options[select.selectedIndex].value + ';address_id={$this->address->getId()}';
