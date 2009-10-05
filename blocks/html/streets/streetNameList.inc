@@ -6,7 +6,7 @@
  * @param StreetNameList $this->streetNameList
  * @param Street $this->street
  */
-$addButton = '';
+$addButtons = '';
 if (userIsAllowed('Street')) {
 	$url = BASE_URL.'/streets/actions.php?street_id='.$this->street->getId();
 	$addButtons = "
