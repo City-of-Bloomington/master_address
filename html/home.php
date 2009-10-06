@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$template = new Template('two-column');
+$template = new Template('full-width');
 $template->blocks[] = new Block('multiSearchForm.inc');
 
 if (isset($_GET['queryType'])) {
