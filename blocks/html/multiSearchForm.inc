@@ -7,6 +7,7 @@
 $queryType = isset($_GET['queryType']) ? $_GET['queryType'] : 'address';
 $query = isset($_GET['query']) ? View::escape($_GET['query']) : '';
 ?>
+<div class="interfaceBox">
 <form method="get" action="<?php echo BASE_URL; ?>">
 	<fieldset><legend>Search</legend>
 		<input name="query" id="multiSearchForm_input" value="<?php echo $query; ?>" />
@@ -17,3 +18,4 @@ $query = isset($_GET['query']) ? View::escape($_GET['query']) : '';
 		<button type="submit" class="search">Search</button>
 	</fieldset>
 </form>
+</div>
