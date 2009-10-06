@@ -6,7 +6,7 @@
  * @param Address $this->address
  */
 ?>
-<h1>Add Subunit</h1>
+<div class="interfaceBox"><h1>Add Subunit</h1>
 <script type="text/javascript">
 function handleAddSubunit(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
@@ -34,3 +34,4 @@ function handleAddSubunit(form) {
 		<button type="submit" class="submit">Submit</button>
 	</fieldset>
 </form>
+</div>
