@@ -16,8 +16,7 @@ if (isset($this->street)) {
 	<span id="chosenStreetName"><?php echo $name ?></span>
 	<input type="hidden" name="street_id" id="street_id"
 		value="<?php echo $id; ?>" />
-</div>
-<div><button type="button" onclick="openStreetSelector();">Choose Street</button></div>
+<button type="button" onclick="openStreetSelector();">Choose Street</button></div>
 
 <div id="streetSelector" style="position:absolute; visibility:hidden;">
 	<div class="hd">Choose a Street</div>
