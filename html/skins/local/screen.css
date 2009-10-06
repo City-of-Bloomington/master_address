@@ -1,36 +1,49 @@
-legend { border:1px solid black; }
+html { background-color:#999999; text-align:center; padding:0; }
+body { width:980px; position:relative; margin:0 auto; padding:0; text-align:left; background-color:white; font-family:Arial, Helvetica, sans-serif; border:1px solid grey; }
+legend {}
+label { font-weight:normal; color:#666666; text-align:right; }
+fieldset { margin:4px 0; }
 
-table { border-collapse:separate; margin:3px 0 8px 0; overflow:auto; }
-tr { }
-td { padding:6px 4px 6px 4px; vertical-align:top; border-bottom:1px solid #dddddd; }
-th { text-align:left; background-color:#dddddd; padding:6px 4px 6px 4px; vertical-align: top; font-weight:bold; border-bottom:1px solid #dddddd; }
+table { border-collapse:separate; margin:3px 0 8px 0; overflow:auto; border:none; }
+td label {float:right; font-weight:normal; color:#666666; vertical-align:top;}
+td input {  }
+td { vertical-align:top; height:8pt; padding:4px; }
+th { height:8pt; padding:4px; }
+thead th { font-weight:normal; color:#666666; text-align:left; vertical-align:bottom; }
+tbody th { font-weight:normal; color:#666666; text-align:right; vertical-align:top; }
 th a:link,th a:visited { color:#3366cc; background-color:inherit; }
 
 form table { border:none; }
-form table th, form table td { border:none; }
-
-
 ul.pageNavigation li { margin-right:2px; }
 
 
 /* Side Panels */
-#panel-container { overflow:auto; padding-top:10px; padding-bottom:2px; }
-
+#panel-container { overflow:auto; }
+#content-panel { padding-top:2px; }
+#panel-one { padding-top:5px; }
 /* Footer */
-#footer h1 { display:inline; font-size: 16px; color: #666666; }
+#footer h1 { float:left; font-size: 16px; color: #666666; }
+
+/* Breadcrumbs */
+.breadcrumbs ul { list-style-type:none; padding-bottom:5px; }
+.breadcrumbs li { display:inline; font-size:14pt; background:url('/skins/origin/images/breadcrumb.png') center right no-repeat; padding-right:.75em; }
+
+.interfaceBox {border-top:1px solid grey; padding:.5em; }
+
+textarea {width:300px; }
 
 /*  Custom buttons for forms */
-button { margin:8px 5px 2px 0px; font-size:1em; }
-button.login { width:52px; height:15px; padding-top:15px; background: url('images/buttons/login.gif') no-repeat; border:0; }
+button { margin:8px 5px 2px 0px;  }
 
 /* All hrefs that are to be rendered as buttons need to include the button class. */
 /* Technique taken from http://www.evotech.net/blog/2007/09/css-image-replacement-method */
 
-#banner .loginForm { position:absolute; top:5px; right:5px; }
+#banner .loginForm { position:absolute; top:5px; right:5px; color:white; }
 #banner .loginForm h1 { display:none; }
+#banner .loginForm th label { color:white; }
 #banner .loginForm fieldset { border:none; margin:0; padding:0; }
 #banner .loginForm legend { display:none; }
-#banner .loginForm button { display:none; }
+#banner .loginForm button {display:none; }
 #banner .loginForm a { font-weight:bold; color:blue; }
 
 .addressList,.subunitList { height:300px; overflow:auto; }
@@ -43,5 +56,7 @@ button.login { width:52px; height:15px; padding-top:15px; background: url('image
 .yui-skin-sam .yui-overlay { color:white; background-color:#737373; padding:10px; }
 .yui-skin-sam .yui-overlay .hd { font-size:12pt; font-weight:bold; }
 .yui-skin-sam .yui-overlay .bd { min-height:30px; }
+
+table.action { border:1px solid #999999; }
 
 
