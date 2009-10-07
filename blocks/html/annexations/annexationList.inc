@@ -7,27 +7,11 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		<?php
-			if (userIsAllowed('Annexation')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/annexations/addAnnexation.php\">Add</a>";
-			}
-		?>
-		Annexations
-	</h1>
-	<ul>
-		<?php
+	<h1>Annexations</h1>
+	<ul><?php
 			foreach ($this->annexationList as $annexation) {
-				$editButton = '';
-				if (userIsAllowed('Annexation')) {
-					$url = new URL(BASE_URL.'/annexations/updateAnnexation.php');
-					$url->annexation_id = $annexation->getId();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
 				$ordinance = View::escape($annexation->getOrdinance_number());
-				echo "
-				<li>$editButton $ordinance</li>
-				";
+				echo "<li>$ordinance</li>";
 			}
 		?>
 	</ul>

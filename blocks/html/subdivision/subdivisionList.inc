@@ -7,23 +7,10 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		<?php
-			if (userIsAllowed('Subdivision')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/subdivisions/addSubdivision.php\">Add</a>";
-			}
-		?>
-		Subdivisions
-	</h1>
+	<h1>Subdivisions</h1>
 	<ul><?php
 			foreach ($this->subdivisionList as $subdivision) {
-				$editButton = '';
-				if (userIsAllowed('Subdivision')) {
-					$url = new URL(BASE_URL.'/subdivisions/updateSubdivision.php');
-					$url->subdivision_id = $subdivision->getSubdivision_id();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
-				echo "<li>$editButton $subdivision</li>";
+				echo "<li>$subdivision</li>";
 			}
 		?>
 	</ul>

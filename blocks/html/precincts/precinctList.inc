@@ -7,28 +7,18 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		<?php
-			if (userIsAllowed('Precinct')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/precincts/addPrecinct.php\">Add</a>";
-			}
-		?>
-		Precincts
-	</h1>
+	<h1>Precincts</h1>
 	<table>
-		<tr><th></th>
-			<th>Code</th>
-			<th>Name</th>
-			<th>Active</th>
-		</tr>
+		<thead>
+			<tr><th></th>
+				<th>Code</th>
+				<th>Name</th>
+				<th>Active</th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			foreach ($this->precinctList as $precinct) {
-				$editButton = '';
-				if (userIsAllowed('Precinct')) {
-					$url = new URL(BASE_URL.'/precincts/updatePrecinct.php');
-					$url->precinct_id = $precinct->getId();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
 				$code = View::escape($precinct->getCode());
 				$name = View::escape($precinct->getName());
 				$active = View::escape($precinct->getActive());
@@ -41,5 +31,6 @@
 				";
 			}
 		?>
+		</tbody>
 	</table>
 </div>

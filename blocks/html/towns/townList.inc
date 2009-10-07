@@ -9,7 +9,11 @@
 <div class="interfaceBox">
 	<h1><?php
 			if (userIsAllowed('Town')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/towns/addTown.php\">Add</a>";
+				echo "
+				<button type=\"button\" class=\"add\" onclick=\"document.location.href='".BASE_URL."/towns/addTown.php';\">
+					Add
+				</button>
+				";
 			}
 		?>
 		Towns
@@ -21,7 +25,11 @@
 			if (userIsAllowed('Town')) {
 				$url = new URL(BASE_URL.'/towns/updateTown.php');
 				$url->town_id = $town->getId();
-				$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
+				$editButton = "
+				<button type=\"button\" class=\"edit\" onclick=\"document.location.href='$url';\">
+					Edit
+				</button>
+				";
 			}
 			$description = View::escape($town->getDescription());
 			$code = View::escape($town->getCode());

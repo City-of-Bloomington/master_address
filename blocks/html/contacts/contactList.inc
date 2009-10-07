@@ -3,13 +3,17 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param ContactList $this->contactList
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		<?php
+	<h1><?php
 			if (userIsAllowed('Contact')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/contacts/addContact.php\">Add</a>";
+				echo "
+				<button type=\"button\" class=\"add\" onclick=\"document.location.href='".BASE_URL."/contacts/addContact.php';\">
+					Add
+				</button>
+				";
 			}
 		?>
 		Contacts
@@ -30,7 +34,11 @@
 				if (userIsAllowed('Contact')) {
 					$url = new URL(BASE_URL.'/contacts/updateContact.php');
 					$url->contact_id = $contact->getContact_id();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
+					$editButton = "
+					<button type=\"button\" class=\"edit\" onclick=\"document.location.href='$url';\">
+						Edit
+					</button>
+					";
 				}
 				$url = new URL(BASE_URL.'/contacts/viewContact.php');
 				$url->contact_id = $contact->getContact_id();
@@ -38,8 +46,7 @@
 				$name = "<a href=\"$url\">$name</a>";
 				$phone = View::escape($contact->getPhone_number());
 				echo "
-				<tr>
-					<td>$editButton</td>
+				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$phone</td>
 					<td>{$contact->getType()}</td>

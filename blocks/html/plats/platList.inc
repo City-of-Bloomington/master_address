@@ -12,7 +12,11 @@ if (!count($this->platList)) {
 <div class="interfaceBox">
 	<h1><?php
 			if (userIsAllowed('Plat')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/plats/addPlat.php\">Add</a>";
+				echo "
+				<button type=\"button\" class=\"add\" onclick=\"document.location.href='".BASE_URL."/plats/addPlat.php';\">
+					Add
+				</button>
+				";
 			}
 		?>
 		Plats
@@ -36,7 +40,11 @@ if (!count($this->platList)) {
 				if (userIsAllowed('Plat')) {
 					$url = new URL(BASE_URL.'/plats/updatePlat.php');
 					$url->plat_id = $plat->getPlat_id();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
+					$editButton = "
+					<button type=\"button\" class=\"edit\" onclick=\"document.location.href='$url';\">
+						Edit
+					</button>
+					";
 				}
 				$name = View::escape($plat->getName());
 				$township = $plat->getTownship_id() ? View::escape($plat->getTownship()->getName()) : '';

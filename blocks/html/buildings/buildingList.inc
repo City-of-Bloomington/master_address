@@ -7,34 +7,22 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		<?php
-			if (userIsAllowed('Building')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuilding.php\">Add</a>";
-			}
-		?>
-		Buildings
-	</h1>
+	<h1>Buildings</h1>
 	<table>
-		<tr><th></th>
-			<th>Type</th>
-			<th>GIS tag</th>
-			<th>Name </th>
-			<th>Effective Start Date</th>
-			<th>Effective End Date</th>
-			<th>Status</th>
-		</tr>
+		<thead>
+			<tr><th>Type</th>
+				<th>GIS tag</th>
+				<th>Name </th>
+				<th>Effective Start Date</th>
+				<th>Effective End Date</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			foreach ($this->buildingList as $building) {
-				$editButton = '';
-				if (userIsAllowed('Building')) {
-					$url = new URL(BASE_URL.'/buildings/updateBuilding.php');
-					$url->building_id = $building->getBuilding_id();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
 				echo "
-				<tr><td>$editButton</td>
-					<td>{$building->getBuildingType()}</td>
+				<tr><td>{$building->getBuildingType()}</td>
 					<td>{$building->getGis_tag()}</td>
 					<td>{$building->getBuilding_name()}</td>
 					<td>{$building->getEffective_start_date('n/j/Y')}</td>
@@ -44,5 +32,6 @@
 				";
 			}
 		?>
+		</tbody>
 	</table>
 </div>

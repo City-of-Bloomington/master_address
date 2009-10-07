@@ -7,23 +7,10 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		<?php
-			if (userIsAllowed('BuildingStatus')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/buildings/addBuildingStatus.php\">Add</a>";
-			}
-		?>
-		Building Statuses
-	</h1>
+	<h1>Building Statuses</h1>
 	<ul><?php
 			foreach ($this->buildingStatusList as $buildingStatus) {
-				$editButton = '';
-				if (userIsAllowed('BuildingStatus')) {
-					$url = new URL(BASE_URL.'/buildings/updateBuildingStatus.php');
-					$url->status_code = $buildingStatus->getStatus_code();
-					$editButton = "<a class=\"edit button\" href=\"$url\">Edit</a>";
-				}
-				echo "<li>$editButton $buildingStatus</li>";
+				echo "<li>$buildingStatus</li>";
 			}
 		?>
 	</ul>
