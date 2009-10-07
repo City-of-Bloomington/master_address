@@ -41,9 +41,6 @@ ul.pageNavigation li { margin-right:2px; }
 
 textarea { width:300px; }
 
-/*  Custom buttons for forms */
-button { margin:8px 5px 2px 0px;  }
-
 #banner .loginForm { position:absolute; top:5px; right:5px; color:white; }
 #banner .loginForm h1 { display:none; }
 #banner .loginForm th label { color:white; }
