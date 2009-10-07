@@ -23,9 +23,8 @@ select street_names_id_s.nextval, street_id, street_name, street_type_suffix_cod
 	effective_start_date, effective_end_date, notes, street_direction_code, post_direction_suffix_code
 from mast_street_names;
 
--- Manual changes
--- Drop mast_street_names
--- Rename temp to mast_street_names
+drop table mast_street_names;
+rename temp to mast_street_names;
 
 create trigger street_names_trigger
 before insert on mast_street_names

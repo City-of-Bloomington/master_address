@@ -1,3 +1,4 @@
+-- This is in the GIS schema
 create table temp (
 	id number not null primary key,
 	ordinance_number varchar2(12) not null,
@@ -23,9 +24,8 @@ select annexations_id_seq.nextval, ordinance_number, township_id, name, passed_d
 acres, square_miles, estimate_population, dwelling_units
 from annexations;
 
--- Manual changes
--- Drop table annexations
--- rename temp to annexations
+drop table annexations cascade constraints purge;
+rename temp to annexations;
 
 create trigger annexations_trigger
 before insert on annexations

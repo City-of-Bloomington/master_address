@@ -11,10 +11,8 @@ insert into temp (id, direction_code, description)
 select direction_id_seq.nextval, direction_code, description
 from mast_street_direction_master;
 
--- Manual changes
--- Delete the foreign keys from mast_street
--- Drop mast_street_direction_master
--- rename temp to mast_street_direction_master
+drop table mast_street_direction_master cascade constraints purge;
+rename temp to mast_street_direction_master;
 
 alter table mast_street add foreign key (street_direction_code) references mast_street_direction_master(direction_code);
 alter table mast_street add foreign key (post_direction_suffix_code) references mast_street_direction_master(direction_code);

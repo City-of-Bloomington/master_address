@@ -14,9 +14,8 @@ insert into temp (id, status_code, effective_start_date, location_id, effective_
 select location_status_id_seq.nextval, status_code, effective_start_date, location_id, effective_end_date
 from mast_address_location_status;
 
--- Manual changes
--- Drop table mast_address_location_status
--- renamte temp to mast_address_location_status
+drop table mast_address_location_status cascade constraints purge;
+rename temp to mast_address_location_status;
 
 create trigger location_status_trigger
 before insert on mast_address_location_status

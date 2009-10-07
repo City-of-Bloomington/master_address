@@ -11,9 +11,8 @@ insert into temp (id, sudtype, description)
 select subunit_type_id_s.nextval, sudtype, description
 from mast_addr_subunit_types_mast;
 
--- Manual changes
--- Drop table mast_addr_subunit_types_mast
--- rename temp to mast_addr_subunit_types_mast
+drop table mast_addr_subunit_types_mast cascade constraints purge;
+rename temp to mast_addr_subunit_types_mast;
 
 
 create trigger subunit_type_trigger

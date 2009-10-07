@@ -15,10 +15,8 @@ insert into temp (id,street_address_id,status_code,start_date,end_date)
 select address_status_id_seq.nextval,street_address_id,status_code,start_date,end_date
 from mast_address_status;
 
--- Manual changes
--- Drop mast_address_status
--- rename temp to mast_address_status
-
+drop table mast_address_status cascade constraints purge;
+rename temp to mast_address_status;
 
 
 create trigger address_status_trigger

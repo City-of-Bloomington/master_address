@@ -12,9 +12,8 @@ insert into temp (id, precinct, precinct_name, active)
 select precinct_id_seq.nextval, precinct, precinct_name, active
 from voting_precincts;
 
--- Manual changes
--- Drop table voting_precincts
--- rename temp to voting_precincts
+drop table voting_precincts cascade constraints purge;
+rename temp to voting_precincts;
 
 create trigger precinct_id_trigger
 before insert on voting_precincts

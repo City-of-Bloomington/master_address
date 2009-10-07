@@ -1,3 +1,5 @@
+-- We can add these directly to the Master_address schema.
+-- There is no reason to put these into ENG anymore.
 create table people (
 	id number primary key,
 	firstname varchar2(128) not null,

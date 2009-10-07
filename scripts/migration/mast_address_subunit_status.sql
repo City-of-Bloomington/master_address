@@ -21,10 +21,8 @@ insert into temp (id,subunit_id,street_address_id,status_code,start_date,end_dat
 select subunit_status_id_seq.nextval,subunit_id,street_address_id,status_code,start_date,end_date
 from mast_address_subunit_status;
 
--- Manual changes
--- Drop mast_address_subunit_status
--- rename temp to mast_address_subunit_status
-
+drop table mast_address_subunit_status cascade constraints purge;
+rename temp to mast_address_subunit_status;
 
 create trigger subunit_status_trigger
 before insert on mast_address_subunit_status

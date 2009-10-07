@@ -1,4 +1,5 @@
--- This has to be run as root
+-- This has to be run as root in SQLPlus.
+-- You cannot do this using SQLDeveloper
 create or replace trigger master_address.session_setup_trigger
 after logon on database
 begin
@@ -9,3 +10,4 @@ begin
     execute immediate 'alter session set nls_sort=binary_ci';
   end if;
 end session_setup_trigger;
+/

@@ -11,11 +11,8 @@ insert into temp (id, street_name_type, description)
 select street_name_type_id_s.nextval, street_name_type, description
 from mast_street_name_type_master;
 
--- Manual Changes
--- Drop foreign keys from mast_street_names
--- Drop table mast_street_name_type_master
--- rename temp to mast_street_name_type_master
-
+drop table mast_street_name_type_master cascade constraints purge;
+rename temp to mast_street_name_type_master;
 alter table mast_street_names add foreign key (street_name_type) references mast_street_name_type_master(street_name_type);
 
 

@@ -12,11 +12,8 @@ insert into temp (id, suffix_code, description)
 select suffix_id_seq.nextval, suffix_code, description
 from mast_street_type_suffix_master;
 
--- Manual Changes
--- Drop foreign keys from mast_street_names
--- Drop table mast_street_type_suffix_master
--- rename temp to mast_street_type_suffix_master
-
+drop table mast_street_type_suffix_master cascade constraints purge;
+rename temp to mast_street_type_suffix_master;
 alter table mast_street_names add foreign key (street_type_suffix_code) references mast_street_type_suffix_master(suffix_code);
 
 create trigger suffix_id_trigger
