@@ -171,3 +171,9 @@ create synonym master_address.building_id_s for gis.building_id_s;
 create synonym master_address.building_type_id_s for gis.building_type_id_s;
 create synonym master_address.buildings_status_code_seq for gis.buildings_status_code_seq;
 create synonym master_address.precinct_id_seq for gis.precinct_id_seq;
+
+
+
+grant select on eng.mast_address_location_status to gis;
+grant select on eng.mast_address_status to gis;
+grant select on eng.mast_street_names to gis;
