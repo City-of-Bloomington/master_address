@@ -64,3 +64,4 @@ $ZEND_ACL->deny('GIS','Person');
 
 // Engineering is only allowed to edit this stuff
 $ZEND_ACL->allow('Engineering','Street');
+$ZEND_ACL->allow('Engineering','Address');
