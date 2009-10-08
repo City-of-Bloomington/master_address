@@ -33,7 +33,7 @@ FRAMEWORK.getChangeLog = function (form,action)
 	changeLogForm.setBody("<div><label for=\"changeLogEntry-action\">Action:</label>" + action +
 		"<input type=\"hidden\" name=\"changeLogEntry[action]\" id=\"changeLogEntry-action\" value=\"" + action + "\" /></div>" +
 		"<div><p>Enter comments or rationale for the activity log:</p><textarea name=\"changeLogEntry[notes]\" rows=\"4\" cols=\"50\"></textarea></div>" +
-		"<div><label for=\"changeLogEntry-contact_id\">Contact</label>" +
+		"<div><label for=\"changeLogEntry-contact_id\" class=\"required\">Contact</label>" +
 		"<select name=\"changeLogEntry[contact_id]\" id=\"changeLogEntry-contact_id\"><option></option>" +
 		"</select></div>");
 
@@ -75,7 +75,12 @@ FRAMEWORK.getChangeLog = function (form,action)
 	YAHOO.util.Connect.asyncRequest('GET',"/master_address/contacts/home.php?format=json", callbacks);
 
 	function changeLogSubmit() {
-		form.submit();
+		if (document.getElementById('changeLogEntry-contact_id').selectedIndex > 0) {
+			form.submit();
+		}
+		else {
+			alert('You must choose a Contact');
+		}
 	}
 	function changeLogCancel() {
 		changeLogForm.hide();

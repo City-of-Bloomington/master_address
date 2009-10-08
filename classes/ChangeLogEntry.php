@@ -68,6 +68,9 @@ class ChangeLogEntry
 		if (!$this->action) {
 			throw new Exception('logEntry/missingAction');
 		}
+		if (!$this->contact_id) {
+			throw new Exception('logEntry/missingContact');
+		}
 	}
 
 	/**
