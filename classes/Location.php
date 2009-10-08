@@ -28,7 +28,7 @@ class Location
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			
+
 		}
 	}
 
@@ -95,6 +95,7 @@ class Location
 		if (!$count) {
 			$data['location_id'] = $this->location_id;
 			$data['location_type_id'] = $type->getId();
+			$data['active'] = 'N';
 			$zend_db->insert('address_location',$data);
 		}
 	}
@@ -152,11 +153,11 @@ class Location
 
 			$zend_db = Database::getConnection();
 			$zend_db->update('address_location',
-							array('active'=>'Y'),
-							"location_id={$this->location_id} and $field={$address->getId()}");
-			$zend_db->update('address_location',
 							array('active'=>'N'),
 							"location_id={$this->location_id} and $where");
+			$zend_db->update('address_location',
+							array('active'=>'Y'),
+							"location_id={$this->location_id} and $field={$address->getId()}");
 		}
 	}
 
