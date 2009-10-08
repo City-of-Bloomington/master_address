@@ -8,12 +8,13 @@
 if (!count($this->platList)) {
 	echo "<h2>No plats found</h2>";
 }
+$updateURL = new URL(BASE_URL.'/plats/updatePlat.php');
 ?>
 <div class="interfaceBox">
 	<h1><?php
 			if (userIsAllowed('Plat')) {
 				echo "
-				<button type=\"button\" class=\"add\" onclick=\"document.location.href='".BASE_URL."/plats/addPlat.php';\">
+				<button type=\"button\" class=\"add\" onclick=\"document.location.href='$updateURL';\">
 					Add
 				</button>
 				";
@@ -38,10 +39,9 @@ if (!count($this->platList)) {
 			foreach ($this->platList as $plat) {
 				$editButton = '';
 				if (userIsAllowed('Plat')) {
-					$url = new URL(BASE_URL.'/plats/updatePlat.php');
-					$url->plat_id = $plat->getPlat_id();
+					$updateURL->plat_id = $plat->getPlat_id();
 					$editButton = "
-					<button type=\"button\" class=\"edit\" onclick=\"document.location.href='$url';\">
+					<button type=\"button\" class=\"edit\" onclick=\"document.location.href='$updateURL';\">
 						Edit
 					</button>
 					";
@@ -52,7 +52,7 @@ if (!count($this->platList)) {
 				$envelope = View::escape($plat->getEnvelope());
 				echo "
 				<tr><td>$editButton</td>
-					<td>$name</td>
+					<td><a href=\"{$plat->getURL()}\">$name</a></td>
 					<td>$township</td>
 					<td>{$plat->getEffective_start_date('n/j/Y')}</td>
 					<td>{$plat->getEffective_end_date('n/j/Y')}</td>

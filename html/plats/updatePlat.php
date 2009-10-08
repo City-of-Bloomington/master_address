@@ -11,7 +11,10 @@ if (!userIsAllowed('Plat')) {
 	exit();
 }
 
-$plat = new Plat($_REQUEST['plat_id']);
+$plat = (isset($_REQUEST['plat_id']) && $_REQUEST['plat_id'])
+		? new Plat($_REQUEST['plat_id'])
+		: new Plat();
+
 if (isset($_POST['plat'])) {
 	foreach ($_POST['plat'] as $field=>$value) {
 		$set = 'set'.ucfirst($field);
@@ -20,7 +23,7 @@ if (isset($_POST['plat'])) {
 
 	try {
 		$plat->save();
-		header('Location: '.BASE_URL.'/plats');
+		header('Location: '.$plat->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -29,5 +32,5 @@ if (isset($_POST['plat'])) {
 }
 
 $template = new Template();
-$template->blocks[] = new Block('plats/updatePlatForm.inc',array('plat'=>$plat));
+$template->blocks[] = new Block('plats/platForm.inc',array('plat'=>$plat));
 echo $template->render();

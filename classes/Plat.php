@@ -62,6 +62,7 @@ class Plat
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->effective_start_date = new Date();
 		}
 	}
 	/**
@@ -339,6 +340,10 @@ class Plat
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function getURL()
+	{
+		return BASE_URL.'/plats/viewPlat.php?plat_id='.$this->plat_id;
+	}
 	/**
 	 * Alias for getPlat_id()
 	 *
@@ -387,5 +392,31 @@ class Plat
 	{
 		$zend_db = Database::getConnection();
 		return $zend_db->fetchCol('select distinct plat_cabinet from plat_master order by plat_cabinet');
+	}
+
+	/**
+	 * Alias for getEffective_start_date()
+	 */
+	public function getStartDate($format)
+	{
+		return $this->getEffective_start_date($format);
+	}
+
+	/**
+	 * Alias for getEffective_end_date()
+	 */
+	public function getEndDate($format)
+	{
+		return $this->getEffective_end_date($format);
+	}
+
+	/**
+	 * @return AddressList
+	 */
+	public function getAddresses()
+	{
+		if ($this->plat_id) {
+			return new AddressList(array('plat_id'=>$this->plat_id));
+		}
 	}
 }

@@ -5,11 +5,13 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Plat $this->plat
  */
+$action = $this->plat->getId() ? 'Update' : 'Add';
+echo "<h1>$action Plat</h1>";
 ?>
-<h1>Update Plat</h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
+	onsubmit="return FRAMEWORK.checkRequiredFields();">
 	<fieldset><legend>Plat Info</legend>
-		<input name="plat_id" type="hidden" value="<?php echo $this->plat->getPlat_id(); ?>" />
+		<input name="plat_id" type="hidden" value="<?php echo $this->plat->getId(); ?>" />
 		<table>
 
 			<tr><td><label for="plat-name" class="required">Name</label></td>

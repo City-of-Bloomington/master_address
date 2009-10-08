@@ -107,7 +107,7 @@ create table plat_master (
 
 create sequence plat_id_s nocache;
 
-create trigger plat_autoincrement_trigger
+create trigger plat_id_trigger
 before insert on plat_master
 for each row
 begin

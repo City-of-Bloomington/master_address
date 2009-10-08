@@ -70,3 +70,14 @@ begin
 select gov_jur_id_s.nextval into :new.gov_jur_id from dual;
 end;
 /
+
+drop sequence plat_id_s;
+create sequence plat_id_s start with 1796 nocache;
+
+create trigger plat_id_trigger
+before insert on plat_master
+for each row
+begin
+select plat_id_s.nextval into :new.plat_id from dual;
+end;
+/
