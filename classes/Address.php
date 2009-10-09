@@ -1240,21 +1240,18 @@ class Address
 	 */
 	public function reassign(ChangeLogEntry $changeLogEntry)
 	{
-		$newAddress = clone($this);
-		$newAddress->save($changeLogEntry);
-		$newAddress->saveStatus('CURRENT');
-
 		$locationData = $this->getLocation()->getUpdatableData($this);
 
 		$newLocation = new Location();
-		$newLocation->assign($newAddress,$locationData['locationType']);
-		$newLocation->update($locationData,$newAddress);
-		$newLocation->activate($newAddress);
+		$newLocation->assign($this,$locationData['locationType']);
+		$newLocation->update($locationData,$this);
+		$newLocation->activate($this);
 		$newLocation->saveStatus('CURRENT');
 
+		$this->saveStatus('CURRENT');
 		$this->updateChangeLog($changeLogEntry);
 
-		return $newAddress;
+		return $this;
 	}
 
 	/**

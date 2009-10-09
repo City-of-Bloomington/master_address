@@ -21,8 +21,9 @@ function handleReassignAddress(form) {
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<div>
-		<p>This is a special way of unretiring this address.  We will keep this address as retired,
-			but we'll create a new address with all the same information as this address.
+		<p>This is a special way of unretiring this address.
+			We will keep the current location as retired,
+			but we'll create a new location with this address as the active address.
 		</p>
 		</div>
 
