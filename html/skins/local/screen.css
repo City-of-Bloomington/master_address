@@ -58,7 +58,7 @@ textarea { width:300px; }
 .yui-skin-sam .yui-ac-content li { color:black; background-color:white; }
 
 /* YUI Overlay popups */
-.yui-skin-sam .yui-overlay { color:white; background-color:#737373; padding:10px; }
+.yui-skin-sam .yui-overlay { color:black; background-color:#737373; padding:10px; }
 .yui-skin-sam .yui-overlay .hd { font-size:12pt; font-weight:bold; }
 .yui-skin-sam .yui-overlay .bd { min-height:30px; }
 
