@@ -330,9 +330,9 @@ class Street
 			$streetName->setStreet($this);
 			$streetName->setStreet_name_type('STREET');
 			foreach ($fields as $field) {
-				if (isset($post[$field])) {
+				if (isset($post['streetName'][$field])) {
 					$set = 'set'.ucfirst($field);
-					$streetName->$set($post[$field]);
+					$streetName->$set($post['streetName'][$field]);
 				}
 			}
 			$streetName->save();

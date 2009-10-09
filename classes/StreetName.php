@@ -80,8 +80,11 @@ class StreetName
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->street_id || !$this->street_name) {
+		if (!$this->street_id) {
 			throw new Exception('missingRequiredFields');
+		}
+		if (!$this->street_name) {
+			throw new Exception('streets/missingName');
 		}
 
 		if (!$this->street_name_type) {
