@@ -26,7 +26,7 @@ if (isset($_GET['queryType'])) {
 			break;
 
 		case 'street':
-			$fields = AddressList::parseAddress($_GET['query']);
+			$fields = AddressList::parseAddress($_GET['query'],'streetNameOnly');
 			if (count($fields)) {
 				$streets = new StreetList($fields);
 				$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));

@@ -274,7 +274,7 @@ class AddressList extends ZendDbResultIterator
 	 * @param string $string
 	 * @return array
 	 */
-	public static function parseAddress($string)
+	public static function parseAddress($string,$parseType='address')
 	{
 		$output = array();
 
@@ -282,55 +282,57 @@ class AddressList extends ZendDbResultIterator
 		$address = preg_replace('/[^\w\s\/\-]/',' ',$string);
 		$address = preg_replace('/\s+/',' ',$address);
 
-		//echo "Looking for fractions: $address\n";
-		if (preg_match("/(?<fraction>\d+\/\d+)/",$address,$matches)) {
-			$output['fraction'] = trim($matches['fraction']);
-			$address = preg_replace("/\d+\/\d+/",'',$address);
-		}
-
-		//echo "Looking for number: $address\n";
-		$directionCodePattern = implode('|',self::getDirections());
-		$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern]\s)?)";
-		if (preg_match("/^$numberPattern/i",$address,$matches)) {
-			$output['street_number'] = trim($matches['number']);
-			$address = preg_replace("/^$matches[number]/i",'',$address);
-		}
-
-		//echo "Looking for Zip: $address\n";
-		$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
-		if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
-			$output['zip'] = trim($matches['zip']);
-			if (isset($matches['zipplus4']) && $matches['zipplus4']) {
-				$output['zipplus4'] = trim($matches['zipplus4']);
+		if ($parseType=='address') {
+			//echo "Looking for fractions: $address\n";
+			if (preg_match("/(?<fraction>\d+\/\d+)/",$address,$matches)) {
+				$output['fraction'] = trim($matches['fraction']);
+				$address = preg_replace("/\d+\/\d+/",'',$address);
 			}
-			$address = trim(preg_replace("/\s$zipPattern$/i",'',$address));
-		}
 
-		//echo "Looking for State: $address\n";
-		if (preg_match("/\s(?<state>IN|INDIANA)\b/i",$address,$matches)) {
-			$output['state'] = trim($matches['state']);
-			$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
-		}
-
-		//echo "Looking for city: $address\n";
-		$cityPattern = implode('|',self::getCities());
-		if (preg_match("/\s(?<city>$cityPattern)$/i",$address,$matches)) {
-			$output['city'] = trim($matches['city']);
-			$address = trim(preg_replace("/\s$matches[city]$/i",'',$address));
-		}
-
-		//echo "Looking for subunit: $address\n";
-		$subunitTypePattern = implode('|',array_merge(self::getSubunitTypes(),
-														array_keys(self::getSubunitTypes())));
-		$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
-		if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
-			try {
-				$output['subunitType'] = new SubunitType($matches['subunitType']);
-				$output['subunitIdentifier'] = $matches['subunitIdentifier'];
-				$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
+			//echo "Looking for number: $address\n";
+			$directionCodePattern = implode('|',self::getDirections());
+			$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern]\s)?)";
+			if (preg_match("/^$numberPattern/i",$address,$matches)) {
+				$output['street_number'] = trim($matches['number']);
+				$address = preg_replace("/^$matches[number]/i",'',$address);
 			}
-			catch (Exception $e) {
-				// Just ignore anything that's not a known type
+
+			//echo "Looking for Zip: $address\n";
+			$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
+			if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
+				$output['zip'] = trim($matches['zip']);
+				if (isset($matches['zipplus4']) && $matches['zipplus4']) {
+					$output['zipplus4'] = trim($matches['zipplus4']);
+				}
+				$address = trim(preg_replace("/\s$zipPattern$/i",'',$address));
+			}
+
+			//echo "Looking for State: $address\n";
+			if (preg_match("/\s(?<state>IN|INDIANA)\b/i",$address,$matches)) {
+				$output['state'] = trim($matches['state']);
+				$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
+			}
+
+			//echo "Looking for city: $address\n";
+			$cityPattern = implode('|',self::getCities());
+			if (preg_match("/\s(?<city>$cityPattern)$/i",$address,$matches)) {
+				$output['city'] = trim($matches['city']);
+				$address = trim(preg_replace("/\s$matches[city]$/i",'',$address));
+			}
+
+			//echo "Looking for subunit: $address\n";
+			$subunitTypePattern = implode('|',array_merge(self::getSubunitTypes(),
+															array_keys(self::getSubunitTypes())));
+			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
+			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
+				try {
+					$output['subunitType'] = new SubunitType($matches['subunitType']);
+					$output['subunitIdentifier'] = $matches['subunitIdentifier'];
+					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
+				}
+				catch (Exception $e) {
+					// Just ignore anything that's not a known type
+				}
 			}
 		}
 
