@@ -8,6 +8,7 @@
  * @param Location $this->location
  * @param array $this->locationData
  */
+$this->address->setStreet_number('');
 ?>
 <h1>Add Address</h1>
 <script type="text/javascript">

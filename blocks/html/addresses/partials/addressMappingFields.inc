@@ -58,11 +58,29 @@
 		</td>
 	</tr>
 	<tr><td><label for="section">Section</label></td>
-		<td><input name="section" id="section" size="2" maxlength="2"
-					value="<?php echo View::escape($this->address->getSection()); ?>" />
+		<td><select name="section" id="section">
+				<option></option>
+				<?php
+					foreach (Address::getSections() as $section) {
+						$selected = $this->address->getSection()==$section
+									? 'selected="selected"'
+									: '';
+						echo "<option $selected>$section</option>";
+					}
+				?>
+			</select>
 			<label for="quarter_section">Quarter Section</label>
-			<input name="quarter_section" id="quarter_section" size="2" maxlength="2"
-					value="<?php echo View::escape($this->address->getQuarter_section()); ?>" />
+			<select name="quarter_section" id="quarter_section">
+				<option></option>
+				<?php
+					foreach (Address::getQuarterSections() as $quarter) {
+						$selected = $this->address->getQuarter_section()==$quarter
+									? 'selected="selected"'
+									: '';
+						echo "<option $selected>$quarter</option>";
+					}
+				?>
+			</select>
 		</td>
 	</tr>
 	<tr><td><label for="census_block_fips_code">Census Block</label></td>
@@ -88,8 +106,17 @@
 		</td>
 	</tr>
 	<tr><td><label for="tax_jurisdiction">Tax Jurisdiction</label></td>
-		<td><input name="tax_jurisdiction" id="tax_jurisdiction" size="3" maxlength="3"
-					value="<?php echo $this->address->getTax_jurisdiction(); ?>" />
+		<td><select name="tax_jurisdiction" id="tax_jurisdiction">
+				<option></option>
+				<?php
+					foreach (Address::getTaxJurisdictions() as $taxJurisdiction) {
+						$selected = $this->address->getTax_jurisdiction()==$taxJurisdiction
+									? 'selected="selected"'
+									: '';
+						echo "<option $selected>$taxJurisdiction</option>";
+					}
+				?>
+			</select>
 		</td>
 	</tr>
 </table>

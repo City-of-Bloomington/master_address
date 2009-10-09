@@ -52,10 +52,37 @@ class Address
     public static function getZipCodes()
     {
         $zend_db = Database::getConnection();
-		$sql = "select distinct zip from mast_address";
+		$sql = "select distinct zip from mast_address
+				where zip is not null
+				order by zip";
         $result = $zend_db->fetchCol($sql);
         return $result;
     }
+
+	public static function getTaxJurisdictions()
+	{
+		$zend_db = Database::getConnection();
+		$sql = "select distinct tax_jurisdiction from mast_address
+				where tax_jurisdiction is not null
+				order by tax_jurisdiction";
+		$result = $zend_db->fetchCol($sql);
+		return $result;
+	}
+
+	public static function getSections()
+	{
+		$zend_db = Database::getConnection();
+		$sql = "select distinct section from mast_address
+				where section is not null
+				order by section";
+		$result = $zend_db->fetchCol($sql);
+		return $result;
+	}
+
+	public static function getQuarterSections()
+	{
+		return array('NE','NW','SE','SW');
+	}
 
 	/**
 	 * Populates the object with data
@@ -585,10 +612,16 @@ class Address
 	/**
 	 * @param int $int
 	 */
-	public function setStreet_id($int)
+	public function setStreet_id($int=null)
 	{
-		$this->street = new Street($int);
-		$this->street_id = $this->street->getId();
+		if ($int) {
+			$this->street = new Street($int);
+			$this->street_id = $this->street->getId();
+		}
+		else {
+			$this->street = null;
+			$this->street_id = null;
+		}
 	}
 
 	/**

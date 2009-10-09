@@ -11,6 +11,8 @@ if (!userIsAllowed('Address')) {
 	exit();
 }
 
+$addressCreatedSuccessfully = false;
+
 // If they've submitted a valid post, create the new address.
 if (isset($_POST['changeLogEntry'])) {
 	try {
@@ -21,6 +23,8 @@ if (isset($_POST['changeLogEntry'])) {
 			header('Location: '.$address->getStreet()->getURL());
 			exit();
 		}
+
+		$addressCreatedSuccessfully = true;
 	}
 	catch(Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -45,6 +49,11 @@ if (!isset($address)) {
 	$location = new Location();
 	if (isset($_REQUEST['location_id']) && $_REQUEST['location_id']) {
 		$location = new Location($_REQUEST['location_id']);
+		$addresses = $location->getAddresses();
+		if (count($addresses)) {
+			$address = $addresses[0];
+			$address->setStreet_id(null);
+		}
 	}
 }
 else {
@@ -67,7 +76,7 @@ if (isset($street)) {
 $template->blocks[] = $breadcrumbs;
 
 // If we've successfully saved the address, let the user know
-if ($address->getId()) {
+if ($addressCreatedSuccessfully) {
 	$template->blocks[] = new Block('addresses/partials/success.inc',
 									array('address'=>$address));
 }

@@ -21,7 +21,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 		$buttons = "
 		<div class=\"buttons\">
 			<button type=\"button\" onclick=\"document.location.href='$addURL';\">
-				Add New Address
+				Add Additional Address
 			</button>
 			<button type=\"button\" onclick=\"document.location.href='$moveURL';\">
 				Move to Existing Location
@@ -43,6 +43,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 				<th>Zip</th>
 			</tr>
 			</thead>
+			<tbody>
 	";
 			foreach ($location->getAddresses() as $address) {
 				$checked = '';
@@ -52,7 +53,6 @@ foreach ($this->address->getLocations() as $i=>$location) {
 				}
 
 				$content.= "
-				<tbody>
 				<tr><td><a href=\"{$address->getURL()}\">$address</a></td>
 					<td><input type=\"radio\" name=\"address_id\"
 							value=\"{$address->getId()}\" $checked
@@ -62,10 +62,10 @@ foreach ($this->address->getLocations() as $i=>$location) {
 					<td>{$address->getJurisdiction()}</td>
 					<td>{$address->getZip()}</td>
 				</tr>
-				</tbody>
 				";
 			}
 	$content.= "
+			</tbody>
 		</table>
 	</div>
 	";
