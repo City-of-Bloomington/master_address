@@ -3,12 +3,13 @@
 		<input name="return_url" type="hidden" value="<?php echo View::escape($_SERVER['REQUEST_URI']); ?>" />
 		<table>
 			<tr><th><label for="username">Username:</label></th>
-				<td><input name="username" /></td>
+				<td><input name="username" /></td><td></td>
 			</tr>
 			<tr><th><label for="password">Password:</label></th>
 				<td><input type="password" name="password" /></td>
+				<td><button type="submit" class="login">Login</button></td>
 			</tr>
 		</table>
-		<button type="submit" class="login">Login</button>
+		
 	</fieldset>
 </form>
