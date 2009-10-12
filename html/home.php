@@ -7,11 +7,11 @@
 $template = new Template('full-width');
 $template->blocks[] = new Block('multiSearchForm.inc');
 
-if (isset($_GET['queryType'])) {
-	switch ($_GET['queryType']) {
+if (isset($_REQUEST['queryType'])) {
+	switch ($_REQUEST['queryType']) {
 		case 'address':
 			$addresses = new AddressList();
-			$addresses->search(array('address'=>$_GET['query']));
+			$addresses->search(array('address'=>$_REQUEST['query']));
 
 			// If there's only one address returned, we should display the address
 			if (count($addresses) != 1) {
@@ -26,7 +26,7 @@ if (isset($_GET['queryType'])) {
 			break;
 
 		case 'street':
-			$fields = AddressList::parseAddress($_GET['query'],'streetNameOnly');
+			$fields = AddressList::parseAddress($_REQUEST['query'],'streetNameOnly');
 			if (count($fields)) {
 				$streets = new StreetList($fields);
 				$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));

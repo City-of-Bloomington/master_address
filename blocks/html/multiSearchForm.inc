@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$queryType = isset($_GET['queryType']) ? $_GET['queryType'] : 'address';
-$query = isset($_GET['query']) ? View::escape($_GET['query']) : '';
+$queryType = isset($_REQUEST['queryType']) ? $_REQUEST['queryType'] : 'address';
+$query = isset($_REQUEST['query']) ? View::escape($_REQUEST['query']) : '';
 ?>
 <div class="interfaceBox">
 <form method="get" action="<?php echo BASE_URL; ?>">

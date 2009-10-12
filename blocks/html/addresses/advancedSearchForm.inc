@@ -7,7 +7,7 @@
 $searchFields = array('street_number','direction','street_name','streetType',
 						'postDirection','city','zip','subunitType','subunitIdentifier');
 foreach ($searchFields as $field) {
-	$$field = (isset($_GET[$field]) && $_GET[$field]) ? View::escape($_GET[$field]) : '';
+	$$field = (isset($_REQUEST[$field]) && $_REQUEST[$field]) ? View::escape($_REQUEST[$field]) : '';
 }
 ?>
 <h1>Address Search</h1>
