@@ -19,13 +19,24 @@ else {
 }
 
 if ($template->outputFormat == 'html') {
-	$template->blocks[] = new Block('addresses/findAddressForm.inc');
+	$template->blocks[] = new Block('addresses/advancedSearchForm.inc');
 }
-if (isset($_GET['address'])) {
-	$addresses = new AddressList();
-	$addresses->search(array('address'=>$_GET['address']));
 
-	// If there's only one address returned, we should display the address
+
+
+$search = array();
+$searchFields = array('street_number','direction','street_name','streetType',
+						'postDirection','city','zip','subunitType','subunitIdentifier');
+foreach ($searchFields as $field) {
+	if (isset($_GET[$field]) && $_GET[$field]) {
+		$search[$field] = $_GET[$field];
+	}
+}
+if (count($search)) {
+	$addresses = new AddressList();
+	$addresses->search($search);
+
+	// If there's zero addresses, or more than one address, display the addressList
 	if (count($addresses) != 1) {
 		$template->blocks[] = new Block('addresses/addressList.inc',
 										array('addressList'=>$addresses));
@@ -34,7 +45,9 @@ if (isset($_GET['address'])) {
 		$address = $addresses[0];
 	}
 }
-// If they ask for an address, we should display the address
+
+
+// If they ask for an address, load the address they asked for
 if (isset($_GET['address_id'])) {
 	try {
 		$address = new Address($_GET['address_id']);
@@ -42,8 +55,10 @@ if (isset($_GET['address_id'])) {
 	catch (Exception $e) {
 	}
 }
+
+
+
 if (isset($address)) {
 	$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 }
-
 echo $template->render();

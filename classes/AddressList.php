@@ -88,6 +88,10 @@ class AddressList extends ZendDbResultIterator
 
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
+				if (is_string($value)) {
+					$value = trim($value);
+					$fields[$key] = $value;
+				}
 				if (in_array($key,$this->columns)) {
 					$this->select->where("a.$key=?",$value);
 				}
@@ -120,6 +124,10 @@ class AddressList extends ZendDbResultIterator
 		// Finding on fields from the mast_address table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
+				if (is_string($value)) {
+					$value = trim($value);
+					$fields[$key] = $value;
+				}
 				if (in_array($key,$this->columns)) {
 					$this->select->where("a.$key like ?","$value%");
 				}
@@ -176,20 +184,38 @@ class AddressList extends ZendDbResultIterator
 		$joins = array();
 
 		if (isset($fields['direction'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
+			if (!$fields['direction'] instanceof Direction) {
+				try {
+					$fields['direction'] = new Direction($fields['direction']);
+				}
+				catch (Exception $e) {
+				}
+			}
+			if ($fields['direction'] instanceof Direction) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
+			}
 		}
 
 		if (isset($fields['postDirection'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.post_direction_suffix_code=?',
-								$fields['postDirection']->getCode());
+			if (!$fields['postDirection'] instanceof Direction) {
+				try {
+					$fields['postDirection'] = new Direction($fields['postDirection']);
+				}
+				catch (Exception $e) {
+				}
+			}
+			if ($fields['postDirection'] instanceof Direction) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.post_direction_suffix_code=?',
+									$fields['postDirection']->getCode());
+			}
 		}
 
 		if (isset($fields['street_name'])) {
@@ -201,17 +227,35 @@ class AddressList extends ZendDbResultIterator
 		}
 
 		if (isset($fields['streetType'])) {
-			$joins['s'] = array('table'=>'mast_street',
-								'condition'=>'a.street_id=s.street_id');
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+			if (!$fields['streetType'] instanceof StreetType) {
+				try {
+					$fields['streetType'] = new StreetType($fields['streetType']);
+				}
+				catch (Exception $e) {
+				}
+			}
+			if ($fields['streetType'] instanceof StreetType) {
+				$joins['s'] = array('table'=>'mast_street',
+									'condition'=>'a.street_id=s.street_id');
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+			}
 		}
 
 		if (isset($fields['subunitType'])) {
-			$joins['u'] = array('table'=>'mast_address_subunits',
-								'condition'=>'a.street_address_id=u.street_address_id');
-			$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
+			if ($fields['subunitType'] instanceof SubunitType) {
+				try {
+					$fields['subunitType'] = new SubunitType($fields['subunitType']);
+				}
+				catch (Exception $e) {
+				}
+			}
+			if ($fields['subunitType'] instanceof SubunitType) {
+				$joins['u'] = array('table'=>'mast_address_subunits',
+									'condition'=>'a.street_address_id=u.street_address_id');
+				$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
+			}
 		}
 
 		if (isset($fields['subdivision_id'])) {
@@ -464,7 +508,7 @@ class AddressList extends ZendDbResultIterator
 		return self::$subunitTypes;
 	}
 
-	private static function getCities()
+	public static function getCities()
 	{
 		if (!count(self::$cities)) {
 			$zend_db = Database::getConnection();

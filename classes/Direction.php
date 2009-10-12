@@ -131,7 +131,7 @@ class Direction
 	 */
 	public function getDirection_code()
 	{
-		return $this->direction_code;
+		return trim($this->direction_code);
 	}
 
 	/**
