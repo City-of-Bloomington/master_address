@@ -118,7 +118,12 @@ class StreetList extends ZendDbResultIterator
 		if (isset($fields['street_name'])) {
 			$joins['n'] = array('table'=>'mast_street_names',
 								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_name like ?',"$fields[street_name]%");
+			if ($queryType=='find') {
+				$this->select->where('n.street_name=?',$fields['street_name']);
+			}
+			else {
+				$this->select->where('n.street_name like ?',"%$fields[street_name]%");
+			}
 		}
 
 		if (isset($fields['direction'])) {

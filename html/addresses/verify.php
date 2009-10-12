@@ -5,6 +5,28 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST address
  */
+$search = array();
+$searchFields = array('street_number','direction','street_name','streetType',
+						'postDirection','city','zip','subunitType','subunitIdentifier');
+foreach ($searchFields as $field) {
+	if (isset($_REQUEST[$field]) && $_REQUEST[$field]) {
+		$search[$field] = $_REQUEST[$field];
+	}
+}
+if (count($search)) {
+	$addresses = new AddressList();
+	$addresses->find($search);
+
+	// A valid address should return one and only one result
+	if (count($addresses) == 1) {
+		$address = $addresses[0];
+	}
+}
+
+
+
+
+
 if (isset($_REQUEST['format'])) {
 	switch ($_REQUEST['format']) {
 		case 'xml':
@@ -18,52 +40,13 @@ if (isset($_REQUEST['format'])) {
 else {
 	$template = new Template();
 }
-
-$search = array();
-$searchFields = array('street_number','direction','street_name','streetType',
-						'postDirection','city','zip','subunitType','subunitIdentifier');
-foreach ($searchFields as $field) {
-	if (isset($_REQUEST[$field]) && $_REQUEST[$field]) {
-		$search[$field] = $_REQUEST[$field];
-	}
-}
-if (count($search)) {
-	$addresses = new AddressList();
-	$addresses->find($search);
-
-	// If there's zero addresses, or more than one address, display the addressList
-	if (count($addresses) != 1) {
-		$addressList = new Block('addresses/addressList.inc',array('addressList'=>$addresses));
-	}
-	else {
-		$address = $addresses[0];
-	}
-}
-
-
-// If they ask for an address, load the address they asked for
-if (isset($_REQUEST['address_id'])) {
-	try {
-		$address = new Address($_REQUEST['address_id']);
-	}
-	catch (Exception $e) {
-	}
-}
-
-
-
 if ($template->outputFormat == 'html') {
-	$template->blocks[] = new Block('addresses/advancedSearchForm.inc');
-	if (isset($addressList)) {
-		$template->blocks[] = $addressList;
-	}
+	$template->blocks[] = new Block('addresses/verifyAddressForm.inc');
 }
 if (isset($address)) {
-	if ($template->outputFormat == 'txt') {
-		$template->blocks[] = new Block('addresses/verify.inc',array('verified'=>true));
-	}
-	else {
-		$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
-	}
+	$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
+}
+else {
+	$template->blocks[] = new Block('addresses/invalid.inc');
 }
 echo $template->render();

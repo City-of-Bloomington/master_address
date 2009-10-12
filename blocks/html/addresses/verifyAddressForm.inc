@@ -5,12 +5,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
-<h1>Address Search</h1>
+<h1>Verify Address</h1>
 <form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Street Address</legend>
 		<?php
 			include APPLICATION_HOME.'/blocks/html/addresses/partials/advancedSearchFields.inc';
 		?>
-		<button type="submit" class="search">Search</button>
+		<button type="submit">Verify</button>
 	</fieldset>
 </form>
