@@ -47,6 +47,8 @@ if (isset($address)) {
 	$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
 }
 else {
-	$template->blocks[] = new Block('addresses/invalid.inc');
+	if (count($search)) {
+		$template->blocks[] = new Block('addresses/invalid.inc');
+	}
 }
 echo $template->render();
