@@ -4,8 +4,22 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$template = new Template('full-width');
-$template->blocks[] = new Block('multiSearchForm.inc');
+if (isset($_REQUEST['format'])) {
+	switch ($_REQUEST['format']) {
+		case 'xml':
+			$template = new Template('default','xml');
+			break;
+		default:
+			$template = new Template('full-width');
+	}
+}
+else {
+	$template = new Template('full-width');
+}
+
+if ($template->outputFormat == 'html') {
+	$template->blocks[] = new Block('multiSearchForm.inc');
+}
 
 if (isset($_REQUEST['queryType'])) {
 	switch ($_REQUEST['queryType']) {
@@ -14,15 +28,16 @@ if (isset($_REQUEST['queryType'])) {
 			$addresses->search(array('address'=>$_REQUEST['query']));
 
 			// If there's only one address returned, we should display the address
-			if (count($addresses) != 1) {
-				$template->blocks[] = new Block('addresses/addressList.inc',
-												array('addressList'=>$addresses));
-			}
-			else {
+			if (count($addresses) == 1) {
 				$address = $addresses[0];
-				header('Location: '.BASE_URL.'/addresses/viewAddress.php?address_id='.$address->getId());
-				exit();
+				if ($template->outputFormat == 'html') {
+					header('Location: '.BASE_URL.'/addresses/viewAddress.php?address_id='.$address->getId());
+					exit();
+				}
 			}
+
+			$template->blocks[] = new Block('addresses/addressList.inc',
+											array('addressList'=>$addresses));
 			break;
 
 		case 'street':
