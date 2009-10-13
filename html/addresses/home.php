@@ -23,15 +23,20 @@ if ($template->outputFormat == 'html') {
 }
 
 
-
-$search = array();
-$searchFields = array('street_number','direction','street_name','streetType',
-						'postDirection','city','zip','subunitType','subunitIdentifier');
-foreach ($searchFields as $field) {
-	if (isset($_REQUEST[$field]) && $_REQUEST[$field]) {
-		$search[$field] = $_REQUEST[$field];
+if (isset($_REQUEST['address']) && $_REQUEST['address']) {
+	$search = array('address'=>$_REQUEST['address']);
+}
+else {
+	$search = array();
+	$searchFields = array('street_number','direction','street_name','streetType',
+							'postDirection','city','zip','subunitType','subunitIdentifier');
+	foreach ($searchFields as $field) {
+		if (isset($_REQUEST[$field]) && $_REQUEST[$field]) {
+			$search[$field] = $_REQUEST[$field];
+		}
 	}
 }
+
 if (count($search)) {
 	$addresses = new AddressList();
 	$addresses->search($search);
