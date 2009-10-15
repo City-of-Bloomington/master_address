@@ -12,7 +12,7 @@ $this->address->setStreet_number('');
 ?>
 <h1>Add Address</h1>
 <script type="text/javascript">
-var addAddressFormAction = 'add';
+var addAddressFormAction = 'assign';
 function handleAddAddress(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
 		FRAMEWORK.getChangeLog(form,addAddressFormAction);
