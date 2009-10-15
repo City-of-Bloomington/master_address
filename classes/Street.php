@@ -363,7 +363,6 @@ class Street
 			}
 		}
 		catch (Exception $e) {
-			print_r($e);
 			$zend_db->rollBack();
 			throw $e;
 		}

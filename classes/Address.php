@@ -151,6 +151,14 @@ class Address
 			|| !$this->address_type || !$this->gov_jur_id || !$this->township_id) {
 			throw new Exception('missingRequiredFields');
 		}
+
+		// Make sure this is not a duplicate address
+		$zend_db = Database::getConnection();
+		$sql = 'select count(*) from mast_address where street_number=? and street_id=?';
+		$count = $zend_db->fetchOne($sql,array($this->street_number,$this->street_id));
+		if ((!$this->street_address_id && $count) || $count>1) {
+			throw new Exception('addresses/duplicateAddress');
+		}
 	}
 
 	/**
@@ -1344,7 +1352,6 @@ class Address
 			$location->update($data,$address);
 		}
 		catch (Exception $e) {
-			print_r($e);
 			$zend_db->rollBack();
 			throw $e;
 		}
