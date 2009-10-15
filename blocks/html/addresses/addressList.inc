@@ -4,22 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param AddressList $this->addressList
+ * @param Street $this->street (optional)
  */
-$street_id = isset($this->street) ? $this->street->getId() : '';
-$addButton = '';
-if (userIsAllowed('Address')) {
-	$addButton = "
-		<div>
-			<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/addresses/addAddress.php?street_id=$street_id';\">
-				Add Address
-			</button>
-		</div>
-		";
-}
 echo "
 <div class=\"interfaceBox addressList\">
 	<h1>Addresses</h1>
-	$addButton
 ";
 	if (count($this->addressList)) {
 		echo "
@@ -67,10 +56,14 @@ echo "
 echo "</div>";
 
 if (userIsAllowed('Address')) {
+	$url = new URL(BASE_URL.'/addresses/addAddress.php');
+	if (isset($this->street)) {
+		$url->street_id = $this->street->getId();
+	}
 	echo "
 	<p>Can't find what you're looking for?</p>
 	<div>
-		<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/addresses/addAddress.php';\">
+		<button type=\"button\" onclick=\"document.location.href='$url';\">
 			Add an Address
 		</button>
 	</div>
