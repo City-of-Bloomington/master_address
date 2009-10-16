@@ -1350,6 +1350,8 @@ class Address
 			$data['mailable'] = isset($post['mailable']);
 			$data['livable'] = isset($post['livable']);
 			$location->update($data,$address);
+
+			$location->saveStatus('CURRENT');
 		}
 		catch (Exception $e) {
 			$zend_db->rollBack();
