@@ -3,23 +3,21 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Address $this->address
+ * @param Subunit $this->subunit
  */
 $notes = View::escape($this->subunit->getNotes());
 $location = $this->subunit->getLocation();
-$mailable="";
-$livable="";
-$active="";
-$type="";
-if($location){
-	$mailable = $location->isMailable($this->subunit) ? 'Yes' : 'No';
-	$livable = $location->isLivable($this->subunit) ? 'Yes' : 'No';
+$mailable = '';
+$active = '';
+$type = '';
+if ($location) {
+	$mailable = $location->getMailable($this->subunit);
+	$livable = $location->getLivable($this->subunit);
 	$active = $location->isActive($this->subunit)? 'Yes' : 'No';
 	$type = $location->getLocationType($this->subunit);
 }
 echo "
 <table>
-
 	<tr><th>SUD Type</th>
 		<td>{$this->subunit->getSudtype()}</td>
 	</tr>

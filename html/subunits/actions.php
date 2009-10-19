@@ -45,15 +45,15 @@ if (isset($_POST['changeLogEntry'])) {
 
 				$location = new Location($_POST['location_id']);
 				$data = array();
-				$data['mailable'] = isset($_POST['mailable']);
-				$data['livable'] = isset($_POST['livable']);
+				$data['mailable'] = $_POST['mailable'];
+				$data['livable'] = $_POST['livable'];
 				$data['locationType'] = $_POST['location_type_id'];
 				$location->update($data,$subunit);
 				break;
 
 			case 'retire':
 			case 'unretire':
-			case 'verify':				
+			case 'verify':
 				$subunit->$action($changeLogEntry);
 				break;
 		}

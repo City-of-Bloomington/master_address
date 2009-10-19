@@ -34,8 +34,8 @@ if (isset($_POST['changeLogEntry'])) {
 				$location = new Location();
 				$location->assign($subunit,$locationType);
 				$location->activate($subunit);
-				$data['mailable'] = isset($_POST['mailable']);
-				$data['livable'] = isset($_POST['livable']);
+				$data['mailable'] = $_POST['mailable'];
+				$data['livable'] = $_POST['livable'];
 				$location->update($data,$subunit);
 				$location->saveStatus('CURRENT');
 			}

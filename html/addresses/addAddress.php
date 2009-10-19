@@ -61,8 +61,8 @@ else {
 
 	$location = $address->getLocation();
 	$locationData = array();
-	$locationData['mailable'] = $location->isMailable($address);
-	$locationData['livable'] = $location->isLivable($address);
+	$locationData['mailable'] = $location->getMailable($address);
+	$locationData['livable'] = $location->getLivable($address);
 	$locationData['locationType'] = $location->getLocationType($address);
 	unset($location);
 }
