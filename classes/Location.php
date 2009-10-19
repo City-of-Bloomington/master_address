@@ -7,6 +7,12 @@
 class Location
 {
 	private $location_id;
+	private static $flagValues = array('yes','no','unknown');
+
+	public static function getFlagValues()
+	{
+		return self::$flagValues;
+	}
 
 	/**
 	 * Populates the object with data
@@ -172,10 +178,16 @@ class Location
 			if ($address instanceof Address || $address instanceof Subunit) {
 				$data = array();
 				if (isset($post['mailable'])) {
-					$data['mailable_flag'] = $post['mailable'] ? 1 : null;
+					$data['mailable_flag'] = 'unknown';
+					if (in_array($post['mailable'],self::$flagValues)) {
+						$data['mailable_flag'] = $post['mailable'];
+					}
 				}
 				if (isset($post['livable'])) {
-					$data['livable_flag'] = $post['livable'] ? 1 : null;
+					$data['livable_flag'] = 'unknown';
+					if (in_array($post['livable'],self::$flagValues)) {
+						$data['livable_flag'] = $post['livable'];
+					}
 				}
 				if (isset($post['common_name'])) {
 					$data['common_name'] = $post['common_name'];
@@ -212,8 +224,8 @@ class Location
 	public function getUpdatableData($address)
 	{
 		$data = array();
-		$data['mailable'] = $this->isMailable($address);
-		$data['livable'] = $this->isLivable($address);
+		$data['mailable'] = $this->getMailable($address);
+		$data['livable'] = $this->getLivable($address);
 		$data['locationType'] = $this->getLocationType($address);
 		$data['common_name'] = $this->getCommonName($address);
 		return $data;
@@ -339,20 +351,20 @@ class Location
 
 	/**
 	 * @param Address|Subunit $address
-	 * @return boolean
+	 * @return string
 	 */
-	public function isMailable($address)
+	public function getMailable($address)
 	{
-		return $this->fieldLookup('mailable_flag',$address) ? true : false;
+		return $this->fieldLookup('mailable_flag',$address);
 	}
 
 	/**
 	 * @param Address|Subunit $address
-	 * @return boolean
+	 * @return string
 	 */
-	public function isLivable($address)
+	public function getLivable($address)
 	{
-		return $this->fieldLookup('livable_flag',$address) ? true : false;
+		return $this->fieldLookup('livable_flag',$address);
 	}
 
 	/**

@@ -966,21 +966,25 @@ class Address
 	/**
 	 * Returns the Mailable information from this address's primary location
 	 *
-	 * @return boolean
+	 * @return string
 	 */
-	public function isMailable()
+	public function getMailable()
 	{
-		return ($this->getLocation() && $this->getLocation()->isLivable($this));
+		if ($this->getLocation()) {
+			return $this->getLocation()->getMailable($this);
+		}
 	}
 
 	/**
 	 * Returns the Livable information from this address's primary location
 	 *
-	 * @return boolean
+	 * @return string
 	 */
-	public function isLivable()
+	public function getLivable()
 	{
-		return ($this->getLocation() && $this->getLocation()->isLivable($this));
+		if ($this->getLocation()) {
+			return $this->getLocation()->getLivable($this);
+		}
 	}
 
 	/**
@@ -1161,8 +1165,8 @@ class Address
 
 		// Update the mailable, livable flags on all the locations for this address
 		foreach ($this->getLocations() as $location) {
-			$data['mailable'] = isset($post['mailable']);
-			$data['livable'] = isset($post['livable']);
+			$data['mailable'] = $post['mailable'];
+			$data['livable'] = $post['livable'];
 			$data['locationType'] = $post['location_type_id'];
 			$location->update($data,$this);
 		}
@@ -1347,8 +1351,8 @@ class Address
 				$location->activate($address);
 			}
 
-			$data['mailable'] = isset($post['mailable']);
-			$data['livable'] = isset($post['livable']);
+			$data['mailable'] = $post['mailable'];
+			$data['livable'] = $post['livable'];
 			$location->update($data,$address);
 
 			$location->saveStatus('CURRENT');

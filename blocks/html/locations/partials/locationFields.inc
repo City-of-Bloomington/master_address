@@ -7,25 +7,39 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->locationData (optional)
  */
-$mailable = isset($this->locationData['mailable']) ? $this->locationData['mailable'] : false;
-$livable = isset($this->locationData['livable']) ? $this->locationData['livable'] : false;
+$mailable = isset($this->locationData['mailable']) ? $this->locationData['mailable'] : 'unknown';
+$livable = isset($this->locationData['livable']) ? $this->locationData['livable'] : 'unknown';
 $locationType = isset($this->locationData['locationType'])
 				? $this->locationData['locationType']
 				: new LocationType("RESIDENTIAL SFR");
 ?>
 <table>
-	<tr><td><label for="mailable">Mailable</label></td>
+	<tr><td>Mailable</td>
 		<td><?php
-				$checked = $mailable ? 'checked="checked"' : '';
-				echo "<input name=\"mailable\" id=\"mailable\" type=\"checkbox\" $checked />";
+				foreach (Location::getFlagValues() as $value) {
+					$checked = $mailable==$value ? 'checked="checked"' : '';
+					echo "
+					<label>
+						<input name=\"mailable\" id=\"mailable_$value\" type=\"radio\" value=\"$value\" $checked />
+						$value
+					</label>
+					";
+				}
 			?>
 		</td>
 	</tr>
 
 	<tr><td><label for="livable">Livable</label></td>
 		<td><?php
-				$checked = $livable ? 'checked="checked"' : '';
-				echo "<input name=\"livable\" id=\"livable\" type=\"checkbox\" $checked />";
+				foreach (Location::getFlagValues() as $value) {
+					$checked = $livable==$value ? 'checked="checked"' : '';
+					echo "
+					<label>
+						<input name=\"livable\" id=\"livable_$value\" type=\"radio\" value=\"$value\" $checked />
+						$value
+					</label>
+					";
+				}
 			?>
 		</td>
 	</tr>

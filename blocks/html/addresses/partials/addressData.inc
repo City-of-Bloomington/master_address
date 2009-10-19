@@ -5,8 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
-$mailable = $this->address->isMailable() ? 'Yes' : 'No';
-$livable = $this->address->isLivable() ? 'Yes' : 'No';
 $active = $this->address->isActive()? 'Yes' : 'No';
 echo "
 <table>
@@ -20,10 +18,10 @@ echo "
 		<td>{$this->address->getRecycleWeek()}</td>
 	</tr>
 	<tr><th>Mailable</th>
-		<td>$mailable</td>
+		<td>{$this->address->getMailable()}</td>
 	</tr>
 	<tr><th>Livable</th>
-		<td>$livable</td>
+		<td>{$this->address->getLivable()}</td>
 	</tr>
 	<tr><th>Active</th>
 		<td>$active</td>
