@@ -39,4 +39,18 @@ echo "
 		}
 		echo "</purposes>";
 	}
+
+	$subunits = $this->address->getSubunits();
+	if (count($subunits)) {
+		echo "<subunits>";
+		foreach ($subunits as $subunit) {
+			echo "
+			<subunit id=\"{$subunit->getId()}\">
+				<type>{$subunit->getType()}</type>
+				<identifier>{$subunit->getIdentifier()}</identifier>
+			</subunit>
+			";
+		}
+		echo "</subunits>";
+	}
 echo "</address>";
