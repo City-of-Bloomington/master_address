@@ -1,3 +1,5 @@
+<div class="interfaceBox">
+<h1>Address Information</h1>
 <?php
 /**
  * @copyright 2009 City of Bloomington, Indiana
@@ -15,7 +17,6 @@ else {
 	$actions[] = 'retire';
 }
 
-echo "<div class=\"interfaceBox\"><h1>Address Information</h1>";
 if (userIsAllowed('Address')) {
 	echo "
 	<table>
@@ -30,7 +31,7 @@ if (userIsAllowed('Address')) {
 				</select>
 			</td>
 		</tr>
-	</table></div>
+	</table>
 	<script type=\"text/javascript\">
 		function handleActionChoice(select) {
 			document.location.href = '".BASE_URL."/addresses/actions.php?action=' + select.options[select.selectedIndex].value + ';address_id={$this->address->getId()}';
@@ -42,3 +43,5 @@ if (userIsAllowed('Address')) {
 include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
+?>
+</div>
