@@ -30,16 +30,15 @@ $template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$ad
 if ($template->outputFormat=='html') {
 	$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
 									array('addressStatusChangeList'=>$address->getStatusChangeList()));
-	
-	$template->blocks[] = new Block('changeLogs/changeLog.inc',
-									array('changeLog'=>$address->getChangeLog()));
 
 	$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
-													array('address'=>$address));
+												array('address'=>$address));
 	$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
-													array('address'=>$address,
-															'subunitList'=>$address->getSubunits()));
+												array('address'=>$address,
+													'subunitList'=>$address->getSubunits()));
 	$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
-													array('purposeList'=>$address->getPurposes()));
+												array('purposeList'=>$address->getPurposes()));
+	$template->blocks['panel-two'][] = new Block('changeLogs/changeLog.inc',
+												array('changeLog'=>$address->getChangeLog()));
 }
 echo $template->render();

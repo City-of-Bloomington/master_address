@@ -13,6 +13,7 @@
 	?>
 
 	<div id="panel-container" class="yui-skin-sam">
+		<?php include $dir.'/partials/panel-one.inc'; ?>
 		<div id="content-panel">
 			<?php
 				include FRAMEWORK.'/errorMessages.php';
@@ -22,6 +23,7 @@
 				echo $this->includeBlocks('content-panel');
 			?>
 		</div>
+		<?php include $dir.'/partials/panel-two.inc'; ?>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>
 </body>
