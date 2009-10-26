@@ -6,20 +6,8 @@
  * @param Address $this->address
  */
 ?>
-<table>
-	<tr><td><label for="address_type" class="required">Address Type</label></td>
-		<td><select name="address_type" id="address_type">
-			<?php
-				foreach (Address::getAddressTypes() as $type) {
-					$selected = $this->address->getAddress_type() == $type
-						? 'selected="selected"'
-						: '';
-					echo "<option $selected>$type</option>";
-				}
-			?>
-			</select>
-		</td>
-	</tr>
+
+
 	<tr><td><label for="trash_pickup_day">Trash Schedule</label></td>
 		<td><select name="trash_pickup_day" id="trash_pickup_day">
 				<option></option>

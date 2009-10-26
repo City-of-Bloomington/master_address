@@ -13,37 +13,6 @@ $locationType = isset($this->locationData['locationType'])
 				? $this->locationData['locationType']
 				: new LocationType("RESIDENTIAL SFR");
 ?>
-<table>
-	<tr><td>Mailable</td>
-		<td><?php
-				foreach (Location::getFlagValues() as $value) {
-					$checked = $mailable==$value ? 'checked="checked"' : '';
-					echo "
-					<label>
-						<input name=\"mailable\" id=\"mailable_$value\" type=\"radio\" value=\"$value\" $checked />
-						$value
-					</label>
-					";
-				}
-			?>
-		</td>
-	</tr>
-
-	<tr><td><label for="livable">Livable</label></td>
-		<td><?php
-				foreach (Location::getFlagValues() as $value) {
-					$checked = $livable==$value ? 'checked="checked"' : '';
-					echo "
-					<label>
-						<input name=\"livable\" id=\"livable_$value\" type=\"radio\" value=\"$value\" $checked />
-						$value
-					</label>
-					";
-				}
-			?>
-		</td>
-	</tr>
-
 	<tr><td><label for="location_type_id">Location Use Type</label></td>
 		<td><select name="location_type_id">
 				<?php
@@ -59,4 +28,35 @@ $locationType = isset($this->locationData['locationType'])
 			</select>
 		</td>
 	</tr>
-</table>
+
+	<tr><td><label for="mailable">Mailable</label></td>
+		<td style="float:left;"><?php
+				foreach (Location::getFlagValues() as $value) {
+					$checked = $mailable==$value ? 'checked="checked"' : '';
+					echo "
+					<label>
+						<input name=\"mailable\" id=\"mailable_$value\" type=\"radio\" value=\"$value\" $checked />
+						$value
+					</label>
+					";
+				}
+			?>
+		</td>
+	</tr>
+
+	<tr><td><label for="livable">Livable</label></td>
+		<td style="float:left;"><?php
+				foreach (Location::getFlagValues() as $value) {
+					$checked = $livable==$value ? 'checked="checked"' : '';
+					echo "
+					<label>
+						<input name=\"livable\" id=\"livable_$value\" type=\"radio\" value=\"$value\" $checked />
+						$value
+					</label>
+					";
+				}
+			?>
+		</td>
+	</tr>
+
+	
