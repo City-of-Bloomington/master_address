@@ -22,7 +22,7 @@ function handleAddAddress(form) {
 <table>
 <tbody>
 	<tr>
-		<td class="required">Action</td>
+		<td><label for="action" class="required">Action</label></td>
 		<td  style="float:left;">
 			<label>
 				<input type="radio" name="action" value="add"
