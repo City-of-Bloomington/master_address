@@ -1364,4 +1364,17 @@ class Address
 		$zend_db->commit();
 		return $address;
 	}
+
+	/**
+	 * If this address was readdressed, we return the original address
+	 *
+	 * Readdressing results in the old address being retired,
+	 * and a new address created at the same location
+	 *
+	 * @return Address
+	 */
+	public function getOldAddress()
+	{
+		return $this->getLocation()->getAddresses(array('status'=>'RETIRED'));
+	}
 }

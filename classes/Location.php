@@ -57,13 +57,18 @@ class Location
 	}
 
 	/**
-	 * Looks up all the address for this location
+	 * Looks up the addresses for this location
 	 *
+	 * @param array $fields
 	 * @return AddressList
 	 */
-	public function getAddresses()
+	public function getAddresses(array $fields=null)
 	{
-		return new AddressList(array('location_id'=>$this->location_id));
+		$search = array('location_id'=>$this->location_id);
+		if ($fields) {
+			$search = array_merge($search,$fields);
+		}
+		return new AddressList($search);
 	}
 
 	/**

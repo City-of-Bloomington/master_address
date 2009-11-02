@@ -155,6 +155,11 @@ class Town
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return "{$this->description}";
+	}
+
 	/**
 	 * Alias for getTown_id()
 	 *
@@ -174,5 +179,5 @@ class Town
 	{
 		return $this->getTown_code();
 	}
-	   
+
 }

@@ -35,3 +35,41 @@ create table subunit_change_log (
 );
 
 
+insert into address_change_log (street_address_id,user_id,contact_id,notes,action_date,action)
+select a.street_address_id,1, c.contact_id, a.notes, a.action_date,
+decode(a.action,
+  'RETIRED LOCATION','retired',
+  'CORRECTED','corrected',
+  'REASSIGNED','reassigned',
+  'MOVED TO LOCATION','moved to location',
+  'UNRETIRED LOCATION','unretired',
+  'ASSIGN','assigned',
+  'UNRETIRED','unretired',
+  'REMOVED','retired',
+  'ACTIVE','activated',
+  'READDRESSED','readdressed',
+  'RETIRED','retired')
+from mast_address_assignment_hist a
+left join mast_addr_assignment_contact c on a.contact_id=c.contact_id
+where street_address_id in (select street_address_id from mast_address)
+and subunit_id is null;
+
+
+insert into subunit_change_log (subunut_id,user_id,contact_id,notes,action_date,action)
+select a.subunit_id,1, c.contact_id, a.notes, a.action_date,
+decode(a.action,
+  'RETIRED LOCATION','retired',
+  'CORRECTED','corrected',
+  'REASSIGNED','reassigned',
+  'MOVED TO LOCATION','moved to location',
+  'UNRETIRED LOCATION','unretired',
+  'ASSIGN','assigned',
+  'UNRETIRED','unretired',
+  'REMOVED','retired',
+  'ACTIVE','activated',
+  'READDRESSED','readdressed',
+  'RETIRED','retired')
+from mast_address_assignment_hist a
+left join mast_addr_assignment_contact c on a.contact_id=c.contact_id
+where subunit_id in (select subunit_id from mast_address_subunits)
+and subunit_id is not null;

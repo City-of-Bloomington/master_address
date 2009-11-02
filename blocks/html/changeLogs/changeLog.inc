@@ -47,7 +47,14 @@ if (count($this->changeLog)) {
 			$notes = $notes ? $notes:'&nbsp;';
 			echo "
 			<tr><td>{$logEntry->action_date}</td>
-				<td>{$logEntry->getTarget()}</td>
+				<td>
+			";
+				$target = $logEntry->getTarget();
+				if ($target) {
+					echo "<a href=\"{$target->getURL()}\">$target</a>";
+				}
+			echo "
+				</td>
 				<td>{$logEntry->action}</td>
 				<td>$username</td>
 				<td>{$logEntry->getContact()->getFirstname()}

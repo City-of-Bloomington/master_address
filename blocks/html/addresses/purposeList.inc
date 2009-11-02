@@ -8,10 +8,13 @@
 ?>
 <div class="interfaceBox">
 	<h1>Additional Information</h1>
-	<ul><?php
+	<?php
+		if (count($this->purposeList)) {
+			echo '<ul>';
 			foreach ($this->purposeList as $purpose) {
 				echo "<li>$purpose</li>";
 			}
-		?>
-	</ul>
+			echo '</ul>';
+		}
+	?>
 </div>

@@ -340,10 +340,19 @@ class Plat
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getURL()
 	{
 		return BASE_URL.'/plats/viewPlat.php?plat_id='.$this->plat_id;
 	}
+
 	/**
 	 * Alias for getPlat_id()
 	 *
