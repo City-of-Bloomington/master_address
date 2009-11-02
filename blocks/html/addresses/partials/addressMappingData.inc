@@ -13,9 +13,12 @@ $plat = $this->address->getPlat()
 		: '';
 $notes = View::escape($this->address->getNotes());
 echo "
-<table>
-	<tr><th>Zip Plus4</th>
-		<td>{$this->address->getZipplus4()}</td>
+<table>	
+	<tr><th>Address Type</th>
+		<td>{$this->address->getType()}</td>
+	</tr>
+        <tr><th>Jurisdiction</th>
+		<td>{$this->address->getJurisdiction()->getDescription()}</td>
 	</tr>
 	<tr><th>Plat</th>
 		<td>$plat</td>
@@ -23,29 +26,23 @@ echo "
 	<tr><th>Lot Number</th>
 		<td>{$this->address->getPlat_lot_number()}</td>
 	</tr>
-	<tr><th>Jurisdiction</th>
-		<td>{$this->address->getJurisdiction()->getDescription()}</td>
-	</tr>
+	
 	<tr><th>Township</th>
 		<td>$township</td>
 	</tr>
-	<tr><th>Section</th>
-		<td>{$this->address->getSection()}</td>
-	</tr>
-	<tr><th>Quarter Section</th>
-		<td>{$this->address->getQuarter_section()}</td>
-	</tr>
-	<tr><th>Census Block</th>
-		<td>{$this->address->getCensus_block_fips_code()}</td>
-	</tr>
-	<tr><th>Lat/Long</th>
-		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
-	</tr>
-	<tr><th>State Plane X/Y</th>
+	<tr><th>Section {$this->address->getSection()}</th><th>Quarter Section {$this->address->getQuarter_section()}</th></tr>
+        <tr><th>State Plane X/Y</th>
 		<td>{$this->address->getState_plane_x_coordinate()},
 			{$this->address->getState_plane_y_coordinate()}
 		</td>
 	</tr>
+	<tr><th>Lat/Long</th>
+		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
+	</tr>
+        <tr><th>Census Block</th>
+		<td>{$this->address->getCensus_block_fips_code()}</td>
+	</tr>
+	
 </table>
 <p>$notes</p>
 ";

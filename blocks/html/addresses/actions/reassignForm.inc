@@ -17,9 +17,10 @@ function handleReassignAddress(form) {
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="handleReassignAddress(this); return false;">
 	<fieldset>
+<table><tbody>
 		<input type="hidden" name="action" value="reassign" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
-
+</tbody></table>
 		<div>
 		<p>This is a special way of unretiring this address.
 			We will keep the current location as retired,

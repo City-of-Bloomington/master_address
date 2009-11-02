@@ -50,16 +50,4 @@
 	<td><?php echo $this->address->getStatus(); ?>
 	</td>
 </tr>
-<tr><td><label for="address_type" class="required">Address Type</label></td>
-		<td><select name="address_type" id="address_type">
-			<?php
-				foreach (Address::getAddressTypes() as $type) {
-					$selected = $this->address->getAddress_type() == $type
-						? 'selected="selected"'
-						: '';
-					echo "<option $selected>$type</option>";
-				}
-			?>
-			</select>
-		</td>
-	</tr>
+

@@ -8,20 +8,12 @@
 $active = $this->address->isActive()? 'Yes' : 'No';
 echo "
 <table>
-	<tr><th>Address Type</th>
-		<td>{$this->address->getType()}</td>
+	<tr><th>Tax Jurisdiction</th><td> {$this->address->getTax_jurisdiction()}</td></tr>
+        <tr><th>Location Use Type</th><td>{$this->address->getLocation()->getLocationType($this->address)}</td></tr>
+	<tr><td><label>Trash Day</label></td><td> {$this->address->getTrashDay()}</td>
+	<td><label>Recycle Week<?label></td><td> {$this->address->getRecycleWeek()}</td>
 	</tr>
-	<tr><th>Trash Day</th>
-		<td>{$this->address->getTrashDay()}</td>
-	</tr>
-	<tr><th>Recycle Week</th>
-		<td>{$this->address->getRecycleWeek()}</td>
-	</tr>
-	<tr><th>Mailable</th>
-		<td>{$this->address->getMailable()}</td>
-	</tr>
-	<tr><th>Livable</th>
-		<td>{$this->address->getLivable()}</td>
+	<tr><td><label>Mailable</label></td><td> {$this->address->getMailable()} </td><td><label>Livable </label></td><td>{$this->address->getLivable()}</td>
 	</tr>
 	<tr><th>Active</th>
 		<td>$active</td>

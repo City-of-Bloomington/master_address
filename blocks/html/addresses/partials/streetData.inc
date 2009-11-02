@@ -8,7 +8,7 @@
 echo "
 <table>
 	<tr><th>Number</th>
-		<td>{$this->address->getStreet_number()}</td>
+		<td>{$this->address->getStreet_number()} - {$this->address->getZipplus4()}</td>
 	</tr>
 	<tr><th>Street</th>
 		<td>{$this->address->getStreet()->getStreetName()}</td>

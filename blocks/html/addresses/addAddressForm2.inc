@@ -2,9 +2,10 @@
 	onsubmit="handleAddAddress(this); return false;">
 	<table>
 	<tbody>
-<?php include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFieldsunrequired.inc'; ?>
+	
+	<?php include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
 
-include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc';
 					if (isset($this->location)) {
 						echo "<input type=\"hidden\" name=\"location_id\" value=\"{$this						->location->getId()}\" />";
 						$this->locationData = $this->location->getUpdatableData($this->address);
@@ -12,7 +13,7 @@ include APPLICATION_HOME.'/blocks/html/addresses/partials/addressFields.inc';
 	 ?>
 			
 		
-<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFieldsunrequired.inc'; ?>
+
 			
 	
 <tr>

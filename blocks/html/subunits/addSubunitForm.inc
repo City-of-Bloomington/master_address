@@ -22,6 +22,7 @@ function handleAddSubunit(form) {
 	</fieldset>
 
 	<fieldset>
+	<table><tbody>
 		<?php
 			$locationData = $this->address->getLocation()->getUpdatableData($this->address);
 			$locationData['locationType'] = new LocationType('RESIDENTIAL MULTI-FAMILY');
@@ -29,6 +30,7 @@ function handleAddSubunit(form) {
 								array('locationData'=>$locationData));
 			echo $block->render('html');
 		?>
+	</tbody></table>
 	</fieldset>
 	<fieldset>
 		<button type="submit" class="submit">Submit</button>

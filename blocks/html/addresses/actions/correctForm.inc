@@ -17,18 +17,22 @@ function handleCorrectAddress(form) {
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="handleCorrectAddress(this); return false;">
 	<fieldset>
+	<table><tbody>
 		<input type="hidden" name="action" value="correct" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
+</tbody></table>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
 	<fieldset>
+
 		<?php
 			include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
 			include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
 		?>
+
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 </form>
