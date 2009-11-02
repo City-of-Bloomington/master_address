@@ -4,15 +4,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$requiredBrowsers = array('Firefox'=>3,'IE'=>8,'Safari'=>4);
-$browser = get_browser($_SERVER['HTTP_USER_AGENT'],true);
-if (in_array($browser['browser'],array_keys($requiredBrowsers))
-	&& (float)$browser < $requiredBrowsers[$browser['browser']]) {
-	header('Location: '.BASE_URL.'/requiredBrowsers.php');
-	exit();
-}
-
-
 if (isset($_REQUEST['format'])) {
 	switch ($_REQUEST['format']) {
 		case 'xml':
@@ -27,6 +18,15 @@ else {
 }
 
 if ($template->outputFormat == 'html') {
+	$requiredBrowsers = array('Firefox'=>3,'IE'=>8,'Safari'=>4);
+	$browser = get_browser($_SERVER['HTTP_USER_AGENT'],true);
+	if (in_array($browser['browser'],array_keys($requiredBrowsers))
+		&& (float)$browser['version'] < $requiredBrowsers[$browser['browser']]) {
+		header('Location: '.BASE_URL.'/requiredBrowsers.php');
+		exit();
+	}
+
+
 	$template->blocks[] = new Block('multiSearchForm.inc');
 }
 
