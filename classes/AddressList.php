@@ -249,18 +249,29 @@ class AddressList extends ZendDbResultIterator
 		}
 
 		if (isset($fields['subunitType'])) {
-			if ($fields['subunitType'] instanceof SubunitType) {
-				try {
-					$fields['subunitType'] = new SubunitType($fields['subunitType']);
+			// If they're doing a search, and they're looking for a particular subunit,
+			// just ignore whatever they typed for the subunit type.
+			// They may searched for APT 1 and the address only has SUITES.
+			// If there's a subunit 1, we should return it no matter what type of subunit it is
+			if ($queryType=='find' || !isset($fields['subunitIdentifier'])) {
+				if ($fields['subunitType'] instanceof SubunitType) {
+					try {
+						$fields['subunitType'] = new SubunitType($fields['subunitType']);
+					}
+					catch (Exception $e) {
+					}
 				}
-				catch (Exception $e) {
+				if ($fields['subunitType'] instanceof SubunitType) {
+					$joins['u'] = array('table'=>'mast_address_subunits',
+										'condition'=>'a.street_address_id=u.street_address_id');
+					$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
 				}
 			}
-			if ($fields['subunitType'] instanceof SubunitType) {
-				$joins['u'] = array('table'=>'mast_address_subunits',
-									'condition'=>'a.street_address_id=u.street_address_id');
-				$this->select->where('u.sudtype=?',$fields['subunitType']->getType());
-			}
+		}
+		if (isset($fields['subunitIdentifier'])) {
+			$joins['u'] = array('table'=>'mast_address_subunits',
+								'condition'=>'a.street_address_id=u.street_address_id');
+			$this->select->where('u.street_subunit_identifier=?',$fields['subunitIdentifier']);
 		}
 
 		if (isset($fields['subdivision_id'])) {

@@ -114,6 +114,11 @@ class SubunitType
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->sudtype;
+	}
+
 	/**
 	 * @return number
 	 */
