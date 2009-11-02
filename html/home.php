@@ -1,5 +1,11 @@
 <?php
 /**
+ * Basic Search Page
+ *
+ * This homepage provides only basic searching for addresses and streets.
+ * Only the single input is supported.  If you need the search to be more precise,
+ * use the advanced search pages.
+ *
  * @copyright 2006-2008 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
@@ -26,7 +32,6 @@ if ($template->outputFormat == 'html') {
 		exit();
 	}
 
-
 	$template->blocks[] = new Block('multiSearchForm.inc');
 }
 
@@ -36,13 +41,10 @@ if (isset($_REQUEST['queryType'])) {
 			$addresses = new AddressList();
 			$addresses->search(array('address'=>$_REQUEST['query']));
 
-			// If there's only one address returned, we should display the address
-			if (count($addresses) == 1) {
+			if ($template->outputFormat == 'html' && count($addresses) == 1) {
 				$address = $addresses[0];
-				if ($template->outputFormat == 'html') {
-					header('Location: '.BASE_URL.'/addresses/viewAddress.php?address_id='.$address->getId());
-					exit();
-				}
+				header('Location: '.$address->getURL());
+				exit();
 			}
 
 			$template->blocks[] = new Block('addresses/addressList.inc',
