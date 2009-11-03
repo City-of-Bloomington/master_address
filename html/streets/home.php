@@ -15,8 +15,19 @@ if (isset($_GET['streetName'])) {
 	$fields = AddressList::parseAddress($_GET['streetName'],'streetNameOnly');
 	if (count($fields)) {
 		$streets = new StreetList($fields);
-		$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));
 	}
+	else {
+		$streets = new StreetList();
+		$streets->find();
+	}
+}
+elseif ($template->outputFormat != 'html') {
+	$streets = new StreetList();
+	$streets->find();
+}
+
+if (isset($streets)) {
+	$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));
 }
 
 echo $template->render();
