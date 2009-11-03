@@ -111,40 +111,41 @@ class StreetList extends ZendDbResultIterator
 	 * @param array $fields
 	 * @param string $queryType find|search
 	 */
-	private function getJoins(array $fields,$queryType='find')
+	private function getJoins(array $fields=null,$queryType='find')
 	{
 		$joins = array();
 
-		if (isset($fields['street_name'])) {
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			if ($queryType=='find') {
-				$this->select->where('n.street_name=?',$fields['street_name']);
+		if ($fields) {
+			if (isset($fields['street_name'])) {
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				if ($queryType=='find') {
+					$this->select->where('n.street_name=?',$fields['street_name']);
+				}
+				else {
+					$this->select->where('n.street_name like ?',"%$fields[street_name]%");
+				}
 			}
-			else {
-				$this->select->where('n.street_name like ?',"%$fields[street_name]%");
+
+			if (isset($fields['direction'])) {
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
+			}
+
+			if (isset($fields['postDirection'])) {
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.post_direction_suffix_code=?',
+										$fields['postDirection']->getCode());
+			}
+
+			if (isset($fields['streetType'])) {
+				$joins['n'] = array('table'=>'mast_street_names',
+									'condition'=>'s.street_id=n.street_id');
+				$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
 			}
 		}
-
-		if (isset($fields['direction'])) {
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
-		}
-
-		if (isset($fields['postDirection'])) {
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.post_direction_suffix_code=?',
-									$fields['postDirection']->getCode());
-		}
-
-		if (isset($fields['streetType'])) {
-			$joins['n'] = array('table'=>'mast_street_names',
-								'condition'=>'s.street_id=n.street_id');
-			$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
-		}
-
 		return $joins;
 	}
 
