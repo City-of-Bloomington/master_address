@@ -55,7 +55,7 @@ class AddressList extends ZendDbResultIterator
 	 */
 	private function createSelection()
 	{
-		$this->select->from(array('a'=>'mast_address'));
+		$this->select->distinct()->from(array('a'=>'mast_address'));
 		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
 								'a.street_address_id=trash.street_address_id',
 								array('trash_pickup_day','recycle_week'));

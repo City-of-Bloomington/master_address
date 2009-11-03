@@ -45,7 +45,7 @@ class StreetList extends ZendDbResultIterator
 	 */
 	private function createSelection()
 	{
-		$this->select->from(array('s'=>'mast_street'));
+		$this->select->distinct()->from(array('s'=>'mast_street'));
 	}
 
 	/**
