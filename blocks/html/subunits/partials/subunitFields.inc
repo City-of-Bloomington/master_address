@@ -25,7 +25,7 @@ $subunit = $this->subunit ? $this->subunit : new Subunit();
 	</tr>
 	<tr><td><label for="street_subunit_identifier" class="required">Unit</label></td>
 		<td><input name="street_subunit_identifier" id="street_subunit_identifier"
-					size="10" maxlength="20"
+					size="30" maxlength="30"
 					value="<?php echo View::escape($subunit->getIdentifier()); ?>" />
 		</td>
 	</tr>
