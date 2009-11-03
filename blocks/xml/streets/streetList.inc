@@ -11,9 +11,7 @@ foreach ($this->streetList as $street) {
 	$town = View::escape($street->getTown()->getDescription());
 	$notes = View::escape($street->getNotes());
 	echo "
-	<street>
-		<id>{$street->getId()}</id>
-		<name>$name</name>
+	<street id=\"{$street->getId()}\" name=\"$name\">
 		<town>$town</town>
 		<status>{$street->getStatus_code()}</status>
 		<notes>$notes</notes>
