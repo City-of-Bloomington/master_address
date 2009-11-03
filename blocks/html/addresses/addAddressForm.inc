@@ -19,27 +19,47 @@ function handleAddAddress(form) {
 	}
 }
 </script>
-<table>
-<tbody>
-	<tr>
-		<td><label for="action" class="required">Action</label></td>
-		<td  style="float:left;">
-			<label>
-				<input type="radio" name="action" value="add"
-				onclick="addAddressFormAction='add';" />
-				Add
-			</label>
-			<label>
-				<input type="radio" name="action" value="assign" checked="checked"
-				onclick="addAddressFormAction='assign';" />
-				Assign
-			</label>
-		</td>
-	</tr>
-<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc';
-				?>
-<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFieldsrequired.inc';
-?>
-				</tbody>
+<form method="post" action="<?php echo BASE_URL; ?>/addresses/addAddress.php"
+	onsubmit="handleAddAddress(this);return false;">
+	<table>
+		<tr><td><table>
+					<tr><td><label for="action_add" class="required">Action</label></td>
+						<td><label style="float:none;">
+								<input type="radio" name="action" id="action_add" value="add"
+									onclick="addAddressFormAction='add';" />
+								Add
+							</label>
+							<label style="float:none;">
+								<input type="radio" name="action" id="action_assign" value="assign" checked="checked"
+									onclick="addAddressFormAction='assign';" />
+								Assign
+							</label>
+						</td>
+					</tr>
+					<?php
+						include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc';
+						include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredFields.inc';
+					?>
+				</table>
+			</td>
+			<td><table>
+					<?php
+						include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredFields.inc';
+						include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+						include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationFields.inc';
+					?>
+					<tr><td><label for="notes">Notes</label></td>
+						<td><textarea name="notes" id="notes" rows="3" cols="50"><?php echo View::escape($this->address->getNotes()); ?></textarea>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
 	</table>
-	
+	<div><button type="submit" class="submit">Save</button>
+		<label>
+			<input type="checkbox" name="batch_mode" />
+				Submit in Batch Mode
+		</label>
+	</div>
+</form>

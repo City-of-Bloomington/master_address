@@ -21,12 +21,13 @@ function handleVerifyAddress(form) {
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<div>
-		This will retire this address as well as any subunits and locations associated with it.
+			<p>
+			This will retire this address as well as any subunits and locations associated with it.
+			</p>
 		</div>
 
 		<button type="submit" class="save">Retire</button>
 	</fieldset>
-
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';

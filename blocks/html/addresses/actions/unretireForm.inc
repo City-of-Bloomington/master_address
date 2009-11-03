@@ -21,12 +21,13 @@ function handleUnretireAddress(form) {
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<div>
-		This will bring this address out of retirement by simply changing it's status to CURRENT.
+			<p>
+			This will bring this address out of retirement by simply changing it's status to CURRENT.
+			</p>
 		</div>
 
 		<button type="submit" class="save">Unretire</button>
 	</fieldset>
-
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';

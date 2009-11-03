@@ -6,8 +6,6 @@
  * @param Address $this->address
  */
 ?>
-
-
 	<tr><td><label for="trash_pickup_day">Trash Schedule</label></td>
 		<td><select name="trash_pickup_day" id="trash_pickup_day">
 				<option></option>

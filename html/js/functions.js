@@ -84,15 +84,20 @@ FRAMEWORK.getChangeLog = function (form,action)
 	}
 	function changeLogCancel() {
 		changeLogForm.hide();
+		changeLogForm.destroy();
 	}
 }
 FRAMEWORK.checkRequiredFields = function()
 {
 	var elements = document.getElementsByTagName("label");
-	for (var i=0;i<elements.length;i++) {
+	for (i in elements) {
 		if (elements[i].className && elements[i].className =='required') {
 			var id = elements[i].getAttribute('for');
 			var obj = document.getElementById(id);
+			if (!obj) {
+				alert('Failed to find the input id="' + id + '" for the required label. Please let a developer know about this problem');
+				return false;
+			}
 			switch (obj.type) {
 				case 'text':
 					if (obj.value.trim() == "") {

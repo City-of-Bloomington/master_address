@@ -68,7 +68,7 @@ else {
 }
 
 
-$template = new Template('two-column');
+$template = new Template('full-width');
 $breadcrumbs = new Block('addresses/breadcrumbs.inc',array('action'=>'add'));
 if (isset($street)) {
 	$breadcrumbs->street = $street;
@@ -82,16 +82,12 @@ if ($addressCreatedSuccessfully) {
 }
 
 $addAddressForm = new Block('addresses/addAddressForm.inc',array('address'=>$address));
-$addAddressForm2 = new Block('addresses/addAddressForm2.inc',array('address'=>$address));
-
-
 if (isset($location)) {
 	$addAddressForm->location = $location;
 }
 else {
 	$addAddressForm->locationData = $locationData;
 }
-$template->blocks['panel-one'][] = $addAddressForm2;
 $template->blocks[] = $addAddressForm;
 
 

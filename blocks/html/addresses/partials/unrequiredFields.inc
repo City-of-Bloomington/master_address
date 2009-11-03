@@ -6,7 +6,7 @@
  * @param Address $this->address
  */
 ?>
-<tr><td><label for="state_plane_x_coordinate">State Plane X/Y</label></td>
+	<tr><td><label for="state_plane_x_coordinate">State Plane X/Y</label></td>
 		<td><input name="state_plane_x_coordinate" id="state_plane_x_coordinate"
 					size="7" maxlength="7"
 					value="<?php echo $this->address->getState_plane_x_coordinate(); ?>" />
@@ -27,7 +27,7 @@
 					value="<?php echo View::escape($this->address->getCensus_block_fips_code()); ?>" />
 		</td>
 	</tr>
-	
+
 	<tr><td><label for="tax_jurisdiction">Tax Jurisdiction</label></td>
 		<td><select name="tax_jurisdiction" id="tax_jurisdiction">
 				<option></option>

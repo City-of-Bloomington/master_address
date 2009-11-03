@@ -10,8 +10,7 @@ $name = $this->plat ? View::escape($this->plat->getName()) : '';
 ?>
 <div>
 	<span id="chosenPlat"><?php echo $name; ?></span>
-	<input type="hidden" name="plat_id" id="plat_id"
-		value="<?php echo $id; ?>" />
+	<input type="hidden" name="plat_id" id="plat_id" value="<?php echo $id; ?>" />
 </div>
 <div><button type="button" onclick="openPlatSelector();">Choose Plat</button></div>
 

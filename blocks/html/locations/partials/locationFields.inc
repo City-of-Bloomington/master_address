@@ -7,6 +7,15 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->locationData (optional)
  */
+if (isset($this->location)) {
+	echo "
+	<tr><td colspan=\"2\">
+			<input type=\"hidden\" name=\"location_id\" value=\"{$this->location->getId()}\" />
+		</td>
+	</tr>
+	";
+	$this->locationData = $this->location->getUpdatableData($this->address);
+}
 $mailable = isset($this->locationData['mailable']) ? $this->locationData['mailable'] : 'unknown';
 $livable = isset($this->locationData['livable']) ? $this->locationData['livable'] : 'unknown';
 $locationType = isset($this->locationData['locationType'])
@@ -30,11 +39,11 @@ $locationType = isset($this->locationData['locationType'])
 	</tr>
 
 	<tr><td><label for="mailable">Mailable</label></td>
-		<td style="float:left;"><?php
+		<td><?php
 				foreach (Location::getFlagValues() as $value) {
 					$checked = $mailable==$value ? 'checked="checked"' : '';
 					echo "
-					<label>
+					<label style=\"float:none;\">
 						<input name=\"mailable\" id=\"mailable_$value\" type=\"radio\" value=\"$value\" $checked />
 						$value
 					</label>
@@ -45,11 +54,11 @@ $locationType = isset($this->locationData['locationType'])
 	</tr>
 
 	<tr><td><label for="livable">Livable</label></td>
-		<td style="float:left;"><?php
+		<td><?php
 				foreach (Location::getFlagValues() as $value) {
 					$checked = $livable==$value ? 'checked="checked"' : '';
 					echo "
-					<label>
+					<label style=\"float:none;\">
 						<input name=\"livable\" id=\"livable_$value\" type=\"radio\" value=\"$value\" $checked />
 						$value
 					</label>
@@ -58,33 +67,3 @@ $locationType = isset($this->locationData['locationType'])
 			?>
 		</td>
 	</tr>
-		<tr><td><label for="trash_pickup_day">Trash Schedule</label></td>
-		<td><select name="trash_pickup_day" id="trash_pickup_day">
-				<option></option>
-				<?php
-					foreach (Address::getTrashDays() as $day) {
-						$selected = $this->address->getTrash_pickup_day()==$day
-							? 'selected="selected"'
-							: '';
-						echo "<option $selected>$day</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-	<tr><td><label for="recycle_week">Recycle Week</label></td>
-		<td><select name="recycle_week" id="recycle_week">
-				<option></option>
-				<?php
-					foreach (Address::getRecycleWeeks() as $week) {
-						$selected = $this->address->getRecycle_week() == $week
-							? 'selected="selected"'
-							: '';
-						echo "<option $selected>$week</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-
-	

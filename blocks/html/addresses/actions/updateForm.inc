@@ -17,27 +17,24 @@ function handleUpdateAddress(form) {
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="handleUpdateAddress(this); return false;">
 	<fieldset>
-	<table><tbody>
 		<input type="hidden" name="action" value="update" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc'; ?>
-	</tbody></table>		
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 
 	<fieldset>
-	<table><tbody>
-		<?php
-			include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFieldsrequired.inc';
-			include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingFieldsunrequired.inc';
-			
-			
-			$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
-			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
-			
-		?>
-		</tbody></table>
+		<table>
+			<?php
+				include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredFields.inc';
+				include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredFields.inc';
+
+				$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
+				include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+				include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationFields.inc';
+			?>
+		</table>
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 </form>

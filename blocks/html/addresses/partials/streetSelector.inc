@@ -14,9 +14,9 @@ if (isset($this->street)) {
 ?>
 <div>
 	<span id="chosenStreetName"><?php echo $name ?></span>
-	<input type="hidden" name="street_id" id="street_id"
-		value="<?php echo $id; ?>" />
-<button type="button" onclick="openStreetSelector();">Choose Street</button></div>
+	<input type="hidden" name="street_id" id="street_id" value="<?php echo $id; ?>" />
+	<button type="button" onclick="openStreetSelector();">Choose Street</button>
+</div>
 
 <div id="streetSelector" style="position:absolute; visibility:hidden;">
 	<div class="hd">Choose a Street</div>
@@ -35,8 +35,7 @@ if (isset($this->street)) {
 
 <script type="text/javascript">
 var streetSelector;
-function openStreetSelector()
-{
+function openStreetSelector() {
 	streetSelector = new YAHOO.widget.Overlay('streetSelector');
 	streetSelector.center();
 	streetSelector.render();

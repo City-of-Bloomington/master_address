@@ -21,8 +21,10 @@ function handleVerifyAddress(form) {
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
 
 		<div>
-		I, <?php echo View::escape($_SESSION['USER']->getFullname()); ?>,
-		verify that this address is accurate at this point in time.
+			<p>
+			I, <?php echo View::escape($_SESSION['USER']->getFullname()); ?>,
+			verify that this address is accurate at this point in time.
+			</p>
 		</div>
 
 		<button type="submit" class="save">Verify</button>

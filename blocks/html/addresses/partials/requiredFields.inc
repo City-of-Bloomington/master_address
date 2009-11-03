@@ -6,13 +6,6 @@
  * @param Address $this->address
  */
 ?>
-<?php
-/**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- */
-?>
 	<tr><td><label for="address_type" class="required">Address Type</label></td>
 		<td><select name="address_type" id="address_type">
 			<?php
@@ -55,7 +48,7 @@
 				value="<?php echo $this->address->getPlat_lot_number(); ?>" />
 		</td>
 	</tr>
-	
+
 	<tr><td><label for="township_id" class="required">Township</label></td>
 		<td><select name="township_id" id="township_id" >
 				<option></option>
@@ -85,7 +78,7 @@
 					}
 				?>
 			</select>
-			<label for="quarter_section">Quarter Section</label>
+			<label for="quarter_section" style="float:none;">Quarter Section</label>
 			<select name="quarter_section" id="quarter_section">
 				<option></option>
 				<?php

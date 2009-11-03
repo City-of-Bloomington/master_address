@@ -17,20 +17,17 @@ function handleReassignAddress(form) {
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="handleReassignAddress(this); return false;">
 	<fieldset>
-<table><tbody>
 		<input type="hidden" name="action" value="reassign" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
-</tbody></table>
 		<div>
-		<p>This is a special way of unretiring this address.
-			We will keep the current location as retired,
-			but we'll create a new location with this address as the active address.
-		</p>
+			<p>This is a special way of unretiring this address.
+				We will keep the current location as retired,
+				but we'll create a new location with this address as the active address.
+			</p>
 		</div>
 
 		<button type="submit" class="save">Reassign</button>
 	</fieldset>
-
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
