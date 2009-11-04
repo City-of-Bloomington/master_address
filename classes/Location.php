@@ -64,11 +64,13 @@ class Location
 	 */
 	public function getAddresses(array $fields=null)
 	{
-		$search = array('location_id'=>$this->location_id);
-		if ($fields) {
-			$search = array_merge($search,$fields);
+		if ($this->location_id) {
+			$search = array('location_id'=>$this->location_id);
+			if ($fields) {
+				$search = array_merge($search,$fields);
+			}
+			return new AddressList($search);
 		}
-		return new AddressList($search);
 	}
 
 	/**
@@ -77,37 +79,39 @@ class Location
 	 */
 	public function assign($address,LocationType $type)
 	{
-		if ($address instanceof Address) {
-			$data['street_address_id'] = $address->getId();
-		}
-		elseif ($address instanceof Subunit) {
-			$data['street_address_id'] = $address->getStreet_address_id();
-			$data['subunit_id'] = $address->getId();
-		}
-		else {
-			throw new Exception('locations/invalidAddress');
-		}
+		if ($this->location_id) {
+			if ($address instanceof Address) {
+				$data['street_address_id'] = $address->getId();
+			}
+			elseif ($address instanceof Subunit) {
+				$data['street_address_id'] = $address->getStreet_address_id();
+				$data['subunit_id'] = $address->getId();
+			}
+			else {
+				throw new Exception('locations/invalidAddress');
+			}
 
-		$zend_db = Database::getConnection();
+			$zend_db = Database::getConnection();
 
-		if (!$this->location_id) {
-			$this->location_id = $zend_db->nextSequenceId('location_id_s');
-		}
+			if (!$this->location_id) {
+				$this->location_id = $zend_db->nextSequenceId('location_id_s');
+			}
 
-		// If it's not in the database already, add a new row
-		$sql = 'select count(*) from address_location where location_id=? and street_address_id=?';
-		$parameters = array($this->location_id,$data['street_address_id']);
-		if (isset($data['subunit_id'])) {
-			$sql.= ' and subunit_id=?';
-			$parameters[] = $data['street_address_id'];
-		}
+			// If it's not in the database already, add a new row
+			$sql = 'select count(*) from address_location where location_id=? and street_address_id=?';
+			$parameters = array($this->location_id,$data['street_address_id']);
+			if (isset($data['subunit_id'])) {
+				$sql.= ' and subunit_id=?';
+				$parameters[] = $data['street_address_id'];
+			}
 
-		$count = $zend_db->fetchOne($sql,$parameters);
-		if (!$count) {
-			$data['location_id'] = $this->location_id;
-			$data['location_type_id'] = $type->getId();
-			$data['active'] = 'N';
-			$zend_db->insert('address_location',$data);
+			$count = $zend_db->fetchOne($sql,$parameters);
+			if (!$count) {
+				$data['location_id'] = $this->location_id;
+				$data['location_type_id'] = $type->getId();
+				$data['active'] = 'N';
+				$zend_db->insert('address_location',$data);
+			}
 		}
 	}
 
@@ -123,7 +127,8 @@ class Location
 	 */
 	public function moveAddress(Address $address,Location $newLocation)
 	{
-		if ($newLocation->getId() != $this->getId()) {
+		if ($this->location_id
+			&& $newLocation->getId() != $this->location_id) {
 			$zend_db = Database::getConnection();
 			$zend_db->update('address_location',
 							array('location_id'=>$newLocation->getId(),'active'=>'N'),
@@ -272,14 +277,16 @@ class Location
 	 */
 	public function getStatus(Date $date=null)
 	{
-		$search = array('location_id'=>$this->location_id);
-		if ($date) {
-			$search['current'] = $date;
-		}
-		$list = new LocationStatusChangeList($search);
-		if (count($list)) {
-			$statusChange = $list[0];
-			return $statusChange->getStatus();
+		if ($this->location_id) {
+			$search = array('location_id'=>$this->location_id);
+			if ($date) {
+				$search['current'] = $date;
+			}
+			$list = new LocationStatusChangeList($search);
+			if (count($list)) {
+				$statusChange = $list[0];
+				return $statusChange->getStatus();
+			}
 		}
 	}
 
@@ -299,33 +306,35 @@ class Location
 	 */
 	public function saveStatus($status)
 	{
-		if (!$status instanceof AddressStatus) {
-			$status = new AddressStatus($status);
-		}
-		$currentStatus = $this->getStatus();
-		// If we don't have a current status, or it's different than the new one.
-		// We create the new status change object.  We'll save it later
-		if (!$currentStatus ||
-			($currentStatus->getStatus_code() != $status->getStatus_code())) {
-			$newStatus = new LocationStatusChange();
-			$newStatus->setLocation($this);
-			$newStatus->setStatus($status);
-		}
+		if ($this->location_id) {
+			if (!$status instanceof AddressStatus) {
+				$status = new AddressStatus($status);
+			}
+			$currentStatus = $this->getStatus();
+			// If we don't have a current status, or it's different than the new one.
+			// We create the new status change object.  We'll save it later
+			if (!$currentStatus ||
+				($currentStatus->getStatus_code() != $status->getStatus_code())) {
+				$newStatus = new LocationStatusChange();
+				$newStatus->setLocation($this);
+				$newStatus->setStatus($status);
+			}
 
-		// If we have a current status, and it's not the same as the new one,
-		// Do our data cleanup - use today's date on all the empty end dates
-		if ($currentStatus
-			&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
-			$zend_db = Database::getConnection();
-			$zend_db->update('mast_address_location_status',
-							array('effective_end_date'=>date('Y-m-d H:i:s')),
-								"location_id='{$this->location_id}' and effective_end_date is null");
-		}
+			// If we have a current status, and it's not the same as the new one,
+			// Do our data cleanup - use today's date on all the empty end dates
+			if ($currentStatus
+				&& $currentStatus->getStatus_code() != $status->getStatus_code()) {
+				$zend_db = Database::getConnection();
+				$zend_db->update('mast_address_location_status',
+								array('effective_end_date'=>date('Y-m-d H:i:s')),
+									"location_id='{$this->location_id}' and effective_end_date is null");
+			}
 
-		// If we have a new status, go ahead and save it.
-		// The data should be nice and clean now
-		if (isset($newStatus)) {
-			$newStatus->save();
+			// If we have a new status, go ahead and save it.
+			// The data should be nice and clean now
+			if (isset($newStatus)) {
+				$newStatus->save();
+			}
 		}
 	}
 

@@ -1375,6 +1375,11 @@ class Address
 	 */
 	public function getOldAddress()
 	{
-		return $this->getLocation()->getAddresses(array('status'=>'RETIRED'));
+		if ($this->getLocation()) {
+			$addresses = $this->getLocation()->getAddresses(array('status'=>'RETIRED'));
+			if (count($addresses)) {
+				return $addresses[0];
+			}
+		}
 	}
 }

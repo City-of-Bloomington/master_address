@@ -5,12 +5,19 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->changeLog (An array of ChangeLogEntry's)
  */
-$columnHeadings = array('Action Date','Action','Notes',
-						'Street Number','Zip','Jurisdiction','Plat','Lot','Location Type',
+$columnHeadings = array('Action Date',
+						'Street Number','Direction','Street Name','Street Type','Post Direction',
 						'Subunit Type','Subunit Identifier',
+						'Zip',
+						'Action',
+						'Plat','Lot',
+						'Old',
+						'Jurisdiction','Location Type',
+						'Notes',
 						'Street ID','Town','Street Status',
-						'Street Name Type','Direction','Street Name','Street Type','Post Direction',
+						'Street Name Type',
 						'Street Name Start','Street Name End');
+
 echo implode('|',$columnHeadings)."\n";
 foreach ($this->changeLog as $logEntry) {
 	$target = $logEntry->getTarget();
@@ -33,16 +40,21 @@ foreach ($this->changeLog as $logEntry) {
 	}
 	$streetName = $street->getStreetName();
 	$locationType = $address->getLocation() ? $address->getLocation()->getLocationType($address) : '';
-
+	$oldAddress = "{$address->getOldAddress()}";
 	$notes = preg_replace('/\n/',' ',$logEntry->notes);
-	$line = array($logEntry->action_date,$logEntry->action,$notes,
-					$address->getStreet_number(),$address->getZip(),$address->getJurisdiction(),
-						$address->getPlat(),$address->getPlat_lot_number(),$locationType,
-					$subunit->getType(),$subunit->getIdentifier(),
-					$street->getId(),$street->getTown(),$street->getStatus(),
-					$streetName->getStreetNameType(),$streetName->getDirection(),$streetName->getName(),
+	$line = array($logEntry->action_date,
+					$address->getStreet_number(),$streetName->getDirection(),$streetName->getName(),
 						$streetName->getStreetType(),$streetName->getPostDirection(),
-						$streetName->getStartDate('n/j/Y'),$streetName->getEndDate('n/j/Y'));
+					$address->getZip(),
+					$logEntry->action,
+					$subunit->getType(),$subunit->getIdentifier(),
+					$address->getPlat(),$address->getPlat_lot_number(),
+					$oldAddress,
+					$address->getJurisdiction(),$locationType,
+					$notes,
+					$street->getId(),$street->getTown(),$street->getStatus(),
+					$streetName->getStreetNameType(),
+					$streetName->getStartDate('n/j/Y'),$streetName->getEndDate('n/j/Y'));
 
 	echo implode('|',$line)."\n";
 }

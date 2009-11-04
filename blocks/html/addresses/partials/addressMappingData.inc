@@ -13,11 +13,11 @@ $plat = $this->address->getPlat()
 		: '';
 $notes = View::escape($this->address->getNotes());
 echo "
-<table>	
+<table>
 	<tr><th>Address Type</th>
 		<td>{$this->address->getType()}</td>
 	</tr>
-        <tr><th>Jurisdiction</th>
+	<tr><th>Jurisdiction</th>
 		<td>{$this->address->getJurisdiction()->getDescription()}</td>
 	</tr>
 	<tr><th>Plat</th>
@@ -26,12 +26,17 @@ echo "
 	<tr><th>Lot Number</th>
 		<td>{$this->address->getPlat_lot_number()}</td>
 	</tr>
-	
+
 	<tr><th>Township</th>
 		<td>$township</td>
 	</tr>
-	<tr><th>Section {$this->address->getSection()}</th><th>Quarter Section {$this->address->getQuarter_section()}</th></tr>
-        <tr><th>State Plane X/Y</th>
+	<tr><th>Section</td>
+		<td>{$this->address->getSection()}</td>
+	</tr>
+	<tr><th>Quarter Section</td>
+		<td>{$this->address->getQuarter_section()}</td>
+	</tr>
+	<tr><th>State Plane X/Y</th>
 		<td>{$this->address->getState_plane_x_coordinate()},
 			{$this->address->getState_plane_y_coordinate()}
 		</td>
@@ -42,7 +47,7 @@ echo "
         <tr><th>Census Block</th>
 		<td>{$this->address->getCensus_block_fips_code()}</td>
 	</tr>
-	
+
 </table>
 <p>$notes</p>
 ";
