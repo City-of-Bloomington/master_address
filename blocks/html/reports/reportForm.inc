@@ -7,8 +7,8 @@
  */
 $months = array(1=>'Jan',2=>'Feb',3=>'March',4=>'April',5=>'May',6=>'June',
 				7=>'July',8=>'Aug',9=>'Sept',10=>'Oct',11=>'Nov',12=>'Dec');
-$firstYear = 2009; // get this from the database
-$currYear = date('Y');
+$firstYear = ChangeLog::getFirstYear(); // get this from the database
+$currentYear = date('Y');
 
 // Set up all the default values or read from what the user requested
 $dateFrom = isset($_REQUEST['dateFrom'])
@@ -67,7 +67,7 @@ $actions = isset($_REQUEST['actions'])
 					<select name="dateFrom[year]" id="dateFrom-year">
 						<option value="">Year</option>
 						<?php
-							for ($i=$firstYear; $i<$currYear+1; $i++) {
+							for ($i=$currentYear; $i>=$firstYear; $i--) {
 								$selected = $dateFrom['year']==$i ? 'selected="selected"' : '';
 								echo "<option value=\"$i\" $selected>$i</option>";
 							}
@@ -98,7 +98,7 @@ $actions = isset($_REQUEST['actions'])
 					<select name="dateTo[year]" id="dateTo-year">
 						<option value="">Year</option>
 						<?php
-							for ($i=$firstYear; $i<$currYear+1; $i++) {
+							for ($i=$currentYear; $i>=$firstYear; $i--) {
 								$selected = $dateTo['year']==$i ? 'selected="selected"' : '';
 								echo "<option value=\"$i\" $selected>$i</option>";
 							}

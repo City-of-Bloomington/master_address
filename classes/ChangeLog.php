@@ -20,6 +20,23 @@ class ChangeLog
 													'id'=>'subunit_id'));
 
 	/**
+	 * Returns the earliest year found in the change logs.
+	 * @return int
+	 */
+	public static function getFirstYear()
+	{
+		$sql = "select min(x) from (
+					select to_char(min(action_date),'YYYY') as x from street_change_log
+					union all
+					select to_char(min(action_date),'YYYY') as x from address_change_log
+					union all
+					select to_char(min(action_date),'YYYY') as x from subunit_change_log
+				)";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchOne($sql);
+	}
+
+	/**
 	 * @param array $data
 	 */
 	public static function getEntries(array $types, array $actions, array $fields)
