@@ -25,6 +25,8 @@ function handleVerifySubunit(form) {
 		verify that this subunit is accurate at this point in time.
 		</div>
 
+		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/notesField.inc'; ?>
+
 		<button type="submit" class="save">Save</button>
 	</fieldset>
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>

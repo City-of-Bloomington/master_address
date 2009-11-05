@@ -25,6 +25,8 @@ function handleRetireSubunit(form) {
 		verify that this subunit is to be retired at this point in time.
 		</div>
 
+		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/notesField.inc'; ?>
+
 		<button type="submit" class="save">Save</button>
 	</fieldset>
 

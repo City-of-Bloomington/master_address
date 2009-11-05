@@ -26,6 +26,8 @@ function handleUnretireAddress(form) {
 			</p>
 		</div>
 
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
+
 		<button type="submit" class="save">Unretire</button>
 	</fieldset>
 	<?php

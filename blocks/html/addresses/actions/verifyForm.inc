@@ -27,6 +27,8 @@ function handleVerifyAddress(form) {
 			</p>
 		</div>
 
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
+
 		<button type="submit" class="save">Verify</button>
 	</fieldset>
 

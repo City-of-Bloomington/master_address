@@ -8,13 +8,13 @@
 echo "
 <table>
 	<tr><th>Number</th>
-		<td>{$this->address->getStreet_number()} - {$this->address->getZipplus4()}</td>
+		<td>{$this->address->getStreet_number()}</td>
 	</tr>
 	<tr><th>Street</th>
 		<td>{$this->address->getStreet()->getStreetName()}</td>
 	</tr>
 	<tr><th>Zip</th>
-		<td>{$this->address->getZip()}</td>
+		<td>{$this->address->getZip()} - {$this->address->getZipplus4()}</td>
 	</tr>
 	<tr><th>Status</th>
 		<td>{$this->address->getStatus()}</td>

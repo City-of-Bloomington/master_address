@@ -19,19 +19,26 @@ function handleAddSubunit(form) {
 	<fieldset><legend>Subunit Information</legend>
 		<input name="street_address_id" type="hidden" value="<?php echo $this->address->getId() ?>" />
 		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitFields.inc'; ?>
+		<div>
+			<p>If you are adding multiple subunits,
+				these notes will be entered on all the subunits you create.
+			</p>
+			<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/notesField.inc'; ?>
+		</div>
 	</fieldset>
 
 	<fieldset>
-	<table><tbody>
-		<?php
-			$locationData = $this->address->getLocation()->getUpdatableData($this->address);
-			$locationData['locationType'] = new LocationType('RESIDENTIAL MULTI-FAMILY');
-			$block = new Block('locations/partials/locationFields.inc',
-								array('locationData'=>$locationData));
-			echo $block->render('html');
-		?>
-	</tbody></table>
+		<table>
+			<?php
+				$locationData = $this->address->getLocation()->getUpdatableData($this->address);
+				$locationData['locationType'] = new LocationType('RESIDENTIAL MULTI-FAMILY');
+				$block = new Block('locations/partials/locationFields.inc',
+									array('locationData'=>$locationData));
+				echo $block->render('html');
+			?>
+		</table>
 	</fieldset>
+
 	<fieldset>
 		<button type="submit" class="submit">Submit</button>
 	</fieldset>

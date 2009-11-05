@@ -85,6 +85,19 @@ class Address
 	}
 
 	/**
+	 * Returns the method names of actions that are supported
+	 *
+	 * These actions all share the same interface
+	 * $this->action($post,$changeLogEntry);
+	 *
+	 * @return array
+	 */
+	public static function getActions()
+	{
+		return array('correct','update','readdress','unretire','reassign','retire','verify');
+	}
+
+	/**
 	 * Populates the object with data
 	 *
 	 * Passing in an associative array of data will populate this object without
@@ -1155,7 +1168,7 @@ class Address
 						'township_id','section','quarter_section',
 						'census_block_fips_code','tax_jurisdiction',
 						'latitude','longitude',
-						'state_plane_x_coordinate','state_plane_y_coordinate');
+						'state_plane_x_coordinate','state_plane_y_coordinate','notes');
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
 				$set = 'set'.ucfirst($field);
@@ -1185,7 +1198,7 @@ class Address
 	 */
 	public function correct($post,ChangeLogEntry $changeLogEntry)
 	{
-		$fields = array('street_id','street_number','zip','zipplus4');
+		$fields = array('street_id','street_number','zip','zipplus4','notes');
 
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
@@ -1203,16 +1216,20 @@ class Address
 	 * We retire the old address, and create a new address at the same location
 	 * The new address will probably have a different street and street number.
 	 *
-	 * @param int $street_id
-	 * @param string $street_number
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function readdress($street_id,$street_number,ChangeLogEntry $changeLogEntry)
+	public function readdress($post,ChangeLogEntry $changeLogEntry)
 	{
+		$street_id = $post['street_id'];
+		$street_number = $post['street_number'];
+		$notes = $post['notes'];
+
 		// Create the new address
 		$newAddress = clone($this);
 		$newAddress->setStreet_id($street_id);
 		$newAddress->setStreet_number($street_number);
+		$newAddress->setNotes($notes);
 		$newAddress->save($changeLogEntry);
 		$newAddress->saveStatus('CURRENT');
 
@@ -1233,13 +1250,16 @@ class Address
 	/**
 	 * Sets the latest status for this address to CURRENT
 	 *
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function unretire(ChangeLogEntry $changeLogEntry)
+	public function unretire($post,ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('CURRENT');
 		$this->getLocation()->saveStatus('CURRENT');
-		$this->updateChangeLog($changeLogEntry);
+
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 	}
 
 	/**
@@ -1247,10 +1267,11 @@ class Address
 	 *
 	 * This is a special way of unretiring this address.
 	 *
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 * @return Address
 	 */
-	public function reassign(ChangeLogEntry $changeLogEntry)
+	public function reassign($post,ChangeLogEntry $changeLogEntry)
 	{
 		$locationData = $this->getLocation()->getUpdatableData($this);
 
@@ -1261,7 +1282,9 @@ class Address
 		$newLocation->saveStatus('CURRENT');
 
 		$this->saveStatus('CURRENT');
-		$this->updateChangeLog($changeLogEntry);
+
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 
 		return $this;
 	}
@@ -1276,9 +1299,10 @@ class Address
 	 * You must pass in the changeLogEntry to be used for updating the
 	 * subunits and locations
 	 *
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function retire(ChangeLogEntry $changeLogEntry)
+	public function retire($post,ChangeLogEntry $changeLogEntry)
 	{
 		$retired = new AddressStatus('RETIRED');
 		$this->saveStatus($retired);
@@ -1300,15 +1324,18 @@ class Address
 			}
 		}
 
-		$this->updateChangeLog($changeLogEntry);
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 	}
 
 	/**
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function verify(ChangeLogEntry $changeLogEntry)
+	public function verify($post,ChangeLogEntry $changeLogEntry)
 	{
-		$this->updateChangeLog($changeLogEntry);
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 	}
 
 	/**

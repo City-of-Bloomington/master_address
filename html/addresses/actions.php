@@ -38,27 +38,15 @@ $action = $_REQUEST['action'];
 if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
+		if (in_array($action,Address::getActions())) {
+			$address->$action($_POST,$changeLogEntry);
 
-		switch ($action) {
-			case 'correct':
-			case 'update':
-				$address->$action($_POST,$changeLogEntry);
-				break;
-
-			case 'readdress':
-				$address->readdress($_POST['street_id'],$_POST['street_number'],$changeLogEntry);
-				break;
-
-			case 'retire':
-			case 'unretire':
-			case 'reassign':
-			case 'verify':
-				$address->$action($changeLogEntry);
-				break;
+			header('Location: '.$address->getURL());
+			exit();
 		}
-
-		header('Location: '.$address->getURL());
-		exit();
+		else {
+			$_SESSION['errorMessages'][] = new Exception('addresses/unknownAction');
+		}
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;

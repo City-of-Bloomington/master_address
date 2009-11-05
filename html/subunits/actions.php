@@ -36,30 +36,14 @@ $action = $_REQUEST['action'];
 if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
-		switch ($action) {
-			case 'correct':
-				$subunit->setSudType($_POST['sudtype']);
-				$subunit->setNotes($_POST['notes']);
-				$subunit->setIdentifier($_POST['street_subunit_identifier']);
-				$subunit->save($changeLogEntry);
-
-				$location = new Location($_POST['location_id']);
-				$data = array();
-				$data['mailable'] = $_POST['mailable'];
-				$data['livable'] = $_POST['livable'];
-				$data['locationType'] = $_POST['location_type_id'];
-				$location->update($data,$subunit);
-				break;
-
-			case 'retire':
-			case 'unretire':
-			case 'verify':
-				$subunit->$action($changeLogEntry);
-				break;
+		if (in_array($action,Subunit::getActions())) {
+			$subunit->$action($_POST,$changeLogEntry);
+			header('Location: '.$subunit->getURL());
+			exit();
 		}
-
-		header('Location: '.$subunit->getURL());
-		exit();
+		else {
+			$_SESSION['errorMessages'][] = new Exception('subunits/unknownAction');
+		}
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;

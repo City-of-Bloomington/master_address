@@ -21,7 +21,10 @@ function handleCorrectSubunit(form) {
 		<input type="hidden" name="subunit_id" value="<?php echo $this->subunit->getId(); ?>" />
 		<input type="hidden" name="location_id" value="<?php echo $this->subunit->getLocation()->getId(); ?>" />
 
-		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitFields.inc'; ?>
+		<?php
+			include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitFields.inc';
+			include APPLICATION_HOME.'/blocks/html/subunits/partials/notesField.inc';
+		?>
 	</fieldset>
 	<fieldset>
 		<?php

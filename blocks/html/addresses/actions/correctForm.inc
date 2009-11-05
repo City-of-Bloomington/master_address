@@ -23,6 +23,9 @@ function handleCorrectAddress(form) {
 		<table>
 			<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
 		</table>
+
+		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
+
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 	<?php

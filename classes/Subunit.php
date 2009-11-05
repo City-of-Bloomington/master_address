@@ -21,6 +21,20 @@ class Subunit
 	private $statusChange;// stores the latest SubunitStatusChange
 
 	private $location; // stores the Location
+
+	/**
+	 * Returns the method names of actions that are supported
+	 *
+	 * These actions all share the same interface
+	 * $this->action($post,$changeLogEntry);
+	 *
+	 * @return array
+	 */
+	public static function getActions()
+	{
+		return array('correct','retire','unretire','verify');
+	}
+
 	/**
 	 * Populates the object with data
 	 *
@@ -442,38 +456,64 @@ class Subunit
 	}
 
 	/**
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function retire(ChangeLogEntry $changeLogEntry)
+	public function correct($post,ChangeLogEntry $changeLogEntry)
+	{
+		$subunit->setSudType($post['sudtype']);
+		$subunit->setIdentifier($post['street_subunit_identifier']);
+		$subunit->setNotes($post['notes']);
+		$subunit->save($changeLogEntry);
+
+		$location = new Location($post['location_id']);
+		$data = array();
+		$data['mailable'] = $post['mailable'];
+		$data['livable'] = $post['livable'];
+		$data['locationType'] = $post['location_type_id'];
+		$location->update($data,$subunit);
+	}
+
+	/**
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
+	 */
+	public function retire($post,ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('retired');
-		$this->updateChangeLog($changeLogEntry);
 		$location = $this->getLocation();
 		if ($location) {
 			$location->saveStatus('retired');
 		}
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 	}
-	
+
 	/**
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function unretire(ChangeLogEntry $changeLogEntry)
+	public function unretire($post,ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('CURRENT');
-		$this->updateChangeLog($changeLogEntry);
 		$location = $this->getLocation();
 		if ($location) {
 			$location->saveStatus('CURRENT');
 		}
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 	}
-	
+
 
 	/**
 	 * add a log entry as verified
+	 * @param array $post
+	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function verify(ChangeLogEntry $changeLogEntry)
+	public function verify($post,ChangeLogEntry $changeLogEntry)
 	{
-		$this->updateChangeLog($changeLogEntry);
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 	}
 
 	/**
