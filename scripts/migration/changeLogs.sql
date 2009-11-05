@@ -55,7 +55,7 @@ where street_address_id in (select street_address_id from mast_address)
 and subunit_id is null;
 
 
-insert into subunit_change_log (subunut_id,user_id,contact_id,notes,action_date,action)
+insert into subunit_change_log (subunit_id,user_id,contact_id,notes,action_date,action)
 select a.subunit_id,1, c.contact_id, a.notes, a.action_date,
 decode(a.action,
   'RETIRED LOCATION','retired',
