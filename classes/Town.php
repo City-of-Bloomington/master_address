@@ -139,7 +139,7 @@ class Town
 	 */
 	public function setDescription($string)
 	{
-		$this->description = trim($string);
+		$this->description = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -147,7 +147,7 @@ class Town
 	 */
 	public function setTown_code($string)
 	{
-		$this->town_code = trim($string);
+		$this->town_code = strtoupper(trim($string));
 	}
 
 

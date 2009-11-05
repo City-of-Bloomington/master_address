@@ -53,7 +53,7 @@ class Subdivision
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -120,7 +120,7 @@ class Subdivision
 	{
 		return $this->subdivision_id;
 	}
-	
+
 	/**
 	 * @return number
 	 */
@@ -149,14 +149,14 @@ class Subdivision
 	{
 		if ($this->subdivision_id) {
 			if (!$this->subdivisionNameList) {
-			    $subdivisionNameList = new SubdivisionNameList(array('subdivision_id'=>$this->subdivision_id));	  
+			    $subdivisionNameList = new SubdivisionNameList(array('subdivision_id'=>$this->subdivision_id));
 				$this->subdivisionNameList = $subdivisionNameList;
 			}
 			return $this->subdivisionNameList;
 		}
 		return null;
 	}
-	
+
 	public function getAddressList()
 	{
 		if ($this->subdivision_id) {
@@ -169,7 +169,7 @@ class Subdivision
 		}
 		return null;
 	}
-	
+
 	public function getStreetList()
 	{
 		if ($this->subdivision_id) {
@@ -191,7 +191,8 @@ class Subdivision
 	 */
 	public function setTownship_id($number)
 	{
-		$this->township_id = $number;
+		$this->township = new Township($number);
+		$this->township_id = $this->township->getId();
 	}
 
 	/**
@@ -212,5 +213,5 @@ class Subdivision
 	{
 	    return $this->subdivision_id;
 	}
-	
+
 }

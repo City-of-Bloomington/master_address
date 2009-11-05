@@ -627,7 +627,7 @@ class Address
 	public function setStreet_number($string)
 	{
 		$this->numeric_street_number = (int)$string;
-		$this->street_number = trim($string);
+		$this->street_number = strtoupper(trim($string));
 	}
 
 	/**
@@ -650,7 +650,7 @@ class Address
 	 */
 	public function setAddress_type($string)
 	{
-		$this->address_type = trim($string);
+		$this->address_type = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -658,7 +658,7 @@ class Address
 	 */
 	public function setTax_jurisdiction($char)
 	{
-		$this->tax_jurisdiction = $char;
+		$this->tax_jurisdiction = strtoupper($char);
 	}
 
 	/**
@@ -728,7 +728,7 @@ class Address
 	 */
 	public function setStreet_address_2($string)
 	{
-		$this->street_address_2 = trim($string);
+		$this->street_address_2 = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -736,7 +736,7 @@ class Address
 	 */
 	public function setCity($string)
 	{
-		$this->city = trim($string);
+		$this->city = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -744,7 +744,7 @@ class Address
 	 */
 	public function setState($string)
 	{
-		$this->state = trim($string);
+		$this->state = strtoupper(strtolower(trim($string)));
 	}
 
 	/**
@@ -752,7 +752,7 @@ class Address
 	 */
 	public function setZip($string)
 	{
-		$this->zip = trim($string);
+		$this->zip = preg_replace('/[^0-9]/','',$string);
 	}
 
 	/**
@@ -760,7 +760,7 @@ class Address
 	 */
 	public function setZipplus4($string)
 	{
-		$this->zipplus4 = trim($string);
+		$this->zipplus4 = preg_replace('/[^0-9]/','',$string);
 	}
 
 	/**
@@ -768,7 +768,7 @@ class Address
 	 */
 	public function setCensus_block_fips_code($string)
 	{
-		$this->census_block_fips_code = trim($string);
+		$this->census_block_fips_code = strtoupper(trim($string));
 	}
 
 	/**
@@ -776,7 +776,7 @@ class Address
 	 */
 	public function setState_plane_x_coordinate($number)
 	{
-		$this->state_plane_x_coordinate = $number;
+		$this->state_plane_x_coordinate = (int)$number;
 	}
 
 	/**
@@ -784,7 +784,7 @@ class Address
 	 */
 	public function setState_plane_y_coordinate($number)
 	{
-		$this->state_plane_y_coordinate = $number;
+		$this->state_plane_y_coordinate = (int)$number;
 	}
 
 	/**
@@ -792,7 +792,7 @@ class Address
 	 */
 	public function setLatitude($number)
 	{
-		$this->latitude = $number;
+		$this->latitude = (float)$number;
 	}
 
 	/**
@@ -800,7 +800,7 @@ class Address
 	 */
 	public function setLongitude($number)
 	{
-		$this->longitude = $number;
+		$this->longitude = (float)$number;
 	}
 
 	/**

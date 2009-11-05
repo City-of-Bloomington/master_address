@@ -13,7 +13,7 @@ class Contact
 	private $phone_number;
 	private $agency;
 
-	private static $types = array('GIS','CBU BILLING','ADDRESS COORDINATOR','E911 ADMINISTRATOR');
+	private static $types = array('Gis','Cbu Billing','Address Coordinator','E911 Administrator');
 
 	/**
 	 * Populates the object with data
@@ -183,7 +183,7 @@ class Contact
 	 */
 	public function setLast_name($string)
 	{
-		$this->last_name = trim($string);
+		$this->last_name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -191,7 +191,7 @@ class Contact
 	 */
 	public function setFirst_name($string)
 	{
-		$this->first_name = trim($string);
+		$this->first_name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -199,7 +199,7 @@ class Contact
 	 */
 	public function setContact_type($string)
 	{
-		$this->contact_type = trim($string);
+		$this->contact_type = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -207,7 +207,7 @@ class Contact
 	 */
 	public function setPhone_number($string)
 	{
-		$this->phone_number = trim($string);
+		$this->phone_number = strtoupper(trim($string));
 	}
 
 	/**
@@ -215,7 +215,7 @@ class Contact
 	 */
 	public function setAgency($string)
 	{
-		$this->agency = trim($string);
+		$this->agency = ucwords(strtolower(trim($string)));
 	}
 
 	//----------------------------------------------------------------

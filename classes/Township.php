@@ -148,7 +148,7 @@ class Township
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Township
 	 */
 	public function setTownship_abbreviation($char)
 	{
-		$this->township_abbreviation = $char;
+		$this->township_abbreviation = strtoupper($char);
 	}
 
 	/**
@@ -164,7 +164,7 @@ class Township
 	 */
 	public function setQuarter_code($char)
 	{
-		$this->quarter_code = $char;
+		$this->quarter_code = strtoupper($char);
 	}
 
 	//----------------------------------------------------------------

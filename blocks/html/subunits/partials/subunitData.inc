@@ -8,6 +8,7 @@
 $notes = View::escape($this->subunit->getNotes());
 $location = $this->subunit->getLocation();
 $mailable = '';
+$livable = '';
 $active = '';
 $type = '';
 if ($location) {

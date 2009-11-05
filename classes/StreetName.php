@@ -314,7 +314,8 @@ class StreetName
 	 */
 	public function setStreet_id($number)
 	{
-		$this->street_id = $number;
+		$this->street = new Street($number);
+		$this->street_id = $this->street->getId();
 	}
 
 	/**
@@ -322,7 +323,7 @@ class StreetName
 	 */
 	public function setStreet_name($string)
 	{
-		$this->street_name = trim($string);
+		$this->street_name = ucwords(strtolower(trim($string)));
 	}
 
 	/**

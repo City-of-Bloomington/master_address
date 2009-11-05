@@ -241,7 +241,7 @@ class Building
 	 */
 	public function setGis_tag($string)
 	{
-		$this->gis_tag = trim($string);
+		$this->gis_tag = strtoupper(trim($string));
 	}
 
 	/**
@@ -249,7 +249,7 @@ class Building
 	 */
 	public function setBuilding_name($string)
 	{
-		$this->building_name = trim($string);
+		$this->building_name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -297,7 +297,7 @@ class Building
 	 */
 	public function setStatus_code($number)
 	{
-		$this->status_code = $number;
+		$this->status_code = (int)$number;
 	}
 
 

@@ -264,7 +264,7 @@ class Annexation
 	 */
 	public function setOrdinance_number($string)
 	{
-		$this->ordinance_number = trim($string);
+		$this->ordinance_number = strtoupper(trim($string));
 	}
 
 	/**
@@ -280,7 +280,7 @@ class Annexation
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -336,7 +336,7 @@ class Annexation
 	 */
 	public function setAcres($number)
 	{
-		$this->acres = $number;
+		$this->acres = (float)$number;
 	}
 
 	/**
@@ -344,7 +344,7 @@ class Annexation
 	 */
 	public function setSquare_miles($number)
 	{
-		$this->square_miles = $number;
+		$this->square_miles = (float)$number;
 	}
 
 	/**
@@ -352,7 +352,7 @@ class Annexation
 	 */
 	public function setEstimate_population($number)
 	{
-		$this->estimate_population = $number;
+		$this->estimate_population = (int)$number;
 	}
 
 	/**
@@ -360,7 +360,7 @@ class Annexation
 	 */
 	public function setDwelling_units($number)
 	{
-		$this->dwelling_units = $number;
+		$this->dwelling_units = (int)$number;
 	}
 
 	/**

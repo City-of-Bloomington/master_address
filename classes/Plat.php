@@ -243,7 +243,7 @@ class Plat
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -251,7 +251,8 @@ class Plat
 	 */
 	public function setTownship_id($number)
 	{
-		$this->township_id = $number;
+		$this->township = new Township($number);
+		$this->township_id = $this->township->getId();
 	}
 
 	/**
@@ -299,7 +300,7 @@ class Plat
 	 */
 	public function setPlat_type($char)
 	{
-		$this->plat_type = $char;
+		$this->plat_type = strtoupper($char);
 	}
 
 	/**
@@ -307,7 +308,7 @@ class Plat
 	 */
 	public function setPlat_cabinet($string)
 	{
-		$this->plat_cabinet = trim($string);
+		$this->plat_cabinet = strtoupper(trim($string));
 	}
 
 	/**
@@ -315,7 +316,7 @@ class Plat
 	 */
 	public function setEnvelope($string)
 	{
-		$this->envelope = trim($string);
+		$this->envelope = strtoupper(trim($string));
 	}
 
 	/**

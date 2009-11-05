@@ -230,7 +230,8 @@ class Subunit
 	 */
 	public function setStreet_address_id($number)
 	{
-		$this->street_address_id = $number;
+		$this->address = new Address($number);
+		$this->street_address_id = $this->address->getId();
 	}
 
 	/**
@@ -238,7 +239,7 @@ class Subunit
 	 */
 	public function setSudtype($string)
 	{
-		$this->sudtype = trim($string);
+		$this->sudtype = strtoupper(trim($string));
 	}
 
 	/**
@@ -246,7 +247,7 @@ class Subunit
 	 */
 	public function setStreet_subunit_identifier($string)
 	{
-		$this->street_subunit_identifier = trim($string);
+		$this->street_subunit_identifier = strtoupper(trim($string));
 	}
 
 	/**
@@ -448,9 +449,6 @@ class Subunit
 				}
 			}
 
-		}
-		if (!$this->location) {
-			throw new Exception("subunits/missingLocation");
 		}
 		return $this->location;
 	}

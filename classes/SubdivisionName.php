@@ -61,7 +61,7 @@ class SubdivisionName
 			// Set any default values for properties that need it here
 		}
 	}
-	
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -132,7 +132,7 @@ class SubdivisionName
 	{
 		return $this->subdivision_name_id;
 	}
-	
+
 	/**
 	 * an alias for subdivision_name_id
 	 * @return number
@@ -235,7 +235,7 @@ class SubdivisionName
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->name = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -243,7 +243,7 @@ class SubdivisionName
 	 */
 	public function setPhase($string)
 	{
-		$this->phase = trim($string);
+		$this->phase = ucwords(strtolower(trim($string)));
 	}
 
 	/**
@@ -251,7 +251,7 @@ class SubdivisionName
 	 */
 	public function setStatus($string)
 	{
-		$this->status = trim($string);
+		$this->status = strtoupper(trim($string));
 	}
 
 	/**
@@ -313,5 +313,5 @@ class SubdivisionName
 	public function __toString()
 	{
 		return $this->name;
-	}	
+	}
 }
