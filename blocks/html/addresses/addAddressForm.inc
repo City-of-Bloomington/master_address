@@ -63,3 +63,6 @@ function handleAddAddress(form) {
 		</label>
 	</div>
 </form>
+<?php
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetSelector.inc';
+?>

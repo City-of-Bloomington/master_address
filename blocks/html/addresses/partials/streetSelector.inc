@@ -5,88 +5,66 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Street $this->street
  */
-$id = '';
-$name = '';
-if (isset($this->street)) {
-	$id = $this->street->getId();
-	$name = View::escape($this->street->getStreetName());
-}
 ?>
-<div>
-	<span id="chosenStreetName"><?php echo $name ?></span>
-	<input type="hidden" name="street_id" id="street_id" value="<?php echo $id; ?>" />
-	<button type="button" onclick="openStreetSelector();">Choose Street</button>
-</div>
-
 <div id="streetSelector" style="position:absolute; visibility:hidden;">
-	<div class="hd">Choose a Street</div>
+	<div class="hd">Search for a street:</div>
 	<div class="bd">
-		<div id="findStreetForm-autosuggest" style="width:15em;">
-			<input name="streetName" id="streetName" value="<?php echo $name; ?>" />
-			<div id="street-container"></div>
-		</div>
-	</div>
-	<div class="ft">
-		<button type="button" class="cancel" onclick="streetSelector.hide();">
-			Cancel
-		</button>
+		<form id="dialog" method="get" action="http://bandit.bloomington.in.gov/master_address/streets/home.php">
+			<input name="format" type="hidden" value="json" />
+			<label for="streetName">Street Name:</label><input type="text" name="streetName" id="streetName" />
+		</form>
+		<div id="streetSelectorResults"></div>
 	</div>
 </div>
 
 <script type="text/javascript">
 var streetSelector;
+var streetSelectorCancel = function() {
+    this.cancel();
+}
+var streetSelectorSubmit = function() {
+    this.submit();
+}
+function setStreet(id,name) {
+	document.getElementById('street_id').value = id;
+	document.getElementById('chosenStreetName').innerHTML = '';
+	document.getElementById('chosenStreetName').appendChild(document.createTextNode(name));
+	streetSelector.hide();
+}
+var updateStreetSelectorResults = function(o) {
+	document.getElementById('streetSelectorResults').innerHTML = '';
+	var result = YAHOO.lang.JSON.parse(o.responseText);
+	var list = document.createElement('ul');
+	for (i in result.streets) {
+		var id = result.streets[i].id;
+		var name = result.streets[i].name;
+
+		var a = document.createElement('a');
+		a.appendChild(document.createTextNode(name));
+		a.setAttribute('onclick',"setStreet(" + id + ",'" + name + "');");
+
+		var li = document.createElement('li');
+		li.appendChild(a);
+
+		list.appendChild(li);
+	}
+	document.getElementById('streetSelectorResults').appendChild(list);
+}
+var onFailure = function(o) {
+    alert("Your submission failed. Status: " + o.status);
+}
 function openStreetSelector() {
-	streetSelector = new YAHOO.widget.Overlay('streetSelector');
+	streetSelector = new YAHOO.widget.Dialog("streetSelector",
+									{ 	buttons:[ { text:"Submit", handler:streetSelectorSubmit, isDefault:true },
+												{ text:"Cancel", handler:streetSelectorCancel }],
+										hideaftersubmit:false,
+										context:['chosenStreetName','tl','bl']
+									});
 	streetSelector.center();
 	streetSelector.render();
 	streetSelector.show();
+	streetSelector.callback.success = updateStreetSelectorResults;
+	streetSelector.callback.failure = onFailure;
+	streetSelector.hideaftersubmit = false;
 }
-
-findStreetForm_autosuggest = function() {
-	var streetService = new YAHOO.util.XHRDataSource("<?php echo BASE_URL; ?>/streets/home.php");
-	streetService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
-	streetService.responseSchema = {
-		resultsList: "streets",
-		fields: ["name","id","town"]
-	};
-	streetService.maxCacheEntries = 5;
-
-	var findStreetFormAC = new YAHOO.widget.AutoComplete("streetName",
-														"street-container",
-														streetService);
-	findStreetFormAC.resultTypeList = false;
-
-	// Custom formatter of the results
-	findStreetFormAC.formatResult = function(oResultData, sQuery, sResultMatch) {
-	   var name = oResultData.name,
-           town = oResultData.town;
-
-		if (town) {
-			town = town.charAt(0)+town.substr(1,town.length).toLowerCase();
-			return name + " ("+town+")";
-		}
-		return name;
-	};
-
-	var myHandler = function(sType, aArgs) {
-		var myAC = aArgs[0]; // reference back to the AC instance
-		var elLI = aArgs[1]; // reference to the selected LI element
-		var oData = aArgs[2]; // object literal of selected item's result data
-
-		// update hidden form field with the selected item's ID
-		document.getElementById('street_id').value = oData.id;
-		document.getElementById('chosenStreetName').textContent = oData.name;
-		streetSelector.hide();
-	};
-	findStreetFormAC.itemSelectEvent.subscribe(myHandler);
-
-	findStreetFormAC.generateRequest = function(query) {
-		return '?format=json;streetName=' + query;
-	}
-
-	return {
-		streetService: streetService,
-		findStreetFormAC: findStreetFormAC
-	};
-}();
 </script>

@@ -29,6 +29,9 @@ function handleCorrectAddress(form) {
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
 </form>
+<?php
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetSelector.inc';
+?>
 <table>
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
