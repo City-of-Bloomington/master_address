@@ -14,17 +14,14 @@ function handleUpdateAddress(form) {
 	}
 }
 </script>
+<table>
+	<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc'; ?>
+</table>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="handleUpdateAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="update" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
-
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc'; ?>
-		<button type="submit" class="save">Save Changes</button>
-	</fieldset>
-
-	<fieldset>
 		<table>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredFields.inc';
