@@ -66,7 +66,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="section">Section</label></td>
+	<tr><td><label for="section" class="required">Section</label></td>
 		<td><select name="section" id="section">
 				<option></option>
 				<?php

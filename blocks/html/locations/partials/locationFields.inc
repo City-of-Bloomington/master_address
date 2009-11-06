@@ -22,7 +22,7 @@ $locationType = isset($this->locationData['locationType'])
 				? $this->locationData['locationType']
 				: new LocationType("RESIDENTIAL SFR");
 ?>
-	<tr><td><label for="location_type_id">Location Use Type</label></td>
+	<tr><td><label for="location_type_id" class="required">Location Use Type</label></td>
 		<td><select name="location_type_id">
 				<?php
 					$types = new LocationTypeList();
@@ -38,7 +38,7 @@ $locationType = isset($this->locationData['locationType'])
 		</td>
 	</tr>
 
-	<tr><td><label for="mailable">Mailable</label></td>
+	<tr><td><label for="mailable" class="required">Mailable</label></td>
 		<td><?php
 				foreach (Location::getFlagValues() as $value) {
 					$checked = $mailable==$value ? 'checked="checked"' : '';
@@ -53,7 +53,7 @@ $locationType = isset($this->locationData['locationType'])
 		</td>
 	</tr>
 
-	<tr><td><label for="livable">Livable</label></td>
+	<tr><td><label for="livable" class="required">Livable</label></td>
 		<td><?php
 				foreach (Location::getFlagValues() as $value) {
 					$checked = $livable==$value ? 'checked="checked"' : '';

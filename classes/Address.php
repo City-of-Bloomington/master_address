@@ -160,7 +160,7 @@ class Address
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->street_id || !$this->street_number || !$this->zip
+		if (!$this->street_id || !$this->street_number || !$this->zip || !$this->section
 			|| !$this->address_type || !$this->gov_jur_id || !$this->township_id) {
 			throw new Exception('missingRequiredFields');
 		}
@@ -191,7 +191,7 @@ class Address
 		$data['a']['jurisdiction_id'] = $this->gov_jur_id;
 		$data['a']['gov_jur_id'] = $this->gov_jur_id;
 		$data['a']['township_id'] = $this->township_id;
-		$data['a']['section'] = $this->section ? $this->section : null;
+		$data['a']['section'] = $this->section;
 		$data['a']['quarter_section'] = $this->quarter_section ? $this->quarter_section : null;
 		$data['a']['subdivision_id'] = $this->subdivision_id ? $this->subdivision_id : null;
 		$data['a']['plat_id'] = $this->plat_id ? $this->plat_id : null;
@@ -1341,12 +1341,19 @@ class Address
 	/**
 	 * Creates a new address in the database and returns the new address
 	 *
+	 * If they post a location_id, they are creating the address at that location.
+	 *
 	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 * @return Address
 	 */
 	public static function createNew(array $post,ChangeLogEntry $changeLogEntry)
 	{
+		// Check for required Location information
+		if (!$post['location_type_id'] || !$post['mailable'] || !$post['livable']) {
+			throw new Exception('locations/missingRequiredFields');
+		}
+
 		$address = new Address();
 		$fields = array('street_id','street_number',
 						'address_type','tax_jurisdiction','jurisdiction_id','township_id',
