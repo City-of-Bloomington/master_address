@@ -10,7 +10,7 @@
 <div class="interfaceBox subunitList">
 <h1>Subunits</h1>
 <?php
-	if (isset($this->address) && userIsAllowed('Subunit')) {
+	if (isset($this->address) && userIsAllowed('Subunit') && !$this->deactivateButtons) {
 		echo "
 		<div>
 			<button type=\"button\" onclick=\"document.location.href='".BASE_URL."/subunits/addSubunit.php?street_address_id={$this->address->getId()}';\">

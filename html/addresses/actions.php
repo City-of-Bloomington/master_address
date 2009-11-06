@@ -62,10 +62,11 @@ $template->blocks[] = new Block('changeLogs/changeLog.inc',
 								array('changeLog'=>$address->getChangeLog()));
 
 $template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
-												array('address'=>$address));
+												array('address'=>$address,'deactivateButtons'=>true));
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
 												array('address'=>$address,
-														'subunitList'=>$address->getSubunits()));
+														'subunitList'=>$address->getSubunits(),
+														'deactivateButtons'=>true));
 $template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
 												array('purposeList'=>$address->getPurposes()));
 echo $template->render();

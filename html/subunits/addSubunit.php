@@ -56,5 +56,6 @@ $template->blocks[] = new Block('subunits/breadcrumbs.inc',array('address'=>$add
 $template->blocks[] = new Block('subunits/addSubunitForm.inc',array('address'=>$address));
 
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
-											array('subunitList'=>$address->getSubunits()));
+											array('subunitList'=>$address->getSubunits(),
+													'deactivateButtons'=>true));
 echo $template->render();

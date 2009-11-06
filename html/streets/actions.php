@@ -68,9 +68,11 @@ $template->blocks[] = new Block('streets/breadcrumbs.inc',array('street'=>$stree
 $template->blocks[] = new Block("streets/actions/{$action}Form.inc",array('street'=>$street));
 $template->blocks['panel-one'][] = new Block('streets/streetNameList.inc',
 												array('streetNameList'=>$street->getNames(),
-														'street'=>$street));
+														'street'=>$street,
+														'deactivateButtons'=>true));
 
 $template->blocks['panel-one'][] = new Block('addresses/addressList.inc',
 												array('addressList'=>$street->getAddresses(),
-														'street'=>$street));
+														'street'=>$street,
+														'deactivateButtons'=>true));
 echo $template->render();

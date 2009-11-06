@@ -7,7 +7,7 @@
  * @param Street $this->street
  */
 $addButtons = '';
-if (userIsAllowed('Street')) {
+if (userIsAllowed('Street') && !$this->deactivateButtons) {
 	$url = BASE_URL.'/streets/actions.php?street_id='.$this->street->getId();
 	$addButtons = "
 	<div>

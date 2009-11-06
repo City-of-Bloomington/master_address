@@ -15,7 +15,7 @@ $notes = View::escape($street->getNotes());
 	<h2>Street Information</h2>
 	<table>
 	<?php
-		if (userIsAllowed('Street')) {
+		if (userIsAllowed('Street') && !$this->deactivateButtons) {
 			$actionURL = BASE_URL.'/streets/actions.php';
 			echo "
 				<tr><th>Action</th>

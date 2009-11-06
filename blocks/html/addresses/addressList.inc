@@ -55,7 +55,7 @@ echo "
 	}
 echo "</div>";
 
-if (userIsAllowed('Address')) {
+if (userIsAllowed('Address') && !$this->deactivateButtons) {
 	$url = new URL(BASE_URL.'/addresses/addAddress.php');
 	if (isset($this->street)) {
 		$url->street_id = $this->street->getId();

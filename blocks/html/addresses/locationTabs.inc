@@ -9,7 +9,7 @@ $tabs = array();
 $activeIndex = 0;
 foreach ($this->address->getLocations() as $i=>$location) {
 	$buttons = '';
-	if (userIsAllowed('Address')) {
+	if (userIsAllowed('Address') && !$this->deactivateButtons) {
 		$addURL = new URL(BASE_URL.'/addresses/addAddress.php');
 		$addURL->location_id = $location->getId();
 		$addURL->street_id = $this->address->getStreet_id();

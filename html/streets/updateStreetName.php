@@ -37,7 +37,7 @@ if (isset($_POST['streetName'])) {
 
 $template = new Template('two-column');
 $template->blocks[] = new Block('streets/breadcrumbs.inc',array('street'=>$street));
-$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$street));
+$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$street,'deactivateButtons'=>true));
 $template->blocks[] = new Block('changeLogs/changeLog.inc',
 								array('changeLog'=>$street->getChangeLog()));
 
@@ -45,8 +45,10 @@ $template->blocks['panel-one'][] = new Block('streets/updateStreetNameForm.inc',
 											array('streetName'=>$streetName));
 $template->blocks['panel-one'][] = new Block('streets/streetNameList.inc',
 											array('streetNameList'=>$street->getNames(),
-													'street'=>$street));
+													'street'=>$street,
+													'deactivateButtons'=>true));
 $template->blocks['panel-one'][] = new Block('addresses/addressList.inc',
 											array('addressList'=>$street->getAddresses(),
-													'street'=>$street));
+													'street'=>$street,
+													'deactivateButtons'=>true));
 echo $template->render();
