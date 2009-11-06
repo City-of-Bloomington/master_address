@@ -8,8 +8,9 @@
  * @param Address $this->address
  */
 // Set up all the valid actions based on the current status of the address
+$status = strtolower($this->address->getStatus()->getDescription());
 $actions = array('correct','update','readdress','verify');
-if ($this->address->getStatus()->getDescription() == 'RETIRED') {
+if ($status == 'retired') {
 	$actions[] = 'unretire';
 	$actions[] = 'reassign';
 }
@@ -39,9 +40,13 @@ if (userIsAllowed('Address')) {
 	</script>
 	";
 }
-
-include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
-include APPLICATION_HOME.'/blocks/html/addresses/partials/addressMappingData.inc';
-include APPLICATION_HOME.'/blocks/html/addresses/partials/addressData.inc';
+echo "<table>";
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
+	include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
+echo "</table>";
+include APPLICATION_HOME.'/blocks/html/addresses/partials/notes.inc';
 ?>
 </div>

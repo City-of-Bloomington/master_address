@@ -6,7 +6,6 @@
  * @param Address $this->address
  */
 echo "
-<table>
 	<tr><th>Number</th>
 		<td>{$this->address->getStreet_number()}</td>
 	</tr>
@@ -19,5 +18,4 @@ echo "
 	<tr><th>Status</th>
 		<td>{$this->address->getStatus()}</td>
 	</tr>
-</table>
 ";
