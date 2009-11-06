@@ -31,7 +31,8 @@ function handleVerifyAddress(form) {
 
 		<button type="submit" class="save">Verify</button>
 	</fieldset>
-
+</form>
+<table>
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
@@ -39,4 +40,4 @@ function handleVerifyAddress(form) {
 		include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
 	?>
-</form>
+</table>

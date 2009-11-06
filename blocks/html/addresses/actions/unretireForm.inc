@@ -30,6 +30,8 @@ function handleUnretireAddress(form) {
 
 		<button type="submit" class="save">Unretire</button>
 	</fieldset>
+</form>
+<table>
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
@@ -37,4 +39,4 @@ function handleUnretireAddress(form) {
 		include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
 	?>
-</form>
+</table>

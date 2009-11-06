@@ -28,10 +28,12 @@ function handleReaddressAddress(form) {
 
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
+</form>
+<table>
 	<?php
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
 		include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
 		include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
 	?>
-</form>
+</table>
