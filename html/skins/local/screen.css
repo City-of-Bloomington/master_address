@@ -52,9 +52,9 @@ textarea { width:300px; }
 #banner .loginForm a { font-weight:bold; color:blue; }
 
 .addressList,.subunitList { height:300px; overflow:auto; }
-.current { border:2px solid #00aa00; background-color:#aaffaa; }
-.retired { border:2px solid #333333; background-color:#999999; }
-.missing { border:2px solid #aa0000; background-color:#ffaaaa; }
+.current { border:2px solid #00aa00; background-color:lemonchiffon; }
+.retired { border:2px solid #333333; background-color:lightgrey; }
+.missing { border:2px solid #aa0000; background-color:salmon; }
 
 /* YUI Auto-complete */
 .yui-skin-sam .yui-ac { font-size:100%; margin-bottom:1em; }
