@@ -10,7 +10,7 @@
 <script type="text/javascript">
 function handleAddSubunit(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'assign');
+		FRAMEWORK.getChangeLog(form,'assign','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

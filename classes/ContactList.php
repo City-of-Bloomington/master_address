@@ -17,6 +17,8 @@
  */
 class ContactList extends ZendDbResultIterator
 {
+	private $columns = array('contact_id','last_name','first_name',
+								'contact_type','phone_number','agency');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -51,8 +53,14 @@ class ContactList extends ZendDbResultIterator
 		// Finding on fields from the mast_addr_assignment_contact table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$this->select->where("$key=?",$value);
+				if (in_array($key,$this->columns)) {
+					$this->select->where("$key=?",$value);
+				}
 			}
+		}
+
+		if (isset($fields['name'])) {
+			$this->select->where("first_name || ' ' || last_name like ?","%$fields[name]%");
 		}
 
 		// Finding on fields from other tables requires joining those tables.

@@ -7,7 +7,12 @@
 $template = isset($_GET['format']) ? new Template('default',$_GET['format']) : new Template();
 
 $contacts = new ContactList();
-$contacts->find();
+if (isset($_REQUEST['name'])) {
+	$contacts->find(array('name'=>$_REQUEST['name']));
+}
+else {
+	$contacts->find();
+}
 
 $template->blocks[] = new Block('contacts/contactList.inc',array('contactList'=>$contacts));
 echo $template->render();

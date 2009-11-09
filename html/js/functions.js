@@ -17,7 +17,7 @@ FRAMEWORK.deleteConfirmation = function (url)
 };
 
 var changeLogForm;
-FRAMEWORK.getChangeLog = function (form,action)
+FRAMEWORK.getChangeLog = function (form,action,BASE_URL)
 {
 	// Instantiate the Dialog
 	changeLogForm = new YAHOO.widget.Dialog("changeLogForm",
@@ -34,8 +34,9 @@ FRAMEWORK.getChangeLog = function (form,action)
 		"<input type=\"hidden\" name=\"changeLogEntry[action]\" id=\"changeLogEntry-action\" value=\"" + action + "\" /></div>" +
 		"<div><p>Enter comments or rationale for the activity log:</p><textarea name=\"changeLogEntry[notes]\" rows=\"4\" cols=\"50\"></textarea></div>" +
 		"<div><label for=\"changeLogEntry-contact_id\" class=\"required\">Contact</label>" +
-		"<select name=\"changeLogEntry[contact_id]\" id=\"changeLogEntry-contact_id\"><option></option>" +
-		"</select></div>");
+		"<input type=\"hidden\" name=\"changeLogEntry[contact_id]\" id=\"changeLogEntry-contact_id\" />" +
+		"<div id=\"changeLog-autocomplete\"><input name=\"chosenName\" id=\"chosenName\" />" +
+		"<div id=\"changeLog-autocomplete-container\"></div></div>");
 
 	changeLogForm.center();
 
@@ -44,38 +45,42 @@ FRAMEWORK.getChangeLog = function (form,action)
 	changeLogForm.render(form);
 	changeLogForm.show();
 
+	// Start the AutoComplete
+    var contactService = new YAHOO.util.XHRDataSource(BASE_URL + '/contacts');
+    contactService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+    contactService.responseSchema = {
+        resultsList: 'contacts',
+        fields: ['id','name']
+    };
+    contactService.maxCacheEntries = 5;
 
-	var callbacks = {
-		// Successful XHR response handler
-		success : function (o) {
-			var messages = [];
-
-			// Use the JSON Utility to parse the data returned from the server
-			try {
-				response = YAHOO.lang.JSON.parse(o.responseText);
-				var contacts = response.contacts;
-			}
-			catch (x) {
-				alert("Failed to load contacts!");
-			}
-
-			// The returned data was parsed into an array of objects.
-			// Add a P element for each received message
-			for (var i = 0, len = contacts.length; i < len; ++i) {
-				var c = contacts[i];
-				var option = document.createElement('option');
-				option.setAttribute('value',c.id);
-				option.appendChild(document.createTextNode(c.name));
-				document.getElementById('changeLogEntry-contact_id').appendChild(option);
-			}
-		}
+	var autocomplete = new YAHOO.widget.AutoComplete('chosenName',
+													'changeLog-autocomplete-container',
+													contactService);
+	// Custom formatter of the results
+	autocomplete.resultTypeList = false;
+	autocomplete.formatResult = function(result,query,match) {
+		var name = result.name;
+		return result.name;
 	};
 
-	// Make the call to the server for JSON data
-	YAHOO.util.Connect.asyncRequest('GET',"/master_address/contacts/home.php?format=json", callbacks);
+	autocomplete.generateRequest = function(query) {
+		return '?format=json;name=' + query;
+	}
+
+	var autocompleteHandler = function(sType, aArgs) {
+		var myAC = aArgs[0]; // reference back to the AC instance
+		var elLI = aArgs[1]; // reference to the selected LI element
+		var oData = aArgs[2]; // object literal of selected item's result data
+
+		// update hidden form field with the selected item's ID
+		document.getElementById('changeLogEntry-contact_id').value = oData.id;
+		document.getElementById('chosenName').value = oData.name;
+	};
+	autocomplete.itemSelectEvent.subscribe(autocompleteHandler);
 
 	function changeLogSubmit() {
-		if (document.getElementById('changeLogEntry-contact_id').selectedIndex > 0) {
+		if (document.getElementById('changeLogEntry-contact_id').value) {
 			form.submit();
 		}
 		else {
@@ -87,6 +92,7 @@ FRAMEWORK.getChangeLog = function (form,action)
 		changeLogForm.destroy();
 	}
 }
+
 FRAMEWORK.checkRequiredFields = function()
 {
 	var elements = document.getElementsByTagName("label");

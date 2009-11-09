@@ -10,7 +10,7 @@
 <script type="text/javascript">
 function handleAliasStreet(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'alias');
+		FRAMEWORK.getChangeLog(form,'alias','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

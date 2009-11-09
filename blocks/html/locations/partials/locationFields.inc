@@ -16,15 +16,13 @@ if (isset($this->location)) {
 	";
 	$this->locationData = $this->location->getUpdatableData($this->address);
 }
-$mailable = isset($this->locationData['mailable']) ? $this->locationData['mailable'] : 'unknown';
-$livable = isset($this->locationData['livable']) ? $this->locationData['livable'] : 'unknown';
-$locationType = isset($this->locationData['locationType'])
-				? $this->locationData['locationType']
-				: new LocationType("RESIDENTIAL SFR");
 ?>
 	<tr><td><label for="location_type_id" class="required">Location Use Type</label></td>
-		<td><select name="location_type_id">
+		<td><select name="location_type_id" id="location_type_id">
 				<?php
+					$locationType = isset($this->locationData['locationType'])
+									? $this->locationData['locationType']
+									: new LocationType("RESIDENTIAL SFR");
 					$types = new LocationTypeList();
 					$types->find();
 					foreach ($types as $type) {
@@ -38,8 +36,11 @@ $locationType = isset($this->locationData['locationType'])
 		</td>
 	</tr>
 
-	<tr><td><label for="mailable" class="required">Mailable</label></td>
+	<tr><td><label>Mailable</label></td>
 		<td><?php
+				$mailable = isset($this->locationData['mailable'])
+							? $this->locationData['mailable']
+							: 'unknown';
 				foreach (Location::getFlagValues() as $value) {
 					$checked = $mailable==$value ? 'checked="checked"' : '';
 					echo "
@@ -53,8 +54,11 @@ $locationType = isset($this->locationData['locationType'])
 		</td>
 	</tr>
 
-	<tr><td><label for="livable" class="required">Livable</label></td>
+	<tr><td><label>Livable</label></td>
 		<td><?php
+				$livable = isset($this->locationData['livable'])
+							? $this->locationData['livable']
+							: 'unknown';
 				foreach (Location::getFlagValues() as $value) {
 					$checked = $livable==$value ? 'checked="checked"' : '';
 					echo "

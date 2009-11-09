@@ -40,7 +40,7 @@ if (userIsAllowed('Address')) {
 	</script>
 	";
 }
-echo "<table>";
+echo "<table class=\"$status\">";
 	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
 	include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
 	include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';

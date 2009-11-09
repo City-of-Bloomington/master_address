@@ -12,11 +12,18 @@ $plat = $this->address->getPlat()
 		? View::escape($this->address->getPlat()->getName())
 		: '';
 $notes = View::escape($this->address->getNotes());
+
+$typeClass = $this->address->getType() ? '' : 'class="missing"';
+$jurisdictionClass = $this->address->getJurisdiction() ? '' : 'class="missing"';
+$townshipClass = $township ? '' : 'class="missing"';
+$sectionClass = $this->address->getSection() ? '' : 'class="missing"';
 echo "
-	<tr><th>Address Type</th>
+	<tr $typeClass>
+		<th>Address Type</th>
 		<td>{$this->address->getType()}</td>
 	</tr>
-	<tr><th>Jurisdiction</th>
+	<tr $jurisdictionClass>
+		<th>Jurisdiction</th>
 		<td>{$this->address->getJurisdiction()->getDescription()}</td>
 	</tr>
 	<tr><th>Plat</th>
@@ -25,10 +32,10 @@ echo "
 	<tr><th>Lot Number</th>
 		<td>{$this->address->getPlat_lot_number()}</td>
 	</tr>
-	<tr><th>Township</th>
+	<tr $townshipClass><th>Township</th>
 		<td>$township</td>
 	</tr>
-	<tr><th>Section</td>
+	<tr $sectionClass><th>Section</td>
 		<td>{$this->address->getSection()}</td>
 	</tr>
 	<tr><th>Quarter Section</td>

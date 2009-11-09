@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function handleUnretireSubunit(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'unretire');
+		FRAMEWORK.getChangeLog(form,'unretire','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

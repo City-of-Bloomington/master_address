@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function handleCorrectStreet(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'correct');
+		FRAMEWORK.getChangeLog(form,'correct','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

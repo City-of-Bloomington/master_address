@@ -10,7 +10,7 @@
 <script type="text/javascript">
 function handleRetireSubunit(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'retire');
+		FRAMEWORK.getChangeLog(form,'retire','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

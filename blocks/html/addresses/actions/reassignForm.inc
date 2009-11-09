@@ -10,7 +10,7 @@
 <script type="text/javascript">
 function handleReassignAddress(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'reassign');
+		FRAMEWORK.getChangeLog(form,'reassign','<?php echo BASE_URL; ?>');
 	}
 }
 </script>
@@ -31,12 +31,13 @@ function handleReassignAddress(form) {
 		<button type="submit" class="save">Reassign</button>
 	</fieldset>
 </form>
-<table>
-	<?php
-		include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
-		include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
-		include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
-		include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
-		include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
-	?>
-</table>
+<?php
+	$status = strtolower($this->address->getStatus()->getDescription());
+	echo "<table class=\"$status\">";
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
+	include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
+	echo "</table>";
+?>

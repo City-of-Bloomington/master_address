@@ -10,7 +10,7 @@
 var addStreetFormAction = 'create';
 function handleAddStreet(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,addStreetFormAction);
+		FRAMEWORK.getChangeLog(form,addStreetFormAction,'<?php echo BASE_URL; ?>');
 	}
 }
 </script>

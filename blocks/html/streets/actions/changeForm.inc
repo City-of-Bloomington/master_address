@@ -11,7 +11,7 @@ $url = new URL(BASE_URL.'/streets/actions.php');
 <script type="text/javascript">
 function handleChangeStreet(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'change');
+		FRAMEWORK.getChangeLog(form,'change','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

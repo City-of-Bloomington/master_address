@@ -10,7 +10,7 @@
 <script type="text/javascript">
 function handleVerifySubunit(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'verify');
+		FRAMEWORK.getChangeLog(form,'verify','<?php echo BASE_URL; ?>');
 	}
 }
 </script>

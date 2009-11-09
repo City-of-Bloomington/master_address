@@ -10,30 +10,33 @@
 <script type="text/javascript">
 function handleUpdateAddress(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'update');
+		FRAMEWORK.getChangeLog(form,'update','<?php echo BASE_URL; ?>');
 	}
 }
 </script>
-<table>
-	<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc'; ?>
-</table>
+<?php
+	$status = strtolower($this->address->getStatus()->getDescription());
+	echo "<table class=\"$status\">";
+	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
+	echo "</table>";
+?>
 <form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
 	onsubmit="handleUpdateAddress(this); return false;">
 	<fieldset>
 		<input type="hidden" name="action" value="update" />
 		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
-		<table>
-			<?php
-				include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredFields.inc';
-				include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredFields.inc';
+		<?php
+			echo "<table class=\"$status\">";
+			include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredFields.inc';
+			include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredFields.inc';
 
-				$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
-				include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
-				include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationFields.inc';
-			?>
-		</table>
+			$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
+			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
+			include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationFields.inc';
+			echo "</table>";
 
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
+			include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc';
+		?>
 
 		<button type="submit" class="save">Save Changes</button>
 	</fieldset>
