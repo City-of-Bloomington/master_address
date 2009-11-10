@@ -31,6 +31,9 @@ FRAMEWORK.getChangeLog = function (form,action,BASE_URL)
 					{text:"Cancel",handler:changeLogCancel},
 					{text:"Add Contact",handler:openAddContactForm}]
 		});
+	function openAddContactForm() {
+		window.open(BASE_URL + '/contacts/addContact.php');
+	}
 	changeLogForm.setHeader('Activity Log Entry');
 	changeLogForm.setBody("<div><label for=\"changeLogEntry-action\">Action:</label>" + action +
 		"<input type=\"hidden\" name=\"changeLogEntry[action]\" id=\"changeLogEntry-action\" value=\"" + action + "\" /></div>" +
@@ -45,6 +48,7 @@ FRAMEWORK.getChangeLog = function (form,action,BASE_URL)
 	// Make sure to put this inside of whatever form called it.
 	// That way the change log fields will be included in that form's post
 	changeLogForm.render(form);
+	changeLogForm.show();
 
 	// Start the AutoComplete
     var contactService = new YAHOO.util.XHRDataSource(BASE_URL + '/contacts');
@@ -91,77 +95,6 @@ FRAMEWORK.getChangeLog = function (form,action,BASE_URL)
 	function changeLogCancel() {
 		changeLogForm.hide();
 		changeLogForm.destroy();
-	}
-
-	// This is the popup for adding a new contact
-	var addContactForm = new YAHOO.widget.Dialog("addContactForm",
-		{
-			fixedcenter:true,
-			visible:false,
-			constraintoviewport:true,
-			postmethod:'none',
-			buttons:[{text:"Submit",handler:addContact,isDefault:true},
-					{text:"Cancel",handler:cancelAddContact}]
-		});
-	addContactForm.setHeader('Add A Contact');
-	addContactForm.setBody("<form method=\"post\" action=\"" + BASE_URL + "/contacts/addContact.php\">" +
-			"<fieldset><legend>Contact Info</legend><table>" +
-			"<tr><td><label for=\"contact-last_name\" class=\"required\">Last Name</label></td>" +
-				"<td><input name=\"contact[last_name]\" id=\"contact-last_name\" /></td></tr>" +
-			"<tr><td><label for=\"contact-first_name\" class=\"required\">First Name</label></td>" +
-				"<td><input name=\"contact[first_name]\" id=\"contact-first_name\" /></td></tr>" +
-			"<tr><td><label for=\"contact-contact_type\" class=\"required\">Type</label></td>" +
-				"<td><select name=\"contact[contact_type]\" id=\"contact-contact_type\">" +
-				"</select></td></tr>" +
-			"<tr><td><label for=\"contact-phone_number\" class=\"required\">Phone</label></td>" +
-				"<td><input name=\"contact[phone_number]\" id=\"contact-phone_number\" /></td></tr>" +
-			"<tr><td><label for=\"contact-agency\" class=\"required\">Organization</label></td>" +
-				"<td><input name=\"contact[agency]\" id=\"contact-agency\" /></td></tr>" +
-			"</table></fieldset></form>");
-	addContactForm.center();
-	addContactForm.render('content-panel');
-
-	var callbacks = {
-		success : function (o) {
-			response = YAHOO.lang.JSON.parse(o.responseText);
-			var types = response.types;
-			for (i in types) {
-				var option = document.createElement('option');
-				option.appendChild(document.createTextNode(types[i]));
-				document.getElementById('contact-contact_type').appendChild(option);
-			}
-		}
-	};
-	YAHOO.util.Connect.asyncRequest('GET',BASE_URL+'/contacts/types.php?format=json',callbacks);
-
-	function checkRequiredContactFields() {
-		if (document.getElementById('contact-last_name').value.trim()
-			&& document.getElementById('contact-first_name').value.trim()
-			&& document.getElementById('contact-phone_number').value.trim()
-			&& document.getElementById('contact-agency').value.trim()) {
-			return true;
-		}
-		alert('All the fields are required');
-		return false;
-	}
-	function addContact() {
-		if (checkRequiredContactFields()) {
-			alert('We have all the required information');
-		}
-	}
-	function cancelAddContact() {
-		addContactForm.hide();
-		addContactForm.destroy();
-	}
-
-
-	var manager = new YAHOO.widget.OverlayManager();
-	manager.register([changeLogForm,addContactForm]);
-	changeLogForm.show();
-
-	function openAddContactForm() {
-		addContactForm.show();
-		addContactForm.focus();
 	}
 }
 
