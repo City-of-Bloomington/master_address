@@ -17,7 +17,7 @@ if ($this->address->getStreet()) {
 						value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
 		</td>
 	</tr>
-	<tr><td><label for="streetName" class="required">Street</label></td>
+	<tr><td><label for="street_id" class="required">Street</label></td>
 		<td><div>
 				<span id="chosenStreetName"><?php echo $name ?></span>
 				<input type="hidden" name="street_id" id="street_id" value="<?php echo $id; ?>" />

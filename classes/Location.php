@@ -74,44 +74,44 @@ class Location
 	}
 
 	/**
+	 * Assigns an address.  Creates a new Location_ID if we don't have one yet
+	 *
 	 * @param Address|Subunit $address
 	 * @param LocationType $type
 	 */
 	public function assign($address,LocationType $type)
 	{
-		if ($this->location_id) {
-			if ($address instanceof Address) {
-				$data['street_address_id'] = $address->getId();
-			}
-			elseif ($address instanceof Subunit) {
-				$data['street_address_id'] = $address->getStreet_address_id();
-				$data['subunit_id'] = $address->getId();
-			}
-			else {
-				throw new Exception('locations/invalidAddress');
-			}
+		if ($address instanceof Address) {
+			$data['street_address_id'] = $address->getId();
+		}
+		elseif ($address instanceof Subunit) {
+			$data['street_address_id'] = $address->getStreet_address_id();
+			$data['subunit_id'] = $address->getId();
+		}
+		else {
+			throw new Exception('locations/invalidAddress');
+		}
 
-			$zend_db = Database::getConnection();
+		$zend_db = Database::getConnection();
 
-			if (!$this->location_id) {
-				$this->location_id = $zend_db->nextSequenceId('location_id_s');
-			}
+		if (!$this->location_id) {
+			$this->location_id = $zend_db->nextSequenceId('location_id_s');
+		}
 
-			// If it's not in the database already, add a new row
-			$sql = 'select count(*) from address_location where location_id=? and street_address_id=?';
-			$parameters = array($this->location_id,$data['street_address_id']);
-			if (isset($data['subunit_id'])) {
-				$sql.= ' and subunit_id=?';
-				$parameters[] = $data['street_address_id'];
-			}
+		// If it's not in the database already, add a new row
+		$sql = 'select count(*) from address_location where location_id=? and street_address_id=?';
+		$parameters = array($this->location_id,$data['street_address_id']);
+		if (isset($data['subunit_id'])) {
+			$sql.= ' and subunit_id=?';
+			$parameters[] = $data['street_address_id'];
+		}
 
-			$count = $zend_db->fetchOne($sql,$parameters);
-			if (!$count) {
-				$data['location_id'] = $this->location_id;
-				$data['location_type_id'] = $type->getId();
-				$data['active'] = 'N';
-				$zend_db->insert('address_location',$data);
-			}
+		$count = $zend_db->fetchOne($sql,$parameters);
+		if (!$count) {
+			$data['location_id'] = $this->location_id;
+			$data['location_type_id'] = $type->getId();
+			$data['active'] = 'N';
+			$zend_db->insert('address_location',$data);
 		}
 	}
 

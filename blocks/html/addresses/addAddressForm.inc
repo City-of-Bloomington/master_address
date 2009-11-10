@@ -15,7 +15,7 @@ $this->address->setStreet_number('');
 var addAddressFormAction = 'assign';
 function handleAddAddress(form) {
 	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,addAddressFormAction);
+		FRAMEWORK.getChangeLog(form,addAddressFormAction,'<?php echo BASE_URL; ?>');
 	}
 }
 </script>

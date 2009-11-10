@@ -1384,6 +1384,9 @@ class Address
 				$location->assign($address,$type);
 				$location->activate($address);
 			}
+			if (!$location->getId()) {
+				throw new Exception('addresses/failedCreatingLocation');
+			}
 
 			$data['mailable'] = $post['mailable'];
 			$data['livable'] = $post['livable'];
