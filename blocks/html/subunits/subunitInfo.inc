@@ -20,7 +20,7 @@ if (userIsAllowed('Address')) {
 	<table>
 		<tr><th>Action</th>
 			<td><select onchange=\"handleActionChoice(this);\">
-					<option value=\"\">Action to Apply</option>";			
+					<option value=\"\">Action to Apply</option>";
 	foreach($actions as $action){
 		echo "<option value=\"$action\">$action</option>";
 	}
@@ -36,4 +36,6 @@ if (userIsAllowed('Address')) {
 	</script>
 	";
 }
+echo "<table>";
 include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc';
+echo "</table>";

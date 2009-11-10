@@ -18,7 +18,6 @@ if ($location) {
 	$type = $location->getLocationType($this->subunit);
 }
 echo "
-<table>
 	<tr><th>SUD Type</th>
 		<td>{$this->subunit->getSudtype()}</td>
 	</tr>
@@ -40,6 +39,4 @@ echo "
 	<tr><th>Active</th>
 		<td>$active</td>
 	</tr>
-</table>
-<p>$notes</p>
 ";

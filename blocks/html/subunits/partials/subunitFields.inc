@@ -7,7 +7,6 @@
  */
 $subunit = $this->subunit ? $this->subunit : new Subunit();
 ?>
-<table>
 	<tr><td><label for="sudtype" class="required">SUD Type</label></td>
 		<td><select name="sudtype" id="sudtype">
 			<?php
@@ -29,4 +28,3 @@ $subunit = $this->subunit ? $this->subunit : new Subunit();
 					value="<?php echo View::escape($subunit->getIdentifier()); ?>" />
 		</td>
 	</tr>
-</table>

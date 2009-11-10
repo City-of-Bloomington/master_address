@@ -29,5 +29,7 @@ function handleVerifySubunit(form) {
 
 		<button type="submit" class="save">Save</button>
 	</fieldset>
+	<table>
 	<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc'; ?>
+	</table>
 </form>

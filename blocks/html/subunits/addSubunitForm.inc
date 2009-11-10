@@ -18,7 +18,9 @@ function handleAddSubunit(form) {
 	onsubmit="handleAddSubunit(this); return false;">
 	<fieldset><legend>Subunit Information</legend>
 		<input name="street_address_id" type="hidden" value="<?php echo $this->address->getId() ?>" />
+		<table>
 		<?php include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitFields.inc'; ?>
+		</table>
 		<div>
 			<p>If you are adding multiple subunits,
 				these notes will be entered on all the subunits you create.
