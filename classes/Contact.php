@@ -13,7 +13,7 @@ class Contact
 	private $phone_number;
 	private $agency;
 
-	private static $types = array('Gis','Cbu Billing','Address Coordinator','E911 Administrator');
+	private static $types;
 
 	/**
 	 * Populates the object with data
@@ -68,7 +68,7 @@ class Contact
 			throw new Exception('missingRequiredFields');
 		}
 
-		if (!in_array($this->contact_type,self::$types)) {
+		if (!in_array($this->contact_type,self::getTypes())) {
 			throw new Exception('contacts/invalidType');
 		}
 	}
@@ -249,6 +249,11 @@ class Contact
 	 */
 	public static function getTypes()
 	{
+		if (!self::$types) {
+			$sql = 'select distinct contact_type from mast_addr_assignment_contact order by contact_type';
+			$zend_db = Database::getConnection();
+			self::$types = $zend_db->fetchCol($sql);
+		}
 		return self::$types;
 	}
 
