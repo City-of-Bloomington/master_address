@@ -4,10 +4,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Zend_Paginator $this->pages
- * @param URL $this->url
  */
-if (count($this->pages)) {
-	$url = $this->url;
+if ($this->pages->pageCount > 1) {
+	$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+	$url->purgeEmptyParameters();
 
 	echo '<ul class="pageNavigation">';
 

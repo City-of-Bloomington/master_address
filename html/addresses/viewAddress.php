@@ -39,6 +39,6 @@ if ($template->outputFormat=='html') {
 	$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
 												array('purposeList'=>$address->getPurposes()));
 	$template->blocks['panel-two'][] = new Block('changeLogs/changeLog.inc',
-												array('changeLog'=>$address->getChangeLog()));
+												array('target'=>$address));
 }
 echo $template->render();

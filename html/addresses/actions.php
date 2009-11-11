@@ -58,8 +58,7 @@ $template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$ad
 $template->blocks[] = new Block("addresses/actions/{$action}Form.inc",array('address'=>$address));
 $template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
 								array('addressStatusChangeList'=>$address->getStatusChangeList()));
-$template->blocks[] = new Block('changeLogs/changeLog.inc',
-								array('changeLog'=>$address->getChangeLog()));
+$template->blocks[] = new Block('changeLogs/changeLog.inc',array('target'=>$address));
 
 $template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
 												array('address'=>$address,'deactivateButtons'=>true));

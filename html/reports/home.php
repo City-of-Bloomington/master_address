@@ -5,6 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W Sibo <sibow@bloomington.in.gov>
  */
+$template = isset($_GET['format'])
+			? new Template('default',$_GET['format'])
+			: new Template('two-column');
+
+
 if (isset($_GET['actions'])) {
 	$actions = $_GET['actions'];
 
@@ -31,15 +36,17 @@ if (isset($_GET['actions'])) {
 		}
 	}
 
-	$changeLog = ChangeLog::getEntries($types,$actions,$fields);
-	$changeLogBlock = new Block('changeLogs/changeLog.inc',
-								array('changeLog'=>$changeLog,
-										'url'=>"http://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]"));
+	if ($template->outputFormat == 'html') {
+		$changeLogBlock = new Block('changeLogs/changeLog.inc',
+									array('paginator'=>ChangeLog::getPaginator($types,$actions,$fields),
+											'url'=>"http://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]"));
+	}
+	else {
+		$changeLogBlock = new Block('changeLogs/changeLog.inc',
+									array('changeLog'=>ChangeLog::getEntries($types,$actions,$fields)));
+	}
 }
 
-$template = isset($_GET['format'])
-			? new Template('default',$_GET['format'])
-			: new Template('two-column');
 if ($template->outputFormat == 'html') {
 	$template->blocks[] = new Block('reports/reportForm.inc');
 	if (isset($changeLogBlock)) {

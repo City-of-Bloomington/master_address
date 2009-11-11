@@ -414,14 +414,36 @@ class Street
 	public function getChangeLog()
 	{
 		$changeLog = array();
-
-		$zend_db = Database::getConnection();
-		$sql = 'select * from street_change_log where street_id=? order by action_date desc';
-		$result = $zend_db->fetchAll($sql,$this->street_id);
-		foreach ($result as $row) {
-			$changeLog[] = new ChangeLogEntry($row);
+		if ($this->street_id) {
+			$zend_db = Database::getConnection();
+			$sql = 'select * from street_change_log where street_id=? order by action_date';
+			$result = $zend_db->fetchAll($sql,$this->street_id);
+			foreach ($result as $row) {
+				$changeLog[] = new ChangeLogEntry($row);
+			}
 		}
 		return $changeLog;
+	}
+
+	/**
+	 * Returns a Zend_Paginator for the raw database results
+	 *
+	 * If you ask for this, you must remember to create a ChangeLogEntry out of
+	 * each row of the results.
+	 * $changeLogEntry = new ChangeLogEntry($row)
+	 *
+	 * @return Zend_Paginator
+	 */
+	public function getChangeLogPaginator()
+	{
+		if ($this->street_id) {
+			$zend_db = Database::getConnection();
+			$select = $zend_db->select()->from('street_change_log');
+			$select->where('street_id=?',$this->street_id);
+			$select->order('action_date desc');
+
+			return new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
+		}
 	}
 
 	/**

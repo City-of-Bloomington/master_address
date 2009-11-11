@@ -18,6 +18,25 @@ class ChangeLog
 													'id'=>'street_address_id'),
 									'Subunit'=>array('table'=>'subunit_change_log',
 													'id'=>'subunit_id'));
+	/**
+	 * Returns the types of logs available
+	 *
+	 * @return array
+	 */
+	public static function getTypes()
+	{
+		return array_keys(self::$logTables);
+	}
+
+	/**
+	 * Returns the known actions that occur in the change logs
+	 *
+	 * @return array
+	 */
+	public static function getActions()
+	{
+		return ChangeLogEntry::$actions;
+	}
 
 	/**
 	 * Returns the earliest year found in the change logs.
@@ -36,11 +55,9 @@ class ChangeLog
 		return $zend_db->fetchOne($sql);
 	}
 
-	/**
-	 * @param array $data
-	 */
-	public static function getEntries(array $types, array $actions, array $fields)
+	private static function getZendDbSelect(array $types, array $actions, array $fields=null)
 	{
+		// Gather all the Where clauses and save them as a single where string
 		$where = array();
 		if (count($actions)) {
 			$actionSet = array();
@@ -51,7 +68,7 @@ class ChangeLog
 			$where[] = "action in ($actionSet)";
 		}
 
-		if (count($fields)) {
+		if ($fields) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
 					case 'contact_id':
@@ -69,28 +86,71 @@ class ChangeLog
 				}
 			}
 		}
-		$where = count($where) ? 'where '.implode(' and ',$where) : '';
+		$where = count($where) ? implode(' and ',$where) : '';
 
+		// Prepare a Select statement for each of the tables we're looking through
+		$zend_db = Database::getConnection();
 		$allqq = array();
 		foreach (self::$logTables as $type=>$data) {
 			if (in_array($type,$types)) {
-				$allqq[] = "(select '$type' as type,
-							$data[id] as id,action,action_date,notes,user_id,contact_id
-							from $data[table] $where)";
+				$select = $zend_db->select()->from($data['table'],
+													array('type'=>new Zend_Db_Expr("'$type'"),
+														'id'=>$data['id'],
+														'action','action_date','notes',
+														'user_id','contact_id'));
+				if ($where) {
+					$select->where($where);
+				}
+				$allqq[] = $select;
 			}
 		}
 
-		$changeLog = array();
+		// Create a Union query using all of the Select statements we've prepared
 		if (count($allqq)) {
-			$sql = implode(' union ',$allqq);
-			$sql.= 'order by type,action_date DESC';
+			return $zend_db->select()->union($allqq)->order(array('type','action_date desc'));
+		}
+	}
 
-			$zend_db = Database::getConnection();
-			$result = $zend_db->fetchAll($sql);
+	/**
+	 * Returns an array of ChangeLogEntry
+	 *
+	 * @param array $types The log tables to look through
+	 * @param array $actions The relevant actions in the log tables
+	 * @param array $fields  Additional fields to include in the where
+	 * @param array ChangeLogEntry
+	 */
+	public static function getEntries(array $types, array $actions, array $fields)
+	{
+		$changeLog = array();
+
+		$select = self::getZendDbSelect($types,$actions,$fields);
+		if ($select) {
+			$query = $select->query();
+			$result = $query->fetchAll();
 			foreach ($result as $row) {
 				$changeLog[] = new ChangeLogEntry($row);
 			}
 		}
 		return $changeLog;
+	}
+
+	/**
+	 * Returns a Zend_Paginator for the raw database results
+	 *
+	 * If you ask for this, you must remember to create a ChangeLogEntry out of
+	 * each row of the results.
+	 * $changeLogEntry = new ChangeLogEntry($row)
+	 *
+	 * @param array $types The log tables to look through
+	 * @param array $actions The relevant actions in the log tables
+	 * @param array $fields  Additional fields to include in the where
+	 * @return Zend_Paginator
+	 */
+	public static function getPaginator(array $types,array $actions,array $fields=null)
+	{
+		$select = self::getZendDbSelect($types,$actions,$fields);
+		if ($select) {
+			return new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
+		}
 	}
 }

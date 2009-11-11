@@ -37,9 +37,9 @@ if (isset($_POST['streetName'])) {
 
 $template = new Template('two-column');
 $template->blocks[] = new Block('streets/breadcrumbs.inc',array('street'=>$street));
-$template->blocks[] = new Block('streets/streetInfo.inc',array('street'=>$street,'deactivateButtons'=>true));
-$template->blocks[] = new Block('changeLogs/changeLog.inc',
-								array('changeLog'=>$street->getChangeLog()));
+$template->blocks[] = new Block('streets/streetInfo.inc',
+								array('street'=>$street,'deactivateButtons'=>true));
+$template->blocks[] = new Block('changeLogs/changeLog.inc',array('target'=>$street));
 
 $template->blocks['panel-one'][] = new Block('streets/updateStreetNameForm.inc',
 											array('streetName'=>$streetName));

@@ -3,9 +3,15 @@
  * @copyright 2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->changeLog (An array of ChangeLogEntry's)
- * @param URL $this->url
+ * @param Street|Address|Subunit|Contact $this->target
+ * @param Zend_Paginator $this->paginator
+ * @param URL $this->url  If we send a URL, we want buttons rendered for all the possibile formats
  */
+$paginator = $this->paginator ? $this->paginator : $this->target->getChangeLogPaginator();
+if (isset($_GET['page'])) {
+	$paginator->setCurrentPageNumber((int)$_GET['page']);
+}
+
 $txtButton = '';
 $xmlButton = '';
 if (isset($this->url)) {
@@ -26,9 +32,6 @@ if (isset($this->url)) {
 echo "
 <div class=\"interfaceBox\">
 	<h1>Action History $txtButton $xmlButton</h1>
-";
-if (count($this->changeLog)) {
-	echo "
 	<table>
 		<thead>
 			<tr><th>Action Date</th>
@@ -41,10 +44,10 @@ if (count($this->changeLog)) {
 		</thead>
 		<tbody>
 	";
-		foreach ($this->changeLog as $logEntry) {
+		foreach ($paginator as $row) {
+			$logEntry = new ChangeLogEntry($row);
 			$username = $logEntry->getUser()->getUsername();
 			$notes = View::escape($logEntry->notes);
-			$notes = $notes ? $notes:'&nbsp;';
 			echo "
 			<tr><td>{$logEntry->action_date}</td>
 				<td>
@@ -68,7 +71,8 @@ if (count($this->changeLog)) {
 		</tbody>
 	</table>
 	";
-}
+	$block = new Block('pageNavigation.inc',array('pages'=>$paginator->getPages()));
+	echo $block->render('html');
 echo "
 </div>
 ";

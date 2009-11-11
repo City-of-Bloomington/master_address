@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Contact
+class Contact implements ChangeLogInterface
 {
 	private $contact_id;
 	private $last_name;
@@ -274,21 +274,28 @@ class Contact
 	 */
 	public function getChangeLog()
 	{
-		$changeLog = array();
-
-		$zend_db = Database::getConnection();
-		$sql = " select * from ((select 'Address' as type,street_address_id as id,action,action_date,notes,user_id,contact_id
-				from address_change_log where contact_id=?)
-				union
-				(select 'Street' as type,street_id as id,action,action_date,notes,user_id,contact_id
-				from street_change_log where contact_id=?)
-				union
-				(select 'Subunit' as type,subunit_id as id,action,action_date,notes,user_id,contact_id
-				from subunit_change_log where contact_id=?)) order by action_date DESC ";
-		$result = $zend_db->fetchAll($sql,array($this->contact_id,$this->contact_id,$this->contact_id));
-		foreach ($result as $row) {
-			$changeLog[] = new ChangeLogEntry($row);
+		if ($this->contact_id) {
+			return ChangeLog::getEntries(ChangeLog::getTypes(),
+										 ChangeLog::getActions(),
+										 array('contact_id'=>$this->contact_id));
 		}
-		return $changeLog;
+	}
+
+	/**
+	 * Returns a Zend_Paginator for the raw database results
+	 *
+	 * If you ask for this, you must remember to create a ChangeLogEntry out of
+	 * each row of the results.
+	 * $changeLogEntry = new ChangeLogEntry($row)
+	 *
+	 * @return Zend_Paginator
+	 */
+	public function getChangeLogPaginator()
+	{
+		if ($this->contact_id) {
+			return ChangeLog::getPaginator(ChangeLog::getTypes(),
+											ChangeLog::getActions(),
+											array('contact_id'=>$this->contact_id));
+		}
 	}
 }

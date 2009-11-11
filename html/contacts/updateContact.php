@@ -27,10 +27,10 @@ if (isset($_POST['contact'])) {
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
 	}
-	
+
 }
 
 $template = new Template('two-column');
 $template->blocks[] = new Block('contacts/updateContactForm.inc',array('contact'=>$contact));
-$template->blocks['panel-one'][] = new Block('changeLogs/changeLog.inc',array('changeLog'=>$contact->getChangeLog()));
+$template->blocks['panel-one'][] = new Block('changeLogs/changeLog.inc',array('target'=>$contact));
 echo $template->render();

@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Subunit
+class Subunit implements ChangeLogInterface
 {
 	private $subunit_id;
 	private $street_address_id;
@@ -379,14 +379,36 @@ class Subunit
 	public function getChangeLog()
 	{
 		$changeLog = array();
-
-		$zend_db = Database::getConnection();
-		$sql = "select * from subunit_change_log where subunit_id=? order by action_date desc";
-		$result = $zend_db->fetchAll($sql,$this->subunit_id);
-		foreach ($result as $row) {
-			$changeLog[] = new ChangeLogEntry($row);
+		if ($this->subunit_id) {
+			$zend_db = Database::getConnection();
+			$sql = 'select * from subunit_change_log where subunit_id=? order by action_date';
+			$result = $zend_db->fetchAll($sql,$this->subunit_id);
+			foreach ($result as $row) {
+				$changeLog[] = new ChangeLogEntry($row);
+			}
 		}
 		return $changeLog;
+	}
+
+	/**
+	 * Returns a Zend_Paginator for the raw database results
+	 *
+	 * If you ask for this, you must remember to create a ChangeLogEntry out of
+	 * each row of the results.
+	 * $changeLogEntry = new ChangeLogEntry($row)
+	 *
+	 * @return Zend_Paginator
+	 */
+	public function getChangeLogPaginator()
+	{
+		if ($this->subunit_id) {
+			$zend_db = Database::getConnection();
+			$select = $zend_db->select()->from('subunit_change_log');
+			$select->where('subunit_id=?',$this->subunit_id);
+			$select->order('action_date desc');
+
+			return new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
+		}
 	}
 
 	/**

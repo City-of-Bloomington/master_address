@@ -21,13 +21,13 @@ class ChangeLogEntry
 	private $user;
 	private $contact;
 
-	private $actions = array('add'=>'added','assign'=>'assigned','activate'=>'activated',
-							 'create'=>'created','propose'=>'proposed','correct'=>'corrected',
-							 'alias'=>'added alias','change'=>'changed street name',
-							 'update'=>'updated','move'=>'moved to location',
-							 'readdress'=>'readdressed','reassign'=>'reassigned',
-							 'unretire'=>'unretired','retire'=>'retired',
-							 'verify'=>'verified');
+	public static $actions = array( 'add'=>'added','assign'=>'assigned','activate'=>'activated',
+									'create'=>'created','propose'=>'proposed','correct'=>'corrected',
+									'alias'=>'added alias','change'=>'changed street name',
+									'update'=>'updated','move'=>'moved to location',
+									'readdress'=>'readdressed','reassign'=>'reassigned',
+									'unretire'=>'unretired','retire'=>'retired',
+									'verify'=>'verified');
 
 	/**
 	 * Creates a new entry for the change log
@@ -84,10 +84,10 @@ class ChangeLogEntry
 					$value = new Date($value);
 					break;
 				case 'action':
-					if (in_array($value,array_keys($this->actions))) {
-						$value = $this->actions[$value];
+					if (in_array($value,array_keys(self::$actions))) {
+						$value = self::$actions[$value];
 					}
-					elseif (!in_array($value,$this->actions)) {
+					elseif (!in_array($value,self::$actions)) {
 						throw new Exception('logEntry/unknownAction');
 					}
 					break;
