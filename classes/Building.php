@@ -249,7 +249,7 @@ class Building
 	 */
 	public function setBuilding_name($string)
 	{
-		$this->building_name = ucwords(strtolower(trim($string)));
+		$this->building_name = trim($string);
 	}
 
 	/**

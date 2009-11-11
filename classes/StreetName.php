@@ -323,7 +323,7 @@ class StreetName
 	 */
 	public function setStreet_name($string)
 	{
-		$this->street_name = ucwords(strtolower(trim($string)));
+		$this->street_name = trim($string);
 	}
 
 	/**

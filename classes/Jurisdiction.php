@@ -131,7 +131,7 @@ class Jurisdiction
 	 */
 	public function setDescription($string)
 	{
-		$this->description = ucwords(strtolower(trim($string)));
+		$this->description = trim($string);
 	}
 
 	//----------------------------------------------------------------

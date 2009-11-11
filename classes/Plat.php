@@ -243,7 +243,7 @@ class Plat
 	 */
 	public function setName($string)
 	{
-		$this->name = ucwords(strtolower(trim($string)));
+		$this->name = trim($string);
 	}
 
 	/**

@@ -650,7 +650,7 @@ class Address
 	 */
 	public function setAddress_type($string)
 	{
-		$this->address_type = ucwords(strtolower(trim($string)));
+		$this->address_type = trim($string);
 	}
 
 	/**
@@ -728,7 +728,7 @@ class Address
 	 */
 	public function setStreet_address_2($string)
 	{
-		$this->street_address_2 = ucwords(strtolower(trim($string)));
+		$this->street_address_2 = trim($string);
 	}
 
 	/**
@@ -736,7 +736,7 @@ class Address
 	 */
 	public function setCity($string)
 	{
-		$this->city = ucwords(strtolower(trim($string)));
+		$this->city = trim($string);
 	}
 
 	/**
@@ -744,7 +744,7 @@ class Address
 	 */
 	public function setState($string)
 	{
-		$this->state = strtoupper(strtolower(trim($string)));
+		$this->state = trim($string);
 	}
 
 	/**
