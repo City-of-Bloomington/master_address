@@ -12,8 +12,13 @@ if (!userIsAllowed('Address')) {
 	header("Location: $errorURL");
 	exit();
 }
-if (!isset($_REQUEST['address_id']) || !$_REQUEST['address_id']
-	|| !isset($_REQUEST['action']) || !$_REQUEST['action']) {
+if (!isset($_REQUEST['address_id']) || !$_REQUEST['address_id']) {
+	$_SESSION['errorMessages'][] = new Exception('addresses/unknownAddress');
+	header("Location: $errorURL");
+	exit();
+}
+if (!isset($_REQUEST['action']) || !$_REQUEST['action']) {
+	$_SESSION['errorMessages'][] = new Exception('addresses/unknownAction');
 	header("Location: $errorURL");
 	exit();
 }

@@ -21,8 +21,8 @@ $notes = View::escape($street->getNotes());
 				<tr><th>Action</th>
 					<td><select onchange=\"handleActionChoice(this);\">
 							<option value=\"\">Action to Apply</option>
-							<option>correct</option>
-							<option>verify</option>
+							<option value=\"correct\">correct</option>
+							<option value=\"verify\">verify</option>
 						</select>
 					</td>
 				</tr>

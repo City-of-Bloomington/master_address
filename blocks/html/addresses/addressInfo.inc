@@ -26,7 +26,7 @@ if (userIsAllowed('Address')) {
 					<option value=\"\">Action to Apply</option>
 	";
 					foreach ($actions as $action) {
-						echo "<option>$action</option>";
+						echo "<option value=\"$action\">$action</option>";
 					}
 	echo "
 				</select>
