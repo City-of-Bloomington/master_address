@@ -127,8 +127,31 @@ $actions = isset($_REQUEST['actions'])
 			</tr>
 		</table>
 	</fieldse>
-
-	<fieldset><legend>Actions</legend>
+	<fieldset><legend>Street-only Actions</legend>
+		<table>
+			<tr>
+				<td><label>
+						Created
+						<input type="checkbox" name="actions[]" id="action_created" value="created"
+							<?php echo in_array('created',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
+				<td><label>
+						Proposed
+						<input type="checkbox" name="actions[]" id="action_proposed" value="proposed"
+							<?php echo in_array('proposed',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
+				<td><label>
+						Aliased
+						<input type="checkbox" name="actions[]" id="action_aliased" value="aliased"
+							<?php echo in_array('aliased',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset><legend>Address-only Actions</legend>
 		<table>
 			<tr><td><label>
 						Added
@@ -143,57 +166,16 @@ $actions = isset($_REQUEST['actions'])
 					</label>
 				</td>
 				<td><label>
-						Created
-						<input type="checkbox" name="actions[]" id="action_created" value="created"
-							<?php echo in_array('created',$actions) ? 'checked="checked"' : ''; ?> />
-					</label>
-				</td>
-			</tr>
-
-			<tr><td><label>
-						Corrected
-						<input type="checkbox" name="actions[]" id="action_corrected" value="corrected"
-							<?php echo in_array('corrected',$actions) ? 'checked="checked"' : ''; ?> />
-					</label>
-				</td>
-				<td><label>
-						Verified
-						<input type="checkbox" name="actions[]"  id="action_verified" value="verified"
-							<?php echo in_array('verified',$actions) ? 'checked="checked"' : ''; ?> />
-					</label>
-				</td>
-				<td><label>
-						Proposed
-						<input type="checkbox" name="actions[]" id="action_proposed" value="proposed"
-							<?php echo in_array('proposed',$actions) ? 'checked="checked"' : ''; ?> />
-					</label>
-				</td>
-			</tr>
-
-			<tr><td><label>
-						Retired
-						<input type="checkbox" name="actions[]" id="action_retired" value="retired"
-							<?php echo in_array('retired',$actions) ? 'checked="checked"' : ''; ?> />
-					</label>
-				</td>
-				<td><label>
 						Readdressed
 						<input type="checkbox" name="actions[]" id="action_readdressed" value="readdressed"
 							<?php echo in_array('readdressed',$actions) ? 'checked="checked"' : ''; ?> />
 					</label>
 				</td>
-				<td><label>
+			</tr>
+			<tr><td><label>
 						Reassigned
 						<input type="checkbox" name="actions[]" id="action_reassigned" value="reassigned"
 							<?php echo in_array('reassigned',$actions) ? 'checked="checked"' : ''; ?> />
-					</label>
-				</td>
-			</tr>
-
-			<tr><td><label>
-						Unretired
-						<input type="checkbox" name="actions[]" id="action_unretired" value="unretired"
-							<?php echo in_array('unretired',$actions) ? 'checked="checked"' : ''; ?> />
 					</label>
 				</td>
 				<td><label>
@@ -202,20 +184,44 @@ $actions = isset($_REQUEST['actions'])
 							<?php echo in_array('moved',$actions) ? 'checked="checked"' : ''; ?> />
 					</label>
 				</td>
-				<td><label>
-						Aliased
-						<input type="checkbox" name="actions[]" id="action_aliased" value="aliased"
-							<?php echo in_array('aliased',$actions) ? 'checked="checked"' : ''; ?> />
+				<td></td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<fieldset><legend>Generic Actions</legend>
+		<table>
+			<tr><td><label>
+						Corrected
+						<input type="checkbox" name="actions[]" id="action_corrected" value="corrected"
+							<?php echo in_array('corrected',$actions) ? 'checked="checked"' : ''; ?> />
 					</label>
 				</td>
-			</tr>
-			<tr><td><label>
+				<td><label>
 						Updated
 						<input type="checkbox" name="actions[]" id="action_updated" value="updated"
 							<?php echo in_array('updated',$actions) ? 'checked="checked"' : ''; ?> />
 					</label>
 				</td>
-				<td></td>
+				<td><label>
+						Verified
+						<input type="checkbox" name="actions[]"  id="action_verified" value="verified"
+							<?php echo in_array('verified',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
+			</tr>
+			<tr><td><label>
+						Retired
+						<input type="checkbox" name="actions[]" id="action_retired" value="retired"
+							<?php echo in_array('retired',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
+				<td><label>
+						Unretired
+						<input type="checkbox" name="actions[]" id="action_unretired" value="unretired"
+							<?php echo in_array('unretired',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
 				<td></td>
 			</tr>
 		</table>
