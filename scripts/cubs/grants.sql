@@ -26,3 +26,18 @@ grant select on ce_registr_v to apps;
 grant select on ce_registr_v to applsys;
 grant select on ce_registr_v to applsyspub;
 
+grant select on address_subunits_master_s to apps;
+grant select on address_subunits_master_s to applsys;
+grant select on address_subunits_master_s to applsyspub;
+
+grant select on street_direction_master_s to apps;
+grant select on street_direction_master_s to applsys;
+grant select on street_direction_master_s to applsyspub;
+
+grant select on street_names_master_s to apps;
+grant select on street_names_master_s to applsys;
+grant select on street_names_master_s to applsyspub;
+
+grant select on street_type_suffix_master_s to apps;
+grant select on street_type_suffix_master_s to applsys;
+grant select on street_type_suffix_master_s to applsyspub;
