@@ -1,0 +1,28 @@
+grant select on locations_all_v to apps;
+grant select on locations_all_v to applsys;
+grant select on locations_all_v to applsyspub;
+
+grant select on locations_all_s to apps;
+grant select on locations_all_s to applsys;
+grant select on locations_all_s to applsyspub;
+
+grant select on hand_owners_s to apps;
+grant select on hand_owners_s to applsys;
+grant select on hand_owners_s to applsyspub;
+
+grant select on ce_address_v to apps;
+grant select on ce_address_v to applsys;
+grant select on ce_address_v to applsyspub;
+
+grant select on ce_name_v to apps;
+grant select on ce_name_v to applsys;
+grant select on ce_name_v to applsyspub;
+
+grant select on ce_regid_name_v to apps;
+grant select on ce_regid_name_v to applsys;
+grant select on ce_regid_name_v to applsyspub;
+
+grant select on ce_registr_v to apps;
+grant select on ce_registr_v to applsys;
+grant select on ce_registr_v to applsyspub;
+
