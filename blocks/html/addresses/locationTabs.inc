@@ -100,7 +100,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 <script type="text/javascript">
 var activateAddressFormAction = 'activate';
 function handleActivateAddress(form) {
-	FRAMEWORK.getChangeLog(form,activateAddressFormAction);
+	FRAMEWORK.getChangeLog(form,activateAddressFormAction,'<?php echo BASE_URL; ?>');
 }
 
 function activateAddress(location_id,address_id) {
