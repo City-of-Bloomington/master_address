@@ -13,7 +13,7 @@
 function handleMoveAddress(form) {
 	if (document.getElementById('new_location_id').value) {
 		if (FRAMEWORK.checkRequiredFields()) {
-			FRAMEWORK.getChangeLog(form,'verify');
+			FRAMEWORK.getChangeLog(form,'move','<?php echo BASE_URL; ?>');
 		}
 	}
 	else {

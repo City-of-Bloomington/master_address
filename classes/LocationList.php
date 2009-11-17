@@ -49,8 +49,8 @@ class LocationList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='location_id',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('l'=>'address_location'),
-							array('location_id'));
+		$this->select->distinct()->from(array('l'=>'address_location'),
+										array('location_id'));
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
