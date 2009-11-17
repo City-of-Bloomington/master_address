@@ -57,7 +57,7 @@ textarea { width:300px; }
 .missing { border:2px solid #aa0000; background-color:salmon; }
 
 /* YUI Auto-complete */
-.yui-skin-sam .yui-ac { font-size:100%; margin-bottom:1em; }
+.yui-skin-sam .yui-ac { padding-bottom:2em; }
 .yui-skin-sam .yui-ac-content li { color:black; background-color:white; }
 
 /* YUI Overlay popups */
