@@ -1172,6 +1172,9 @@ class Address
 		// The data should be nice and clean now
 		if (isset($newStatus)) {
 			$newStatus->save();
+			$this->status = $status;
+			$this->status_code = $status->getCode();
+			$this->description = $status->getDescription();
 		}
 	}
 

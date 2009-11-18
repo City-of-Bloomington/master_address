@@ -38,15 +38,15 @@ function handleMoveAddress(form) {
 			</tr>
 		</table>
 		<div>
-			<label for="old_location_status">What status should we set on the old location?</label>
+			<label for="old_address_status">What status should we set on the old address?</label>
 		</div>
 		<div>
-			<select name="old_location_status" id="old_location_status">
+			<select name="old_address_status" id="old_address_status">
 				<?php
 					$statuses = new AddressStatusList();
 					$statuses->find();
 					foreach($statuses as $status){
-						$selected = $this->location->getStatus()->getStatus_code() == $status->getStatus_code()
+						$selected = $this->address->getStatus()->getStatus_code() == $status->getStatus_code()
 									? 'selected="selected"'
 									: '';
 						echo "<option $selected value=\"{$status->getId()}\">$status</option>";

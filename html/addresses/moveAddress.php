@@ -36,6 +36,7 @@ if (isset($target_location)) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
 		$old_location->moveAddress($address,$target_location);
+		$address->saveStatus($_POST['old_address_status']);
 		$address->updateChangeLog($changeLogEntry);
 		header('Location: '.$address->getURL());
 		exit();
