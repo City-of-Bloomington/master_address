@@ -3,5 +3,6 @@ tablespace "CUBSD"
 refresh complete on demand start with sysdate+0 next trunc(sysdate+1) + (5.7/24)
 disable query rewrite
 as
-select distinct direction_code,description as direction_description
+select distinct upper(direction_code) as direction_code,
+upper(description) as direction_description
 from eng.mast_street_direction_master@earthgis.world;

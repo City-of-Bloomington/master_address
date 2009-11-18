@@ -6,6 +6,10 @@ grant select on locations_all_s to apps;
 grant select on locations_all_s to applsys;
 grant select on locations_all_s to applsyspub;
 
+grant select on hand_agents_s to apps;
+grant select on hand_agents_s to applsys;
+grant select on hand_agents_s to applsyspub;
+
 grant select on hand_owners_s to apps;
 grant select on hand_owners_s to applsys;
 grant select on hand_owners_s to applsyspub;
