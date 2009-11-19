@@ -48,7 +48,7 @@ class PurposeList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='p.description',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('p'=>'addr_location_purpose_mast'));
+		$this->select->distinct()->from(array('p'=>'addr_location_purpose_mast'));
 
 		// Finding on fields from the addr_location_purpose_mast table is handled here
 		if (count($fields)) {
