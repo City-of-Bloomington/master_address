@@ -61,6 +61,7 @@ $template->blocks[] = new Block('changeLogs/changeLog.inc',array('target'=>$subu
 $address = $subunit->getAddress();
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
 											array('address'=>$address,
-											'subunitList'=>$address->getSubunits()));
+													'subunitList'=>$address->getSubunits(),
+													'deactivateButtons'=>true));
 
 echo $template->render();
