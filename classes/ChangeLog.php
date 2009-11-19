@@ -117,7 +117,7 @@ class ChangeLog
 	 * @param array $types The log tables to look through
 	 * @param array $actions The relevant actions in the log tables
 	 * @param array $fields  Additional fields to include in the where
-	 * @param array ChangeLogEntry
+	 * @return array ChangeLogEntry
 	 */
 	public static function getEntries(array $types, array $actions, array $fields)
 	{
