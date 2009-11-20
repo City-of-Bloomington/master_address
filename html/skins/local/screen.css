@@ -8,8 +8,8 @@ body {
 fieldset { margin:4px 0; }
 legend {}
 label { font-weight:normal; color:#666666; text-align:right; }
-label.required { color:#333333; }
 .required { color:#333333; }
+.suggested { font-weight:bold; color:#333333; }
 
 table { border-collapse:separate; margin:3px 0 8px 0; overflow:auto; border:none; }
 td label {float:right; font-weight:normal; color:#666666; vertical-align:top;}

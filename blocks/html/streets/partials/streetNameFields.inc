@@ -8,7 +8,7 @@
 $streetName = $this->streetName ? $this->streetName : new StreetName();
 ?>
 <table>
-	<tr><td><label for="streetName-street_direction_code">Direction</label></td>
+	<tr><td><label for="streetName-street_direction_code" class="suggested">Direction</label></td>
 		<td><select name="streetName[street_direction_code]" id="streetName-street_direction_code">
 				<option></option>
 				<?php
@@ -31,7 +31,7 @@ $streetName = $this->streetName ? $this->streetName : new StreetName();
 		</td>
 	</tr>
 
-	<tr><td><label for="streetName-street_type_suffix_code">Type Suffix</label></td>
+	<tr><td><label for="streetName-street_type_suffix_code" class="suggested">Type Suffix</label></td>
 		<td><select name="streetName[street_type_suffix_code]" id="streetName-street_type_suffix_code">
 				<option></option>
 				<?php
