@@ -52,6 +52,7 @@ findPlatForm_autosuggest = function() {
 														"plat-container",
 														platService);
 	findPlatFormAC.resultTypeList = false;
+	findPlatFormAC.maxResultsDisplayed = 20;
 
 	// Custom formatter of the results
 	findPlatFormAC.formatResult = function(oResultData, sQuery, sResultMatch) {

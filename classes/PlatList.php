@@ -49,7 +49,7 @@ class PlatList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='plat_id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
 	{
 		$this->select->from(array('p'=>'plat_master'));
 
