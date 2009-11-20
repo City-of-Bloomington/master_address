@@ -24,7 +24,7 @@ function handleVerifyStreet(form) {
 		I, <?php echo View::escape($_SESSION['USER']->getFullname()); ?>,
 		verify that this street is accurate at this point in time.
 		</div>
-
+		<?php include APPLICATION_HOME.'/blocks/html/streets/partials/notesField.inc'; ?>
 		<button type="submit" class="save">Save</button>
 	</fieldset>
 </form>

@@ -16,6 +16,9 @@ function handleAliasStreet(form) {
 </script>
 <form method="post" action="<?php echo BASE_URL; ?>/streets/actions.php"
 	onsubmit="handleAliasStreet(this); return false;">
+	<fieldset><legend>Street Information</legend>
+		<?php include APPLICATION_HOME.'/blocks/html/streets/partials/notesField.inc'; ?>
+	</fieldset>
 	<fieldset><legend>New Street Name</legend>
   		<input name="street_id" type="hidden" value="<?php echo $this->street->getStreet_id(); ?>" />
 		<input name="action" type="hidden" value="alias" />

@@ -40,8 +40,8 @@ function handleAddStreet(form) {
 
 	<fieldset><legend>Street Information</legend>
 		<table>
-			<tr><td><label for="town_id">Town</label></td>
-				<td><select name="town_id" id="town_id" >
+			<tr><td><label for="street-town_id">Town</label></td>
+				<td><select name="street[town_id]" id="street-town_id">
 						<option></option>
 						<?php
 							$towns = new TownList();
@@ -54,13 +54,11 @@ function handleAddStreet(form) {
 					</select>
 				</td>
 			</tr>
-
-			<tr><td><label for="notes">Notes</label></td>
-				<td><textarea name="notes" id="notes" rows="4" cols="30" wrap="wrap"></textarea>
-				</td>
-			</tr>
-
 		</table>
+		<?php
+			$block = new Block('streets/partials/notesField.inc',array('street'=>new Street()));
+			echo $block->render('html');
+		?>
 
 		<button type="submit" class="submit">Submit Street</button>
 	</fieldset>

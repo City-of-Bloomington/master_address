@@ -42,14 +42,8 @@ function handleCorrectStreet(form) {
 					</select>
 				</td>
 			</tr>
-
-			<tr><td><label for="street-notes">Notes</label></td>
-				<td><input name="street[notes]" id="street-notes"
-							value="<?php echo View::escape($this->street->getNotes()); ?>" />
-				</td>
-			</tr>
-
 		</table>
+		<?php include APPLICATION_HOME.'/blocks/html/streets/partials/notesField.inc'; ?>
 
 		<button type="submit" class="submit">Save Changes</button>
 	</fieldset>

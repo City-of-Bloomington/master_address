@@ -52,7 +52,7 @@ if (isset($_POST['changeLogEntry'])) {
 			case 'retire':
 			case 'unretire':
 			case 'verify':
-				$street->$action($changeLogEntry);
+				$street->$action($_POST,$changeLogEntry);
 				break;
 		}
 		header('Location: '.$street->getURL());

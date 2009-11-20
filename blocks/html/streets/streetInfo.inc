@@ -29,6 +29,7 @@ $notes = View::escape($street->getNotes());
 			";
 		}
 		echo "
+		<tr><th>ID</th><td>{$street->getId()}</td></tr>
 		<tr><th>Name</th><td>$name</td></tr>
 		<tr><th>Status</th><td>$status</td></tr>
 		<tr><th>Town</th><td>$town</td></tr>

@@ -17,6 +17,9 @@ function handleChangeStreet(form) {
 </script>
 <form method="post" action="<?php echo $url; ?>"
 	onsubmit="handleChangeStreet(this); return false;">
+	<fieldset><legend>Street Information</legend>
+		<?php include APPLICATION_HOME.'/blocks/html/streets/partials/notesField.inc'; ?>
+	</fieldset>
 	<fieldset><legend>Renumber Addresses</legend>
 		<p>Do you want to re-number the addresses on this street?</p>
 		<?php

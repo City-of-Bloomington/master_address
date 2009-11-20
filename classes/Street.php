@@ -304,13 +304,18 @@ class Street
 		$streetName = new StreetName();
 		$streetName->setStreet($this);
 		foreach ($fields as $field) {
-			if (isset($post[$field])) {
+			if (isset($post['streetName'][$field])) {
 				$set = 'set'.ucfirst($field);
-				$streetName->$set($post[$field]);
+				$streetName->$set($post['streetName'][$field]);
 			}
 		}
 		$streetName->save();
-		$this->updateChangeLog($changeLogEntry);
+
+		// Update the Notes on the street
+		if (isset($post['street']['notes'])) {
+			$this->setNotes($post['street']['notes']);
+		}
+		$this->save($changeLogEntry);
 	}
 
 	/**
@@ -323,13 +328,13 @@ class Street
 		$zend_db->beginTransaction();
 
 		try {
-			$fields = array('street_name','street_type_suffix_code',
-							'effective_start_date','effective_end_date','notes',
-							'street_direction_code','post_direction_suffix_code');
+			$streetNameFields = array('street_name','street_type_suffix_code',
+										'effective_start_date','effective_end_date','notes',
+										'street_direction_code','post_direction_suffix_code');
 			$streetName = new StreetName();
 			$streetName->setStreet($this);
 			$streetName->setStreet_name_type('STREET');
-			foreach ($fields as $field) {
+			foreach ($streetNameFields as $field) {
 				if (isset($post['streetName'][$field])) {
 					$set = 'set'.ucfirst($field);
 					$streetName->$set($post['streetName'][$field]);
@@ -344,7 +349,11 @@ class Street
 							and street_name_type='STREET'
 							and id!={$streetName->getId()}");
 
-			$this->updateChangeLog($changeLogEntry);
+			// Update the Notes for the street
+			if (isset($post['street']['notes'])) {
+				$this->setNotes($post['street']['notes']);
+			}
+			$this->save($changeLogEntry);
 
 			// If they post new address street numbers, apply the new street numbers
 			// and save the changeLog for each address
@@ -454,9 +463,9 @@ class Street
 	{
 		$fields = array('town_id','notes');
 		foreach ($fields as $field) {
-			if (isset($post[$field])) {
+			if (isset($post['street'][$field])) {
 				$set = 'set'.ucfirst($field);
-				$this->$set($post[$field]);
+				$this->$set($post['street'][$field]);
 			}
 		}
 		$this->save($changeLogEntry);
@@ -465,31 +474,43 @@ class Street
 	/**
 	 * Sets the latest status for this street to RETIRED
 	 *
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function retire(ChangeLogEntry $changeLogEntry)
+	public function retire(array $post,ChangeLogEntry $changeLogEntry)
 	{
+		if (isset($post['street']['notes'])) {
+			$this->setNotes($post['street']['notes']);
+		}
+		$this->save($changeLogEntry);
 		$this->saveStatus('RETIRED');
-		$this->updateChangeLog($changeLogEntry);
 	}
 
 	/**
 	 * Sets the latest status for this street to CURRENT
 	 *
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function unretire(ChangeLogEntry $changeLogEntry)
+	public function unretire(array $post,ChangeLogEntry $changeLogEntry)
 	{
+		if (isset($post['street']['notes'])) {
+			$this->setNotes($post['street']['notes']);
+		}
+		$this->save($changeLogEntry);
 		$this->saveStatus('CURRENT');
-		$this->updateChangeLog($changeLogEntry);
 	}
 
 	/**
+	 * @param array $post
 	 * @param ChangeLogEntry $changeLogEntry
 	 */
-	public function verify(ChangeLogEntry $changeLogEntry)
+	public function verify(array $post,ChangeLogEntry $changeLogEntry)
 	{
-		$this->updateChangeLog($changeLogEntry);
+		if (isset($post['street']['notes'])) {
+			$this->setNotes($post['street']['notes']);
+		}
+		$this->save($changeLogEntry);
 	}
 
 	/**
@@ -506,8 +527,8 @@ class Street
 
 		try {
 			$street = new Street();
-			$street->setTown_id($post['town_id']);
-			$street->setNotes($post['notes']);
+			$street->setTown_id($post['street']['town_id']);
+			$street->setNotes($post['street']['notes']);
 
 			switch ($changeLogEntry->action) {
 				case 'propose':
