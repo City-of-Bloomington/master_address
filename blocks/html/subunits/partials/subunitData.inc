@@ -5,7 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Subunit $this->subunit
  */
-$notes = View::escape($this->subunit->getNotes());
 $location = $this->subunit->getLocation();
 $mailable = '';
 $livable = '';

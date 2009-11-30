@@ -39,3 +39,4 @@ if (userIsAllowed('Address')) {
 echo "<table>";
 include APPLICATION_HOME.'/blocks/html/subunits/partials/subunitData.inc';
 echo "</table>";
+include APPLICATION_HOME.'/blocks/html/subunits/partials/notes.inc';
