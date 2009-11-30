@@ -481,17 +481,17 @@ class Subunit implements ChangeLogInterface
 	 */
 	public function correct($post,ChangeLogEntry $changeLogEntry)
 	{
-		$subunit->setSudType($post['sudtype']);
-		$subunit->setIdentifier($post['street_subunit_identifier']);
-		$subunit->setNotes($post['notes']);
-		$subunit->save($changeLogEntry);
+		$this->setSudType($post['sudtype']);
+		$this->setIdentifier($post['street_subunit_identifier']);
+		$this->setNotes($post['notes']);
+		$this->save($changeLogEntry);
 
 		$location = new Location($post['location_id']);
 		$data = array();
 		$data['mailable'] = $post['mailable'];
 		$data['livable'] = $post['livable'];
 		$data['locationType'] = $post['location_type_id'];
-		$location->update($data,$subunit);
+		$location->update($data,$this);
 	}
 
 	/**
