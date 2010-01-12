@@ -1269,7 +1269,7 @@ class Address
 			$subunit->moveToAddress($newAddress,$changeLogEntry);
 		}
 
-		$this->retire($changeLogEntry);
+		$this->retire($post,$changeLogEntry);
 	}
 
 	/**
