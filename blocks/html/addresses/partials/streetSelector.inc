@@ -9,7 +9,7 @@
 <div id="streetSelector" style="position:absolute; visibility:hidden;">
 	<div class="hd">Search for a street:</div>
 	<div class="bd">
-		<form id="dialog" method="get" action="http://bandit.bloomington.in.gov/master_address/streets/home.php">
+		<form id="dialog" method="get" action="<?php echo BASE_URL; ?>/streets/home.php">
 			<input name="format" type="hidden" value="json" />
 			<label for="streetName">Street Name:</label><input type="text" name="streetName" id="streetName" />
 		</form>
