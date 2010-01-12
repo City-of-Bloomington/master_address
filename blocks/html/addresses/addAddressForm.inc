@@ -1,14 +1,16 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2010 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W. Sibo <sibow@bloomington.in.gov>
  * @param Address $this->address
  * @param Location $this->location
  * @param array $this->locationData
+ * @param string $this->action (optional)
  */
 $this->address->setStreet_number('');
+$action = (isset($this->action) && $this->action=='added') ? 'add' : 'assign';
 ?>
 <h1>Add Address</h1>
 <script type="text/javascript">
@@ -26,11 +28,13 @@ function handleAddAddress(form) {
 					<tr><td><label for="action_add" class="required">Action</label></td>
 						<td><label style="float:none;">
 								<input type="radio" name="action" id="action_add" value="add"
+									<?php echo $action=='add' ? 'checked="checked"' : ''; ?>
 									onclick="addAddressFormAction='add';" />
 								Add
 							</label>
 							<label style="float:none;">
-								<input type="radio" name="action" id="action_assign" value="assign" checked="checked"
+								<input type="radio" name="action" id="action_assign" value="assign"
+									<?php echo $action=='assign' ? 'checked="checked"' : ''; ?>
 									onclick="addAddressFormAction='assign';" />
 								Assign
 							</label>

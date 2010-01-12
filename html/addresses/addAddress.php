@@ -82,6 +82,9 @@ if ($addressCreatedSuccessfully) {
 }
 
 $addAddressForm = new Block('addresses/addAddressForm.inc',array('address'=>$address));
+if (isset($changeLogEntry)) {
+	$addAddressForm->action = $changeLogEntry->action;
+}
 if (isset($location)) {
 	$addAddressForm->location = $location;
 }
