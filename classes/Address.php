@@ -47,8 +47,9 @@ class Address
 
 	private $location;
 
-	private static $addressTypes = array("STREET","UTILITY","PROPERTY",
-										"PARCEL","FACILITY","TEMPORARY");
+	private static $addressTypes = array("Street","Utility","Property",
+										"Parcel","Facility","Temporary");
+
     public static function getZipCodes()
     {
         $zend_db = Database::getConnection();
