@@ -50,14 +50,18 @@ class Address
 	private static $addressTypes = array("Street","Utility","Property",
 										"Parcel","Facility","Temporary");
 
+	private static $zipcodes = array();
     public static function getZipCodes()
     {
-        $zend_db = Database::getConnection();
-		$sql = "select distinct zip from mast_address
-				where zip is not null
-				order by zip";
-        $result = $zend_db->fetchCol($sql);
-        return $result;
+		if (!self::$zipcodes) {
+			$zend_db = Database::getConnection();
+			$sql = 'select * from zipcodes order by zip';
+			$result = $zend_db->fetchAll($sql);
+			foreach ($result as $row) {
+				self::$zipcodes[$row['zip']] = $row['city'];
+			}
+		}
+		return self::$zipcodes;
     }
 
 	public static function getTaxJurisdictions()
@@ -749,11 +753,15 @@ class Address
 	}
 
 	/**
-	 * @param string $string
+	 * @param int $int
 	 */
-	public function setZip($string)
+	public function setZip($int)
 	{
-		$this->zip = preg_replace('/[^0-9]/','',$string);
+		$zipcodes = $this->getZipCodes();
+		if (in_array($int,array_keys($zipcodes))) {
+			$this->zip = (int)$int;
+			$this->setCity($zipcodes[$int]);
+		}
 	}
 
 	/**

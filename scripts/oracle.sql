@@ -491,6 +491,11 @@ create table trash_recycle_week_master (
 	recycle_week varchar2(20) not null primary key
 );
 
+create table zipcodes (
+	zip number unsigned not null primary key,
+	city varchar2(20) not null
+);
+
 create table mast_address (
 	street_address_id number not null primary key,
 	street_number varchar2(20),
@@ -508,7 +513,7 @@ create table mast_address (
 	street_address_2 varchar2(40),
 	city varchar2(20),
 	state varchar2(3),
-	zip varchar2(6),
+	zip number,
 	zipplus4 varchar2(6),
 	census_block_fips_code varchar2(20),
 	state_plane_x_coordinate number,
@@ -524,7 +529,8 @@ create table mast_address (
 	foreign key (subdivision_id) references subdivision_master(subdivision_id),
 	foreign key (jurisdiction_id) references addr_jurisdiction_master(jurisdiction_id),
 	foreign key (gov_jur_id) references governmental_jurisdiction_mast(gov_jur_id),
-	foreign key (plat_id) references plat_master(plat_id)
+	foreign key (plat_id) references plat_master(plat_id),
+	foreign key (zip) references zipcodes(zip)
 );
 create sequence street_address_id_s nocache;
 create trigger mast_address_trigger

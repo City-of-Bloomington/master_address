@@ -20,6 +20,7 @@ echo "
 					<th>Status</th>
 					<th>Jurisdiction</th>
 					<th>Zip</th>
+					<th>City</th>
 					<th>Units</th>
 				</tr>
 			</thead>
@@ -32,6 +33,7 @@ echo "
 				$status = $address->getStatus();
 				$jurisdiction = $address->getJurisdiction();
 				$zip = $address->getZip();
+				$city = View::escape($address->getCity());
 				$count = $address->getSubunitCount();
 				$count = $count ? $count : '';
 				echo "
@@ -41,6 +43,7 @@ echo "
 					<td><a href=\"{$address->getURL()}\">$status</a></td>
 					<td><a href=\"{$address->getURL()}\">$jurisdiction</a></td>
 					<td><a href=\"{$address->getURL()}\">$zip</a></td>
+					<td><a href=\"{$address->getURL()}\">$city</a></td>
 					<td>$count</td>
 				</tr>
 				";

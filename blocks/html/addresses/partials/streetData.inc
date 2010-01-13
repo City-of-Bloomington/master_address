@@ -15,6 +15,9 @@ echo "
 	<tr><th>Zip</th>
 		<td>{$this->address->getZip()} - {$this->address->getZipplus4()}</td>
 	</tr>
+	<tr><th>City</th>
+		<td>{$this->address->getCity()}</td>
+	</tr>
 	<tr><th>Status</th>
 		<td>{$this->address->getStatus()}</td>
 	</tr>

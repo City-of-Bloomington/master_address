@@ -26,10 +26,11 @@ if ($this->address->getStreet()) {
 		</td>
 	</tr>
 	<tr><td><label for="zip" class="required">Zip Code</label></td>
-		<td><select name="zip" id="zip">
+		<td><select name="zip" id="zip"
+				onchange="updateCity(this.options[this.selectedIndex].value);">
 				<?php
 					$zips = Address::getZipCodes();
-					foreach ($zips as $zip) {
+					foreach (array_keys($zips) as $zip) {
 						$selected = $zip==$this->address->getZip() ? 'selected="selected"' : '';
 						echo "<option $selected>$zip</option>";
 					}
@@ -37,6 +38,22 @@ if ($this->address->getStreet()) {
 			</select> -
 			<input name="zipplus4" id="zipplus4" size="4" maxlength="4"
 						value="<?php echo $this->address->getZipplus4(); ?>" />
+			<script type="text/javascript">
+				function updateCity(zip) {
+					var zipcodes = new Array();
+					<?php
+						foreach (Address::getZipCodes() as $zip=>$city) {
+							echo "zipcodes[$zip] = '$city';\n";
+						}
+					?>
+					document.getElementById('city').innerHTML = zipcodes[zip];
+				}
+			</script>
+		</td>
+	</tr>
+	<tr><td><label>City</label></td>
+		<td id="city">
+			<?php echo View::escape($this->address->getCity()); ?>
 		</td>
 	</tr>
 	<tr><td><label>Status</label></td>
