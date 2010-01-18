@@ -206,7 +206,7 @@ as select
 	upper(addr.street_address_2) as street_address_2,
 	upper(RTRIM(addr.city)) as city,
 	upper(RTRIM(addr.state)) as state,
-	addr.zip,
+	to_char(addr.zip) as zip,
 	addr.zipplus4,
 	addr.census_block_fips_code,
 	addr.state_plane_x_coordinate,
