@@ -9,7 +9,7 @@
 			echo "<a href=\"".BASE_URL."/login/logout.php\">Logout</a>";
 		}
 		else {
-			include APPLICATION_HOME.'/blocks/html/loginForm.inc';
+			echo "<a href=\"".BASE_URL."/login\">Login</a>";
 		}
 	?>
 	</div>
