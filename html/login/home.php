@@ -33,6 +33,5 @@ if ($client->isAuthenticated()) {
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
-else {
-	header('Location: '.BASE_URL);
-}
+
+header('Location: '.BASE_URL);
