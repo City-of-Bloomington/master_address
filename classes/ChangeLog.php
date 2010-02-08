@@ -99,7 +99,7 @@ class ChangeLog
 														'action','action_date','notes',
 														'user_id','contact_id'));
 				// Filter on jurisdictions only for Address queries
-				if ($type=='Address') {
+				if ($type=='Address' && $jurisdictions) {
 					$jurisdictions = implode(',',$jurisdictions);
 					$select->joinLeft(array('a'=>'mast_address'),
 											"a.$data[id]=$data[table].$data[id]",
@@ -158,7 +158,7 @@ class ChangeLog
 	 * @param array $fields  Additional fields to include in the where
 	 * @return Zend_Paginator
 	 */
-	public static function getPaginator(array $types,array $actions,array $fields,array $jurisdictions)
+	public static function getPaginator(array $types,array $actions,array $fields=null,array $jurisdictions=null)
 	{
 		$select = self::getZendDbSelect($types,$actions,$fields,$jurisdictions);
 		if ($select) {
