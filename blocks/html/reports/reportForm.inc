@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2010 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W Sibo <sibow@bloomington.in.gov>
@@ -23,12 +23,25 @@ $types = isset($_REQUEST['types'])
 $actions = isset($_REQUEST['actions'])
 			? $_REQUEST['actions']
 			: array('added','assigned','created','corrected');
+
+// Go ahead and load the jurisdictions, since we're going to use them to
+// display the form anyway
+$jurisdictionList = new JurisdictionList();
+$jurisdictionList->find();
+if (isset($_REQUEST['jurisdictions'])) {
+	$jurisdictions = $_REQUEST['jurisdictions'];
+}
+else {
+	foreach ($jurisdictionList as $jurisdiction) {
+		$jurisdictions[] = $jurisdiction->getId();
+	}
+}
 ?>
 <h1>Activity Report</h1>
 <p>
 	Using this tool, you can gather data from the change logs in the system.
 </p>
-<form method="get" action="<?php echo BASE_URL; ?>/reports">
+<form method="get" action="<?php echo BASE_URL; ?>/reports" id="reportform">
 	<fieldset>
 		<legend>Presets</legend>
 		<ul>
@@ -126,7 +139,26 @@ $actions = isset($_REQUEST['actions'])
 			?>
 			</tr>
 		</table>
-	</fieldse>
+	</fieldset>
+	<fieldset><legend>Jurisdictions</legend>
+	<ul>
+		<?php
+			foreach ($jurisdictionList as $jurisdiction) {
+				$checked = in_array($jurisdiction->getId(),$jurisdictions) ? 'checked="checked"' : '';
+				echo "
+				<li>
+				<label>
+					$jurisdiction
+					<input type=\"checkbox\" name=\"jurisdictions[]\"
+							id=\"jurisdiction_{$jurisdiction->getId()}\"
+							value=\"{$jurisdiction->getId()}\" $checked />
+				</label>
+				</li>
+				";
+			}
+		?>
+	</ul>
+	</fieldset>
 	<fieldset><legend>Street-only Actions</legend>
 		<table>
 			<tr>

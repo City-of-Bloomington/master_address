@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2010 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W Sibo <sibow@bloomington.in.gov>
@@ -17,6 +17,8 @@ if (isset($_GET['actions'])) {
 	if (isset($_GET['types'])) {
 		$types = $_GET['types'];
 	}
+
+	$jurisdictions = (isset($_GET['jurisdictions'])) ? $_GET['jurisdictions'] : array();
 
 	$fields = array();
 	if (isset($_GET['dateFrom'])) {
@@ -38,12 +40,12 @@ if (isset($_GET['actions'])) {
 
 	if ($template->outputFormat == 'html') {
 		$changeLogBlock = new Block('changeLogs/changeLog.inc',
-									array('paginator'=>ChangeLog::getPaginator($types,$actions,$fields),
+									array('paginator'=>ChangeLog::getPaginator($types,$actions,$fields,$jurisdictions),
 											'url'=>"http://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]"));
 	}
 	else {
 		$changeLogBlock = new Block('changeLogs/changeLog.inc',
-									array('changeLog'=>ChangeLog::getEntries($types,$actions,$fields)));
+									array('changeLog'=>ChangeLog::getEntries($types,$actions,$fields,$jurisdictions)));
 	}
 }
 

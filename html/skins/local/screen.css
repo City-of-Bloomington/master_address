@@ -66,3 +66,7 @@ textarea { width:300px; }
 .yui-skin-sam .yui-overlay .bd { min-height:30px; }
 .yui-skin-sam .yui-overlay ul { margin:0; padding:0; }
 .yui-skin-sam .yui-overlay li { list-style-type:none; }
+
+
+#reportform ul { margin-left:5px; padding-left:0; }
+#reportform li { list-style-type:none; float:left; width:120px; }
