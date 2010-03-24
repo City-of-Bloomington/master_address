@@ -13,7 +13,8 @@
 if (isset($_REQUEST['format'])) {
 	switch ($_REQUEST['format']) {
 		case 'xml':
-			$template = new Template('default','xml');
+		case 'json':
+			$template = new Template('default',$_REQUEST['format']);
 			break;
 		default:
 			$template = new Template('full-width');
