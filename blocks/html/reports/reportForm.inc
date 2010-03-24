@@ -49,7 +49,7 @@ else {
 					Address Activity
 				</button>
 			</li>
-			<li><button type="button" onclick="preset(['Street'],['aliased','updated','unretired']);">
+			<li><button type="button" onclick="preset(['Street'],['aliased','updated','unretired','changed']);">
 					Street Activity
 				</button>
 			</li>
@@ -180,6 +180,15 @@ else {
 							<?php echo in_array('aliased',$actions) ? 'checked="checked"' : ''; ?> />
 					</label>
 				</td>
+			</tr>
+			<tr><td><label>
+						Changed
+						<input type="checkbox" name="actions[]" id="action_changed" value="changed street name"
+							<?php echo in_array('changed street name',$actions) ? 'checked="checked"' : ''; ?> />
+					</label>
+				</td>
+				<td></td>
+				<td></td>
 			</tr>
 		</table>
 	</fieldset>
