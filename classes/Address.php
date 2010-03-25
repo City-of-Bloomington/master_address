@@ -1291,6 +1291,9 @@ class Address
 	{
 		$this->saveStatus('CURRENT');
 		$this->getLocation()->saveStatus('CURRENT');
+		if (!$this->getLocation()->hasActive($this)) {
+			$this->getLocation()->activate($this);
+		}
 
 		$this->setNotes($post['notes']);
 		$this->save($changeLogEntry);
@@ -1342,8 +1345,7 @@ class Address
 		$this->saveStatus($retired);
 
 		foreach ($this->getSubunits() as $subunit) {
-			$subunit->saveStatus($retired);
-			$subunit->save($changeLogEntry);
+			$subunit->retire($post,$changeLogEntry);
 		}
 
 		foreach ($this->getLocations() as $location) {

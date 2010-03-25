@@ -408,6 +408,34 @@ class Location
 	}
 
 	/**
+	 * Tells whether there's at least one active address or subunit for this location
+	 *
+	 * @param Address|Subunit $address
+	 * @return boolean
+	 */
+	public function hasActive($address)
+	{
+		if ($this->location_id) {
+			$sql = 'select count(*) from address_location where active=? and location_id=?';
+
+			if ($address instanceof Address) {
+				$sql.= ' and street_address_id=?';
+			}
+			elseif ($address instanceof Subunit) {
+				$sql.= ' and subunit_id=?';
+			}
+			else {
+				// Don't bother throwing an exception
+				return false;
+			}
+
+			$zend_db = Database::getConnection();
+			$count = $zend_db->fetchOne($sql,array('Y',$this->location_id,$address->getId()));
+			return $count ? true : false;
+		}
+	}
+
+	/**
 	 * @param Address|Subunit $address
 	 * @return LocationType
 	 */

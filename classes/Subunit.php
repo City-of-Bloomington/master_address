@@ -515,10 +515,7 @@ class Subunit implements ChangeLogInterface
 	public function retire($post,ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('retired');
-		$location = $this->getLocation();
-		if ($location) {
-			$location->saveStatus('retired');
-		}
+		$this->getLocation()->saveStatus('retired');
 		$this->setNotes($post['notes']);
 		$this->save($changeLogEntry);
 	}
@@ -530,9 +527,9 @@ class Subunit implements ChangeLogInterface
 	public function unretire($post,ChangeLogEntry $changeLogEntry)
 	{
 		$this->saveStatus('CURRENT');
-		$location = $this->getLocation();
-		if ($location) {
-			$location->saveStatus('CURRENT');
+		$this->getLocation()->saveStatus('CURRENT');
+		if (!$this->getLocation()->hasActive($this)) {
+			$this->getLocation()->activate($this);
 		}
 		$this->setNotes($post['notes']);
 		$this->save($changeLogEntry);
