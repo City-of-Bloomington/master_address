@@ -67,6 +67,12 @@ class SubunitList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the mast_address_subunits table.
+		if (isset($fields['location_id'])) {
+			$this->select->joinLeft(array('loc'=>'address_location'),
+									's.subunit_id=loc.subunit_id',
+									array());
+			$this->select->where('loc.location_id=?',$fields['location_id']);
+		}
 
 		$this->select->order($order);
 		if ($limit) {

@@ -444,6 +444,20 @@ class Subunit implements ChangeLogInterface
 	}
 
 	/**
+	 * @return LocationList
+	 */
+	public function getLocations(array $fields=null)
+	{
+		if ($this->subunit_id) {
+			$search = array('subunit_id'=>$this->subunit_id);
+			if ($fields) {
+				$search = array_merge($search,$fields);
+			}
+			return new LocationList($search);
+		}
+	}
+
+	/**
 	 * Returns the active location for this subunit.
 	 *
 	 * If we can't find an active location, we return the first of any locations

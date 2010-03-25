@@ -15,14 +15,15 @@ $template->blocks[] = new Block('subunits/breadcrumbs.inc',array('subunit'=>$sub
 $template->blocks[] = new Block('subunits/subunitInfo.inc',array('subunit'=>$subunit));
 
 $template->blocks[] = new Block('subunits/subunitStatusChangeList.inc',
-									array('subunitStatusChangeList'=>$subunit->getStatusChangeList()));
+								array('subunitStatusChangeList'=>$subunit->getStatusChangeList()));
 
 $template->blocks[] = new Block('changeLogs/changeLog.inc',array('target'=>$subunit));
 
-
+$template->blocks['panel-one'][] = new Block('subunits/locationTabs.inc',
+											array('subunit'=>$subunit));
 $template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
-												array('address'=>$address,
-												'subunitList'=>$address->getSubunits()));
+											array('address'=>$address,
+											'subunitList'=>$address->getSubunits()));
 
 echo $template->render();
 

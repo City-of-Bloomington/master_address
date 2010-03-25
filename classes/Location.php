@@ -74,6 +74,23 @@ class Location
 	}
 
 	/**
+	 * Looks up the addresses for this location
+	 *
+	 * @param array $fields
+	 * @return AddressList
+	 */
+	public function getSubunits(array $fields=null)
+	{
+		if ($this->location_id) {
+			$search = array('location_id'=>$this->location_id);
+			if ($fields) {
+				$search = array_merge($search,$fields);
+			}
+			return new SubunitList($search);
+		}
+	}
+
+	/**
 	 * Assigns an address.  Creates a new Location_ID if we don't have one yet
 	 *
 	 * @param Address|Subunit $address
