@@ -164,7 +164,7 @@ from
 	eng.mast_address_subunits@earthgis.world suds,
 	/* Now, the status fields */
 	master_address.mast_address_latest_status@earthgis.world mastatus,
-	eng.mast_address_location_status@earthgis.world locstatus,
+	master_address.latest_location_status@earthgis.world locstatus,
 	master_address.latest_subunit_status@earthgis.world sudstatus,
     eng.mast_address@earthgis.world addr,
     eng.address_location@earthgis.world loc where loc.street_address_id = addr.street_address_id
