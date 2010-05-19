@@ -366,6 +366,14 @@ select location_status_id_seq.nextval into :new.id from dual;
 end;
 /
 
+create view latest_location_status as
+select z.*,s.status_code,l.description from mast_address_location_status s
+left join mast_address_status_lookup l on s.status_code=l.status_code
+right join (
+	select location_id,max(effective_start_date) as effective_start_date
+	from mast_address_location_status group by location_id
+) z on (s.location_id=z.location_id and s.effective_start_date=z.effective_start_date);
+
 
 create table subdivision_master (
 	subdivision_id number not null primary key,
