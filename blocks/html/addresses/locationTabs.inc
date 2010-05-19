@@ -47,17 +47,21 @@ foreach ($this->address->getLocations() as $i=>$location) {
 	";
 			foreach ($location->getAddresses() as $address) {
 				$checked = '';
+				$active = 'N';
 				if ($location->isActive($address)) {
 					$checked = 'checked="checked"';
 					$activeIndex = $i;
+					$active = 'Y';
+				}
+				if (userIsAllowed('Address') && !$this->deactivateButtons) {
+					$active = "<input type=\"radio\" name=\"address_id\"
+								value=\"{$address->getId()}\" $checked
+								onchange=\"activateAddress({$location->getId()},{$address->getId()});\" />";
 				}
 
 				$content.= "
 				<tr><td><a href=\"{$address->getURL()}\">$address</a></td>
-					<td><input type=\"radio\" name=\"address_id\"
-							value=\"{$address->getId()}\" $checked
-							onchange=\"activateAddress({$location->getId()},{$address->getId()});\" />
-					</td>
+					<td>$active</td>
 					<td>{$address->getStatus()}</td>
 					<td>{$address->getJurisdiction()}</td>
 					<td>{$address->getZip()}</td>
