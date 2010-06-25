@@ -250,7 +250,7 @@ create table mast_address (
 	quarter_section char(2),
 	subdivision_id int unsigned,
 	plat_id int unsigned,
-	plat_lot_number int unsigned,
+	plat_lot_number varchar(20),
 	street_address_2 varchar(40),
 	city varchar(20),
 	state varchar(3),
