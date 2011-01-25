@@ -79,8 +79,9 @@ class AddressList extends ZendDbResultIterator
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
 			$fields = self::parseAddress($fields['address']);
-			// We don't support searching for fractions right now
+			// Add Fractions onto the street_number
 			if (isset($fields['fraction'])) {
+				$fields['street_number'].= ' '.$fields['fraction'];
 				unset($fields['fraction']);
 			}
 			unset($fields['address']);
@@ -114,8 +115,9 @@ class AddressList extends ZendDbResultIterator
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
 			$fields = self::parseAddress($fields['address']);
-			// We don't support searching for fractions right now
+			// Add Fractions onto the street_number
 			if (isset($fields['fraction'])) {
+				$fields['street_number'].= ' '.$fields['fraction'];
 				unset($fields['fraction']);
 			}
 			unset($fields['address']);
@@ -338,7 +340,7 @@ class AddressList extends ZendDbResultIterator
 	{
 		$output = array();
 
-		//echo "Starting with $string\n";
+		//echo "Starting with |$string|\n";
 		$address = preg_replace('/[^\w\s\/\-]/',' ',$string);
 		$address = preg_replace('/\s+/',' ',$address);
 
@@ -349,15 +351,15 @@ class AddressList extends ZendDbResultIterator
 				$address = preg_replace("/\d+\/\d+/",'',$address);
 			}
 
-			//echo "Looking for number: $address\n";
+			//echo "Looking for number: |$address|\n";
 			$directionCodePattern = implode('|',self::getDirections());
 			$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern]\s)?)";
 			if (preg_match("/^$numberPattern/i",$address,$matches)) {
 				$output['street_number'] = trim($matches['number']);
-				$address = preg_replace("/^$matches[number]/i",'',$address);
+				$address = trim(preg_replace("/^$matches[number]/i",'',$address));
 			}
 
-			//echo "Looking for Zip: $address\n";
+			//echo "Looking for Zip: |$address|\n";
 			$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
 			if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
 				$output['zip'] = trim($matches['zip']);
@@ -367,20 +369,20 @@ class AddressList extends ZendDbResultIterator
 				$address = trim(preg_replace("/\s$zipPattern$/i",'',$address));
 			}
 
-			//echo "Looking for State: $address\n";
+			//echo "Looking for State: |$address|\n";
 			if (preg_match("/\s(?<state>IN|INDIANA)\b/i",$address,$matches)) {
 				$output['state'] = trim($matches['state']);
 				$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
 			}
 
-			//echo "Looking for city: $address\n";
+			//echo "Looking for city: |$address|\n";
 			$cityPattern = implode('|',self::getCities());
 			if (preg_match("/\s(?<city>$cityPattern)$/i",$address,$matches)) {
 				$output['city'] = trim($matches['city']);
 				$address = trim(preg_replace("/\s$matches[city]$/i",'',$address));
 			}
 
-			//echo "Looking for subunit: $address\n";
+			//echo "Looking for subunit: |$address|\n";
 			$subunitTypePattern = implode('|',array_merge(self::getSubunitTypes(),
 															array_keys(self::getSubunitTypes())));
 			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
@@ -396,7 +398,7 @@ class AddressList extends ZendDbResultIterator
 			}
 		}
 
-		//echo "Looking for Street Name: $address\n";
+		echo "Looking for Street Name: |$address|\n";
 		$fullDirectionPattern = implode('|',array_merge(self::getDirections(),
 														array_keys(self::getDirections())));
 		$streetTypePattern = implode('|',array_merge(self::getStreetTypes(),
