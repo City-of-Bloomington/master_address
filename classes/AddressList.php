@@ -398,7 +398,7 @@ class AddressList extends ZendDbResultIterator
 			}
 		}
 
-		echo "Looking for Street Name: |$address|\n";
+		//echo "Looking for Street Name: |$address|\n";
 		$fullDirectionPattern = implode('|',array_merge(self::getDirections(),
 														array_keys(self::getDirections())));
 		$streetTypePattern = implode('|',array_merge(self::getStreetTypes(),
