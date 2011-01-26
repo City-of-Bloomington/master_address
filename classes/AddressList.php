@@ -117,7 +117,9 @@ class AddressList extends ZendDbResultIterator
 			$fields = self::parseAddress($fields['address']);
 			// Add Fractions onto the street_number
 			if (isset($fields['fraction'])) {
-				$fields['street_number'].= ' '.$fields['fraction'];
+				$fields['street_number'] = isset($fields['street_number'])
+					? "$fields[street_number] $fields[fraction]"
+					: $fields['fraction'];
 				unset($fields['fraction']);
 			}
 			unset($fields['address']);
