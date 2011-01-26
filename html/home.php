@@ -37,10 +37,14 @@ if ($template->outputFormat == 'html') {
 }
 
 if (isset($_REQUEST['queryType'])) {
+	$query = trim($_REQUEST['query']);
+
 	switch ($_REQUEST['queryType']) {
 		case 'address':
 			$addresses = new AddressList();
-			$addresses->search(array('address'=>$_REQUEST['query']));
+			if (strlen($query)>=3) {
+				$addresses->search(array('address'=>$query));
+			}
 
 			if ($template->outputFormat == 'html' && count($addresses) == 1) {
 				$address = $addresses[0];
@@ -53,7 +57,7 @@ if (isset($_REQUEST['queryType'])) {
 			break;
 
 		case 'street':
-			$fields = AddressList::parseAddress($_REQUEST['query'],'streetNameOnly');
+			$fields = AddressList::parseAddress($query,'streetNameOnly');
 			if (count($fields)) {
 				$streets = new StreetList($fields);
 				$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));
