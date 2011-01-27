@@ -5,23 +5,28 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
+$address = View::escape($this->address->getStreetAddress());
+$city = View::escape($this->address->getCity());
+$state = View::escape($this->address->getState());
+$zip = View::escape($this->address->getZip());
+$jurisdiction = View::escape($this->address->getJurisdiction()->getDescription());
 $township = $this->address->getTownship()
 			? View::escape($this->address->getTownship()->getName())
 			: '';
 echo "
 <address>
 	<id>{$this->address->getId()}</id>
-	<streetAddress>{$this->address->getStreetAddress()}</streetAddress>
-	<city>{$this->address->getCity()}</city>
-	<state>{$this->address->getState()}</state>
-	<zip>{$this->address->getZip()}</zip>
+	<streetAddress>$address</streetAddress>
+	<city>$city</city>
+	<state>$state</state>
+	<zip>$zip</zip>
 	<latitude>{$this->address->getLatitude()}</latitude>
 	<longitude>{$this->address->getLongitude()}</longitude>
 	<statePlane>
 		<x>{$this->address->getState_plane_x_coordinate()}</x>
 		<y>{$this->address->getState_plane_y_coordinate()}</y>
 	</statePlane>
-	<jurisdiction>{$this->address->getJurisdiction()->getDescription()}</jurisdiction>
+	<jurisdiction>$jurisdiction</jurisdiction>
 	<township>$township</township>
 	<trashDay>{$this->address->getTrashDay()}</trashDay>
 	<recycleWeek>{$this->address->getRecycleWeek()}</recycleWeek>
@@ -34,7 +39,7 @@ echo "
 			$type = View::escape($purpose->getType());
 			$description = View::escape($purpose->getDescription());
 			echo "
-			<purpose type=\"$type\">$description</purpose>
+			<purpose id=\"{$purpose->getId()}\" type=\"$type\">$description</purpose>
 			";
 		}
 		echo "</purposes>";
@@ -44,10 +49,12 @@ echo "
 	if (count($subunits)) {
 		echo "<subunits>";
 		foreach ($subunits as $subunit) {
+			$type = View::escape($subunit->getType());
+			$identifier = View::escape($subunit->getIdentifier());
 			echo "
 			<subunit id=\"{$subunit->getId()}\">
-				<type>{$subunit->getType()}</type>
-				<identifier>{$subunit->getIdentifier()}</identifier>
+				<type>$type</type>
+				<identifier>$identifier</identifier>
 			</subunit>
 			";
 		}
