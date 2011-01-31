@@ -230,7 +230,17 @@ class Address
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->update('mast_address',$data['a'],"street_address_id='{$this->street_address_id}'");
-		$zend_db->update('mast_address_sanitation',$data['s'],"street_address_id='{$this->street_address_id}'");
+
+		// Addresses might not have data in the Sanitation table yet
+		$query = $zend_db->query('select * from mast_address_sanitation where street_address_id=?',$this->street_address_id);
+		$row = $query->fetch();
+		if ($row) {
+			$zend_db->update('mast_address_sanitation',$data['s'],"street_address_id='{$this->street_address_id}'");
+		}
+		else {
+			$data['s']['street_address_id'] = $this->street_address_id;
+			$zend_db->insert('mast_address_sanitation',$data['s']);
+		}
 	}
 
 	private function insertDB($data)
