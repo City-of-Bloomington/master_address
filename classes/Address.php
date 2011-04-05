@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -51,6 +51,10 @@ class Address
 										"Parcel","Facility","Temporary");
 
 	private static $zipcodes = array();
+
+	/**
+	 * @return array
+	 */
     public static function getZipCodes()
     {
 		if (!self::$zipcodes) {
@@ -64,26 +68,33 @@ class Address
 		return self::$zipcodes;
     }
 
+	/**
+	 * @return array
+	 */
 	public static function getTaxJurisdictions()
 	{
 		$zend_db = Database::getConnection();
 		$sql = "select distinct tax_jurisdiction from mast_address
 				where tax_jurisdiction is not null
 				order by tax_jurisdiction";
-		$result = $zend_db->fetchCol($sql);
-		return $result;
+		return $zend_db->fetchCol($sql);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getSections()
 	{
 		$zend_db = Database::getConnection();
 		$sql = "select distinct section from mast_address
 				where section is not null
 				order by section";
-		$result = $zend_db->fetchCol($sql);
-		return $result;
+		return $zend_db->fetchCol($sql);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getQuarterSections()
 	{
 		return array('NE','NW','SE','SW');
@@ -465,6 +476,7 @@ class Address
 		}
 		return $ret;
 	}
+
 	/**
 	 * @return number
 	 */
@@ -624,6 +636,9 @@ class Address
 		return new SubunitList(array('street_address_id'=>$this->street_address_id));
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getSubunitCount()
 	{
 		$zend_db = Database::getConnection();
@@ -635,7 +650,6 @@ class Address
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param string $string
 	 */
@@ -678,17 +692,22 @@ class Address
 
 	/**
 	 * The real jurisdictions are the Governmental Jurisdictions
-	 * @param number $number
+	 *
+	 * @param int $number
 	 */
 	public function setJurisdiction_id($number)
 	{
 		$this->setGov_jur_id($number);
 	}
 
+	/**
+	 * @param int $number
+	 */
 	public function setGov_jur_id($number)
 	{
-		$this->gov_jur_id = $number;
+		$this->gov_jur_id = (int)$number;
 	}
+
 	/**
 	 * @param int $int
 	 */
@@ -715,27 +734,27 @@ class Address
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $number
 	 */
 	public function setSubdivision_id($number)
 	{
-		$this->subdivision_id = $number;
+		$this->subdivision_id = (int)$number;
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $number
 	 */
 	public function setPlat_id($number)
 	{
-		$this->plat_id = $number;
+		$this->plat_id = (int)$number;
 	}
 
 	/**
-	 * @param number $number
+	 * @param int $number
 	 */
 	public function setPlat_lot_number($number)
 	{
-		$this->plat_lot_number = $number;
+		$this->plat_lot_number = (int)$number;
 	}
 
 	/**
@@ -859,18 +878,9 @@ class Address
 	}
 
 	/**
-	 * @param Street_address $street_address
-	 */
-	public function setStreet_address($street_address)
-	{
-		$this->street_address_id = $street_address->getId();
-		$this->street_address = $street_address;
-	}
-
-	/**
 	 * @param Street $street
 	 */
-	public function setStreet($street)
+	public function setStreet(Street $street)
 	{
 		$this->street_id = $street->getId();
 		$this->street = $street;
@@ -879,7 +889,7 @@ class Address
 	/**
 	 * @param Jurisdiction $jurisdiction
 	 */
-	public function setJurisdiction($jurisdiction)
+	public function setJurisdiction(Jurisdiction $jurisdiction)
 	{
 		$this->gov_jur_id = $jurisdiction->getId();
 		$this->jurisdiction = $jurisdiction;
@@ -888,7 +898,7 @@ class Address
 	/**
 	 * @param Township $township
 	 */
-	public function setTownship($township)
+	public function setTownship(Township $township)
 	{
 		$this->township_id = $township->getId();
 		$this->township = $township;
@@ -897,7 +907,7 @@ class Address
 	/**
 	 * @param Subdivision $subdivision
 	 */
-	public function setSubdivision($subdivision)
+	public function setSubdivision(Subdivision $subdivision)
 	{
 		$this->subdivision_id = $subdivision->getId();
 		$this->subdivision = $subdivision;
@@ -906,7 +916,7 @@ class Address
 	/**
 	 * @param Plat $plat
 	 */
-	public function setPlat($plat)
+	public function setPlat(Plat $plat)
 	{
 		$this->plat_id = $plat->getId();
 		$this->plat = $plat;
