@@ -65,7 +65,7 @@ class AddressList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Populates the collection
+	 * Populates the collection using exact matching
 	 *
 	 * @param array $fields
 	 * @param string|array $order Multi-column sort should be given as an array
@@ -108,6 +108,14 @@ class AddressList extends ZendDbResultIterator
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
+	/**
+	 * Populates the collection using loose matching
+	 *
+	 * @param array $fields
+	 * @param string|array $order Multi-column sort should be given as an array
+	 * @param int $limit
+	 * @param string|array $groupBy Multi-column group by should be given as an array
+	 */
 	public function search($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
 	{
 		$this->createSelection();
@@ -158,6 +166,8 @@ class AddressList extends ZendDbResultIterator
 	 */
 	private function runSelection($order,$limit=null,$groupBy=null)
 	{
+		$order = substr($order,0,2)!='a.' ? 'a.'.$order : $order;
+
 		$this->select->order($order);
 		if ($limit) {
 			$this->select->limit($limit);
@@ -481,6 +491,9 @@ class AddressList extends ZendDbResultIterator
 		return $output;
 	}
 
+	/**
+	 * @return array
+	 */
 	private static function getDirections()
 	{
 		if (!count(self::$directions)) {
@@ -516,6 +529,9 @@ class AddressList extends ZendDbResultIterator
 		return self::$streetTypes;
 	}
 
+	/**
+	 * @return array
+	 */
 	private static function getSubunitTypes()
 	{
 		if (!count(self::$subunitTypes)) {
@@ -528,6 +544,9 @@ class AddressList extends ZendDbResultIterator
 		return self::$subunitTypes;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getCities()
 	{
 		if (!count(self::$cities)) {
