@@ -23,7 +23,7 @@ class AddressList extends ZendDbResultIterator
 							'plat_id','plat_lot_number','street_address_2',
 							'city','state','zip','zipplus4','census_block_fips_code',
 							'state_plane_x_coordinate','state_plane_y_coordinate',
-							'latitude','longitude','notes','numeric_street_number');
+							'notes','numeric_street_number');
 	private static $directions = array();
 	private static $streetTypes = array();
 	private static $subunitTypes = array();
@@ -52,10 +52,26 @@ class AddressList extends ZendDbResultIterator
 	/**
 	 * Creates the base select query that this class uses.
 	 * Both find() and search() will use the same select query.
+	 *
+	 * @param array $fields
 	 */
-	private function createSelection()
+	private function createSelection($fields=null)
 	{
-		$this->select->distinct()->from(array('a'=>'mast_address'));
+		if (isset($fields['latitude']) && isset($fields['longitude'])
+			&& is_numeric($fields['latitude']) && is_numeric($fields['longitude'])) {
+			$fields['latitude'] = (float)$fields['latitude'];
+			$fields['longitude'] = (float)$fields['longitude'];
+			$this->select->distinct()->from(
+				array('a'=>'mast_address'),
+				array(
+					'a.*',
+					'distance'=>"(sqrt(power(($fields[latitude] - latitude),2) + power(($fields[longitude] - longitude),2)))"
+				)
+			);
+		}
+		else {
+			$this->select->distinct()->from(array('a'=>'mast_address'));
+		}
 		$this->select->joinLeft(array('trash'=>'mast_address_sanitation'),
 								'a.street_address_id=trash.street_address_id',
 								array('trash_pickup_day','recycle_week'));
@@ -74,7 +90,7 @@ class AddressList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
 	{
-		$this->createSelection();
+		$this->createSelection($fields);
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
@@ -118,7 +134,7 @@ class AddressList extends ZendDbResultIterator
 	 */
 	public function search($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
 	{
-		$this->createSelection();
+		$this->createSelection($fields);
 
 		// If we pass in an address, we should parse the address string into the fields
 		if (isset($fields['address'])) {
@@ -166,7 +182,9 @@ class AddressList extends ZendDbResultIterator
 	 */
 	private function runSelection($order,$limit=null,$groupBy=null)
 	{
-		$order = substr($order,0,2)!='a.' ? 'a.'.$order : $order;
+		if ($order != 'distance') {
+			$order = substr($order,0,2)!='a.' ? 'a.'.$order : $order;
+		}
 
 		$this->select->order($order);
 		if ($limit) {
@@ -175,6 +193,7 @@ class AddressList extends ZendDbResultIterator
 		if ($groupBy) {
 			$this->select->group($groupBy);
 		}
+		echo $this->select->__toString()."\n";
 		$this->populateList();
 	}
 

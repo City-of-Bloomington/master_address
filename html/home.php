@@ -37,10 +37,9 @@ if ($template->outputFormat == 'html') {
 }
 
 if (isset($_REQUEST['queryType'])) {
-	$query = trim($_REQUEST['query']);
-
 	switch ($_REQUEST['queryType']) {
 		case 'address':
+			$query = trim($_REQUEST['query']);
 			$addresses = new AddressList();
 			if (strlen($query)>=3) {
 				$addresses->search(array('address'=>$query));
@@ -57,11 +56,26 @@ if (isset($_REQUEST['queryType'])) {
 			break;
 
 		case 'street':
+			$query = trim($_REQUEST['query']);
 			$fields = AddressList::parseAddress($query,'streetNameOnly');
 			if (count($fields)) {
 				$streets = new StreetList($fields);
 				$template->blocks[] = new Block('streets/streetList.inc',array('streetList'=>$streets));
 			}
+			break;
+
+		case 'nearest':
+			$list = new AddressList();
+			$list->find(
+				array('latitude'=>$_REQUEST['latitude'],'longitude'=>$_REQUEST['longitude']),
+				'distance',1
+			);
+			#if ($template->outputFormat == 'html' && count($list) == 1) {
+			#	$address = $list[0];
+			#	header('Location: '.$address->getURL());
+			#	exit();
+			#}
+			$template->blocks[] = new Block('addresses/addressList.inc',array('addressList'=>$list));
 			break;
 	}
 }
