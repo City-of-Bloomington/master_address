@@ -193,7 +193,6 @@ class AddressList extends ZendDbResultIterator
 		if ($groupBy) {
 			$this->select->group($groupBy);
 		}
-		echo $this->select->__toString()."\n";
 		$this->populateList();
 	}
 
