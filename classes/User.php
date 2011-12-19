@@ -17,6 +17,14 @@ class User extends SystemUser
 	private $newPassword; // the User's new password, unencrypted
 
 	/**
+	 * @return array
+	 */
+	public static function getAuthenticationmethods()
+	{
+		return array('local','Employee');
+	}
+
+	/**
 	 * @param int|string $id
 	 */
 	public function __construct($id = null)

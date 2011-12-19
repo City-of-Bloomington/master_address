@@ -32,17 +32,18 @@ if (isset($_POST['user'])) {
 	else {
 		// Load their information from LDAP
 		// Delete this statement if you're not using LDAP
-		if ($user->getAuthenticationmethod() == 'LDAP') {
+		if ($user->getAuthenticationmethod() != 'local') {
 			try {
-				$ldap = new LDAPEntry($user->getUsername());
+				$externalIdentity = $user->getAuthenticationmethod();
+				$identity = new $externalIdentity($user->getUsername());
 				try {
-					$person = new Person($ldap->getEmail());
+					$person = new Person($identity->getEmail());
 				}
 				catch (Exception $e) {
 					$person = new Person();
-					$person->setFirstname($ldap->getFirstname());
-					$person->setLastname($ldap->getLastname());
-					$person->setEmail($ldap->getEmail());
+					$person->setFirstname($identity->getFirstname());
+					$person->setLastname($identity->getLastname());
+					$person->setEmail($identity->getEmail());
 					$person->save();
 				}
 				$user->setPerson($person);

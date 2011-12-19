@@ -13,12 +13,14 @@
 		<table>
 			<tr><td><label for="user-authenticationmethod">Authentication</label></td>
 				<td><select name="user[authenticationmethod]" id="user-authenticationmethod">
-						<option <?php if ($this->user->getAuthenticationmethod()=='LDAP') echo "selected=\"selected\""; ?>>
-							LDAP
-						</option>
-						<option <?php if ($this->user->getAuthenticationmethod()=='local') echo "selected=\"selected\""; ?>>
-							local
-						</option>
+					<?php
+						foreach (User::getAuthenticationmethods() as $method) {
+							$selected = $this->user->getAuthenticationmethod()==$method
+								? 'selected="selected"'
+								: '';
+							echo "<option $selected>$method</option>";
+						}
+					?>
 					</select>
 				</td>
 			</tr>
