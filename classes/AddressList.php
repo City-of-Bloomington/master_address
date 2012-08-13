@@ -400,7 +400,7 @@ class AddressList extends ZendDbResultIterator
 			}
 
 			//echo "Looking for State: |$address|\n";
-			if (preg_match("/\s(?<state>IN|INDIANA)\b/i",$address,$matches)) {
+			if (preg_match("/\s(?<state>IN)\b/i",$address,$matches)) {
 				$output['state'] = trim($matches['state']);
 				$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
 			}
