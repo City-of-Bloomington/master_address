@@ -8,21 +8,34 @@
 $township = $this->address->getTownship()
 			? View::escape($this->address->getTownship()->getName())
 			: '';
+$location = $this->address->getLocation();
+$locationType = $location ? $location->getLocationType($this->address) : '';
 $output = [
-	'id'           => $this->address->getId(),
-	'streetAddress'=> $this->address->getStreetAddress(),
-	'city'         => $this->address->getCity(),
-	'state'        => $this->address->getState(),
-	'zip'          => $this->address->getZip(),
-	'jurisdiction' => $this->address->getJurisdiction()->getDescription(),
-	'trashDay'     => $this->address->getTrashDay(),
-	'recycleWeek'  => $this->address->getRecycleWeek(),
-	'censusBlock'  => $this->address->getCensus_block_fips_code(),
-	'latitude'     => $this->address->getLatitude(),
-	'longitude'    => $this->address->getLongitude(),
+	'id'             => $this->address->getId(),
+	'streetAddress'  => $this->address->getStreetAddress(),
+	'city'           => $this->address->getCity(),
+	'state'          => $this->address->getState(),
+	'zip'            => $this->address->getZip(),
+	'status'         => $this->address->getStatus(),
+	'jurisdiction'   => $this->address->getJurisdiction()->getDescription(),
+	'plat'           => $this->address->getPlat(),
+	'lot'            => $this->address->getPlat_lot_number(),
+	'section'        => $this->address->getSection(),
+	'quarter'        => $this->address->getQuarter_section(),
+	'trashDay'       => $this->address->getTrashDay(),
+	'recycleWeek'    => $this->address->getRecycleWeek(),
+	'censusBlock'    => $this->address->getCensus_block_fips_code(),
+	'township'       => $this->address->getTownship(),
+	'latitude'       => $this->address->getLatitude(),
+	'longitude'      => $this->address->getLongitude(),
+	'censusBlock'    => $this->address->getCensus_block_fips_code(),
+	'taxJurisdiction'=> $this->address->getTax_jurisdiction(),
+	'mailable'       => $this->address->getMailable(),
+	'livable'        => $this->address->getLivable(),
+	'active'         => $this->address->isActive() ? 'yes' : 'no',
 	'statePlane' => [ 'x'=>$this->address->getState_plane_x_coordinate(),
 					  'y'=>$this->address->getState_plane_y_coordinate()],
-	'township'     => $township
+	'locationUseType' => $location ? $location->getLocationType($this->address) : '',
 ];
 $purposes = $this->address->getPurposes();
 if (count($purposes)) {

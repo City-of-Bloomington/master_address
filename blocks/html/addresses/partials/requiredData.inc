@@ -1,22 +1,18 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
-$township = $this->address->getTownship()
-			? View::escape($this->address->getTownship()->getName())
-			: '';
-$plat = $this->address->getPlat()
-		? View::escape($this->address->getPlat()->getName())
-		: '';
-$notes = View::escape($this->address->getNotes());
+$township = View::escape($this->address->getTownship());
+$plat     = View::escape($this->address->getPlat());
+$notes    = View::escape($this->address->getNotes());
 
-$typeClass = $this->address->getType() ? '' : 'class="missing"';
+$typeClass         = $this->address->getType()         ? '' : 'class="missing"';
 $jurisdictionClass = $this->address->getJurisdiction() ? '' : 'class="missing"';
-$townshipClass = $township ? '' : 'class="missing"';
-$sectionClass = $this->address->getSection() ? '' : 'class="missing"';
+$sectionClass      = $this->address->getSection()      ? '' : 'class="missing"';
+$townshipClass     = $township                         ? '' : 'class="missing"';
 echo "
 	<tr $typeClass>
 		<th>Address Type</th>
