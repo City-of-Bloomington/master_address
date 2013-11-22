@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET address_id
@@ -9,8 +9,9 @@ $address = new Address($_GET['address_id']);
 
 if (isset($_GET['format'])) {
 	switch ($_GET['format']) {
+		case 'json':
 		case 'xml':
-			$template = new Template('default','xml');
+			$template = new Template('default', $_GET['format']);
 			break;
 		default:
 			$template = new Template('two-column');
@@ -22,23 +23,20 @@ else {
 }
 
 if ($template->outputFormat=='html') {
-	$template->blocks[] = new Block('addresses/breadcrumbs.inc',array('address'=>$address));
+	$template->blocks[] = new Block('addresses/breadcrumbs.inc',['address'=>$address]);
 }
 
-$template->blocks[] = new Block('addresses/addressInfo.inc',array('address'=>$address));
+$template->blocks[] = new Block('addresses/addressInfo.inc',['address'=>$address]);
 
 if ($template->outputFormat=='html') {
-	$template->blocks[] = new Block('addresses/addressStatusChangeList.inc',
-									array('addressStatusChangeList'=>$address->getStatusChangeList()));
+	$template->blocks[] = new Block(
+		'addresses/addressStatusChangeList.inc',
+		['addressStatusChangeList'=>$address->getStatusChangeList()]
+	);
 
-	$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',
-												array('address'=>$address));
-	$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
-												array('address'=>$address,
-													'subunitList'=>$address->getSubunits()));
-	$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc',
-												array('purposeList'=>$address->getPurposes()));
-	$template->blocks['panel-two'][] = new Block('changeLogs/changeLog.inc',
-												array('target'=>$address));
+	$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',['address'=>$address]);
+	$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',  ['address'=>$address, 'subunitList'=>$address->getSubunits()]);
+	$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc', ['purposeList'=>$address->getPurposes()]);
+	$template->blocks['panel-two'][] = new Block('changeLogs/changeLog.inc',  ['target'=>$address]);
 }
 echo $template->render();
