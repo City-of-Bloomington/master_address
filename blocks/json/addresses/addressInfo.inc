@@ -28,7 +28,6 @@ $output = [
 	'township'       => $this->address->getTownship(),
 	'latitude'       => $this->address->getLatitude(),
 	'longitude'      => $this->address->getLongitude(),
-	'censusBlock'    => $this->address->getCensus_block_fips_code(),
 	'taxJurisdiction'=> $this->address->getTax_jurisdiction(),
 	'mailable'       => $this->address->getMailable(),
 	'livable'        => $this->address->getLivable(),
