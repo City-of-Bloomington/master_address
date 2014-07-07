@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$searchFields = array('street_number','direction','street_name','streetType',
-						'postDirection','city','zip','subunitType','subunitIdentifier');
+$searchFields = [
+	'street_number','street_number_suffix',
+	'direction','street_name','streetType','postDirection',
+	'city','zip',
+	'subunitType','subunitIdentifier'
+];
 foreach ($searchFields as $field) {
 	$$field = (isset($_REQUEST[$field]) && $_REQUEST[$field]) ? View::escape($_REQUEST[$field]) : '';
 }
@@ -23,6 +27,7 @@ foreach ($searchFields as $field) {
 	</thead>
 	<tbody>
 	<tr><td><input name="street_number" id="street_number" size="6" value="<?php echo $street_number; ?>" />
+			<input name="street_number_suffix" id="street_number_suffix" size="3" value="<?php echo $street_number_suffix; ?>" />
 		</td>
 		<td><select name="direction" id="direction">
 				<option></option>

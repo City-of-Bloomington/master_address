@@ -28,11 +28,9 @@ function handleUpdateAddress(form) {
 		<?php
 			echo "<table class=\"$status\">";
 			include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredFields.inc';
-			include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredFields.inc';
 
 			$this->locationData = $this->address->getLocation()->getUpdatableData($this->address);
 			include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
-			include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationFields.inc';
 			echo "</table>";
 
 			include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc';

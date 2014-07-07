@@ -18,7 +18,7 @@
 class LocationList extends ZendDbResultIterator
 {
 	private $columns = array('location_id','location_type_id','street_address_id',
-							'subunit_id','mailable_flag','livable_flag','common_name','active');
+							'subunit_id','mailable_flag','livable_flag','active');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *

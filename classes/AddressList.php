@@ -11,19 +11,22 @@
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
  *
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class AddressList extends ZendDbResultIterator
 {
-	private $columns = array('street_address_id','street_number','street_id','address_type',
-							'tax_jurisdiction','jurisdiction_id','gov_jur_id','township_id',
-							'section','quarter_section','subdivision_id',
-							'plat_id','plat_lot_number','street_address_2',
-							'city','state','zip','zipplus4','census_block_fips_code',
-							'state_plane_x_coordinate','state_plane_y_coordinate',
-							'notes','numeric_street_number');
+	private $columns = [
+		'street_address_id','address_type',
+		'street_id', 'street_number', 'street_number_suffix',
+		'jurisdiction_id','gov_jur_id','township_id',
+		'section','quarter_section','subdivision_id',
+		'plat_id','plat_lot_number','street_address_2',
+		'city','state','zip','zipplus4',
+		'state_plane_x_coordinate', 'state_plane_y_coordinate','usng_coordinate',
+		'notes','numeric_street_number'
+	];
 	private static $directions = array();
 	private static $streetTypes = array();
 	private static $subunitTypes = array();
@@ -303,7 +306,7 @@ class AddressList extends ZendDbResultIterator
 		if (isset($fields['subunitIdentifier'])) {
 			$joins['u'] = array('table'=>'mast_address_subunits',
 								'condition'=>'a.street_address_id=u.street_address_id');
-			$this->select->where('u.street_subunit_identifier=?',$fields['subunitIdentifier']);
+			$this->select->where('u.subunit_identifier=?',$fields['subunitIdentifier']);
 		}
 
 		if (isset($fields['subdivision_id'])) {
@@ -362,6 +365,12 @@ class AddressList extends ZendDbResultIterator
 	 *					'state'=>'IN'
 	 *				)
 	 *
+	 * The strategy here is to match parts of the address piecemeal.
+	 * As each part is matched, it is removed from the input string;
+	 * this reduces the complexity for subsequent matches.
+	 * Also, this is generally an outside-in approach.  We try matching
+	 * parts at the beginning and end of the string first.  Then, we
+	 * work our way towards the middle of the string.
 	 *
 	 * @param string $string
 	 * @return array
@@ -371,22 +380,36 @@ class AddressList extends ZendDbResultIterator
 		$output = array();
 
 		//echo "Starting with |$string|\n";
-		$address = preg_replace('/[^\w\s\/\-]/',' ',$string);
-		$address = preg_replace('/\s+/',' ',$address);
+		$address = preg_replace('/[^a-z0-9\-\s\/]/i', '', $string);
+		$address = preg_replace('/\s+/', ' ', $address);
 
 		if ($parseType=='address') {
-			//echo "Looking for fractions: $address\n";
-			if (preg_match("/(?<fraction>\d+\/\d+)/",$address,$matches)) {
-				$output['fraction'] = trim($matches['fraction']);
-				$address = preg_replace("/\d+\/\d+/",'',$address);
-			}
-
 			//echo "Looking for number: |$address|\n";
-			$directionCodePattern = implode('|',self::getDirections());
-			$numberPattern = "(?<number>\d+[\-\s]?(?:[^$directionCodePattern]\s)?)";
-			if (preg_match("/^$numberPattern/i",$address,$matches)) {
+			$fraction = '\d\/\d';
+			$directionCodePattern = implode('', self::getDirections());
+			$numberPattern = "(?<prefix>$fraction\s|[A-Z]\s)?(?<number>\d+)(?<suffix>\s$fraction\s|\-\d+\s|\s[A-Z]\s)?(?<direction>[$directionCodePattern]\s)?";
+
+			if (preg_match("/^$numberPattern/i", $address, $matches)) {
+
+				if (!empty($matches['prefix'])) { $output['street_number_prefix'] = trim($matches['prefix']); }
 				$output['street_number'] = trim($matches['number']);
-				$address = trim(preg_replace("/^$matches[number]/i",'',$address));
+
+				if (!empty($matches['direction'])) {
+					$output['direction'] = trim($matches['direction']);
+					if (!empty($matches['suffix'])) {
+						$output['street_number_suffix'] = trim($matches['suffix']);
+					}
+				}
+				elseif (!empty($matches['suffix'])) {
+					$s = trim($matches['suffix']);
+					if (in_array($s, self::getDirections())) {
+						$output['direction'] = $s;
+					}
+					else {
+						$output['street_number_suffix'] = $s;
+					}
+				}
+				$address = trim(preg_replace("#^$matches[0]#i",'',$address));
 			}
 
 			//echo "Looking for Zip: |$address|\n";
@@ -463,7 +486,8 @@ class AddressList extends ZendDbResultIterator
 					case 'dir':
 					case 'direction':
 						try {
-							$output['direction'] = new Direction($value);
+							$d = new Direction($value);
+							$output['direction'] = $d->getCode();
 						}
 						catch (Exception $e) {
 							// Just ignore anything that's not a known direction
@@ -474,7 +498,8 @@ class AddressList extends ZendDbResultIterator
 					case 'streetType':
 					case 'stype':
 						try {
-							$output['streetType'] = new StreetType($value);
+							$t = new StreetType($value);
+							$output['streetType'] = $t->getCode();
 						}
 						catch (Exception $e) {
 							// Just ignore anything that's not a known street type
@@ -491,7 +516,8 @@ class AddressList extends ZendDbResultIterator
 					case 'postdir':
 					case 'pdir':
 						try {
-							$output['postDirection'] = new Direction($value);
+							$d = new Direction($value);
+							$output['postDirection'] = $d->getCode();
 						}
 						catch (Exception $e) {
 							// Just ignore anything that's not a known direction
@@ -503,8 +529,12 @@ class AddressList extends ZendDbResultIterator
 
 		// Sanity Checking
 		if (!isset($output['street_name']) && isset($output['streetType'])) {
-			$output['street_name'] = $output['streetType']->__toString();
+			$output['street_name'] = $output['streetType'];
 			unset($output['streetType']);
+		}
+		if (!empty($output['street_number_suffix']) && empty($output['street_name'])) {
+			$output['street_name'] = $output['street_number_suffix'];
+			unset($output['street_number_suffix']);
 		}
 		return $output;
 	}

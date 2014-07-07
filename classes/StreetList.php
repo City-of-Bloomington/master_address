@@ -130,20 +130,20 @@ class StreetList extends ZendDbResultIterator
 			if (isset($fields['direction'])) {
 				$joins['n'] = array('table'=>'mast_street_names',
 									'condition'=>'s.street_id=n.street_id');
-				$this->select->where('n.street_direction_code=?',$fields['direction']->getCode());
+				$this->select->where('n.street_direction_code=?',$fields['direction']);
 			}
 
 			if (isset($fields['postDirection'])) {
 				$joins['n'] = array('table'=>'mast_street_names',
 									'condition'=>'s.street_id=n.street_id');
 				$this->select->where('n.post_direction_suffix_code=?',
-										$fields['postDirection']->getCode());
+										$fields['postDirection']);
 			}
 
 			if (isset($fields['streetType'])) {
 				$joins['n'] = array('table'=>'mast_street_names',
 									'condition'=>'s.street_id=n.street_id');
-				$this->select->where('n.street_type_suffix_code=?',$fields['streetType']->getCode());
+				$this->select->where('n.street_type_suffix_code=?',$fields['streetType']);
 			}
 		}
 		return $joins;

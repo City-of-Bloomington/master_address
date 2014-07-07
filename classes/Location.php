@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -195,7 +195,7 @@ class Location
 	}
 
 	/**
-	 * Allows you to set values for mailable,livable,locationType,common_name
+	 * Allows you to set values for mailable,livable,locationType
 	 * @param array $post
 	 * @param Address|Subunit $address
 	 */
@@ -215,9 +215,6 @@ class Location
 					if (in_array($post['livable'],self::$flagValues)) {
 						$data['livable_flag'] = $post['livable'];
 					}
-				}
-				if (isset($post['common_name'])) {
-					$data['common_name'] = $post['common_name'];
 				}
 				if (isset($post['locationType'])) {
 					$locationType = $post['locationType'] instanceof LocationType
@@ -254,7 +251,6 @@ class Location
 		$data['mailable'] = $this->getMailable($address);
 		$data['livable'] = $this->getLivable($address);
 		$data['locationType'] = $this->getLocationType($address);
-		$data['common_name'] = $this->getCommonName($address);
 		return $data;
 	}
 
@@ -445,14 +441,5 @@ class Location
 		if ($type_id) {
 			return new LocationType($type_id);
 		}
-	}
-
-	/**
-	 * @param Address|Subunit $address
-	 * @return string
-	 */
-	public function getCommonName($address)
-	{
-		return $this->fieldLookup('common_name',$address);
 	}
 }

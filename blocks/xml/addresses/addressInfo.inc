@@ -44,8 +44,6 @@ echo "
 	<township>$township</township>
 	<trashDay>{$this->address->getTrashDay()}</trashDay>
 	<recycleWeek>{$this->address->getRecycleWeek()}</recycleWeek>
-	<censusBlock>{$this->address->getCensus_block_fips_code()}</censusBlock>
-	<taxJurisdiction>{$this->address->getTax_jurisdiction()}</taxJurisdiction>
 	<locationUseType>$locationType</locationUseType>
 	<mailable>{$this->address->getMailable()}</mailable>
 	<livable>{$this->address->getLivable()}</livable>
@@ -72,6 +70,12 @@ echo "
 			<subunit id=\"{$subunit->getId()}\">
 				<type>$type</type>
 				<identifier>$identifier</identifier>
+				<latitude>{$subunit->getLatitude()}</latitude>
+				<longitude>{$subunit->getLongitude()}</longitude>
+				<statePlane>
+					<x>{$subunit->getState_plane_x_coordinate()}</x>
+					<y>{$subunit->getState_plane_y_coordinate()}</y>
+				</statePlane>
 			</subunit>
 			";
 		}

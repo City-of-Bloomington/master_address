@@ -302,13 +302,37 @@ select location_purpose_id_s.nextval into :new.location_purpose_id from dual;
 end;
 /
 
+create table contactStatus (
+	id number not null primary key,
+	status varchar2(20) not null
+);
+create sequence contactStatus_id_s nocache;
+create trigger  contactStatus_trigger
+before insert on contactStatus
+for each row
+begin
+select contactStatus_id_s.nextval into :new.id from dual;
+end;
+/
+insert into contactStatus (status) values('Current');
+insert into contactStatus (status) values('Historic');
+
 create table mast_addr_assignment_contact (
 	contact_id number not null primary key,
-	last_name varchar2(30) not null,
-	first_name varchar2(20) not null,
-	contact_type varchar2(20) not null,
-	phone_number varchar2(12) not null,
-	agency varchar2(40) not null
+	last_name    varchar2(30),
+	first_name   varchar2(20),
+	contact_type varchar2(20),
+	phone_number varchar2(12),
+	agency       varchar2(40),
+	email        varchar2(128),
+	address      varchar2(128),
+	city         varchar2(128),
+	state        char(2),
+	zip          varchar2(10),
+	status_id    number not null default 1,
+	notification char(2),
+	coordination char(2),
+	foreign key (status_id) references contactStatus(id)
 );
 create sequence contact_id_s nocache;
 create trigger contact_id_trigger
@@ -326,7 +350,6 @@ create table address_location (
 	subunit_id number,
 	mailable_flag number,
 	livable_flag number,
-	common_name varchar2(100),
 	active char(1) check (active in ('Y','N')),
 	unique (location_id, street_address_id, subunit_id),
 	foreign key (street_address_id) references mast_address (street_address_id),
@@ -426,13 +449,9 @@ end;
 
 create table mast_street (
 	street_id number not null primary key,
-	street_direction_code varchar2(2),
-	post_direction_suffix_code varchar2(2),
 	town_id number,
 	status_code number not null,
 	notes varchar2(240),
-	foreign key (street_direction_code) references mast_street_direction_master(direction_code),
-	foreign key (post_direction_suffix_code) references mast_street_direction_master(direction_code),
 	foreign key (town_id) references towns_master(town_id),
 	foreign key (status_code) references mast_street_status_lookup(status_code)
 );
@@ -505,11 +524,12 @@ create table zipcodes (
 
 create table mast_address (
 	street_address_id number not null primary key,
-	street_number varchar2(20),
+	street_number_prefix varchar2(10),
+	street_number number(10, 0) not null,
+	street_number_suffix varchar2(10),
 	street_id number not null,
 	address_type varchar2(20) not null,
-	tax_jurisdiction char(3),
-	jurisdiction_id number not null,
+	addr_jurisdiction_id number not null,
 	gov_jur_id number not null,
 	township_id number,
 	section varchar2(20),
@@ -522,19 +542,20 @@ create table mast_address (
 	state varchar2(3),
 	zip number,
 	zipplus4 varchar2(6),
-	census_block_fips_code varchar2(20),
 	state_plane_x_coordinate number,
 	state_plane_y_coordinate number,
 	latitude number,
 	longitude number,
+	usng_coordinate varchar2(20),
 	notes varchar2(240),
 	status_code number,
 	numeric_street_number number,
+	constraint unique (street_id, street_number_prefix, street_number, street_number_suffix),
 	foreign key (street_id) references mast_street(street_id),
 	foreign key (quarter_section) references quarter_section_master(quarter_section),
 	foreign key (township_id) references township_master(township_id),
 	foreign key (subdivision_id) references subdivision_master(subdivision_id),
-	foreign key (jurisdiction_id) references addr_jurisdiction_master(jurisdiction_id),
+	foreign key (addr_jurisdiction_id) references addr_jurisdiction_master(jurisdiction_id),
 	foreign key (gov_jur_id) references governmental_jurisdiction_mast(gov_jur_id),
 	foreign key (plat_id) references plat_master(plat_id),
 	foreign key (zip) references zipcodes(zip)
@@ -588,7 +609,12 @@ create table mast_address_subunits (
 	subunit_id number not null primary key,
 	street_address_id number not null,
 	sudtype varchar2(20) not null,
-	street_subunit_identifier varchar2(20) not null,
+	subunit_identifier varchar2(20) not null,
+	state_plane_x_coordinate number,
+	state_plane_y_coordinate number,
+	latitude number,
+	longitude number,
+	usng_coordinate varchar2(20),
 	notes varchar2(240),
 	foreign key references mast_address (street_address_id),
 	foreign key (sudtype) references mast_addr_subunit_types_mast (sudtype)

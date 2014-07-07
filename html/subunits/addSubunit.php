@@ -16,7 +16,7 @@ if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
 
-		$identifiers = explode(',',$_POST['street_subunit_identifier']);
+		$identifiers = explode(',',$_POST['subunit_identifier']);
 		foreach ($identifiers as $identifier) {
 			$identifier = trim($identifier);
 

@@ -1,2 +1,3 @@
 <?php
-	echo $this->includeBlocks();
+header('Content-type: application/json');
+echo $this->includeBlocks();

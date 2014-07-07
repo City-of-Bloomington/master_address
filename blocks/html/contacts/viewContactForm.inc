@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Contact $this->contact
@@ -15,26 +15,26 @@ if (userIsAllowed('Contact')) {
 	</button>
 	";
 }
+$fields = [
+    'last_name', 'first_name', 'contact_type', 'phone_number', 'email',
+    'address', 'city', 'state', 'zip',
+    'notification', 'coordination',
+    'contact_type', 'agency'
+];
+foreach ($fields as $f) {
+    $get = 'get'.ucfirst($f);
+    $$f = View::escape($this->contact->$get());
+}
 ?>
-<h1>Contact Info<?php echo $editButton; ?></h1>
+<h1><?php echo "$first_name $last_name $editButton"; ?></h1>
+<h2><?php echo "($contact_type) $agency"; ?></h2>
+<div>
+    <div><?php echo $address; ?></div>
+    <div><?php echo "$city $state $zip"; ?></div>
+</div>
 <table>
-	<tr><td><label for="contact-last_name" class="required">Last Name</label></td>
-		<td><?php echo View::escape($this->contact->getLast_name()); ?></td>
-	</tr>
-
-	<tr><td><label for="contact-first_name" class="required">First Name</label></td>
-		<td><?php echo View::escape($this->contact->getFirst_name()); ?></td>
-	</tr>
-
-	<tr><td><label for="contact-contact_type" class="required">Type</label></td>
-		<td><?php echo $this->contact->getType(); ?></td>
-	</tr>
-
-	<tr><td><label for="contact-phone_number" class="required">Phone</label></td>
-		<td><?php echo View::escape($this->contact->getPhone_number()); ?></td>
-	</tr>
-
-	<tr><td><label for="contact-agency" class="required">Organization</label></td>
-		<td><?php echo View::escape($this->contact->getAgency()); ?></td>
-	</tr>
+	<tr><th>Email</th>       <td><?php echo "<a href=\"mailto:$email\">$email</a>"; ?></td></tr>
+	<tr><th>Phone</th>       <td><?php echo $phone_number; ?></td></tr>
+	<tr><th>Notification</th><td><?php echo $notification; ?></td></tr>
+	<tr><th>Coordination</th><td><?php echo $coordination; ?></td></tr>
 </table>

@@ -26,6 +26,15 @@ echo "
 	<tr><th>Status</th>
 		<td>{$this->subunit->getStatus()}</td>
 	</tr>
+	<tr><th>State Plane X/Y</th>
+		<td>{$this->subunit->getState_plane_xy_coordinate()}</td>
+	</tr>
+	<tr><th>Lat/Long</th>
+		<td>{$this->subunit->getLatLong()}</td>
+	</tr>
+	<tr><th>USNG</th>
+		<td>{$this->subunit->getUsng_coordinate()}</td>
+	</tr>
 	<tr><th>Location Use Type</th>
 	    <td>$type</td>
 	</tr>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Subunit $this->subunit (optional)
@@ -22,8 +22,8 @@ $subunit = $this->subunit ? $this->subunit : new Subunit();
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="street_subunit_identifier" class="required">Unit</label></td>
-		<td><input name="street_subunit_identifier" id="street_subunit_identifier"
+	<tr><td><label for="subunit_identifier" class="required">Unit</label></td>
+		<td><input name="subunit_identifier" id="subunit_identifier"
 					size="30" maxlength="30"
 					value="<?php echo View::escape($subunit->getIdentifier()); ?>" />
 		</td>

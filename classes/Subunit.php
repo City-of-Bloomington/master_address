@@ -9,7 +9,12 @@ class Subunit implements ChangeLogInterface
 	private $subunit_id;
 	private $street_address_id;
 	private $sudtype;
-	private $street_subunit_identifier;
+	private $subunit_identifier;
+	private $state_plane_x_coordinate;
+	private $state_plane_y_coordinate;
+	private $latitude;
+	private $longitude;
+	private $usng_coordinate;
 	private $notes;
 
 	private $subunitType;
@@ -88,7 +93,7 @@ class Subunit implements ChangeLogInterface
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->street_address_id || !$this->sudtype || !$this->street_subunit_identifier) {
+		if (!$this->street_address_id || !$this->sudtype || !$this->subunit_identifier) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -105,7 +110,7 @@ class Subunit implements ChangeLogInterface
 		$data = array();
 		$data['street_address_id'] = $this->street_address_id;
 		$data['sudtype'] = $this->sudtype;
-		$data['street_subunit_identifier'] = $this->street_subunit_identifier;
+		$data['subunit_identifier'] = $this->subunit_identifier;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->subunit_id) {
@@ -186,9 +191,75 @@ class Subunit implements ChangeLogInterface
 	/**
 	 * @return string
 	 */
-	public function getStreet_subunit_identifier()
+	public function getSubunit_identifier()
 	{
-		return $this->street_subunit_identifier;
+		return $this->subunit_identifier;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getState_plane_x_coordinate()
+	{
+		return $this->state_plane_x_coordinate;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getState_plane_y_coordinate()
+	{
+		return $this->state_plane_y_coordinate;
+	}
+
+	/**
+	 * @return string of pair of numbers
+	 */
+	public function getState_plane_xy_coordinate()
+	{
+		$ret =  $this->state_plane_x_coordinate;
+		if($this->state_plane_y_coordinate){
+		    if($ret) $ret .=', ';
+		    $ret .= $this->state_plane_y_coordinate;
+		}
+		return $ret;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getLatitude()
+	{
+		return $this->latitude;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getLongitude()
+	{
+		return $this->longitude;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getLatLong()
+	{
+	    $ret = $this->latitude;
+	    if($this->longitude){
+		    $ret .=', ';
+		    $ret .= $this->longitude;
+	    }
+	    return $ret;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUsng_coordinate()
+	{
+		return $this->usng_coordinate;
 	}
 
 	/**
@@ -245,9 +316,9 @@ class Subunit implements ChangeLogInterface
 	/**
 	 * @param string $string
 	 */
-	public function setStreet_subunit_identifier($string)
+	public function setSubunit_identifier($string)
 	{
-		$this->street_subunit_identifier = strtoupper(trim($string));
+		$this->subunit_identifier = strtoupper(trim($string));
 	}
 
 	/**
@@ -301,22 +372,22 @@ class Subunit implements ChangeLogInterface
 	}
 
 	/**
-	 * Alias for getStreet_subunit_identifier()
+	 * Alias for getSubunit_identifier()
 	 *
 	 * @return string
 	 */
 	public function getIdentifier()
 	{
-		return $this->getStreet_subunit_identifier();
+		return $this->getSubunit_identifier();
 	}
 
 	/**
-	 * Alias for setStreet_subunit_identifier()
+	 * Alias for setSubunit_identifier()
 	 * @param string $string
 	 */
 	public function setIdentifier($string)
 	{
-		$this->setStreet_subunit_identifier($string);
+		$this->setSubunit_identifier($string);
 	}
 
 	/**
@@ -496,7 +567,7 @@ class Subunit implements ChangeLogInterface
 	public function correct($post,ChangeLogEntry $changeLogEntry)
 	{
 		$this->setSudType($post['sudtype']);
-		$this->setIdentifier($post['street_subunit_identifier']);
+		$this->setIdentifier($post['subunit_identifier']);
 		$this->setNotes($post['notes']);
 		$this->save($changeLogEntry);
 

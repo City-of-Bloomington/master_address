@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
@@ -12,9 +12,19 @@ if ($this->address->getStreet()) {
 	$name = View::escape($this->address->getStreet()->getStreetName());
 }
 ?>
+	<tr><td><label for="street_number_prefix">Prefix</label></td>
+		<td><input name="street_number_prefix" id="street_number_prefix" size="3"
+					value="<?php echo View::escape($this->address->getStreet_number_prefix()); ?>" />
+		</td>
+	</tr>
 	<tr><td><label for="street_number" class="required">Number</label></td>
-		<td><input name="street_number" id="street_number"
-						value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
+		<td><input name="street_number" id="street_number" size="8"
+					value="<?php echo View::escape($this->address->getStreet_number()); ?>" />
+		</td>
+	</tr>
+	<tr><td><label for="street_number_suffix">Suffix</label></td>
+		<td><input name="street_number_suffix" id="street_number_suffix" size="3"
+					value="<?php echo View::escape($this->address->getStreet_number_suffix()); ?>" />
 		</td>
 	</tr>
 	<tr><td><label for="street_id" class="required">Street</label></td>

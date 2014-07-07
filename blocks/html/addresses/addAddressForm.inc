@@ -48,9 +48,7 @@ function handleAddAddress(form) {
 			</td>
 			<td><table>
 					<?php
-						include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredFields.inc';
 						include APPLICATION_HOME.'/blocks/html/locations/partials/locationFields.inc';
-						include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationFields.inc';
 					?>
 					<tr><td><label for="notes">Notes</label></td>
 						<td><textarea name="notes" id="notes" rows="3" cols="50"><?php echo View::escape($this->address->getNotes()); ?></textarea>

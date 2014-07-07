@@ -6,13 +6,7 @@
  */
 class Street
 {
-	// The direction and post-direction in this table are bad data.
-	// They are left over from long ago.
-	// The direction and post-direction for a street should come from whatever
-	// StreetName is being used for that street.
 	private $street_id;
-	private $street_direction_code;			// Unused - see StreetName class
-	private $post_direction_suffix_code;	// Unused - see StreetName class
 	private $town_id;
 	private $status_code;
 	private $notes;

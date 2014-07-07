@@ -24,11 +24,9 @@ $output = [
 	'quarter'        => $this->address->getQuarter_section(),
 	'trashDay'       => $this->address->getTrashDay(),
 	'recycleWeek'    => $this->address->getRecycleWeek(),
-	'censusBlock'    => $this->address->getCensus_block_fips_code(),
 	'township'       => $this->address->getTownship(),
 	'latitude'       => $this->address->getLatitude(),
 	'longitude'      => $this->address->getLongitude(),
-	'taxJurisdiction'=> $this->address->getTax_jurisdiction(),
 	'mailable'       => $this->address->getMailable(),
 	'livable'        => $this->address->getLivable(),
 	'active'         => $this->address->isActive() ? 'yes' : 'no',
@@ -53,7 +51,14 @@ if (count($subunits)) {
 	foreach ($subunits as $subunit) {
 		$s[] = ['id'        => $subunit->getId(),
 				'type'      => $subunit->getType(),
-				'identifier'=> $subunit->getIdentifier()];
+				'identifier'=> $subunit->getIdentifier(),
+				'latitude'  => $subunit->getLatitude(),
+				'longitude' => $subunit->getLongitude(),
+				'statePlane' => [
+					'x' => $subunit->getState_plane_x_coordinate(),
+					'y' => $subunit->getState_plane_y_coordinate()
+				]
+		];
 	}
 	$output['subunits'] = $s;
 }

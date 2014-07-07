@@ -24,16 +24,4 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->address
  */
-$parts = array(
-	'street_number','fraction','direction','street_name','postDirection','streetType',
-	'subunitType','subunitIdentifier',
-	'city','state','zip','zipplus4'
-);
-
-$address = array();
-foreach ($parts as $part) {
-	if (isset($this->address[$part])) {
-		$address[$part] = "{$this->address[$part]}";
-	}
-}
-echo json_encode($address);
+echo json_encode($this->address);

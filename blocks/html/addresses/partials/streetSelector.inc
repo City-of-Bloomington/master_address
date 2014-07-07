@@ -32,20 +32,22 @@ function setStreet(id,name) {
 	streetSelector.hide();
 }
 var updateStreetSelectorResults = function(o) {
-	document.getElementById('streetSelectorResults').innerHTML = '';
-	var result = YAHOO.lang.JSON.parse(o.responseText);
-	var list = document.createElement('ul');
-	for (i in result.streets) {
-		var id = result.streets[i].id;
-		var name = result.streets[i].name;
+	var result = YAHOO.lang.JSON.parse(o.responseText),
+		list = document.createElement('ul');
 
-		var a = document.createElement('a');
-		a.appendChild(document.createTextNode(name));
+	document.getElementById('streetSelectorResults').innerHTML = '';
+
+	for (i in result.streets) {
+		var id   = result.streets[i].id,
+			name = result.streets[i].name,
+			town = result.streets[i].town,
+			a  = document.createElement('a'),
+			li = document.createElement('li');
+
+		a.appendChild(document.createTextNode(name + ', ' + town));
 		a.setAttribute('onclick',"setStreet(" + id + ",'" + name + "');");
 
-		var li = document.createElement('li');
 		li.appendChild(a);
-
 		list.appendChild(li);
 	}
 	document.getElementById('streetSelectorResults').appendChild(list);

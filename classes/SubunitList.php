@@ -11,14 +11,14 @@
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
  *
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class SubunitList extends ZendDbResultIterator
 {
 	private $columns = array('subunit_id','street_address_id','sudtype',
-							'street_subunit_identifier','notes');
+							'subunit_identifier','notes');
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -47,7 +47,7 @@ class SubunitList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='street_subunit_identifier',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='subunit_identifier',$limit=null,$groupBy=null)
 	{
 		$this->select->from(array('s'=>'mast_address_subunits'));
 		$this->select->joinLeft(array('l'=>'latest_subunit_status'),

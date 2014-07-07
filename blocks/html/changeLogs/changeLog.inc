@@ -48,6 +48,7 @@ echo "
 			$logEntry = new ChangeLogEntry($row);
 			$username = $logEntry->getUser()->getUsername();
 			$notes = View::escape($logEntry->notes);
+			$contact = $logEntry->getContact();
 			echo "
 			<tr><td>{$logEntry->action_date}</td>
 				<td>
@@ -60,8 +61,10 @@ echo "
 				</td>
 				<td>{$logEntry->action}</td>
 				<td>$username</td>
-				<td>{$logEntry->getContact()->getFirstname()}
-					{$logEntry->getContact()->getLastname()}
+				<td><a href=\"".BASE_URL."/contacts/viewContact.php?contact_id={$contact->getId()}\">
+					{$contact->getFirstname()}
+					{$contact->getLastname()}
+					</a>
 				</td>
 				<td>$notes</td>
 			</tr>

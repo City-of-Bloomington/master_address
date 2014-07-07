@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
@@ -12,12 +12,9 @@ echo "
 		</td>
 	</tr>
 	<tr><th>Lat/Long</th>
-		<td>{$this->address->getLatitude()},{$this->address->getLongitude()}</td>
+		<td>{$this->address->getLatitude()}, {$this->address->getLongitude()}</td>
 	</tr>
-        <tr><th>Census Block</th>
-		<td>{$this->address->getCensus_block_fips_code()}</td>
-	</tr>
-	<tr><th>Tax Jurisdiction</th>
-		<td>{$this->address->getTax_jurisdiction()}</td>
+	<tr><th>USNG</th>
+		<td>{$this->address->getUsng_coordinate()}</td>
 	</tr>
 ";

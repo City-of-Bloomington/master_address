@@ -1,17 +1,18 @@
 <?php
 /**
- * @copyright 2009-2011 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class Address
 {
 	private $street_address_id;
+	private $street_number_prefix;
 	private $street_number;
+	private $street_number_suffix;
 	private $street_id;
 	private $address_type;
-	private $tax_jurisdiction;
-	private $jurisdiction_id;	// jurisdiction_id is unused
+	private $addr_jurisdiction_id;	// addr_jurisdiction_id is unused
 	private $gov_jur_id;		// This is the real jurisdiction
 	private $township_id;
 	private $section;
@@ -24,11 +25,11 @@ class Address
 	private $state;
 	private $zip;
 	private $zipplus4;
-	private $census_block_fips_code;
 	private $state_plane_x_coordinate;
 	private $state_plane_y_coordinate;
 	private $latitude;
 	private $longitude;
+	private $usng_coordinate;
 	private $notes;
 	private $numeric_street_number;
 
@@ -67,18 +68,6 @@ class Address
 		}
 		return self::$zipcodes;
     }
-
-	/**
-	 * @return array
-	 */
-	public static function getTaxJurisdictions()
-	{
-		$zend_db = Database::getConnection();
-		$sql = "select distinct tax_jurisdiction from mast_address
-				where tax_jurisdiction is not null
-				order by tax_jurisdiction";
-		return $zend_db->fetchCol($sql);
-	}
 
 	/**
 	 * @return array
@@ -133,7 +122,7 @@ class Address
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = "select a.*,trash_pickup_day,recycle_week,l.status_code,l.description
+				$sql = "select a.*, s.trash_pickup_day, s.recycle_week, l.status_code, l.description
 						from mast_address a
 						left join mast_address_sanitation s on a.street_address_id=s.street_address_id
 						left join mast_address_latest_status l on a.street_address_id=l.street_address_id
@@ -183,8 +172,13 @@ class Address
 
 		// Make sure this is not a duplicate address
 		$zend_db = Database::getConnection();
-		$sql = 'select count(*) from mast_address where street_number=? and street_id=?';
-		$count = $zend_db->fetchOne($sql,array($this->street_number,$this->street_id));
+		$sql = "select count(*) from mast_address
+				where street_id=?
+				  and street_number_prefix=? and street_number=? and street_number_suffix=?";
+		$count = $zend_db->fetchOne($sql, [
+			$this->street_id,
+			$this->street_number_prefix, $this->street_number, $this->street_number_suffix
+		]);
 		if ((!$this->street_address_id && $count) || $count>1) {
 			throw new Exception('addresses/duplicateAddress');
 		}
@@ -200,11 +194,11 @@ class Address
 		$this->validate();
 
 		$data = array();
+		$data['a']['street_number_prefix'] = $this->street_number_prefix ? $this->street_number_prefix : null;
 		$data['a']['street_number'] = $this->street_number;
+		$data['a']['street_number_suffix'] = $this->street_number_suffix ? $this->street_number_suffix : null;
 		$data['a']['street_id'] = $this->street_id;
 		$data['a']['address_type'] = $this->address_type;
-		$data['a']['tax_jurisdiction'] = $this->tax_jurisdiction ? $this->tax_jurisdiction : null;
-		$data['a']['jurisdiction_id'] = $this->gov_jur_id;
 		$data['a']['gov_jur_id'] = $this->gov_jur_id;
 		$data['a']['township_id'] = $this->township_id;
 		$data['a']['section'] = $this->section;
@@ -217,15 +211,8 @@ class Address
 		$data['a']['state'] = $this->state ? $this->state : null;
 		$data['a']['zip'] = $this->zip;
 		$data['a']['zipplus4'] = $this->zipplus4 ? $this->zipplus4 : null;
-		$data['a']['census_block_fips_code'] = $this->census_block_fips_code ? $this->census_block_fips_code : null;
-		$data['a']['state_plane_x_coordinate'] = $this->state_plane_x_coordinate ? $this->state_plane_x_coordinate : null;
-		$data['a']['state_plane_y_coordinate'] = $this->state_plane_y_coordinate ? $this->state_plane_y_coordinate : null;
-		$data['a']['latitude'] = $this->latitude ? $this->latitude : null;
-		$data['a']['longitude'] = $this->longitude ? $this->longitude : null;
 		$data['a']['notes'] = $this->notes ? $this->notes : null;
 		$data['a']['numeric_street_number'] = $this->numeric_street_number;
-		$data['s']['trash_pickup_day'] = $this->trash_pickup_day ? $this->trash_pickup_day : null;
-		$data['s']['recycle_week'] = $this->recycle_week ? $this->recycle_week : null;
 
 		if ($this->street_address_id) {
 			$this->updateDB($data);
@@ -241,17 +228,6 @@ class Address
 	{
 		$zend_db = Database::getConnection();
 		$zend_db->update('mast_address',$data['a'],"street_address_id='{$this->street_address_id}'");
-
-		// Addresses might not have data in the Sanitation table yet
-		$query = $zend_db->query('select * from mast_address_sanitation where street_address_id=?',$this->street_address_id);
-		$row = $query->fetch();
-		if ($row) {
-			$zend_db->update('mast_address_sanitation',$data['s'],"street_address_id='{$this->street_address_id}'");
-		}
-		else {
-			$data['s']['street_address_id'] = $this->street_address_id;
-			$zend_db->insert('mast_address_sanitation',$data['s']);
-		}
 	}
 
 	private function insertDB($data)
@@ -264,9 +240,6 @@ class Address
 		else{
 		     $this->street_address_id = $zend_db->lastInsertId('mast_address','street_address_id');
 		}
-
-		$data['s']['street_address_id'] = $this->street_address_id;
-		$zend_db->insert('mast_address_sanitation',$data['s']);
 	}
 
 	//----------------------------------------------------------------
@@ -293,9 +266,25 @@ class Address
 	/**
 	 * @return string
 	 */
+	public function getStreet_number_prefix()
+	{
+		return $this->street_number_prefix;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getStreet_number()
 	{
 		return $this->street_number;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStreet_number_suffix()
+	{
+		return $this->street_number_suffix;
 	}
 
 	/**
@@ -312,14 +301,6 @@ class Address
 	public function getAddress_type()
 	{
 		return $this->address_type;
-	}
-
-	/**
-	 * @return char
-	 */
-	public function getTax_jurisdiction()
-	{
-		return $this->tax_jurisdiction;
 	}
 
 	/**
@@ -441,14 +422,6 @@ class Address
 		return $ret;
 	}
 	/**
-	 * @return string
-	 */
-	public function getCensus_block_fips_code()
-	{
-		return $this->census_block_fips_code;
-	}
-
-	/**
 	 * @return number
 	 */
 	public function getState_plane_x_coordinate()
@@ -504,6 +477,14 @@ class Address
 		    $ret .= $this->longitude;
 	    }
 	    return $ret;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUsng_coordinate()
+	{
+		return $this->usng_coordinate;
 	}
 
 	/**
@@ -650,13 +631,21 @@ class Address
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
+	public function setStreet_number_prefix($string)
+	{
+		$this->street_number_prefix = strtoupper(trim($string));
+	}
 	/**
 	 * @param string $string
 	 */
-	public function setStreet_number($string)
+	public function setStreet_number($int)
 	{
-		$this->numeric_street_number = (int)$string;
-		$this->street_number = strtoupper(trim($string));
+		$this->street_number = (int)$int;
+	}
+
+	public function setStreet_number_suffix($string)
+	{
+		$this->street_number_suffix = strtoupper(trim($string));
 	}
 
 	/**
@@ -680,14 +669,6 @@ class Address
 	public function setAddress_type($string)
 	{
 		$this->address_type = trim($string);
-	}
-
-	/**
-	 * @param char $char
-	 */
-	public function setTax_jurisdiction($char)
-	{
-		$this->tax_jurisdiction = strtoupper($char);
 	}
 
 	/**
@@ -804,77 +785,9 @@ class Address
 	/**
 	 * @param string $string
 	 */
-	public function setCensus_block_fips_code($string)
-	{
-		$this->census_block_fips_code = strtoupper(trim($string));
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setState_plane_x_coordinate($number)
-	{
-		$this->state_plane_x_coordinate = (int)$number;
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setState_plane_y_coordinate($number)
-	{
-		$this->state_plane_y_coordinate = (int)$number;
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setLatitude($number)
-	{
-		$this->latitude = (float)$number;
-	}
-
-	/**
-	 * @param number $number
-	 */
-	public function setLongitude($number)
-	{
-		$this->longitude = (float)$number;
-	}
-
-	/**
-	 * @param string $string
-	 */
 	public function setNotes($string)
 	{
 		$this->notes = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setTrash_pickup_day($string)
-	{
-		$string = trim($string);
-		if (in_array($string,self::getTrashDays())) {
-			$this->trash_pickup_day = $string;
-		}
-		else {
-			$this->trash_pickup_day = null;
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setRecycle_week($string)
-	{
-		$string = trim($string);
-		if (in_array($string,self::getRecycleWeeks())) {
-			$this->recycle_week = $string;
-		}
-		else {
-			$this->recycle_week = null;
-		}
 	}
 
 	/**
@@ -955,7 +868,12 @@ class Address
 	 */
 	public function getStreetAddress()
 	{
-		return "{$this->getStreet_number()} {$this->getStreet()->getStreetName()}";
+		$number = [];
+		if ($this->street_number_prefix) { $number[] = $this->street_number_prefix; }
+		$number[] = $this->street_number;
+		if ($this->street_number_suffix) { $number[] = $this->street_number_suffix; }
+		$number = implode(' ', $number);
+		return "$number {$this->getStreet()->getStreetName()}";
 	}
 
 	/**
@@ -1218,11 +1136,8 @@ class Address
 	{
 		// These are the fields that are allowed to be set during a correction
 		$fields = array('address_type','plat_id','plat_lot_number',
-						'trash_pickup_day','recycle_week','jurisdiction_id',
-						'township_id','section','quarter_section',
-						'census_block_fips_code','tax_jurisdiction',
-						'latitude','longitude',
-						'state_plane_x_coordinate','state_plane_y_coordinate','notes');
+						'jurisdiction_id',
+						'township_id','section','quarter_section','notes');
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
 				$set = 'set'.ucfirst($field);
@@ -1252,7 +1167,10 @@ class Address
 	 */
 	public function correct($post,ChangeLogEntry $changeLogEntry)
 	{
-		$fields = array('street_id','street_number','zip','zipplus4','notes');
+		$fields = [
+			'street_id', 'street_number_prefix', 'street_number','street_number_suffix',
+			'zip','zipplus4','notes'
+		];
 
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
@@ -1275,15 +1193,14 @@ class Address
 	 */
 	public function readdress($post,ChangeLogEntry $changeLogEntry)
 	{
-		$street_id = $post['street_id'];
-		$street_number = $post['street_number'];
-		$notes = $post['notes'];
+		$fields = ['street_id', 'street_number_prefix', 'street_number', 'street_number_suffix', 'notes'];
 
 		// Create the new address
 		$newAddress = clone($this);
-		$newAddress->setStreet_id($street_id);
-		$newAddress->setStreet_number($street_number);
-		$newAddress->setNotes($notes);
+		foreach ($fields as $f) {
+			$set = 'set'.ucfirst($f);
+			$newAddress->$set($post[$f]);
+		}
 		$newAddress->save($changeLogEntry);
 		$newAddress->saveStatus('CURRENT');
 
@@ -1411,12 +1328,10 @@ class Address
 		}
 
 		$address = new Address();
-		$fields = array('street_id','street_number',
-						'address_type','tax_jurisdiction','jurisdiction_id','township_id',
+		$fields = array('street_id','street_number_prefix','street_number','street_number_suffix',
+						'address_type','jurisdiction_id','township_id',
 						'section','quarter_section','subdivision_id','plat_id','plat_lot_number',
-						'street_address_2','city','state','zip','zipplus4',
-						'latitude','longitude','state_plane_x_coordinate','state_plane_y_coordinate',
-						'census_block_fips_code','notes');
+						'street_address_2','city','state','zip','zipplus4','notes');
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
 				$set = 'set'.ucfirst($field);

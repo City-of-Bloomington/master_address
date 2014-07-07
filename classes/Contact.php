@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -12,8 +12,58 @@ class Contact implements ChangeLogInterface
 	private $contact_type;
 	private $phone_number;
 	private $agency;
+	private $email;
+	private $address;
+	private $city;
+	private $state;
+	private $zip;
+	private $notification;
+	private $coordination;
+	private $status_id;
 
-	private static $types;
+	private $status;
+
+	private static $types = [
+		'Address Coordinator', 'CBU', 'Developer', 'E911 Administrator', 'Emergency Services',
+		'GIS', 'Government Agency', 'Property Owner', 'Utility Provider'
+	];
+	private static $statuses;
+
+    /**
+     * Returns the list of valid types for contacts
+     *
+     * @return array
+     */
+    public static function getTypes()
+    {
+        if (!self::$types) {
+			// I've preset the current list of type, so we can avoid this
+			// extra database call.
+            $sql = 'select distinct contact_type from mast_addr_assignment_contact order by contact_type';
+            $zend_db = Database::getConnection();
+            self::$types = $zend_db->fetchCol($sql);
+        }
+        return self::$types;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses()
+    {
+        if (!self::$statuses) {
+            $sql = 'select * from eng.contactstatus';
+            $zend_db = Database::getConnection();
+            $result = $zend_db->fetchAll($sql);
+            foreach ($result as $row) {
+                self::$statuses[] = new ContactStatus($row);
+            }
+        }
+        return self::$statuses;
+    }
+
+    public static function getNotificationValues() { return ['Y']; }
+    public static function getCoordinationValues() { return ['Y', 'CC']; }
 
 	/**
 	 * Populates the object with data
@@ -53,6 +103,7 @@ class Contact implements ChangeLogInterface
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->setStatus(new ContactStatus('Current'));
 		}
 	}
 
@@ -81,11 +132,19 @@ class Contact implements ChangeLogInterface
 		$this->validate();
 
 		$data = array();
-		$data['last_name'] = $this->last_name;
-		$data['first_name'] = $this->first_name;
+		$data['last_name']    = $this->last_name;
+		$data['first_name']   = $this->first_name;
 		$data['contact_type'] = $this->contact_type;
 		$data['phone_number'] = $this->phone_number;
-		$data['agency'] = $this->agency;
+		$data['agency']       = $this->agency;
+        $data['status_id']    = $this->status_id;
+        $data['email']        = $this->email        ? $this->email        : null;
+        $data['address']      = $this->address      ? $this->address      : null;
+        $data['city']         = $this->city         ? $this->city         : null;
+        $data['state']        = $this->state        ? $this->state        : null;
+        $data['zip']          = $this->zip          ? $this->zip          : null;
+        $data['notification'] = $this->notification ? $this->notification : null;
+        $data['coordination'] = $this->coordination ? $this->coordination : null;
 
 		if ($this->contact_id) {
 			$this->update($data);
@@ -121,101 +180,74 @@ class Contact implements ChangeLogInterface
 	 *
 	 * @return int
 	 */
-	public function getId()
-	{
-		return $this->getContact_id();
-	}
+	public function getId() { return $this->getContact_id(); }
 
-	/**
-	 * @return int
-	 */
-	public function getContact_id()
-	{
-		return $this->contact_id;
-	}
+	public function getContact_id()   { return $this->contact_id; }
+	public function getLast_name()    { return $this->last_name; }
+	public function getFirst_name()   { return $this->first_name; }
+	public function getContact_type() { return $this->contact_type; }
+	public function getPhone_number() { return $this->phone_number; }
+	public function getAgency()       { return $this->agency; }
+	public function getEmail()        { return $this->email; }
+	public function getAddress()      { return $this->address; }
+	public function getCity()         { return $this->city; }
+	public function getState()        { return $this->state; }
+	public function getZip()          { return $this->zip; }
+	public function getNotification() { return $this->notification; }
+	public function getCoordination() { return $this->coordination; }
 
-	/**
-	 * @return string
-	 */
-	public function getLast_name()
-	{
-		return $this->last_name;
-	}
+    public function getStatus_id() { return $this->status_id; }
+    public function getStatus()
+    {
+        if (!$this->status) {
+            $this->status = new ContactStatus($this->status_id);
+        }
+        return $this->status;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getFirst_name()
-	{
-		return $this->first_name;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getContact_type()
-	{
-		return $this->contact_type;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPhone_number()
-	{
-		return $this->phone_number;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getAgency()
-	{
-		return $this->agency;
-	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
+	public function setLast_name   ($s) { $this->last_name    = trim($s); }
+	public function setFirst_name  ($s) { $this->first_name   = trim($s); }
+	public function setContact_type($s) { $this->contact_type = trim($s); }
+	public function setPhone_number($s) { $this->phone_number = strtoupper(trim($s)); }
+	public function setAgency      ($s) { $this->agency       = trim($s); }
+	public function setEmail       ($s) { $this->email        = trim($s); }
+	public function setAddress     ($s) { $this->address      = trim($s); }
+	public function setCity        ($s) { $this->city         = trim($s); }
+	public function setState       ($s) { $this->state        = trim($s); }
+	public function setZip         ($s) { $this->zip          = trim($s); }
+	public function setNotification($s) { $this->notification = $s ? trim($s) : null; }
+	public function setCoordination($s) { $this->coordination = $s ? trim($s) : null; }
 
-	/**
-	 * @param string $string
-	 */
-	public function setLast_name($string)
-	{
-		$this->last_name = trim($string);
+	public function setStatus($s) {
+        if ($s instanceof ContactStatus) {
+            $this->status_id = $s->getId();
+            $this->status = $s;
+        }
+        else {
+            $this->status = new ContactStatus($s);
+            $this->status_id = $this->status->getId();
+        }
 	}
 
 	/**
-	 * @param string $string
+	 * @param array $post The POST array
 	 */
-	public function setFirst_name($string)
+	public function handleUpdate($post)
 	{
-		$this->first_name = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setContact_type($string)
-	{
-		$this->contact_type = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setPhone_number($string)
-	{
-		$this->phone_number = strtoupper(trim($string));
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setAgency($string)
-	{
-		$this->agency = trim($string);
+		$fields = [
+			'status', 'contact_type', 'agency',
+			'last_name', 'first_name', 'email', 'phone_number',
+			'address', 'city', 'state', 'zip',
+			'notification', 'coordination'
+		];
+		foreach ($fields as $f) {
+			$set = 'set'.ucfirst($f);
+			$this->$set($post[$f]);
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -240,21 +272,6 @@ class Contact implements ChangeLogInterface
 	public function getFirstname()
 	{
 		return $this->getFirst_name();
-	}
-
-	/**
-	 * Returns the list of valid types for contacts
-	 *
-	 * @return array
-	 */
-	public static function getTypes()
-	{
-		if (!self::$types) {
-			$sql = 'select distinct contact_type from mast_addr_assignment_contact order by contact_type';
-			$zend_db = Database::getConnection();
-			self::$types = $zend_db->fetchCol($sql);
-		}
-		return self::$types;
 	}
 
 	/**

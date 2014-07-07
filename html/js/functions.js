@@ -32,7 +32,7 @@ FRAMEWORK.getChangeLog = function (form,action,BASE_URL)
 					{text:"Add Contact",handler:openAddContactForm}]
 		});
 	function openAddContactForm() {
-		window.open(BASE_URL + '/contacts/addContact.php');
+		window.open(BASE_URL + '/contacts/updateContact.php');
 	}
 	changeLogForm.setHeader('Activity Log Entry');
 	changeLogForm.setBody("<div><label for=\"changeLogEntry-action\">Action:</label>" + action +

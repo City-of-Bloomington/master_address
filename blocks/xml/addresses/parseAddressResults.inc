@@ -24,17 +24,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->address
  */
-$parts = array(
-	'street_number','fraction','direction','street_name','postDirection','streetType',
-	'subunitType','subunitIdentifier',
-	'city','state','zip','zipplus4'
-);
-
 echo "<address>";
-foreach ($parts as $part) {
-	if (isset($this->address[$part])) {
-		$text = View::escape($this->address[$part]);
-		echo "<$part>$text</$part>";
-	}
+foreach ($this->address as $key=>$value) {
+	$value = View::escape($value);
+	echo "<$key>$value</$key>";
 }
 echo "</address>";
