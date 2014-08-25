@@ -31,7 +31,10 @@ class AddressParserTest extends PHPUnit_Framework_TestCase
 			['A 410 1/2 W 4th',  ['street_number_prefix'=>'A',   'street_number'=>410, 'direction'=>'W', 'street_name'=>'4th', 'street_number_suffix'=>'1/2']],
 			['201   N   Morton', ['street_number'=>201, 'direction'=>'N', 'street_name'=>'Morton']],
 			['123 5th St, Bloomington, In, 47403', ['street_number'=>123, 'street_name'=>'5th', 'streetType'=>'ST', 'city'=>'Bloomington', 'state'=>'In', 'zip'=>'47403']],
-			['943 1/2 N  Jackson  ST', ['street_number'=>'943', 'street_number_suffix'=>'1/2', 'direction'=>'N', 'street_name'=>'Jackson', 'streetType'=>'ST']]
+			['943 1/2 N  Jackson  ST', ['street_number'=>'943', 'street_number_suffix'=>'1/2', 'direction'=>'N', 'street_name'=>'Jackson', 'streetType'=>'ST']],
+			['2437 S Walnut Street Pike', ['street_number'=>'2437', 'direction'=>'S', 'street_name'=>'Walnut Street', 'streetType'=>'PIKE']],
+			['2437 Walnut Street Pike', ['street_number'=>'2437', 'street_name'=>'Walnut Street', 'streetType'=>'PIKE']],
+			['4750 N State Road 37', ['street_number'=>'4750', 'direction'=>'N', 'street_name'=>'State Road 37']]
 		];
 	}
 

@@ -465,17 +465,21 @@ class AddressList extends ZendDbResultIterator
 				(?<name>[\w\s]+)
 				(\s(?<streetType>$streetTypePattern)\b)
 				(\s(?<postdirection>$fullDirectionPattern)\b)?
+				$
 				|
 				(?<streetName>[\w\s]+)
 				(\s(?<postdir>$fullDirectionPattern))\b
+				$
 				|
 				(?<street>[\w\s]+)
 				(\s(?<stype>$streetTypePattern)\b)?
 				(\s(?<pdir>$fullDirectionPattern)\b)?
+				$
 			)
 		)
 		";
 		preg_match("/$streetPattern/ix",$address,$matches);
+		//print_r($matches);
 		foreach ($matches as $key=>$value) {
 			if (!is_int($key) && trim($value)) {
 				// The regular expression for street names required some duplication.

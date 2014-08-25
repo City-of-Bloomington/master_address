@@ -103,3 +103,4 @@ alter table eng.mast_addr_assignment_contact add coordination char(2);
 alter table eng.mast_addr_assignment_contact add foreign key (status_id) references eng.contactStatus(id);
 
 alter table eng.mast_address rename column jurisdiction_id to addr_jurisdiction_id;
+alter table eng.mast_address drop column numeric_street_number;
