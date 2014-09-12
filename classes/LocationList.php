@@ -135,9 +135,6 @@ class LocationList extends ZendDbResultIterator
 	 */
 	private function getJoins(array $fields)
 	{
-        echo "getJoins\n";
-        print_r($fields);
-
         $addressJoin = ['table'=>'mast_address',          'condition'=>'l.street_address_id=a.street_address_id'];
         $streetsJoin = ['table'=>'mast_street',           'condition'=>'a.street_id=s.street_id'];
         $namesJoin   = ['table'=>'mast_street_names',     'condition'=>'s.street_id=n.street_id'];
