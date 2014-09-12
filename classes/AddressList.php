@@ -387,7 +387,7 @@ class AddressList extends ZendDbResultIterator
 			//echo "Looking for number: |$address|\n";
 			$fraction = '\d\/\d';
 			$directionCodePattern = implode('', self::getDirections());
-			$numberPattern = "(?<prefix>$fraction\s|[A-Z]\s)?(?<number>\d+)(?<suffix>\s$fraction\s|\-\d+\s|\s[A-Z]\s)?(?<direction>[$directionCodePattern]\s)?";
+			$numberPattern = "(?<prefix>$fraction\s|[A-Z]\s)?(?<number>\d+)(?<suffix>\s$fraction\s|\-\d+\s|\s?[A-Z]\s)?(?<direction>[$directionCodePattern]\s)?";
 
 			if (preg_match("/^$numberPattern/i", $address, $matches)) {
 
@@ -441,7 +441,8 @@ class AddressList extends ZendDbResultIterator
 			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
 			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
 				try {
-					$output['subunitType'] = new SubunitType($matches['subunitType']);
+                    $type = new SubunitType($matches['subunitType']);
+					$output['subunitType'] = $type->getType();
 					$output['subunitIdentifier'] = $matches['subunitIdentifier'];
 					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 				}

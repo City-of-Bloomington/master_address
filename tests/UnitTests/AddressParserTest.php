@@ -21,6 +21,7 @@ class AddressParserTest extends PHPUnit_Framework_TestCase
 			['Indiana',  ['street_name' => 'Indiana']],
 			['401 N Morton St 47403',   ['street_number'=>401, 'direction'=>'N', 'street_name'=>'Morton', 'streetType'=>'ST', 'zip'=>47403 ]],
 			['12 A E Longwood Ct',      ['street_number'=>12,   'street_number_suffix'=>'A', 'direction'=>'E', 'street_name'=>'Longwood', 'streetType'=>'CT']],
+			['12A E Longwood Ct',       ['street_number'=>12,   'street_number_suffix'=>'A', 'direction'=>'E', 'street_name'=>'Longwood', 'streetType'=>'CT']],
 			['1401 N E Longwood Ct',    ['street_number'=>1401, 'street_number_suffix'=>'N', 'direction'=>'E', 'street_name'=>'Longwood', 'streetType'=>'CT']],
 			['1401 E Longwood Ct West', ['street_number'=>1401, 'direction'=>'E', 'street_name'=>'Longwood', 'streetType'=>'CT', 'postDirection'=>'W']],
 			['1401 E Longwood Ct W',    ['street_number'=>1401, 'direction'=>'E', 'street_name'=>'Longwood', 'streetType'=>'CT', 'postDirection'=>'W']],
