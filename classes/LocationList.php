@@ -217,6 +217,7 @@ class LocationList extends ZendDbResultIterator
             foreach ($search as $key=>$value) {
                 if (in_array($key, array_keys(self::$joinableFields))) {
                     $f = self::$joinableFields[$key];
+                    //$options[] = "$f='$value'"; // DEBUG
                     $options[]        = "$f=:$key";
                     $bindValues[$key] = $value;
                 }
@@ -224,10 +225,13 @@ class LocationList extends ZendDbResultIterator
             // If the user gave us a subunit, the previous foreach will have added the
             // subunit to the query.  However, if they did not give us a subunit,
             // then we need to look for locations that do not have a subunit
+            $subunitJoin = '';
             if (isset($search['subunitIdentifier'])) {
-                $subunitJoin = 'left join eng.mast_address_subunits u on a.street_address_id=u.street_address_id';
+                $subunitJoin = 'left join eng.mast_address_subunits u on a.street_address_id=u.street_address_id and l.subunit_id=u.subunit_id';
             }
             else {
+                // Locations that do not have a subunit do not need to join
+                // the subunits table.
                 $options[] = "l.subunit_id is null";
             }
 
@@ -242,9 +246,10 @@ class LocationList extends ZendDbResultIterator
                             join eng.mast_address          a on l.street_address_id=a.street_address_id
                             join eng.mast_street           s on a.street_id=s.street_id
                             join eng.mast_street_names     n on s.street_id=n.street_id
-                            left join eng.mast_address_subunits u on a.street_address_id=u.street_address_id
+                            $subunitJoin
                             where $options)";
                 $zend_db = Database::getConnection();
+                //$result = $zend_db->fetchAll($sql); // DEBUG
                 $result = $zend_db->fetchAll($sql, $bindValues);
 
                 foreach ($result as $row) {
