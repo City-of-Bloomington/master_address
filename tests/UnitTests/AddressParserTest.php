@@ -35,7 +35,8 @@ class AddressParserTest extends PHPUnit_Framework_TestCase
 			['943 1/2 N  Jackson  ST', ['street_number'=>'943', 'street_number_suffix'=>'1/2', 'direction'=>'N', 'street_name'=>'Jackson', 'streetType'=>'ST']],
 			['2437 S Walnut Street Pike', ['street_number'=>'2437', 'direction'=>'S', 'street_name'=>'Walnut Street', 'streetType'=>'PIKE']],
 			['2437 Walnut Street Pike', ['street_number'=>'2437', 'street_name'=>'Walnut Street', 'streetType'=>'PIKE']],
-			['4750 N State Road 37', ['street_number'=>'4750', 'direction'=>'N', 'street_name'=>'State Road 37']]
+			['4750 N State Road 37', ['street_number'=>'4750', 'direction'=>'N', 'street_name'=>'State Road 37']],
+			['300 E State Road 45 46 Bypass Unit 2', ['street_number'=>'300', 'direction'=>'E', 'street_name'=>'State Road 45 46 Bypass', 'subunitType'=>'UNIT', 'subunitIdentifier'=>'2']]
 		];
 	}
 
