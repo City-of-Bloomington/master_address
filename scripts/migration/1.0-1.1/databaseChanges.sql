@@ -44,6 +44,13 @@ delete from eng.mast_address_status where street_address_id in (
     union
     select street_address_id from eng.mast_address where regexp_like(street_number, '^0+')
 );
+delete from master_address.address_change_log where street_address_id in (
+    select street_address_id from eng.mast_address where street_number is null
+    union
+    select street_address_id from eng.mast_address where street_number='2ND'
+    union
+    select street_address_id from eng.mast_address where regexp_like(street_number, '^0+')
+);
 delete from eng.mast_address where street_number is null;
 delete from eng.mast_address where street_number='2ND';
 delete from eng.mast_address where regexp_like(street_number, '^0+');
