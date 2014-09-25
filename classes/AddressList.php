@@ -25,7 +25,7 @@ class AddressList extends ZendDbResultIterator
 		'plat_id','plat_lot_number','street_address_2',
 		'city','state','zip','zipplus4',
 		'state_plane_x_coordinate', 'state_plane_y_coordinate','usng_coordinate',
-		'notes','numeric_street_number'
+		'notes'
 	];
 	private static $directions = array();
 	private static $streetTypes = array();
@@ -91,7 +91,7 @@ class AddressList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
 		$this->createSelection($fields);
 
@@ -135,7 +135,7 @@ class AddressList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function search($fields=null,$order='numeric_street_number',$limit=null,$groupBy=null)
+	public function search($fields=null,$order='street_number',$limit=null,$groupBy=null)
 	{
 		$this->createSelection($fields);
 
