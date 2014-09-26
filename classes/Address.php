@@ -31,7 +31,6 @@ class Address
 	private $longitude;
 	private $usng_coordinate;
 	private $notes;
-	private $numeric_street_number;
 
 	private $status_code;	// Used for pre-loading the latest status
 	private $description; 	// Used for pre-loading the latest status
@@ -212,7 +211,6 @@ class Address
 		$data['a']['zip'] = $this->zip;
 		$data['a']['zipplus4'] = $this->zipplus4 ? $this->zipplus4 : null;
 		$data['a']['notes'] = $this->notes ? $this->notes : null;
-		$data['a']['numeric_street_number'] = $this->numeric_street_number;
 
 		if ($this->street_address_id) {
 			$this->updateDB($data);
