@@ -4,7 +4,8 @@ insert into RENTAL.PULL_REAS select * from CE.PULL_REAS;
 insert into RENTAL.ZONING_2007 select * from CE.ZONING_2007;
 insert into RENTAL.ZONING select * from CE.ZONING;
 insert into RENTAL.REGISTR select * from CE.REGISTR;
-insert into RENTAL.address2 select * from CE.address2;
+insert into RENTAL.address2 (street_num, street_dir, street_name, street_type, post_dir, sud_type, sud_num, invalid_addr, registr_id, id)
+    select * from CE.address2;
 insert into RENTAL.c_types select * from CE.c_types;
 insert into RENTAL.email_logs select * from CE.email_logs;
 insert into RENTAL.inspection_types select * from CE.inspection_types;
@@ -20,7 +21,7 @@ insert into RENTAL.rental_pull_hist select * from CE.rental_pull_hist;
 insert into RENTAL.rental_structures select * from CE.rental_structures;
 insert into RENTAL.rental_units select * from CE.rental_units;
 insert into RENTAL.rental_updates select * from CE.rental_updates;
-insert into RENTAL.variances select * from CE.variances;
+
 create table rental.temp_VARIANCES as select VARIANCE_DATE, to_lob(VARIANCE) VARIANCE, ID, VID from ce.VARIANCES;
 insert into RENTAL.variances select * from rental.temp_variances;
 drop table rental.temp_VARIANCES;
