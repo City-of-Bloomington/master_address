@@ -19,16 +19,17 @@
  *				)
  *
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->address
  */
-$parts = array(
-	'street_number','fraction','direction','street_name','postDirection','streetType',
+$parts = [
+	'street_number','street_number_suffix',
+	'direction','street_name','postDirection','streetType',
 	'subunitType','subunitIdentifier',
 	'city','state','zip','zipplus4'
-);
+];
 
 echo "<table>";
 foreach ($parts as $part) {
