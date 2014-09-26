@@ -5,9 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
-<h1>Add Jurisdiction</h1>
+<h1>Add Government Jurisdiction</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Jurisdiction Info</legend>
+	<fieldset><legend>Government Jurisdiction Info</legend>
 		<table>
 
 			<tr><td><label for="jurisdiction-description" class="required">Description</label></td>

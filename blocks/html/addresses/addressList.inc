@@ -18,7 +18,7 @@ echo "
 					<th>Type</th>
 					<th>Street</th>
 					<th>Status</th>
-					<th>Jurisdiction</th>
+					<th>Gov. Jurisdiction</th>
 					<th>Zip</th>
 					<th>City</th>
 					<th>Units</th>

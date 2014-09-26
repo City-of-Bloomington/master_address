@@ -39,7 +39,7 @@ foreach ($this->address->getLocations() as $i=>$location) {
 			<tr><th>Address</th>
 				<th>Active</th>
 				<th>Status</th>
-				<th>Jurisdiction</th>
+				<th>Gov. Jurisdiction</th>
 				<th>Zip</th>
 			</tr>
 			</thead>

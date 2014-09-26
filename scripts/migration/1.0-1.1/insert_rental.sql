@@ -25,3 +25,19 @@ insert into RENTAL.rental_updates select * from CE.rental_updates;
 create table rental.temp_VARIANCES as select VARIANCE_DATE, to_lob(VARIANCE) VARIANCE, ID, VID from ce.VARIANCES;
 insert into RENTAL.variances select * from rental.temp_variances;
 drop table rental.temp_VARIANCES;
+
+
+
+create sequence rental.address_seq     nocache start with 9283;
+create sequence rental.rental_seq      nocache start with 4;
+create sequence rental.registr_id_seq  nocache start with 10514;
+create sequence rental.owner_seq       nocache start with 103;
+create sequence rental.reg_bill_seq    nocache start with 20240;
+create sequence rental.reg_receipt_seq nocache start with 30814;
+create sequence rental.phone_id_seq    nocache start with 16999;
+create sequence rental.unit_id_seq     nocache start with 22;
+create sequence rental.rent_unit_seq   nocache start with 9074;
+create sequence rental.rent_struct_seq nocache start with 7931;
+create sequence rental.inspection_seq  nocache start with 43642;
+create sequence rental.variance_seq    nocache start with 1957;
+create sequence rental.name_num_seq    nocache start with 11125;

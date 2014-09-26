@@ -19,7 +19,7 @@ echo "
 		<td>{$this->address->getType()}</td>
 	</tr>
 	<tr $jurisdictionClass>
-		<th>Jurisdiction</th>
+		<th>Gov. Jurisdiction</th>
 		<td>{$this->address->getJurisdiction()->getDescription()}</td>
 	</tr>
 	<tr><th>Plat</th>

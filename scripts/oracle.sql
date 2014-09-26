@@ -529,7 +529,7 @@ create table mast_address (
 	street_number_suffix varchar2(10),
 	street_id number not null,
 	address_type varchar2(20) not null,
-	addr_jurisdiction_id number not null,
+	addr_jurisdiction_id number,
 	gov_jur_id number not null,
 	township_id number,
 	section varchar2(20),

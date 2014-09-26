@@ -140,7 +140,7 @@ else {
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend>Jurisdictions</legend>
+	<fieldset><legend>Government Jurisdictions</legend>
 	<ul>
 		<?php
 			foreach ($jurisdictionList as $jurisdiction) {

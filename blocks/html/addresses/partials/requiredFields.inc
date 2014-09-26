@@ -19,7 +19,7 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="jurisdiction_id" class="required">Jurisdiction</label></td>
+	<tr><td><label for="jurisdiction_id" class="required">Gov. Jurisdiction</label></td>
 		<td><select name="jurisdiction_id" id="jurisdiction_id">
 			<?php
 				$list = new JurisdictionList();
