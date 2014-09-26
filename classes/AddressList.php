@@ -401,7 +401,7 @@ class AddressList extends ZendDbResultIterator
 					}
 				}
 				elseif (!empty($matches['suffix'])) {
-					$s = trim($matches['suffix']);
+					$s = strtoupper(trim($matches['suffix']));
 					if (in_array($s, self::getDirections())) {
 						$output['direction'] = $s;
 					}

@@ -12,6 +12,8 @@ class AddressParserTest extends PHPUnit_Framework_TestCase
 		return [
 			['401 N Morton St', ['street_number'=>401, 'direction'=>'N', 'street_name'=>'Morton', 'streetType'=>'ST' ]],
 			['410 W 4th',       ['street_number'=>410, 'direction'=>'W', 'street_name'=>'4th']],
+			['410 S 4th',       ['street_number'=>410, 'direction'=>'S', 'street_name'=>'4th']],
+			['410 s 4th',       ['street_number'=>410, 'direction'=>'S', 'street_name'=>'4th']],
 			['123 5th',      ['street_number'=>123, 'street_name'=>'5th']],
 			['123 Somersbe', ['street_number'=>123, 'street_name'=>'Somersbe']],
 			['1 3rd',        ['street_number'=>1,   'street_name'=>'3rd']],
@@ -36,7 +38,8 @@ class AddressParserTest extends PHPUnit_Framework_TestCase
 			['2437 S Walnut Street Pike', ['street_number'=>'2437', 'direction'=>'S', 'street_name'=>'Walnut Street', 'streetType'=>'PIKE']],
 			['2437 Walnut Street Pike', ['street_number'=>'2437', 'street_name'=>'Walnut Street', 'streetType'=>'PIKE']],
 			['4750 N State Road 37', ['street_number'=>'4750', 'direction'=>'N', 'street_name'=>'State Road 37']],
-			['300 E State Road 45 46 Bypass Unit 2', ['street_number'=>'300', 'direction'=>'E', 'street_name'=>'State Road 45 46 Bypass', 'subunitType'=>'UNIT', 'subunitIdentifier'=>'2']]
+			['300 E State Road 45 46 Bypass Unit 2', ['street_number'=>'300', 'direction'=>'E', 'street_name'=>'State Road 45 46 Bypass', 'subunitType'=>'UNIT', 'subunitIdentifier'=>'2']],
+			['623 s washington st', ['street_number'=>'623', 'direction'=>'S', 'street_name'=>'washington', 'streetType'=>'ST']]
 		];
 	}
 
