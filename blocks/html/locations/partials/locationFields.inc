@@ -22,7 +22,7 @@ if (isset($this->location)) {
 				<?php
 					$locationType = isset($this->locationData['locationType'])
 									? $this->locationData['locationType']
-									: new LocationType("RESIDENTIAL SFR");
+									: new LocationType("Residential");
 					$types = new LocationTypeList();
 					$types->find();
 					foreach ($types as $type) {
