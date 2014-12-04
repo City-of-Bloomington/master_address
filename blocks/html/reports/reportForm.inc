@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2010 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @author W Sibo <sibow@bloomington.in.gov>
@@ -32,9 +32,7 @@ if (isset($_REQUEST['jurisdictions'])) {
 	$jurisdictions = $_REQUEST['jurisdictions'];
 }
 else {
-	foreach ($jurisdictionList as $jurisdiction) {
-		$jurisdictions[] = $jurisdiction->getId();
-	}
+    $jurisdictions[] = 1;
 }
 ?>
 <h1>Activity Report</h1>

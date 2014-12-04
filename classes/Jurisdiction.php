@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -19,18 +19,20 @@ class Jurisdiction
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $gov_jur_id
+	 * @param int|array $id
 	 */
-	public function __construct($gov_jur_id=null)
+	public function __construct($id=null)
 	{
-		if ($gov_jur_id) {
-			if (is_array($gov_jur_id)) {
-				$result = $gov_jur_id;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from governmental_jurisdiction_mast where gov_jur_id=?';
-				$result = $zend_db->fetchRow($sql,array($gov_jur_id));
+				$sql = ((is_int($id) && $id>0) || (is_string($id) && ctype_digit($id)))
+                    ? 'select * from governmental_jurisdiction_mast where gov_jur_id=?'
+                    : 'select * from governmental_jurisdiction_mast where description=?';
+				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
