@@ -252,6 +252,7 @@ class LocationList extends ZendDbResultIterator
                 //$result = $zend_db->fetchAll($sql); // DEBUG
                 $result = $zend_db->fetchAll($sql, $bindValues);
 
+                $possibleMatches = [];
                 foreach ($result as $row) {
                     if ($row['active'] == 'Y') {
                         $address = new Address($row['street_address_id']);
@@ -260,9 +261,42 @@ class LocationList extends ZendDbResultIterator
                             : '';
 
                         $row['addressString'] = trim("$address $subunit");
-                        return $row;
+                        $possibleMatches[$row['addressString']] = [
+                            'row'     => $row,
+                            'address' => $address
+                        ];
                     }
                 }
+                // When we come up with multiple addresses that match what they've typed
+                // we need some way to filter it down to just one best match.
+                //
+                // So far, we've only had confusion over the street_number_suffix
+                // For now, we're double checking whether they typed a suffix or not.
+                // We'll try and choose the result that matches their desired suffix
+                if (count($possibleMatches) > 1) {
+                    // They either typed a suffix or didn't
+                    if (empty($search['street_number_suffix'])) {
+                        // See if there's an address without a suffix
+                        foreach ($possibleMatches as $addressString => $d) {
+                            if ($d['address']->getStreet_number_suffix() == '') {
+                                return $d['row'];
+                            }
+                        }
+                    }
+                    else {
+                        // See if there's an address with a matching suffix
+                        foreach ($possibleMatches as $addressString => $d) {
+                            if ($d['address']->getStreet_number_suffix() == $search['street_number_suffix']) {
+                                return $d['row'];
+                            }
+                        }
+                    }
+                }
+
+                // Finally, if we haven't found anything special to return, just
+                // return the first address we found
+                reset($possibleMatches);
+                return current($possibleMatches)['row'];
             }
         }
 	}
