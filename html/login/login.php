@@ -13,7 +13,7 @@ try {
 	$user = new User($_POST['username']);
 
 	if ($user->authenticate($_POST['password'])) {
-		$user->startNewSession();
+		$_SESSION['USER'] = $user;
 	}
 	else {
 		throw new Exception('invalidLogin');
