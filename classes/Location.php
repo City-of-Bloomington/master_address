@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2014 City of Bloomington, Indiana
+ * @copyright 2009-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -354,25 +354,36 @@ class Location
 	/**
 	 * Queries the database for a single location property
 	 *
+	 * We do a single query to get all the fields in one call.
+	 * The data is cached, so subsequent calls do not result in
+	 * more database calls.
+	 *
 	 * @param string $fieldname
 	 * @param Address|Subunit $address
 	 */
-	private function fieldLookup($fieldname,$address)
+	private function fieldLookup($fieldname, $address)
 	{
+        static $data = [];
+
 		if ($this->location_id) {
-			if ($address instanceof Address) {
-				$lookup = 'street_address_id';
-			}
-			elseif ($address instanceof Subunit) {
-				$lookup = 'subunit_id';
-			}
+			if     ($address instanceof Address) { $lookup = 'street_address_id'; }
+			elseif ($address instanceof Subunit) { $lookup = 'subunit_id';        }
 			else {
 				throw new Exception('locations/invalidAddress');
 			}
 
-			$zend_db = Database::getConnection();
-			$sql = "select $fieldname from address_location where location_id=? and $lookup=?";
-			return $zend_db->fetchOne($sql,array($this->location_id,$address->getId()));
+			$key = $lookup.'_'.$address->getId();
+			if (empty($data[$key])) {
+                $zend_db = Database::getConnection();
+                $sql = "select * from address_location where location_id=? and $lookup=?";
+                if ($lookup == 'street_address_id') { $sql.= " and subunit_id is null"; }
+
+                $query = $zend_db->query($sql, [$this->location_id, $address->getId()]);
+                $result = $query->fetchAll();
+                $row = current($result);
+                $data[$key] = $row;
+			}
+			return $data[$key][$fieldname];
 		}
 	}
 
