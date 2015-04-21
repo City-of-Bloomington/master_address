@@ -11,7 +11,7 @@
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
  *
- * @copyright 2009-2014 City of Bloomington, Indiana
+ * @copyright 2009-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -27,10 +27,6 @@ class AddressList extends ZendDbResultIterator
 		'state_plane_x_coordinate', 'state_plane_y_coordinate','usng_coordinate',
 		'notes'
 	];
-	private static $directions = array();
-	private static $streetTypes = array();
-	private static $subunitTypes = array();
-	private static $cities = array();
 
 	/**
 	 * Creates a basic select statement for the collection.
@@ -490,25 +486,19 @@ class AddressList extends ZendDbResultIterator
 				switch ($key) {
 					case 'dir':
 					case 'direction':
-						try {
-							$d = new Direction($value);
-							$output['direction'] = $d->getCode();
-						}
-						catch (Exception $e) {
-							// Just ignore anything that's not a known direction
-						}
+                        $value = strtoupper($value);
+                        if (            in_array($value, self::$directions)) { $output['direction'] = $value; }
+                        elseif (array_key_exists($value, self::$directions)) { $output['direction'] = self::$directions[$value]; }
+                        // Just ignore anything that's not a known direction
 						break;
 
 					case 'type':
 					case 'streetType':
 					case 'stype':
-						try {
-							$t = new StreetType($value);
-							$output['streetType'] = $t->getCode();
-						}
-						catch (Exception $e) {
-							// Just ignore anything that's not a known street type
-						}
+                        $value = strtoupper($value);
+                        if (            in_array($value, self::$streetTypes)) { $output['streetType'] = $value; }
+                        elseif (array_key_exists($value, self::$streetTypes)) { $output['streetType'] = self::$streetTypes[$value]; }
+                        // Just ignore anything that's not a known street type
 						break;
 
 					case 'name':
@@ -520,13 +510,10 @@ class AddressList extends ZendDbResultIterator
 					case 'postdirection':
 					case 'postdir':
 					case 'pdir':
-						try {
-							$d = new Direction($value);
-							$output['postDirection'] = $d->getCode();
-						}
-						catch (Exception $e) {
-							// Just ignore anything that's not a known direction
-						}
+                        $value = strtoupper($value);
+                        if (            in_array($value, self::$directions)) { $output['postDirection'] = $value; }
+                        elseif (array_key_exists($value, self::$directions)) { $output['postDirection'] = self::$directions[$value]; }
+                        // Just ignore anything that's not a known direction
 						break;
 				}
 			}
@@ -544,9 +531,21 @@ class AddressList extends ZendDbResultIterator
 		return $output;
 	}
 
-	/**
-	 * @return array
-	 */
+    /**
+     * Returns street directions in use by the system
+     *
+     * !IMPORTANT
+     * For performance, this function has been cached in code.
+     *
+     * The directions are being prepopulated, in the static $directions variable.
+     * If there is a direction that is not being parsed in the
+     * address parser, you might need to regenerate the list, and
+     * update the $directions variable
+     *
+     * The database query has been left here for reference.
+     *
+     * @return array
+     */
 	private static function getDirections()
 	{
 		if (!count(self::$directions)) {
@@ -558,12 +557,28 @@ class AddressList extends ZendDbResultIterator
 		}
 		return self::$directions;
 	}
+    private static $directions = [
+        'NORTH' => 'N',
+        'EAST'  => 'E',
+        'SOUTH' => 'S',
+        'WEST'  => 'W'
+    ];
 
 	/**
-	 * Returns only the streetTypes that are actually in use in the system.
-	 *
-	 * Limiting to only those in use provides more accurate parsing of typed addresses.
-	 *
+     * Returns street types in use by the system
+     *
+     * !IMPORTANT
+     * For performance, this function has been cached in code.
+     * Doing a select distinct across hundreds of thousands of rows was
+     * too slow for a web-service backing.
+     *
+     * The street types are being prepopulated, in the static $streetTypes variable.
+     * If there is a street type that is not being parsed in the
+     * address parser, you might need to regenerate the list, and
+     * update the $streetTypes variable
+     *
+     * The database query has been left here for reference.
+     *
 	 * @return array
 	 */
 	private static function getStreetTypes()
@@ -581,10 +596,65 @@ class AddressList extends ZendDbResultIterator
 		}
 		return self::$streetTypes;
 	}
+    private static $streetTypes = [
+        'WAY'       => 'WAY',
+        'PARKWAY'   => 'PKWY',
+        'GROVE'     => 'GRV',
+        'PIKE'      => 'PIKE',
+        'POINT'     => 'PT',
+        'MEWS'      => 'MEWS',
+        'BEND'      => 'BND',
+        'AVENUE'    => 'AVE',
+        'BOULEVARD' => 'BLVD',
+        'FORK'      => 'FRK',
+        'CIRCLE'    => 'CIR',
+        'ROW'       => 'ROW',
+        'TERRACE'   => 'TER',
+        'DRIVE'     => 'DR',
+        'ESTATES'   => 'ESTS',
+        'TURN'      => 'TURN',
+        'TRAIL'     => 'TRL',
+        'LANE'      => 'LN',
+        'BOW'       => 'BOW',
+        'CROSSING'  => 'XING',
+        'VALLEY'    => 'VLY',
+        'ROAD'      => 'RD',
+        'COURT'     => 'CT',
+        'PLACE'     => 'PL',
+        'GLEN'      => 'GLN',
+        'KNOLL'     => 'KNL',
+        'SQUARE'    => 'SQ',
+        'VIEW'      => 'VW',
+        'MALL'      => 'MALL',
+        'RUN'       => 'RUN',
+        'PATH'      => 'PATH',
+        'CLIFFS'    => 'CLFS',
+        'RIDGE'     => 'RDG',
+        'STREET'    => 'ST',
+        'CREST'     => 'CRST',
+        'TRACE'     => 'TRCE',
+        'ALLEY'     => 'ALY',
+        'CHASE'     => 'CHASE',
+        'HILL'      => 'HL'
+    ];
 
-	/**
-	 * @return array
-	 */
+    /**
+     * Returns cities in use by the system
+     *
+     * !IMPORTANT
+     * For performance, this function has been cached in code.
+     * Doing a select distinct across hundreds of thousands of rows was
+     * too slow for a web-service backing.
+     *
+     * The types are being prepopulated, in the static $subunitTypes variable.
+     * If there is a type that is not being parsed in the
+     * address parser, you might need to regenerate the list, and
+     * update the $subunitTypes variable
+     *
+     * The database query has been left here for reference.
+     *
+     * @return array
+     */
 	private static function getSubunitTypes()
 	{
 		if (!count(self::$subunitTypes)) {
@@ -596,8 +666,49 @@ class AddressList extends ZendDbResultIterator
 		}
 		return self::$subunitTypes;
 	}
+    private static $subunitTypes = [
+        'APT'     => 'APARTMENT',
+        'BSMT'    => 'BASEMENT',
+        'BLDG'    => 'BUILDING ',
+        'DEPT'    => 'DEPARTMENT',
+        'FL'      => 'FLOOR',
+        'FRNT'    => 'FRONT',
+        'HNGR'    => 'HANGER',
+        'KEY'     => 'KEY',
+        'LBBY'    => 'LOBBY',
+        'LOT'     => 'LOT',
+        'LOWR'    => 'LOWER',
+        'OFC'     => 'OFFICE',
+        'PH'      => 'PENTHOUSE',
+        'PIER'    => 'PIER',
+        'REAR'    => 'REAR',
+        'RM'      => 'ROOM',
+        'SIDE'    => 'SIDE',
+        'SLIP'    => 'SLIP',
+        'SPC'     => 'SPACE',
+        'STOP'    => 'STOP',
+        'STE'     => 'SUITE',
+        'TRLR'    => 'TRAILER',
+        'UNIT'    => 'UNIT',
+        'UPPR'    => 'UPPER',
+        'UNKNOWN' => 'UNKNOWN'
+    ];
 
 	/**
+	 * Returns cities in use by the system
+	 *
+	 * !IMPORTANT
+	 * For performance, this function has been cached in code.
+	 * Doing a select distinct across hundreds of thousands of rows was
+	 * too slow for a web-service backing.
+	 *
+	 * The cities are being prepopulated, in the static $cities variable.
+	 * If there is a city that is not being parsed in the
+	 * address parser, you might need to regenerate the list, and
+	 * update the $cities variable
+	 *
+	 * The database query has been left here for reference.
+	 *
 	 * @return array
 	 */
 	public static function getCities()
@@ -612,4 +723,21 @@ class AddressList extends ZendDbResultIterator
 		}
 		return self::$cities;
 	}
+    private static $cities = [
+        'Bedford',
+        'Harrodsburg',
+        'Stanford',
+        'Bloomington',
+        'Springville',
+        'Martinsville',
+        'Unionville',
+        'Gosport',
+        'Spencer',
+        'Stinesville',
+        'Ellettsville',
+        'Nashville',
+        'Clear Creek',
+        'Heltonville',
+        'Smithville'
+    ];
 }
