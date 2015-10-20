@@ -93,6 +93,7 @@ class StreetList extends ZendDbResultIterator
 		if ($groupBy) {
 			$this->select->group($groupBy);
 		}
+
 		$this->populateList();
 	}
 
@@ -123,7 +124,7 @@ class StreetList extends ZendDbResultIterator
 					$this->select->where('n.street_name=?',$fields['street_name']);
 				}
 				else {
-					$this->select->where('n.street_name like ?',"%$fields[street_name]%");
+					$this->select->where('n.street_name like ?',"$fields[street_name]%");
 				}
 			}
 

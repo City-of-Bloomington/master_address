@@ -50,6 +50,8 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Town'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Township'));
 $ZEND_ACL->add(new Zend_Acl_Resource('User'));
 
+$ZEND_ACL->add(new Zend_Acl_Resource('Intersection'));
+
 /**
  * Assign permissions to the resources
  */

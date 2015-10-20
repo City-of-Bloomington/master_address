@@ -46,7 +46,8 @@ class AddressParserTest extends PHPUnit_Framework_TestCase
 	public function streetProvider()
 	{
 		return [
-			['N Walnut', ['direction'=>'N', 'street_name'=>'Walnut']]
+			['N Walnut', ['direction'=>'N', 'street_name'=>'Walnut']],
+			['N Mor',    ['direction'=>'N', 'street_name'=>'Mor']]
 		];
 	}
 
