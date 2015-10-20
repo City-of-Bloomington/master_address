@@ -1,0 +1,16 @@
+/buildignore
+/build.sh
+/build
+/dist
+.git/
+.git*
+configuration.inc
+site_config.inc
+data
+/scripts/backup.cnf
+libraries/zf1/bin
+libraries/zf1/demos
+libraries/zf1/documentation
+libraries/zf1/puppet
+libraries/zf1/resources
+libraries/zf1/tests
