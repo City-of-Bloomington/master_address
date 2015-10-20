@@ -4,7 +4,7 @@
  */
 define('APPLICATION_HOME', realpath(__DIR__.'/../../'));
 define('FRAMEWORK', APPLICATION_HOME.'/libraries/framework');
-define('ZEND',      APPLICATION_HOME.'/libraries/ZendFramework/library');
+define('ZEND',      APPLICATION_HOME.'/libraries/zf1/library');
 
 /**
  * Database Setup

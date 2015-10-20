@@ -28,7 +28,7 @@ define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
  * installation of the ZendFramework
  * http://framework.zend.com
  */
-define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
+define('ZEND',APPLICATION_HOME.'/libraries/zf1/library');
 ini_set('include_path',ini_get('include_path').':'.ZEND);
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance();
