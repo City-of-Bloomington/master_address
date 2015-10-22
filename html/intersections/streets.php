@@ -11,11 +11,8 @@ if ($template->outputFormat === 'html') {
 }
 
 if (!empty($_REQUEST['street'])) {
-    $list = empty($_REQUEST['intersectingStreet'])
-        ? IntersectionGateway::intersections($_REQUEST['street'])
-        : IntersectionGateway::intersections($_REQUEST['street'], $_REQUEST['intersectingStreet']);
-
-    $template->blocks[] = new Block('intersections/list.inc', ['intersections'=>$list]);
+    $list = IntersectionGateway::intersectingStreets($_REQUEST['street']);
+    $template->blocks[] = new Block('streets/streetList.inc', ['streetList'=>$list]);
 }
 
 echo $template->render();
