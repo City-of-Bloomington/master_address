@@ -729,11 +729,11 @@ class Address
 	}
 
 	/**
-	 * @param int $number
+	 * @param string $string
 	 */
-	public function setPlat_lot_number($number)
+	public function setPlat_lot_number($string)
 	{
-		$this->plat_lot_number = (int)$number;
+		$this->plat_lot_number = $string;
 	}
 
 	/**
