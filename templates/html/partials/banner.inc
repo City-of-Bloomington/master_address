@@ -1,7 +1,7 @@
 <div id="banner">
 	<div id="application_name"><a href="<?php echo BASE_URL; ?>/">Master Address</a></div>
 	<div id="location_name">
-		<a href="<?php echo BASE_URL; ?>">City of Bloomington, Mark Kruzan, Mayor</a>
+		<a href="<?php echo BASE_URL; ?>">City of Bloomington, John Hamilton, Mayor</a>
 	</div>
 	<div class="loginForm">
 	<?php
