@@ -33,7 +33,7 @@ function handleAddSubunit(form) {
 		<table>
 			<?php
 				$locationData = $this->address->getLocation()->getUpdatableData($this->address);
-				$locationData['locationType'] = new LocationType('Residential Subunit');
+				$locationData['locationType'] = new LocationType('Residential Multi-Family');
 				$block = new Block('locations/partials/locationFields.inc',
 									array('locationData'=>$locationData));
 				echo $block->render('html');
