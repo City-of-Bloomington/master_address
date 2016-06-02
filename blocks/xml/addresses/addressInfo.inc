@@ -30,6 +30,15 @@ echo "
 foreach ($fields as $f) {
     echo "\t<$f>{$$f}</$f>\n";
 }
+$streetName = $this->address->getStreetName();
+$streetNameFields = ['directionCode', 'name', 'typeCode', 'postDirectionCode'];
+echo "<streetName>";
+foreach ($streetNameFields as $f) {
+    $get = 'get'.ucfirst($f);
+    echo "\t<$f>".self::escape($streetName->$get())."</$f>\n";
+}
+echo "</streetName>";
+
 echo "
 	<locationUseType>$locationType</locationUseType>
 	<active>$active</active>

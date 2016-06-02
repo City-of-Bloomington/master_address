@@ -33,6 +33,14 @@ $output['locations'      ] = [];
 $output['statePlane'     ] = [ 'x' => $this->address->getState_plane_x_coordinate(),
                                'y' => $this->address->getState_plane_y_coordinate()];
 
+$streetName = $this->address->getStreetName();
+$output['streetName'] = [
+    'directionCode'     => $streetName->getDirectionCode(),
+    'name'              => $streetName->getName(),
+    'typeCode'          => $streetName->getTypeCode(),
+    'postDirectionCode' => $streetName->getPostDirectionCode()
+];
+
 $locations = $this->address->getLocations();
 foreach ($locations as $location) {
     foreach ($location->getAddresses() as $address) {

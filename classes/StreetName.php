@@ -497,6 +497,16 @@ class StreetName
 	}
 
 	/**
+	 * Alias for getStreet_type_suffix_code()
+	 *
+	 * @return string
+	 */
+	public function getTypeCode()
+	{
+        return $this->getStreet_type_suffix_code();
+    }
+
+	/**
 	 * Alias for getEffective_start_date()
 	 */
 	public function getStartDate($format=null)

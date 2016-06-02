@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2009-2011 City of Bloomington, Indiana
+ * @copyright 2009-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class Street
 {
@@ -13,6 +12,7 @@ class Street
 
 	private $town;
 	private $status;
+	private $streetName;
 
 	/**
 	 * Populates the object with data
@@ -268,19 +268,24 @@ class Street
 	public function getStreetName()
 	{
 		if ($this->street_id) {
-			$streetNameList = new StreetNameList(array('street_id'=>$this->street_id,
-														'street_name_type'=>'STREET'));
-			if (count($streetNameList)) {
-				return $streetNameList[0];
-			}
-			else {
-				// We couldn't find a name of the TYPE:STREET for this street.
-				// Do another search and see if we can find any name at all
-				$streetNameList = new StreetNameList(array('street_id'=>$this->street_id));
-				if (count($streetNameList)) {
-					return $streetNameList[0];
-				}
-			}
+            if (!$this->streetName) {
+                $streetNameList = new StreetNameList([
+                    'street_id'       => $this->street_id,
+                    'street_name_type'=> 'STREET'
+                ]);
+                if (count($streetNameList)) {
+                    $this->streetName = $streetNameList[0];
+                }
+                else {
+                    // We couldn't find a name of the TYPE:STREET for this street.
+                    // Do another search and see if we can find any name at all
+                    $streetNameList = new StreetNameList(['street_id'=>$this->street_id]);
+                    if (count($streetNameList)) {
+                        $this->streetName = $streetNameList[0];
+                    }
+                }
+            }
+            return $this->streetName;
 		}
 	}
 
