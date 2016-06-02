@@ -1,39 +1,37 @@
 <?php
 /**
- * @copyright 2013-2015 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
 $township = $this->address->getTownship()
 			? $this->address->getTownship()->getName()
 			: '';
 $location = $this->address->getLocation();
-$output = [
-	'id'             => $this->address->getId(),
-	'streetAddress'  => $this->address->getStreetAddress(),
-	'city'           => $this->address->getCity(),
-	'state'          => $this->address->getState(),
-	'zip'            => $this->address->getZip(),
-	'status'         => $this->address->getStatus()->__toString(),
-	'jurisdiction'   => $this->address->getJurisdiction()->getDescription(),
-	'plat'           => $this->address->getPlat(),
-	'lot'            => $this->address->getPlat_lot_number(),
-	'section'        => $this->address->getSection(),
-	'quarter'        => $this->address->getQuarter_section(),
-	'trashDay'       => $this->address->getTrashDay(),
-	'recycleWeek'    => $this->address->getRecycleWeek(),
-	'township'       => $township,
-	'latitude'       => $this->address->getLatitude(),
-	'longitude'      => $this->address->getLongitude(),
-	'mailable'       => $this->address->getMailable()=='yes' ? true : false,
-	'livable'        => $this->address->getLivable ()=='yes' ? true : false,
-	'active'         => $this->address->isActive()           ? true : false,
-	'statePlane' => [ 'x'=>$this->address->getState_plane_x_coordinate(),
-					  'y'=>$this->address->getState_plane_y_coordinate()],
-	'locationUseType' => $location ? $location->getLocationType($this->address) : '',
-	'locations'       => []
+
+$fields = [
+    'id', 'streetAddress',
+    'street_number_prefix', 'street_number', 'street_number_suffix', 'street_id',
+    'city', 'state', 'zip', 'zipplus4',
+    'plat', 'plat_lot_number', 'section', 'quarter_section',
+    'trashDay', 'recycleWeek',
+    'latitude', 'longitude'
 ];
+$output = [];
+foreach ($fields as $f) {
+    $get = 'get'.ucfirst($f);
+    $output[$f] = $this->address->$get();
+}
+$output['township'       ] = $township;
+$output['mailable'       ] = $this->address->getMailable()=='yes' ? true : false;
+$output['livable'        ] = $this->address->getLivable ()=='yes' ? true : false;
+$output['active'         ] = $this->address->isActive()           ? true : false;
+$output['status'         ] = $this->address->getStatus()->__toString();
+$output['jurisdiction'   ] = $this->address->getJurisdiction()->getDescription();
+$output['locationUseType'] = $location ? $location->getLocationType($this->address) : '';
+$output['locations'      ] = [];
+$output['statePlane'     ] = [ 'x' => $this->address->getState_plane_x_coordinate(),
+                               'y' => $this->address->getState_plane_y_coordinate()];
 
 $locations = $this->address->getLocations();
 foreach ($locations as $location) {
