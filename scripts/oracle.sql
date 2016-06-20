@@ -609,7 +609,7 @@ create table mast_address_subunits (
 	subunit_id number not null primary key,
 	street_address_id number not null,
 	sudtype varchar2(20) not null,
-	subunit_identifier varchar2(20) not null,
+	subunit_identifier varchar2(20),
 	state_plane_x_coordinate number,
 	state_plane_y_coordinate number,
 	latitude number,

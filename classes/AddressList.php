@@ -284,7 +284,7 @@ class AddressList extends ZendDbResultIterator
 			// just ignore whatever they typed for the subunit type.
 			// They may searched for APT 1 and the address only has SUITES.
 			// If there's a subunit 1, we should return it no matter what type of subunit it is
-			if ($queryType=='find' || !isset($fields['subunitIdentifier'])) {
+			if ($queryType=='find' || !empty($fields['subunitIdentifier'])) {
 				if ($fields['subunitType'] instanceof SubunitType) {
 					try {
 						$fields['subunitType'] = new SubunitType($fields['subunitType']);

@@ -93,7 +93,7 @@ class Subunit implements ChangeLogInterface
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->street_address_id || !$this->sudtype || !$this->subunit_identifier) {
+		if (!$this->street_address_id || !$this->sudtype) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
