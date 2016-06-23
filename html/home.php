@@ -72,7 +72,7 @@ if (isset($_REQUEST['queryType'])) {
 	}
 }
 
-if ($template->outputFormat == 'html') {
+if ($template->outputFormat == 'html' && userIsAllowed('ChangeLog')) {
 	$paginator = ChangeLog::getPaginator(ChangeLog::getTypes(),ChangeLog::getActions());
 	$template->blocks[] = new Block('changeLogs/changeLog.inc',array('paginator'=>$paginator));
 }

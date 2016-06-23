@@ -25,8 +25,10 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Annexation'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Building'));
 $ZEND_ACL->add(new Zend_Acl_Resource('BuildingStatus'));
 $ZEND_ACL->add(new Zend_Acl_Resource('BuildingType'));
+$ZEND_ACL->add(new Zend_Acl_Resource('ChangeLog'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Contact'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Direction'));
+$ZEND_ACL->add(new Zend_Acl_Resource('Intersection'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Jurisdiction'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Location'));
 $ZEND_ACL->add(new Zend_Acl_Resource('LocationType'));
@@ -35,6 +37,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Places'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Plat'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Precinct'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Purpose'));
+$ZEND_ACL->add(new Zend_Acl_Resource('Report'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Role'));
 $ZEND_ACL->add(new Zend_Acl_Resource('StreetName'));
 $ZEND_ACL->add(new Zend_Acl_Resource('StreetNameType'));
@@ -50,7 +53,6 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Town'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Township'));
 $ZEND_ACL->add(new Zend_Acl_Resource('User'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('Intersection'));
 
 /**
  * Assign permissions to the resources

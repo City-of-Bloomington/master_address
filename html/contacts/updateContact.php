@@ -5,7 +5,7 @@
  */
 if (!userIsAllowed('Contact')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL.'/contacts');
+	header('Location: '.BASE_URL);
 	exit();
 }
 

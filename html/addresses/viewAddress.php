@@ -35,6 +35,8 @@ if ($template->outputFormat=='html') {
 	$template->blocks['panel-one'][] = new Block('addresses/locationTabs.inc',['address'    => $address]);
 	$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',  ['address'    => $address, 'subunitList'=>$address->getSubunits()]);
 	$template->blocks['panel-one'][] = new Block('addresses/purposeList.inc', ['purposeList'=> $address->getPurposes()]);
-	$template->blocks['panel-two'][] = new Block('changeLogs/changeLog.inc',  ['target'     => $address]);
+	if (userIsAllowed('ChangeLog')) {
+        $template->blocks['panel-two'][] = new Block('changeLogs/changeLog.inc',  ['target' => $address]);
+    }
 }
 echo $template->render();

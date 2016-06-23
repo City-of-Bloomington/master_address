@@ -4,6 +4,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @param GET contact_id
  */
+if (!userIsAllowed('Contact')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL);
+	exit();
+}
+
 $contact  = new Contact($_GET['contact_id']);
 $template = new Template('two-column');
 $template->blocks[]              = new Block('contacts/viewContactForm.inc', ['contact' => $contact]);

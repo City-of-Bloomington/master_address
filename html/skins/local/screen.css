@@ -30,13 +30,13 @@ ul.pageNavigation li { margin-right:2px; }
 #content-panel { padding-top:2px; }
 #panel-one { padding-top:5px; }
 /* Footer */
-#footer h1 { float:left; font-size: 16px; color: #666666; }
+#footer h1 { font-size: 16px; color: #666666; }
 
 /* Breadcrumbs */
 .breadcrumbs ul { list-style-type:none; padding-bottom:5px; }
 .breadcrumbs li {
 	display:inline; font-size:14pt; padding-right:.75em;
-	background:url('/skins/origin/images/breadcrumb.png') center right no-repeat;
+	background:url('../origin/images/breadcrumb.png') center right no-repeat;
 }
 
 .interfaceBox { border-top:1px solid grey; padding:.5em; }
