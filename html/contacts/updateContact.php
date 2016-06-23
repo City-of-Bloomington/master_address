@@ -1,11 +1,8 @@
 <?php
 /**
- * @copyright 2009-2014 City of Bloomington, Indiana
+ * @copyright 2009-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @author W. Sibo <sibow@bloomington.in.gov>
  */
-
 if (!userIsAllowed('Contact')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL.'/contacts');
@@ -42,8 +39,8 @@ if (isset($_POST['status'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('contacts/updateContactForm.inc',array('contact'=>$contact));
+$template->blocks[] = new Block('contacts/updateContactForm.inc', ['contact' => $contact]);
 if ($contact->getId()) {
-	$template->blocks['panel-one'][] = new Block('changeLogs/changeLog.inc',['target'=>$contact]);
+	$template->blocks['panel-one'][] = new Block('changeLogs/changeLog.inc', ['target' => $contact]);
 }
 echo $template->render();
