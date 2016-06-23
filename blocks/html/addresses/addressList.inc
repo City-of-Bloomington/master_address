@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param AddressList $this->addressList
  * @param Street $this->street (optional)
  */
@@ -26,24 +25,27 @@ echo "
 			</thead>
 			<tbody>
 	";
+            $fields = [
+                'streetNumber', 'address_type', 'streetName',
+                'status', 'jurisdiction', 'zip', 'city'
+            ];
 			foreach ($this->addressList as $address) {
-				$street_number = $address->getStreet_number();
-				$type = $address->getAddress_type();
-				$street = View::escape($address->getStreetName());
-				$status = $address->getStatus();
-				$jurisdiction = $address->getJurisdiction();
-				$zip = $address->getZip();
-				$city = View::escape($address->getCity());
+                foreach ($fields as $f) {
+                    $get = 'get'.ucfirst($f);
+                    $$f = self::escape($address->$get());
+                }
+                $url = $address->getURL();
+
 				$count = $address->getSubunitCount();
 				$count = $count ? $count : '';
 				echo "
-				<tr><td><a href=\"{$address->getURL()}\">$street_number</a></td>
-					<td><a href=\"{$address->getURL()}\">$type</a></td>
-					<td><a href=\"{$address->getURL()}\">$street</a></td>
-					<td><a href=\"{$address->getURL()}\">$status</a></td>
-					<td><a href=\"{$address->getURL()}\">$jurisdiction</a></td>
-					<td><a href=\"{$address->getURL()}\">$zip</a></td>
-					<td><a href=\"{$address->getURL()}\">$city</a></td>
+				<tr><td><a href=\"$url\">$streetNumber</a></td>
+					<td><a href=\"$url\">$address_type</a></td>
+					<td><a href=\"$url\">$streetName</a></td>
+					<td><a href=\"$url\">$status</a></td>
+					<td><a href=\"$url\">$jurisdiction</a></td>
+					<td><a href=\"$url\">$zip</a></td>
+					<td><a href=\"$url\">$city</a></td>
 					<td>$count</td>
 				</tr>
 				";

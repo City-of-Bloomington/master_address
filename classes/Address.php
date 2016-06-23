@@ -862,16 +862,27 @@ class Address
 	}
 
 	/**
+	 * Returns the complete street number
+	 *
+	 * The complete street number includes prefix, number, and suffix
+	 *
+	 * @return string
+	 */
+	public function getStreetNumber()
+	{
+        $number = '';
+        if ($this->street_number_prefix) { $number = "{$this->street_number_prefix} "; }
+        $number.= $this->street_number;
+        if ($this->street_number_suffix) { $number.= " {$this->street_number_suffix}"; }
+        return $number;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getStreetAddress()
 	{
-		$number = [];
-		if ($this->street_number_prefix) { $number[] = $this->street_number_prefix; }
-		$number[] = $this->street_number;
-		if ($this->street_number_suffix) { $number[] = $this->street_number_suffix; }
-		$number = implode(' ', $number);
-		return "$number {$this->getStreet()->getStreetName()}";
+		return "{$this->getStreetNumber()} {$this->getStreet()->getStreetName()}";
 	}
 
 	/**
