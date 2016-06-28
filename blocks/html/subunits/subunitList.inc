@@ -34,10 +34,11 @@
 			<tbody>
 		";
 			foreach ($this->subunitList as $subunit) {
+                $url    = $subunit->getURL();
 				$number = View::escape($subunit->getIdentifier());
 				echo "
-				<tr><td>{$subunit->getType()}</td>
-					<td><a href=\"{$subunit->getURL()}\">$number</a></td>
+				<tr><td><a href=\"$url\">{$subunit->getType()}</a></td>
+					<td><a href=\"$url\">$number</a></td>
 					<td>{$subunit->getStatus()}</td>
 					<td>{$subunit->getLatLong()}</td>
 					<td>{$subunit->getState_plane_xy_coordinate()}</td>

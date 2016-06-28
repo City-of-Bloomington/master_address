@@ -14,30 +14,50 @@ if (isset($_POST['changeLogEntry'])) {
 	try {
 		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'], $_POST['changeLogEntry']);
 
-		$identifiers = explode(',', $_POST['subunit_identifier']);
-		foreach ($identifiers as $identifier) {
-			$identifier = trim($identifier);
+		if (!empty($_POST['subunit_identifier'])) {
+            $identifiers = explode(',', $_POST['subunit_identifier']);
+            foreach ($identifiers as $identifier) {
+                $identifier = trim($identifier);
 
-			if ($identifier) {
-				$subunit = new Subunit();
-				$subunit->setAddress($address);
-				$subunit->setIdentifier($identifier);
-				$subunit->setSudtype($_POST['sudtype']);
-				$subunit->setNotes($_POST['notes']);
+                if ($identifier) {
+                    $subunit = new Subunit();
+                    $subunit->setAddress($address);
+                    $subunit->setIdentifier($identifier);
+                    $subunit->setSudtype($_POST['sudtype']);
+                    $subunit->setNotes($_POST['notes']);
 
-				$subunit->save($changeLogEntry);
-				$subunit->saveStatus('CURRENT');
+                    $subunit->save($changeLogEntry);
+                    $subunit->saveStatus('CURRENT');
 
-				$locationType = new LocationType($_POST['location_type_id']);
-				$location = new Location();
-				$location->assign($subunit, $locationType);
-				$location->activate($subunit);
-				$data['mailable'] = $_POST['mailable'];
-				$data['livable' ] = $_POST['livable'];
-				$location->update($data,$subunit);
-				$location->saveStatus('CURRENT');
-			}
-		}
+                    $locationType = new LocationType($_POST['location_type_id']);
+                    $location = new Location();
+                    $location->assign($subunit, $locationType);
+                    $location->activate($subunit);
+                    $data['mailable'] = $_POST['mailable'];
+                    $data['livable' ] = $_POST['livable'];
+                    $location->update($data,$subunit);
+                    $location->saveStatus('CURRENT');
+                }
+            }
+        }
+        else {
+            $subunit = new Subunit();
+            $subunit->setAddress($address);
+            $subunit->setSudtype($_POST['sudtype']);
+            $subunit->setNotes($_POST['notes']);
+
+            $subunit->save($changeLogEntry);
+            $subunit->saveStatus('CURRENT');
+
+            $locationType = new LocationType($_POST['location_type_id']);
+            $location = new Location();
+            $location->assign($subunit, $locationType);
+            $location->activate($subunit);
+            $data['mailable'] = $_POST['mailable'];
+            $data['livable' ] = $_POST['livable'];
+            $location->update($data,$subunit);
+            $location->saveStatus('CURRENT');
+        }
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
