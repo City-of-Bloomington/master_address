@@ -72,3 +72,6 @@ $ZEND_ACL->allow('Engineering','Street');
 $ZEND_ACL->allow('Engineering','Address');
 $ZEND_ACL->allow('Engineering','Subunit');
 $ZEND_ACL->allow('Engineering','Plat');
+$ZEND_ACL->allow('Engineering','Contacts');
+$ZEND_ACL->allow('Engineering','ChangeLog');
+
