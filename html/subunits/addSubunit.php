@@ -1,9 +1,7 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @author W Sibo <sibow@bloomington.in.gov>
  */
 if (!userIsAllowed('Subunit')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -14,9 +12,9 @@ $address = new Address($_REQUEST['street_address_id']);
 
 if (isset($_POST['changeLogEntry'])) {
 	try {
-		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'],$_POST['changeLogEntry']);
+		$changeLogEntry = new ChangeLogEntry($_SESSION['USER'], $_POST['changeLogEntry']);
 
-		$identifiers = explode(',',$_POST['subunit_identifier']);
+		$identifiers = explode(',', $_POST['subunit_identifier']);
 		foreach ($identifiers as $identifier) {
 			$identifier = trim($identifier);
 
@@ -32,10 +30,10 @@ if (isset($_POST['changeLogEntry'])) {
 
 				$locationType = new LocationType($_POST['location_type_id']);
 				$location = new Location();
-				$location->assign($subunit,$locationType);
+				$location->assign($subunit, $locationType);
 				$location->activate($subunit);
 				$data['mailable'] = $_POST['mailable'];
-				$data['livable'] = $_POST['livable'];
+				$data['livable' ] = $_POST['livable'];
 				$location->update($data,$subunit);
 				$location->saveStatus('CURRENT');
 			}
@@ -52,10 +50,13 @@ if (isset($_POST['changeLogEntry'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('subunits/breadcrumbs.inc',array('address'=>$address));
-$template->blocks[] = new Block('subunits/addSubunitForm.inc',array('address'=>$address));
+$template->blocks[] = new Block('subunits/breadcrumbs.inc',   ['address'=>$address]);
+$template->blocks[] = new Block('subunits/addSubunitForm.inc',['address'=>$address]);
 
-$template->blocks['panel-one'][] = new Block('subunits/subunitList.inc',
-											array('subunitList'=>$address->getSubunits(),
-													'deactivateButtons'=>true));
+$template->blocks['panel-one'][] = new Block(
+    'subunits/subunitList.inc', [
+        'subunitList'=>$address->getSubunits(),
+        'deactivateButtons'=>true
+    ]
+);
 echo $template->render();
