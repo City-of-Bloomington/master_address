@@ -74,4 +74,5 @@ $ZEND_ACL->allow('Engineering','Subunit');
 $ZEND_ACL->allow('Engineering','Plat');
 $ZEND_ACL->allow('Engineering','Contact');
 $ZEND_ACL->allow('Engineering','ChangeLog');
+$ZEND_ACL->allow('Engineering','Report');
 
