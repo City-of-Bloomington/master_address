@@ -20,6 +20,14 @@ class URL
 
 	public $parameters = array();
 
+	/**
+	 * @return string
+	 */
+	public static function current_url()
+	{
+        return "$_SERVER[REQUEST_SCHEME]://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]";
+	}
+
 	public function __construct($script)
 	{
 		$script = urldecode($script);

@@ -41,7 +41,7 @@ if (isset($_GET['actions'])) {
 	$changeLogBlock = new Block('changeLogs/changeLog.inc');
 	if ($template->outputFormat == 'html') {
         $changeLogBlock->paginator = ChangeLog::getPaginator($types, $actions, $fields, $jurisdictions);
-        $changeLogBlock->url       = "http://$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]";
+        $changeLogBlock->url       = URL::current_url();
 	}
 	else {
         $changeLogBlock->changeLog = ChangeLog::getEntries($types, $actions, $fields, $jurisdictions);
