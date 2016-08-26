@@ -7,7 +7,7 @@
 $subunit = $this->subunit ? $this->subunit : new Subunit();
 ?>
 	<tr><td><label for="sudtype" class="required">SUD Type</label></td>
-		<td><select name="sudtype" id="sudtype">
+		<td><select name="sudtype" id="sudtype"><option value=""></option>
 			<?php
 				$types = new SubunitTypeList();
 				$types->find();
