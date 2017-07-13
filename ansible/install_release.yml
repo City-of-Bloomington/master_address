@@ -1,0 +1,28 @@
+---
+- hosts: master_address
+  become: yes
+  roles:
+    - City-of-Bloomington.postgresql
+    - City-of-Bloomington.php
+
+  tasks:
+    - name: Create database user
+      become: yes
+      become_user: postgres
+      postgresql_user:
+        name: "{{ ma_db.username }}"
+        password: "{{ ma_db.password }}"
+        state: present
+        role_attr_flags: LOGIN
+      no_log: True
+
+    - name: Create database
+      become: yes
+      become_user: postgres
+      postgresql_db: name={{ ma_db.name }} state=present
+
+    - name: Create schema
+      become: yes
+      become_user: postgres
+      postgresql_schema: database={{ ma_db.name }} name={{ ma_db.schema }} owner={{ ma_db.username }}
+...

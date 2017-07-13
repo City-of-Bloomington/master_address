@@ -2,4 +2,4 @@ configuration.inc
 data/sessions/*
 build
 dist
-
+ansible/roles/*

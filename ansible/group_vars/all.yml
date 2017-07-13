@@ -1,0 +1,13 @@
+---
+ma_path: "/srv/sites/master_address"
+ma_version: "2.0.2"
+
+ma_base_uri: /master_address
+ma_base_url: https://{{ ansible_host }}{{ ma_base_uri }}
+
+ma_db:
+  name:     "gis"
+  schema:   "address"
+  username: "master_address"
+  password: "{{ vault_ma_db.password }}"
+...
