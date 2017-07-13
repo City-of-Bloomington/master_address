@@ -112,7 +112,7 @@ create table locationPurposes (
 
 create table plats (
 	id          serial primary key,
-	type        char(1),
+	platType    char(1),
 	name        varchar(120) not null,
 	cabinet     varchar(5),
 	envelope    varchar(10),
@@ -202,7 +202,7 @@ create table addresses (
     streetNumber       integer not null,
     streetNumberSuffix varchar(8),
     adddress2          varchar(64),
-    type               varchar(16) not null,
+    addressType        varchar(16) not null,
     street_id          integer not null,
     jurisdiction_id    integer not null,
     township_id        integer,
@@ -219,20 +219,15 @@ create table addresses (
     statePlaneY        integer,
     latitude           decimal(10, 8),
     longitude          decimal(10, 8),
+    usng               varchar(20),
     geom public.geometry(Point, 2966),
-    trashDay_id          smallint,
-    trashLargeItemDay_id smallint,
-    recycleWeek_code     char(1),
     foreign key (street_id      ) references streets      (id),
     foreign key (jurisdiction_id) references jurisdictions(id),
     foreign key (township_id    ) references townships    (id),
     foreign key (subdivision_id ) references subdivisions (id),
     foreign key (plat_id        ) references plats        (id),
     foreign key (quarterSection ) references quarterSections(code),
-    foreign key (zip            ) references zipCodes(zip),
-    foreign key (trashDay_id    )      references trashDays(id),
-    foreign key (trashLargeItemDay_id) references trashDays(id),
-    foreign key (recycleWeek_code)     references recycleWeeks(code)
+    foreign key (zip            ) references zipCodes(zip)
 );
 
 create table address_status (
@@ -255,6 +250,7 @@ create table subunits (
     statePlaneY integer,
     latitude    decimal(10, 8),
     longitude   decimal(10, 8),
+    usng        varchar(20),
     geom public.geometry(Point, 2966),
     foreign key (address_id) references addresses   (id),
     foreign key (type_id   ) references subunitTypes(id)
@@ -276,7 +272,7 @@ create table locations (
 	address_id integer,
 	subunit_id integer,
 	mailable   boolean,
-	livable    boolean,
+	occupiable boolean,
 	active     boolean,
 	unique (id, address_id, subunit_id),
 	foreign key (address_id) references addresses    (id),
@@ -294,6 +290,16 @@ create table location_status (
 	foreign key (status_id  ) references addressStatuses(id)
 );
 
+create table sanitation (
+    id               serial   primary key,
+    location_id      integer  not null,
+    trashDay_id      smallint,
+    recycleWeek_code char(1),
+    foreign key (location_id) references locations(id),
+    foreign key (trashDay_id) references trashDays(id),
+    foreign key (recycleWeek_code) references recycleWeeks(code)
+);
+
 
 -- mast_addr_assignment_contacts
 -- Removed address, city, state, and zip fields
@@ -302,7 +308,7 @@ create table location_status (
 create table contacts (
 	id           serial      primary key,
 	status_id    integer     not null,
-	type         varchar(20),
+	contactType  varchar(20),
 	lastname     varchar(30),
 	firstname    varchar(20),
 	phone        varchar(12),
