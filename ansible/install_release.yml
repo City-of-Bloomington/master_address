@@ -6,6 +6,22 @@
     - City-of-Bloomington.php
 
   tasks:
+    - name: Install web application
+      template:
+        src: postgres_create.sql
+        dest: "{{ ma_path }}/scripts/postgres_create.sql"
+
+    - name: Install PostGIS
+      apt: name=postgis state=present
+
+    - name: Activate PostGIS
+      become: yes
+      become_user: postgres
+      postgresql_ext:
+        name: postgis
+        db: "{{ ma_db.name }}"
+        state: present
+
     - name: Create database user
       become: yes
       become_user: postgres

@@ -1,7 +1,6 @@
 -- @copyright 2017 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
-create schema master_address;
-set search_path = master_address, pg_catalog;
+set search_path = address;
 
 -- Historically, used for user accounts.
 -- Will probably merge the contacts table into here.
@@ -139,7 +138,7 @@ create table subdivisionNames (
 	name           varchar(100) not null,
 	phase          integer,
 	status         varchar(8)   not null,
-	foreign key (subdivisions) references subdivisions(id)
+	foreign key (subdivision_id) references subdivisions(id)
 );
 
 -- mast_street_name_type_master
@@ -212,7 +211,7 @@ create table addresses (
     section            varchar(16),
     quarterSection     char(2),
     plat_lotNumber     varchar(16),
-    city               varchar(32)
+    city               varchar(32),
     state              char(2) not null default 'IN',
     zip                integer,
     zipplus4           smallint,
@@ -230,7 +229,7 @@ create table addresses (
     foreign key (subdivision_id ) references subdivisions (id),
     foreign key (plat_id        ) references plats        (id),
     foreign key (quarterSection ) references quarterSections(code),
-    foreign key (zip            ) references zipCodes(zip)
+    foreign key (zip            ) references zipCodes(zip),
     foreign key (trashDay_id    )      references trashDays(id),
     foreign key (trashLargeItemDay_id) references trashDays(id),
     foreign key (recycleWeek_code)     references recycleWeeks(code)
@@ -279,7 +278,7 @@ create table locations (
 	mailable   boolean,
 	livable    boolean,
 	active     boolean,
-	unique (location_id, address_id, subunit_id),
+	unique (id, address_id, subunit_id),
 	foreign key (address_id) references addresses    (id),
 	foreign key (subunit_id) references subunits     (id),
 	foreign key (type_id   ) references locationTypes(id)
@@ -338,8 +337,8 @@ create table addressChangeLog (
 	action     varchar(20) not null,
 	notes      varchar(255),
 	foreign key (address_id) references addresses(id),
-	foreign key (person_id) references people(id),
-	foreign key (contact_id) references mast_addr_assignment_contact(contact_id)
+	foreign key (person_id ) references people   (id),
+	foreign key (contact_id) references contacts (id)
 );
 
 create table locationChangeLog (
