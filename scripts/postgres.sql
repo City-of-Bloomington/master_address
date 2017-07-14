@@ -93,14 +93,14 @@ create table subunitTypes (
 create table locationTypes (
     id          serial       primary key,
     code        varchar(8)   not null unique,
-    name        varchar(16)  not null unique,
+    name        varchar(40)  not null unique,
     description varchar(128) not null
 );
 
 create table locationPurposes (
-    id   serial       primary key,
-    name varchar(128) not null,
-    type varchar(32)  not null
+    id          serial       primary key,
+    name        varchar(128) not null,
+    purposeType varchar(32)  not null
 );
 
 
@@ -124,21 +124,17 @@ create table plats (
 );
 
 
+-- Combined subvisions and subdivisionNames into a single table
+-- Subdivision names never changed
+-- Dropped date fields
+-- startDate and endDate were null for all Oracle records
 create table subdivisions (
     id          serial primary key,
     township_id integer,
+	name        varchar(100) not null,
+	phase       integer,
+	status      varchar(8)   not null,
     foreign key (township_id) references townships(id)
-);
-
--- Dropped date fields
--- startDate and endDate were null for all Oracle records
-create table subdivisionNames (
-    id             serial       primary key,
-	subdivision_id integer      not null,
-	name           varchar(100) not null,
-	phase          integer,
-	status         varchar(8)   not null,
-	foreign key (subdivision_id) references subdivisions(id)
 );
 
 -- mast_street_name_type_master
@@ -161,15 +157,14 @@ create table streetNames (
     id               serial primary key,
     direction_id     integer,
     name             varchar(64),
-    type_id          integer,
     postDirection_id integer,
     notes            varchar(240),
-    foreign key (type_id         ) references streetTypes(id),
     foreign key (direction_id    ) references directions (id),
     foreign key (postDirection_id) references directions (id)
 );
 
 create table street_streetNames (
+    id            serial primary key,
     street_id     integer,
     streetName_id integer,
     type_id       integer,
@@ -179,21 +174,6 @@ create table street_streetNames (
     foreign key (street_id    ) references streets        (id),
     foreign key (streetName_id) references streetNames    (id),
     foreign key (type_id      ) references streetNameTypes(id)
-);
-
-create table street_townships (
-    street_id   integer,
-    township_id integer,
-    foreign key (street_id  ) references streets  (id),
-    foreign key (township_id) references townships(id)
-);
-
-
-create table street_subdivisions (
-    street_id      integer,
-    subdivision_id integer,
-    foreign key (street_id     ) references streets     (id),
-    foreign key (subdivision_id) references subdivisions(id)
 );
 
 create table addresses (
@@ -266,19 +246,28 @@ create table subunit_status (
     foreign key (status_id ) references addressStatuses(id)
 );
 
+-- The primary key for locations is a composite.
+-- We did this to avoid confusion in the common scenario.
+-- Most locations have a single row and people thing of
+-- the location_id as key field.
+-- However, locations that get readdressed, over time, will have the
+-- same location_id across multiple rows.
+-- This is a many to many relationship between addresses and locations.
+-- We use address and subunit tables as the primary entrance to this table
 create table locations (
-	id         serial  primary key,
-	type_id    integer not null,
-	address_id integer,
-	subunit_id integer,
-	mailable   boolean,
-	occupiable boolean,
-	active     boolean,
-	unique (id, address_id, subunit_id),
+	location_id serial,
+	type_id     integer not null,
+	address_id  integer,
+	subunit_id  integer,
+	mailable    boolean,
+	occupiable  boolean,
+	active      boolean,
+	unique (location_id, address_id, subunit_id),
 	foreign key (address_id) references addresses    (id),
 	foreign key (subunit_id) references subunits     (id),
-	foreign key (type_id   ) references locationTypes(id)
+	foreign key (type_id   ) references locationTypes(id),
 );
+create index on locations(location_id);
 
 create table location_status (
 	id          serial  primary key,
@@ -286,16 +275,15 @@ create table location_status (
 	status_id   integer not null,
 	startDate   date,
 	endDate     date,
-	foreign key (location_id) references locations      (id),
 	foreign key (status_id  ) references addressStatuses(id)
 );
 
 create table sanitation (
     id               serial   primary key,
-    location_id      integer  not null,
+    address_id       integer  not null,
     trashDay_id      smallint,
     recycleWeek_code char(1),
-    foreign key (location_id) references locations(id),
+    foreign key (address_id ) references addresses(id),
     foreign key (trashDay_id) references trashDays(id),
     foreign key (recycleWeek_code) references recycleWeeks(code)
 );
@@ -329,7 +317,6 @@ create table addressAssignmentLog (
 	action      varchar(20) not null,
 	notes       varchar(240),
 	foreign key (address_id ) references addresses(id),
-	foreign key (location_id) references locations(id),
 	foreign key (subunit_id ) references subunits (id),
 	foreign key (contact_id ) references contacts (id)
 );
@@ -348,11 +335,11 @@ create table addressChangeLog (
 );
 
 create table locationChangeLog (
-    id          serial  primary key,
-    location_id integer not null,
+    id             serial  primary key,
+    location_id    integer not null,
+    oldLocation_id integer not null,
     actionDate  date    not null default CURRENT_DATE,
-    notes       varchar(240),
-    foreign key (location_id) references locations(id)
+    notes       varchar(240)
 );
 
 create table streetChangeLog (
