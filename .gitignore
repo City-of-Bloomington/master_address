@@ -1,5 +1,6 @@
-configuration.inc
+site_config.inc
 data/sessions/*
 build
 dist
 ansible/roles/*
+vendor

@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'three-column';
-	$dir = dirname(__FILE__);
-	include $dir.'/partials/header.inc';
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="three-column">
 	<?php
-		include $dir.'/partials/banner.inc';
-		include $dir.'/partials/menubar.inc';
+		$this->_include('partials/header.inc');
 	?>
-
-	<div id="panel-container">
-		<?php
-			include $dir.'/partials/panel-one.inc';
-			include $dir.'/partials/panel-two.inc';
-		?>
-		<div id="content-panel">
-			<?php
-				include FRAMEWORK.'/errorMessages.php';
-
-				// This is the default panel
-				echo $this->includeBlocks();
-				echo $this->includeBlocks('content-panel');
-			?>
-		</div>
-	</div>
-	<?php include $dir.'/partials/footer.inc'; ?>
+	<main>
+        <?php
+            $this->_include('partials/panel-one.inc');
+            $this->_include('partials/panel-two.inc');
+        ?>
+        <div id="content-panel" class="panel">
+            <?php
+                include BLOSSOM.'/errorMessages.php';
+                echo $this->includeBlocks();
+            ?>
+        </div>
+	</main>
+	<?php $this->_include('partials/footer.inc'); ?>
 </body>
 </html>
 <?php
-	include $dir.'/partials/garbageCollection.inc';
+	$this->_include('partials/garbageCollection.inc');
 ?>

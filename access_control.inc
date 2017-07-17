@@ -1,78 +1,77 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2009-2017 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-$ZEND_ACL = new Zend_Acl();
-/**
- * Load the roles from the database
- */
-$roles = new RoleList();
-$roles->find();
-foreach ($roles as $role) {
-	$ZEND_ACL = $ZEND_ACL->addRole(new Zend_Acl_Role($role->getName()));
-}
-/**
- * Create resources for all the classes
- */
-$ZEND_ACL->add(new Zend_Acl_Resource('AddressLocationChange'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Address'));
-$ZEND_ACL->add(new Zend_Acl_Resource('AddressSanitation'));
-$ZEND_ACL->add(new Zend_Acl_Resource('AddressStatusChange'));
-$ZEND_ACL->add(new Zend_Acl_Resource('AddressStatus'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Annexation'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Building'));
-$ZEND_ACL->add(new Zend_Acl_Resource('BuildingStatus'));
-$ZEND_ACL->add(new Zend_Acl_Resource('BuildingType'));
-$ZEND_ACL->add(new Zend_Acl_Resource('ChangeLog'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Contact'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Direction'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Intersection'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Jurisdiction'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Location'));
-$ZEND_ACL->add(new Zend_Acl_Resource('LocationType'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Person'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Places'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Plat'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Precinct'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Purpose'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Report'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Role'));
-$ZEND_ACL->add(new Zend_Acl_Resource('StreetName'));
-$ZEND_ACL->add(new Zend_Acl_Resource('StreetNameType'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Street'));
-$ZEND_ACL->add(new Zend_Acl_Resource('StreetStatus'));
-$ZEND_ACL->add(new Zend_Acl_Resource('StreetType'));
-$ZEND_ACL->add(new Zend_Acl_Resource('SubdivisionName'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Subdivision'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Subunit'));
-$ZEND_ACL->add(new Zend_Acl_Resource('SubunitStatus'));
-$ZEND_ACL->add(new Zend_Acl_Resource('SubunitType'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Town'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Township'));
-$ZEND_ACL->add(new Zend_Acl_Resource('User'));
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+
+$ZEND_ACL = new Acl();
+$ZEND_ACL->addRole(new Role('Anonymous'))
+		 ->addRole(new Role('Public'),   'Anonymous')
+		 ->addRole(new Role('Engineering'), 'Public')
+		 ->addRole(new Role('GIS'))
+		 ->addRole(new Role('Administrator'));
 
 
 /**
- * Assign permissions to the resources
+ * Create resources for all the Controllers
  */
-// Administrator is allowed access to everything
-$ZEND_ACL->allow('Administrator');
+$ZEND_ACL->addResource(new Resource('index'));
+$ZEND_ACL->addResource(new Resource('people'));
+$ZEND_ACL->addResource(new Resource('users'));
+$ZEND_ACL->addResource(new Resource('login'));
 
-// Gis is allowed access to everything except Users, Roles, and People
-$ZEND_ACL->allow('GIS');
-$ZEND_ACL->deny('GIS','User');
-$ZEND_ACL->deny('GIS','Role');
-$ZEND_ACL->deny('GIS','Person');
+$ZEND_ACL->addResource(new Resource('AddressLocationChange'));
+$ZEND_ACL->addResource(new Resource('Address'));
+$ZEND_ACL->addResource(new Resource('AddressSanitation'));
+$ZEND_ACL->addResource(new Resource('AddressStatusChange'));
+$ZEND_ACL->addResource(new Resource('AddressStatus'));
+$ZEND_ACL->addResource(new Resource('Annexation'));
+$ZEND_ACL->addResource(new Resource('Building'));
+$ZEND_ACL->addResource(new Resource('BuildingStatus'));
+$ZEND_ACL->addResource(new Resource('BuildingType'));
+$ZEND_ACL->addResource(new Resource('ChangeLog'));
+$ZEND_ACL->addResource(new Resource('Contact'));
+$ZEND_ACL->addResource(new Resource('Direction'));
+$ZEND_ACL->addResource(new Resource('Intersection'));
+$ZEND_ACL->addResource(new Resource('Jurisdiction'));
+$ZEND_ACL->addResource(new Resource('Location'));
+$ZEND_ACL->addResource(new Resource('LocationType'));
+$ZEND_ACL->addResource(new Resource('Places'));
+$ZEND_ACL->addResource(new Resource('Plat'));
+$ZEND_ACL->addResource(new Resource('Precinct'));
+$ZEND_ACL->addResource(new Resource('Purpose'));
+$ZEND_ACL->addResource(new Resource('Report'));
+$ZEND_ACL->addResource(new Resource('StreetName'));
+$ZEND_ACL->addResource(new Resource('StreetNameType'));
+$ZEND_ACL->addResource(new Resource('Street'));
+$ZEND_ACL->addResource(new Resource('StreetStatus'));
+$ZEND_ACL->addResource(new Resource('StreetType'));
+$ZEND_ACL->addResource(new Resource('SubdivisionName'));
+$ZEND_ACL->addResource(new Resource('Subdivision'));
+$ZEND_ACL->addResource(new Resource('Subunit'));
+$ZEND_ACL->addResource(new Resource('SubunitStatus'));
+$ZEND_ACL->addResource(new Resource('SubunitType'));
+$ZEND_ACL->addResource(new Resource('Town'));
+$ZEND_ACL->addResource(new Resource('Township'));
 
+
+// Permissions for unauthenticated browsing
+$ZEND_ACL->allow(null, 'login');
+$ZEND_ACL->allow(null, ['index'], ['index']);
 
 // Engineering is only allowed to edit this stuff
-$ZEND_ACL->allow('Engineering','Street');
-$ZEND_ACL->allow('Engineering','Address');
-$ZEND_ACL->allow('Engineering','Subunit');
-$ZEND_ACL->allow('Engineering','Plat');
-$ZEND_ACL->allow('Engineering','Contact');
-$ZEND_ACL->allow('Engineering','ChangeLog');
-$ZEND_ACL->allow('Engineering','Report');
+$ZEND_ACL->allow('Engineering','streets'   );
+$ZEND_ACL->allow('Engineering','addresses' );
+$ZEND_ACL->allow('Engineering','subunits'  );
+$ZEND_ACL->allow('Engineering','plats'     );
+$ZEND_ACL->allow('Engineering','contacts'  );
+$ZEND_ACL->allow('Engineering','changeLogs');
+$ZEND_ACL->allow('Engineering','reports'   );
 
+$ZEND_ACL->allow('GIS');
+$ZEND_ACL->deny ('GIS', 'users');
+
+$ZEND_ACL->allow('Administrator');
