@@ -25,6 +25,8 @@ cd $DIR
 
 # The PHP code does not need to actually build anything.
 # Just copy all the files into the build
-rsync -rlv --exclude-from=$DIR/buildignore --delete $DIR/ $BUILD/$APPNAME
+echo "Copying files"
+rsync -rl --exclude-from=$DIR/buildignore --delete $DIR/ $BUILD/$APPNAME
 cd $BUILD
-tar czvf $APPNAME.tar.gz $APPNAME
+echo "Creating tarball"
+tar czf $APPNAME.tar.gz $APPNAME

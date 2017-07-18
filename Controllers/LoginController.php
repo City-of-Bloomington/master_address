@@ -1,29 +1,26 @@
 <?php
 /**
- * @copyright 2012-2015 City of Bloomington, Indiana
+ * @copyright 2012-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
-use Blossom\Classes\Block;
+
 use Application\Models\Person;
+use Blossom\Classes\Controller;
 
 class LoginController extends Controller
 {
 	private $return_url;
 
-	public function __construct(Template $template)
+	public function __construct()
 	{
-		parent::__construct($template);
 		$this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
 	}
 
 	/**
 	 * Attempts to authenticate users via CAS
 	 */
-	public function index()
+	public function index(array $params)
 	{
 		// If they don't have CAS configured, send them onto the application's
 		// internal authentication system
@@ -52,13 +49,15 @@ class LoginController extends Controller
 			$_SESSION['errorMessages'][] = $e;
 		}
 
-		$this->template->blocks[] = new Block('loginForm.inc', ['return_url'=>$this->return_url]);
+		return new \Application\Views\Login\LoginView([
+            'return_url' => $this->return_url
+		]);
 	}
 
 	/**
 	 * Attempts to authenticate users based on AuthenticationMethod
 	 */
-	public function login()
+	public function login(array $params)
 	{
 		if (isset($_POST['username'])) {
 			try {
@@ -76,10 +75,12 @@ class LoginController extends Controller
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		$this->template->blocks[] = new Block('loginForm.inc', ['return_url'=>$this->return_url]);
+		return new \Application\Views\Login\LoginView([
+            'return_url'=>$this->return_url
+        ]);
 	}
 
-	public function logout()
+	public function logout(array $params)
 	{
 		session_destroy();
 		header('Location: '.$this->return_url);
