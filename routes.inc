@@ -34,3 +34,11 @@ $ROUTES->attach('users', '/users', function ($r) {
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('delete', '/delete/{id}') ->addValues(['action'=>'delete']);
 });
+
+$ROUTES->attach('townships', '/townships', function ($r) {
+    $r->setTokens(['id'=>'[a-z0-9]+']);
+    $r->setValues(['controller'=>'townships']);
+
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
+    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+});

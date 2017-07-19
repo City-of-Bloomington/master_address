@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2015 City of Bloomington, Indiana
+ * @copyright 2015-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Person;
 
 $links  = [];
 $routes = [
+    'townships'      => 'township',
     'people'         => 'person',
     'users'          => 'user'
 ];

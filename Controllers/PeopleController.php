@@ -8,7 +8,6 @@ namespace Application\Controllers;
 use Application\Models\Person;
 use Application\Models\PeopleTable;
 use Blossom\Classes\Controller;
-use Blossom\Classes\Block;
 
 class PeopleController extends Controller
 {
