@@ -10,6 +10,13 @@ class Jurisdiction extends ActiveRecord
 {
     protected $tablename = 'jurisdictions';
 
+    // Maps this model's fieldnames to database column names
+    // [field => column]
+    public static $fieldmap = [
+        'id'   => 'id',
+        'name' => 'name'
+    ];
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e

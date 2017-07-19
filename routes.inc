@@ -35,18 +35,14 @@ $ROUTES->attach('users', '/users', function ($r) {
     $r->add('delete', '/delete/{id}') ->addValues(['action'=>'delete']);
 });
 
-$ROUTES->attach('townships', '/townships', function ($r) {
-    $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=>'townships']);
+// Basic lookup table routes
+$tables = ['townships', 'jurisdictions', 'directions'];
+foreach ($tables as $t) {
+    $ROUTES->attach($t, "/$t", function ($r) use ($t) {
+        $r->setTokens(['id'=>'[a-z0-9]+']);
+        $r->setValues(['controller'=>$t]);
 
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-});
-
-$ROUTES->attach('jurisdictions', '/jurisdictions', function ($r) {
-    $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=>'jurisdictions']);
-
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-});
+        $r->add('index',  '')             ->addValues(['action'=>'index' ]);
+        $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+    });
+}

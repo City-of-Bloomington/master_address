@@ -7,13 +7,9 @@ namespace Application\Models;
 
 use Blossom\Classes\TableGateway;
 
-class TownshipsTable extends TableGateway
+class DirectionsTable extends TableGateway
 {
-    public function __construct()
-    {
-        parent::__construct('townships', __namespace__.'\Township');
-        $this->columns = Township::$fieldmap;
-    }
+    public function __construct() { parent::__construct('directions', __namespace__.'\Direction'); }
 
     public function find($fields=null, $order=['name'], $itemsPerPage=null, $currentPage=null)
     {

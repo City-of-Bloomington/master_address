@@ -16,7 +16,12 @@ class JurisdictionsController extends Controller
         $table = new JurisdictionsTable();
         $list  = $table->find();
 
-        return new \Application\Views\Jurisdictions\ListView(['jurisdictions'=>$list]);
+        return new \Application\Views\Generic\ListView([
+            'list'     => $list,
+            'plural'   => 'jurisdictions',
+            'singular' => 'jurisdiction',
+            'fields'   => array_keys(Jurisdiction::$fieldmap)
+        ]);
     }
 
     public function update(array $params)
@@ -37,7 +42,10 @@ class JurisdictionsController extends Controller
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
-            return new \Application\Views\Jurisdictions\UpdateView(['jurisdiction'=>$jurisdiction]);
+            return new \Application\Views\Generic\UpdateView([
+                'object'    => $jurisdiction,
+                'tablename' => 'jurisdiction'
+            ]);
         }
         else {
             return new \Application\Views\NotFoundView();

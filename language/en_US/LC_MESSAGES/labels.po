@@ -127,13 +127,10 @@ msgstr "New Township"
 msgid "township_edit"
 msgstr "Edit Township"
 
-msgid "township_delete"
-msgstr "Delete Township"
-
 msgid "code"
 msgstr "Code"
 
-msgid "quarter_code"
+msgid "quarterCode"
 msgstr "Quarter Code"
 
 msgid "jurisdiction"
@@ -147,5 +144,14 @@ msgstr "New Jurisdiction"
 msgid "jurisdiction_edit"
 msgstr "Edit Jurisdiction"
 
-msgid "jurisdiction_delete"
-msgstr "Delete Jurisdiction"
+msgid "direction"
+msgid_plural "directions"
+msgstr[0] "Direction"
+msgstr[1] "Directions"
+
+msgid "direction_add"
+msgstr "New Direction"
+
+msgid "direction_edit"
+msgstr "Edit Direction"
+

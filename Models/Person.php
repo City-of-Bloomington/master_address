@@ -31,7 +31,6 @@ class Person extends ActiveRecord
 				$this->data = $id;
 			}
 			else {
-                $pdo = Database::getConnection();
 				if (ActiveRecord::isId($id)) {
 					$sql = 'select * from people where id=?';
 				}

@@ -10,6 +10,15 @@ class Township extends ActiveRecord
 {
     protected $tablename = 'townships';
 
+    // Maps this model's fieldnames to database column names
+    // [field => column]
+    public static $fieldmap = [
+        'id'          => 'id',
+        'name'        => 'name',
+        'code'        => 'code',
+        'quarterCode' => 'quarter_code'
+    ];
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws Exception $e
@@ -39,9 +48,10 @@ class Township extends ActiveRecord
 
 	public function handleUpdate(array $post)
 	{
-        $this->setName($post['name']);
-        $this->setCode($post['code']);
-        $this->setQuarterCode($post['quarterCode']);
+        foreach (array_keys(self::$fieldmap) as $f) {
+            $set = 'set'.ucfirst($f);
+            $this->$set($post[$f]);
+        }
 	}
 
 

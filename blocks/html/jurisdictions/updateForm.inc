@@ -2,10 +2,10 @@
 /**
  * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Jurisdiction $this->jurisdiction
+ * @param Jurisdiction $this->object
  */
-$id    = $this->jurisdiction->getId();
-$name  = parent::escape($this->jurisdiction->getName());
+$id    = $this->object->getId();
+$name  = parent::escape($this->object->getName());
 
 $title = $id ? $this->_('jurisdiction_edit') : $this->_('jurisdiction_add');
 ?>

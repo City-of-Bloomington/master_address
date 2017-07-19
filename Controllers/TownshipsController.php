@@ -16,7 +16,12 @@ class TownshipsController extends Controller
         $table = new TownshipsTable();
         $list  = $table->find();
 
-        return new \Application\Views\Townships\ListView(['townships'=>$list]);
+        return new \Application\Views\Generic\ListView([
+            'list'     => $list,
+            'plural'   => 'townships',
+            'singular' => 'township',
+            'fields'   => array_keys(Township::$fieldmap)
+        ]);
     }
 
     public function update(array $params)
@@ -37,7 +42,10 @@ class TownshipsController extends Controller
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
-            return new \Application\Views\Townships\UpdateView(['township'=>$township]);
+            return new \Application\Views\Generic\UpdateView([
+                'object'    => $township,
+                'tablename' => 'townships'
+            ]);
         }
         else {
             return new \Application\Views\NotFoundView();

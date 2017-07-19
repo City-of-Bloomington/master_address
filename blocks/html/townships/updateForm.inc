@@ -2,12 +2,12 @@
 /**
  * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Township $this->township
+ * @param Township $this->object
  */
 $fields = ['id', 'name', 'code', 'quarterCode'];
 foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->township->$get());
+    $$f  = parent::escape($this->object->$get());
 }
 $title = $id ? $this->_('township_edit') : $this->_('township_add');
 ?>
@@ -23,7 +23,7 @@ $title = $id ? $this->_('township_edit') : $this->_('township_add');
                 echo $h->field([
                     'name'     => 'name',
                     'id'       => 'name',
-                    'label '   => $this->_('name'),
+                    'label'    => $this->_('name'),
                     'required' => true,
                     'value'    => $name
                 ]);
@@ -31,7 +31,7 @@ $title = $id ? $this->_('township_edit') : $this->_('township_add');
                 echo $h->field([
                     'name'     => 'code',
                     'id'       => 'code',
-                    'label '   => $this->_('code'),
+                    'label'    => $this->_('code'),
                     'required' => true,
                     'value'    => $code,
                     'attr'     => ['size'=>2, 'maxlength'=>2]
@@ -39,7 +39,7 @@ $title = $id ? $this->_('township_edit') : $this->_('township_add');
                 echo $h->field([
                     'name'     => 'quarterCode',
                     'id'       => 'quarterCode',
-                    'label '   => $this->_('quarterCode'),
+                    'label'    => $this->_('quarterCode'),
                     'value'    => $quarterCode,
                     'attr'     => ['size'=>1, 'maxlength'=>1]
                 ]);
