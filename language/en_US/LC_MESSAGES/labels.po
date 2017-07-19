@@ -135,3 +135,17 @@ msgstr "Code"
 
 msgid "quarter_code"
 msgstr "Quarter Code"
+
+msgid "jurisdiction"
+msgid_plural "jurisdictions"
+msgstr[0] "Jurisdiction"
+msgstr[1] "Jurisdictions"
+
+msgid "jurisdiction_add"
+msgstr "New Jurisdiction"
+
+msgid "jurisdiction_edit"
+msgstr "Edit Jurisdiction"
+
+msgid "jurisdiction_delete"
+msgstr "Delete Jurisdiction"

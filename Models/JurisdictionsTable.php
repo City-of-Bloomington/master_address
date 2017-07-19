@@ -7,12 +7,13 @@ namespace Application\Models;
 
 use Blossom\Classes\TableGateway;
 
-class TownshipsTable extends TableGateway
+class JurisdictionsTable extends TableGateway
 {
-    public function __construct() { parent::__construct('townships', __namespace__.'\Township'); }
+    public function __construct() { parent::__construct('jurisdictions', __namespace__.'\Jurisdiction'); }
 
     public function find($fields=null, $order=['name'], $itemsPerPage=null, $currentPage=null)
     {
         return parent::find($fields, $order, $itemsPerPage, $currentPage);
     }
+
 }

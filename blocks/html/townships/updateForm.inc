@@ -7,7 +7,7 @@
 $fields = ['id', 'name', 'code', 'quarterCode'];
 foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
-    $$f  = $this->township->$get();
+    $$f  = parent::escape($this->township->$get());
 }
 $title = $id ? $this->_('township_edit') : $this->_('township_add');
 ?>

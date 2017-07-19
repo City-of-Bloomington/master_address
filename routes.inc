@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2015 City of Bloomington, Indiana
+ * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -38,6 +38,14 @@ $ROUTES->attach('users', '/users', function ($r) {
 $ROUTES->attach('townships', '/townships', function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=>'townships']);
+
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
+    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+});
+
+$ROUTES->attach('jurisdictions', '/jurisdictions', function ($r) {
+    $r->setTokens(['id'=>'[a-z0-9]+']);
+    $r->setValues(['controller'=>'jurisdictions']);
 
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);

@@ -7,6 +7,7 @@ use Application\Models\Person;
 
 $links  = [];
 $routes = [
+    'jurisdictions'  => 'jurisdiction',
     'townships'      => 'township',
     'people'         => 'person',
     'users'          => 'user'
