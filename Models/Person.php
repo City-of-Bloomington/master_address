@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2016 City of Bloomington, Indiana
+ * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
@@ -81,9 +81,7 @@ class Person extends ActiveRecord
 	 */
 	public function deleteUserAccount()
 	{
-		$userAccountFields = array(
-			'username', 'password', 'authenticationMethod', 'role'
-		);
+		$userAccountFields = ['username', 'password', 'authentication_method', 'role'];
 		foreach ($userAccountFields as $f) {
 			$this->data[$f] = null;
 		}
@@ -105,11 +103,11 @@ class Person extends ActiveRecord
 	public function getUsername()             { return parent::get('username'); }
 	public function getPassword()             { return parent::get('password'); } # Encrypted
 	public function getRole()                 { return parent::get('role');     }
-	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
+	public function getAuthenticationMethod() { return parent::get('authentication_method'); }
 
-	public function setUsername            ($s) { parent::set('username',             $s); }
-	public function setRole                ($s) { parent::set('role',                 $s); }
-	public function setAuthenticationMethod($s) { parent::set('authenticationMethod', $s); }
+	public function setUsername            ($s) { parent::set('username',              $s); }
+	public function setRole                ($s) { parent::set('role',                  $s); }
+	public function setAuthenticationMethod($s) { parent::set('authentication_method', $s); }
 
 	public function setPassword($s)
 	{
