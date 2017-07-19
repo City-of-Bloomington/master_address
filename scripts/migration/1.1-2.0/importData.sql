@@ -1,24 +1,24 @@
-insert into address.people (id, firstname, lastname, email, username, authenticationMethod, role) (
-    select p.id, p.firstname, p.lastname, p.email, u.username, u.authenticationMethod, r.name
+insert into address.people (id, firstname, lastname, email, username, authentication_method, role) (
+    select p.id, p.firstname, p.lastname, p.email, u.username, u.authenticationmethod, r.name
     from master_address.people     p
     left join master_address.users      u  on p.id=u.person_id
     left join master_address.user_roles ur on u.id=ur.user_id
     left join master_address.roles      r  on ur.role_id=r.id
 );
 
-insert into address.quarterSections (code) (
+insert into address.quarter_sections (code) (
     select quarter_section from eng.quarter_section_master
 );
 
-insert into address.zipCodes (zip, city, state) (
+insert into address.zip_codes (zip, city, state) (
     select zip, city, 'IN' from master_address.zipcodes
 );
 
-insert into address.trashDays (name) (
+insert into address.trash_days (name) (
     select trash_pickup_day from eng.trash_pickup_master
 );
 
-insert into address.recycleWeeks (code) (
+insert into address.recycle_weeks (code) (
     select recycle_week from eng.trash_recycle_week_master
 );
 
@@ -30,19 +30,19 @@ insert into address.directions (id, name, code) (
     select id, description, direction_code from eng.mast_street_direction_master
 );
 
-insert into address.addressStatuses select * from eng.mast_address_status_lookup;
-insert into address.contactStatuses select * from eng.contactstatus;
-insert into address.streetStatuses  select * from eng.mast_street_status_lookup;
-insert into address.streetTypes     select * from eng.mast_street_type_suffix_master;
-insert into address.subunitTypes    select * from eng.mast_addr_subunit_types_mast;
-insert into address.streetNameTypes select * from eng.mast_street_name_type_master;
+insert into address.address_statuses select * from eng.mast_address_status_lookup;
+insert into address.contact_statuses select * from eng.contactstatus;
+insert into address.street_statuses  select * from eng.mast_street_status_lookup;
+insert into address.street_types     select * from eng.mast_street_type_suffix_master;
+insert into address.subunit_types    select * from eng.mast_addr_subunit_types_mast;
+insert into address.street_name_types select * from eng.mast_street_name_type_master;
 
-insert into address.locationTypes (code, name, description) (
+insert into address.location_types (code, name, description) (
     select location_code, location_type_id, description from eng.addr_location_types_master
 );
-insert into address.locationPurposes select * from eng.addr_location_purpose_mast;
+insert into address.location_purposes select * from eng.addr_location_purpose_mast;
 
-insert into address.plats (id, platType, name, cabinet, envelope, notes, township_id, startDate, endDate) (
+insert into address.plats (id, plat_type, name, cabinet, envelope, notes, township_id, start_date, end_date) (
     select plat_id, plat_type, name, plat_cabinet, envelope, notes, township_id, effective_start_date, effective_end_date
     from eng.plat_master
 );
@@ -54,17 +54,17 @@ insert into address.subdivisions (id, township_id, name, phase, status) (
 );
 
 insert into address.streets select * from eng.mast_street;
-insert into address.streetNames (id, direction_id, name, postDirection_id, notes) (
+insert into address.street_names (id, direction_id, name, post_direction_id, notes) (
     select n.id, sd.id, n.street_name, pd.id, n.notes
     from eng.mast_street_names   n
     left join address.directions sd on n.street_direction_code=sd.code
     left join address.directions pd on n.post_direction_suffix_code=pd.code
 );
 
-insert into address.street_streetNames (street_id, streetName_id, type_id, startDate, endDate) (
+insert into address.street_street_names (street_id, street_name_id, type_id, start_date, end_date) (
     select n.street_id, n.id, t.id, n.effective_start_date, n.effective_end_date
     from      eng.mast_street_names   n
-    left join address.streetNameTypes t on n.street_name_type=t.name
+    left join address.street_name_types t on n.street_name_type=t.name
 );
 
 -- Clean out some bad data
@@ -74,25 +74,25 @@ update eng.mast_address set zipplus4=null where zipplus4='39800';
 
 insert into address.addresses (
     id,
-    streetNumberPrefix,
-    streetNumber,
-    streetNumberSuffix,
+    street_number_prefix,
+    street_number,
+    street_number_suffix,
     adddress2,
-    addressType,
+    address_type,
     street_id,
     jurisdiction_id,
     township_id,
     subdivision_id,
     plat_id,
     section,
-    quarterSection,
-    plat_lotNumber,
+    quarter_section,
+    plat_lot_number,
     city,
     state,
     zip,
     zipplus4,
-    statePlaneX,
-    statePlaneY,
+    state_plane_x,
+    state_plane_y,
     latitude,
     longitude,
     usng,
@@ -130,7 +130,7 @@ insert into address.subunits (
             s.state_plane_x_coordinate, s.state_plane_y_coordinate, s.latitude, s.longitude,
             s.usng_coordinate, s.geom
     from eng.mast_address_subunits s
-    left join address.subunitTypes t on s.sudtype=t.code
+    left join address.subunit_types t on s.sudtype=t.code
 );
 
 insert into address.subunit_status (
@@ -152,7 +152,7 @@ insert into address.locations (
                  else null
             end as active
     from eng.address_location l
-    left join address.locationTypes t on l.location_type_id=t.name
+    left join address.location_types t on l.location_type_id=t.name
 );
 
 
@@ -160,13 +160,13 @@ insert into address.location_status (
     select id, location_id, status_code, effective_start_date, effective_end_date from eng.mast_address_location_status
 );
 
-insert into address.sanitation (address_id, trashDay_id, recycleWeek_code) (
+insert into address.sanitation (address_id, trash_day_id, recycle_week_code) (
     select s.street_address_id, t.id, s.recycle_week
     from eng.mast_address_sanitation s
-    left join address.trashDays t on s.trash_pickup_day=t.name
+    left join address.trash_days t on s.trash_pickup_day=t.name
 );
 
-insert into address.contacts (id, status_id, contactType, lastname, firstname, phone, agency, email, notification, coordination) (
+insert into address.contacts (id, status_id, contact_type, lastname, firstname, phone, agency, email, notification, coordination) (
     select  contact_id, status_id, contact_type, last_name, first_name, phone_number, agency, email,
             case when notification='Y' then TRUE
                  else null
@@ -179,8 +179,8 @@ insert into address.contacts (id, status_id, contactType, lastname, firstname, p
 
 -- Clean out bad data
 update eng.mast_address_assignment_hist set contact_id=null where contact_id=0;
-insert into address.addressAssignmentLog
-            (address_id,      location_id, subunit_id, contact_id, actionDate,  action, notes) (
+insert into address.address_assignment_log
+            (address_id,      location_id, subunit_id, contact_id, action_date,  action, notes) (
     select a.street_address_id, h.location_id, h.subunit_id, h.contact_id, h.action_date, h.action, h.notes
     from eng.mast_address_assignment_hist h
     join eng.mast_address a on h.street_address_id=a.street_address_id
@@ -189,18 +189,18 @@ insert into address.addressAssignmentLog
 -- person_id == user_id
 -- It just so happens that in our old data,
 -- everyone's person_id was the same as their user_id
-insert into address.addressChangeLog (address_id, person_id, contact_id, actionDate, action, notes) (
+insert into address.address_change_log (address_id, person_id, contact_id, action_date, action, notes) (
     select street_address_id, user_id, contact_id, action_date, action, notes from master_address.address_change_log
 );
 
-insert into address.locationChangeLog select * from eng.mast_address_location_change;
+insert into address.location_change_log select * from eng.mast_address_location_change;
 
-insert into address.streetChangeLog (street_id, person_id, contact_id, actionDate, action, notes) (
+insert into address.street_change_log (street_id, person_id, contact_id, action_date, action, notes) (
     select street_id, user_id, contact_id, action_date, action, notes
     from master_address.street_change_log
 );
 
-insert into address.subunitChangeLog (subunit_id, person_id, contact_id, actionDate, action, notes) (
+insert into address.subunit_change_log (subunit_id, person_id, contact_id, action_date, action, notes) (
     select subunit_id, user_id, contact_id, action_date, action, notes
     from master_address.subunit_change_log
 );
