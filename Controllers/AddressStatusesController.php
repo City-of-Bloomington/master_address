@@ -5,48 +5,48 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Jurisdiction;
-use Application\Models\JurisdictionsTable;
+use Application\Models\AddressStatus;
+use Application\Models\AddressStatusesTable;
 use Blossom\Classes\Controller;
 
-class JurisdictionsController extends Controller
+class AddressStatusesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new JurisdictionsTable();
+        $table = new AddressStatusesTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'jurisdictions',
-            'singular' => 'jurisdiction',
-            'fields'   => array_keys(Jurisdiction::$fieldmap)
+            'plural'   => 'addressStatuses',
+            'singular' => 'addressStatus',
+            'fields'   => array_keys(AddressStatus::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $jurisdiction = new Jurisdiction($_REQUEST['id']); }
+            try { $status = new AddressStatus($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $jurisdiction = new Jurisdiction(); }
+        else { $status = new AddressStatus(); }
 
-        if (isset($jurisdiction)) {
+        if (isset($status)) {
             if (isset($_POST['name'])) {
                 try {
-                    $jurisdiction->handleUpdate($_POST);
-                    $jurisdiction->save();
-                    header('Location: '.self::generateUrl('jurisdictions.index'));
+                    $status->handleUpdate($_POST);
+                    $status->save();
+                    header('Location: '.self::generateUrl('addressStatuses.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'object'   => $jurisdiction,
-                'plural'   => 'jurisdictions',
-                'singular' => 'jurisdiction',
-                'form'     => 'generic/updateNameForm.inc'
+                'form'     => 'generic/updateNameForm.inc',
+                'plural'   => 'addressStatuses',
+                'singular' => 'addressStatus',
+                'object'   => $status
             ]);
         }
         else {

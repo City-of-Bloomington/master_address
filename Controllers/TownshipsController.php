@@ -43,8 +43,8 @@ class TownshipsController extends Controller
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'object'    => $township,
-                'tablename' => 'townships'
+                'form'     => 'townships/updateForm.inc',
+                'township' => $township
             ]);
         }
         else {

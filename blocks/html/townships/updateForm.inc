@@ -2,12 +2,12 @@
 /**
  * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Township $this->object
+ * @param Township $this->township
  */
 $fields = ['id', 'name', 'code', 'quarterCode'];
 foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->object->$get());
+    $$f  = parent::escape($this->township->$get());
 }
 $title = $id ? $this->_('township_edit') : $this->_('township_add');
 ?>

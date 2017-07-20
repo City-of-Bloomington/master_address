@@ -155,3 +155,13 @@ msgstr "New Direction"
 msgid "direction_edit"
 msgstr "Edit Direction"
 
+msgid "addressStatus"
+msgid_plural "addressStatuses"
+msgstr[0] "Address Status"
+msgstr[1] "Address Statuses"
+
+msgid "addressStatus_add"
+msgstr "New Address Status"
+
+msgid "addressStatus_edit"
+msgstr "Edit Address Status"

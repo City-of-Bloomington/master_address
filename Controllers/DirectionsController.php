@@ -5,48 +5,46 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Jurisdiction;
-use Application\Models\JurisdictionsTable;
+use Application\Models\Direction;
+use Application\Models\DirectionsTable;
 use Blossom\Classes\Controller;
 
-class JurisdictionsController extends Controller
+class DirectionsController extends Controller
 {
     public function index(array $params)
     {
-        $table = new JurisdictionsTable();
+        $table = new DirectionsTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'jurisdictions',
-            'singular' => 'jurisdiction',
-            'fields'   => array_keys(Jurisdiction::$fieldmap)
+            'plural'   => 'directions',
+            'singular' => 'direction',
+            'fields'   => array_keys(Direction::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $jurisdiction = new Jurisdiction($_REQUEST['id']); }
+            try { $direction = new Direction($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $jurisdiction = new Jurisdiction(); }
+        else { $direction = new Direction(); }
 
-        if (isset($jurisdiction)) {
+        if (isset($direction)) {
             if (isset($_POST['name'])) {
                 try {
-                    $jurisdiction->handleUpdate($_POST);
-                    $jurisdiction->save();
-                    header('Location: '.self::generateUrl('jurisdictions.index'));
+                    $direction->handleUpdate($_POST);
+                    $direction->save();
+                    header('Location: '.self::generateUrl('directions.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'object'   => $jurisdiction,
-                'plural'   => 'jurisdictions',
-                'singular' => 'jurisdiction',
-                'form'     => 'generic/updateNameForm.inc'
+                'form'      => 'directions/updateForm.inc',
+                'direction' => $direction
             ]);
         }
         else {

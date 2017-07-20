@@ -27,7 +27,7 @@ $ZEND_ACL->addResource(new Resource('AddressLocationChange'));
 $ZEND_ACL->addResource(new Resource('Address'));
 $ZEND_ACL->addResource(new Resource('AddressSanitation'));
 $ZEND_ACL->addResource(new Resource('AddressStatusChange'));
-$ZEND_ACL->addResource(new Resource('AddressStatus'));
+$ZEND_ACL->addResource(new Resource('addressStatuses'));
 $ZEND_ACL->addResource(new Resource('Annexation'));
 $ZEND_ACL->addResource(new Resource('Building'));
 $ZEND_ACL->addResource(new Resource('BuildingStatus'));
