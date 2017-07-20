@@ -34,6 +34,7 @@ $ZEND_ACL->addResource(new Resource('BuildingStatus'));
 $ZEND_ACL->addResource(new Resource('BuildingType'));
 $ZEND_ACL->addResource(new Resource('ChangeLog'));
 $ZEND_ACL->addResource(new Resource('Contact'));
+$ZEND_ACL->addResource(new Resource('contactStatuses'));
 $ZEND_ACL->addResource(new Resource('directions'));
 $ZEND_ACL->addResource(new Resource('Intersection'));
 $ZEND_ACL->addResource(new Resource('jurisdictions'));

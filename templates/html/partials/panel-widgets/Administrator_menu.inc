@@ -7,10 +7,13 @@ use Application\Models\Person;
 
 $links  = [];
 $routes = [
-    'jurisdictions'  => 'jurisdiction',
-    'townships'      => 'township',
-    'people'         => 'person',
-    'users'          => 'user'
+    'jurisdictions'   => 'jurisdiction',
+    'townships'       => 'township',
+    'people'          => 'person',
+    'users'           => 'user',
+    'addressStatuses' => 'addressStatus',
+    'contactStatuses' => 'contactStatus',
+    'streetStatuses'  => 'streetStatus'
 ];
 foreach ($routes as $plural=>$singular) {
     $requiredAction = 'index';

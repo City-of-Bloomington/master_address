@@ -165,3 +165,25 @@ msgstr "New Address Status"
 
 msgid "addressStatus_edit"
 msgstr "Edit Address Status"
+
+msgid "contactStatus"
+msgid_plural "contactStatuses"
+msgstr[0] "Contact Status"
+msgstr[1] "Contact Statuses"
+
+msgid "contactStatus_add"
+msgstr "New Contact Status"
+
+msgid "contactStatus_edit"
+msgstr "Edit Contact Status"
+
+msgid "streetStatus"
+msgid_plural "streetStatuses"
+msgstr[0] "Street Status"
+msgstr[1] "Street Statuses"
+
+msgid "streetStatus_add"
+msgstr "New Street Status"
+
+msgid "streetStatus_edit"
+msgstr "Edit Street Status"

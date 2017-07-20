@@ -36,7 +36,10 @@ $ROUTES->attach('users', '/users', function ($r) {
 });
 
 // Basic lookup table routes
-$tables = ['townships', 'jurisdictions', 'directions', 'addressStatuses'];
+$tables = [
+    'townships', 'jurisdictions', 'directions',
+    'addressStatuses', 'contactStatuses', 'streetStatuses'
+];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
         $r->setTokens(['id'=>'[a-z0-9]+']);

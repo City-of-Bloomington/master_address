@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-class AddressStatus extends Status
+class StreetStatus extends Status
 {
-    protected $tablename = 'address_statuses';
+    protected $tablename = 'street_statuses';
 }
