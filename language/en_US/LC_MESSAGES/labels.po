@@ -50,6 +50,14 @@ msgstr "Logout"
 msgid "help"
 msgstr "Help"
 
+msgid "type"
+msgid_plural "types"
+msgstr[0] "Type"
+msgstr[1] "Types"
+
+msgid "description"
+msgstr "Description"
+
 msgid "name"
 msgstr "Name"
 
@@ -220,3 +228,25 @@ msgstr "New Subunit Type"
 
 msgid "subunitType_edit"
 msgstr "Edit Subunit Type"
+
+msgid "locationType"
+msgid_plural "locationTypes"
+msgstr[0] "Location Type"
+msgstr[1] "Location Types"
+
+msgid "locationType_add"
+msgstr "New Location Type"
+
+msgid "locationType_edit"
+msgstr "Edit Location Type"
+
+msgid "purpose"
+msgid_plural "purposes"
+msgstr[0] "Location Purpose"
+msgstr[1] "Location Purposes"
+
+msgid "purpose_add"
+msgstr "New Location Purpose"
+
+msgid "purpose_edit"
+msgstr "Edit Location Purpose"

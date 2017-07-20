@@ -14,7 +14,11 @@ $routes = [
     'users'           => 'user',
     'addressStatuses' => 'addressStatus',
     'contactStatuses' => 'contactStatus',
-    'streetStatuses'  => 'streetStatus'
+    'streetStatuses'  => 'streetStatus',
+    'streetTypes'     => 'streetType',
+    'subunitTypes'    => 'subunitType',
+    'locationTypes'   => 'locationType',
+    'purposes'        => 'purpose'
 ];
 foreach ($routes as $plural=>$singular) {
     $requiredAction = 'index';

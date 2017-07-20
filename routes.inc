@@ -38,7 +38,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 // Basic lookup table routes
 $tables = [
     'towns', 'townships', 'jurisdictions', 'directions',
-    'streetTypes', 'subunitTypes',
+    'streetTypes', 'subunitTypes', 'locationTypes', 'purposes',
     'addressStatuses', 'contactStatuses', 'streetStatuses'
 ];
 foreach ($tables as $t) {

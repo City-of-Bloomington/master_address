@@ -14,7 +14,6 @@ $ZEND_ACL->addRole(new Role('Anonymous'))
 		 ->addRole(new Role('GIS'))
 		 ->addRole(new Role('Administrator'));
 
-
 /**
  * Create resources for all the Controllers
  */
@@ -39,11 +38,11 @@ $ZEND_ACL->addResource(new Resource('directions'));
 $ZEND_ACL->addResource(new Resource('Intersection'));
 $ZEND_ACL->addResource(new Resource('jurisdictions'));
 $ZEND_ACL->addResource(new Resource('Location'));
-$ZEND_ACL->addResource(new Resource('LocationType'));
+$ZEND_ACL->addResource(new Resource('locationTypes'));
 $ZEND_ACL->addResource(new Resource('Places'));
 $ZEND_ACL->addResource(new Resource('Plat'));
 $ZEND_ACL->addResource(new Resource('Precinct'));
-$ZEND_ACL->addResource(new Resource('Purpose'));
+$ZEND_ACL->addResource(new Resource('purposes'));
 $ZEND_ACL->addResource(new Resource('Report'));
 $ZEND_ACL->addResource(new Resource('StreetName'));
 $ZEND_ACL->addResource(new Resource('StreetNameType'));
