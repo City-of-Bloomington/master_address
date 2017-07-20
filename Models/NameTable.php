@@ -1,12 +1,14 @@
 <?php
 /**
+ * Base class for tables that just have an ID and a Name field
+ *
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
 
-class Status extends ActiveRecord
+class NameTable extends ActiveRecord
 {
     // Maps this model's fieldnames to database column names
     // [field => column]

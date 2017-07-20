@@ -55,7 +55,7 @@ $ZEND_ACL->addResource(new Resource('Subdivision'));
 $ZEND_ACL->addResource(new Resource('Subunit'));
 $ZEND_ACL->addResource(new Resource('SubunitStatus'));
 $ZEND_ACL->addResource(new Resource('SubunitType'));
-$ZEND_ACL->addResource(new Resource('Town'));
+$ZEND_ACL->addResource(new Resource('towns'));
 $ZEND_ACL->addResource(new Resource('townships'));
 
 

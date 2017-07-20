@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-class ContactStatus extends Status
+class ContactStatus extends NameTable
 {
     protected $tablename = 'contact_statuses';
 }

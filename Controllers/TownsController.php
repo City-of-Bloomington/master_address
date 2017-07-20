@@ -5,48 +5,48 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Direction;
-use Application\Models\DirectionsTable;
+use Application\Models\Town;
+use Application\Models\TownsTable;
 use Blossom\Classes\Controller;
 
-class DirectionsController extends Controller
+class TownsController extends Controller
 {
     public function index(array $params)
     {
-        $table = new DirectionsTable();
+        $table = new TownsTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'directions',
-            'singular' => 'direction',
-            'fields'   => array_keys(Direction::$fieldmap)
+            'plural'   => 'towns',
+            'singular' => 'town',
+            'fields'   => array_keys(Town::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $direction = new Direction($_REQUEST['id']); }
+            try { $town = new Town($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $direction = new Direction(); }
+        else { $town = new Town(); }
 
-        if (isset($direction)) {
+        if (isset($town)) {
             if (isset($_POST['name'])) {
                 try {
-                    $direction->handleUpdate($_POST);
-                    $direction->save();
-                    header('Location: '.self::generateUrl('directions.index'));
+                    $town->handleUpdate($_POST);
+                    $town->save();
+                    header('Location: '.self::generateUrl('towns.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
                 'form'     => 'generic/updateNameCodeForm.inc',
-                'plural'   => 'directions',
-                'singular' => 'direction',
-                'object'   => $direction
+                'plural'   => 'towns',
+                'singular' => 'town',
+                'object'   => $town
             ]);
         }
         else {

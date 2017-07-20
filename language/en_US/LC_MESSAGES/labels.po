@@ -116,6 +116,17 @@ msgstr "Sorry"
 msgid "my_account"
 msgstr "My Account"
 
+msgid "town"
+msgid_plural "towns"
+msgstr[0] "Town"
+msgstr[1] "Towns"
+
+msgid "town_add"
+msgstr "New Town"
+
+msgid "town_edit"
+msgstr "Edit Town"
+
 msgid "township"
 msgid_plural "townships"
 msgstr[0] "Township"

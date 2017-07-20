@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-class StreetStatus extends Status
+class StreetStatus extends NameTable
 {
     protected $tablename = 'street_statuses';
 }

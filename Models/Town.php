@@ -5,7 +5,10 @@
  */
 namespace Application\Models;
 
-class AddressStatus extends NameTable
+class Town extends NameCodeTable
 {
-    protected $tablename = 'address_statuses';
+    protected $tablename = 'towns';
+
+    // The character limit for Codes
+    public $codeSize = 9;
 }
