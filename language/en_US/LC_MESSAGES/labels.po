@@ -198,3 +198,25 @@ msgstr "New Street Status"
 
 msgid "streetStatus_edit"
 msgstr "Edit Street Status"
+
+msgid "streetType"
+msgid_plural "streetTypes"
+msgstr[0] "Street Type"
+msgstr[1] "Street Types"
+
+msgid "streetType_add"
+msgstr "New Street Type"
+
+msgid "streetType_edit"
+msgstr "Edit Street Type"
+
+msgid "subunitType"
+msgid_plural "subunitTypes"
+msgstr[0] "Subunit Type"
+msgstr[1] "Subunit Types"
+
+msgid "subunitType_add"
+msgstr "New Subunit Type"
+
+msgid "subunitType_edit"
+msgstr "Edit Subunit Type"

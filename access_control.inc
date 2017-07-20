@@ -49,12 +49,12 @@ $ZEND_ACL->addResource(new Resource('StreetName'));
 $ZEND_ACL->addResource(new Resource('StreetNameType'));
 $ZEND_ACL->addResource(new Resource('streets'));
 $ZEND_ACL->addResource(new Resource('streetStatuses'));
-$ZEND_ACL->addResource(new Resource('streetType'));
+$ZEND_ACL->addResource(new Resource('streetTypes'));
 $ZEND_ACL->addResource(new Resource('SubdivisionName'));
 $ZEND_ACL->addResource(new Resource('Subdivision'));
 $ZEND_ACL->addResource(new Resource('Subunit'));
 $ZEND_ACL->addResource(new Resource('SubunitStatus'));
-$ZEND_ACL->addResource(new Resource('SubunitType'));
+$ZEND_ACL->addResource(new Resource('subunitTypes'));
 $ZEND_ACL->addResource(new Resource('towns'));
 $ZEND_ACL->addResource(new Resource('townships'));
 
