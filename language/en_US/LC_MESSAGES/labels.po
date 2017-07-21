@@ -28,6 +28,9 @@ msgstr "Edit"
 msgid "delete"
 msgstr "Delete"
 
+msgid "search"
+msgstr "Search"
+
 msgid "submit"
 msgstr "Submit"
 
@@ -250,3 +253,32 @@ msgstr "New Location Purpose"
 
 msgid "purpose_edit"
 msgstr "Edit Location Purpose"
+
+msgid "plat"
+msgid_plural "plats"
+msgstr[0] "Plat"
+msgstr[1] "Plats"
+
+msgid "plat_add"
+msgstr "New Plat"
+
+msgid "plat_edit"
+msgstr "Edit Plat"
+
+msgid "plat_search"
+msgstr "Find a Plat"
+
+msgid "plat_info"
+msgstr "Plat Info"
+
+msgid "cabinet"
+msgstr "Cabinet"
+
+msgid "envelope"
+msgstr "Envelope"
+
+msgid "startDate"
+msgstr "Start Date"
+
+msgid "endDate"
+msgstr "End Date"

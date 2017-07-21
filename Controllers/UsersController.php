@@ -16,7 +16,7 @@ class UsersController extends Controller
 	{
 		$people = new PeopleTable();
 		$page = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-		$users = $people->find(['user_account'=>true], null, 20, $page);
+		$users = $people->find(['user_account'=>true], ['lastname'], 20, $page);
 
 		return new \Application\Views\Users\ListView(['users'=>$users]);
 	}

@@ -28,7 +28,7 @@ class PeopleController extends Controller
 		$table = new PeopleTable();
 
 		$page = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-		$people = $table->find(null, null, 20, $page);
+		$people = $table->find(null, ['lastname'], 20, $page);
 
 		return new \Application\Views\People\ListView(['people'=>$people]);
 	}

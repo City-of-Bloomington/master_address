@@ -50,3 +50,12 @@ foreach ($tables as $t) {
         $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     });
 }
+
+$ROUTES->attach('plats', '/plats', function ($r) {
+    $r->setTokens(['id'=>'[0-9]+']);
+    $r->setValues(['controller'=>'plats']);
+
+    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+    $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
+});

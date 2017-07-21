@@ -40,7 +40,7 @@ $ZEND_ACL->addResource(new Resource('jurisdictions'));
 $ZEND_ACL->addResource(new Resource('Location'));
 $ZEND_ACL->addResource(new Resource('locationTypes'));
 $ZEND_ACL->addResource(new Resource('Places'));
-$ZEND_ACL->addResource(new Resource('Plat'));
+$ZEND_ACL->addResource(new Resource('plats'));
 $ZEND_ACL->addResource(new Resource('Precinct'));
 $ZEND_ACL->addResource(new Resource('purposes'));
 $ZEND_ACL->addResource(new Resource('Report'));

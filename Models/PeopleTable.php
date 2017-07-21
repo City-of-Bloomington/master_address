@@ -3,9 +3,9 @@
  * @copyright 2013-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
+declare (strict_types=1);
 namespace Application\Models;
 
-use Blossom\Classes\Paginator;
 use Blossom\Classes\TableGateway;
 
 class PeopleTable extends TableGateway
@@ -19,7 +19,7 @@ class PeopleTable extends TableGateway
 	 * @param int $currentPage
 	 * @return array|Paginator
 	 */
-	public function find($fields=null, $order=['lastname'], $itemsPerPage=null, $currentPage=null)
+	public function find(array $fields=null, array $order=['lastname'], int $itemsPerPage=null, int $currentPage=null)
 	{
         $select = $this->queryFactory->newSelect();
         $select->cols(['p.*'])

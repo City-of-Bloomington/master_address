@@ -39,7 +39,7 @@ class Field extends Helper
                     // we must continute to use plain text inputs for dates.
                     unset($params['type']);
 
-                    $params['value'] = !empty($params['value']) ? date(DATE_FORMAT, $params['value']) : '';
+                    $params['value'] = !empty($params['value']) ? $params['value']->format(DATE_FORMAT) : '';
                     $params['attr']['placeholder'] = View::translateDateString(DATE_FORMAT);
                     $renderInput = 'input';
                 break;
