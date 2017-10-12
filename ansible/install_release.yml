@@ -6,21 +6,13 @@
     - City-of-Bloomington.php
 
   tasks:
-    - name: Install web application
-      template:
-        src: postgres_create.sql
-        dest: "{{ ma_path }}/scripts/postgres_create.sql"
-
-    - name: Install PostGIS
-      apt: name=postgis state=present
-
-    - name: Activate PostGIS
-      become: yes
-      become_user: postgres
-      postgresql_ext:
-        name: postgis
-        db: "{{ ma_db.name }}"
+    - name: Install php and related packages
+      apt:
+        name: "{{ item }}"
         state: present
+      with_items:
+        - php-pgsql
+        - postgis
 
     - name: Create database user
       become: yes
@@ -41,4 +33,42 @@
       become: yes
       become_user: postgres
       postgresql_schema: database={{ ma_db.name }} name={{ ma_db.schema }} owner={{ ma_db.username }}
+
+    - name: Activate PostGIS
+      become: yes
+      become_user: postgres
+      postgresql_ext:
+        name: postgis
+        db: "{{ ma_db.name }}"
+        state: present
+
+    - name: Apache site configuration
+      template:
+        src: master_address.conf
+        dest: /etc/apache2/sites-enabled/conf.d/master_address.conf
+      notify: apache_restart
+
+    - name: "Create installation directories"
+      file:
+        path: "{{ item }}"
+        state: "directory"
+        owner: "www-data"
+        group: "staff"
+      with_items:
+        - "{{ ma_install_path }}"
+        - "{{ ma_backup_path  }}"
+        - "{{ ma_site_home    }}"
+
+    - name: "Update application permissions"
+      file:
+        path:    "{{ item }}"
+        state:   "directory"
+        owner:   "www-data"
+        group:   "staff"
+        mode:    "g+rw"
+        recurse: "yes"
+      with_items:
+        - "{{ ma_install_path }}"
+        - "{{ ma_backup_path  }}"
+        - "{{ ma_site_home    }}"
 ...

@@ -79,8 +79,7 @@ create table street_statuses (
 );
 
 create table street_types (
-    id   serial      primary key,
-    code varchar(8)  not null unique,
+    code varchar(8)  not null primary key,
     name varchar(16) not null
 );
 
@@ -158,9 +157,11 @@ create table street_names (
     direction_id      integer,
     name              varchar(64),
     post_direction_id integer,
+    suffix_code       varchar(8),
     notes             varchar(240),
     foreign key (direction_id     ) references directions (id),
-    foreign key (post_direction_id) references directions (id)
+    foreign key (post_direction_id) references directions (id),
+    foreign key (suffix_code      ) references street_types(code)
 );
 
 create table street_street_names (
@@ -174,6 +175,20 @@ create table street_street_names (
     foreign key (street_id     ) references streets          (id),
     foreign key (street_name_id) references street_names     (id),
     foreign key (type_id       ) references street_name_types(id)
+);
+
+create table state_roads (
+    id           serial primary key,
+    description  varchar(40) not null,
+    abbreviation varchar(15) not null,
+    number       varchar(10) not null
+);
+
+create table street_state_roads (
+    street_id     int not null,
+    state_road_id int not null,
+    foreign key (street_id    ) references streets    (id),
+    foreign key (state_road_id) references state_roads(id)
 );
 
 create table addresses (
@@ -248,7 +263,7 @@ create table subunit_status (
 
 -- The primary key for locations is a composite.
 -- We did this to avoid confusion in the common scenario.
--- Most locations have a single row and people thing of
+-- Most locations have a single row and people think of
 -- the location_id as key field.
 -- However, locations that get readdressed, over time, will have the
 -- same location_id across multiple rows.

@@ -7,3 +7,5 @@ vendor
 screen.css
 screen.css.map
 *.mo
+*.retry
+
