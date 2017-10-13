@@ -4,13 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Models;
+namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
 class PeopleTable extends TableGateway
 {
-    public function __construct() { parent::__construct('people', __namespace__.'\Person'); }
+    public function __construct() { parent::__construct('people', 'Application\Models\Person'); }
 
 	/**
 	 * @param array $fields Key value pairs to select on

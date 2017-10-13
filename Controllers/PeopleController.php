@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Person;
-use Application\Models\PeopleTable;
+use Application\Models\TableGateways\PeopleTable;
 use Blossom\Classes\Controller;
 
 class PeopleController extends Controller

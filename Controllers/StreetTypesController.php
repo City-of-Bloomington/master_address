@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\StreetType;
-use Application\Models\StreetTypesTable;
+use Application\Models\TableGateways\StreetTypesTable;
 use Blossom\Classes\Controller;
 
 class StreetTypesController extends Controller

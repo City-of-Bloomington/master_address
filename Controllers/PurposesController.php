@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Purpose;
-use Application\Models\PurposesTable;
+use Application\Models\TableGateways\PurposesTable;
 use Blossom\Classes\Controller;
 
 class PurposesController extends Controller

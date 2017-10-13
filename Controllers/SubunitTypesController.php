@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\SubunitType;
-use Application\Models\SubunitTypesTable;
+use Application\Models\TableGateways\SubunitTypesTable;
 use Blossom\Classes\Controller;
 
 class SubunitTypesController extends Controller

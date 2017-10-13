@@ -4,13 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Models;
+namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
 class DirectionsTable extends TableGateway
 {
-    public function __construct() { parent::__construct('directions', __namespace__.'\Direction'); }
+    public function __construct() { parent::__construct('directions', 'Application\Models\Direction'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

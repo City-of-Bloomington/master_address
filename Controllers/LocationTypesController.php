@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\LocationType;
-use Application\Models\LocationTypesTable;
+use Application\Models\TableGateways\LocationTypesTable;
 use Blossom\Classes\Controller;
 
 class LocationTypesController extends Controller

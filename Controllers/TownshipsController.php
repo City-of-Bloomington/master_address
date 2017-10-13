@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Township;
-use Application\Models\TownshipsTable;
+use Application\Models\TableGateways\TownshipsTable;
 use Blossom\Classes\Controller;
 
 class TownshipsController extends Controller

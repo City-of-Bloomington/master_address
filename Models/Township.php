@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 
 class Township extends ActiveRecord
