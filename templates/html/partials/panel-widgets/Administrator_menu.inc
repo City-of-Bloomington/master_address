@@ -19,7 +19,8 @@ $routes = [
     'subunitTypes'    => 'subunitType',
     'locationTypes'   => 'locationType',
     'purposes'        => 'purpose',
-    'plats'           => 'plat'
+    'plats'           => 'plat',
+    'subdivisions'    => 'subdivision'
 ];
 foreach ($routes as $plural=>$singular) {
     $requiredAction = 'index';

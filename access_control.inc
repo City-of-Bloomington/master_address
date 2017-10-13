@@ -49,27 +49,16 @@ $ZEND_ACL->addResource(new Resource('StreetNameType'));
 $ZEND_ACL->addResource(new Resource('streets'));
 $ZEND_ACL->addResource(new Resource('streetStatuses'));
 $ZEND_ACL->addResource(new Resource('streetTypes'));
-$ZEND_ACL->addResource(new Resource('SubdivisionName'));
-$ZEND_ACL->addResource(new Resource('Subdivision'));
+$ZEND_ACL->addResource(new Resource('subdivisions'));
 $ZEND_ACL->addResource(new Resource('Subunit'));
 $ZEND_ACL->addResource(new Resource('SubunitStatus'));
 $ZEND_ACL->addResource(new Resource('subunitTypes'));
 $ZEND_ACL->addResource(new Resource('towns'));
 $ZEND_ACL->addResource(new Resource('townships'));
 
-
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null, 'login');
 $ZEND_ACL->allow(null, ['index'], ['index']);
-
-// Engineering is only allowed to edit this stuff
-#$ZEND_ACL->allow('Engineering','streets'   );
-#$ZEND_ACL->allow('Engineering','addresses' );
-#$ZEND_ACL->allow('Engineering','subunits'  );
-#$ZEND_ACL->allow('Engineering','plats'     );
-#$ZEND_ACL->allow('Engineering','contacts'  );
-#$ZEND_ACL->allow('Engineering','changeLogs');
-#$ZEND_ACL->allow('Engineering','reports'   );
 
 $ZEND_ACL->allow('GIS');
 $ZEND_ACL->deny ('GIS', 'users');

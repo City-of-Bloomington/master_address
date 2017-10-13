@@ -282,3 +282,23 @@ msgstr "Start Date"
 
 msgid "endDate"
 msgstr "End Date"
+
+msgid "subdivision"
+msgid_plural "subdivisions"
+msgstr[0] "Subdivision"
+msgstr[1] "Subdivisions"
+
+msgid "subdivision_add"
+msgstr "New Subdivision"
+
+msgid "subdivision_edit"
+msgstr "Edit Subdivision"
+
+msgid "subdivision_search"
+msgstr "Find a Subdivision"
+
+msgid "status"
+msgstr "Status"
+
+msgid "phase"
+msgstr "Phase"

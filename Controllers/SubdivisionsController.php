@@ -3,17 +3,18 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
+declare (strict_types=1);
 namespace Application\Controllers;
 
-use Application\Models\Plat;
-use Application\Models\TableGateways\PlatsTable;
+use Application\Models\Subdivision;
+use Application\Models\TableGateways\SubdivisionsTable;
 use Blossom\Classes\Controller;
 
-class PlatsController extends Controller
+class SubdivisionsController extends Controller
 {
     public function index(array $params)
     {
-        $table = new PlatsTable();
+        $table = new SubdivisionsTable();
 
         if (isset($_GET['page']) && $_GET['page'] == 'all') {
             $list = $table->search($_GET);
@@ -23,43 +24,43 @@ class PlatsController extends Controller
             $list  = $table->search($_GET, null, 20, $page);
         }
 
-        return new \Application\Views\Plats\SearchView(['plats'=>$list]);
+        return new \Application\Views\Subdivisions\SearchView(['subdivisions'=>$list]);
     }
 
     public function view(array $params)
     {
         if (!empty($_GET['id'])) {
-            try { $plat = new Plat($_GET['id']); }
+            try { $subdivision = new Subdivision($_GET['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
 
-        return isset($plat)
-            ? new \Application\Views\Plats\InfoView(['plat'=>$plat])
+        return isset($subdivision)
+            ? new \Application\Views\Subdivisions\InfoView(['subdivision'=>$subdivision])
             : new \Application\Views\NotFoundView();
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $plat = new Plat($_REQUEST['id']); }
+            try { $subdivision = new Subdivision($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $plat = new Plat(); }
+        else { $subdivision = new Subdivision(); }
 
-        if (isset($plat)) {
+        if (isset($subdivision)) {
             if (isset($_POST['name'])) {
                 try {
-                    $plat->handleUpdate($_POST);
-                    $plat->save();
-                    header('Location: '.parent::generateUrl('plats.view', ['id'=>$plat->getId()]));
+                    $subdivision->handleUpdate($_POST);
+                    $subdivision->save();
+                    header('Location: '.parent::generateUrl('subdivisions.view', ['id'=>$subdivision->getId()]));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
 
             return new \Application\Views\Generic\UpdateView([
-                'form'=>'plats/updateForm.inc',
-                'plat'=>$plat
+                'form'=>'subdivisions/updateForm.inc',
+                'subdivision'=>$subdivision
             ]);
         }
 

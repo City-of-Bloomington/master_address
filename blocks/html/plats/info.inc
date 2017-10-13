@@ -17,7 +17,7 @@ $township  = $this->plat->getTownship () ? parent::escape($this->plat->getTownsh
 ?>
 <section>
     <header>
-        <h1><?= parent::escape($this->plat->getName()); ?></h1>
+        <h1><?= $name; ?></h1>
         <div class="tools">
         <?php
             if (Person::isAllowed('plats', 'update')) {

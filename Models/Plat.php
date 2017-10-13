@@ -137,7 +137,7 @@ class Plat extends ActiveRecord
 	public static function getCabinets() : array
 	{
         $pdo   = Database::getConnection();
-        $query = $pdo->prepare('select distinct cabinet from plats order by cabinet');
+        $query = $pdo->prepare('select distinct cabinet from plats where cabinet is not null order by cabinet');
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_COLUMN, 0);
 	}
