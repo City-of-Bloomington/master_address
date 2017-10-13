@@ -18,7 +18,8 @@ $routes = [
     'streetTypes'     => 'streetType',
     'subunitTypes'    => 'subunitType',
     'locationTypes'   => 'locationType',
-    'purposes'        => 'purpose'
+    'purposes'        => 'purpose',
+    'plats'           => 'plat'
 ];
 foreach ($routes as $plural=>$singular) {
     $requiredAction = 'index';

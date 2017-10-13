@@ -5,6 +5,8 @@
  */
 declare (strict_types=1);
 namespace Application\Models\TableGateways;
+
+use Application\Models\Plat;
 use Blossom\Classes\TableGateway;
 
 class PlatsTable extends TableGateway
