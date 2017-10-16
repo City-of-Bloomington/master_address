@@ -17,15 +17,6 @@ $ROUTES->attach('login', '/login', function ($r) {
     $r->add('logout', '/logout')->addValues(['action'=>'logout']);
 });
 
-$ROUTES->attach('people', '/people', function ($r) {
-    $r->setTokens(['id'=>'[0-9]+']);
-    $r->setValues(['controller'=>'people']);
-
-    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
-    $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
-});
-
 $ROUTES->attach('users', '/users', function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=>'users']);
@@ -35,7 +26,7 @@ $ROUTES->attach('users', '/users', function ($r) {
     $r->add('delete', '/delete/{id}') ->addValues(['action'=>'delete']);
 });
 
-// Basic lookup table routes
+// Controllers that only have index, update
 $tables = [
     'towns', 'townships', 'jurisdictions', 'directions',
     'streetTypes', 'subunitTypes', 'locationTypes', 'purposes',
@@ -51,20 +42,17 @@ foreach ($tables as $t) {
     });
 }
 
-$ROUTES->attach('plats', '/plats', function ($r) {
-    $r->setTokens(['id'=>'[0-9]+']);
-    $r->setValues(['controller'=>'plats']);
+// Controllers that only have index, view, update
+$tables = [
+    'people', 'plats', 'subdivisions'
+];
+foreach ($tables as $t) {
+    $ROUTES->attach($t, "/$t", function ($r) use ($t) {
+        $r->setTokens(['id'=>'[a-z0-9]+']);
+        $r->setValues(['controller'=>$t]);
 
-    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
-    $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
-});
-
-$ROUTES->attach('subdivisions', '/subdivisions', function ($r) {
-    $r->setTokens(['id'=>'[0-9]+']);
-    $r->setValues(['controller'=>'subdivisions']);
-
-    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
-    $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
-});
+        $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+        $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+        $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
+    });
+}

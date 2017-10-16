@@ -24,7 +24,8 @@ create table quarter_sections (
 );
 
 create table zip_codes (
-    zip   integer     not null primary key,
+    id    serial primary key,
+    zip   integer     not null unique,
     city  varchar(20) not null,
     state char(2)     not null default 'IN'
 );
@@ -79,7 +80,8 @@ create table street_statuses (
 );
 
 create table street_types (
-    code varchar(8)  not null primary key,
+    id   serial      primary key,
+    code varchar(8)  not null unique,
     name varchar(16) not null
 );
 

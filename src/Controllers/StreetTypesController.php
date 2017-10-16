@@ -5,7 +5,7 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\StreetType;
+use Application\Models\Streets\Type;
 use Application\Models\TableGateways\StreetTypesTable;
 use Blossom\Classes\Controller;
 
@@ -16,21 +16,16 @@ class StreetTypesController extends Controller
         $table = new StreetTypesTable();
         $list  = $table->find();
 
-        return new \Application\Views\Generic\ListView([
-            'list'     => $list,
-            'plural'   => 'streetTypes',
-            'singular' => 'streetType',
-            'fields'   => array_keys(StreetType::$fieldmap)
-        ]);
+        return new \Application\Views\Streets\Types\ListView(['types'=>$list]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $type = new StreetType($_REQUEST['id']); }
+            try { $type = new Type($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $type = new StreetType(); }
+        else { $type = new Type(); }
 
         if (isset($type)) {
             if (isset($_POST['name'])) {
@@ -42,12 +37,7 @@ class StreetTypesController extends Controller
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
-            return new \Application\Views\Generic\UpdateView([
-                'form'     => 'generic/updateNameCodeForm.inc',
-                'plural'   => 'streetTypes',
-                'singular' => 'streetType',
-                'object'   => $type
-            ]);
+            return new \Application\Views\Streets\Types\UpdateView(['type'=>$type]);
         }
         else {
             return new \Application\Views\NotFoundView();
