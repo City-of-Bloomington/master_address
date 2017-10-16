@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\Streets\Type;
-use Application\Models\TableGateways\StreetTypes;
+use Application\Models\TableGateways\Streets\Types;
 use Blossom\Classes\Controller;
 
 class StreetTypesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new StreetTypes();
+        $table = new Types();
         $list  = $table->find();
 
         return new \Application\Views\Streets\Types\ListView(['types'=>$list]);

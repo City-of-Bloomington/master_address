@@ -4,11 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Models\TableGateways;
+namespace Application\Models\TableGateways\Streets;
 
 use Blossom\Classes\TableGateway;
 
-class StreetTypes extends TableGateway
+class Types extends TableGateway
 {
     public function __construct() { parent::__construct('street_types', 'Application\Models\Streets\Type'); }
 
