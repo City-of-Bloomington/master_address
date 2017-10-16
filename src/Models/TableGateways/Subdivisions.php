@@ -8,7 +8,7 @@ namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class SubdivisionsTable extends TableGateway
+class Subdivisions extends TableGateway
 {
     protected $columns = ['name', 'township_id', 'phase', 'status'];
     public static $defaultOrder = ['name'];

@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 use Application\Models\Subdivision;
-use Application\Models\TableGateways\TownshipsTable;
+use Application\Models\TableGateways\Townships;
 
 $fields = ['name', 'township_id', 'phase', 'status'];
 foreach ($fields as $f) {
@@ -28,7 +28,7 @@ foreach ($fields as $f) {
             ]);
 
             $options = [['value'=>'']];
-            $table   = new TownshipsTable();
+            $table   = new Townships();
             $list    = $table->find();
             foreach ($list as $t) {
                 $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())];

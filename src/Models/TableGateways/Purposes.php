@@ -8,9 +8,9 @@ namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class DirectionsTable extends TableGateway
+class Purposes extends TableGateway
 {
-    public function __construct() { parent::__construct('directions', 'Application\Models\Direction'); }
+    public function __construct() { parent::__construct('location_purposes', 'Application\Models\Purpose'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

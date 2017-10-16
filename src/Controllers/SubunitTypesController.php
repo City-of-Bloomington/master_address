@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\SubunitType;
-use Application\Models\TableGateways\SubunitTypesTable;
+use Application\Models\TableGateways\SubunitTypes;
 use Blossom\Classes\Controller;
 
 class SubunitTypesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new SubunitTypesTable();
+        $table = new SubunitTypes();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

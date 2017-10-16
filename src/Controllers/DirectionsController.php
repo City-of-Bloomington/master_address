@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\Direction;
-use Application\Models\TableGateways\DirectionsTable;
+use Application\Models\TableGateways\Directions;
 use Blossom\Classes\Controller;
 
 class DirectionsController extends Controller
 {
     public function index(array $params)
     {
-        $table = new DirectionsTable();
+        $table = new Directions();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

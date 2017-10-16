@@ -5,7 +5,7 @@
  * @param Plat $this->plat
  */
 use Application\Models\Plat;
-use Application\Models\TableGateways\TownshipsTable;
+use Application\Models\TableGateways\Townships;
 
 $fields = ['id', 'name', 'type', 'cabinet', 'envelope', 'notes', 'township_id'];
 foreach ($fields as $f) {
@@ -32,7 +32,7 @@ $title = $id ? $this->_('plat_edit') : $this->_('plat_add');
                 ]);
 
                 $options = [['value'=>'']];
-                $table   = new TownshipsTable();
+                $table   = new Townships();
                 $list    = $table->find();
                 foreach ($list as $t) { $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())]; }
                 echo $h->field([

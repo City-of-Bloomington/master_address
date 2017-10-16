@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\Jurisdiction;
-use Application\Models\TableGateways\JurisdictionsTable;
+use Application\Models\TableGateways\Jurisdictions;
 use Blossom\Classes\Controller;
 
 class JurisdictionsController extends Controller
 {
     public function index(array $params)
     {
-        $table = new JurisdictionsTable();
+        $table = new Jurisdictions();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

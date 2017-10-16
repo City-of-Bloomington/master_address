@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Person;
-use Application\Models\TableGateways\PeopleTable;
+use Application\Models\TableGateways\People;
 use Blossom\Classes\Controller;
 use Blossom\Classes\Block;
 
@@ -14,7 +14,7 @@ class UsersController extends Controller
 {
 	public function index(array $params)
 	{
-		$people = new PeopleTable();
+		$people = new People();
 		$page = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
 		$users = $people->find(['user_account'=>true], ['lastname'], 20, $page);
 

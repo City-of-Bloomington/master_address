@@ -6,19 +6,15 @@
 declare (strict_types=1);
 namespace Application\Models\TableGateways;
 
-use Application\Models\Township;
 use Blossom\Classes\TableGateway;
 
-class TownshipsTable extends TableGateway
+class Jurisdictions extends TableGateway
 {
-    public function __construct()
-    {
-        parent::__construct('townships', 'Application\Models\Township');
-        $this->columns = Township::$fieldmap;
-    }
+    public function __construct() { parent::__construct('jurisdictions', 'Application\Models\Jurisdiction'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {
         return parent::find($fields, $order, $itemsPerPage, $currentPage);
     }
+
 }

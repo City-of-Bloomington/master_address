@@ -8,7 +8,7 @@ namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class StreetStatusesTable extends TableGateway
+class StreetStatuses extends TableGateway
 {
     public function __construct() { parent::__construct('street_statuses', 'Application\Models\StreetStatus'); }
 

@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\Township;
-use Application\Models\TableGateways\TownshipsTable;
+use Application\Models\TableGateways\Townships;
 use Blossom\Classes\Controller;
 
 class TownshipsController extends Controller
 {
     public function index(array $params)
     {
-        $table = new TownshipsTable();
+        $table = new Townships();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\AddressStatus;
-use Application\Models\TableGateways\AddressStatusesTable;
+use Application\Models\TableGateways\AddressStatuses;
 use Blossom\Classes\Controller;
 
 class AddressStatusesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new AddressStatusesTable();
+        $table = new AddressStatuses();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

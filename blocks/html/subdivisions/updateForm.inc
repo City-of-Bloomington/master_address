@@ -5,7 +5,7 @@
  * @param Subdivision $this->subdivision
  */
 use Application\Models\Subdivision;
-use Application\Models\TableGateways\TownshipsTable;
+use Application\Models\TableGateways\Townships;
 
 $fields = ['id', 'name', 'township_id', 'phase', 'status'];
 foreach ($fields as $f) {
@@ -32,7 +32,7 @@ $title = $id ? $this->_('subdivision_edit') : $this->_('subdivision_add');
                 ]);
 
                 $options = [['value'=>'']];
-                $table   = new TownshipsTable();
+                $table   = new Townships();
                 $list    = $table->find();
                 foreach ($list as $t) { $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())]; }
                 echo $h->field([

@@ -6,11 +6,16 @@
 declare (strict_types=1);
 namespace Application\Models\TableGateways;
 
+use Application\Models\Township;
 use Blossom\Classes\TableGateway;
 
-class SubunitTypesTable extends TableGateway
+class Townships extends TableGateway
 {
-    public function __construct() { parent::__construct('subunit_types', 'Application\Models\SubunitType'); }
+    public function __construct()
+    {
+        parent::__construct('townships', 'Application\Models\Township');
+        $this->columns = Township::$fieldmap;
+    }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

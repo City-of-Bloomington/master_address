@@ -8,7 +8,7 @@ namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class PeopleTable extends TableGateway
+class People extends TableGateway
 {
     public function __construct() { parent::__construct('people', 'Application\Models\Person'); }
 

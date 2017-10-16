@@ -8,9 +8,9 @@ namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class TownsTable extends TableGateway
+class SubunitTypes extends TableGateway
 {
-    public function __construct() { parent::__construct('towns', 'Application\Models\Town'); }
+    public function __construct() { parent::__construct('subunit_types', 'Application\Models\SubunitType'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

@@ -8,13 +8,12 @@ namespace Application\Models\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class JurisdictionsTable extends TableGateway
+class StreetTypes extends TableGateway
 {
-    public function __construct() { parent::__construct('jurisdictions', 'Application\Models\Jurisdiction'); }
+    public function __construct() { parent::__construct('street_types', 'Application\Models\Streets\Type'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {
         return parent::find($fields, $order, $itemsPerPage, $currentPage);
     }
-
 }

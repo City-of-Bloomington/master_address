@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\LocationType;
-use Application\Models\TableGateways\LocationTypesTable;
+use Application\Models\TableGateways\LocationTypes;
 use Blossom\Classes\Controller;
 
 class LocationTypesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new LocationTypesTable();
+        $table = new LocationTypes();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

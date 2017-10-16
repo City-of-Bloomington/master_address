@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\Purpose;
-use Application\Models\TableGateways\PurposesTable;
+use Application\Models\TableGateways\Purposes;
 use Blossom\Classes\Controller;
 
 class PurposesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new PurposesTable();
+        $table = new Purposes();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

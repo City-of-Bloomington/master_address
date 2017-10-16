@@ -159,11 +159,11 @@ create table street_names (
     direction_id      integer,
     name              varchar(64),
     post_direction_id integer,
-    suffix_code       varchar(8),
+    suffix_code_id    integer,
     notes             varchar(240),
-    foreign key (direction_id     ) references directions (id),
-    foreign key (post_direction_id) references directions (id),
-    foreign key (suffix_code      ) references street_types(code)
+    foreign key (direction_id     ) references directions  (id),
+    foreign key (post_direction_id) references directions  (id),
+    foreign key (suffix_code_id   ) references street_types(id)
 );
 
 create table street_street_names (

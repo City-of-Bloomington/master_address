@@ -9,7 +9,7 @@ namespace Application\Models\TableGateways;
 use Application\Models\Plat;
 use Blossom\Classes\TableGateway;
 
-class PlatsTable extends TableGateway
+class Plats extends TableGateway
 {
     public function __construct() { parent::__construct('plats', 'Application\Models\Plat'); }
 
