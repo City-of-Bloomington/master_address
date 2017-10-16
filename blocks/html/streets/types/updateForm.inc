@@ -12,6 +12,7 @@ foreach ($fields as $f) {
     $$f  = parent::escape($this->type->$get());
 }
 
+$size  = $this->type->codeSize;
 $title = $code ? $this->_('streetType_edit') : $this->_('streetType_add');
 ?>
 <section>
@@ -26,6 +27,7 @@ $title = $code ? $this->_('streetType_edit') : $this->_('streetType_add');
                 'id'       => 'code',
                 'label'    => $this->_('code'),
                 'value'    => $code,
+                'attr'     => ['size'=>$size, 'maxlength'=>$size],
                 'required' => true
             ]);
 

@@ -10,4 +10,7 @@ use Application\Models\NameCodeTable;
 class Type extends NameCodeTable
 {
     protected $tablename = 'street_types';
+
+    // Max length for the code field
+    public $codeSize = 8;
 }
