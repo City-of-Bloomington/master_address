@@ -10,7 +10,7 @@ use Blossom\Classes\TableGateway;
 
 class StreetStatuses extends TableGateway
 {
-    public function __construct() { parent::__construct('street_statuses', 'Application\Models\StreetStatus'); }
+    public function __construct() { parent::__construct('street_statuses', 'Application\Models\Streets\Status'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

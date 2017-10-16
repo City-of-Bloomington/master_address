@@ -5,7 +5,7 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\StreetStatus;
+use Application\Models\Streets\Status;
 use Application\Models\TableGateways\StreetStatuses;
 use Blossom\Classes\Controller;
 
@@ -20,17 +20,17 @@ class StreetStatusesController extends Controller
             'list'     => $list,
             'plural'   => 'streetStatuses',
             'singular' => 'streetStatus',
-            'fields'   => array_keys(StreetStatus::$fieldmap)
+            'fields'   => array_keys(Status::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $status = new StreetStatus($_REQUEST['id']); }
+            try { $status = new Status($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $status = new StreetStatus(); }
+        else { $status = new Status(); }
 
         if (isset($status)) {
             if (isset($_POST['name'])) {
