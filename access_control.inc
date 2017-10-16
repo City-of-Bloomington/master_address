@@ -45,7 +45,7 @@ $ZEND_ACL->addResource(new Resource('Precinct'));
 $ZEND_ACL->addResource(new Resource('purposes'));
 $ZEND_ACL->addResource(new Resource('Report'));
 $ZEND_ACL->addResource(new Resource('StreetName'));
-$ZEND_ACL->addResource(new Resource('StreetNameType'));
+$ZEND_ACL->addResource(new Resource('streetNameTypes'));
 $ZEND_ACL->addResource(new Resource('streets'));
 $ZEND_ACL->addResource(new Resource('streetStatuses'));
 $ZEND_ACL->addResource(new Resource('streetTypes'));

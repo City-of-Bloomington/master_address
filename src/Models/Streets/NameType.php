@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2017 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-class StreetNameType
+declare (strict_types=1);
+namespace Application\Models\Streets;
+use Blossom\Classes\ActiveRecord;
+
+class NameType extends ActiveRecord
 {
-	private $street_name_type;
-	private $description;
-    private $id;
+    protected $tablename = 'street_name_types';
 
 	/**
 	 * Populates the object with data
@@ -20,34 +21,26 @@ class StreetNameType
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
 	 *
-	 * @param int|array $street_name_type
+	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+                $this->data = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
-				if (is_numeric($id)) {
-				  $sql = 'select * from mast_street_name_type_master where id=?';
-				}
-				else{
-				  $sql = 'select * from mast_street_name_type_master where street_name_type=?';
-				}
-				$result = $zend_db->fetchRow($sql,array($id));
-			}
+                $sql = ActiveRecord::isId($id)
+                    ? "select * from {$this->tablename} where id=?"
+                    : "select * from {$this->tablename} where name=?";
 
-			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
-			}
-			else {
-				throw new Exception('streets/unknownStreetNameType');
+				$rows = self::doQuery($sql, [$id]);
+                if (count($rows)) {
+                    $this->data = $rows[0];
+                }
+                else {
+                    throw new \Exception("{$this->tablename}/unknown");
+                }
 			}
 		}
 		else {
@@ -56,116 +49,28 @@ class StreetNameType
 		}
 	}
 
-	/**
-	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
-	 */
 	public function validate()
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-	  if(!$this->street_name_type || !$this->description){
-			throw new Exception('missingRequiredFields');
-	  }
+        if (!$this->getName() || !$this->getDescription()) {
+            throw new \Exception('missingRequiredFields');
+        }
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-
-		$data = array();
-		$data['description'] = $this->description;
-		$data['street_name_type'] = $this->street_name_type;
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-		    $this->insert($data);
-		}
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('mast_street_name_type_master',$data,"id={$this->id}");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('mast_street_name_type_master',$data);
-		if (Database::getType()=='oracle') {
-		    $this->id = $zend_db->lastSequenceId('street_name_type_id_s');
-		}
-		else {
-		    $this->street_name_type = $zend_db->lastInsertId('mast_street_name_type_master','street_name_type');
-		}
-
-	}
+	public function save() { parent::save(); }
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
+	public function getId()          { return (int)parent::get('id'         ); }
+	public function getName()        { return      parent::get('name'       ); }
+	public function getDescription() { return      parent::get('description'); }
 
-	/**
-	 * @return string
-	 */
-	public function getStreet_name_type()
-	{
-		return $this->street_name_type;
-	}
+	public function setName       (string $s) { parent::set('name',        $s); }
+	public function setDescription(string $s) { parent::set('description', $s); }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
+	public function handleUpdate(array $post)
 	{
-		return $this->description;
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-
-	/**
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->description = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setStreet_name_type($string)
-	{
-	    $this->street_name_type = trim($string);
-	}
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->getStreet_name_type();
-	}
-
-	/**
-	 * alias for street_name_type
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->getStreet_name_type();
+        $this->setName       ($post['name'       ]);
+        $this->setDescription($post['description']);
 	}
 }

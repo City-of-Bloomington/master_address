@@ -221,6 +221,17 @@ msgstr "New Street Type"
 msgid "streetType_edit"
 msgstr "Edit Street Type"
 
+msgid "streetNameType"
+msgid_plural "streetNameTypes"
+msgstr[0] "Streetname Type"
+msgstr[1] "Streetname Types"
+
+msgid "streetNameType_add"
+msgstr "New Streetname Type"
+
+msgid "streetNameType_edit"
+msgstr "Edit Streetname Type"
+
 msgid "subunitType"
 msgid_plural "subunitTypes"
 msgstr[0] "Subunit Type"

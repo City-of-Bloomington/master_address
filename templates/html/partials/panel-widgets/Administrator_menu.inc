@@ -16,6 +16,7 @@ $routes = [
     'contactStatuses' => 'contactStatus',
     'streetStatuses'  => 'streetStatus',
     'streetTypes'     => 'streetType',
+    'streetNameTypes' => 'streetNameType',
     'subunitTypes'    => 'subunitType',
     'locationTypes'   => 'locationType',
     'purposes'        => 'purpose',

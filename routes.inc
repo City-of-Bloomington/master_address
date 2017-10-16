@@ -29,7 +29,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 // Controllers that only have index, update
 $tables = [
     'towns', 'townships', 'jurisdictions', 'directions',
-    'streetTypes', 'subunitTypes', 'locationTypes', 'purposes',
+    'streetTypes', 'streetNameTypes', 'subunitTypes', 'locationTypes', 'purposes',
     'addressStatuses', 'contactStatuses', 'streetStatuses'
 ];
 foreach ($tables as $t) {
