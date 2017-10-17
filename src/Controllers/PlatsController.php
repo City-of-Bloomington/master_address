@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Plat;
-use Application\Models\TableGateways\Plats;
+use Application\TableGateways\Plats;
 use Blossom\Classes\Controller;
 
 class PlatsController extends Controller

@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Jurisdiction;
-use Application\Models\TableGateways\Jurisdictions;
+use Application\TableGateways\Jurisdictions;
 use Blossom\Classes\Controller;
 
 class JurisdictionsController extends Controller

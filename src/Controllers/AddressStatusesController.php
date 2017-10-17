@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\AddressStatus;
-use Application\Models\TableGateways\AddressStatuses;
+use Application\TableGateways\AddressStatuses;
 use Blossom\Classes\Controller;
 
 class AddressStatusesController extends Controller

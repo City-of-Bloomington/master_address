@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Streets\Status;
-use Application\Models\TableGateways\Streets\Statuses;
+use Application\TableGateways\Streets\Statuses;
 use Blossom\Classes\Controller;
 
 class StreetStatusesController extends Controller

@@ -7,7 +7,7 @@ declare (strict_types=1);
 namespace Application\Controllers;
 
 use Application\Models\Subdivision;
-use Application\Models\TableGateways\Subdivisions;
+use Application\TableGateways\Subdivisions;
 use Blossom\Classes\Controller;
 
 class SubdivisionsController extends Controller

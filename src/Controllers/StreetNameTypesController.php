@@ -7,7 +7,7 @@ declare (strict_types=1);
 namespace Application\Controllers;
 
 use Application\Models\Streets\NameType;
-use Application\Models\TableGateways\Streets\NameTypes;
+use Application\TableGateways\Streets\NameTypes;
 use Blossom\Classes\Controller;
 
 class StreetNameTypesController extends Controller

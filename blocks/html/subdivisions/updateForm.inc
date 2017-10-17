@@ -5,7 +5,7 @@
  * @param Subdivision $this->subdivision
  */
 use Application\Models\Subdivision;
-use Application\Models\TableGateways\Townships;
+use Application\TableGateways\Townships;
 
 $fields = ['id', 'name', 'township_id', 'phase', 'status'];
 foreach ($fields as $f) {

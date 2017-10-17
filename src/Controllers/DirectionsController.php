@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Direction;
-use Application\Models\TableGateways\Directions;
+use Application\TableGateways\Directions;
 use Blossom\Classes\Controller;
 
 class DirectionsController extends Controller

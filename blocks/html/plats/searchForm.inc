@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 use Application\Models\Plat;
-use Application\Models\TableGateways\Townships;
+use Application\TableGateways\Townships;
 
 $fields = ['name', 'township_id', 'type', 'cabinet', 'envelope'];
 foreach ($fields as $f) {

@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Application\Models;
 
-use Application\Models\TableGateways\AddressesTable;
+use Application\TableGateways\AddressesTable;
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 

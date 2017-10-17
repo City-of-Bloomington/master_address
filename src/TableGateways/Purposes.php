@@ -4,18 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Models\TableGateways;
+namespace Application\TableGateways;
 
-use Application\Models\Township;
 use Blossom\Classes\TableGateway;
 
-class Townships extends TableGateway
+class Purposes extends TableGateway
 {
-    public function __construct()
-    {
-        parent::__construct('townships', 'Application\Models\Township');
-        $this->columns = Township::$fieldmap;
-    }
+    public function __construct() { parent::__construct('location_purposes', 'Application\Models\Purpose'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

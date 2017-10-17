@@ -4,13 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Models\TableGateways\Streets;
+namespace Application\TableGateways;
 
 use Blossom\Classes\TableGateway;
 
-class NameTypes extends TableGateway
+class ContactStatuses extends TableGateway
 {
-    public function __construct() { parent::__construct('street_name_types', 'Application\Models\Streets\NameType'); }
+    public function __construct() { parent::__construct('contact_statuses', 'Application\Models\ContactStatus'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

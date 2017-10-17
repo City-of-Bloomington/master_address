@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Town;
-use Application\Models\TableGateways\Towns;
+use Application\TableGateways\Towns;
 use Blossom\Classes\Controller;
 
 class TownsController extends Controller

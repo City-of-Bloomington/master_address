@@ -6,7 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\ContactStatus;
-use Application\Models\TableGateways\ContactStatuses;
+use Application\TableGateways\ContactStatuses;
 use Blossom\Classes\Controller;
 
 class ContactStatusesController extends Controller
