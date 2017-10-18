@@ -34,7 +34,7 @@ use Application\Models\Person;
         <?php
             foreach ($this->types as $t) {
                 $name = parent::escape($t->getName());
-                $desc = parent::escape($t->getDescription());
+                $code = parent::escape($t->getCode());
 
                 $editButton = '';
                 if ($userCanEdit) {
@@ -48,7 +48,7 @@ use Application\Models\Person;
                 echo "
                 <tr><td>$editButton</td>
                     <td>$name</td>
-                    <td>$desc</td>
+                    <td>$code</td>
                 </tr>
                 ";
             }

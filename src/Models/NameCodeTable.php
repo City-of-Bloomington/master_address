@@ -44,7 +44,6 @@ class NameCodeTable extends ActiveRecord
 				else {
 					$sql  = "select * from {$this->tablename} where name=? or code=?";
                     $rows = parent::doQuery($sql, [$id, $id]);
-
 				}
 
                 if (count($rows)) {
