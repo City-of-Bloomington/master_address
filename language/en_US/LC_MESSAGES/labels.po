@@ -199,6 +199,14 @@ msgstr "New Contact Status"
 msgid "contactStatus_edit"
 msgstr "Edit Contact Status"
 
+msgid "street"
+msgid_plural "streets"
+msgstr[0] "Street"
+msgstr[1] "Streets"
+
+msgid "streetName"
+msgstr "Streetname"
+
 msgid "streetStatus"
 msgid_plural "streetStatuses"
 msgstr[0] "Street Status"

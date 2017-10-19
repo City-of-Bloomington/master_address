@@ -13,6 +13,20 @@ use Application\TableGateways\Streets\Types;
 
 class Parser
 {
+    const NUMBER_PREFIX  = 'street_number_prefix';
+    const NUMBER         = 'street_number';
+    const NUMBER_SUFFIX  = 'street_number_suffix';
+    const DIRECTION      = 'direction';
+    const STREET_NAME    = 'street_name';
+    const STREET_TYPE    = 'streetType';
+    const POST_DIRECTION = 'postDirection';
+    const SUBUNIT_TYPE   = 'subunitType';
+    const SUBUNIT_ID     = 'subunitIdentifier';
+    const CITY           = 'city';
+    const STATE          = 'state';
+    const ZIP            = 'zip';
+    const ZIP_PLUS4      = 'zipplus4';
+
 	/**
 	 * Returns cities in use by the system
 	 *
@@ -153,22 +167,22 @@ class Parser
 
 			if (preg_match("/^$numberPattern/i", $address, $matches)) {
 
-				if (!empty($matches['prefix'])) { $output['street_number_prefix'] = trim($matches['prefix']); }
-				$output['street_number'] = trim($matches['number']);
+				if (!empty($matches['prefix'])) { $output[self::NUMBER_PREFIX] = trim($matches['prefix']); }
+				$output[self::NUMBER] = trim($matches['number']);
 
 				if (!empty($matches['direction'])) {
-					$output['direction'] = trim($matches['direction']);
+					$output[self::DIRECTION] = trim($matches['direction']);
 					if (!empty($matches['suffix'])) {
-						$output['street_number_suffix'] = trim($matches['suffix']);
+						$output[self::NUMBER_SUFFIX] = trim($matches['suffix']);
 					}
 				}
 				elseif (!empty($matches['suffix'])) {
 					$s = strtoupper(trim($matches['suffix']));
 					if (in_array($s, $directions)) {
-						$output['direction'] = $s;
+						$output[self::DIRECTION] = $s;
 					}
 					else {
-						$output['street_number_suffix'] = $s;
+						$output[self::NUMBER_SUFFIX] = $s;
 					}
 				}
 				$address = trim(preg_replace("#^$matches[0]#i",'',$address));
@@ -177,23 +191,23 @@ class Parser
 			//echo "Looking for Zip: |$address|\n";
 			$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
 			if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
-				$output['zip'] = trim($matches['zip']);
+				$output[self::ZIP] = trim($matches['zip']);
 				if (isset($matches['zipplus4']) && $matches['zipplus4']) {
-					$output['zipplus4'] = trim($matches['zipplus4']);
+					$output[self::ZIP_PLUS4] = trim($matches['zipplus4']);
 				}
 				$address = trim(preg_replace("/\s$zipPattern$/i",'',$address));
 			}
 
 			//echo "Looking for State: |$address|\n";
 			if (preg_match("/\s(?<state>IN)\b/i",$address,$matches)) {
-				$output['state'] = trim($matches['state']);
+				$output[self::STATE] = trim($matches['state']);
 				$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
 			}
 
 			//echo "Looking for city: |$address|\n";
 			$cityPattern = implode('|', $cities);
 			if (preg_match("/\s(?<city>$cityPattern)$/i",$address,$matches)) {
-				$output['city'] = trim($matches['city']);
+				$output[self::CITY] = trim($matches['city']);
 				$address = trim(preg_replace("/\s$matches[city]$/i",'',$address));
 			}
 
@@ -203,8 +217,8 @@ class Parser
 			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
 				try {
                     $type = new SubunitType(strtoupper($matches['subunitType']));
-					$output['subunitType'] = $type->getCode();
-					$output['subunitIdentifier'] = $matches['subunitIdentifier'];
+					$output[self::SUBUNIT_TYPE] = $type->getCode();
+					$output[self::SUBUNIT_ID] = $matches['subunitIdentifier'];
 					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 				}
 				catch (Exception $e) {
@@ -250,8 +264,8 @@ class Parser
 					case 'dir':
 					case 'direction':
                         $value = strtoupper($value);
-                        if (            in_array($value, $directions)) { $output['direction'] = $value; }
-                        elseif (array_key_exists($value, $directions)) { $output['direction'] = $directions[$value]; }
+                        if (            in_array($value, $directions)) { $output[self::DIRECTION] = $value; }
+                        elseif (array_key_exists($value, $directions)) { $output[self::DIRECTION] = $directions[$value]; }
                         // Just ignore anything that's not a known direction
 						break;
 
@@ -259,23 +273,23 @@ class Parser
 					case 'streetType':
 					case 'stype':
                         $value = strtoupper($value);
-                        if (            in_array($value, $streetTypes)) { $output['streetType'] = $value; }
-                        elseif (array_key_exists($value, $streetTypes)) { $output['streetType'] = $streetTypes[$value]; }
+                        if (            in_array($value, $streetTypes)) { $output[self::STREET_TYPE] = $value; }
+                        elseif (array_key_exists($value, $streetTypes)) { $output[self::STREET_TYPE] = $streetTypes[$value]; }
                         // Just ignore anything that's not a known street type
 						break;
 
 					case 'name':
 					case 'street':
 					case 'streetName':
-						$output['street_name'] = $value;
+						$output[self::STREET_NAME] = $value;
 						break;
 
 					case 'postdirection':
 					case 'postdir':
 					case 'pdir':
                         $value = strtoupper($value);
-                        if (            in_array($value, $directions)) { $output['postDirection'] = $value; }
-                        elseif (array_key_exists($value, $directions)) { $output['postDirection'] = $directions[$value]; }
+                        if (            in_array($value, $directions)) { $output[self::POST_DIRECTION] = $value; }
+                        elseif (array_key_exists($value, $directions)) { $output[self::POST_DIRECTION] = $directions[$value]; }
                         // Just ignore anything that's not a known direction
 						break;
 				}
@@ -283,13 +297,13 @@ class Parser
 		}
 
 		// Sanity Checking
-		if (!isset($output['street_name']) && isset($output['streetType'])) {
-			$output['street_name'] = $output['streetType'];
-			unset($output['streetType']);
+		if (!isset($output[self::STREET_NAME]) && isset($output[self::STREET_TYPE])) {
+			$output[self::STREET_NAME] = $output[self::STREET_TYPE];
+			unset($output[self::STREET_TYPE]);
 		}
-		if (!empty($output['street_number_suffix']) && empty($output['street_name'])) {
-			$output['street_name'] = $output['street_number_suffix'];
-			unset($output['street_number_suffix']);
+		if (!empty($output[self::NUMBER_SUFFIX]) && empty($output[self::STREET_NAME])) {
+			$output[self::STREET_NAME] = $output[self::NUMBER_SUFFIX];
+			unset($output[self::NUMBER_SUFFIX]);
 		}
 		return $output;
 	}

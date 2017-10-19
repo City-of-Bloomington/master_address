@@ -44,7 +44,7 @@ foreach ($tables as $t) {
 
 // Controllers that only have index, view, update
 $tables = [
-    'people', 'plats', 'subdivisions'
+    'people', 'plats', 'subdivisions', 'streets'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {

@@ -73,4 +73,9 @@ class NameType extends ActiveRecord
         $this->setName       ($post['name'       ]);
         $this->setDescription($post['description']);
 	}
+
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
+	public function __toString() { return $this->getName(); }
 }
