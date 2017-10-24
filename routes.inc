@@ -10,7 +10,7 @@ $ROUTES = $rf->newInstance();
 $ROUTES->add('home', '/')->setValues(['controller'=>'index', 'action'=>'index']);
 
 $ROUTES->attach('login', '/login', function ($r) {
-    $r->setValues(['controller'=>'login']);
+    $r->setValues(['controller'=>'Application\Controllers\LoginController']);
 
     $r->add('index',  '')       ->addValues(['action'=>'index' ]);
     $r->add('login',  '/login') ->addValues(['action'=>'login' ]);
@@ -19,7 +19,7 @@ $ROUTES->attach('login', '/login', function ($r) {
 
 $ROUTES->attach('users', '/users', function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=>'users']);
+    $r->setValues(['controller'=>'Application\Controllers\UsersController']);
 
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
@@ -35,7 +35,7 @@ $tables = [
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
         $r->setTokens(['id'=>'[a-z0-9]+']);
-        $r->setValues(['controller'=>$t]);
+        $r->setValues(['controller'=> 'Application\Controllers\\'.ucfirst($t).'Controller']);
 
         $r->add('index',  '')             ->addValues(['action'=>'index' ]);
         $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
@@ -49,7 +49,7 @@ $tables = [
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
         $r->setTokens(['id'=>'[a-z0-9]+']);
-        $r->setValues(['controller'=>$t]);
+        $r->setValues(['controller'=> 'Application\Controllers\\'.ucfirst($t).'Controller']);
 
         $r->add('index',  '')            ->addValues(['action'=>'index' ]);
         $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
