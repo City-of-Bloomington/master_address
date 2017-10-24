@@ -5,48 +5,46 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Streets\Status;
-use Application\TableGateways\Streets\Statuses;
+use Application\Models\Township;
+use Application\TableGateways\Townships as TownshipsTable;
 use Blossom\Classes\Controller;
 
-class StreetStatusesController extends Controller
+class Townships extends Controller
 {
     public function index(array $params)
     {
-        $table = new Statuses();
+        $table = new TownshipsTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'streetStatuses',
-            'singular' => 'streetStatus',
-            'fields'   => array_keys(Status::$fieldmap)
+            'plural'   => 'townships',
+            'singular' => 'township',
+            'fields'   => array_keys(Township::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $status = new Status($_REQUEST['id']); }
+            try { $township = new Township($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $status = new Status(); }
+        else { $township = new Township(); }
 
-        if (isset($status)) {
+        if (isset($township)) {
             if (isset($_POST['name'])) {
                 try {
-                    $status->handleUpdate($_POST);
-                    $status->save();
-                    header('Location: '.self::generateUrl('streetStatuses.index'));
+                    $township->handleUpdate($_POST);
+                    $township->save();
+                    header('Location: '.self::generateUrl('townships.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'form'     => 'generic/updateNameForm.inc',
-                'plural'   => 'streetStatuses',
-                'singular' => 'streetStatus',
-                'object'   => $status
+                'form'     => 'townships/updateForm.inc',
+                'township' => $township
             ]);
         }
         else {

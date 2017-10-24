@@ -31,7 +31,6 @@ if ($route) {
                     $_GET['id'] = $route->params['id'];
                 $_REQUEST['id'] = $route->params['id'];
             }
-            echo "$controller::$action\n";
 
             $c = new $controller();
             $view = $c->$action($route->params);

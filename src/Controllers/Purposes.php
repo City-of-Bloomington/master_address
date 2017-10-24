@@ -5,46 +5,46 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Township;
-use Application\TableGateways\Townships;
+use Application\Models\Purpose;
+use Application\TableGateways\Purposes as PurposesTable;
 use Blossom\Classes\Controller;
 
-class TownshipsController extends Controller
+class Purposes extends Controller
 {
     public function index(array $params)
     {
-        $table = new Townships();
+        $table = new PurposesTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'townships',
-            'singular' => 'township',
-            'fields'   => array_keys(Township::$fieldmap)
+            'plural'   => 'purposes',
+            'singular' => 'purpose',
+            'fields'   => array_keys(Purpose::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $township = new Township($_REQUEST['id']); }
+            try { $purpose = new Purpose($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $township = new Township(); }
+        else { $purpose = new Purpose(); }
 
-        if (isset($township)) {
+        if (isset($purpose)) {
             if (isset($_POST['name'])) {
                 try {
-                    $township->handleUpdate($_POST);
-                    $township->save();
-                    header('Location: '.self::generateUrl('townships.index'));
+                    $purpose->handleUpdate($_POST);
+                    $purpose->save();
+                    header('Location: '.self::generateUrl('purposes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'form'     => 'townships/updateForm.inc',
-                'township' => $township
+                'form'    => 'locations/updatePurposeForm.inc',
+                'purpose' => $purpose
             ]);
         }
         else {

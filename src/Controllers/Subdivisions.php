@@ -7,14 +7,14 @@ declare (strict_types=1);
 namespace Application\Controllers;
 
 use Application\Models\Subdivision;
-use Application\TableGateways\Subdivisions;
+use Application\TableGateways\Subdivisions as SubdivisionsTable;
 use Blossom\Classes\Controller;
 
-class SubdivisionsController extends Controller
+class Subdivisions extends Controller
 {
     public function index(array $params)
     {
-        $table = new Subdivisions();
+        $table = new SubdivisionsTable();
 
         if (isset($_GET['page']) && $_GET['page'] == 'all') {
             $list = $table->search($_GET);

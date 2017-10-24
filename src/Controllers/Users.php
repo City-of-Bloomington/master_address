@@ -10,7 +10,7 @@ use Application\TableGateways\People;
 use Blossom\Classes\Controller;
 use Blossom\Classes\Block;
 
-class UsersController extends Controller
+class Users extends Controller
 {
 	public function index(array $params)
 	{

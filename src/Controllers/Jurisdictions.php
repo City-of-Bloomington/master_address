@@ -5,48 +5,48 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Direction;
-use Application\TableGateways\Directions;
+use Application\Models\Jurisdiction;
+use Application\TableGateways\Jurisdictions as JurisdictionsTable;
 use Blossom\Classes\Controller;
 
-class DirectionsController extends Controller
+class Jurisdictions extends Controller
 {
     public function index(array $params)
     {
-        $table = new Directions();
+        $table = new JurisdictionsTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'directions',
-            'singular' => 'direction',
-            'fields'   => array_keys(Direction::$fieldmap)
+            'plural'   => 'jurisdictions',
+            'singular' => 'jurisdiction',
+            'fields'   => array_keys(Jurisdiction::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $direction = new Direction($_REQUEST['id']); }
+            try { $jurisdiction = new Jurisdiction($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $direction = new Direction(); }
+        else { $jurisdiction = new Jurisdiction(); }
 
-        if (isset($direction)) {
+        if (isset($jurisdiction)) {
             if (isset($_POST['name'])) {
                 try {
-                    $direction->handleUpdate($_POST);
-                    $direction->save();
-                    header('Location: '.self::generateUrl('directions.index'));
+                    $jurisdiction->handleUpdate($_POST);
+                    $jurisdiction->save();
+                    header('Location: '.self::generateUrl('jurisdictions.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'form'     => 'generic/updateNameCodeForm.inc',
-                'plural'   => 'directions',
-                'singular' => 'direction',
-                'object'   => $direction
+                'object'   => $jurisdiction,
+                'plural'   => 'jurisdictions',
+                'singular' => 'jurisdiction',
+                'form'     => 'generic/updateNameForm.inc'
             ]);
         }
         else {

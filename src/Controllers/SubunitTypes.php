@@ -5,48 +5,48 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Town;
-use Application\TableGateways\Towns;
+use Application\Models\SubunitType;
+use Application\TableGateways\SubunitTypes as TypesTable;
 use Blossom\Classes\Controller;
 
-class TownsController extends Controller
+class SubunitTypes extends Controller
 {
     public function index(array $params)
     {
-        $table = new Towns();
+        $table = new TypesTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'towns',
-            'singular' => 'town',
-            'fields'   => array_keys(Town::$fieldmap)
+            'plural'   => 'subunitTypes',
+            'singular' => 'subunitType',
+            'fields'   => array_keys(SubunitType::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $town = new Town($_REQUEST['id']); }
+            try { $type = new SubunitType($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $town = new Town(); }
+        else { $type = new SubunitType(); }
 
-        if (isset($town)) {
+        if (isset($type)) {
             if (isset($_POST['name'])) {
                 try {
-                    $town->handleUpdate($_POST);
-                    $town->save();
-                    header('Location: '.self::generateUrl('towns.index'));
+                    $type->handleUpdate($_POST);
+                    $type->save();
+                    header('Location: '.self::generateUrl('subunitTypes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
                 'form'     => 'generic/updateNameCodeForm.inc',
-                'plural'   => 'towns',
-                'singular' => 'town',
-                'object'   => $town
+                'plural'   => 'subunitTypes',
+                'singular' => 'subunitType',
+                'object'   => $type
             ]);
         }
         else {

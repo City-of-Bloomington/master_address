@@ -4,17 +4,17 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Controllers;
+namespace Application\Controllers\Streets;
 
 use Application\Models\Streets\NameType;
-use Application\TableGateways\Streets\NameTypes;
+use Application\TableGateways\Streets\NameTypes as TypesTable;
 use Blossom\Classes\Controller;
 
-class StreetNameTypesController extends Controller
+class NameTypes extends Controller
 {
     public function index(array $params)
     {
-        $table = new NameTypes();
+        $table = new TypesTable();
         $list  = $table->find();
 
         return new \Application\Views\Streets\NameTypes\ListView(['types'=>$list]);

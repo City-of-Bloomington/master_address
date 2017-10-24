@@ -3,20 +3,20 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Controllers;
+namespace Application\Controllers\Streets;
 
 use Application\Models\Streets\Type;
-use Application\TableGateways\Streets\Types;
+use Application\TableGateways\Streets\Types as TypesTable;
 use Blossom\Classes\Controller;
 
-class StreetTypesController extends Controller
+class Types extends Controller
 {
     public function index(array $params)
     {
-        $table = new Types();
+        $table = new TypesTable();
         $list  = $table->find();
 
-        return new \Application\Views\Streets\NameTypes\ListView(['types'=>$list]);
+        return new \Application\Views\Streets\Types\ListView(['types'=>$list]);
     }
 
     public function update(array $params)

@@ -4,14 +4,14 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Controllers;
+namespace Application\Controllers\Streets;
 
 use Application\Models\Addresses\Parser;
 use Application\Models\Streets\Street;
-use Application\TableGateways\Streets\Streets;
+use Application\TableGateways\Streets\Streets as StreetsTable;
 use Blossom\Classes\Controller;
 
-class StreetsController extends Controller
+class Streets extends Controller
 {
     public function index(array $params)
     {
@@ -19,7 +19,7 @@ class StreetsController extends Controller
 
         if (!empty($_GET['street'])) {
             $parse = Parser::parse($_GET['street'], 'street');
-            $table = new Streets();
+            $table = new StreetsTable();
             $vars['streets'] = $table->search($parse);
         }
         return new \Application\Views\Streets\SearchView($vars);

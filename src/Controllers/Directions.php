@@ -5,48 +5,48 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\SubunitType;
-use Application\TableGateways\SubunitTypes;
+use Application\Models\Direction;
+use Application\TableGateways\Directions as DirectionsTable;
 use Blossom\Classes\Controller;
 
-class SubunitTypesController extends Controller
+class Directions extends Controller
 {
     public function index(array $params)
     {
-        $table = new SubunitTypes();
+        $table = new DirectionsTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'subunitTypes',
-            'singular' => 'subunitType',
-            'fields'   => array_keys(SubunitType::$fieldmap)
+            'plural'   => 'directions',
+            'singular' => 'direction',
+            'fields'   => array_keys(Direction::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $type = new SubunitType($_REQUEST['id']); }
+            try { $direction = new Direction($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $type = new SubunitType(); }
+        else { $direction = new Direction(); }
 
-        if (isset($type)) {
+        if (isset($direction)) {
             if (isset($_POST['name'])) {
                 try {
-                    $type->handleUpdate($_POST);
-                    $type->save();
-                    header('Location: '.self::generateUrl('subunitTypes.index'));
+                    $direction->handleUpdate($_POST);
+                    $direction->save();
+                    header('Location: '.self::generateUrl('directions.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
                 'form'     => 'generic/updateNameCodeForm.inc',
-                'plural'   => 'subunitTypes',
-                'singular' => 'subunitType',
-                'object'   => $type
+                'plural'   => 'directions',
+                'singular' => 'direction',
+                'object'   => $direction
             ]);
         }
         else {

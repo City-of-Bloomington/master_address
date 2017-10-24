@@ -5,46 +5,48 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\Purpose;
-use Application\TableGateways\Purposes;
+use Application\Models\Town;
+use Application\TableGateways\Towns as TownsTable;
 use Blossom\Classes\Controller;
 
-class PurposesController extends Controller
+class Towns extends Controller
 {
     public function index(array $params)
     {
-        $table = new Purposes();
+        $table = new TownsTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'purposes',
-            'singular' => 'purpose',
-            'fields'   => array_keys(Purpose::$fieldmap)
+            'plural'   => 'towns',
+            'singular' => 'town',
+            'fields'   => array_keys(Town::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $purpose = new Purpose($_REQUEST['id']); }
+            try { $town = new Town($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $purpose = new Purpose(); }
+        else { $town = new Town(); }
 
-        if (isset($purpose)) {
+        if (isset($town)) {
             if (isset($_POST['name'])) {
                 try {
-                    $purpose->handleUpdate($_POST);
-                    $purpose->save();
-                    header('Location: '.self::generateUrl('purposes.index'));
+                    $town->handleUpdate($_POST);
+                    $town->save();
+                    header('Location: '.self::generateUrl('towns.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'form'    => 'locations/updatePurposeForm.inc',
-                'purpose' => $purpose
+                'form'     => 'generic/updateNameCodeForm.inc',
+                'plural'   => 'towns',
+                'singular' => 'town',
+                'object'   => $town
             ]);
         }
         else {

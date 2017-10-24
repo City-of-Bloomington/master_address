@@ -3,50 +3,50 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Controllers;
+namespace Application\Controllers\Streets;
 
-use Application\Models\Jurisdiction;
-use Application\TableGateways\Jurisdictions;
+use Application\Models\Streets\Status;
+use Application\TableGateways\Streets\Statuses as StatusesTable;
 use Blossom\Classes\Controller;
 
-class JurisdictionsController extends Controller
+class Statuses extends Controller
 {
     public function index(array $params)
     {
-        $table = new Jurisdictions();
+        $table = new StatusesTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
-            'plural'   => 'jurisdictions',
-            'singular' => 'jurisdiction',
-            'fields'   => array_keys(Jurisdiction::$fieldmap)
+            'plural'   => 'streetStatuses',
+            'singular' => 'streetStatus',
+            'fields'   => array_keys(Status::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $jurisdiction = new Jurisdiction($_REQUEST['id']); }
+            try { $status = new Status($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $jurisdiction = new Jurisdiction(); }
+        else { $status = new Status(); }
 
-        if (isset($jurisdiction)) {
+        if (isset($status)) {
             if (isset($_POST['name'])) {
                 try {
-                    $jurisdiction->handleUpdate($_POST);
-                    $jurisdiction->save();
-                    header('Location: '.self::generateUrl('jurisdictions.index'));
+                    $status->handleUpdate($_POST);
+                    $status->save();
+                    header('Location: '.self::generateUrl('streetStatuses.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
             return new \Application\Views\Generic\UpdateView([
-                'object'   => $jurisdiction,
-                'plural'   => 'jurisdictions',
-                'singular' => 'jurisdiction',
-                'form'     => 'generic/updateNameForm.inc'
+                'form'     => 'generic/updateNameForm.inc',
+                'plural'   => 'streetStatuses',
+                'singular' => 'streetStatus',
+                'object'   => $status
             ]);
         }
         else {

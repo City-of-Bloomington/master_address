@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\Plat;
-use Application\TableGateways\Plats;
+use Application\TableGateways\Plats as PlatsTable;
 use Blossom\Classes\Controller;
 
-class PlatsController extends Controller
+class Plats extends Controller
 {
     public function index(array $params)
     {
-        $table = new Plats();
+        $table = new PlatsTable();
 
         if (isset($_GET['page']) && $_GET['page'] == 'all') {
             $list = $table->search($_GET);

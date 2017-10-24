@@ -1,15 +1,15 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Controllers;
 
 use Application\Models\Person;
-use Application\TableGateways\People;
+use Application\TableGateways\People as PeopleTable;
 use Blossom\Classes\Controller;
 
-class PeopleController extends Controller
+class People extends Controller
 {
     private function loadPerson($id)
     {
@@ -25,7 +25,7 @@ class PeopleController extends Controller
 
 	public function index(array $params)
 	{
-		$table = new People();
+		$table = new PeopleTable();
 
 		$page = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
 		$people = $table->find(null, ['lastname'], 20, $page);

@@ -8,7 +8,7 @@ namespace Application\Controllers;
 use Application\Models\Person;
 use Blossom\Classes\Controller;
 
-class LoginController extends Controller
+class Login extends Controller
 {
 	private $return_url;
 

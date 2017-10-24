@@ -9,7 +9,7 @@ use Application\Models\Addresses\Status;
 use Application\TableGateways\Addresses\Statuses;
 use Blossom\Classes\Controller;
 
-class AddressStatusesController extends Controller
+class AddressStatuses extends Controller
 {
     public function index(array $params)
     {

@@ -24,10 +24,10 @@ $routes = [
     'subdivisions'    => 'subdivision'
 ];
 foreach ($routes as $plural=>$singular) {
-    $requiredAction = 'index';
-    if (Person::isAllowed($plural, $requiredAction)) {
-        $url = BASE_URI."/$plural";
-        $links[] = ['url'=>$url, 'label'=>$this->_([$singular, $plural, 2])];
+    if (Person::isAllowed($plural, 'index')) {
+        $links[] = [
+            'url'   => parent::generateUri("$plural.index"),
+            'label' => $this->_([$singular, $plural, 2])];
     }
 }
 

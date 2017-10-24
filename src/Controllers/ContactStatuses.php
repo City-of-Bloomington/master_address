@@ -6,14 +6,14 @@
 namespace Application\Controllers;
 
 use Application\Models\ContactStatus;
-use Application\TableGateways\ContactStatuses;
+use Application\TableGateways\ContactStatuses as StatusTable;
 use Blossom\Classes\Controller;
 
-class ContactStatusesController extends Controller
+class ContactStatuses extends Controller
 {
     public function index(array $params)
     {
-        $table = new ContactStatuses();
+        $table = new StatusTable();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([

@@ -17,7 +17,7 @@ $ZEND_ACL->addRole(new Role('Anonymous'))
 /**
  * Create resources for all the Controllers
  */
-$ZEND_ACL->addResource(new Resource('index'));
+$ZEND_ACL->addResource(new Resource('home'));
 $ZEND_ACL->addResource(new Resource('people'));
 $ZEND_ACL->addResource(new Resource('users'));
 $ZEND_ACL->addResource(new Resource('login'));
@@ -53,7 +53,7 @@ $ZEND_ACL->addResource(new Resource('townships'));
 
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null, 'login');
-$ZEND_ACL->allow(null, ['index'], ['index']);
+$ZEND_ACL->allow(null, ['home'], ['index']);
 
 $ZEND_ACL->allow('GIS');
 $ZEND_ACL->deny ('GIS', 'users');
