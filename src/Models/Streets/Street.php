@@ -7,6 +7,7 @@ declare (strict_types=1);
 namespace Application\Models\Streets;
 
 use Application\Models\Town;
+use Application\TableGateways\Addresses\Addresses;
 use Application\TableGateways\Streets\StreetNames;
 use Blossom\Classes\ActiveRecord;
 
@@ -69,6 +70,13 @@ class Street extends ActiveRecord
 	public function getStreetNames()
 	{
         $table = new StreetNames();
+        $list  = $table->find(['street_id'=>$this->getId()]);
+        return $list;
+	}
+
+	public function getAddresses()
+	{
+        $table = new Addresses();
         $list  = $table->find(['street_id'=>$this->getId()]);
         return $list;
 	}

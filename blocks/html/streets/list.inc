@@ -35,12 +35,13 @@ use Application\Models\Person;
                 $status = $street->getStatus_id()
                         ? parent::escape($street->getStatus()->getName())
                         : '';
+                $uri = parent::generateUri('streets.view', ['id'=>$street->getId()]);
 
                 echo "
-                <tr><td>{$street->getId()}</td>
-                    <td>$name</td>
-                    <td>$town</td>
-                    <td>$status</td>
+                <tr><td><a href=\"$uri\">{$street->getId()}</a></td>
+                    <td><a href=\"$uri\">$name</a></td>
+                    <td><a href=\"$uri\">$town</a></td>
+                    <td><a href=\"$uri\">$status</a></td>
                 </tr>
                 ";
             }

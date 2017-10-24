@@ -19,5 +19,6 @@ class InfoView extends Template
 
         $this->blocks[]            = new Block('streets/info.inc',        ['street' => $this->street]);
         $this->blocks['panel-one'] = new Block('streets/streetNames.inc', ['street' => $this->street]);
+        $this->blocks['panel-one'] = new Block('addresses/list.inc', ['addresses' => $this->street->getAddresses()]);
     }
 }

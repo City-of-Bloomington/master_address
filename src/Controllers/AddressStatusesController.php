@@ -5,32 +5,32 @@
  */
 namespace Application\Controllers;
 
-use Application\Models\AddressStatus;
-use Application\TableGateways\AddressStatuses;
+use Application\Models\Addresses\Status;
+use Application\TableGateways\Addresses\Statuses;
 use Blossom\Classes\Controller;
 
 class AddressStatusesController extends Controller
 {
     public function index(array $params)
     {
-        $table = new AddressStatuses();
+        $table = new Statuses();
         $list  = $table->find();
 
         return new \Application\Views\Generic\ListView([
             'list'     => $list,
             'plural'   => 'addressStatuses',
             'singular' => 'addressStatus',
-            'fields'   => array_keys(AddressStatus::$fieldmap)
+            'fields'   => array_keys(Status::$fieldmap)
         ]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $status = new AddressStatus($_REQUEST['id']); }
+            try { $status = new Status($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $status = new AddressStatus(); }
+        else { $status = new Status(); }
 
         if (isset($status)) {
             if (isset($_POST['name'])) {
