@@ -13,7 +13,6 @@ $routes = [
     'people'          => 'person',
     'users'           => 'user',
     'addressStatuses' => 'addressStatus',
-    'contactStatuses' => 'contactStatus',
     'streetStatuses'  => 'streetStatus',
     'streetTypes'     => 'streetType',
     'streetNameTypes' => 'streetNameType',

@@ -89,14 +89,26 @@ class Person extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()            { return parent::get('id');           }
-	public function getFirstname()     { return parent::get('firstname');    }
-	public function getLastname()      { return parent::get('lastname');     }
-	public function getEmail()         { return parent::get('email');        }
+	public function getId()            { return parent::get('id'          ); }
+	public function getFirstname()     { return parent::get('firstname'   ); }
+	public function getLastname()      { return parent::get('lastname'    ); }
+	public function getEmail()         { return parent::get('email'       ); }
+	public function getPhone()         { return parent::get('phone'       ); }
+	public function getType()          { return parent::get('contact_type'); }
+	public function getAgency()        { return parent::get('agency'      ); }
+	public function getCurrent()       { return parent::get('current'     ); }
+	public function getNotification()  { return parent::get('notification'); }
+	public function getCoordination()  { return parent::get('coordination'); }
 
 	public function setFirstname   ($s) { parent::set('firstname',    $s); }
 	public function setLastname    ($s) { parent::set('lastname',     $s); }
 	public function setEmail       ($s) { parent::set('email',        $s); }
+	public function setPhone       ($s) { parent::set('phone',        $s); }
+	public function setType        ($s) { parent::set('contact_type', $s); }
+	public function setAgency      ($s) { parent::set('agency',       $s); }
+	public function setCurrent     ($s) { parent::set('current',      $s ? 1 : 0); }
+	public function setNotification($s) { parent::set('notification', $s ? 1 : 0); }
+	public function setCoordination($s) { parent::set('coordination', $s ? 1 : 0); }
 
 	public function getUsername()             { return parent::get('username'); }
 	public function getPassword()             { return parent::get('password'); } # Encrypted
@@ -116,7 +128,7 @@ class Person extends ActiveRecord
 
 	public function handleUpdate(array $post)
 	{
-		$fields = ['firstname', 'lastname', 'email'];
+		$fields = ['firstname', 'lastname', 'email', 'phone', 'agency', 'type', 'current', 'notification', 'coordination'];
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
 				$set = 'set'.ucfirst($field);
@@ -251,4 +263,23 @@ class Person extends ActiveRecord
 		return "{$this->getFirstname()} {$this->getLastname()}";
 	}
 
+	public function isCurrent     ():bool { return $this->getCurrent     () ? true : false; }
+	public function isNotification():bool { return $this->getNotification() ? true : false; }
+	public function isCoordination():bool { return $this->getCoordination() ? true : false; }
+
+	public static function getTypes():array
+	{
+        static $types = [
+            'Address Coordinator',
+            'CBU',
+            'Developer',
+            'E911 Administrator',
+            'Emergency Services',
+            'GIS',
+            'Government Agency',
+            'Property Owner',
+            'Utility Provider'
+        ];
+        return $types;
+	}
 }

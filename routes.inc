@@ -12,62 +12,62 @@ $ROUTES->add('home.index', '/')->setValues(['controller'=>'Application\Controlle
 $ROUTES->attach('login', '/login', function ($r) {
     $r->setValues(['controller'=>'Application\Controllers\Login']);
 
-    $r->add('index',  '')       ->addValues(['action'=>'index' ]);
     $r->add('login',  '/login') ->addValues(['action'=>'login' ]);
     $r->add('logout', '/logout')->addValues(['action'=>'logout']);
+    $r->add('index',  '')       ->addValues(['action'=>'index' ]);
 });
 
 $ROUTES->attach('users', '/users', function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=>'Application\Controllers\Users']);
 
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('delete', '/delete/{id}') ->addValues(['action'=>'delete']);
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
 
 $tables = [
     'towns', 'townships', 'jurisdictions', 'directions',
     'subunitTypes', 'locationTypes', 'purposes',
-    'addressStatuses', 'contactStatuses'
+    'addressStatuses'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
         $r->setTokens(['id'=>'[a-z0-9]+']);
         $r->setValues(['controller'=> 'Application\Controllers\\'.ucfirst($t)]);
 
-        $r->add('index',  '')             ->addValues(['action'=>'index' ]);
         $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+        $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     });
 }
 $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Controllers\Streets\Types']);
 
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
 $ROUTES->attach('streetNameTypes', "/streets/nameTypes", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Controllers\Streets\NameTypes']);
 
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
 $ROUTES->attach('streetStatuses', "/streets/statuses", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Controllers\Streets\Statuses']);
 
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
 $ROUTES->attach('streets', "/streets", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Controllers\Streets\Streets']);
 
-    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
+    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
 });
 
 // Controllers that only have index, view, update
@@ -79,8 +79,8 @@ foreach ($tables as $t) {
         $r->setTokens(['id'=>'[a-z0-9]+']);
         $r->setValues(['controller'=> 'Application\Controllers\\'.ucfirst($t)]);
 
-        $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-        $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
         $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
+        $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+        $r->add('index',  '')            ->addValues(['action'=>'index' ]);
     });
 }

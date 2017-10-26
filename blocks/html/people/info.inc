@@ -13,7 +13,7 @@ $h = $this->template->getHelper('buttonLink');
 $username = $this->person->getUsername();
 if (!$username && Person::isAllowed('users')) {
 	$username = $h->buttonLink(
-		self::generateUri('users.update', ['id'=>$this->person->getId()])."?return_url=$return_url",
+		parent::generateUri('users.update', ['id'=>$this->person->getId()])."?return_url=$return_url",
 		$this->_('user_add'),
 		'add'
 	);
@@ -22,26 +22,31 @@ if (!$username && Person::isAllowed('users')) {
 $editButton = '';
 if (Person::isAllowed('people', 'edit')) {
     $editButton = $h->buttonLink(
-        self::generateUri('people.update', ['id'=>$this->person->getId()])."?return_url=$return_url",
+        parent::generateUri('people.update', ['id'=>$this->person->getId()])."?return_url=$return_url",
         $this->_('edit'),
         'edit'
     );
 }
-$name = self::escape($this->person->getFullname());
-echo "
+$name = parent::escape($this->person->getFullname());
+
+$fields = ['email', 'phone', 'type', 'agency', 'current', 'notification', 'coordination'];
+foreach ($fields as $f) {
+    $get = 'get'.ucfirst($f);
+    $$f  = parent::escape($this->person->$get());
+}
+?>
 <section>
     <header>
-        <h1>$name</h1>
-        <div class=\"tools\">$editButton</div>
+        <h1><?= $name; ?></h1>
+        <div class="tools"><?= $editButton; ?></div>
     </header>
 
 	<table>
-		<tr><th>{$this->_('email')}</th>
-			<td>{$this->person->getEmail()}</td>
-		</tr>
-		<tr><th>{$this->_('username')}</th>
-			<td>$username</td>
-		</tr>
+		<tr><th><?= $this->_('username'); ?></th><td><?= $username; ?></td></tr>
+		<?php
+            foreach ($fields as $f) {
+                echo "<tr><th>{$this->_($f)}</th><td>{$$f}</td></tr>";
+            }
+		?>
 	</table>
 </section>
-";

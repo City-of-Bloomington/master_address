@@ -188,17 +188,6 @@ msgstr "New Address Status"
 msgid "addressStatus_edit"
 msgstr "Edit Address Status"
 
-msgid "contactStatus"
-msgid_plural "contactStatuses"
-msgstr[0] "Contact Status"
-msgstr[1] "Contact Statuses"
-
-msgid "contactStatus_add"
-msgstr "New Contact Status"
-
-msgid "contactStatus_edit"
-msgstr "Edit Contact Status"
-
 msgid "street"
 msgid_plural "streets"
 msgstr[0] "Street"
