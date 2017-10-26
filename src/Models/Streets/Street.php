@@ -8,6 +8,7 @@ namespace Application\Models\Streets;
 
 use Application\Models\Town;
 use Application\TableGateways\Addresses\Addresses;
+use Application\TableGateways\Streets\ChangeLog;
 use Application\TableGateways\Streets\StreetNames;
 use Blossom\Classes\ActiveRecord;
 
@@ -52,6 +53,15 @@ class Street extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
+	public function getName():string
+	{
+        $sn = $this->getStreetName();
+        if ($sn) {
+            return $sn->getName()->__toString();
+        }
+        return '';
+	}
+
 	public function getStreetName()
 	{
         if (!$this->streetName) {
@@ -59,7 +69,9 @@ class Street extends ActiveRecord
 
             $table = new StreetNames();
             $list  = $table->find(['street_id'=>$this->getId(), 'type_id'=>$type->getId()]);
-            $this->streetName = $list[0];
+            if (count($list)) {
+                $this->streetName = $list[0];
+            }
         }
         return $this->streetName;
 	}
@@ -77,6 +89,13 @@ class Street extends ActiveRecord
 	public function getAddresses()
 	{
         $table = new Addresses();
+        $list  = $table->find(['street_id'=>$this->getId()]);
+        return $list;
+	}
+
+	public function getChangeLog()
+	{
+        $table = new ChangeLog();
         $list  = $table->find(['street_id'=>$this->getId()]);
         return $list;
 	}

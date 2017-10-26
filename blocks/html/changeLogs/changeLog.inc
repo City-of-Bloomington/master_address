@@ -1,81 +1,44 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2009-2017 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Street|Address|Subunit|Contact $this->target
- * @param Zend_Paginator $this->paginator
- * @param URL $this->url  If we send a URL, we want buttons rendered for all the possibile formats
+ * @param array                          $this->changes
  */
-$paginator = $this->paginator ? $this->paginator : $this->target->getChangeLogPaginator();
-if (isset($_GET['page'])) {
-	$paginator->setCurrentPageNumber((int)$_GET['page']);
-}
-
-$txtButton = '';
-$xmlButton = '';
-if (isset($this->url)) {
-	$url = $this->url.';format=txt';
-	$txtButton = "
-		<button type=\"button\" onclick=\"window.open('$url','popup');\">
-			TXT
-		</button>
-	";
-
-	$url = $this->url.';format=xml';
-	$xmlButton = "
-		<button type=\"button\" onclick=\"window.open('$url','popup');\">
-			XML
-		</button>
-	";
-}
-echo "
-<div class=\"interfaceBox\">
-	<h1>Action History $txtButton $xmlButton</h1>
+?>
+<section>
+    <header>
+        <h2><?= $this->_('changeLog'); ?></h2>
+    </header>
 	<table>
 		<thead>
-			<tr><th>Action Date</th>
+			<tr><th><?= $this->_('date'); ?></th>
 				<th></th>
-				<th>Action</th>
-				<th>User</th>
-				<th>Contact</th>
-				<th>Notes</th>
+				<th><?= $this->_('action' ); ?></th>
+				<th><?= $this->_('person' ); ?></th>
+				<th><?= $this->_('contact'); ?></th>
+				<th><?= $this->_('notes'  ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
-	";
-		foreach ($paginator as $row) {
-			$logEntry = new ChangeLogEntry($row);
-			$username = $logEntry->getUser()->getUsername();
-			$notes = View::escape($logEntry->notes);
-			$contact = $logEntry->getContact();
-			echo "
-			<tr><td>{$logEntry->action_date}</td>
-				<td>
-			";
-				$target = $logEntry->getTarget();
-				if ($target) {
-					echo "<a href=\"{$target->getURL()}\">$target</a>";
-				}
-			echo "
-				</td>
-				<td>{$logEntry->action}</td>
-				<td>$username</td>
-				<td><a href=\"".BASE_URL."/contacts/viewContact.php?contact_id={$contact->getId()}\">
-					{$contact->getFirstname()}
-					{$contact->getLastname()}
-					</a>
-				</td>
-				<td>$notes</td>
-			</tr>
-			";
-		}
-	echo "
-		</tbody>
-	</table>
-	";
-	$block = new Block('pageNavigation.inc',array('pages'=>$paginator->getPages()));
-	echo $block->render('html');
-echo "
-</div>
-";
+		<?php
+            foreach ($this->changes as $c) {
+                $date    = $c->getActionDate()->format(DATE_FORMAT);
+                $person  = $c->getPerson_id () ? parent::escape($c->getPerson ()->getFullname()) : '';
+                $contact = $c->getContact_id() ? parent::escape($c->getContact()->getFullname()) : '';
+                $action  = parent::escape($c->getAction());
+                $notes   = parent::escape($c->getNotes());
+                echo "
+                <tr><th>$date</th>
+                    <td></td>
+                    <td>$action</td>
+                    <td>$person</td>
+                    <td>$contact</td>
+                    <td>$notes</td>
+                </tr>
+                ";
+            }
+		?>
+        </tbody>
+    </table>
+</section>

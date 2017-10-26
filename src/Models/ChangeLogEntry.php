@@ -3,146 +3,114 @@
  * A class to encapsulate the information logged whenever someone makes a change
  * to something in the database.  All of the log tables will have these same fields
  *
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2009-2017 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-class ChangeLogEntry
+declare (strict_types=1);
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+
+class ChangeLogEntry extends ActiveRecord
 {
-	public $user_id;
-	public $action;
-	public $contact_id;
-	public $notes;
-	public $action_date;
+	protected $person;
+	protected $contact;
 
-	public $type;
-	public $id;
+	public static $actions = [  'add'=>'added','assign'=>'assigned','activate'=>'activated',
+                                'create'=>'created','propose'=>'proposed','correct'=>'corrected',
+                                'alias'=>'added alias','change'=>'changed street name',
+                                'update'=>'updated','move'=>'moved to location',
+                                'readdress'=>'readdressed','reassign'=>'reassigned',
+                                'unretire'=>'unretired','retire'=>'retired',
+                                'verify'=>'verified'];
 
-	private $user;
-	private $contact;
-
-	public static $actions = array( 'add'=>'added','assign'=>'assigned','activate'=>'activated',
-									'create'=>'created','propose'=>'proposed','correct'=>'corrected',
-									'alias'=>'added alias','change'=>'changed street name',
-									'update'=>'updated','move'=>'moved to location',
-									'readdress'=>'readdressed','reassign'=>'reassigned',
-									'unretire'=>'unretired','retire'=>'retired',
-									'verify'=>'verified');
+    /**
+     * Convert date strings to DateTime objects before loading
+     */
+    private function populate(array $row)
+    {
+        $row['action_date'] = !empty($row['action_date'])
+            ? parent::parseDate(     $row['action_date'], ActiveRecord::DB_DATE_FORMAT)
+            : null;
+        $this->data = $row;
+    }
 
 	/**
-	 * Creates a new entry for the change log
+	 * Populates the object with data
 	 *
-	 * Only the User is required.  You must pass the user in the first parameter.
-	 * You can pass all the of the data as an array in the first paramter....
-	 * Or you can pass the User and the data seperately
+	 * Passing in an associative array of data will populate this object without
+	 * hitting the database.
 	 *
-	 * @param User|array $user
-	 * @param array $data
+	 * Passing in a scalar will load the data from the database.
+	 * This will load all fields in the table as properties of this class.
+	 * You may want to replace this with, or add your own extra, custom loading
+	 *
+	 * @param int|array $id
 	 */
-	public function __construct($user,array $data=null)
+	public function __construct($id=null)
 	{
-		if ($user instanceof User) {
-			$this->user = $user;
-			$this->user_id = $user->getId();
-		}
-		elseif (is_array($user)) {
-			$this->parseArray($user);
+		if ($id) {
+			if (is_array($id)) {
+                $this->populate($id);
+			}
+			else {
+                $sql = "select * from {$this->tablename} where id=?";
+
+				$rows = parent::doQuery($sql, [$id]);
+                if (count($rows)) {
+                    $this->populate($rows[0]);
+                }
+                else {
+                    throw new \Exception("{$this->tablename}/unknown");
+                }
+			}
 		}
 		else {
-			$this->user_id = $user;
-		}
-
-		if ($data) {
-			$this->parseArray($data);
-		}
-
-
-		if (!$this->action_date) {
-			$this->action_date = new Date();
-		}
-
-		if (!$this->user_id) {
-			throw new Exception('logEntry/missingUser');
-		}
-
-		if (!$this->action) {
-			throw new Exception('logEntry/missingAction');
-		}
-		if (!$this->contact_id) {
-			throw new Exception('logEntry/missingContact');
+			// This is where the code goes to generate a new, empty instance.
+			// Set any default values for properties that need it here
+			$this->setActionDate(new \DateTime());
 		}
 	}
 
-	/**
-	 * @param array $data
-	 */
-	private function parseArray(array $data)
+	public function validate()
 	{
-		foreach ($data as $field=>$value) {
-			switch ($field) {
-				case 'action_date':
-					$value = new Date($value);
-					break;
-				case 'action':
-					if (in_array($value,array_keys(self::$actions))) {
-						$value = self::$actions[$value];
-					}
-					elseif (!in_array($value,self::$actions)) {
-						throw new Exception('logEntry/unknownAction');
-					}
-					break;
-			}
-			$this->$field = $value;
-		}
+        if (!$this->getActionDate()) { $this->setActionDate(new \DateTime()); }
+
+        if (!$this->getPerson_id() || !$this->getAction()) {
+            throw new \Exception('missingRequiredFields');
+        }
+
+        if (!in_array($this->getAction(), array_keys(self::$actions))) {
+            throw new \Exception('logEntry/unknownAction');
+        }
 	}
 
-	/**
-	 * Returns the array of data, ready to insert into the database
-	 *
-	 * @return array
-	 */
-	public function getData()
-	{
-		return array('user_id'=>$this->user_id,'action'=>$this->action,
-					 'contact_id'=>$this->contact_id,'notes'=>$this->notes,
-					 'action_date'=>$this->action_date->format('Y-m-d H:i:s'));
-	}
+	public function save() { parent::save(); }
 
-	/**
-	 * @return User
-	 */
-	public function getUser()
-	{
-		if (!$this->user) {
-			$this->user = new User($this->user_id);
-		}
-		return $this->user;
-	}
+	//----------------------------------------------------------------
+	// Generic Getters and Setters
+	//----------------------------------------------------------------
+    public function getId()         { return (int)parent::get('id'         ); }
+    public function getAction()     { return      parent::get('action'     ); }
+    public function getNotes()      { return      parent::get('notes'      ); }
+    public function getActionDate() { return      parent::get('action_date'); }
+    public function getPerson_id()  {  $id = (int)parent::get('person_id'  ); return $id ? $id : null; }
+    public function getContact_id() {  $id = (int)parent::get('contact_id' ); return $id ? $id : null; }
+    public function getPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id' ); }
+    public function getContact() { return parent::getForeignKeyObject(__namespace__.'\Person', 'contact_id'); }
 
-	/**
-	 * @return Contact
-	 */
-	public function getContact()
-	{
-		if (!$this->contact) {
-			$this->contact = new Contact($this->contact_id);
-		}
-		return $this->contact;
-	}
+    public function setAction($s) { parent::set('action', $s); }
+    public function setNotes ($s) { parent::set('notes',  $s); }
+    public function setActionDate(\DateTime $d=null) { parent::set('action_date', $d); }
+    public function setPerson_id      (int $id=null) { parent::setForeignKeyField (__namespace__.'\Person', 'person_id',  $id); }
+    public function setContact_id     (int $id=null) { parent::setForeignKeyField (__namespace__.'\Person', 'contact_id', $id); }
+    public function setPerson       (Person $p=null) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id',  $p ); }
+    public function setContact      (Person $p=null) { parent::setForeignKeyObject(__namespace__.'\Person', 'contact_id', $p ); }
 
-	/**
-	 * Returns the object that was the target of this action
-	 *
-	 * This will only work if it knows the type and id
-	 *
-	 * @return Address|Street|Subunit
-	 */
-	public function getTarget()
-	{
-		if ($this->type) {
-			if ($this->id) {
-				return new $this->type($this->id);
-			}
-		}
-	}
+    public function handleUpdate(array $post)
+    {
+        $this->setAction    (     $post['action'    ]);
+        $this->setNotes     (     $post['notes'     ]);
+        $this->setPerson_id ((int)$post['person_id' ]);
+        $this->setContact_id((int)$post['contact_id']);
+    }
 }

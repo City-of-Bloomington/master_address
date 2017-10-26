@@ -14,11 +14,12 @@ class InfoView extends Template
     public function __construct(array $vars)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
-        parent::__construct('default', $format, $vars);
+        parent::__construct('two-column', $format, $vars);
 
 
         $this->blocks[]            = new Block('streets/info.inc',        ['street' => $this->street]);
-        $this->blocks['panel-one'] = new Block('streets/streetNames.inc', ['street' => $this->street]);
-        $this->blocks['panel-one'] = new Block('addresses/list.inc', ['addresses' => $this->street->getAddresses()]);
+        $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes'=>$this->street->getChangeLog()]);
+        $this->blocks['panel-one'][] = new Block('streets/streetNames.inc', ['street' => $this->street]);
+        $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $this->street->getAddresses()]);
     }
 }
