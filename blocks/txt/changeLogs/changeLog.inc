@@ -14,7 +14,7 @@ $columnHeadings = array('Action Date',
 						'Old Address',
 						'Jurisdiction','Location Type',
 						'Notes',
-						'Location ID', 'Subunit ID',
+						'Location ID', 'Address ID', 'Subunit ID',
 						'Street ID','Town','Street Status',
 						'Street Name Type',
 						'Street Name Start','Street Name End');
@@ -39,7 +39,7 @@ foreach ($this->changeLog as $logEntry) {
 			$address  = new Address();
 			$street   = $target;
 			$subunit  = new Subunit();
-			$location = null;
+			$location = new Location();
 			break;
 	}
 	$streetName = $street->getStreetName();
@@ -58,7 +58,7 @@ foreach ($this->changeLog as $logEntry) {
 					$oldAddress,
 					$address->getJurisdiction(),$locationType,
 					$notes,
-					$location->getId(), $subunit->getId(),
+					$location->getId(), $address->getId(), $subunit->getId(),
 					$street->getId(),$street->getTown(),$street->getStatus(),
 					$streetName->getStreetNameType(),
 					$streetName->getStartDate('n/j/Y'),$streetName->getEndDate('n/j/Y'));
