@@ -14,6 +14,7 @@ $columnHeadings = array('Action Date',
 						'Old Address',
 						'Jurisdiction','Location Type',
 						'Notes',
+						'Location ID', 'Subunit ID',
 						'Street ID','Town','Street Status',
 						'Street Name Type',
 						'Street Name Start','Street Name End');
@@ -23,23 +24,26 @@ foreach ($this->changeLog as $logEntry) {
 	$target = $logEntry->getTarget();
 	switch (get_class($target)) {
 		case 'Address':
-			$address = $target;
-			$street = $address->getStreet();
-			$subunit = new Subunit();
+			$address  = $target;
+			$location = $address->getLocation();
+			$street   = $address->getStreet();
+			$subunit  = new Subunit();
 			break;
 		case 'Subunit':
-			$address = $target->getAddress();
-			$street = $address->getStreet();
-			$subunit = $target;
+			$address  = $target->getAddress();
+			$street   = $address->getStreet();
+			$subunit  = $target;
+			$location = $subunit->getLocation();
 			break;
 		case 'Street':
-			$address = new Address();
-			$street = $target;
-			$subunit = new Subunit();
+			$address  = new Address();
+			$street   = $target;
+			$subunit  = new Subunit();
+			$location = null;
 			break;
 	}
 	$streetName = $street->getStreetName();
-	$locationType = $address->getLocation() ? $address->getLocation()->getLocationType($address) : '';
+	$locationType = $location ? $location->getLocationType($address) : '';
 	$oldAddress = "{$address->getOldAddress()}";
 	$notes = preg_replace('/\n/',' ',$logEntry->notes);
 	$line = array($logEntry->action_date,
@@ -54,6 +58,7 @@ foreach ($this->changeLog as $logEntry) {
 					$oldAddress,
 					$address->getJurisdiction(),$locationType,
 					$notes,
+					$location->getId(), $subunit->getId(),
 					$street->getId(),$street->getTown(),$street->getStatus(),
 					$streetName->getStreetNameType(),
 					$streetName->getStartDate('n/j/Y'),$streetName->getEndDate('n/j/Y'));

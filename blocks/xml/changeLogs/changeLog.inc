@@ -11,7 +11,7 @@ echo "
 foreach ($this->changeLog as $logEntry) {
 	$username = $logEntry->getUser()->getUsername();
 	$notes = View::escape($logEntry->notes);
-	$notes = $notes ? $notes:'&nbsp;';
+	$notes = $notes ? $notes : '';
 	echo "
 	<action type=\"{$logEntry->action}\">
 		<date>{$logEntry->action_date}</date>
