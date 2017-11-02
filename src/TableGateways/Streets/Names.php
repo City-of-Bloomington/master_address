@@ -10,7 +10,7 @@ use Blossom\Classes\TableGateway;
 
 class Names extends TableGateway
 {
-    protected $columns = ['id', 'name', 'direction_id', 'post_direction_id', 'suffix_code_id'];
+    protected $columns = ['id', 'name', 'direction', 'post_direction', 'suffix_code_id'];
 
     public function __construct() { parent::__construct('street_names', 'Application\Models\Streets\Name'); }
 

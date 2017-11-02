@@ -29,7 +29,6 @@ $ZEND_ACL->addResource(new Resource('addressStatuses'));
 $ZEND_ACL->addResource(new Resource('Annexation'));
 $ZEND_ACL->addResource(new Resource('ChangeLog'));
 $ZEND_ACL->addResource(new Resource('Contact'));
-$ZEND_ACL->addResource(new Resource('directions'));
 $ZEND_ACL->addResource(new Resource('Intersection'));
 $ZEND_ACL->addResource(new Resource('jurisdictions'));
 $ZEND_ACL->addResource(new Resource('Location'));

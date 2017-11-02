@@ -27,7 +27,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 });
 
 $tables = [
-    'towns', 'townships', 'jurisdictions', 'directions',
+    'towns', 'townships', 'jurisdictions',
     'subunitTypes', 'locationTypes', 'purposes',
     'addressStatuses'
 ];
