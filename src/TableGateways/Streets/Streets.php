@@ -11,7 +11,7 @@ use Blossom\Classes\TableGateway;
 
 class Streets extends TableGateway
 {
-	private $columns = ['id', 'town_id', 'status_id', 'notes'];
+	private $columns = ['id', 'town_id', 'status', 'notes'];
 
     public function __construct() { parent::__construct('streets', 'Application\Models\Streets\Street'); }
 

@@ -28,8 +28,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 
 $tables = [
     'towns', 'townships', 'jurisdictions',
-    'subunitTypes', 'locationTypes', 'purposes',
-    'addressStatuses'
+    'subunitTypes', 'locationTypes', 'purposes'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
@@ -50,13 +49,6 @@ $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
 $ROUTES->attach('streetNameTypes', "/streets/nameTypes", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Controllers\Streets\NameTypes']);
-
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-});
-$ROUTES->attach('streetStatuses', "/streets/statuses", function ($r) {
-    $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=> 'Application\Controllers\Streets\Statuses']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);

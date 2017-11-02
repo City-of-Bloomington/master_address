@@ -6,12 +6,10 @@
  */
 use Application\Models\Person;
 
-
-
-$name   = parent::escape($this->street->getName());
-$status = parent::escape($this->street->getStatus_id() ? $this->street->getStatus()->getName() : '');
-$town   = parent::escape($this->street->getTown_id()   ? $this->street->getTown()  ->getName() : '');
-$notes  = parent::escape($this->street->getNotes());
+$name   = parent::escape($this->street->getName  ());
+$status = parent::escape($this->street->getStatus());
+$notes  = parent::escape($this->street->getNotes ());
+$town   = parent::escape($this->street->getTown_id() ? $this->street->getTown()->getName() : '');
 ?>
 <section>
     <header>
