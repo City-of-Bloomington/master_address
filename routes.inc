@@ -69,10 +69,18 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
 });
+$ROUTES->attach('addresses', "/addresses", function ($r) {
+    $r->setTokens(['id'=>'[a-z0-9]+']);
+    $r->setValues(['controller'=> 'Application\Controllers\Addresses\Addresses']);
+
+    $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
+    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+});
 
 // Controllers that only have index, view, update
 $tables = [
-    'people', 'plats', 'subdivisions', 'addresses'
+    'people', 'plats', 'subdivisions'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {

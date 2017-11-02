@@ -20,7 +20,8 @@ $routes = [
     'locationTypes'   => 'locationType',
     'purposes'        => 'purpose',
     'plats'           => 'plat',
-    'subdivisions'    => 'subdivision'
+    'subdivisions'    => 'subdivision',
+    'streets'         => 'street'
 ];
 foreach ($routes as $plural=>$singular) {
     if (Person::isAllowed($plural, 'index')) {
