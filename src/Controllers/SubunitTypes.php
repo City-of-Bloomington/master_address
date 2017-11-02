@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\SubunitType;
 use Application\TableGateways\SubunitTypes as TypesTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class SubunitTypes extends Controller
+class SubunitTypes
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class SubunitTypes extends Controller
                 try {
                     $type->handleUpdate($_POST);
                     $type->save();
-                    header('Location: '.self::generateUrl('subunitTypes.index'));
+                    header('Location: '.View::generateUrl('subunitTypes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

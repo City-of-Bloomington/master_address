@@ -7,9 +7,9 @@ namespace Application\Controllers\Streets;
 
 use Application\Models\Streets\Status;
 use Application\TableGateways\Streets\Statuses as StatusesTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Statuses extends Controller
+class Statuses
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class Statuses extends Controller
                 try {
                     $status->handleUpdate($_POST);
                     $status->save();
-                    header('Location: '.self::generateUrl('streetStatuses.index'));
+                    header('Location: '.View::generateUrl('streetStatuses.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\LocationType;
 use Application\TableGateways\LocationTypes as Types;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class LocationTypes extends Controller
+class LocationTypes
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class LocationTypes extends Controller
                 try {
                     $type->handleUpdate($_POST);
                     $type->save();
-                    header('Location: '.self::generateUrl('locationTypes.index'));
+                    header('Location: '.View::generateUrl('locationTypes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

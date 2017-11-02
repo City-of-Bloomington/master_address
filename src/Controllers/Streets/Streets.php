@@ -9,9 +9,9 @@ namespace Application\Controllers\Streets;
 use Application\Models\Addresses\Parser;
 use Application\Models\Streets\Street;
 use Application\TableGateways\Streets\Streets as StreetsTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Streets extends Controller
+class Streets
 {
     public function index(array $params)
     {

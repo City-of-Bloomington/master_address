@@ -7,10 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Person;
 use Application\TableGateways\People;
-use Blossom\Classes\Controller;
 use Blossom\Classes\Block;
 
-class Users extends Controller
+class Users
 {
 	public function index(array $params)
 	{
@@ -76,7 +75,7 @@ class Users extends Controller
 		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 		}
-		header('Location: '.self::generateUrl('users.index'));
+		header('Location: '.View::generateUrl('users.index'));
 		exit();
 	}
 }

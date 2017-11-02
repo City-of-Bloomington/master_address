@@ -8,9 +8,9 @@ namespace Application\Controllers\Addresses;
 
 use Application\Models\Addresses\Parser;
 use Application\TableGateways\Addresses\Addresses as AddressesTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Addresses extends Controller
+class Addresses
 {
     public function index(array $params)
     {

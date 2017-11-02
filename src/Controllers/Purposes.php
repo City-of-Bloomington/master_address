@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Purpose;
 use Application\TableGateways\Purposes as PurposesTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Purposes extends Controller
+class Purposes
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class Purposes extends Controller
                 try {
                     $purpose->handleUpdate($_POST);
                     $purpose->save();
-                    header('Location: '.self::generateUrl('purposes.index'));
+                    header('Location: '.View::generateUrl('purposes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

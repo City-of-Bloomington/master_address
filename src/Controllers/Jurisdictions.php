@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Jurisdiction;
 use Application\TableGateways\Jurisdictions as JurisdictionsTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Jurisdictions extends Controller
+class Jurisdictions
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class Jurisdictions extends Controller
                 try {
                     $jurisdiction->handleUpdate($_POST);
                     $jurisdiction->save();
-                    header('Location: '.self::generateUrl('jurisdictions.index'));
+                    header('Location: '.View::generateUrl('jurisdictions.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

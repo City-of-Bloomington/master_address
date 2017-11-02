@@ -8,9 +8,9 @@ namespace Application\Controllers;
 
 use Application\Models\Subdivision;
 use Application\TableGateways\Subdivisions as SubdivisionsTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Subdivisions extends Controller
+class Subdivisions
 {
     public function index(array $params)
     {

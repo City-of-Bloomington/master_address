@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Addresses\Status;
 use Application\TableGateways\Addresses\Statuses;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class AddressStatuses extends Controller
+class AddressStatuses
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class AddressStatuses extends Controller
                 try {
                     $status->handleUpdate($_POST);
                     $status->save();
-                    header('Location: '.self::generateUrl('addressStatuses.index'));
+                    header('Location: '.View::generateUrl('addressStatuses.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

@@ -5,9 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Index extends Controller
+class Index
 {
 	public function index(array $params)
 	{

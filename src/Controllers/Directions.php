@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Direction;
 use Application\TableGateways\Directions as DirectionsTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Directions extends Controller
+class Directions
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class Directions extends Controller
                 try {
                     $direction->handleUpdate($_POST);
                     $direction->save();
-                    header('Location: '.self::generateUrl('directions.index'));
+                    header('Location: '.View::generateUrl('directions.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

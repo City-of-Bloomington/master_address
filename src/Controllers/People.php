@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Person;
 use Application\TableGateways\People as PeopleTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class People extends Controller
+class People
 {
 	public function index(array $params)
 	{

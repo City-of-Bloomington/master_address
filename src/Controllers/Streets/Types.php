@@ -7,9 +7,9 @@ namespace Application\Controllers\Streets;
 
 use Application\Models\Streets\Type;
 use Application\TableGateways\Streets\Types as TypesTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Types extends Controller
+class Types
 {
     public function index(array $params)
     {
@@ -32,7 +32,7 @@ class Types extends Controller
                 try {
                     $type->handleUpdate($_POST);
                     $type->save();
-                    header('Location: '.self::generateUrl('streetTypes.index'));
+                    header('Location: '.View::generateUrl('streetTypes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

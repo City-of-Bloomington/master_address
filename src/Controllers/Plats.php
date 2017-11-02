@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Plat;
 use Application\TableGateways\Plats as PlatsTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Plats extends Controller
+class Plats
 {
     public function index(array $params)
     {

@@ -6,9 +6,9 @@
 namespace Application\Controllers;
 
 use Application\Models\Person;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Login extends Controller
+class Login
 {
 	private $return_url;
 
@@ -25,7 +25,7 @@ class Login extends Controller
 		// If they don't have CAS configured, send them onto the application's
 		// internal authentication system
 		if (!defined('CAS')) {
-			header('Location: '.self::generateUrl('login.login').'?return_url='.$this->return_url);
+			header('Location: '.View::generateUrl('login.login').'?return_url='.$this->return_url);
 			exit();
 		}
 

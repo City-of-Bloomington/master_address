@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\Town;
 use Application\TableGateways\Towns as TownsTable;
-use Blossom\Classes\Controller;
+use Blossom\Classes\View;
 
-class Towns extends Controller
+class Towns
 {
     public function index(array $params)
     {
@@ -37,7 +37,7 @@ class Towns extends Controller
                 try {
                     $town->handleUpdate($_POST);
                     $town->save();
-                    header('Location: '.self::generateUrl('towns.index'));
+                    header('Location: '.View::generateUrl('towns.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
