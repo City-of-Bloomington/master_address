@@ -27,8 +27,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 });
 
 $tables = [
-    'towns', 'townships', 'jurisdictions',
-    'subunitTypes', 'locationTypes', 'purposes'
+    'towns', 'townships', 'jurisdictions', 'subunitTypes'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
@@ -69,6 +68,21 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
 });
+$ROUTES->attach('locationTypes', "/locations/types", function ($r) {
+    $r->setTokens(['id'=>'[a-z0-9]+']);
+    $r->setValues(['controller'=> 'Application\Controllers\Locations\Types']);
+
+    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
+});
+$ROUTES->attach('purposes', "/locations/purposes", function ($r) {
+    $r->setTokens(['id'=>'[a-z0-9]+']);
+    $r->setValues(['controller'=> 'Application\Controllers\Locations\Purposes']);
+
+    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
+    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
+});
+
 
 // Controllers that only have index, view, update
 $tables = [

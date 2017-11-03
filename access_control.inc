@@ -15,38 +15,14 @@ $ZEND_ACL->addRole(new Role('Anonymous'))
 		 ->addRole(new Role('Administrator'));
 
 /**
- * Create resources for all the Controllers
+ * Create resources for all the routes
  */
-$ZEND_ACL->addResource(new Resource('home'));
-$ZEND_ACL->addResource(new Resource('people'));
-$ZEND_ACL->addResource(new Resource('users'));
-$ZEND_ACL->addResource(new Resource('login'));
-
-$ZEND_ACL->addResource(new Resource('AddressLocationChange'));
-$ZEND_ACL->addResource(new Resource('addresses'));
-$ZEND_ACL->addResource(new Resource('AddressStatusChange'));
-$ZEND_ACL->addResource(new Resource('Annexation'));
-$ZEND_ACL->addResource(new Resource('ChangeLog'));
-$ZEND_ACL->addResource(new Resource('Contact'));
-$ZEND_ACL->addResource(new Resource('Intersection'));
-$ZEND_ACL->addResource(new Resource('jurisdictions'));
-$ZEND_ACL->addResource(new Resource('Location'));
-$ZEND_ACL->addResource(new Resource('locationTypes'));
-$ZEND_ACL->addResource(new Resource('Places'));
-$ZEND_ACL->addResource(new Resource('plats'));
-$ZEND_ACL->addResource(new Resource('purposes'));
-$ZEND_ACL->addResource(new Resource('Report'));
-$ZEND_ACL->addResource(new Resource('StreetName'));
-$ZEND_ACL->addResource(new Resource('streetNameTypes'));
-$ZEND_ACL->addResource(new Resource('streets'));
-$ZEND_ACL->addResource(new Resource('streetTypes'));
-$ZEND_ACL->addResource(new Resource('subdivisions'));
-$ZEND_ACL->addResource(new Resource('Subunit'));
-$ZEND_ACL->addResource(new Resource('SubunitStatus'));
-$ZEND_ACL->addResource(new Resource('subunitTypes'));
-$ZEND_ACL->addResource(new Resource('towns'));
-$ZEND_ACL->addResource(new Resource('townships'));
-
+foreach ($ROUTES->getRoutes() as $r) {
+    list($resource, $permission) = explode('.', $r->name);
+    if (!$ZEND_ACL->hasResource($resource)) {
+         $ZEND_ACL->addResource(new Resource($resource));
+    }
+}
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null, 'login');
 $ZEND_ACL->allow(null, ['home'], ['index']);

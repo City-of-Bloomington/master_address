@@ -3,10 +3,10 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Controllers;
+namespace Application\Controllers\Locations;
 
-use Application\Models\Purpose;
-use Application\TableGateways\Purposes as PurposesTable;
+use Application\Models\Locations\Purpose;
+use Application\TableGateways\Locations\Purposes as PurposesTable;
 use Blossom\Classes\View;
 
 class Purposes
