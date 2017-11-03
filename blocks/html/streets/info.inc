@@ -6,9 +6,9 @@
  */
 use Application\Models\Person;
 
-$name   = parent::escape($this->street->getName  ());
-$status = parent::escape($this->street->getStatus());
-$notes  = parent::escape($this->street->getNotes ());
+$name   = parent::escape($this->street->getName());
+$status = $this->_($this->street->getStatus());
+$notes  = parent::escape($this->street->getNotes());
 $town   = parent::escape($this->street->getTown_id() ? $this->street->getTown()->getName() : '');
 ?>
 <section>

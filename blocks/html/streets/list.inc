@@ -27,13 +27,11 @@ use Application\Models\Person;
         <?php
             foreach ($this->streets as $street) {
                 $streetName = $street->getStreetName();
-                $name = parent::escape($streetName->getName());
+                $name   = parent::escape($streetName->getName());
+                $status = parent::escape($street->getStatus());
 
                 $town   = $street->getTown_id()
                         ? parent::escape($street->getTown()->getName())
-                        : '';
-                $status = $street->getStatus_id()
-                        ? parent::escape($street->getStatus()->getName())
                         : '';
                 $uri = parent::generateUri('streets.view', ['id'=>$street->getId()]);
 
