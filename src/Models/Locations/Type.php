@@ -86,4 +86,9 @@ class Type extends ActiveRecord
         $this->setCode($post['code']);
         $this->setDescription($post['description']);
     }
+
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
+	public function __toString() { return $this->getName(); }
 }

@@ -12,6 +12,10 @@ use Application\Models\Township;
 use Application\Models\Subdivision;
 use Application\Models\Plat;
 
+use Application\TableGateways\Addresses\ChangeLog;
+use Application\TableGateways\Addresses\Statuses;
+use Application\TableGateways\Locations\Locations;
+
 use Blossom\Classes\ActiveRecord;
 
 class Address extends ActiveRecord
@@ -52,8 +56,6 @@ class Address extends ActiveRecord
         'state'                => 'state',
         'zip'                  => 'zip',
         'zipplus4'             => 'zipplus4',
-        'trash_day'            => 'trashDay',
-        'recycle_week'         => 'recycleWeek',
         'state_plane_x'        => 'x',
         'state_plane_y'        => 'y',
         'latitude'             => 'latitude',
@@ -63,8 +65,7 @@ class Address extends ActiveRecord
 
     public static $trash_days    = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     public static $recycle_weeks = ['A', 'B'];
-
-
+    public static $actions       = ['correct','update','readdress','unretire','reassign','retire','verify'];
 
 	/**
 	 * Populates the object with data
@@ -153,8 +154,6 @@ class Address extends ActiveRecord
     public function getState()              { return      parent::get('state'               ); }
     public function getZip()                { return      parent::get('zip'                 ); }
     public function getZipplus4()           { return      parent::get('zipplus4'            ); }
-    public function getTrashDay()           { return      parent::get('trash_day'           ); }
-    public function getRecycleWeek()        { return      parent::get('recycle_week'        ); }
     public function getX()                  { return (int)parent::get('state_plane_x'       ); }
     public function getY()                  { return (int)parent::get('state_plane_y'       ); }
     public function getLatitude()           { return      parent::get('latitude'            ); }
@@ -189,8 +188,6 @@ class Address extends ActiveRecord
     public function setState         ($s) { parent::set('state',           $s); }
     public function setZip       (int $s) { parent::set('zip',             $s); }
     public function setZipplus4      ($s) { parent::set('zipplus4',        $s); }
-    public function setTrashDay      ($s) { parent::set('trash_day',       $s); }
-    public function setRecycleWeek   ($s) { parent::set('recycle_week',    $s); }
     public function setX         (int $s) { parent::set('state_plane_x',   $s); }
     public function setY         (int $s) { parent::set('state_plane_y',   $s); }
     public function setLatitude      ($s) { parent::set('latitude',        $s); }
@@ -200,5 +197,40 @@ class Address extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
+	public function getStatus(\DateTime $date=null)
+	{
+        if (!$date) { $date = new \DateTime(); }
+        $d   = $date->format(parent::DB_DATE_FORMAT);
+        $sql = "select * from address_status
+                where address_id=?
+                  and start_date <= ?
+                  and (end_date is null or end_date >= ?)";
+        $result = parent::doQuery($sql, [$this->getId(), $d, $d]);
+        if (count($result)) {
+            return new Status($result[0]);
+        }
+	}
 
+	public function getChangeLog()
+	{
+        $table = new ChangeLog();
+        $list  = $table->find(['address_id'=>$this->getId()]);
+        return $list;
+	}
+
+	public function toArray() : array
+	{
+        $output = [];
+        foreach (self::$fields as $f) {
+            $get = 'get'.ucfirst($f);
+            $output[$f] = $this->$get();
+        }
+        return $output;
+	}
+
+	public function getLocations()
+	{
+        $table = new Locations();
+        return $table->find(['address_id'=>$this->getId(), 'subunit_id'=>null]);
+	}
 }

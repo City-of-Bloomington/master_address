@@ -6,6 +6,7 @@
 declare (strict_types=1);
 namespace Application\Controllers\Addresses;
 
+use Application\Models\Addresses\Address;
 use Application\Models\Addresses\Parser;
 use Application\TableGateways\Addresses\Addresses as AddressesTable;
 use Blossom\Classes\View;
@@ -37,6 +38,15 @@ class Addresses
 
     public function view(array $params)
     {
+        if (!empty($_GET['id'])) {
+            try { $address = new Address($_GET['id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        if (isset($address)) {
+            return new \Application\Views\Addresses\InfoView(['address'=>$address]);
+        }
+        return new \Application\Views\NotFoundView();
     }
 
     public function move(array $params)

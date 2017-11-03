@@ -67,6 +67,9 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+    foreach (\Application\Models\Addresses\Address::$actions as $a) {
+        $r->add($a, "/$a")->addValues(['action'=>$a]);
+    }
 });
 $ROUTES->attach('locationTypes', "/locations/types", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
