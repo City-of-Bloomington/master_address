@@ -15,6 +15,7 @@ use Application\Models\Plat;
 use Application\TableGateways\Addresses\ChangeLog;
 use Application\TableGateways\Addresses\Statuses;
 use Application\TableGateways\Locations\Locations;
+use Application\TableGateways\Subunits\Subunits;
 
 use Blossom\Classes\ActiveRecord;
 
@@ -232,5 +233,11 @@ class Address extends ActiveRecord
 	{
         $table = new Locations();
         return $table->find(['address_id'=>$this->getId(), 'subunit_id'=>null]);
+	}
+
+	public function getSubunits()
+	{
+        $table = new Subunits();
+        return $table->find(['address_id'=>$this->getId()]);
 	}
 }

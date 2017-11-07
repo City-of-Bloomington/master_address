@@ -6,9 +6,9 @@
 declare (strict_types=1);
 namespace Application\Models\Addresses;
 
-use Application\Models\SubunitType;
+use Application\Models\Subunits\Type as SubunitType;
 use Application\TableGateways\Directions;
-use Application\TableGateways\SubunitTypes;
+use Application\TableGateways\Subunits\Types as SubunitTypes;
 use Application\TableGateways\Streets\Types;
 
 class Parser

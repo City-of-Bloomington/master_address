@@ -89,4 +89,6 @@ class NameCodeTable extends ActiveRecord
         $this->setName($post['name']);
         $this->setCode($post['code']);
 	}
+
+	public function __toString() { return $this->getCode(); }
 }
