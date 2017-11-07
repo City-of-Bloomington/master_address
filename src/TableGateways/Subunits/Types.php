@@ -4,13 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\TableGateways;
+namespace Application\TableGateways\Subunits;
 
 use Blossom\Classes\TableGateway;
 
-class SubunitTypes extends TableGateway
+class Types extends TableGateway
 {
-    public function __construct() { parent::__construct('subunit_types', 'Application\Models\SubunitType'); }
+    public function __construct() { parent::__construct('subunit_types', 'Application\Models\Subunits\Type'); }
 
     public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
     {

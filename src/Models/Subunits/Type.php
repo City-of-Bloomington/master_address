@@ -3,9 +3,10 @@
  * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Models;
+namespace Application\Models\Subunits;
+use Application\Models\NameCodeTable;
 
-class SubunitType extends NameCodeTable
+class Type extends NameCodeTable
 {
     protected $tablename = 'subunit_types';
 
