@@ -61,7 +61,8 @@ class Address extends ActiveRecord
         'state_plane_y'        => 'y',
         'latitude'             => 'latitude',
         'longitude'            => 'longitude',
-        'usng'                 => 'USNG'
+        'usng'                 => 'USNG',
+        'notes'                => 'notes'
     ];
 
     public static $trash_days    = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -160,6 +161,7 @@ class Address extends ActiveRecord
     public function getLatitude()           { return      parent::get('latitude'            ); }
     public function getLongitude()          { return      parent::get('longitude'           ); }
     public function getUSNG()               { return      parent::get('usng'                ); }
+    public function getNotes()              { return      parent::get('notes'               ); }
     public function getStreet()       { return parent::getForeignKeyObject('Application\Models\Streets\Street', 'street_id'      ); }
     public function getJurisdiction() { return parent::getForeignKeyObject('Application\Models\Jurisdiction',   'jurisdiction_id'); }
     public function getTownship()     { return parent::getForeignKeyObject('Application\Models\Township',       'township_id'    ); }
@@ -194,6 +196,7 @@ class Address extends ActiveRecord
     public function setLatitude      ($s) { parent::set('latitude',        $s); }
     public function setLongitude     ($s) { parent::set('longitude',       $s); }
     public function setUSNG          ($s) { parent::set('usng',            $s); }
+    public function setNotes         ($s) { parent::set('notes',           $s); }
 
 	//----------------------------------------------------------------
 	// Custom Functions

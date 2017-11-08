@@ -44,7 +44,7 @@ class Parser
 	 *
 	 * @return array
 	 */
-	public static function getCities()
+	public static function getCities() : array
 	{
         // select distinct city from addresses order by city
         return [
@@ -70,19 +70,9 @@ class Parser
     /**
      * Returns street directions in use by the system
      *
-     * !IMPORTANT
-     * For performance, this function has been cached in code.
-     *
-     * The directions are being prepopulated, in the static $directions variable.
-     * If there is a direction that is not being parsed in the
-     * address parser, you might need to regenerate the list, and
-     * update the $directions variable
-     *
-     * The database query has been left here for reference.
-     *
      * @return array
      */
-	private static function getDirections()
+	private static function getDirections() : array
 	{
         // select name, code from directions
         return [

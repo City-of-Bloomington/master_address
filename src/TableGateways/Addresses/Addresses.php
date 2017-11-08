@@ -52,12 +52,10 @@ class Addresses extends TableGateway
                     case Parser::DIRECTION:
                         if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
                         if (!isset($joins['n'])) { $joins['n'] = ['INNER', 'street_names        n', 's.street_name_id=n.id'   ]; }
-                        if (!isset($joins['d'])) { $joins['d'] = ['INNER' , 'directions         d', 'n.direction_id=d.id'     ]; }
                     break;
                     case Parser::POST_DIRECTION:
                         if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
                         if (!isset($joins['n'])) { $joins['n'] = ['INNER', 'street_names        n', 's.street_name_id=n.id'   ]; }
-                        if (!isset($joins['p'])) { $joins['p'] = ['INNER', 'directions          p', 'n.post_direction_id=d.id']; }
                     break;
                     case Parser::STREET_NAME:
                         if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
@@ -97,12 +95,12 @@ class Addresses extends TableGateway
 
                 if (!empty($value)) {
                     switch ($key) {
-                        case 'location_id'         : $select->where('l.location_id=?', $value); break;
-                        case Parser::DIRECTION     : $select->where('d.code=?',        $value); break;
-                        case Parser::POST_DIRECTION: $select->where('p.code=?',        $value); break;
-                        case Parser::STREET_NAME   : $select->where('n.name=?',        $value); break;
-                        case Parser::STREET_TYPE   : $select->where('t.code=?',        $value); break;
-                        case Parser::SUBUNIT_ID    : $select->where('u.identifier=?',  $value); break;
+                        case 'location_id'         : $select->where('l.location_id=?',    $value); break;
+                        case Parser::DIRECTION     : $select->where('n.direction=?',      $value); break;
+                        case Parser::POST_DIRECTION: $select->where('n.post_direction=?', $value); break;
+                        case Parser::STREET_NAME   : $select->where('n.name=?',           $value); break;
+                        case Parser::STREET_TYPE   : $select->where('t.code=?',           $value); break;
+                        case Parser::SUBUNIT_ID    : $select->where('u.identifier=?',     $value); break;
                         case Parser::SUBUNIT_TYPE:
                             if (empty($fields[Parser::SUBUNIT_ID])) {
                                 $select->where('x.code=?', $value); break;
@@ -142,12 +140,12 @@ class Addresses extends TableGateway
 
                 if (!empty($value)) {
                     switch ($key) {
-                        case 'location_id'         : $select->where('l.location_id=?', $value); break;
-                        case Parser::DIRECTION     : $select->where('d.code=?',        $value); break;
-                        case Parser::POST_DIRECTION: $select->where('p.code=?',        $value); break;
-                        case Parser::STREET_NAME   : $select->where('n.name like ?',"$value%"); break;
-                        case Parser::STREET_TYPE   : $select->where('t.code=?',        $value); break;
-                        case Parser::SUBUNIT_ID    : $select->where('u.identifier=?',  $value); break;
+                        case 'location_id'         : $select->where('l.location_id=?',    $value); break;
+                        case Parser::DIRECTION     : $select->where('n.direction=?',      $value); break;
+                        case Parser::POST_DIRECTION: $select->where('n.post_direction=?', $value); break;
+                        case Parser::STREET_NAME   : $select->where('n.name like ?',     "$value%"); break;
+                        case Parser::STREET_TYPE   : $select->where('t.code=?',           $value); break;
+                        case Parser::SUBUNIT_ID    : $select->where('u.identifier=?',     $value); break;
                         case Parser::SUBUNIT_TYPE:
                             if (empty($fields[Parser::SUBUNIT_ID])) {
                                 $select->where('x.code=?', $value); break;

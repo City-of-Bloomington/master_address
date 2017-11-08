@@ -17,9 +17,9 @@ class InfoView extends Template
         parent::__construct('two-column', $format, $vars);
 
 
-        $this->blocks[] = new Block('addresses/info.inc',       ['address' => $this->address]);
-        $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes' => $this->address->getChangeLog()]);
-        $this->blocks['panel-one'][] = new Block('addresses/locations.inc', ['address'  => $this->address]);
-        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'  => $this->address, 'subunits' => $this->address->getSubunits()]);
+        $this->blocks[] = new Block('addresses/info.inc',                   ['address'   => $this->address]);
+        $this->blocks[] = new Block('changeLogs/changeLog.inc',             ['changes'   => $this->address->getChangeLog()]);
+        $this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $this->address->getLocations()]);
+        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'   => $this->address, 'subunits' => $this->address->getSubunits()]);
     }
 }

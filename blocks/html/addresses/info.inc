@@ -41,4 +41,8 @@ use Application\Models\Person;
         $this->_include('addresses/partials/nonStreetData.inc');
     ?>
     </table>
+    <?php
+        $notes = parent::escape($this->address->getNotes());
+        echo $notes ? "<p>$notes</p>" : '';
+    ?>
 </section>

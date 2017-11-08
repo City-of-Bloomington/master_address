@@ -7,6 +7,8 @@ declare (strict_types=1);
 namespace Application\Models\Subunits;
 
 use Application\Models\Addresses\Address;
+use Application\TableGateways\Subunits\ChangeLog;
+use Application\TableGateways\Locations\Locations;
 use Blossom\Classes\ActiveRecord;
 
 class Subunit extends ActiveRecord
@@ -37,6 +39,8 @@ class Subunit extends ActiveRecord
         'longitude'     => 'longitude',
         'usng'          => 'USNG'
     ];
+
+    public static $actions = ['correct', 'retire', 'unretire', 'verify'];
 
 	/**
 	 * Populates the object with data
@@ -119,5 +123,18 @@ class Subunit extends ActiveRecord
         if (count($result)) {
             return new Status($result[0]);
         }
+	}
+
+	public function getLocations()
+	{
+        $table = new Locations();
+        return $table->find(['subunit_id'=>$this->getId()]);
+	}
+
+	public function getChangeLog()
+	{
+        $table = new ChangeLog();
+        $list  = $table->find(['subunit_id'=>$this->getId()]);
+        return $list;
 	}
 }

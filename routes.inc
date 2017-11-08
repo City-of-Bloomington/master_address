@@ -52,6 +52,9 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+    foreach (\Application\Models\Subunits\Subunit::$actions as $a) {
+        $r->add($a, "/$a")->addValues(['action'=>$a]);
+    }
 });
 $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
