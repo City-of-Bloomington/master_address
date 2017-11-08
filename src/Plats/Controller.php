@@ -3,13 +3,11 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Controllers;
+namespace Application\Plats;
 
-use Application\Models\Plat;
-use Application\TableGateways\Plats as PlatsTable;
 use Blossom\Classes\View;
 
-class Plats
+class Controller
 {
     public function index(array $params)
     {
@@ -23,7 +21,7 @@ class Plats
             $list  = $table->search($_GET, null, 20, $page);
         }
 
-        return new \Application\Views\Plats\SearchView(['plats'=>$list]);
+        return new Views\SearchView(['plats'=>$list]);
     }
 
     public function view(array $params)
@@ -34,7 +32,7 @@ class Plats
         }
 
         return isset($plat)
-            ? new \Application\Views\Plats\InfoView(['plat'=>$plat])
+            ? new Views\InfoView(['plat'=>$plat])
             : new \Application\Views\NotFoundView();
     }
 

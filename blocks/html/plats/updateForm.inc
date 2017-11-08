@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Plat $this->plat
  */
-use Application\Models\Plat;
+use Application\Plats\Plat;
 use Application\TableGateways\Townships;
 
 $fields = ['id', 'name', 'type', 'cabinet', 'envelope', 'notes', 'township_id'];

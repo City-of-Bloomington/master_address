@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Models;
+namespace Application\Plats;
 
 use Application\TableGateways\AddressesTable;
 use Blossom\Classes\ActiveRecord;
@@ -104,7 +104,7 @@ class Plat extends ActiveRecord
 	public function getStartDate()   { return parent::get('start_date' ); }
 	public function getEndDate()     { return parent::get('end_date'   ); }
 	public function getTownship_id() { return (int)parent::get('township_id'); }
-	public function getTownship()    { return parent::getForeignKeyObject(__namespace__.'\Township', 'township_id'); }
+	public function getTownship()    { return parent::getForeignKeyObject('Application\Models\Township', 'township_id'); }
 
 	public function setName     (string $s) { parent::set('name',      $s); }
 	public function setType     (string $s) { parent::set('plat_type', $s); }
@@ -113,8 +113,8 @@ class Plat extends ActiveRecord
 	public function setNotes    (string $s) { parent::set('notes',     $s); }
 	public function setStartDate(\DateTime $d=null) { parent::set('start_date', $d); }
 	public function setEndDate  (\DateTime $d=null) { parent::set(  'end_date', $d); }
-	public function setTownship_id(int $id)  { parent::setForeignKeyField (__namespace__.'\Township', 'township_id', $id); }
-	public function setTownship(Township $o) { parent::setForeignKeyObject(__namespace__.'\Township', 'township_id', $o ); }
+	public function setTownship_id(int $id)  { parent::setForeignKeyField ('Application\Models\Township', 'township_id', $id); }
+	public function setTownship(Township $o) { parent::setForeignKeyObject('Application\Models\Township', 'township_id', $o ); }
 
 	public function handleUpdate(array $post)
 	{

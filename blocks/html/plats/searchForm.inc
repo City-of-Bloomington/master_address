@@ -3,7 +3,7 @@
  * @copyright 2009-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-use Application\Models\Plat;
+use Application\Plats\Plat;
 use Application\TableGateways\Townships;
 
 $fields = ['name', 'township_id', 'type', 'cabinet', 'envelope'];

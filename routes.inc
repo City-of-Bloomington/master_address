@@ -107,7 +107,7 @@ $ROUTES->attach('purposes', "/locations/purposes", function ($r) {
 
 // Controllers that only have index, view, update
 $tables = [
-    'people', 'plats', 'subdivisions'
+    'people', 'subdivisions'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
@@ -119,3 +119,12 @@ foreach ($tables as $t) {
         $r->add('index',  '')            ->addValues(['action'=>'index' ]);
     });
 }
+
+$ROUTES->attach('plats', '/plats', function ($r) {
+    $r->setTokens(['id'=>'[a-z0-9]+']);
+    $r->setValues(['controller'=> 'Application\Plats\Controller']);
+
+    $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
+    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+});

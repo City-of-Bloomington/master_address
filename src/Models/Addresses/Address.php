@@ -10,7 +10,7 @@ use Application\Models\Streets\Street;
 use Application\Models\Jurisdiction;
 use Application\Models\Township;
 use Application\Models\Subdivision;
-use Application\Models\Plat;
+use Application\Plats\Plat;
 
 use Application\TableGateways\Addresses\ChangeLog;
 use Application\TableGateways\Addresses\Statuses;
@@ -166,7 +166,7 @@ class Address extends ActiveRecord
     public function getJurisdiction() { return parent::getForeignKeyObject('Application\Models\Jurisdiction',   'jurisdiction_id'); }
     public function getTownship()     { return parent::getForeignKeyObject('Application\Models\Township',       'township_id'    ); }
     public function getSubdivision()  { return parent::getForeignKeyObject('Application\Models\Subdivision',    'subdivision_id' ); }
-    public function getPlat()         { return parent::getForeignKeyObject('Application\Models\Plat',           'plat_id'        ); }
+    public function getPlat()         { return parent::getForeignKeyObject('Application\Plats\Plat',            'plat_id'        ); }
 
 
     public function setStreetNumberPrefix($s) { parent::set('street_number_prefix', $s); }
@@ -178,12 +178,12 @@ class Address extends ActiveRecord
     public function setJurisdiction_id     (int $id) { parent::setForeignKeyField ('Application\Models\Jurisdiction',   'jurisdiction_id', $id); }
     public function setTownship_id         (int $id) { parent::setForeignKeyField ('Application\Models\Township',       'township_id',     $id); }
     public function setSubdivision_id      (int $id) { parent::setForeignKeyField ('Application\Models\Subdivision',    'subdivision_id',  $id); }
-    public function setPlat_id             (int $id) { parent::setForeignKeyField ('Application\Models\Plat',           'plat_id',         $id); }
+    public function setPlat_id             (int $id) { parent::setForeignKeyField ('Application\Plats\Plat',            'plat_id',         $id); }
     public function setStreet      (Street       $o) { parent::setForeignKeyObject('Application\Models\Streets\Street', 'street_id',       $o ); }
     public function setJurisdiction(Jurisdiction $o) { parent::setForeignKeyObject('Application\Models\Jurisdiction',   'jurisdiction_id', $o ); }
     public function setTownship    (Township     $o) { parent::setForeignKeyObject('Application\Models\Township',       'township_id',     $o ); }
     public function setSubdivision (Subdivision  $o) { parent::setForeignKeyObject('Application\Models\Subdivision',    'subdivision_id',  $o ); }
-    public function setPlat        (Plat         $o) { parent::setForeignKeyObject('Application\Models\Plat',           'plat_id',         $o ); }
+    public function setPlat        (Plat         $o) { parent::setForeignKeyObject('Application\Plats\Plat',            'plat_id',         $o ); }
     public function setSection       ($s) { parent::set('section',         $s); }
     public function setQuarterSection($s) { parent::set('quarter_section', $s); }
     public function setPlatLotNumber ($s) { parent::set('plat_lot_number', $s); }
