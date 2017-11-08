@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Subunit $this->subunit
  */
-use Application\Models\Subunits\Subunit;
+use Application\Subunits\Subunit;
 
 foreach (Subunit::$fields as $f) {
     $get = 'get'.ucfirst($f);

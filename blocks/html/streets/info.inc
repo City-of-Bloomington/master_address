@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Street $this->street
  */
-use Application\Models\Person;
+use Application\People\Person;
 
 $name   = parent::escape($this->street->getName());
 $status = $this->_($this->street->getStatus());

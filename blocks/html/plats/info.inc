@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Plat $this->plat
  */
-use Application\Models\Person;
+use Application\People\Person;
 
 $fields = ['id', 'name', 'type', 'cabinet', 'envelope', 'notes'];
 foreach ($fields as $f) {

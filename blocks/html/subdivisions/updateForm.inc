@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Subdivision $this->subdivision
  */
-use Application\Models\Subdivision;
-use Application\TableGateways\Townships;
+use Application\Subdivisions\Subdivision;
+use Application\Townships\TownshipsTable as Townships;
 
 $fields = ['id', 'name', 'township_id', 'phase', 'status'];
 foreach ($fields as $f) {

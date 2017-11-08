@@ -3,7 +3,7 @@
  * @copyright 2015-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-use Application\Models\Person;
+use Application\People\Person;
 
 $links  = [];
 $routes = [

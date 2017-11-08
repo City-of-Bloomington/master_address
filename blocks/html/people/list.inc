@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array $this->people
  */
-use Application\Models\Person;
+use Application\People\Person;
 use Blossom\Classes\Url;
 ?>
 <section>

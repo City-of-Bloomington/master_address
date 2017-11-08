@@ -5,7 +5,7 @@
  * @param array  $this->addresses
  * @param Street $this->street    (optional)
  */
-use Application\Models\Person;
+use Application\People\Person;
 ?>
 <section>
     <header>

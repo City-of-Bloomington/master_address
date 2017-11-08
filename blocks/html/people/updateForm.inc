@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Person $this->person
  */
-use Application\Models\Person;
+use Application\People\Person;
 
 $fields = ['firstname','lastname','email', 'phone', 'agency', 'type', 'current', 'notification', 'coordination'];
 foreach ($fields as $f) {

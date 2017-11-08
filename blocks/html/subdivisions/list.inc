@@ -5,7 +5,7 @@
  * @param array $this->subdivisions
  */
 declare (strict_types=1);
-use Application\Models\Person;
+use Application\People\Person;
 ?>
 <section>
     <header>

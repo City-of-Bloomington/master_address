@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Subdivision $this->subdivision
  */
-use Application\Models\Person;
+use Application\People\Person;
 
 $fields = ['id', 'name', 'phase', 'status'];
 foreach ($fields as $f) {

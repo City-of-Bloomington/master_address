@@ -7,7 +7,7 @@
  * @param array $this->list      An array of objects
  * @param array $this->fields    The fields to display for each object
  */
-use Application\Models\Person;
+use Application\People\Person;
 
 $tablename = $this->plural;
 $single    = $this->singular;

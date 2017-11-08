@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Purpose $this->purpose
  */
-use Application\Models\Locations\Purpose;
+use Application\Locations\Purpose;
 
 $fields = ['id', 'name', 'type'];
 foreach ($fields as $f) {

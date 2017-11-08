@@ -5,7 +5,7 @@
  * @param array   $this->subunits
  * @param Address $this->address
  */
-use Application\Models\Person;
+use Application\People\Person;
 ?>
 <section>
     <header>

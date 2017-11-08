@@ -5,7 +5,7 @@
  * @param Plat $this->plat
  */
 use Application\Plats\Plat;
-use Application\TableGateways\Townships;
+use Application\Townships\TownshipsTable as Townships;
 
 $fields = ['id', 'name', 'type', 'cabinet', 'envelope', 'notes', 'township_id'];
 foreach ($fields as $f) {
