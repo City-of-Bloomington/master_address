@@ -3,7 +3,7 @@
  * @copyright 2016-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Users\Views;
+namespace Application\People\Views;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Template;

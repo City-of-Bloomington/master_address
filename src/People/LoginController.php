@@ -48,7 +48,7 @@ class LoginController
 			$_SESSION['errorMessages'][] = $e;
 		}
 
-		return new \Application\Views\Login\LoginView([
+		return new \Application\People\Views\LoginView([
             'return_url' => $this->return_url
 		]);
 	}
@@ -74,7 +74,7 @@ class LoginController
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		return new \Application\Views\Login\LoginView([
+		return new \Application\People\Views\LoginView([
             'return_url'=>$this->return_url
         ]);
 	}

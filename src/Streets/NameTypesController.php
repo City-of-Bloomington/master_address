@@ -8,7 +8,7 @@ namespace Application\Streets;
 
 use Blossom\Classes\View;
 
-class NameTypes
+class NameTypesController
 {
     public function index(array $params)
     {

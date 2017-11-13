@@ -65,7 +65,7 @@ class Street extends ActiveRecord
         if (!$this->streetName) {
             $type = new NameType('STREET');
 
-            $table = new StreetNames();
+            $table = new StreetNamesTable();
             $list  = $table->find(['street_id'=>$this->getId(), 'type_id'=>$type->getId()]);
             if (count($list)) {
                 $this->streetName = $list[0];
