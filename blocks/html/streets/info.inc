@@ -14,6 +14,21 @@ $town   = parent::escape($this->street->getTown_id() ? $this->street->getTown()-
 <section>
     <header>
         <h2><?= $this->_('street_info'); ?></h2>
+        <div class="tools">
+        <?php
+            $actions = ['correct'];
+            $helper = $this->template->getHelper('buttonLink');
+            foreach ($actions as $a) {
+                if (Person::isAllowed('streets', $a)) {
+                    echo $helper->buttonLink(
+                        parent::generateUri("streets.$a").'?id='.$this->street->getId(),
+                        $this->_($a),
+                        'edit'
+                    );
+                }
+            }
+        ?>
+        </div>
     </header>
 	<table>
         <tr><th><?= $this->_('id'    ); ?></th><td><?= $this->street->getId(); ?></td></tr>

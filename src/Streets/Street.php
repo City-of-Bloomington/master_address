@@ -6,10 +6,9 @@
 declare (strict_types=1);
 namespace Application\Streets;
 
-use Application\Towns\Town;
 use Application\Addresses\AddressesTable;
-use Application\Streets\ChangeLog;
-use Application\Streets\StreetNamesTable;
+use Application\People\Person;
+use Application\Towns\Town;
 
 use Blossom\Classes\ActiveRecord;
 
@@ -19,6 +18,8 @@ class Street extends ActiveRecord
     protected $town;
 
     private $streetName;
+
+    public static $actions = ['correct'];
 
     public function validate()
     {
@@ -41,11 +42,25 @@ class Street extends ActiveRecord
 	public function setTown_id  (int $i=null) { parent::setForeignKeyField ('Application\Towns\Town', 'town_id', $i ? $i : null); }
 	public function setTown    (Town $o)      { parent::setForeignKeyObject('Application\Towns\Town', 'town_id', $o); }
 
-	public function handleUpdate(array $post)
+	//----------------------------------------------------------------
+	// Actions
+	//----------------------------------------------------------------
+	public function correct(Messages\CorrectRequest $req)
 	{
-        $this->setNotes    (     $post['notes'    ]);
-        $this->setStatus   (     $post['status'   ]);
-        $this->setTown_id  ((int)$post['town_id'  ]);
+        $this->setNotes    (     $req['streetInfo']['notes'  ]);
+        $this->setTown_id  ((int)$req['streetInfo']['town_id']);
+        $this->validate();
+
+        $change = new Change();
+        $change->setAction('correct');
+        $change->setPerson($req->user);
+        $change->setStreet($this);
+        $change->setContact_id($req['changeLog']['contact_id']);
+        $change->setNotes     ($req['changeLog']['notes'     ]);
+        $change->validate();
+
+        $this->save();
+        $change->save();
 	}
 
 	//----------------------------------------------------------------

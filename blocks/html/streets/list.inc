@@ -6,44 +6,27 @@
  */
 use Application\People\Person;
 ?>
-<section>
-    <header>
-        <div class="tools">
-        <?php
-            $userCanEdit = Person::isAllowed('streets', 'update');
-            if ($userCanEdit) {
-                $h = $this->template->getHelper('buttonLink');
-                echo $h->buttonLink(
-                    parent::generateUri('streets.update'),
-                    $this->_('street_add'),
-                    'add'
-                );
-            }
-        ?>
-        </div>
-    </header>
-    <table>
-        <tbody>
-        <?php
-            foreach ($this->streets as $street) {
-                $streetName = $street->getStreetName();
-                $name   = parent::escape($streetName->getName());
-                $status = parent::escape($street->getStatus());
+<table>
+    <tbody>
+    <?php
+        foreach ($this->streets as $street) {
+            $streetName = $street->getStreetName();
+            $name = $streetName ? parent::escape($streetName->getName()) : '';
+            $status = parent::escape($street->getStatus());
 
-                $town   = $street->getTown_id()
-                        ? parent::escape($street->getTown()->getName())
-                        : '';
-                $uri = parent::generateUri('streets.view', ['id'=>$street->getId()]);
+            $town   = $street->getTown_id()
+                    ? parent::escape($street->getTown()->getName())
+                    : '';
+            $uri = parent::generateUri('streets.view', ['id'=>$street->getId()]);
 
-                echo "
-                <tr><td><a href=\"$uri\">{$street->getId()}</a></td>
-                    <td><a href=\"$uri\">$name</a></td>
-                    <td><a href=\"$uri\">$town</a></td>
-                    <td><a href=\"$uri\">$status</a></td>
-                </tr>
-                ";
-            }
-        ?>
-        </tbody>
-    </table>
-</section>
+            echo "
+            <tr><td><a href=\"$uri\">{$street->getId()}</a></td>
+                <td><a href=\"$uri\">$name</a></td>
+                <td><a href=\"$uri\">$town</a></td>
+                <td><a href=\"$uri\">$status</a></td>
+            </tr>
+            ";
+        }
+    ?>
+    </tbody>
+</table>
