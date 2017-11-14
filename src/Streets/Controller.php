@@ -37,6 +37,31 @@ class Controller
         return new \Application\Views\NotFoundView();
     }
 
+    public function verify(array $params)
+    {
+        if (!empty($_REQUEST['id'])) {
+            try { $street = new Street($_REQUEST['id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        if (isset($street)) {
+            if (isset($_POST['id'])) {
+                $verification = new Messages\VerifyRequest($street, $_SESSION['USER'], $_POST['notes']);
+                try {
+                    $street->verify($verification);
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street->getId()]));
+                    exit();
+                }
+                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+            }
+            else {
+                $verification = new Messages\VerifyRequest($street, $_SESSION['USER']);
+            }
+            return new Views\Actions\VerifyView(['request'=>$verification]);
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
     public function correct(array $params)
     {
         if (!empty($_REQUEST['id'])) {

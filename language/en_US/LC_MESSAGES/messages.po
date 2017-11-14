@@ -21,3 +21,6 @@ msgstr "Signed in as %s"
 
 msgid "no_results"
 msgstr "No %s found"
+
+msgid "street_verify_statement"
+msgstr "I, %s, verify that this street is accurate at this point in time."

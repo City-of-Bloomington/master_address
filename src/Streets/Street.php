@@ -19,7 +19,7 @@ class Street extends ActiveRecord
 
     private $streetName;
 
-    public static $actions = ['correct'];
+    public static $actions = ['verify', 'correct'];
 
     public function validate()
     {
@@ -45,6 +45,16 @@ class Street extends ActiveRecord
 	//----------------------------------------------------------------
 	// Actions
 	//----------------------------------------------------------------
+	public function verify(Messages\VerifyRequest $req)
+	{
+        $change = new Change();
+        $change->setAction('verify');
+        $change->setPerson($req->user);
+        $change->setStreet($this);
+        $change->setNotes ($req->notes);
+        $change->save();
+	}
+
 	public function correct(Messages\CorrectRequest $req)
 	{
         $this->setNotes    (     $req->streetInfo['notes'  ]);

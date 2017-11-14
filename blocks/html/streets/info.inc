@@ -16,7 +16,7 @@ $town   = parent::escape($this->street->getTown_id() ? $this->street->getTown()-
         <h2><?= $this->_('street_info'); ?></h2>
         <div class="tools">
         <?php
-            $actions = ['correct'];
+            $actions = ['verify', 'correct'];
             $helper = $this->template->getHelper('buttonLink');
             foreach ($actions as $a) {
                 if (Person::isAllowed('streets', $a)) {
