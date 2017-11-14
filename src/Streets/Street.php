@@ -23,7 +23,7 @@ class Street extends ActiveRecord
 
     public function validate()
     {
-        if (!$this->getStatus_id()) { throw new \Exception('missingRequiredFields'); }
+        if (!$this->getStatus()) { throw new \Exception('missingRequiredFields'); }
     }
 
     public function save() { parent::save(); }
@@ -47,16 +47,16 @@ class Street extends ActiveRecord
 	//----------------------------------------------------------------
 	public function correct(Messages\CorrectRequest $req)
 	{
-        $this->setNotes    (     $req['streetInfo']['notes'  ]);
-        $this->setTown_id  ((int)$req['streetInfo']['town_id']);
+        $this->setNotes    (     $req->streetInfo['notes'  ]);
+        $this->setTown_id  ((int)$req->streetInfo['town_id']);
         $this->validate();
 
         $change = new Change();
         $change->setAction('correct');
         $change->setPerson($req->user);
         $change->setStreet($this);
-        $change->setContact_id($req['changeLog']['contact_id']);
-        $change->setNotes     ($req['changeLog']['notes'     ]);
+        $change->setContact_id((int)$req->changeLog['contact_id']);
+        $change->setNotes     (     $req->changeLog['notes'     ]);
         $change->validate();
 
         $this->save();

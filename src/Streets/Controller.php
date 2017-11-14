@@ -49,7 +49,7 @@ class Controller
                 $correction = new Messages\CorrectRequest($street, $_SESSION['USER'], $_POST);
                 try {
                     $street->correct($correction);
-                    header('Location: '.View.generateUrl('streets.view', ['id'=>$street->getId()]));
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street->getId()]));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

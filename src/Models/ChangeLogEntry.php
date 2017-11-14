@@ -8,6 +8,8 @@
  */
 declare (strict_types=1);
 namespace Application\Models;
+
+use Application\People\Person;
 use Blossom\Classes\ActiveRecord;
 
 class ChangeLogEntry extends ActiveRecord
@@ -95,22 +97,14 @@ class ChangeLogEntry extends ActiveRecord
     public function getActionDate() { return      parent::get('action_date'); }
     public function getPerson_id()  {  $id = (int)parent::get('person_id'  ); return $id ? $id : null; }
     public function getContact_id() {  $id = (int)parent::get('contact_id' ); return $id ? $id : null; }
-    public function getPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id' ); }
-    public function getContact() { return parent::getForeignKeyObject(__namespace__.'\Person', 'contact_id'); }
+    public function getPerson()  { return parent::getForeignKeyObject('\Application\People\Person', 'person_id' ); }
+    public function getContact() { return parent::getForeignKeyObject('\Application\People\Person', 'contact_id'); }
 
     public function setAction($s) { parent::set('action', $s); }
     public function setNotes ($s) { parent::set('notes',  $s); }
     public function setActionDate(\DateTime $d=null) { parent::set('action_date', $d); }
-    public function setPerson_id      (int $id=null) { parent::setForeignKeyField (__namespace__.'\Person', 'person_id',  $id); }
-    public function setContact_id     (int $id=null) { parent::setForeignKeyField (__namespace__.'\Person', 'contact_id', $id); }
-    public function setPerson       (Person $p=null) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id',  $p ); }
-    public function setContact      (Person $p=null) { parent::setForeignKeyObject(__namespace__.'\Person', 'contact_id', $p ); }
-
-    public function handleUpdate(array $post)
-    {
-        $this->setAction    (     $post['action'    ]);
-        $this->setNotes     (     $post['notes'     ]);
-        $this->setPerson_id ((int)$post['person_id' ]);
-        $this->setContact_id((int)$post['contact_id']);
-    }
+    public function setPerson_id      (int $id=null) { parent::setForeignKeyField ('\Application\People\Person', 'person_id',  $id); }
+    public function setContact_id     (int $id=null) { parent::setForeignKeyField ('\Application\People\Person', 'contact_id', $id); }
+    public function setPerson       (Person $p=null) { parent::setForeignKeyObject('\Application\People\Person', 'person_id',  $p ); }
+    public function setContact      (Person $p=null) { parent::setForeignKeyObject('\Application\People\Person', 'contact_id', $p ); }
 }

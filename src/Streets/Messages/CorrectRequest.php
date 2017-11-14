@@ -29,10 +29,10 @@ class CorrectRequest
         $this->user   = $user;
 
         if ($post) {
-            $this->street['town_id'   ] = !empty($post['street']['town_id'   ]) ? $post['street']['town_id'   ] : '';
-            $this->street['notes'     ] = !empty($post['street']['notes'     ]) ? $post['street']['notes'     ] : '';
-            $this->change['contact_id'] = !empty($post['change']['contact_id']) ? $post['change']['contact_id'] : '';
-            $this->change['notes'     ] = !empty($post['change']['notes'     ]) ? $post['change']['notes'     ] : '';
+            $this->streetInfo['town_id'   ] = !empty($post['street']['town_id'   ]) ? (int)$post['street']['town_id'   ] : '';
+            $this->streetInfo['notes'     ] = !empty($post['street']['notes'     ]) ?      $post['street']['notes'     ] : '';
+            $this->changeLog['contact_id' ] = !empty($post['change']['contact_id']) ? (int)$post['change']['contact_id'] : '';
+            $this->changeLog['notes'      ] = !empty($post['change']['notes'     ]) ?      $post['change']['notes'     ] : '';
         }
         else {
             $this->streetInfo = [
