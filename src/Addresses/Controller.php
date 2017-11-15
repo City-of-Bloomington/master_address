@@ -46,7 +46,28 @@ class Controller
         return new \Application\Views\NotFoundView();
     }
 
-    public function move(array $params)
+    public function verify(array $params)
     {
+        if (!empty($_REQUEST['id'])) {
+            try { $address = new Address($_REQUEST['id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        if (isset($address)) {
+            if (isset($_POST['id'])) {
+                $verification = new Messages\VerifyRequest($address, $_SESSION['USER'], $_POST['notes']);
+                try {
+                    $address->verify($verification);
+                    header('Location: '.View::generateUrl('addresses.view', ['id'=>$address->getId()]));
+                    exit();
+                }
+                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+            }
+            else {
+                $verification = new Messages\VerifyRequest($address, $_SESSION['USER']);
+            }
+            return new Views\VerifyView(['request'=>$verification]);
+        }
+        return new \Application\Views\NotFoundView();
     }
 }

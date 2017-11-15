@@ -66,6 +66,7 @@ class Address extends ActiveRecord
     public static $trash_days    = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     public static $recycle_weeks = ['A', 'B'];
     public static $actions       = ['correct','update','readdress','unretire','reassign','retire','verify'];
+    public static $statuses      = ['current', 'retired', 'proposed', 'duplicate', 'temporary'];
 
 	/**
 	 * Populates the object with data
@@ -195,6 +196,19 @@ class Address extends ActiveRecord
     public function setLongitude     ($s) { parent::set('longitude',       $s); }
     public function setUSNG          ($s) { parent::set('usng',            $s); }
     public function setNotes         ($s) { parent::set('notes',           $s); }
+
+	//----------------------------------------------------------------
+	// Actions
+	//----------------------------------------------------------------
+	public function verify(Messages\VerifyRequest $req)
+	{
+        $change = new Change();
+        $change->setAction('verify');
+        $change->setPerson($req->user);
+        $change->setAddress($this);
+        $change->setNotes ($req->notes);
+        $change->save();
+	}
 
 	//----------------------------------------------------------------
 	// Custom Functions

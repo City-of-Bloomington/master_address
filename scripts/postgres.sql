@@ -5,9 +5,7 @@ set search_path = address;
 --
 -- Lookup Tables
 --
-create table quarter_sections (
-    code char(2) not null primary key
-);
+create type quarter_sections as enum('NE', 'NW', 'SE', 'SW');
 
 create table zip_codes (
     id    serial primary key,
@@ -38,26 +36,9 @@ create table jurisdictions (
     name varchar(20) not null unique
 );
 
-create table directions (
-    id   serial     primary key,
-    name varchar(8) not null unique,
-    code char(2)    not null unique
-);
-
-create table address_statuses (
-    id   serial      primary key,
-    name varchar(16) not null unique
-);
-
-create table person_statuses (
-    id   serial      primary key,
-    name varchar(16) not null unique
-);
-
-create table street_statuses (
-    id   serial      primary key,
-    name varchar(16) not null unique
-);
+create type directions       as enum('N', 'E', 'S', 'W');
+create type address_statuses as enum('current', 'retired', 'proposed', 'duplicate', 'temporary');
+create type  street_statuses as enum('current', 'retired', 'proposed', 'corrected');
 
 create table street_types (
     id   serial      primary key,
@@ -128,22 +109,19 @@ create table street_name_types (
 create table streets (
 	id        serial  primary key,
 	town_id   integer,
-	status_id integer not null,
+	status    street_statuses not null,
 	notes     varchar(240),
-	foreign key (town_id  ) references towns          (id),
-	foreign key (status_id) references street_statuses(id)
+	foreign key (town_id  ) references towns(id)
 );
 
 create table street_names (
     id                serial      primary key,
-    direction_id      integer,
+    direction         directions,
     name              varchar(64) not null,
-    post_direction_id integer,
+    post_direction    directions,
     suffix_code_id    integer,
     notes             varchar(240),
-    foreign key (direction_id     ) references directions  (id),
-    foreign key (post_direction_id) references directions  (id),
-    foreign key (suffix_code_id   ) references street_types(id)
+    foreign key (suffix_code_id) references street_types(id)
 );
 
 create table street_street_names (
@@ -186,37 +164,36 @@ create table addresses (
     subdivision_id       integer,
     plat_id              integer,
     section              varchar(16),
-    quarter_section      char(2),
+    quarter_section      quarter_sections,
     plat_lot_number      varchar(16),
     city                 varchar(32),
     state                char(2) not null default 'IN',
     zip                  integer,
     zipplus4             smallint,
-    trash_day            trash_day,
-    recycle_week         recycle_week,
     state_plane_x        integer,
     state_plane_y        integer,
     latitude             decimal(10, 8),
     longitude            decimal(10, 8),
     usng                 varchar(20),
+    notes                varchar(240),
     geom public.geometry(Point, 2966),
     foreign key (street_id        ) references streets      (id),
     foreign key (jurisdiction_id  ) references jurisdictions(id),
     foreign key (township_id      ) references townships    (id),
     foreign key (subdivision_id   ) references subdivisions (id),
     foreign key (plat_id          ) references plats        (id),
-    foreign key (quarter_section  ) references quarter_sections(code),
     foreign key (zip              ) references zip_codes(zip)
 );
+create index on addresses using gist(geom);
+create trigger update_geom BEFORE INSERT OR UPDATE OF latitude, longitude ON addresses FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
 
 create table address_status (
-    id          serial  primary key,
-    address_id  integer not null,
-    status_id   integer not null,
+    id          serial           primary key,
+    address_id  integer          not null,
+    status      address_statuses not null,
     start_date  date,
     end_date    date,
-    foreign key (address_id) references addresses       (id),
-    foreign key (status_id ) references address_statuses(id)
+    foreign key (address_id) references addresses(id)
 );
 
 create table subunits (
@@ -234,15 +211,16 @@ create table subunits (
     foreign key (address_id) references addresses    (id),
     foreign key (type_id   ) references subunit_types(id)
 );
+create index on subunits using gist(geom);
+create trigger update_geom BEFORE INSERT OR UPDATE OF latitude, longitude ON subunits FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
 
 create table subunit_status (
-    id          serial  primary key,
-    subunit_id  integer not null,
-    status_id   integer not null,
+    id          serial           primary key,
+    subunit_id  integer          not null,
+    status      address_statuses not null,
     start_date  date,
     end_date    date,
-    foreign key (subunit_id) references subunits        (id),
-    foreign key (status_id ) references address_statuses(id)
+    foreign key (subunit_id) references subunits(id)
 );
 
 -- The primary key for locations is a composite.
@@ -261,6 +239,8 @@ create table locations (
 	mailable    boolean,
 	occupiable  boolean,
 	active      boolean,
+    trash_day    trash_day,
+    recycle_week recycle_week,
 	unique (location_id, address_id, subunit_id),
 	foreign key (address_id) references addresses     (id),
 	foreign key (subunit_id) references subunits      (id),
@@ -269,12 +249,11 @@ create table locations (
 create index on locations(location_id);
 
 create table location_status (
-	id           serial  primary key,
-	location_id  integer not null,
-	status_id    integer not null,
+	id           serial           primary key,
+	location_id  integer          not null,
+	status       address_statuses not null,
 	start_date   date,
-	end_date     date,
-	foreign key (status_id) references address_statuses(id)
+	end_date     date
 );
 
 -- mast_addr_assignment_contacts
@@ -283,20 +262,19 @@ create table location_status (
 -- Merged people into this table
 create table people (
 	id            serial      primary key,
-	status_id     integer     not null,
 	contact_type  varchar(20),
 	firstname     varchar(20) not null,
 	lastname      varchar(30) not null,
 	email         varchar(128),
 	phone         varchar(12),
 	agency        varchar(40),
+	current       boolean     not null default true,
 	notification  boolean,
 	coordination  boolean,
 	username      varchar(40) unique,
 	password      varchar(40),
 	role          varchar(30),
-	authentication_method varchar(40),
-	foreign key (status_id) references person_statuses(id)
+	authentication_method varchar(40)
 );
 
 create table address_assignment_log (

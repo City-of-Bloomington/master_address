@@ -25,7 +25,7 @@ use Application\People\Person;
             foreach ($actions as $a) {
                 if (Person::isAllowed('addresses', $a)) {
                     echo $h->buttonLink(
-                        parent::generateUri("addresses.$a"),
+                        parent::generateUri("addresses.$a").'?id='.$this->address->getId(),
                         $this->_($a),
                         'edit'
                     );

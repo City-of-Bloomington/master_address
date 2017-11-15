@@ -19,7 +19,8 @@ class Street extends ActiveRecord
 
     private $streetName;
 
-    public static $actions = ['verify', 'correct'];
+    public static $actions  = ['verify', 'correct'];
+    public static $statuses = ['current', 'retired', 'proposed', 'corrected'];
 
     public function validate()
     {

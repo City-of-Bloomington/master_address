@@ -1,44 +1,42 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Address $this->address
+ * @copyright 2009-2017 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param VerifyRequest $this->request
  */
+$id    = $this->request->address->getId();
+$notes = parent::escape($this->request->notes);
 ?>
-<h1>Verify Address</h1>
-<script type="text/javascript">
-function handleVerifyAddress(form) {
-	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'verify','<?php echo BASE_URL; ?>');
-	}
-}
-</script>
-<form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="handleVerifyAddress(this); return false;">
-	<fieldset>
-		<input type="hidden" name="action" value="verify" />
-		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
+<section>
+    <header><h1><?= $this->_('address_verify'); ?></h1></header>
+    <div>
+        <form method="post" action="<?= parent::generateUri('addresses.verify'); ?>">
+            <fieldset>
+                <input type="hidden" name="id" value="<?= $id; ?>" />
+                <p><?= sprintf($this->_('address_verify_statement', 'messages'), $_SESSION['USER']->getFullname()); ?></p>
+                <?php
+                    $helper = $this->template->getHelper('field');
+                    echo $helper->field([
+                        'name'  => 'notes',
+                        'id'    => 'notes',
+                        'label' => $this->_('notes'),
+                        'type'  => 'textarea',
+                        'value' => $notes
+                    ]);
 
-		<div>
-			<p>
-			I, <?php echo View::escape($_SESSION['USER']->getFullname()); ?>,
-			verify that this address is accurate at this point in time.
-			</p>
-		</div>
-
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
-
-		<button type="submit" class="save">Verify</button>
-	</fieldset>
-</form>
-<?php
-	$status = strtolower($this->address->getStatus()->getDescription());
-	echo "<table class=\"$status\">";
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
-	include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
-	echo "</table>";
-?>
+                    $helper = $this->template->getHelper('saveAndCancelButtons');
+                    echo $helper->saveAndCancelButtons(
+                        parent::generateUri('addresses.view', ['id'=>$id])
+                    );
+                ?>
+            </fieldset>
+        </form>
+        <table class="<?= $status; ?>">
+        <?php
+            $this->address = $this->request->address;
+            $this->_include('addresses/partials/streetData.inc');
+            $this->_include('addresses/partials/nonStreetData.inc');
+        ?>
+        </table>
+    </div>
+</section>
