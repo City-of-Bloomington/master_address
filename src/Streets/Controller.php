@@ -86,4 +86,29 @@ class Controller
         }
         return new \Application\Views\NotFoundView();
     }
+
+    public function changeStatus(array $params)
+    {
+        if (!empty($_REQUEST['id'])) {
+            try { $street  = new Street($_REQUEST['id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        if (isset($street)) {
+            if (isset($_POST['id'])) {
+                $change = new Messages\StatusChangeRequest($street, $_SESSION['USER'], $_POST);
+                try {
+                    $street->changeStatus($change);
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street->getId()]));
+                    exit();
+                }
+                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+            }
+            else {
+                $change = new Messages\StatusChangeRequest($street, $_SESSION['USER']);
+            }
+            return new Views\Actions\StatusChangeView(['request'=>$change]);
+        }
+        return new \Application\Views\NotFoundView();
+    }
 }

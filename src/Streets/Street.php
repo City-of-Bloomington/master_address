@@ -19,7 +19,7 @@ class Street extends ActiveRecord
 
     private $streetName;
 
-    public static $actions  = ['verify', 'correct'];
+    public static $actions  = ['verify', 'correct', 'changeStatus'];
     public static $statuses = ['current', 'retired', 'proposed', 'corrected'];
 
     public function validate()
@@ -72,6 +72,29 @@ class Street extends ActiveRecord
 
         $this->save();
         $change->save();
+	}
+
+	public function changeStatus(Messages\StatusChangeRequest $req)
+	{
+        $current = $this->getStatus();
+        if ($current != $req->status) {
+            $action = $req->status == 'current'
+                    ? $current == 'retired' ? 'unretired' : 'activated'
+                    : $req->status;
+
+            $this->setStatus($req->status);
+            $this->validate();
+
+            $change = new Change();
+            $change->setAction($action);
+            $change->setPerson($req->user);
+            $change->setStreet($this);
+            $change->setNotes ($req->notes);
+            $change->validate();
+
+            $this->save();
+            $change->save();
+        }
 	}
 
 	//----------------------------------------------------------------

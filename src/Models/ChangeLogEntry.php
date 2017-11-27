@@ -17,14 +17,6 @@ class ChangeLogEntry extends ActiveRecord
 	protected $person;
 	protected $contact;
 
-	public static $actions = [  'add'=>'added','assign'=>'assigned','activate'=>'activated',
-                                'create'=>'created','propose'=>'proposed','correct'=>'corrected',
-                                'alias'=>'added alias','change'=>'changed street name',
-                                'update'=>'updated','move'=>'moved to location',
-                                'readdress'=>'readdressed','reassign'=>'reassigned',
-                                'unretire'=>'unretired','retire'=>'retired',
-                                'verify'=>'verified'];
-
     /**
      * Convert date strings to DateTime objects before loading
      */
@@ -79,10 +71,6 @@ class ChangeLogEntry extends ActiveRecord
 
         if (!$this->getPerson_id() || !$this->getAction()) {
             throw new \Exception('missingRequiredFields');
-        }
-
-        if (!in_array($this->getAction(), array_keys(self::$actions))) {
-            throw new \Exception('logEntry/unknownAction');
         }
 	}
 
