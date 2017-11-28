@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Streets;
+namespace Application\Streets\Names;
 
 use Blossom\Classes\ActiveRecord;
 
@@ -28,14 +28,14 @@ class Name extends ActiveRecord
     public function getDirection()     { return      parent::get('direction'     ); }
     public function getPostDirection() { return      parent::get('post_direction'); }
     public function getSuffixCode_id()    { $id = (int)parent::get('suffix_code_id'   ); return $id ? $id : null; }
-    public function getSuffixCode()    { return parent::getForeignKeyObject(__namespace__.'\Type',          'suffix_code_id'   ); }
+    public function getSuffixCode()    { return parent::getForeignKeyObject('Application\Streets\Types\Type', 'suffix_code_id'); }
 
     public function setName         ($s) { parent::set('name',           $s); }
     public function setNotes        ($s) { parent::set('notes',          $s); }
     public function setDirection    ($s) { parent::set('direction',      $s); }
     public function setPostDirection($s) { parent::set('post_direction', $s); }
-    public function setSuffixCode_id   (int $i=null) { parent::setForeignKeyField (__namespace__.'\Type',          'suffix_code_id',    $i ? $i : null); }
-	public function setSuffixCode        (Type $o)   { parent::setForeignKeyObject(__namespace__.'\Type',          'suffix_code_id',    $o); }
+    public function setSuffixCode_id(int $i=null) { parent::setForeignKeyField ('Application\Streets\Types\Type', 'suffix_code_id', $i ? $i : null); }
+	public function setSuffixCode     (Type $o)   { parent::setForeignKeyObject('Application\Streets\Types\Type', 'suffix_code_id', $o); }
 
 	public function handleUpdate(array $post)
 	{

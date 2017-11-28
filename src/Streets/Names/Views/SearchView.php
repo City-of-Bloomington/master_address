@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Streets\Views\Names;
+namespace Application\Streets\Names\Views;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Template;

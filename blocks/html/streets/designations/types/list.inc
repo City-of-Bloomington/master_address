@@ -9,15 +9,15 @@ use Application\People\Person;
 
 ?>
 <section>
-    <header><h1><?= $this->_(['streetNameType', 'streetNameTypes', count($this->types)]); ?></h1></header>
+    <header><h1><?= $this->_(['streetDesignationType', 'streetDesignationTypes', count($this->types)]); ?></h1></header>
     <div class="tools">
     <?php
-        $userCanEdit = Person::isAllowed('streetNameTypes', 'update');
+        $userCanEdit = Person::isAllowed('streetDesignationTypes', 'update');
         if ($userCanEdit) {
             $helper = $this->template->getHelper('buttonLink');
             echo $helper->buttonLink(
-                parent::generateUri('streetNameTypes.update'),
-                $this->_('streetNameType_add'),
+                parent::generateUri('streetDesignationTypes.update'),
+                $this->_('streetDesignationType_add'),
                 'add'
             );
         }
@@ -39,8 +39,8 @@ use Application\People\Person;
                 $editButton = '';
                 if ($userCanEdit) {
                     $editButton = $helper->buttonLink(
-                        parent::generateUri('streetNameTypes.update', ['id'=>$t->getId()]),
-                        $this->_('streetNameType_edit'),
+                        parent::generateUri('streetDesignationTypes.update', ['id'=>$t->getId()]),
+                        $this->_('streetDesignationType_edit'),
                         'edit'
                     );
                 }

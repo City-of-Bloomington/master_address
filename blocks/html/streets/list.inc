@@ -10,8 +10,7 @@ use Application\People\Person;
     <tbody>
     <?php
         foreach ($this->streets as $street) {
-            $streetName = $street->getStreetName();
-            $name = $streetName ? parent::escape($streetName->getName()) : '';
+            $name   = parent::escape($street->getName());
             $status = parent::escape($street->getStatus());
 
             $town   = $street->getTown_id()

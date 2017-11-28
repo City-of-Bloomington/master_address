@@ -48,19 +48,19 @@ class AddressesTable extends TableGateway
                         if (!isset($joins['l'])) { $joins['l'] = ['INNER', 'locations           l', 'a.id=l.address_id'       ]; }
                     break;
                     case Parser::DIRECTION:
-                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
+                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_designations s', 's.street_id=a.street_id' ]; }
                         if (!isset($joins['n'])) { $joins['n'] = ['INNER', 'street_names        n', 's.street_name_id=n.id'   ]; }
                     break;
                     case Parser::POST_DIRECTION:
-                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
+                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_designations s', 's.street_id=a.street_id' ]; }
                         if (!isset($joins['n'])) { $joins['n'] = ['INNER', 'street_names        n', 's.street_name_id=n.id'   ]; }
                     break;
                     case Parser::STREET_NAME:
-                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
+                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_designations s', 's.street_id=a.street_id' ]; }
                         if (!isset($joins['n'])) { $joins['n'] = ['INNER', 'street_names        n', 's.street_name_id=n.id'   ]; }
                     break;
                     case Parser::STREET_TYPE:
-                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_street_names s', 's.street_id=a.street_id' ]; }
+                        if (!isset($joins['s'])) { $joins['s'] = ['INNER', 'street_designations s', 's.street_id=a.street_id' ]; }
                         if (!isset($joins['n'])) { $joins['n'] = ['INNER', 'street_names        n', 's.street_name_id=n.id'   ]; }
                         if (!isset($joins['t'])) { $joins['t'] = ['INNER', 'street_types        t', 'n.suffix_code_id=t.id'   ]; }
                     break;

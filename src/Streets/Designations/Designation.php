@@ -6,13 +6,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Streets;
+namespace Application\Streets\Designations;
 
 use Blossom\Classes\ActiveRecord;
 
-class StreetName extends ActiveRecord
+class Designation extends ActiveRecord
 {
-    protected $tablename = 'street_street_names';
+    protected $tablename = 'street_designations';
 
     protected $street_name;
     protected $street;
@@ -85,20 +85,20 @@ class StreetName extends ActiveRecord
 	public function getRank()        { $id =  (int)parent::get('rank'); return $id ? $id : null; }
 	public function getStreet_id()   { return (int)parent::get('street_id'     ); }
 	public function getName_id()     { return (int)parent::get('street_name_id'); }
-	public function getNameType_id() { return (int)parent::get('type_id'       ); }
+	public function getType_id()     { return (int)parent::get('type_id'       ); }
 	public function getStartDate()   { return      parent::get('start_date'    ); }
 	public function getEndDate()     { return      parent::get('end_date'      ); }
-    public function getStreet()      { return parent::getForeignKeyObject(__namespace__.'\Street',   'street_id'     ); }
-    public function getName()        { return parent::getForeignKeyObject(__namespace__.'\Name',     'street_name_id'); }
-    public function getNameType()    { return parent::getForeignKeyObject(__namespace__.'\NameType', 'type_id'       ); }
+    public function getStreet()      { return parent::getForeignKeyObject('Application\Streets\Street',     'street_id'     ); }
+    public function getName()        { return parent::getForeignKeyObject('Application\Streets\Names\Name', 'street_name_id'); }
+    public function getType()        { return parent::getForeignKeyObject(__namespace__.'\Type',            'type_id'       ); }
 
     public function setRank           (int $i=null) { parent::set('rank', $i ? $i : null); }
     public function setStartDate(\DateTime $d=null) { parent::set('start_date', $d); }
 	public function setEndDate  (\DateTime $d=null) { parent::set(  'end_date', $d); }
-	public function setStreet_id   (int $id) { parent::setForeignKeyField (__namespace__.'\Street',   'street_id', $id); }
-	public function setName_id     (int $id) { parent::setForeignKeyField (__namespace__.'\Name',     'name_id',   $id); }
-	public function setNameType_id (int $id) { parent::setForeignKeyField (__namespace__.'\NameType', 'type_id',   $id); }
-	public function setStreet    (Street $o) { parent::setForeignKeyObject(__namespace__.'\Street',   'street_id', $o ); }
-	public function setName        (Name $o) { parent::setForeignKeyObject(__namespace__.'\Name',     'name_id',   $o ); }
-	public function setNameType(NameType $o) { parent::setForeignKeyObject(__namespace__.'\NameType', 'type_id',   $o ); }
+	public function setStreet_id  (int $id) { parent::setForeignKeyField ('Application\Streets\Street',     'street_id', $id); }
+	public function setName_id    (int $id) { parent::setForeignKeyField ('Application\Streets\Names\Name', 'name_id',   $id); }
+	public function setNameType_id(int $id) { parent::setForeignKeyField (__namespace__.'Type',             'type_id',   $id); }
+	public function setStreet   (Street $o) { parent::setForeignKeyObject('Application\Streets\Street',     'street_id', $o ); }
+	public function setName       (Name $o) { parent::setForeignKeyObject('Application\Streets\Names\Name', 'name_id',   $o ); }
+	public function setType       (Type $o) { parent::setForeignKeyObject(__namespace__.'\Type',            'type_id',   $o ); }
 }

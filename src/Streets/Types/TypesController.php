@@ -3,40 +3,39 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-declare (strict_types=1);
-namespace Application\Streets;
+namespace Application\Streets\Types;
 
 use Blossom\Classes\View;
 
-class NameTypesController
+class TypesController
 {
     public function index(array $params)
     {
-        $table = new NameTypesTable();
+        $table = new TypesTable();
         $list  = $table->find();
 
-        return new Views\NameTypes\ListView(['types'=>$list]);
+        return new Views\ListView(['types'=>$list]);
     }
 
     public function update(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            try { $type = new NameType($_REQUEST['id']); }
+            try { $type = new Type($_REQUEST['id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
-        else { $type = new NameType(); }
+        else { $type = new Type(); }
 
         if (isset($type)) {
             if (isset($_POST['name'])) {
                 try {
                     $type->handleUpdate($_POST);
                     $type->save();
-                    header('Location: '.View::generateUrl('streetNameTypes.index'));
+                    header('Location: '.View::generateUrl('streetTypes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
-            return new Views\NameTypes\UpdateView(['type'=>$type]);
+            return new Views\UpdateView(['type'=>$type]);
         }
         else {
             return new \Application\Views\NotFoundView();

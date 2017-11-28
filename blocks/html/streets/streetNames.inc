@@ -5,7 +5,7 @@
  * @param Street $this->street
  */
 use Application\People\Person;
-$streetNames = $this->street->getStreetNames();
+$streetNames = $this->street->getDesignations();
 ?>
 <section>
     <header>
@@ -28,7 +28,7 @@ $streetNames = $this->street->getStreetNames();
                 $endDate   = $streetName->getEndDate();
 
 				$name  = parent::escape($streetName->getName());
-				$type  = parent::escape($streetName->getNameType()->getName());
+				$type  = parent::escape($streetName->getType()->getName());
 				$start = $startDate ? $startDate->format(DATE_FORMAT) : '';
 				$end   = $endDate   ? $endDate  ->format(DATE_FORMAT) : '';
 

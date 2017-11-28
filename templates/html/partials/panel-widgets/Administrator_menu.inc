@@ -7,19 +7,19 @@ use Application\People\Person;
 
 $links  = [];
 $routes = [
-    'jurisdictions'   => 'jurisdiction',
-    'towns'           => 'town',
-    'townships'       => 'township',
-    'people'          => 'person',
-    'users'           => 'user',
-    'streetTypes'     => 'streetType',
-    'streetNameTypes' => 'streetNameType',
-    'subunitTypes'    => 'subunitType',
-    'locationTypes'   => 'locationType',
-    'purposes'        => 'purpose',
-    'plats'           => 'plat',
-    'subdivisions'    => 'subdivision',
-    'streets'         => 'street'
+    'jurisdictions'          => 'jurisdiction',
+    'towns'                  => 'town',
+    'townships'              => 'township',
+    'people'                 => 'person',
+    'users'                  => 'user',
+    'streetTypes'            => 'streetType',
+    'streetDesignationTypes' => 'streetDesignationType',
+    'subunitTypes'           => 'subunitType',
+    'locationTypes'          => 'locationType',
+    'purposes'               => 'purpose',
+    'plats'                  => 'plat',
+    'subdivisions'           => 'subdivision',
+    'streets'                => 'street'
 ];
 foreach ($routes as $plural=>$singular) {
     if (Person::isAllowed($plural, 'index')) {

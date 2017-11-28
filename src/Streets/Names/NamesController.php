@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Streets;
+namespace Application\Streets\Names;
 
 use Application\Addresses\Parser;
 
@@ -19,7 +19,7 @@ class NamesController
             $table = new NamesTable();
             $vars['names'] = $table->search($parse);
         }
-        return new Views\Names\SearchView($vars);
+        return new Views\SearchView($vars);
     }
 
     public function update(array $params)

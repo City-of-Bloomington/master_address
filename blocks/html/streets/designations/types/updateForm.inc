@@ -12,11 +12,11 @@ foreach ($fields as $f) {
     $$f  = parent::escape($this->type->$get());
 }
 
-$title = $code ? $this->_('streetNameType_edit') : $this->_('streetNameType_add');
+$title = $id ? $this->_('streetDesignationType_edit') : $this->_('streetDesignationType_add');
 ?>
 <section>
     <header><h1><?= $title; ?></h1></header>
-    <form method="post" action="<?= parent::generateUri('streetNameTypes.update'); ?>">
+    <form method="post" action="<?= parent::generateUri('streetDesignationTypes.update'); ?>">
         <fieldset>
             <input name="id" type="hidden" value="<?= $id; ?>" />
         <?php
@@ -39,7 +39,7 @@ $title = $code ? $this->_('streetNameType_edit') : $this->_('streetNameType_add'
             ]);
 
             $helper = $this->template->getHelper('saveAndCancelButtons');
-            echo $helper->saveAndCancelButtons(parent::generateUri('streetTypes.index'));
+            echo $helper->saveAndCancelButtons(parent::generateUri('streetDesignationTypes.index'));
         ?>
         </fieldset>
     </form>

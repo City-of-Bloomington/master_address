@@ -33,7 +33,7 @@ use Application\People\Person;
                     $get = 'get'.ucfirst($f);
                     $$f  = parent::escape($a->$get());
                 }
-                $streetName = parent::escape($a->getStreet()->getStreetName()->getName());
+                $streetName = parent::escape($a->getStreet()->getName());
                 $status = '';
                 $uri = parent::generateUri('addresses.view', ['id'=>$a->getId()]);
                 echo "

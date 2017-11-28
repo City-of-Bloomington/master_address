@@ -58,21 +58,21 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
 });
 $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=> 'Application\Streets\TypesController']);
+    $r->setValues(['controller'=> 'Application\Streets\Types\TypesController']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
-$ROUTES->attach('streetNameTypes', "/streets/nameTypes", function ($r) {
+$ROUTES->attach('streetDesignationTypes', "/streets/designations/types", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=> 'Application\Streets\NameTypesController']);
+    $r->setValues(['controller'=> 'Application\Streets\Designations\TypesController']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
-$ROUTES->attach('names', "/streets/names", function ($r) {
+$ROUTES->attach('streetNames', "/streets/names", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=> 'Application\Streets\NamesController']);
+    $r->setValues(['controller'=> 'Application\Streets\Names\NamesController']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);

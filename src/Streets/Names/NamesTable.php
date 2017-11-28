@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Streets;
+namespace Application\Streets\Names;
 
 use Application\Addresses\Parser;
 use Blossom\Classes\TableGateway;
@@ -13,7 +13,7 @@ class NamesTable extends TableGateway
 {
     protected $columns = ['id', 'name', 'direction', 'post_direction', 'suffix_code_id'];
 
-    public function __construct() { parent::__construct('street_names', 'Application\Streets\Name'); }
+    public function __construct() { parent::__construct('street_names', __namespace__.'\Name'); }
 
     /**
      * Returns an array of join definitions
@@ -27,11 +27,11 @@ class NamesTable extends TableGateway
             if (!empty($v)) {
                 switch ($k) {
                     case 'street_id':
-                        if (!isset($joins['l'])) { $joins['l'] = ['INNER', 'street_street_names l', 'n.id=l.street_name_id']; }
+                        if (!isset($joins['l'])) { $joins['l'] = ['INNER', 'street_designations l', 'n.id=l.street_name_id']; }
                     break;
 
                     case 'type_id':
-                        if (!isset($joins['l'])) { $joins['l'] = ['INNER', 'street_street_names l', 'n.id=l.street_name_id']; }
+                        if (!isset($joins['l'])) { $joins['l'] = ['INNER', 'street_designations l', 'n.id=l.street_name_id']; }
                     break;
 
                     case Parser::STREET_TYPE:

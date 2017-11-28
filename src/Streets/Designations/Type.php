@@ -4,12 +4,12 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Streets;
+namespace Application\Streets\Designations;
 use Blossom\Classes\ActiveRecord;
 
-class NameType extends ActiveRecord
+class Type extends ActiveRecord
 {
-    protected $tablename = 'street_name_types';
+    protected $tablename = 'street_designation_types';
 
 	/**
 	 * Populates the object with data

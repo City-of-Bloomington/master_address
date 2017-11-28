@@ -17,7 +17,7 @@ class Street extends ActiveRecord
     protected $tablename = 'streets';
     protected $town;
 
-    private $streetName;
+    private $designation;
 
     public static $actions  = ['verify', 'correct', 'changeStatus'];
     public static $statuses = ['current', 'retired', 'proposed', 'corrected'];
@@ -102,33 +102,33 @@ class Street extends ActiveRecord
 	//----------------------------------------------------------------
 	public function getName():string
 	{
-        $sn = $this->getStreetName();
+        $sn = $this->getDesignation();
         if ($sn) {
             return $sn->getName()->__toString();
         }
         return '';
 	}
 
-	public function getStreetName()
+	public function getDesignation()
 	{
-        if (!$this->streetName) {
-            $type = new NameType('STREET');
+        if (!$this->designation) {
+            $type = new Designations\Type('STREET');
 
-            $table = new StreetNamesTable();
+            $table = new Designations\DesignationsTable();
             $list  = $table->find(['street_id'=>$this->getId(), 'type_id'=>$type->getId()]);
             if (count($list)) {
-                $this->streetName = $list[0];
+                $this->designation = $list[0];
             }
         }
-        return $this->streetName;
+        return $this->designation;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getStreetNames()
+	public function getDesignations()
 	{
-        $table = new StreetNamesTable();
+        $table = new Designations\DesignationsTable();
         $list  = $table->find(['street_id'=>$this->getId()]);
         return $list;
 	}

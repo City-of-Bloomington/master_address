@@ -3,7 +3,8 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Streets;
+declare (strict_types=1);
+namespace Application\Streets\Designations;
 
 use Blossom\Classes\View;
 
@@ -30,7 +31,7 @@ class TypesController
                 try {
                     $type->handleUpdate($_POST);
                     $type->save();
-                    header('Location: '.View::generateUrl('streetTypes.index'));
+                    header('Location: '.View::generateUrl('streetDesignationTypes.index'));
                     exit();
                 }
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }

@@ -8,7 +8,7 @@ namespace Application\Addresses;
 
 use Application\Subunits\Type       as SubunitType;
 use Application\Subunits\TypesTable as SubunitTypes;
-use Application\Streets\TypesTable  as Types;
+use Application\Streets\Types\TypesTable  as Types;
 
 class Parser
 {

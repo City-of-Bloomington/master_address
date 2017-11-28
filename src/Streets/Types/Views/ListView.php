@@ -3,7 +3,7 @@
  * @copyright 2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Streets\Views\Types;
+namespace Application\Streets\Types\Views;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Template;
