@@ -112,10 +112,11 @@ class Street extends ActiveRecord
 	public function getDesignation()
 	{
         if (!$this->designation) {
-            $type = new Designations\Type('STREET');
-
             $table = new Designations\DesignationsTable();
-            $list  = $table->find(['street_id'=>$this->getId(), 'type_id'=>$type->getId()]);
+            $list  = $table->find([
+                'street_id' => $this->getId(),
+                'type_id'   => Designations\Designation::TYPE_STREET
+            ]);
             if (count($list)) {
                 $this->designation = $list[0];
             }

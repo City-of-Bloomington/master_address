@@ -63,12 +63,11 @@ $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
-$ROUTES->attach('streetDesignationTypes', "/streets/designations/types", function ($r) {
+$ROUTES->attach('streetDesignations', "/streets/designations", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=> 'Application\Streets\Designations\TypesController']);
+    $r->setValues(['controller'=> 'Application\Streets\Designations\DesignationsController']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
 });
 $ROUTES->attach('streetNames', "/streets/names", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);

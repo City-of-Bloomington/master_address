@@ -1,17 +1,16 @@
 /**
- * @copyright 2015 City of Bloomington, Indiana
+ * @copyright 2015-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 .dropdown {
     .launcher {
         cursor: pointer; display: inline-table;
 
         &[aria-expanded="true"] + .links {
-            opacity: 1;
+            display:block;
         }
         &[aria-expanded="false"] + .links {
-            opacity: 0;
+            display:none;
         }
     }
     .links {

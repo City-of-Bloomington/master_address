@@ -22,6 +22,19 @@ class NamesController
         return new Views\SearchView($vars);
     }
 
+    public function view(array $params)
+    {
+        if (!empty($_GET['id'])) {
+            try { $name = new Name($_GET['id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        if (isset($name)) {
+            return new Views\InfoView(['name'=>$name]);
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
     public function update(array $params)
     {
     }

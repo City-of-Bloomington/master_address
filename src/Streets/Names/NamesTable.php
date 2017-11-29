@@ -12,6 +12,7 @@ use Blossom\Classes\TableGateway;
 class NamesTable extends TableGateway
 {
     protected $columns = ['id', 'name', 'direction', 'post_direction', 'suffix_code_id'];
+    public static $default_sort = ['n.name', 'n.direction', 'n.post_direction'];
 
     public function __construct() { parent::__construct('street_names', __namespace__.'\Name'); }
 
@@ -43,7 +44,7 @@ class NamesTable extends TableGateway
         return $joins;
     }
 
-    public function find(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
+    public function find(array $fields=null, array $order=null, int $itemsPerPage=null, int $currentPage=null)
     {
         $select = $this->queryFactory->newSelect();
         $select->cols(['n.*'])
@@ -89,11 +90,12 @@ class NamesTable extends TableGateway
 
         foreach ($this->getJoins($fields) as $j) { $select->join($j[0], $j[1], $j[2]); }
 
-        if ($order) { $select->orderBy($order); }
+        if (!$order) { $order = self::$default_sort; }
+        $select->orderBy($order);
 		return parent::performSelect($select, $itemsPerPage, $currentPage);
     }
 
-    public function search(array $fields=null, array $order=['name'], int $itemsPerPage=null, int $currentPage=null)
+    public function search(array $fields=null, array $order=null, int $itemsPerPage=null, int $currentPage=null)
     {
         $select = $this->queryFactory->newSelect();
         $select->cols(['n.*'])
@@ -139,7 +141,8 @@ class NamesTable extends TableGateway
 
         foreach ($this->getJoins($fields) as $j) { $select->join($j[0], $j[1], $j[2]); }
 
-        if ($order) { $select->orderBy($order); }
+        if (!$order) { $order = self::$default_sort; }
+        $select->orderBy($order);
 		return parent::performSelect($select, $itemsPerPage, $currentPage);
     }
 }

@@ -194,7 +194,9 @@ msgstr[0] "Street"
 msgstr[1] "Streets"
 
 msgid "streetDesignation"
-msgstr "Designation"
+msgid_plural "streetDesignations"
+msgstr[0] "Designation"
+msgstr[1] "Designations"
 
 msgid "streetStatus"
 msgid_plural "streetStatuses"

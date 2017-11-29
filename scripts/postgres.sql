@@ -100,7 +100,7 @@ create table subdivisions (
 );
 
 -- mast_street_name_type_master
-create table street_name_types (
+create table street_designation_types (
     id          serial      primary key,
     name        varchar(16) not null unique,
     description varchar(64) not null
@@ -124,7 +124,7 @@ create table street_names (
     foreign key (suffix_code_id) references street_types(id)
 );
 
-create table street_street_names (
+create table street_designations (
     id             serial primary key,
     street_id      int    not null,
     street_name_id int    not null,
@@ -132,9 +132,9 @@ create table street_street_names (
     start_date     date,
     end_date       date,
     rank           smallint,
-    foreign key (street_id     ) references streets          (id),
-    foreign key (street_name_id) references street_names     (id),
-    foreign key (type_id       ) references street_name_types(id)
+    foreign key (street_id     ) references streets                 (id),
+    foreign key (street_name_id) references street_names            (id),
+    foreign key (type_id       ) references street_designation_types(id)
 );
 
 create table state_roads (

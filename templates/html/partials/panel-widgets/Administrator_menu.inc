@@ -7,25 +7,25 @@ use Application\People\Person;
 
 $links  = [];
 $routes = [
-    'jurisdictions'          => 'jurisdiction',
-    'towns'                  => 'town',
-    'townships'              => 'township',
-    'people'                 => 'person',
-    'users'                  => 'user',
-    'streetTypes'            => 'streetType',
-    'streetDesignationTypes' => 'streetDesignationType',
-    'subunitTypes'           => 'subunitType',
-    'locationTypes'          => 'locationType',
-    'purposes'               => 'purpose',
-    'plats'                  => 'plat',
-    'subdivisions'           => 'subdivision',
-    'streets'                => 'street'
+    'jurisdictions' => 'jurisdiction',
+    'towns'         => 'town',
+    'townships'     => 'township',
+    'people'        => 'person',
+    'users'         => 'user',
+    'streetTypes'   => 'streetType',
+    'subunitTypes'  => 'subunitType',
+    'locationTypes' => 'locationType',
+    'purposes'      => 'purpose',
+    'plats'         => 'plat',
+    'subdivisions'  => 'subdivision',
+    'streets'       => 'street'
 ];
 foreach ($routes as $plural=>$singular) {
     if (Person::isAllowed($plural, 'index')) {
         $links[] = [
             'url'   => parent::generateUri("$plural.index"),
-            'label' => $this->_([$singular, $plural, 2])];
+            'label' => $this->_([$singular, $plural, 2])
+        ];
     }
 }
 
