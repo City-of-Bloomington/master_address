@@ -13,10 +13,11 @@ class Controller
 	{
 		$table = new PeopleTable();
 
-		$page = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-		$people = $table->find(null, ['lastname'], 20, $page);
+		$page    =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+		$search  = (!empty($_GET['firstname']) || !empty($_GET['lastname']) || !empty($_GET['email'])) ? $_GET : null;
+        $results = $search ? $table->search($search, null, 20, $page) : null;
 
-		return new Views\ListView(['people'=>$people]);
+		return new Views\SearchView(['people'=>$results]);
 	}
 
 	public function view(array $params)
