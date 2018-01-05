@@ -31,6 +31,9 @@ class DesignationsController
                 try {
                     $request = new Messages\UpdateRequest($_POST);
                     $designation->update($request);
+                    if (isset($_SESSION['active_form'])) {
+                        unset($_SESSION['active_form'];
+                    }
                     header('Location: '.View::generateUrl('streets.view', ['id'=>$designation->getStreet_id()]));
                     exit();
                 }
@@ -42,6 +45,10 @@ class DesignationsController
                 if (isset($d['end_date'  ])) { $d['endDate'  ] = $d['end_date'  ]; }
 
                 $request = new Messages\UpdateRequest($d);
+            }
+
+            if (isset($request)) {
+                $_SESSION['active_form']['request'] = $request;
             }
 
             return new Views\UpdateView(['request'=>$request]);
