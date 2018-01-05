@@ -14,14 +14,14 @@ class Controller
 {
     public function index(array $params)
     {
-        $vars = ['streets' => null];
+        $streets = null;
 
         if (!empty($_GET['street'])) {
             $parse = Parser::parse($_GET['street'], 'street');
             $table = new StreetsTable();
-            $vars['streets'] = $table->search($parse);
+            $streets = $table->search($parse);
         }
-        return new Views\SearchView($vars);
+        return new Views\SearchView(['streets'=>$streets]);
     }
 
     public function view(array $params)
