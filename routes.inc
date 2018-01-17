@@ -8,15 +8,13 @@ $rf = new \Aura\Router\RouterFactory(BASE_URI);
 $ROUTES = $rf->newInstance();
 
 $ROUTES->add('home.index', '/')->setValues(['controller'=>'Application\Addresses\Controller', 'action'=>'index']);
-
 $ROUTES->attach('login', '/login', function ($r) {
-    $r->setValues(['controller'=>'Application\People\LoginController']);
+    $r->setValues(['controller'=>'Application\LoginController']);
 
     $r->add('login',  '/login') ->addValues(['action'=>'login' ]);
     $r->add('logout', '/logout')->addValues(['action'=>'logout']);
     $r->add('index',  '')       ->addValues(['action'=>'index' ]);
 });
-
 $ROUTES->attach('users', '/users', function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=>'Application\People\UsersController']);
@@ -27,7 +25,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 });
 
 $tables = [
-    'towns', 'townships', 'jurisdictions'
+    'towns'#, 'townships', 'jurisdictions'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
@@ -52,9 +50,10 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    foreach (\Application\Subunits\Subunit::$actions as $a) {
-        $r->add($a, "/$a")->addValues(['action'=>$a]);
-    }
+
+    #foreach (\Application\Subunits\Subunit::$actions as $a) {
+    #    $r->add($a, "/$a")->addValues(['action'=>$a]);
+    #}
 });
 $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
@@ -80,9 +79,9 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Streets\Controller']);
 
-    foreach (\Application\Streets\Street::$actions as $a) {
-        $r->add($a, "/$a")->addValues(['action'=>$a]);
-    }
+    #foreach (\Application\Streets\Street::$actions as $a) {
+    #    $r->add($a, "/$a")->addValues(['action'=>$a]);
+    #}
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
 });
@@ -90,9 +89,9 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);
 
-    foreach (\Application\Addresses\Address::$actions as $a) {
-        $r->add($a, "/$a")->addValues(['action'=>$a]);
-    }
+    #foreach (\Application\Addresses\Address::$actions as $a) {
+    #    $r->add($a, "/$a")->addValues(['action'=>$a]);
+    #}
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
 });

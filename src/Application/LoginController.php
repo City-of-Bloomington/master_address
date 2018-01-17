@@ -3,9 +3,14 @@
  * @copyright 2012-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\People;
+namespace Application;
 
+use Blossom\Classes\Database;
 use Blossom\Classes\View;
+
+use Domain\Authorization\IdentityService;
+use Domain\Users\Entities\User;
+use Domain\Users\DataStorage\PdoUsersRepository;
 
 class LoginController
 {
@@ -40,7 +45,10 @@ class LoginController
 		// and even if they have a person record, they may not
 		// have a user account for that person record.
 		try {
-			$_SESSION['USER'] = new Person(\phpCAS::getUser());
+            $repo = new PdoUsersRepository(Database::getConnection());
+            $identity = new IdentityService($repo);
+            $_SESSION['USER'] = $identity(\phpCAS::getUser());
+
 			header("Location: {$this->return_url}");
 			exit();
 		}
@@ -48,7 +56,7 @@ class LoginController
 			$_SESSION['errorMessages'][] = $e;
 		}
 
-		return new \Application\People\Views\LoginView([
+		return new Views\LoginView([
             'return_url' => $this->return_url
 		]);
 	}
@@ -74,7 +82,7 @@ class LoginController
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		return new \Application\People\Views\LoginView([
+		return new Views\LoginView([
             'return_url'=>$this->return_url
         ]);
 	}

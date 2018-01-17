@@ -4,7 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 if (isset($_SESSION['USER'])) {
-    $name = self::escape($_SESSION['USER']->getFullname());
+
+    $name = self::escape("{$_SESSION['USER']->firstname} {$_SESSION['USER']->lastname}");
     $links = [
         ['url'=>BASE_URI.'/login/logout', 'label'=>$this->_('logout'    )],
         ['url'=>BASE_URI.'/account',      'label'=>$this->_('my_account')]

@@ -10,6 +10,9 @@
         "zendframework/zend-permissions-acl": "@stable"
     },
     "autoload": {
-        "psr-4": {"Application\\": "src/"}
+        "psr-4": {
+            "Application\\": "src/Application/",
+            "Domain\\": "src/Domain"
+        }
     }
 }
