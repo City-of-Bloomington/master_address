@@ -1,11 +1,8 @@
 <?php
 /**
- * @copyright 2015-2016 City of Bloomington, Indiana
+ * @copyright 2015-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-use Blossom\Classes\Block;
-use Blossom\Classes\Template;
-
 /**
  * Grab a timestamp for calculating process time
  */
@@ -18,26 +15,16 @@ $route = $ROUTES->match($p, $_SERVER);
 if ($route) {
     if (isset($route->params['controller']) && isset($route->params['action'])) {
 
-        list($resource, $permission) = explode('.', $route->name);
-        $role = isset($_SESSION['USER']) ? $_SESSION['USER']->getRole() : 'Anonymous';
+        $controller = $route->params['controller'];
+        $action     = $route->params['action'];
 
-        if (   $ZEND_ACL->hasResource($resource)
-            && $ZEND_ACL->isAllowed($role, $resource, $permission)) {
-
-            $controller = $route->params['controller'];
-            $action     = $route->params['action'];
-
-            if (!empty($route->params['id'])) {
-                    $_GET['id'] = $route->params['id'];
-                $_REQUEST['id'] = $route->params['id'];
-            }
-
-            $c = new $controller();
-            $view = $c->$action($route->params);
+        if (!empty($route->params['id'])) {
+                $_GET['id'] = $route->params['id'];
+            $_REQUEST['id'] = $route->params['id'];
         }
-        else {
-            $view = new \Application\Views\ForbiddenView();
-        }
+
+        $c = new $controller();
+        $view = $c->$action($route->params);
     }
 }
 else {

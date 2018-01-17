@@ -1,33 +1,29 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+declare (strict_types=1);
+use Domain\Authorization\AuthorizationService as Auth;
 
-$ZEND_ACL = new Acl();
-$ZEND_ACL->addRole(new Role('Anonymous'))
-		 ->addRole(new Role('Public'),   'Anonymous')
-		 ->addRole(new Role('Engineering'), 'Public')
-		 ->addRole(new Role('GIS'))
-		 ->addRole(new Role('Administrator'));
+$permitted = [
+    Auth::ROLE_ANONYMOUS => [
+        'Domain\Addresses\UseCases\Search\Search'
+    ]
+];
 
-/**
- * Create resources for all the routes
- */
-foreach ($ROUTES->getRoutes() as $r) {
-    list($resource, $permission) = explode('.', $r->name);
-    if (!$ZEND_ACL->hasResource($resource)) {
-         $ZEND_ACL->addResource(new Resource($resource));
-    }
-}
-// Permissions for unauthenticated browsing
-$ZEND_ACL->allow(null, 'login');
-$ZEND_ACL->allow(null, ['home'], ['index']);
+$permitted[Auth::ROLE_PUBLIC] = array_merge($permitted[Auth::ROLE_ANONYMOUS], [
+]);
 
-$ZEND_ACL->allow('GIS');
-$ZEND_ACL->deny ('GIS', 'users');
+$permitted[Auth::ROLE_ENGINEER] = array_merge($permitted[Auth::ROLE_PUBLIC], [
+]);
 
-$ZEND_ACL->allow('Administrator');
+$permitted[Auth::ROLE_GIS] = array_merge($permitted[Auth::ROLE_ENGINEER], [
+    'Domain\Towns\UseCases\Info\Info',
+    'Domain\Towns\UseCases\Search\Search'
+]);
+
+$permitted[Auth::ROLE_ADMIN] = array_merge($permitted[Auth::ROLE_GIS], [
+]);
+
+$ACL = new Auth($permitted);
