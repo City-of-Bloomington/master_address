@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain;
 
-use Domain\Authorization\AuthorizationService;
+use Domain\Auth\AuthorizationService;
 
 abstract class UseCase
 {

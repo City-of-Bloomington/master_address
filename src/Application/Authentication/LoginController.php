@@ -3,22 +3,26 @@
  * @copyright 2012-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application;
+namespace Application\Authentication;
 
 use Blossom\Classes\Database;
 use Blossom\Classes\View;
 
-use Domain\Authorization\IdentityService;
+use Domain\Auth\AuthenticationService;
 use Domain\Users\Entities\User;
 use Domain\Users\DataStorage\PdoUsersRepository;
 
 class LoginController
 {
 	private $return_url;
+	private $repo;
+	private $auth;
 
 	public function __construct()
 	{
 		$this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
+		$this->repo = new PdoUsersRepository(Database::getConnection());
+		$this->auth = new AuthenticationService($this->repo);
 	}
 
 	/**
@@ -45,9 +49,8 @@ class LoginController
 		// and even if they have a person record, they may not
 		// have a user account for that person record.
 		try {
-            $repo = new PdoUsersRepository(Database::getConnection());
-            $identity = new IdentityService($repo);
-            $_SESSION['USER'] = $identity(\phpCAS::getUser());
+            $this->auth->identify(\phpCAS::getUser());
+            $_SESSION['USER'] = $this->auth->identify(\phpCAS::getUser());
 
 			header("Location: {$this->return_url}");
 			exit();
@@ -56,9 +59,7 @@ class LoginController
 			$_SESSION['errorMessages'][] = $e;
 		}
 
-		return new Views\LoginView([
-            'return_url' => $this->return_url
-		]);
+		return new LoginView(['return_url' => $this->return_url]);
 	}
 
 	/**
@@ -68,23 +69,15 @@ class LoginController
 	{
 		if (isset($_POST['username'])) {
 			try {
-				$person = new Person($_POST['username']);
-				if ($person->authenticate($_POST['password'])) {
-					$_SESSION['USER'] = $person;
-					header('Location: '.$this->return_url);
-					exit();
-				}
-				else {
-					throw new \Exception('invalidLogin');
-				}
+                $_SESSION['USER'] = $this->auth->authenticate($_POST['username'], $_POST['password']);
+                header('Location: '.$this->return_url);
+                exit();
 			}
 			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		return new Views\LoginView([
-            'return_url'=>$this->return_url
-        ]);
+		return new LoginView(['return_url'=>$this->return_url]);
 	}
 
 	public function logout(array $params)

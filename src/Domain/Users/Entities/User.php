@@ -8,14 +8,7 @@ namespace Domain\Users\Entities;
 
 class User
 {
-    public $id;
-    public $firstname;
-    public $lastname;
-    public $email;
-
-    public $username;
-    public $role;
-    public $authentication_method;
+    use UserFields;
 
     public function __construct(array $data=null)
     {

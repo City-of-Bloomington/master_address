@@ -7,39 +7,56 @@ declare (strict_types=1);
 namespace Domain\Users\DataStorage;
 
 use Domain\PdoRepository;
-use Domain\Users\Entities\User;
 use Domain\Users\UseCases\Search\SearchRequest;
 
 class PdoUsersRepository extends PdoRepository implements UsersRepository
 {
-    public static $FIELDS = [
-        'id', 'firstname', 'lastname', 'email',
-        'username', 'role', 'authentication_method'
-    ];
+    public static function COLUMNS()
+    {
+        return get_class_vars('\Domain\Users\Entities\UserFields');
+    }
 
     public static $DEFAULT_SORT = ['lastname', 'firstname'];
 
-    private function loadByKey(string $key, $value): User
+    private function loadByKey(string $key, $value): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols(self::$FIELDS)->from('people');
+        $select->cols(self::COLUMNS())->from('people');
         $select->where("$key=?", $value);
         $result = $this->performSelect($select);
-        if (count($result['rows'])) {
-            return new User($result['rows'][0]);
+        if ( count($result['rows'])) {
+            return $result['rows'][0];
         }
         throw new \Exception('users/unknown');
     }
-    public function loadById      (int    $id      ): User { return $this->loadByKey('id',       $id); }
-    public function loadByUsername(string $username): User { return $this->loadByKey('username', $username); }
+    public function loadById      (int    $id      ): array { return $this->loadByKey('id',       $id); }
+    public function loadByUsername(string $username): array { return $this->loadByKey('username', $username); }
+
+    public function find(SearchRequest $req): array
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->cols(self::COLUMNS())->from('people');
+
+        foreach (self::COLUMNS() as $f) {
+            if (!empty($req->$f)) {
+                $select->where("$f=?", $req->$f);
+            }
+        }
+        $order = $req->order ? $req->order : self::$DEFAULT_SORT;
+        $select->orderBy($order);
+
+        echo $select->getStatement()."\n";
+        $result = $this->performSelect($select, $req->itemsPerPage, $req->currentPage);
+        return $result;
+    }
 
 
     public function search(SearchRequest $req): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols(self::$FIELDS)->from('people');
+        $select->cols(self::COLUMNS())->from('people');
 
-        foreach (self::$FIELDS as $f) {
+        foreach (self::COLUMNS() as $f) {
             if (!empty($req->$f)) {
                 $select->where("$f like ?", $req->$f);
             }

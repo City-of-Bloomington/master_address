@@ -9,7 +9,7 @@ $ROUTES = $rf->newInstance();
 
 $ROUTES->add('home.index', '/')->setValues(['controller'=>'Application\Addresses\Controller', 'action'=>'index']);
 $ROUTES->attach('login', '/login', function ($r) {
-    $r->setValues(['controller'=>'Application\LoginController']);
+    $r->setValues(['controller'=>'Application\Authentication\LoginController']);
 
     $r->add('login',  '/login') ->addValues(['action'=>'login' ]);
     $r->add('logout', '/logout')->addValues(['action'=>'logout']);
