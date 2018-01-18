@@ -12,7 +12,7 @@ use Domain\Users\UseCases\Search\SearchRequest;
 
 interface UsersRepository
 {
-    public function loadById(int $id): User;
-    public function loadByUsername(string $username): User;
+    public function loadById(int $id): array;
+    public function loadByUsername(string $username): array;
     public function search(SearchRequest $req) : array;
 }

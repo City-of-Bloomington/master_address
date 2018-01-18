@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-use Domain\Authorization\AuthorizationService as Auth;
+use Domain\Auth\AuthorizationService as Auth;
 
 $permitted = [
     Auth::ROLE_ANONYMOUS => [
@@ -26,4 +26,4 @@ $permitted[Auth::ROLE_GIS] = array_merge($permitted[Auth::ROLE_ENGINEER], [
 $permitted[Auth::ROLE_ADMIN] = array_merge($permitted[Auth::ROLE_GIS], [
 ]);
 
-$ACL = new Auth($permitted);
+return $permitted;
