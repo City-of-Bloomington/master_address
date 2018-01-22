@@ -1,12 +1,12 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Templates\Helpers;
 
-use Blossom\Classes\Helper;
-use Blossom\Classes\View;
+use Application\Helper;
+use Application\View;
 
 class Field extends Helper
 {

@@ -13,7 +13,13 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
 {
     public static function COLUMNS()
     {
-        return get_class_vars('\Domain\Users\Entities\UserFields');
+        static $cols;
+        if (!$cols) {
+            foreach (get_class_vars('\Domain\Users\Entities\UserFields') as $k=>$v) {
+                $cols[] = $k;
+            }
+        }
+        return $cols;
     }
 
     public static $DEFAULT_SORT = ['lastname', 'firstname'];
@@ -27,7 +33,6 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
         if ( count($result['rows'])) {
             return $result['rows'][0];
         }
-        throw new \Exception('users/unknown');
     }
     public function loadById      (int    $id      ): array { return $this->loadByKey('id',       $id); }
     public function loadByUsername(string $username): array { return $this->loadByKey('username', $username); }

@@ -5,21 +5,30 @@
  */
 namespace Application\Towns;
 
-use Blossom\Classes\View;
+use Blossom\Classes\Database;
+use Application\View;
+
+use Domain\Towns\UseCases\Search\Search;
+use Domain\Towns\UseCases\Search\SearchRequest;
 
 class Controller
 {
+    private $di;
+
+    public function __construct()
+    {
+        global $DI;
+        $this->di = $DI;
+    }
+
     public function index(array $params)
     {
-        $table = new TownsTable();
-        $list  = $table->find();
+        $search = $this->di->get('Domain\Towns\UseCases\Search\Search');
+        $user   = isset($_SESSION['USER']) ? $_SESSION['USER'] : null;
+        $req    = new SearchRequest($user);
+        $res    = $search($req);
 
-        return new \Application\Views\Generic\ListView([
-            'list'     => $list,
-            'plural'   => 'towns',
-            'singular' => 'town',
-            'fields'   => array_keys(Town::$fieldmap)
-        ]);
+        return new Views\ListView($res);
     }
 
     public function update(array $params)

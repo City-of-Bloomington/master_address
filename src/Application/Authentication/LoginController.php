@@ -6,7 +6,7 @@
 namespace Application\Authentication;
 
 use Blossom\Classes\Database;
-use Blossom\Classes\View;
+use Application\View;
 
 use Domain\Auth\AuthenticationService;
 use Domain\Users\Entities\User;
