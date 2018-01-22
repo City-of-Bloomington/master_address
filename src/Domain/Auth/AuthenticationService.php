@@ -20,7 +20,10 @@ class AuthenticationService
 
     public function identify(string $username): User
     {
-        return new User($this->repo->loadByUsername($username));
+        $row = $this->repo->loadByUsername($username);
+        if ($row) {
+            return new User($row);
+        }
     }
 
     /**
@@ -31,17 +34,19 @@ class AuthenticationService
     public function authenticate(string $username, string $password)
     {
         $row = $this->repo->loadByUsername($username);
-        switch ($row['authentication_method']) {
-            case 'local':
-                if ($row['password'] == $this->password_hash($password)) {
-                    return new User($row);
-                }
-            break;
+        if ($row && !empty($row['authentication_method'])) {
+            switch ($row['authentication_method']) {
+                case 'local':
+                    if ($row['password'] == $this->password_hash($password)) {
+                        return new User($row);
+                    }
+                break;
 
-            default:
-                #$method = $row['authentication_method'];
-                #$class = $DIRECTORY_CONFIG[$method]['classname'];
-                #return $class::authenticate($this->getUsername(),$password);
+                default:
+                    #$method = $row['authentication_method'];
+                    #$class = $DIRECTORY_CONFIG[$method]['classname'];
+                    #return $class::authenticate($this->getUsername(),$password);
+            }
         }
     }
 

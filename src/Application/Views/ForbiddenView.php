@@ -5,7 +5,7 @@
  */
 namespace Application\Views;
 
-use Blossom\Classes\Template;
+use Application\Template;
 
 class ForbiddenView extends Template
 {
@@ -14,5 +14,8 @@ class ForbiddenView extends Template
         header('HTTP/1.1 403 Forbidden', true, 403);
 
         parent::__construct('default', 'html', $vars);
+        $_SESSION['errorMessages'][] = isset($_SESSION['USER'])
+            ? new \Exception('noAccessAllowed')
+            : new \Exception('notLoggedIn');
     }
 }
