@@ -15,10 +15,12 @@ class ListView extends Template
     public function __construct(SearchResponse $response)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
+        parent::__construct('default', $format);
+
         $vars = [
             'title' => $this->_(['town', 'towns', count($response->towns)])
         ];
-        parent::__construct('default', $format, $vars);
+        $this->vars = $vars;
 
         if (count($response->errors)) {
             $_SESSION['errorMessages'][] = $response->errors;
