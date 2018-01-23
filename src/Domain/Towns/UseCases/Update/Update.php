@@ -22,11 +22,11 @@ class Update
     public function __invoke(UpdateRequest $req): UpdateResponse
     {
         $validate = new Validate();
-        $res = $validate(new Town((array)$req));
-        if ($res->errors) { return new UpdateResponse(null, $res->errors); }
+        $validation = $validate(new Town((array)$req));
+        if ($validation->errors) { return new UpdateResponse(null, $validation->errors); }
 
         try {
-            $id  = $this->repo->save($req);
+            $id  = $this->repo->save($validation->town);
             $res = new UpdateResponse($id);
         }
         catch (\Exception $e) {

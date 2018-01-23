@@ -16,6 +16,7 @@ abstract class PdoRepository
 
     protected $tablename;
     protected $entityClass;
+    protected $primaryKey = 'id';
 
     public function __construct(\PDO $pdo)
     {
@@ -63,5 +64,34 @@ abstract class PdoRepository
             'rows'  => $query->fetchAll(\PDO::FETCH_ASSOC),
             'total' => $total
         ];
+	}
+
+	protected function saveEntity($entity): int
+	{
+        $data = [];
+        foreach ($entity as $k=>$v) {
+            if ($k != $this->primaryKey) { $data[$k] = $v; }
+        }
+
+        if ($entity->id) {
+            // Update
+            $update = $this->queryFactory->newUpdate();
+            $update->table($this->tablename)
+                   ->cols($data)
+                   ->where("{$this->primaryKey}=?", $entity->id);
+            $query = $this->pdo->prepare($update->getStatement());
+            $query->execute($update->getBindValues());
+            return $entity->id;
+        }
+        else {
+            // Insert
+            $insert = $this->queryFactory->newInsert();
+            $insert->into($this->tablename)
+                   ->cols($data);
+            $query = $this->pdo->prepare($insert->getStatement());
+            $query->execute($insert->getBindValues());
+            $pk = $insert->getLastInsertIdName($this->primaryKey);
+            return (int)$this->pdo->lastInsertId($pk);
+        }
 	}
 }
