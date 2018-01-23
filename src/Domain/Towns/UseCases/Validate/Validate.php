@@ -12,9 +12,6 @@ class Validate
 {
     public function __invoke(Town $town): ValidateResponse
     {
-        echo "Validating\n";
-        print_r($town);
-
         $errors = [];
         if (empty($town->name) || empty($town->code)) {
             $errors[] = 'missingRequiredFields';

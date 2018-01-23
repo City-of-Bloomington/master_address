@@ -52,25 +52,6 @@ class PdoTownsRepository extends PdoRepository implements TownsRepository
      */
     public function save(Town $town): int
     {
-        if ($town->id) {
-            // Update
-            $update = $this->queryFactory->newUpdate();
-            $update->table($this->tablename)
-                   ->cols(['name'=>$town->name, 'code'=>$town->code])
-                   ->where('id=?', $town->id);
-            $query = $this->pdo->prepare($update->getStatement());
-            $query->execute($update->getBindValues());
-            return $town->id;
-        }
-        else {
-            // Insert
-            $insert = $this->queryFactory->newInsert();
-            $insert->into($this->tablename)
-                   ->cols(['name'=>$town->name, 'code'=>$town->code]);
-            $query = $this->pdo->prepare($insert->getStatement());
-            $query->execute($insert->getBindValues());
-            $pk = $insert->getLastInsertIdName('id');
-            return (int)$this->pdo->lastInsertId($pk);
-        }
+        return parent::saveEntity($town);
     }
 }
