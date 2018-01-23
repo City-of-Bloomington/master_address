@@ -4,10 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Township $this->township
  */
-$fields = ['id', 'name', 'code', 'quarterCode'];
+$fields = ['id', 'name', 'code', 'quarter_code'];
 foreach ($fields as $f) {
-    $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->township->$get());
+    $$f = parent::escape($this->township->$f);
 }
 $title = $id ? $this->_('township_edit') : $this->_('township_add');
 ?>
@@ -37,10 +36,10 @@ $title = $id ? $this->_('township_edit') : $this->_('township_add');
                     'attr'     => ['size'=>2, 'maxlength'=>2]
                 ]);
                 echo $h->field([
-                    'name'     => 'quarterCode',
-                    'id'       => 'quarterCode',
-                    'label'    => $this->_('quarterCode'),
-                    'value'    => $quarterCode,
+                    'name'     => 'quarter_code',
+                    'id'       => 'quarter_code',
+                    'label'    => $this->_('quarter_code'),
+                    'value'    => $quarter_code,
                     'attr'     => ['size'=>1, 'maxlength'=>1]
                 ]);
 

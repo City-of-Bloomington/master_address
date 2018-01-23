@@ -152,7 +152,7 @@ msgstr "Edit Township"
 msgid "code"
 msgstr "Code"
 
-msgid "quarterCode"
+msgid "quarter_code"
 msgstr "Quarter Code"
 
 msgid "jurisdiction"
