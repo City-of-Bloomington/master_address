@@ -14,10 +14,24 @@ abstract class PdoRepository
     protected $pdo;
     protected $queryFactory;
 
+    protected $tablename;
+    protected $entityClass;
+
     public function __construct(\PDO $pdo)
     {
         $this->pdo          = $pdo;
         $this->queryFactory = new QueryFactory(ucfirst($pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)));
+    }
+
+    public function columns(): array
+    {
+        static $cols;
+        if (!$cols) {
+            foreach (get_class_vars($this->entityClass) as $k=>$v) {
+                $cols[] = $k;
+            }
+        }
+        return $cols;
     }
 
 	public function performSelect(SelectInterface $select, int $itemsPerPage=null, int $currentPage=null) : array

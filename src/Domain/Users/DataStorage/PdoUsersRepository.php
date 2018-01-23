@@ -11,23 +11,15 @@ use Domain\Users\UseCases\Search\SearchRequest;
 
 class PdoUsersRepository extends PdoRepository implements UsersRepository
 {
-    public static function COLUMNS()
-    {
-        static $cols;
-        if (!$cols) {
-            foreach (get_class_vars('\Domain\Users\Entities\UserFields') as $k=>$v) {
-                $cols[] = $k;
-            }
-        }
-        return $cols;
-    }
+    protected $tablename   = 'people';
+    protected $entityClass = '\Domain\Users\Entities\UserFields';
 
     public static $DEFAULT_SORT = ['lastname', 'firstname'];
 
     private function loadByKey(string $key, $value): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols(self::COLUMNS())->from('people');
+        $select->cols($this->columns())->from('people');
         $select->where("$key=?", $value);
         $result = $this->performSelect($select);
         if ( count($result['rows'])) {
@@ -40,9 +32,9 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
     public function find(SearchRequest $req): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols(self::COLUMNS())->from('people');
+        $select->cols($this->columns())->from('people');
 
-        foreach (self::COLUMNS() as $f) {
+        foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
                 $select->where("$f=?", $req->$f);
             }
@@ -59,9 +51,9 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
     public function search(SearchRequest $req): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols(self::COLUMNS())->from('people');
+        $select->cols($this->columns())->from('people');
 
-        foreach (self::COLUMNS() as $f) {
+        foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
                 $select->where("$f like ?", $req->$f);
             }

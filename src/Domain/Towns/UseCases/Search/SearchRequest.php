@@ -12,15 +12,14 @@ class SearchRequest
 {
     public $id;
     public $name;
+    public $code;
 
-    public $requester;
-
-    public function __construct(User $requester=null, array $data=null)
+    public function __construct(array $data=null)
     {
-        $this->requester = $requester;
         if ($data) {
-            if (!empty($data['id'  ])) { $this->id   = $data['id'  ]; }
-            if (!empty($data['name'])) { $this->name = $data['name']; }
+            if (!empty($data['id'  ])) { $this->id   = (int)$data['id'  ]; }
+            if (!empty($data['name'])) { $this->name =      $data['name']; }
+            if (!empty($data['code'])) { $this->code =      $data['code']; }
         }
     }
 }

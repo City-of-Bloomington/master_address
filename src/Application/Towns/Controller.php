@@ -8,8 +8,15 @@ namespace Application\Towns;
 use Blossom\Classes\Database;
 use Application\View;
 
+use Domain\Towns\Entities\Town;
+
+use Domain\Towns\UseCases\Info\Info;
+use Domain\Towns\UseCases\Info\InfoRequest;
 use Domain\Towns\UseCases\Search\Search;
 use Domain\Towns\UseCases\Search\SearchRequest;
+use Domain\Towns\UseCases\Update\Update;
+use Domain\Towns\UseCases\Update\UpdateRequest;
+
 
 class Controller
 {
@@ -24,40 +31,40 @@ class Controller
     public function index(array $params)
     {
         $search = $this->di->get('Domain\Towns\UseCases\Search\Search');
-        $user   = isset($_SESSION['USER']) ? $_SESSION['USER'] : null;
-        $req    = new SearchRequest($user);
-        $res    = $search($req);
+        $res    = $search(new SearchRequest());
 
         return new Views\ListView($res);
     }
 
     public function update(array $params)
     {
-        if (!empty($_REQUEST['id'])) {
-            try { $town = new Town($_REQUEST['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        if (isset($_POST['name'])) {
+            $update   = $this->di->get('Domain\Towns\UseCases\Update\Update');
+            $request  = new UpdateRequest($_POST);
+            $response = $update($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('towns.index'));
+                exit();
+            }
+            else {
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+            $town = new Town(['id'=>$request->id, 'name'=>$request->name]);
+        }
+        elseif (!empty($_REQUEST['id'])) {
+            $info = $this->di->get('Domain\Towns\UseCases\Info\Info');
+            $req  = new InfoRequest((int)$_REQUEST['id']);
+            try {
+                $res  = $info($req);
+                $town = $res->town;
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'] = $res->errors;
+                return new \Application\Views\NotFoundView();
+            }
         }
         else { $town = new Town(); }
 
-        if (isset($town)) {
-            if (isset($_POST['name'])) {
-                try {
-                    $town->handleUpdate($_POST);
-                    $town->save();
-                    header('Location: '.View::generateUrl('towns.index'));
-                    exit();
-                }
-                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-            }
-            return new \Application\Views\Generic\UpdateView([
-                'form'     => 'generic/updateNameCodeForm.inc',
-                'plural'   => 'towns',
-                'singular' => 'town',
-                'object'   => $town
-            ]);
-        }
-        else {
-            return new \Application\Views\NotFoundView();
-        }
+        return new Views\UpdateView($town, isset($response) ? $response : null);
     }
 }
