@@ -15,5 +15,5 @@ interface TownsRepository
 {
     public function   load(InfoRequest   $req): Town;
     public function search(SearchRequest $req): array;
-    public function   save(UpdateRequest $req): int;
+    public function save(Town $town): int;
 }
