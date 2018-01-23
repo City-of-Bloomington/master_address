@@ -3,12 +3,12 @@
  * @copyright 2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-namespace Application\Townships\Views;
+namespace Application\Jurisdictions\Views;
 
 use Application\Block;
 use Application\Template;
 
-use Domain\Townships\UseCases\Search\SearchResponse;
+use Domain\Jurisdictions\UseCases\Search\SearchResponse;
 
 class ListView extends Template
 {
@@ -18,7 +18,7 @@ class ListView extends Template
         parent::__construct('default', $format);
 
         $vars = [
-            'title' => $this->_(['township', 'townships', count($response->townships)])
+            'title' => $this->_('jurisdiction')
         ];
         $this->vars = $vars;
 
@@ -26,7 +26,7 @@ class ListView extends Template
             $_SESSION['errorMessages'][] = $response->errors;
         }
 
-		$vars['townships'] = $response->townships;
-		$this->blocks[] = new Block("townships/list.inc", $vars);
+		$vars['jurisdictions'] = $response->jurisdictions;
+		$this->blocks[] = new Block("jurisdictions/list.inc", $vars);
     }
 }
