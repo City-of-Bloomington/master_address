@@ -20,3 +20,7 @@ $DI->lazyNew('Domain\Users\DataStorage\PdoUsersRepository'));
 $DI->params[ 'Domain\Towns\DataStorage\PdoTownsRepository']['pdo'] = $pdo;
 $DI->set(    'Domain\Towns\DataStorage\TownsRepository',
 $DI->lazyNew('Domain\Towns\DataStorage\PdoTownsRepository'));
+
+$DI->params[ 'Domain\Townships\DataStorage\PdoTownshipsRepository']['pdo'] = $pdo;
+$DI->set(    'Domain\Townships\DataStorage\TownshipsRepository',
+$DI->lazyNew('Domain\Townships\DataStorage\PdoTownshipsRepository'));

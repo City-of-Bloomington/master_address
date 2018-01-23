@@ -25,7 +25,7 @@ $ROUTES->attach('users', '/users', function ($r) {
 });
 
 $tables = [
-    'towns'#, 'townships', 'jurisdictions'
+    'towns', 'townships'#, 'jurisdictions'
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
