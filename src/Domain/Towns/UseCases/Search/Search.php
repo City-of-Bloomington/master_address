@@ -14,9 +14,9 @@ class Search
 {
     private $repo;
 
-    public function __construct(TownsRepository $townsRepository)
+    public function __construct(TownsRepository $repository)
     {
-        $this->repo = $townsRepository;
+        $this->repo = $repository;
     }
 
     public function __invoke(SearchRequest $req): SearchResponse

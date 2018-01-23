@@ -37,9 +37,11 @@ declare (strict_types=1);
             }
 
             $name = parent::escape($t->name);
+            $code = parent::escape($t->code);
             echo "
             <tr><td>$editButton</td>
                 <td>$name</td>
+                <td>$code</td>
             </tr>
             ";
         }

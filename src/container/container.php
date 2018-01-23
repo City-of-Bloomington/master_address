@@ -14,6 +14,12 @@ $DI->params[ 'Domain\Auth\AuthenticationService']['usersRepository'] = $DI->get(
 $DI->set(    'Domain\Auth\AuthenticationService',
 $DI->lazyNew('Domain\Auth\AuthenticationService'));
 
-$DI->params[ 'Domain\Towns\UseCases\Search\Search']['townsRepository'] = $DI->get('Domain\Towns\DataStorage\TownsRepository');
+$DI->params[ 'Domain\Towns\UseCases\Info\Info']['repository'] = $DI->get('Domain\Towns\DataStorage\TownsRepository');
+$DI->set(    'Domain\Towns\UseCases\Info\Info',
+$DI->lazyNew('Domain\Towns\UseCases\Info\Info'));
+$DI->params[ 'Domain\Towns\UseCases\Search\Search']['repository'] = $DI->get('Domain\Towns\DataStorage\TownsRepository');
 $DI->set(    'Domain\Towns\UseCases\Search\Search',
 $DI->lazyNew('Domain\Towns\UseCases\Search\Search'));
+$DI->params[ 'Domain\Towns\UseCases\Update\Update']['repository'] = $DI->get('Domain\Towns\DataStorage\TownsRepository');
+$DI->set(    'Domain\Towns\UseCases\Update\Update',
+$DI->lazyNew('Domain\Towns\UseCases\Update\Update'));

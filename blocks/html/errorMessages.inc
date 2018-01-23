@@ -12,8 +12,7 @@
 	<?php
         $errorDir = "/blocks/html/errorMessages";
 
-		foreach ($this->errorMessages as $e) {
-			$error = $e->getMessage();
+		foreach ($this->errorMessages as $error) {
 			$file = "$errorDir/$error.inc";
 
             if ($this->theme
