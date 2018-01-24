@@ -5,6 +5,7 @@
  */
 namespace Application\Townships;
 
+use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Townships\Entities\Township;
@@ -15,16 +16,8 @@ use Domain\Townships\UseCases\Search\SearchRequest;
 use Domain\Townships\UseCases\Update\Update;
 use Domain\Townships\UseCases\Update\UpdateRequest;
 
-class Controller
+class Controller extends BaseController
 {
-    private $di;
-
-    public function __construct()
-    {
-        global $DI;
-        $this->di = $DI;
-    }
-
     public function index(array $params)
     {
         $search = $this->di->get('Domain\Townships\UseCases\Search\Search');

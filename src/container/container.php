@@ -14,7 +14,7 @@ $DI->params[ 'Domain\Auth\AuthenticationService']['usersRepository'] = $DI->get(
 $DI->set(    'Domain\Auth\AuthenticationService',
 $DI->lazyNew('Domain\Auth\AuthenticationService'));
 
-foreach (['Towns', 'Townships', 'Jurisdictions'] as $t) {
+foreach (['Towns', 'Townships', 'Jurisdictions', 'People'] as $t) {
     foreach (['Info', 'Search', 'Update'] as $a) {
         $DI->params[ "Domain\\$t\\UseCases\\$a\\$a"]["repository"] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
         $DI->set(    "Domain\\$t\\UseCases\\$a\\$a",
