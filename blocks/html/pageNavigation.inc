@@ -4,7 +4,7 @@
  *
  * @copyright 2007-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Blossom\Classes\Paginator $this->paginator
+ * @param Paginator $this->paginator
  */
 use Blossom\Classes\Url;
 $pages = $this->paginator->getPages();

@@ -13,7 +13,7 @@ if ($platform == 'Pgsql' && !empty($conf['schema'])) {
     $pdo->exec("set search_path to $conf[schema]");
 }
 
-foreach (['Users', 'Towns', 'Townships', 'Jurisdictions'] as $t) {
+foreach (['Users', 'Towns', 'Townships', 'Jurisdictions', 'People'] as $t) {
     $DI->params[ "Domain\\$t\\DataStorage\\Pdo{$t}Repository"]["pdo"] = $pdo;
     $DI->set(    "Domain\\$t\\DataStorage\\{$t}Repository",
     $DI->lazyNew("Domain\\$t\\DataStorage\\Pdo{$t}Repository"));

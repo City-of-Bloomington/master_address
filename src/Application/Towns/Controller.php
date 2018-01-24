@@ -5,6 +5,7 @@
  */
 namespace Application\Towns;
 
+use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Towns\Entities\Town;
@@ -16,16 +17,8 @@ use Domain\Towns\UseCases\Update\Update;
 use Domain\Towns\UseCases\Update\UpdateRequest;
 
 
-class Controller
+class Controller extends BaseController
 {
-    private $di;
-
-    public function __construct()
-    {
-        global $DI;
-        $this->di = $DI;
-    }
-
     public function index(array $params)
     {
         $search = $this->di->get('Domain\Towns\UseCases\Search\Search');
@@ -43,9 +36,6 @@ class Controller
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('towns.index'));
                 exit();
-            }
-            else {
-                $_SESSION['errorMessages'] = $response->errors;
             }
             $town = new Town((array)$request);
         }

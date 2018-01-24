@@ -1,26 +1,28 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Person $this->person
+ * @param string $this->title
  */
-use Application\People\Person;
+use Domain\People\Entities\Person;
 
-$fields = ['firstname','lastname','email', 'phone', 'agency', 'type', 'current', 'notification', 'coordination'];
+$fields = ['firstname','lastname','email', 'phone', 'agency', 'contact_type'];
 foreach ($fields as $f) {
-	$get = 'get'.ucfirst($f);
-	$$f  = self::escape($this->person->$get());
+    $$f = parent::escape($this->person->$f);
 }
-$title = $this->person->getId() ? $this->_('person_edit') : $this->_('person_add');
+foreach (['current', 'notification', 'coordination'] as $f) {
+    $$f = $this->person->$f ? 1 : 0;
+}
 ?>
 <section>
     <header>
-        <h1><?= $title; ?></h1>
+        <h1><?= $this->title; ?></h1>
     </header>
 
 	<form method="post" action="<?= self::generateUri('people.update'); ?>">
 		<fieldset><legend><?= $this->_('person_info'); ?></legend>
-			<input name="id" type="hidden" value="<?= $this->person->getId(); ?>" />
+			<input name="id" type="hidden" value="<?= $this->person->id; ?>" />
             <?php
                 $field = $this->template->getHelper('field');
                 echo $field->field(['name'=>'firstname', 'id'=>'firstname', 'label'=>$this->_('firstname'), 'value'=>$firstname, 'required'=>true]);
@@ -31,13 +33,13 @@ $title = $this->person->getId() ? $this->_('person_edit') : $this->_('person_add
                 echo $field->field(['name'=>'phone',     'id'=>'phone',     'label'=>$this->_('phone'),     'value'=>$phone ]);
 
                 $options = [['value'=>'']];
-                foreach (Person::getTypes() as $t) { $options[] = ['value'=>$t]; }
+                foreach (Person::CONTACT_TYPES() as $t) { $options[] = ['value'=>$t]; }
                 echo $field->field([
-                    'name'    => 'type',
-                    'id'      => 'type',
+                    'name'    => 'contact_type',
+                    'id'      => 'contact_type',
                     'label'   => $this->_('type'),
                     'type'    => 'select',
-                    'value'   => $type,
+                    'value'   => $contact_type,
                     'options' => $options
                 ]);
 

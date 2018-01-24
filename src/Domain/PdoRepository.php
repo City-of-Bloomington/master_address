@@ -53,7 +53,7 @@ abstract class PdoRepository
             $total  = (int)$result[0]['count'];
 
             $select->limit ($itemsPerPage);
-            $select->offset($itemsPerPage * ($currentPageNumber-1));
+            $select->offset($itemsPerPage * ($currentPage-1));
         }
 
 

@@ -5,6 +5,7 @@
  */
 namespace Application\Jurisdictions;
 
+use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Jurisdictions\Entities\Jurisdiction;
@@ -16,16 +17,8 @@ use Domain\Jurisdictions\UseCases\Update\Update;
 use Domain\Jurisdictions\UseCases\Update\UpdateRequest;
 
 
-class Controller
+class Controller extends BaseController
 {
-    private $di;
-
-    public function __construct()
-    {
-        global $DI;
-        $this->di = $DI;
-    }
-
     public function index(array $params)
     {
         $search = $this->di->get('Domain\Jurisdictions\UseCases\Search\Search');
