@@ -20,7 +20,7 @@ class Person
     public $notification;
     public $coordination;
 
-    public function __construct(array $data=null)
+    public function __construct(?array $data=null)
     {
         if ($data) {
             if (!empty($data['id'       ])) { $this->id        = (int)$data['id'  ]; }

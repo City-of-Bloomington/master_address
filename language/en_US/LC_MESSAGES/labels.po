@@ -79,7 +79,7 @@ msgstr "Username"
 msgid "password"
 msgstr "Password"
 
-msgid "authenticationMethod"
+msgid "authentication_method"
 msgstr "Authentication"
 
 msgid "role"
