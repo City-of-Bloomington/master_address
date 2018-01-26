@@ -16,15 +16,15 @@ use Domain\People\UseCases\Update\UpdateRequest;
 
 class Controller extends BaseController
 {
+    const ITEMS_PER_PAGE = 20;
+
 	public function index(array $params)
 	{
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-		$query  = (!empty($_GET['firstname']) || !empty($_GET['lastname']) || !empty($_GET['email'])) ? $_GET : null;
-
         $search = $this->di->get('Domain\People\UseCases\Search\Search');
-        $res    = $search(new SearchRequest($query, null, Views\SearchView::ITEMS_PER_PAGE, $page));
+        $res    = $search(new SearchRequest($_GET, null, self::ITEMS_PER_PAGE, $page));
 
-        return new Views\SearchView($res, $page);
+        return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
 	}
 
 	public function view(array $params)

@@ -1,18 +1,18 @@
 <?php
 /**
- * @copyright 2012-2017 City of Bloomington, Indiana
+ * @copyright 2012-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Authentication;
 
-use Blossom\Classes\Database;
+use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Auth\AuthenticationService;
 use Domain\Users\Entities\User;
 use Domain\Users\DataStorage\PdoUsersRepository;
 
-class LoginController
+class LoginController extends BaseController
 {
 	private $return_url;
 	private $repo;
@@ -20,9 +20,10 @@ class LoginController
 
 	public function __construct()
 	{
+        parent::__construct();
+
 		$this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
-		$this->repo = new PdoUsersRepository(Database::getConnection());
-		$this->auth = new AuthenticationService($this->repo);
+		$this->auth = $this->di->get('Domain\Auth\AuthenticationService');
 	}
 
 	/**

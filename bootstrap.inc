@@ -27,7 +27,7 @@ include SITE_HOME.'/site_config.inc';
  * Enable autoloading for the PHP libraries
  */
 $loader = require APPLICATION_HOME.'/vendor/autoload.php';
-$loader->addPsr4('Site\\', SITE_HOME);
+$loader->addPsr4('Site\\', SITE_HOME.'/src');
 
 include APPLICATION_HOME.'/src/container/container.php';
 include APPLICATION_HOME.'/routes.inc';

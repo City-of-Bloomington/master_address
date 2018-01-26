@@ -12,18 +12,26 @@ use Domain\Users\DataStorage\UsersRepository;
 class AuthenticationService
 {
     private $repo;
+    private $config;
 
-    public function __construct(UsersRepository $usersRepository)
+    public function __construct(UsersRepository $repository, array $config)
     {
-        $this->repo = $usersRepository;
+        $this->repo   = $repository;
+        $this->config = $config;
     }
 
-    public function identify(string $username): User
+    public function identify(string $username): ?User
     {
-        $row = $this->repo->loadByUsername($username);
-        if ($row) {
-            return new User($row);
+        $user = $this->repo->loadByUsername($username);
+        if ($user) {
+            return $user;
         }
+    }
+
+    public function externalIdentify(string $method, string $username): ?ExternalIdentity
+    {
+        $o = $this->loadAuthenticationMethod($method);
+        return $o->identify($username);
     }
 
     /**
@@ -31,27 +39,39 @@ class AuthenticationService
      *
      * @return User
      */
-    public function authenticate(string $username, string $password)
+    public function authenticate(string $username, string $password): ?User
     {
         $row = $this->repo->loadByUsername($username);
         if ($row && !empty($row['authentication_method'])) {
             switch ($row['authentication_method']) {
                 case 'local':
-                    if ($row['password'] == $this->password_hash($password)) {
+                    if ($row['password'] == self::password_hash($password)) {
                         return new User($row);
                     }
                 break;
 
                 default:
-                    #$method = $row['authentication_method'];
-                    #$class = $DIRECTORY_CONFIG[$method]['classname'];
-                    #return $class::authenticate($this->getUsername(),$password);
+                    $o = $this->loadAuthenticationMethod($row['authentication_method']);
+                    if ($o->authenticate($username, $password)) {
+                        return new User($row);
+                    }
             }
         }
     }
 
-    public function password_hash(string $password): string
+    public static function password_hash(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    public function getAuthenticationMethods(): array
+    {
+        return array_keys($this->config);
+    }
+
+    private function loadAuthenticationMethod(string $method): AuthenticationInterface
+    {
+        $class = $this->config[$method]['classname'];
+        return new $class($this->config[$method]);
     }
 }

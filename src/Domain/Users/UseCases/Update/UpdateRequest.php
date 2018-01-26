@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\Users\Entities;
+namespace Domain\Users\UseCases\Update;
 
-class User
+class UpdateRequest
 {
     public $id;
     public $firstname;
@@ -15,6 +15,7 @@ class User
 
     public $username;
     public $role;
+    public $password;
     public $authentication_method;
 
     public function __construct(?array $data=null)
@@ -26,6 +27,7 @@ class User
             if (!empty($data['email'    ])) { $this->email     = $data['email'    ]; }
 
             if (!empty($data['username' ])) { $this->username  = $data['username' ]; }
+            if (!empty($data['password' ])) { $this->password  = $data['password' ]; }
             if (!empty($data['role'     ])) { $this->role      = $data['role'     ]; }
             if (!empty($data['authentication_method'])) { $this->authentication_method = $data['authentication_method']; }
         }

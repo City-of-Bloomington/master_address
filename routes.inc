@@ -17,7 +17,7 @@ $ROUTES->attach('login', '/login', function ($r) {
 });
 $ROUTES->attach('users', '/users', function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=>'Application\People\UsersController']);
+    $r->setValues(['controller'=>'Application\Users\Controller']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('delete', '/delete/{id}') ->addValues(['action'=>'delete']);
