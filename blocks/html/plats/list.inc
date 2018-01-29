@@ -1,24 +1,16 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array $this->plats
  */
-use Application\People\Person;
-
-if (!count($this->plats)) {
-    if (isset($_GET['name'])) {
-        echo sprintf($this->_('no_results', 'messages'), $this->_(['plat', 'plats', 2]));
-    }
-}
-else {
 ?>
 <section>
     <header>
         <h1><?= $this->_(['plat', 'plats', count($this->plats)]); ?></h1>
         <div class="tools">
         <?php
-            $userCanEdit = Person::isAllowed('plats', 'update');
+            $userCanEdit = parent::isAllowed('plats', 'update');
             if ($userCanEdit) {
                 $helper = $this->template->getHelper('buttonLink');
                 echo $helper->buttonLink(
@@ -45,14 +37,14 @@ else {
 		<?php
 
 			foreach ($this->plats as $plat) {
-				$uri       = self::generateUri('plats.view', ['id'=>$plat->getId()]);
-				$name      = parent::escape($plat->getName());
-				$type      = parent::escape($plat->getType());
-				$cabinet   = parent::escape($plat->getCabinet());
-				$envelope  = parent::escape($plat->getEnvelope());
-				$township  = $plat->getTownship_id() ? parent::escape($plat->getTownship()->getName()) : '';
-				$startDate = $plat->getStartDate() ? $plat->getStartDate()->format(DATE_FORMAT) : '';
-				$endDate   = $plat->getEndDate  () ? $plat->getEndDate  ()->format(DATE_FORMAT) : '';
+				$uri       = self::generateUri('plats.view', ['id'=>$plat->id]);
+				$name      = parent::escape($plat->name);
+				$type      = parent::escape($plat->plat_type);
+				$cabinet   = parent::escape($plat->cabinet);
+				$envelope  = parent::escape($plat->envelope);
+				$township  = parent::escape($plat->township_name);
+				$startDate = $plat->start_date ? $plat->start_date->format(DATE_FORMAT) : '';
+				$endDate   = $plat->end_date   ? $plat->end_date  ->format(DATE_FORMAT) : '';
 				echo "
 				<tr><td><a href=\"$uri\">$name</a></td>
 					<td>$township</td>
@@ -68,5 +60,3 @@ else {
 		</tbody>
 	</table>
 </div>
-<?php
-}
