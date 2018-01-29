@@ -1,27 +1,30 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
+declare (strict_types=1);
 namespace Application\Plats;
 
-use Blossom\Classes\View;
+use Application\Controller as BaseController;
+use Application\View;
 
-class Controller
+use Domain\Plats\Entities\Plat;
+use Domain\Plats\UseCases\Info\InfoRequest;
+use Domain\Plats\UseCases\Search\SearchRequest;
+use Domain\Plats\UseCases\Update\UpdateRequest;
+
+class Controller extends BaseController
 {
+    const ITEMS_PER_PAGE = 20;
+
     public function index(array $params)
     {
-        $table = new PlatsTable();
+		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+        $search = $this->di->get('Domain\Plats\UseCases\Search\Search');
+        $res    = $search(new SearchRequest($_GET, null, self::ITEMS_PER_PAGE, $page));
 
-        if (isset($_GET['page']) && $_GET['page'] == 'all') {
-            $list = $table->search($_GET);
-        }
-        else {
-            $page  = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-            $list  = $table->search($_GET, null, 20, $page);
-        }
-
-        return new Views\SearchView(['plats'=>$list]);
+        return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
 
     public function view(array $params)

@@ -1,12 +1,11 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param array $this->plats
+ * @param array $this->options
  */
-use Application\Plats\Plat;
-use Application\Townships\TownshipsTable as Townships;
-
-$fields = ['name', 'township_id', 'type', 'cabinet', 'envelope'];
+$fields = ['name', 'township_id', 'plat_type', 'cabinet', 'envelope'];
 foreach ($fields as $f) {
     $$f = !empty($_GET[$f]) ? parent::escape($_GET[$f]) : null;
 }
@@ -28,10 +27,8 @@ foreach ($fields as $f) {
             ]);
 
             $options = [['value'=>'']];
-            $table   = new Townships();
-            $list    = $table->find();
-            foreach ($list as $t) {
-                $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())];
+            foreach ($this->options['townships'] as $t) {
+                $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])];
             }
             echo $h->field([
                 'name'    => 'township_id',
@@ -43,19 +40,18 @@ foreach ($fields as $f) {
             ]);
 
             $options = [['value'=>'']];
-            foreach (Plat::$types as $t) { $options[] = ['value'=>$t]; }
+            foreach ($this->options['plat_types'] as $t) { $options[] = ['value'=>$t]; }
             echo $h->field([
-                'name'    => 'type',
-                'id'      => 'type',
+                'name'    => 'plat_type',
+                'id'      => 'plat_type',
                 'label'   => $this->_('type'),
-                'value'   => $type,
+                'value'   => $plat_type,
                 'type'    => 'select',
                 'options' => $options
             ]);
 
             $options = [['value'=>'']];
-            $cabinets = Plat::getCabinets();
-            foreach ($cabinets as $c) { $options[] = ['value'=>$c]; }
+            foreach ($this->options['cabinets'] as $c) { $options[] = ['value'=>$c]; }
             echo $h->field([
                 'name'    => 'cabinet',
                 'id'      => 'cabinet',
@@ -72,4 +68,14 @@ foreach ($fields as $f) {
             <button type="submit" class="search"><?= $this->_('search'); ?></button>
         </fieldset>
     </form>
+    <?php
+        if (!count($this->plats)) {
+            if (isset($_GET['name'])) {
+                echo sprintf($this->_('no_results', 'messages'), $this->_(['plat', 'plats', 2]));
+            }
+        }
+        else {
+            $this->_include('plats/list.inc');
+        }
+    ?>
 </section>
