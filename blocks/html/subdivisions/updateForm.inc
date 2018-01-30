@@ -1,22 +1,20 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Subdivision $this->subdivision
+ * @param array       $this->options
  */
 use Application\Subdivisions\Subdivision;
 use Application\Townships\TownshipsTable as Townships;
 
 $fields = ['id', 'name', 'township_id', 'phase', 'status'];
 foreach ($fields as $f) {
-    $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->subdivision->$get());
+    $$f = parent::escape($this->subdivision->$f);
 }
-
-$title = $id ? $this->_('subdivision_edit') : $this->_('subdivision_add');
 ?>
 <section>
-    <header><h1><?= $title; ?></h1></header>
+    <header><h1><?= $this->title; ?></h1></header>
     <form method="post" action="<?= parent::generateUri('subdivisions.update'); ?>">
         <fieldset>
             <input name="id" type="hidden" value="<?= $id; ?>" />
@@ -32,9 +30,7 @@ $title = $id ? $this->_('subdivision_edit') : $this->_('subdivision_add');
                 ]);
 
                 $options = [['value'=>'']];
-                $table   = new Townships();
-                $list    = $table->find();
-                foreach ($list as $t) { $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())]; }
+                foreach ($this->options['townships'] as $t) { $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])]; }
                 echo $h->field([
                     'name'    => 'township_id',
                     'id'      => 'township_id',
@@ -45,7 +41,7 @@ $title = $id ? $this->_('subdivision_edit') : $this->_('subdivision_add');
                 ]);
 
                 $options = [];
-                foreach (Subdivision::$statuses as $s) { $options[] = ['value' => $s]; }
+                foreach ($this->options['statuses'] as $s) { $options[] = ['value' => $s]; }
                 echo $h->field([
                     'name'     => 'status',
                     'id'       => 'status',
@@ -57,7 +53,7 @@ $title = $id ? $this->_('subdivision_edit') : $this->_('subdivision_add');
                 ]);
 
                 $options = [['value'=>'']];
-                foreach (Subdivision::getPhases() as $p) { $options[] = ['value' => $p]; }
+                foreach ($this->options['phases'] as $p) { $options[] = ['value' => $p]; }
                 echo $h->field([
                     'name'    => 'phase',
                     'id'      => 'phase',

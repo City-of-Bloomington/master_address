@@ -1,24 +1,20 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Subdivision $this->subdivision
  */
-use Application\People\Person;
-
-$fields = ['id', 'name', 'phase', 'status'];
+$fields = ['id', 'name', 'phase', 'status', 'township_name'];
 foreach ($fields as $f) {
-    $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->subdivision->$get());
+    $$f = parent::escape($this->subdivision->$f);
 }
-$township = $this->subdivision->getTownship () ? parent::escape($this->subdivision->getTownship()->getName()) : '';
 ?>
 <section>
     <header>
         <h1><?= $name; ?></h1>
         <div class="tools">
         <?php
-            if (Person::isAllowed('subdivisions', 'update')) {
+            if (parent::isAllowed('subdivisions', 'update')) {
                 $helper = $this->template->getHelper('buttonLink');
                 echo $helper->buttonLink(
                     self::generateUri('subdivisions.update', ['id'=>$id]),
@@ -29,13 +25,9 @@ $township = $this->subdivision->getTownship () ? parent::escape($this->subdivisi
         ?>
         </div>
     </header>
-    <div>
-        <table>
-        <?php
-            foreach (['township', 'phase', 'status'] as $f) {
-                echo "<tr><th>{$this->_($f)}</th><td>{$$f}</td></tr>";
-            }
-        ?>
-        </table>
-    </div>
+    <table>
+        <tr><th><?= $this->_('township'); ?></th><td><?= $township_name; ?></td></tr>
+        <tr><th><?= $this->_('phase'   ); ?></th><td><?= $phase;         ?></td></tr>
+        <tr><th><?= $this->_('status'  ); ?></th><td><?= $status;        ?></td></tr>
+    </table>
 </section>
