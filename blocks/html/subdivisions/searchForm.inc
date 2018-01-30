@@ -1,11 +1,10 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param array $this->subdivisions
+ * @param array $this->options
  */
-use Application\Subdivisions\Subdivision;
-use Application\Townships\TownshipsTable as Townships;
-
 $fields = ['name', 'township_id', 'phase', 'status'];
 foreach ($fields as $f) {
     $$f = !empty($_GET[$f]) ? parent::escape($_GET[$f]) : null;
@@ -28,10 +27,8 @@ foreach ($fields as $f) {
             ]);
 
             $options = [['value'=>'']];
-            $table   = new Townships();
-            $list    = $table->find();
-            foreach ($list as $t) {
-                $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())];
+            foreach ($this->options['townships'] as $t) {
+                $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])];
             }
             echo $h->field([
                 'name'    => 'township_id',
@@ -43,7 +40,7 @@ foreach ($fields as $f) {
             ]);
 
             $options = [['value'=>'']];
-            foreach (Subdivision::$statuses as $s) { $options[] = ['value' => $s]; }
+            foreach ($this->options['statuses'] as $s) { $options[] = ['value' => $s]; }
             echo $h->field([
                 'name'    => 'status',
                 'id'      => 'status',
@@ -54,7 +51,7 @@ foreach ($fields as $f) {
             ]);
 
             $options = [['value'=>'']];
-            foreach (Subdivision::getPhases() as $p) { $options[] = ['value' => $p]; }
+            foreach ($this->options['phases'] as $p) { $options[] = ['value' => $p]; }
             echo $h->field([
                 'name'    => 'phase',
                 'id'      => 'phase',
@@ -67,4 +64,14 @@ foreach ($fields as $f) {
             <button type="submit" class="search"><?= $this->_('search'); ?></button>
         </fieldset>
     </form>
+    <?php
+        if (!count($this->subdivisions)) {
+            if (isset($_GET['name'])) {
+                echo sprintf($this->_('no_results', 'messages'), $this->_(['subdivision', 'subdivisions', 2]));
+            }
+        }
+        else {
+            $this->_include('subdivisions/list.inc');
+        }
+    ?>
 </section>
