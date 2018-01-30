@@ -36,11 +36,11 @@ class Field extends Helper
             switch ($params['type']) {
                 case 'date':
                     // Until all browsers implement a date picker,
-                    // we must continute to use plain text inputs for dates.
-                    unset($params['type']);
+                    // we must continue to use plain text inputs for dates.
+                    #unset($params['type']);
 
-                    $params['value'] = !empty($params['value']) ? $params['value']->format(DATE_FORMAT) : '';
-                    $params['attr']['placeholder'] = View::translateDateString(DATE_FORMAT);
+                    $params['value'] = !empty($params['value']) ? $params['value']->format('Y-m-d') : '';
+                    $params['attr']['placeholder'] = View::translateDateString('Y-m-d');
                     $renderInput = 'input';
                 break;
 
