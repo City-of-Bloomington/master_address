@@ -11,6 +11,8 @@ use Aura\SqlQuery\QueryFactory;
 
 abstract class PdoRepository
 {
+    const DATE_FORMAT = 'Y-m-d';
+
     protected $pdo;
     protected $queryFactory;
 

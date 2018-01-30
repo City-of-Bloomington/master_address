@@ -26,3 +26,7 @@ foreach ($repos as $t) {
 $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->get('Domain\Users\DataStorage\UsersRepository');
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));
+
+$DI->params[ 'Domain\Plats\Metadata']['repository'] = $DI->get('Domain\Plats\DataStorage\PlatsRepository');
+$DI->set(    'Domain\Plats\Metadata',
+$DI->lazyNew('Domain\Plats\Metadata'));

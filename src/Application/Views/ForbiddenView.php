@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Views;
@@ -15,7 +15,7 @@ class ForbiddenView extends Template
 
         parent::__construct('default', 'html', $vars);
         $_SESSION['errorMessages'][] = isset($_SESSION['USER'])
-            ? new \Exception('noAccessAllowed')
-            : new \Exception('notLoggedIn');
+            ? 'noAccessAllowed'
+            : 'notLoggedIn';
     }
 }

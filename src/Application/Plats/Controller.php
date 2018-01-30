@@ -13,6 +13,7 @@ use Domain\Plats\Entities\Plat;
 use Domain\Plats\UseCases\Info\InfoRequest;
 use Domain\Plats\UseCases\Search\SearchRequest;
 use Domain\Plats\UseCases\Update\UpdateRequest;
+use Domain\Plats\UseCases\Update\UpdateResponse;
 
 class Controller extends BaseController
 {
@@ -27,43 +28,66 @@ class Controller extends BaseController
         return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
 
-    public function view(array $params)
-    {
-        if (!empty($_GET['id'])) {
-            try { $plat = new Plat($_GET['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+	public function view(array $params)
+	{
+        if (!empty($_REQUEST['id'])) {
+            $info = $this->di->get('Domain\Plats\UseCases\Info\Info');
+            $req  = new InfoRequest((int)$_REQUEST['id']);
+            $res  = $info($req);
+            if ($res->plat) {
+                return new Views\InfoView($res);
+            }
+            else {
+                $_SESSION['errorMessages'] = $res->errors;
+            }
         }
-
-        return isset($plat)
-            ? new Views\InfoView(['plat'=>$plat])
-            : new \Application\Views\NotFoundView();
-    }
+        return new \Application\Views\NotFoundView();
+	}
 
     public function update(array $params)
     {
-        if (!empty($_REQUEST['id'])) {
-            try { $plat = new Plat($_REQUEST['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        $errors = [];
+        if (!empty($_POST['start_date'])) {
+            try {  $_POST['start_date'] = new \DateTime($_POST['start_date']); }
+            catch (\Exception $e) {
+                $errors[] = 'invalidDate';
+            }
         }
-        else { $plat = new Plat(); }
+        if (!empty($_POST['end_date'])) {
+            try {  $_POST['end_date'] = new \DateTime($_POST['end_date']); }
+            catch (\Exception $e) { $errors[] = 'invalidDate'; }
+        }
 
-        if (isset($plat)) {
-            if (isset($_POST['name'])) {
-                try {
-                    $plat->handleUpdate($_POST);
-                    $plat->save();
-                    header('Location: '.parent::generateUrl('plats.view', ['id'=>$plat->getId()]));
+        if (isset($_POST['name'])) {
+            if (!count($errors)) {
+                $update   = $this->di->get('Domain\Plats\UseCases\Update\Update');
+                $request  = new UpdateRequest($_POST);
+                $response = $update($request);
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('plats.view', ['id'=>$response->id]));
                     exit();
                 }
-                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+                else {
+                    $errors = $response->errors;
+                }
             }
-
-            return new \Application\Views\Generic\UpdateView([
-                'form'=>'plats/updateForm.inc',
-                'plat'=>$plat
-            ]);
         }
+        elseif (!empty($_REQUEST['id'])) {
+            $info = $this->di->get('Domain\Plats\UseCases\Info\Info');
+            $req  = new InfoRequest((int)$_REQUEST['id']);
+            try {
+                $res  = $info($req);
+                $request = new UpdateRequest((array)$res->plat);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'] = $res->errors;
+                return new \Application\Views\NotFoundView();
+            }
+        }
+        else { $request = new UpdateRequest(); }
 
-        return new Application\Views\NotFoundView();
+        $metadata = $this->di->get('Domain\Plats\Metadata');
+
+        return new Views\UpdateView($request, $metadata, $errors);
     }
 }

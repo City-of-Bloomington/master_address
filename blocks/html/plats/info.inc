@@ -1,29 +1,27 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Plat $this->plat
  */
-use Application\People\Person;
-
-$fields = ['id', 'name', 'type', 'cabinet', 'envelope', 'notes'];
+$fields = ['id', 'name', 'cabinet', 'envelope', 'notes'];
 foreach ($fields as $f) {
-    $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->plat->$get());
+    $$f = parent::escape($this->plat->$f);
 }
-$startDate = $this->plat->getStartDate() ? $this->plat->getStartDate()->format(DATE_FORMAT)      : '';
-$endDate   = $this->plat->getEndDate  () ? $this->plat->getEndDate  ()->format(DATE_FORMAT)      : '';
-$township  = $this->plat->getTownship () ? parent::escape($this->plat->getTownship()->getName()) : '';
+$startDate = $this->plat->start_date ? $this->plat->start_date->format(DATE_FORMAT) : '';
+$endDate   = $this->plat->end_date   ? $this->plat->end_date  ->format(DATE_FORMAT) : '';
+$type      = parent::escape($this->plat->plat_type);
+$township  = parent::escape($this->plat->township_name);
 ?>
 <section>
     <header>
         <h1><?= $name; ?></h1>
         <div class="tools">
         <?php
-            if (Person::isAllowed('plats', 'update')) {
+            if (parent::isAllowed('plats', 'update')) {
                 $helper = $this->template->getHelper('buttonLink');
                 echo $helper->buttonLink(
-                    self::generateUri('plats.update', ['id'=>$this->plat->getId()]),
+                    parent::generateUri('plats.update', ['id'=>$id]),
                     $this->_('plat_edit'),
                     'edit'
                 );

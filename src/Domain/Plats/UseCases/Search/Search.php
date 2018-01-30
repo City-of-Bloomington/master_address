@@ -6,26 +6,28 @@
 declare (strict_types=1);
 namespace Domain\Plats\UseCases\Search;
 
-use Domain\UseCase;
+use Domain\Plats\Metadata;
 use Domain\Plats\DataStorage\PlatsRepository;
 use Domain\Plats\Entities\Plat;
+use Domain\UseCase;
 
 class Search
 {
     private $repo;
-    public static $types = ['A', 'C', 'S'];
+    private $metadata;
 
     public function __construct(PlatsRepository $repository)
     {
         $this->repo = $repository;
+        $this->metadata = new Metadata($repository);
     }
 
     public function __invoke(SearchRequest $req): SearchResponse
     {
         $options = [
-            'plat_types' => self::$types,
-            'cabinets'   => $this->repo->distinct('cabinet'),
-            'townships'  => $this->repo->townships()
+            'plat_types' => $this->metadata->types(),
+            'cabinets'   => $this->metadata->cabinets(),
+            'townships'  => $this->metadata->townships()
         ];
 
         try {

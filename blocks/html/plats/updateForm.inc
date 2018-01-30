@@ -1,22 +1,18 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Plat $this->plat
+ * @param Plat   $this->plat
+ * @param array  $this->options
+ * @param string $this->title
  */
-use Application\Plats\Plat;
-use Application\Townships\TownshipsTable as Townships;
-
-$fields = ['id', 'name', 'type', 'cabinet', 'envelope', 'notes', 'township_id'];
+$fields = ['id', 'name', 'plat_type', 'cabinet', 'envelope', 'notes', 'township_id'];
 foreach ($fields as $f) {
-    $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->plat->$get());
+    $$f  = parent::escape($this->plat->$f);
 }
-
-$title = $id ? $this->_('plat_edit') : $this->_('plat_add');
 ?>
 <section>
-    <header><h1><?= $title; ?></h1></header>
+    <header><h1><?= $this->title; ?></h1></header>
     <form method="post" action="<?= parent::generateUri('plats.update'); ?>">
         <fieldset><legend><?= $this->_('plat_info'); ?></legend>
             <input name="id" type="hidden" value="<?= $id; ?>" />
@@ -32,9 +28,7 @@ $title = $id ? $this->_('plat_edit') : $this->_('plat_add');
                 ]);
 
                 $options = [['value'=>'']];
-                $table   = new Townships();
-                $list    = $table->find();
-                foreach ($list as $t) { $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())]; }
+                foreach ($this->options['townships'] as $t) { $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])]; }
                 echo $h->field([
                     'name'    => 'township_id',
                     'id'      => 'township_id',
@@ -45,37 +39,41 @@ $title = $id ? $this->_('plat_edit') : $this->_('plat_add');
                 ]);
 
                 echo $h->field([
-                    'name'    => 'startDate',
-                    'id'      => 'startDate',
+                    'name'    => 'start_date',
+                    'id'      => 'start_date',
                     'label'   => $this->_('startDate'),
-                    'value'   => $this->plat->getStartDate(),
+                    'value'   => $this->plat->start_date,
                     'type'    => 'date'
                 ]);
 
                 echo $h->field([
-                    'name'    => 'endDate',
-                    'id'      => 'endDate',
+                    'name'    => 'end_date',
+                    'id'      => 'end_date',
                     'label'   => $this->_('endDate'),
-                    'value'   => $this->plat->getEndDate(),
+                    'value'   => $this->plat->end_date,
                     'type'    => 'date'
                 ]);
 
                 $options = [['value'=>'']];
-                foreach (Plat::$types as $t) { $options[] = ['value'=>$t]; }
+                foreach ($this->options['types'] as $t) { $options[] = ['value'=>$t]; }
                 echo $h->field([
-                    'name'    => 'type',
-                    'id'      => 'type',
+                    'name'    => 'plat_type',
+                    'id'      => 'plat_type',
                     'label'   => $this->_('type'),
-                    'value'   => $type,
+                    'value'   => $plat_type,
                     'type'    => 'select',
                     'options' => $options
                 ]);
 
+                $options = [['value'=>'']];
+                foreach ($this->options['cabinets'] as $c) { $options[] = ['value'=>$c]; }
                 echo $h->field([
                     'name'     => 'cabinet',
                     'id'       => 'cabinet',
                     'label'    => $this->_('cabinet'),
-                    'value'    => $cabinet
+                    'value'    => $cabinet,
+                    'type'     => 'select',
+                    'options'  => $options
                 ]);
                 echo $h->field([
                     'name'     => 'envelope',

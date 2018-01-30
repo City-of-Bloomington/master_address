@@ -50,7 +50,7 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
     public function load(InfoRequest $req): Plat
     {
         $select = $this->baseSelect();
-        $select->where('id=?', $req->id);
+        $select->where('p.id=?', $req->id);
 
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
@@ -101,7 +101,7 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
     public function townships(): array
     {
         $result = $this->pdo->query('select id, name from townships order by name');
-        return $result->fetchAll();
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -109,6 +109,17 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
      */
     public function save(Plat $plat): int
     {
-        return parent::saveEntity($plat);
+        return parent::saveEntity([
+            'id'          => $plat->id,
+            'name'        => $plat->name,
+            'plat_type'   => $plat->plat_type,
+            'cabinet'     => $plat->cabinet,
+            'envelope'    => $plat->envelope,
+            'notes'       => $plat->notes,
+            'township_id' => $plat->township_id,
+            'start_date'  => $plat->start_date ? $plat->start_date->format(parent::DATE_FORMAT) : null,
+            'end_date'    => $plat->  end_date ? $plat->  end_date->format(parent::DATE_FORMAT) : null
+
+        ]);
     }
 }
