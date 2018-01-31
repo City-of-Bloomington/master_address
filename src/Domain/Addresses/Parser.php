@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Application\Addresses;
+namespace Domain\Addresses;
+
+use Domain\Addresses\DataStorage\AddressesRepository;
 
 use Application\Subunits\Type       as SubunitType;
 use Application\Subunits\TypesTable as SubunitTypes;
@@ -26,80 +28,31 @@ class Parser
     const ZIP            = 'zip';
     const ZIP_PLUS4      = 'zipplus4';
 
-	/**
-	 * Returns cities in use by the system
-	 *
-	 * !IMPORTANT
-	 * For performance, this function has been cached in code.
-	 * Doing a select distinct across hundreds of thousands of rows was
-	 * too slow for a web-service backing.
-	 *
-	 * The cities are being prepopulated, in the static $cities variable.
-	 * If there is a city that is not being parsed in the
-	 * address parser, you might need to regenerate the list, and
-	 * update the $cities variable
-	 *
-	 * The database query has been left here for reference.
-	 *
-	 * @return array
-	 */
-	public static function getCities() : array
-	{
-        // select distinct city from addresses order by city
-        return [
-            'Bedford',
-            'Bloomington',
-            'Clear Creek',
-            'Ellettsville',
-            'Gosport',
-            'Harrodsburg',
-            'Heltonville',
-            'Martinsville',
-            'Nashville',
-            'Smithville',
-            'Spencer',
-            'Springville',
-            'Stanford',
-            'Stinesville',
-            'Unionville'
-        ];
+    private $repo;
+    private $metadata;
 
-	}
+    public function __construct(AddressesRepository $repository)
+    {
+        $this->repo     = $repository;
+        $this->metadata = new Metadata($repository);
+    }
 
-    /**
-     * Returns street directions in use by the system
-     *
-     * @return array
-     */
-	private static function getDirections() : array
+	private function getStreetTypes(): array
 	{
-        // select name, code from directions
-        return [
-            'NORTH' => 'N',
-            'EAST'  => 'E',
-            'SOUTH' => 'S',
-            'WEST'  => 'W'
-        ];
-	}
-
-	private static function getStreetTypes()
-	{
-        $types = [];
-        $table = new Types();
-        $list  = $table->find();
-        foreach ($list as $t) {
-            $types[$t->getName()] = $t->getCode();
+        static $types = [];
+        if (!$types) {
+            foreach ($this->metadata->streetTypes() as $row) {
+                $types[$row['name']] = $row['code'];
+            }
         }
         return $types;
 	}
 
-	private static function getSubunitTypes()
+	private function getSubunitTypes(): array
 	{
-        $types = [];
-        $table = new SubunitTypes();
-        $list  = $table->find();
-        foreach ($list as $t) {
-            $types[$t->getName()] = $t->getCode();
+        static $types = [];
+        foreach ($this->metadata->subunitTypes() as $row) {
+            $types[$row['name']] = $row['code'];
         }
         return $types;
 	}
@@ -133,15 +86,15 @@ class Parser
 	 * @param string $string
 	 * @return array
 	 */
-	public static function parse($string, $parseType='address')
+	public function __invoke(string $string, string $parseType='address')
 	{
 		$output = [];
 
 		// Lookup table variables
-		$cities       = self::getCities();
-		$directions   = self::getDirections();
-		$streetTypes  = self::getStreetTypes();
-		$subunitTypes = self::getSubunitTypes();
+		$cities       = $this->metadata->cities();
+		$directions   = $this->metadata->directions();
+		$streetTypes  = $this->getStreetTypes();
+		$subunitTypes = $this->getSubunitTypes();
 
 
 		//echo "Starting with |$string|\n";
@@ -205,8 +158,8 @@ class Parser
 			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
 			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
 				try {
-                    $type = new SubunitType(strtoupper($matches['subunitType']));
-					$output[self::SUBUNIT_TYPE] = $type->getCode();
+                    $type = strtoupper($matches['subunitType']);
+					$output[self::SUBUNIT_TYPE] = in_array($type, $subunitTypes) ? $type : $subunitType[$type];
 					$output[self::SUBUNIT_ID] = $matches['subunitIdentifier'];
 					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 				}

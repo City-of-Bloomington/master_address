@@ -17,18 +17,44 @@ if ($platform == 'Pgsql' && !empty($conf['schema'])) {
     $pdo->exec("set search_path to $conf[schema]");
 }
 
-$repos = ['Users', 'Towns', 'Townships', 'Jurisdictions', 'People', 'Plats', 'Subdivisions'];
+//---------------------------------------------------------
+// Declare database repositories
+//---------------------------------------------------------
+$repos = [
+    'Addresses', 'Jurisdictions', 'People', 'Plats',
+    'Streets', 'Subdivisions', 'Towns', 'Townships', 'Users'
+];
 foreach ($repos as $t) {
     $DI->params[ "Domain\\$t\\DataStorage\\Pdo{$t}Repository"]["pdo"] = $pdo;
     $DI->set(    "Domain\\$t\\DataStorage\\{$t}Repository",
     $DI->lazyNew("Domain\\$t\\DataStorage\\Pdo{$t}Repository"));
 }
 
+//---------------------------------------------------------
+// Metadata providers
+//---------------------------------------------------------
+$contexts = ['Addresses', 'Plats', 'Streets', 'Subdivisions'];
+foreach ($contexts as $t) {
+    $DI->params[ "Domain\\$t\\Metadata"]['repository'] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
+    $DI->set(    "Domain\\$t\\Metadata",
+    $DI->lazyNew("Domain\\$t\\Metadata"));
+}
+
+//---------------------------------------------------------
+// Services
+//---------------------------------------------------------
 $DI->params[ 'Domain\Auth\AuthenticationService']['repository'] = $DI->get('Domain\Users\DataStorage\UsersRepository');
 $DI->params[ 'Domain\Auth\AuthenticationService']['config'    ] = $AUTHENTICATION_METHODS;
 $DI->set(    'Domain\Auth\AuthenticationService',
 $DI->lazyNew('Domain\Auth\AuthenticationService'));
 
+$DI->params[ 'Domain\Addresses\Parser']['repository'] = $DI->get('Domain\Addresses\DataStorage\AddressesRepository');
+$DI->set(    'Domain\Addresses\Parser',
+$DI->lazyNew('Domain\Addresses\Parser'));
+
+//---------------------------------------------------------
+// Use Cases
+//---------------------------------------------------------
 foreach ($repos as $t) {
     foreach (['Info', 'Search', 'Update'] as $a) {
         $DI->params[ "Domain\\$t\\UseCases\\$a\\$a"]["repository"] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
@@ -36,15 +62,7 @@ foreach ($repos as $t) {
         $DI->lazyNew("Domain\\$t\\UseCases\\$a\\$a"));
     }
 }
-
 $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->get('Domain\Users\DataStorage\UsersRepository');
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));
 
-$DI->params[ 'Domain\Plats\Metadata']['repository'] = $DI->get('Domain\Plats\DataStorage\PlatsRepository');
-$DI->set(    'Domain\Plats\Metadata',
-$DI->lazyNew('Domain\Plats\Metadata'));
-
-$DI->params[ 'Domain\Subdivisions\Metadata']['repository'] = $DI->get('Domain\Subdivisions\DataStorage\SubdivisionsRepository');
-$DI->set(    'Domain\Subdivisions\Metadata',
-$DI->lazyNew('Domain\Subdivisions\Metadata'));
