@@ -96,4 +96,17 @@ abstract class PdoRepository
             return (int)$this->pdo->lastInsertId($pk);
         }
 	}
+
+    public function distinct(string $field): array
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->distinct()
+               ->cols([$field])
+               ->from($this->tablename)
+               ->where("$field is not null")
+               ->orderBy([$field]);
+
+        $result = $this->pdo->query($select->getStatement());
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
+    }
 }
