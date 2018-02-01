@@ -44,6 +44,8 @@ class SearchRequest
     public $street_post_direction;
     public $street_suffix_code;
 
+    public $status;
+
     // Pagination fields
     public $order;
     public $itemsPerPage;
