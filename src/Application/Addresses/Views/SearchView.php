@@ -1,32 +1,38 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
 namespace Application\Addresses\Views;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Template;
+use Application\Paginator;
+
+use Domain\Addresses\UseCases\Search\SearchResponse;
 
 class SearchView extends Template
 {
-    public function __construct(array $vars)
+    public function __construct(SearchResponse $response, int $itemsPerPage, int $currentPage)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
-        parent::__construct('default', $format, $vars);
+        parent::__construct('default', $format);
 
-        if ($this->outputFormat == 'html') {
-            $this->blocks[] = new Block('addresses/findForm.inc');
+        $this->vars['title'] = $this->_('addresses_search');
+        if (count($response->errors)) {
+            $_SESSION['errorMessages'] = $response->errors;
         }
 
-        if (count($this->addresses)) {
-            $this->blocks[] = new Block('addresses/list.inc', ['addresses' => $this->addresses]);
+        $this->blocks[] = new Block('addresses/findForm.inc', ['addresses' => $response->addresses]);
 
-            if ($this->outputFormat == 'html'
-                && is_a($this->addresses, '\Blossom\Classes\Paginator')) {
-                $this->blocks[] = new Block('pageNavigation.inc', ['paginator'=> $this->addresses]);
-            }
+        if ($response->total > $itemsPerPage) {
+            $this->blocks[] = new Block('pageNavigation.inc', [
+                'paginator' => new Paginator(
+                    $response->total,
+                    $itemsPerPage,
+                    $currentPage
+            )]);
         }
     }
 }

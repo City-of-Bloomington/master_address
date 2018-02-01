@@ -2,11 +2,11 @@
 /**
  * Displays page navigation for any list that has pagination turned on
  *
- * @copyright 2007-2017 City of Bloomington, Indiana
+ * @copyright 2007-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Paginator $this->paginator
  */
-use Blossom\Classes\Url;
+use Application\Url;
 $pages = $this->paginator->getPages();
 
 if (count($pages->pagesInRange) > 1) {

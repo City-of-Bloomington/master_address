@@ -6,20 +6,25 @@
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Search;
 
-use Domain\UseCase;
-use Domain\Addresses\Parser;
+use Domain\Addresses\DataStorage\AddressesRepository;
 
-class Search extends UseCase
+class Search
 {
-    private $parser;
+    private $repo;
 
-    public function __construct(AuthorizationService $auth, Parser $parser)
+    public function __construct(AddressesRepository $repository)
     {
-        parent::__construct($auth);
-        $this->parser = $parser;
+        $this->repo = $repository;
     }
 
     public function __invoke(SearchRequest $req): SearchResponse
     {
+        try {
+            $result = $this->repo->search($req);
+            return new SearchResponse($result['rows'], $result['total']);
+        }
+        catch (\Exception $e) {
+            return new SearchResponse([], 0, [$e->getMessage()]);
+        }
     }
 }

@@ -74,7 +74,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                     break;
 
                     case 'suffix_code':
-                        $select->where("t.$f=?", $req->$f);
+                        $select->where("t.code=?", $req->$f);
                     break;
 
                     case 'direction':

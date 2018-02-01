@@ -6,27 +6,52 @@
 declare (strict_types=1);
 namespace Application\Addresses;
 
-use Blossom\Classes\View;
+use Application\Controller as BaseController;
+use Application\View;
 
-class Controller
+use Domain\Addresses\Parser;
+use Domain\Addresses\Entities\Address;
+use Domain\Addresses\UseCases\Info\InfoRequest;
+use Domain\Addresses\UseCases\Search\SearchRequest;
+use Domain\Addresses\UseCases\Update\UpdateRequest;
+use Domain\Addresses\UseCases\Update\UpdateResponse;
+
+class Controller extends BaseController
 {
-    public function index(array $params)
+    const ITEMS_PER_PAGE = 20;
+
+    /**
+     * Converts Parser fieldnames to SearchRequest fieldnames
+     */
+    private static function translateFields(array $parse): array
     {
-        $vars['addresses'] = null;
-
-        if (!empty($_GET['address'])) {
-            $parse = Parser::parse($_GET['address']);
-            $table = new AddressesTable();
-
-            if (isset($_GET['page']) && $_GET['page'] == 'all') {
-                $vars['addresses'] = $table->find($parse);
-            }
-            else {
-                $page  = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-                $vars['addresses'] = $table->find($parse, null, 20, $page);
+        $query = [];
+        foreach ($parse as $k=>$v) {
+            if (!empty($v)) {
+                switch ($k) {
+                    case Parser::DIRECTION:      $query['street_direction'     ] = $v; break;
+                    case Parser::STREET_NAME:    $query['street_name'          ] = $v; break;
+                    case Parser::POST_DIRECTION: $query['street_post_direction'] = $v; break;
+                    case Parser::STREET_TYPE:    $query['street_suffix_code'   ] = $v; break;
+                    default:
+                        $query[$k] = $v;
+                }
             }
         }
-        return new Views\SearchView($vars);
+        return $query;
+    }
+
+    public function index(array $params)
+    {
+		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+        $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+        $parser = $this->di->get('Domain\Addresses\Parser');
+
+        $query  = !empty($_GET['address'])
+                ? self::translateFields($parser($_GET['address']))
+                : [];
+        $res    = $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page));
+        return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
 
     public function parse(array $params)
