@@ -1,38 +1,66 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
 namespace Application\Streets;
 
-use Application\Addresses\Parser;
-use Aura\Router\Route;
-use Blossom\Classes\View;
+use Application\Controller as BaseController;
+use Application\View;
 
-class Controller
+use Domain\Addresses\Parser;
+use Domain\Streets\Entities\Street;
+use Domain\Streets\UseCases\Info\InfoRequest;
+use Domain\Streets\UseCases\Search\SearchRequest;
+use Domain\Streets\UseCases\Update\UpdateRequest;
+use Domain\Streets\UseCases\Update\UpdateResponse;
+
+class Controller extends BaseController
 {
+    const ITEMS_PER_PAGE = 20;
+
+    /**
+     * Converts Parser fieldnames to SearchRequest fieldnames
+     */
+    private static function extractStreetFields(array $parse): array
+    {
+        $query = [];
+        if (!empty($parse[Parser::DIRECTION     ])) { $query['direction'     ] = $parse[Parser::DIRECTION     ]; }
+        if (!empty($parse[Parser::STREET_NAME   ])) { $query['name'          ] = $parse[Parser::STREET_NAME   ]; }
+        if (!empty($parse[Parser::POST_DIRECTION])) { $query['post_direction'] = $parse[Parser::POST_DIRECTION]; }
+        if (!empty($parse[Parser::STREET_TYPE   ])) { $query['suffix_code'   ] = $parse[Parser::STREET_TYPE   ]; }
+        return $query;
+    }
+
     public function index(array $params)
     {
-        $streets = null;
+		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+        $search = $this->di->get('Domain\Streets\UseCases\Search\Search');
+        $parser = $this->di->get('Domain\Addresses\Parser');
 
-        if (!empty($_GET['street'])) {
-            $parse = Parser::parse($_GET['street'], 'street');
-            $table = new StreetsTable();
-            $streets = $table->search($parse);
-        }
-        return new Views\SearchView(['streets'=>$streets]);
+        $query  = !empty($_GET['street'])
+                ? self::extractStreetFields($parser($_GET['street']))
+                : [];
+        $response = $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page));
+
+        return new Views\SearchView($response, self::ITEMS_PER_PAGE, $page);
     }
 
     public function view(array $params)
     {
-        if (!empty($_GET['id'])) {
-            try { $street = new Street($_GET['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-        }
+        if (!empty($_REQUEST['id'])) {
+            $streetInfo    = $this->di->get('Domain\Streets\UseCases\Info\Info');
+            #$addressSearch = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+            $infoRequest = new InfoRequest((int)$_REQUEST['id']);
 
-        if (isset($street)) {
-            return new Views\InfoView(['street'=>$street]);
+            $streetResponse = $streetInfo($infoRequest);
+            if ($streetResponse->street) {
+                return new Views\InfoView($streetResponse);
+            }
+            else {
+                $_SESSION['errorMessages'] = $streetResponse->errors;
+            }
         }
         return new \Application\Views\NotFoundView();
     }

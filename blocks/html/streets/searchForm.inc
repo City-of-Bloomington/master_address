@@ -1,7 +1,8 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param array $this->streets
  */
 ?>
 <form method="get">
@@ -17,4 +18,14 @@
         ?>
         <button type="submit" class="search"><?= $this->_('search'); ?></button>
     </fieldset>
+    <?php
+        if (!count($this->streets)) {
+            if (isset($_GET['street'])) {
+                echo sprintf($this->_('no_results', 'messages'), $this->_(['street', 'streets', 2]));
+            }
+        }
+        else {
+            $this->_include('streets/list.inc');
+        }
+    ?>
 </form>

@@ -85,19 +85,6 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
         return $result;
     }
 
-    public function distinct(string $field): array
-    {
-        $select = $this->queryFactory->newSelect();
-        $select->distinct()
-               ->cols([$field])
-               ->from($this->tablename)
-               ->where("$field is not null")
-               ->orderBy([$field]);
-
-        $result = $this->pdo->query($select->getStatement());
-        return $result->fetchAll(\PDO::FETCH_COLUMN);
-    }
-
     public function townships(): array
     {
         $result = $this->pdo->query('select id, name from townships order by name');

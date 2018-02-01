@@ -16,16 +16,19 @@ use Domain\Townships\Entities\Township;
 
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 {
+    const TYPE_STREET = 1;
+
     protected $tablename   = 'streets';
     protected $entityClass = '\Domain\Streets\Entities\Street';
 
-    public static $DEFAULT_SORT = ['name'];
+    public static $DEFAULT_SORT = ['n.name'];
     public function columns(): array
     {
         return [
             's.id', 's.status', 's.notes', 's.town_id',
-            't.name as town_name',
-            't.code as town_code',
+            'town.name as town_name', 'town.code as town_code',
+            'n.id as name_id', 'n.direction', 'n.name', 'n.post_direction',
+            't.code as suffix_code'
         ];
     }
 
@@ -33,8 +36,11 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename} as s")
-               ->join('LEFT', 'towns as t', 's.town_id=t.id');
+               ->from("{$this->tablename}          s")
+               ->join('LEFT', 'towns            town', 's.town_id=town.id')
+               ->join('LEFT', 'street_designations d', 's.id=d.street_id and d.type_id='.self::TYPE_STREET)
+               ->join('LEFT', 'street_names        n', 'd.street_name_id=n.id')
+               ->join('LEFT', 'street_types        t', 'n.suffix_code_id=t.id');
         return $select;
     }
 
@@ -61,13 +67,24 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         foreach (parent::columns() as $f) {
             if (!empty($req->$f)) {
                 switch ($f) {
+                    case 'id':
                     case 'status':
                     case 'town_id':
-                        $select->where("$f=?", $req->$f);
+                        $select->where("s.$f=?", $req->$f);
                     break;
 
-                    default:
-                        $select->where("$f like ?", $req->$f);
+                    case 'suffix_code':
+                        $select->where("t.$f=?", $req->$f);
+                    break;
+
+                    case 'direction':
+                    case 'post_direction':
+                        $select->where("n.$f=?", $req->$f);
+                    break;
+
+                    case 'name':
+                        $select->where("n.$f like ?", $req->$f);
+                    break;
                 }
             }
         }

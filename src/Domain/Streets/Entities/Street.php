@@ -16,6 +16,12 @@ class Street
     public $town_name;
     public $town_code;
 
+    public $name_id;
+    public $direction;
+    public $name;
+    public $post_direction;
+    public $suffix_code;
+
     public function __construct(?array $data=null)
     {
         if ($data) {
@@ -26,6 +32,12 @@ class Street
             if (!empty($data['town_id'  ])) { $this->town_id = (int)$data['town_id'  ]; }
             if (!empty($data['town_name'])) { $this->town_name =    $data['town_name']; }
             if (!empty($data['town_code'])) { $this->town_code =    $data['town_code']; }
+
+            if (!empty($data['name_id'       ])) { $this->name_id  =  (int)$data['name_id']; }
+            if (!empty($data['direction'     ])) { $this->direction      = $data['direction']; }
+            if (!empty($data['name'          ])) { $this->name           = $data['name']; }
+            if (!empty($data['post_direction'])) { $this->post_direction = $data['post_direction']; }
+            if (!empty($data['suffix_code'   ])) { $this->suffix_code    = $data['suffix_code']; }
         }
     }
 }
