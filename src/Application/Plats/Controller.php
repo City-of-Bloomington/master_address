@@ -31,11 +31,15 @@ class Controller extends BaseController
 	public function view(array $params)
 	{
         if (!empty($_REQUEST['id'])) {
-            $info = $this->di->get('Domain\Plats\UseCases\Info\Info');
-            $req  = new InfoRequest((int)$_REQUEST['id']);
-            $res  = $info($req);
-            if ($res->plat) {
-                return new Views\InfoView($res);
+            $platInfo     = $this->di->get('Domain\Plats\UseCases\Info\Info');
+            $infoRequest  = new InfoRequest((int)$_REQUEST['id']);
+            $infoResponse = $platInfo($infoRequest);
+            if ($infoResponse->plat) {
+                $addressSearch   = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+                $addressResponse = $addressSearch(new \Domain\Addresses\UseCases\Search\SearchRequest([
+                    'plat_id' => $infoResponse->plat->id
+                ]));
+                return new Views\InfoView($infoResponse, $addressResponse);
             }
             else {
                 $_SESSION['errorMessages'] = $res->errors;

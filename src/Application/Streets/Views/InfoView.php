@@ -8,19 +8,21 @@ namespace Application\Streets\Views;
 
 use Application\Block;
 use Application\Template;
+
 use Domain\Streets\UseCases\Info\InfoResponse;
+use Domain\Addresses\UseCases\Search\SearchResponse;
 
 class InfoView extends Template
 {
-    public function __construct(InfoResponse $response)
+    public function __construct(InfoResponse $info, SearchResponse $search)
     {
         $format   = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         $template = $format == 'html' ? 'two-column' : 'default';
         parent::__construct($template, $format);
 
-        $this->vars['title'] = parent::escape($response->street->name);
+        $this->vars['title'] = parent::escape($info->street->name);
 
-        $this->blocks[] = new Block('streets/info.inc', ['street'=>$response->street]);
-        #$this->blocks['panel-one'][] = new Block('address/list.inc', ['addresses'=>$this->plat->getAddresses()]);
+        $this->blocks[]              = new Block('streets/info.inc', ['street'    => $info->street]);
+        $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $search->addresses]);
     }
 }

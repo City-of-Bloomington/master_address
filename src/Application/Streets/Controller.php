@@ -50,13 +50,16 @@ class Controller extends BaseController
     public function view(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            $streetInfo    = $this->di->get('Domain\Streets\UseCases\Info\Info');
-            #$addressSearch = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+            $streetInfo  = $this->di->get('Domain\Streets\UseCases\Info\Info');
             $infoRequest = new InfoRequest((int)$_REQUEST['id']);
 
             $streetResponse = $streetInfo($infoRequest);
             if ($streetResponse->street) {
-                return new Views\InfoView($streetResponse);
+                $addressSearch   = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+                $addressResponse = $addressSearch(new \Domain\Addresses\UseCases\Search\SearchRequest([
+                    'street_id'=>$streetResponse->street->id
+                ]));
+                return new Views\InfoView($streetResponse, $addressResponse);
             }
             else {
                 $_SESSION['errorMessages'] = $streetResponse->errors;
