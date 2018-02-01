@@ -16,51 +16,85 @@ use Domain\Townships\Entities\Township;
 
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
 {
+    const TYPE_STREET = 1;
+
     protected $tablename   = 'addresses';
     protected $entityClass = '\Domain\Addresses\Entities\Address';
 
-    public static $DEFAULT_SORT = ['name'];
+    public static $DEFAULT_SORT = [
+        'street_name',
+        'street_suffix_code',
+        'street_direction',
+        'street_post_direction',
+        'street_number'
+    ];
+
+    /**
+     * Maps response fieldnames to the names used in the database
+     */
+    public static $fieldmap = [
+        'id'                   => ['prefix'=>'a', 'dbName'=>'id'                  ],
+        'street_number_prefix' => ['prefix'=>'a', 'dbName'=>'street_number_prefix'],
+        'street_number'        => ['prefix'=>'a', 'dbName'=>'street_number'       ],
+        'street_number_suffix' => ['prefix'=>'a', 'dbName'=>'street_number_suffix'],
+        'adddress2'            => ['prefix'=>'a', 'dbName'=>'adddress2'           ],
+        'address_type'         => ['prefix'=>'a', 'dbName'=>'address_type'        ],
+        'street_id'            => ['prefix'=>'a', 'dbName'=>'street_id'           ],
+        'jurisdiction_id'      => ['prefix'=>'a', 'dbName'=>'jurisdiction_id'     ],
+        'township_id'          => ['prefix'=>'a', 'dbName'=>'township_id'         ],
+        'subdivision_id'       => ['prefix'=>'a', 'dbName'=>'subdivision_id'      ],
+        'plat_id'              => ['prefix'=>'a', 'dbName'=>'plat_id'             ],
+        'section'              => ['prefix'=>'a', 'dbName'=>'section'             ],
+        'quarter_section'      => ['prefix'=>'a', 'dbName'=>'quarter_section'     ],
+        'plat_lot_number'      => ['prefix'=>'a', 'dbName'=>'plat_lot_number'     ],
+        'city'                 => ['prefix'=>'a', 'dbName'=>'city'                ],
+        'state'                => ['prefix'=>'a', 'dbName'=>'state'               ],
+        'zip'                  => ['prefix'=>'a', 'dbName'=>'zip'                 ],
+        'zipplus4'             => ['prefix'=>'a', 'dbName'=>'zipplus4'            ],
+        'state_plane_x'        => ['prefix'=>'a', 'dbName'=>'state_plane_x'       ],
+        'state_plane_y'        => ['prefix'=>'a', 'dbName'=>'state_plane_y'       ],
+        'latitude'             => ['prefix'=>'a', 'dbName'=>'latitude'            ],
+        'longitude'            => ['prefix'=>'a', 'dbName'=>'longitude'           ],
+        'usng'                 => ['prefix'=>'a', 'dbName'=>'usng'                ],
+        'notes'                => ['prefix'=>'a', 'dbName'=>'notes'               ],
+
+        'jurisdiction_name'    => ['prefix'=>'j',   'dbName'=>'name'],
+        'township_name'        => ['prefix'=>'t',   'dbName'=>'name'],
+        'subdivision_name'     => ['prefix'=>'sub', 'dbName'=>'name'],
+
+        'street_direction'      => ['prefix'=>'sn', 'dbName'=>'direction'     ],
+        'street_name'           => ['prefix'=>'sn', 'dbName'=>'name'          ],
+        'street_post_direction' => ['prefix'=>'sn', 'dbName'=>'post_direction'],
+        'street_suffix_code'    => ['prefix'=>'st', 'dbName'=>'code'          ],
+
+        'status' => ['prefix'=>'status', 'dbName'=>'status']
+    ];
+
     public function columns(): array
     {
-        return [
-            'a.id',
-            'a.street_number_prefix',
-            'a.street_number',
-            'a.street_number_suffix',
-            'a.adddress2',
-            'a.address_type',
-            'a.street_id',
-            'a.jurisdiction_id',
-            'a.township_id',
-            'a.subdivision_id',
-            'a.plat_id',
-            'a.section',
-            'a.quarter_section',
-            'a.plat_lot_number',
-            'a.city',
-            'a.state',
-            'a.zip',
-            'a.zipplus4',
-            'a.state_plane_x',
-            'a.state_plane_y',
-            'a.latitude',
-            'a.longitude',
-            'a.usng',
-            'a.notes',
-            'j.jurisdiction_name',
-            't.township_name',
-            'sub.subdivision_name'
-        ];
+        static $cols = [];
+        if (!$cols) {
+            foreach (self::$fieldmap as $responseName=>$map) {
+                $cols[] = "$map[prefix].$map[dbName] as $responseName";
+            }
+        }
+        return $cols;
     }
 
     private function baseSelect(): SelectInterface
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename}    as a")
-               ->join('LEFT', 'townships     as t',   'a.township_id=t.id')
-               ->join('LEFT', 'jurisdictions as j',   'a.jurisdiction_id=j.id')
-               ->join('LEFT', 'subdivisions  as sub', 'a.subdivision_id=sub.id');
+               ->from("{$this->tablename}    a")
+               ->join('LEFT', 'townships     t',   'a.township_id=t.id')
+               ->join('LEFT', 'jurisdictions j',   'a.jurisdiction_id=j.id')
+               ->join('LEFT', 'subdivisions  sub', 'a.subdivision_id=sub.id')
+               ->join('LEFT', 'streets             s',  'a.street_id=s.id')
+               ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('LEFT', 'street_names        sn', 'sd.street_name_id=sn.id')
+               ->join('LEFT', 'street_types        st', 'sn.suffix_code_id=st.id')
+               ->join('LEFT', 'address_status  status', 'a.id=status.address_id and status.start_date <= CURRENT_DATE and (status.end_date is null or status.end_date >= CURRENT_DATE)');
+
         return $select;
     }
 
@@ -86,13 +120,23 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $select = $this->baseSelect();
         foreach (parent::columns() as $f) {
             if (!empty($req->$f)) {
+                $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
                 switch ($f) {
                     case 'street_number':
-                        $select->where("$f like ?", $req->$f);
+                        // Postgres requires converting int to varchar before
+                        // doing a like comparison.
+                        // Unfortunately, the Aura SqlQuery butchers the ANSI-92
+                        // cast(street_number as varchar).  So, for now, we're
+                        // using the Postgres specific ::varchar syntax for
+                        // type casting.
+                        $select->where("$column::varchar like ?", "{$req->$f}%");
+                    break;
+                    case 'street_name':
+                        $select->where("$column like ?", "{$req->$f}%");
                     break;
 
                     default:
-                        $select->where("$f=?", $req->$f);
+                        $select->where("$column=?", $req->$f);
                 }
             }
         }
@@ -155,5 +199,14 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     {
         $result = $this->pdo->query('select * from subunit_types order by name');
         return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function test(): string
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->cols(['street_number'])
+               ->from('addresses')
+               ->where('cast(street_number as varchar) like ?', '10%');
+        return $select->getStatement();
     }
 }

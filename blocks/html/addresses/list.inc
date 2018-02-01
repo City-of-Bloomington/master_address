@@ -1,11 +1,9 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array  $this->addresses
- * @param Street $this->street    (optional)
  */
-use Application\People\Person;
 ?>
 <section>
     <header>
@@ -25,17 +23,26 @@ use Application\People\Person;
         </thead>
         <tbody>
         <?php
-            $fields = [
-                'streetNumber', 'type', 'jurisdiction', 'zip', 'city'
-            ];
+
             foreach ($this->addresses as $a) {
-                foreach ($fields as $f) {
-                    $get = 'get'.ucfirst($f);
-                    $$f  = parent::escape($a->$get());
-                }
-                $streetName = parent::escape($a->getStreet()->getName());
-                $status = '';
-                $uri = parent::generateUri('addresses.view', ['id'=>$a->getId()]);
+                $type         = parent::escape($a->address_type);
+                $zip          = parent::escape($a->zip);
+                $status       = parent::escape($a->status);
+                $jurisdiction = parent::escape($a->jurisdiction_name);
+                $city         = parent::escape($a->city);
+
+                $streetNumber = parent::escape(implode(' ', [
+                    $a->street_number_prefix,
+                    $a->street_number,
+                    $a->street_number_suffix
+                ]));
+                $streetName = parent::escape(implode(' ', [
+                    $a->street_direction,
+                    $a->street_name,
+                    $a->street_post_direction,
+                    $a->street_suffix_code
+                ]));
+                $uri = parent::generateUri('addresses.view', ['id'=>$a->id]);
                 echo "
                 <tr><td><a href=\"$uri\">$streetNumber</a></td>
                     <td><a href=\"$uri\">$type</a></td>

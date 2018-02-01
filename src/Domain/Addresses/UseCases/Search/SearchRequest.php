@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\Addresses\Entities;
+namespace Domain\Addresses\UseCases\Search;
 
-class Address
+class SearchRequest
 {
     public $id;
     public $street_number_prefix;
@@ -44,37 +44,45 @@ class Address
     public $street_post_direction;
     public $street_suffix_code;
 
-    public $status;
+    // Pagination fields
+    public $order;
+    public $itemsPerPage;
+    public $currentPage;
 
-    public function __construct(?array $data=null)
+    public function __construct(?array $data=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null)
     {
         if ($data) {
-            foreach ($this as $f=>$v) {
-                if (!empty($data[$f])) {
-                    switch ($f) {
+            foreach ($this as $k=>$v) {
+                if (!empty($data[$k])) {
+                    switch ($k) {
                         case 'id':
+                        case 'street_number':
                         case 'street_id':
-                        case 'plat_id':
                         case 'jurisdiction_id':
                         case 'township_id':
                         case 'subdivision_id':
+                        case 'plat_id':
                         case 'zip':
                         case 'zipplus4':
                         case 'state_plane_x':
                         case 'state_plane_y':
-                            $this->$f = (int)$data[$f];
+                            $this->$k = (int)$data[$k];
                         break;
 
                         case 'latitude':
                         case 'longitude':
-                            $this->$f = (float)$data[$f];
+                            $this->$k = (float)$data[$k];
                         break;
 
                         default:
-                            $this->$f = $data[$f];
+                            $this->$k = $data[$k];
                     }
+
                 }
             }
         }
+        if ($order       ) { $this->order        = $order;        }
+        if ($itemsPerPage) { $this->itemsPerPage = $itemsPerPage; }
+        if ($currentPage ) { $this->currentPage  = $currentPage;  }
     }
 }

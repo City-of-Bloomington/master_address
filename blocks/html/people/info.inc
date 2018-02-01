@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Person $this->person
  */
-use Blossom\Classes\Url;
+use Application\Url;
 
 $return_url = Url::current_url(BASE_HOST);
 $h = $this->template->getHelper('buttonLink');
