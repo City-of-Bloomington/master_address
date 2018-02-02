@@ -13,10 +13,10 @@ use Domain\Addresses\UseCases\Update\UpdateRequest;
 
 interface AddressesRepository
 {
-    public function load    (InfoRequest   $req): Address;
-    public function search  (SearchRequest $req): array;
-    public function save    (Address   $address): int;
-    public function distinct(string      $field): array;
+    public function load     (InfoRequest   $req): Address;
+    public function search   (SearchRequest $req): array;
+    public function save     (Address   $address): int;
+    public function changeLog(int    $address_id): array;
 
     public function cities(): array;
     public function townships(): array;

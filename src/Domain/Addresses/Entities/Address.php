@@ -35,6 +35,7 @@ class Address
 
     // Fields from foreign key tables
     public $jurisdiction_name;
+    public $plat_name;
     public $township_name;
     public $subdivision_name;
 

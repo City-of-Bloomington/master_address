@@ -33,11 +33,6 @@ class SearchRequest
     public $usng;
     public $notes;
 
-    // Fields from foreign key tables
-    public $jurisdiction_name;
-    public $township_name;
-    public $subdivision_name;
-
     // Street Name fields
     public $street_direction;
     public $street_name;

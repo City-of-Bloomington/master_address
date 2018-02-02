@@ -1,25 +1,50 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
 namespace Application\Addresses\Views;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Template;
+
+use Domain\Addresses\Entities\Address;
+use Domain\Addresses\UseCases\Info\InfoResponse;
+use Domain\ChangeLogs\ChangeLogResponse;
 
 class InfoView extends Template
 {
-    public function __construct(array $vars)
+    public function __construct(InfoResponse $info, ChangeLogResponse $log)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
-        parent::__construct('two-column', $format, $vars);
+        parent::__construct('two-column', $format);
 
+        $this->vars['title'] = self::addressToString($info->address);
 
-        $this->blocks[] = new Block('addresses/info.inc',                   ['address'   => $this->address]);
-        $this->blocks[] = new Block('changeLogs/changeLog.inc',             ['changes'   => $this->address->getChangeLog()]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $this->address->getLocations()]);
-        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'   => $this->address, 'subunits' => $this->address->getSubunits()]);
+        if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
+        if ( $log->errors) { $_SESSION['errorMessages'] =  $log->errors; }
+
+        $this->blocks[] = new Block('addresses/info.inc', [
+            'address' => $info->address,
+            'title'   => $this->vars['title']
+        ]);
+
+        $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes'   => $log->changeLog]);
+        #$this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $this->address->getLocations()]);
+        #$this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'   => $this->address, 'subunits' => $this->address->getSubunits()]);
+    }
+
+    public static function addressToString(Address $a): string
+    {
+        return implode(' ', [
+            $a->street_number_prefix,
+            $a->street_number,
+            $a->street_number_suffix,
+            $a->street_direction,
+            $a->street_name,
+            $a->street_suffix_code,
+            $a->street_post_direction
+        ]);
     }
 }
