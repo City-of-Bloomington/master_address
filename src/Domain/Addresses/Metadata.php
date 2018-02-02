@@ -17,6 +17,11 @@ class Metadata
         $this->repo = $repository;
     }
 
+    public function trash_days()    { return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; }
+    public function recycle_weeks() { return ['A', 'B']; }
+    public function actions()       { return ['correct','update','readdress','unretire','reassign','retire','verify']; }
+    public function statuses()      { return ['current', 'retired', 'proposed', 'duplicate', 'temporary']; }
+
     public function cities(): array
     {
         static $cities = [

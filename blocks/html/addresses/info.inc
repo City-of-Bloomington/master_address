@@ -1,18 +1,19 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Address $this->address
+ * @param string  $this->title
  */
-use Application\People\Person;
 ?>
 <section>
     <header>
-        <h1><?= $this->_('address_info'); ?></h1>
+        <h1><?= $this->title ?></h1>
         <div class="tools">
         <?php
+            /*
             $h       = $this->template->getHelper('buttonLink');
-            $status  = $this->address->getStatus()->getStatus();
+            $status  = $this->address->status;
             $actions = ['correct','update','readdress','verify'];
             if ($status == 'retired') {
                 $actions[] = 'unretire';
@@ -23,7 +24,7 @@ use Application\People\Person;
             }
 
             foreach ($actions as $a) {
-                if (Person::isAllowed('addresses', $a)) {
+                if (parent::isAllowed('addresses', $a)) {
                     echo $h->buttonLink(
                         parent::generateUri("addresses.$a").'?id='.$this->address->getId(),
                         $this->_($a),
@@ -32,17 +33,18 @@ use Application\People\Person;
 
                 }
             }
+            */
         ?>
         </div>
     </header>
     <table class="<?= $status; ?>">
     <?php
-        $this->_include('addresses/partials/streetData.inc');
         $this->_include('addresses/partials/nonStreetData.inc');
+        $this->_include('addresses/partials/streetData.inc');
     ?>
     </table>
     <?php
-        $notes = parent::escape($this->address->getNotes());
+        $notes = parent::escape($this->address->notes);
         echo $notes ? "<p>$notes</p>" : '';
     ?>
 </section>

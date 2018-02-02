@@ -6,17 +6,22 @@
  */
 declare (strict_types=1);
 $fields = [
-    'type', 'jurisdiction', 'plat', 'platLotNumber', 'township', 'section', 'quarterSection',
-    'x', 'y', 'latitude', 'longitude', 'USNG'
+    'id'              => 'id',
+    'type'            => 'address_type',
+    'jurisdiction'    => 'jurisdiction_name',
+    'plat'            => 'plat_name',
+    'plat_lot_number' => 'plat_lot_number',
+    'township'        => 'township_name',
+    'section'         => 'section',
+    'quarter'         => 'quarter_section'
 ];
 $required = [
     'type', 'jurisdiction', 'section', 'township'
 ];
-foreach ($fields as $f) {
-    $get   = 'get'.ucfirst($f);
-    $$f    = parent::escape($this->address->$get());
-    $class = in_array($f, $required)
-           ? $$f ? '' : ' class="missing"'
+foreach ($fields as $k=>$f) {
+    $$k = parent::escape($this->address->$f);
+    $class = in_array($k, $required)
+           ? $$k ? '' : ' class="missing"'
            : '';
-    echo "<tr$class><th>{$this->_($f)}</th><td>{$$f}</td>";
+    echo "<tr$class><th>{$this->_($k)}</th><td>{$$k}</td>";
 }

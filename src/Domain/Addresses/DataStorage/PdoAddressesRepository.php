@@ -12,6 +12,8 @@ use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Info\InfoRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Update\UpdateRequest;
+
+use Domain\ChangeLogs\ChangeLogEntry;
 use Domain\Townships\Entities\Township;
 
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
@@ -60,6 +62,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
         'jurisdiction_name'    => ['prefix'=>'j',   'dbName'=>'name'],
         'township_name'        => ['prefix'=>'t',   'dbName'=>'name'],
+        'plat_name'            => ['prefix'=>'p',   'dbName'=>'name'],
         'subdivision_name'     => ['prefix'=>'sub', 'dbName'=>'name'],
 
         'street_direction'      => ['prefix'=>'sn', 'dbName'=>'direction'     ],
@@ -88,6 +91,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->from("{$this->tablename}    a")
                ->join('LEFT', 'townships     t',   'a.township_id=t.id')
                ->join('LEFT', 'jurisdictions j',   'a.jurisdiction_id=j.id')
+               ->join('LEFT', 'plats         p',   'a.plat_id=p.id')
                ->join('LEFT', 'subdivisions  sub', 'a.subdivision_id=sub.id')
                ->join('LEFT', 'streets             s',  'a.street_id=s.id')
                ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
@@ -98,7 +102,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $select;
     }
 
-    private static function hydrate(array $row): Address
+    private static function hydrateAddress(array $row): Address
     {
         return new Address($row);
     }
@@ -110,7 +114,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
-            return self::hydrate($result['rows'][0]);
+            return self::hydrateAddress($result['rows'][0]);
         }
         throw new \Exception('addresses/unknown');
     }
@@ -144,7 +148,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $result = $this->performSelect($select, $req->itemsPerPage, $req->currentPage);
 
         $addresses = [];
-        foreach ($result['rows'] as $r) { $addresses[] = self::hydrate($r); }
+        foreach ($result['rows'] as $r) { $addresses[] = self::hydrateAddress($r); }
         $result['rows'] = $addresses;
         return $result;
     }
@@ -162,22 +166,29 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return parent::saveEntity($address);
     }
 
+    public function changeLog(int $address_id): array
+    {
+        $changeLog = [];
+        $sql = "select l.address_id as entity_id,
+                       l.id, l.person_id, l.contact_id, l.action_date, l.action, l.notes,
+                       p.firstname as  person_firstname, p.lastname as  person_lastname,
+                       c.firstname as contact_firstname, c.lastname as contact_lastname
+                from address_change_log l
+                left join people        p on l.person_id=p.id
+                left join people        c on l.contact_id=p.id
+                where address_id=?";
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$address_id]);
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $changeLog[] = ChangeLogEntry::hydrate($row);
+        }
+        return $changeLog;
+    }
+
     //---------------------------------------------------------------
     // Metadata Functions
     //---------------------------------------------------------------
-    public function distinct(string $field): array
-    {
-        $select = $this->queryFactory->newSelect();
-        $select->distinct()
-               ->cols([$field])
-               ->from($this->tablename)
-               ->where("$field is not null")
-               ->orderBy([$field]);
-
-        $result = $this->pdo->query($select->getStatement());
-        return $result->fetchAll(\PDO::FETCH_COLUMN);
-    }
-
     public function cities(): array
     {
         return $this->distinct('city');
@@ -199,14 +210,5 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     {
         $result = $this->pdo->query('select * from subunit_types order by name');
         return $result->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public function test(): string
-    {
-        $select = $this->queryFactory->newSelect();
-        $select->cols(['street_number'])
-               ->from('addresses')
-               ->where('cast(street_number as varchar) like ?', '10%');
-        return $select->getStatement();
     }
 }

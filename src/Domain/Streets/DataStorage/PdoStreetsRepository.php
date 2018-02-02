@@ -8,6 +8,7 @@ namespace Domain\Streets\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
+use Domain\ChangeLogs\ChangeLogEntry;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -44,7 +45,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         return $select;
     }
 
-    private static function hydrate(array $row): Street
+    private static function hydrateStreet(array $row): Street
     {
         return new Street($row);
     }
@@ -56,7 +57,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
-            return self::hydrate($result['rows'][0]);
+            return self::hydrateStreet($result['rows'][0]);
         }
         throw new \Exception('streets/unknown');
     }
@@ -92,7 +93,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $result = $this->performSelect($select, $req->itemsPerPage, $req->currentPage);
 
         $streets = [];
-        foreach ($result['rows'] as $r) { $streets[] = self::hydrate($r); }
+        foreach ($result['rows'] as $r) { $streets[] = self::hydrateStreet($r); }
         $result['rows'] = $streets;
         return $result;
     }
@@ -108,6 +109,26 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             'status'  => $street->status,
             'notes'   => $street->notes
         ]);
+    }
+
+    public function changeLog(int $street_id): array
+    {
+        $changeLog = [];
+        $sql = "select l.street_id as entity_id,
+                       l.id, l.person_id, l.contact_id, l.action_date, l.action, l.notes,
+                       p.firstname as  person_firstname, p.lastname as  person_lastname,
+                       c.firstname as contact_firstname, c.lastname as contact_lastname
+                from street_change_log l
+                left join people        p on l.person_id=p.id
+                left join people        c on l.contact_id=p.id
+                where street_id=?";
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$street_id]);
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $changeLog[] = ChangeLogEntry::hydrate($row);
+        }
+        return $changeLog;
     }
 
     //---------------------------------------------------------------

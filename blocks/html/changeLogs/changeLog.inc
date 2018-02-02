@@ -1,9 +1,8 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Street|Address|Subunit|Contact $this->target
- * @param array                          $this->changes
+ * @param array $this->changes
  */
 ?>
 <section>
@@ -23,11 +22,11 @@
 		<tbody>
 		<?php
             foreach ($this->changes as $c) {
-                $date    = $c->getActionDate()->format(DATE_FORMAT);
-                $person  = $c->getPerson_id () ? parent::escape($c->getPerson ()->getFullname()) : '';
-                $contact = $c->getContact_id() ? parent::escape($c->getContact()->getFullname()) : '';
-                $action  = parent::escape($c->getAction());
-                $notes   = parent::escape($c->getNotes());
+                $date    = $c->action_date->format(DATE_FORMAT);
+                $person  = parent::escape("{$c->person_firstname} {$c->person_lastname}");
+                $contact = parent::escape("{$c->contact_firstname} {$c->contact_lastname}");
+                $action  = parent::escape($c->action);
+                $notes   = parent::escape($c->notes);
                 echo "
                 <tr><th>$date</th>
                     <td></td>

@@ -50,19 +50,22 @@ class Controller extends BaseController
     public function view(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            $streetInfo  = $this->di->get('Domain\Streets\UseCases\Info\Info');
+            $streetInfo    = $this->di->get('Domain\Streets\UseCases\Info\Info');
+            $addressSearch = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+            $changeLog     = $this->di->get('Domain\Streets\UseCases\ChangeLog\ChangeLog');
+
             $infoRequest = new InfoRequest((int)$_REQUEST['id']);
 
-            $streetResponse = $streetInfo($infoRequest);
-            if ($streetResponse->street) {
-                $addressSearch   = $this->di->get('Domain\Addresses\UseCases\Search\Search');
-                $addressResponse = $addressSearch(new \Domain\Addresses\UseCases\Search\SearchRequest([
-                    'street_id'=>$streetResponse->street->id
+            $info = $streetInfo($infoRequest);
+            if ($info->street) {
+                $addresses = $addressSearch(new \Domain\Addresses\UseCases\Search\SearchRequest([
+                    'street_id'=>$info->street->id
                 ]));
-                return new Views\InfoView($streetResponse, $addressResponse);
+                $log = $changeLog(new \Domain\ChangeLogs\ChangeLogRequest($info->street->id));
+                return new Views\InfoView($info, $addresses, $log);
             }
             else {
-                $_SESSION['errorMessages'] = $streetResponse->errors;
+                $_SESSION['errorMessages'] = $info->errors;
             }
         }
         return new \Application\Views\NotFoundView();

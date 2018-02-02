@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
@@ -15,6 +15,8 @@ use Domain\Addresses\UseCases\Info\InfoRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Update\UpdateRequest;
 use Domain\Addresses\UseCases\Update\UpdateResponse;
+
+use Domain\ChangeLogs\ChangeLogRequest;
 
 class Controller extends BaseController
 {
@@ -61,12 +63,17 @@ class Controller extends BaseController
     public function view(array $params)
     {
         if (!empty($_GET['id'])) {
-            try { $address = new Address($_GET['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-        }
+            $addressInfo = $this->di->get('Domain\Addresses\UseCases\Info\Info');
+            $changeLog   = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
 
-        if (isset($address)) {
-            return new Views\InfoView(['address'=>$address]);
+            $info = $addressInfo(new InfoRequest((int)$_GET['id']));
+            if ($info->address) {
+                $log = $changeLog(new ChangeLogRequest($info->address->id));
+                return new Views\InfoView($info, $log);
+            }
+            else {
+                $_SESSION['errorMessages'] = $info->errors;
+            }
         }
         return new \Application\Views\NotFoundView();
     }

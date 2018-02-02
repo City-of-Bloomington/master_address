@@ -5,11 +5,9 @@
  * @param Address $this->address
  */
 $fields = [
-	'streetNumberPrefix', 'streetNumber', 'streetNumberSuffix', 'street_id',
-	'city', 'zip', 'zipplus4', 'status'
+	'street_id', 'city', 'zip', 'zipplus4'
 ];
 foreach ($fields as $f) {
-	$get = 'get'.ucfirst($f);
-	$$f = parent::escape($this->address->$get());
+    $$f = parent::escape($this->address->$f);
 	echo "<tr><th>{$this->_($f)}</th><td>{$$f}</td></tr>";
 }
