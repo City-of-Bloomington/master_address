@@ -107,10 +107,10 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return new Address($row);
     }
 
-    public function load(InfoRequest $req): Address
+    public function load(int $address_id): Address
     {
         $select = $this->baseSelect();
-        $select->where('a.id=?', $req->id);
+        $select->where('a.id=?', $address_id);
 
         $result = $this->performSelect($select);
         if (count($result['rows'])) {

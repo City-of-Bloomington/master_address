@@ -52,7 +52,6 @@ class Controller extends BaseController
         if (!empty($_REQUEST['id'])) {
             $streetInfo    = $this->di->get('Domain\Streets\UseCases\Info\Info');
             $addressSearch = $this->di->get('Domain\Addresses\UseCases\Search\Search');
-            $changeLog     = $this->di->get('Domain\Streets\UseCases\ChangeLog\ChangeLog');
 
             $infoRequest = new InfoRequest((int)$_REQUEST['id']);
 
@@ -61,8 +60,7 @@ class Controller extends BaseController
                 $addresses = $addressSearch(new \Domain\Addresses\UseCases\Search\SearchRequest([
                     'street_id'=>$info->street->id
                 ]));
-                $log = $changeLog(new \Domain\ChangeLogs\ChangeLogRequest($info->street->id));
-                return new Views\InfoView($info, $addresses, $log);
+                return new Views\InfoView($info, $addresses);
             }
             else {
                 $_SESSION['errorMessages'] = $info->errors;

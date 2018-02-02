@@ -11,11 +11,6 @@ use Domain\Addresses\Entities\Address;
 class InfoResponse
 {
     public $address;
-    public $errors = [];
-
-    public function __construct(?Address $address=null, ?array $errors=null)
-    {
-        if ($address) { $this->address = $address; }
-        if ($errors ) { $this->errors  = $errors;  }
-    }
+    public $changeLog = [];
+    public $errors    = [];
 }

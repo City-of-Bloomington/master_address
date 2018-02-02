@@ -11,11 +11,7 @@ use Domain\Streets\Entities\Street;
 class InfoResponse
 {
     public $street;
-    public $errors = [];
-
-    public function __construct(?Street $street=null, ?array $errors=null)
-    {
-        if ($street) { $this->street = $street; }
-        if ($errors) { $this->errors = $errors; }
-    }
+    public $changeLog    = [];
+    public $designations = [];
+    public $errors       = [];
 }

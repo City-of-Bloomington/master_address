@@ -19,12 +19,15 @@ class Info
 
     public function __invoke(InfoRequest $req): InfoResponse
     {
+        $info = new InfoResponse();
         try {
-            $street = $this->repo->load($req);
-            return new InfoResponse($street);
+            $info->street       = $this->repo->load        ($req->id);
+            $info->changeLog    = $this->repo->changeLog   ($req->id);
+            $info->designations = $this->repo->designations($req->id);
         }
         catch (\Exception $e) {
-            return new InfoResponse(null, [$e->getMessage()]);
+            $info->errors = [$e->getMessage()];
         }
+        return $info;
     }
 }
