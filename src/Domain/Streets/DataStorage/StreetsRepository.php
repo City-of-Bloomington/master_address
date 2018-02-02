@@ -13,12 +13,13 @@ use Domain\Streets\UseCases\Update\UpdateRequest;
 
 interface StreetsRepository
 {
-    public function load     (InfoRequest   $req): Street;
+    public function load     (int     $street_id): Street;
     public function search   (SearchRequest $req): array;
     public function save     (Street     $street): int;
-    public function changeLog(int     $street_id): array;
+
+    public function changeLog   (int $street_id): array;
+    public function designations(int $street_id): array;
 
     public function types(): array;
     public function towns(): array;
-
 }

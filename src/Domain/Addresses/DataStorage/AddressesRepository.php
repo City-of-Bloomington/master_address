@@ -13,7 +13,7 @@ use Domain\Addresses\UseCases\Update\UpdateRequest;
 
 interface AddressesRepository
 {
-    public function load     (InfoRequest   $req): Address;
+    public function load     (int    $address_id): Address;
     public function search   (SearchRequest $req): array;
     public function save     (Address   $address): int;
     public function changeLog(int    $address_id): array;

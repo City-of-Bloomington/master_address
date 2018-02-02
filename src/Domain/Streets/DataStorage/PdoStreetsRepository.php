@@ -9,6 +9,7 @@ namespace Domain\Streets\DataStorage;
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -50,10 +51,10 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         return new Street($row);
     }
 
-    public function load(InfoRequest $req): Street
+    public function load(int $street_id): Street
     {
         $select = $this->baseSelect();
-        $select->where('s.id=?', $req->id);
+        $select->where('s.id=?', $street_id);
 
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
@@ -129,6 +130,35 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             $changeLog[] = ChangeLogEntry::hydrate($row);
         }
         return $changeLog;
+    }
+
+    public function designations(int $street_id): array
+    {
+        $designations = [];
+        $sql = "select  d.id,
+                        d.street_id,
+                        d.street_name_id as name_id,
+                        d.type_id,
+                        d.start_date,
+                        d.end_date,
+                        d.rank,
+                        dt.name          as type,
+                        n.direction,
+                        n.name,
+                        n.post_direction,
+                        t.code           as suffix_code
+                from street_designations d
+                    join street_designation_types dt on d.type_id=dt.id
+                    join street_names n on d.street_name_id=n.id
+                left join street_types t on n.suffix_code_id=t.id
+                where d.street_id=?";
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$street_id]);
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $designations[] = Designation::hydrate($row);
+        }
+        return $designations;
     }
 
     //---------------------------------------------------------------

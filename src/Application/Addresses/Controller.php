@@ -64,12 +64,10 @@ class Controller extends BaseController
     {
         if (!empty($_GET['id'])) {
             $addressInfo = $this->di->get('Domain\Addresses\UseCases\Info\Info');
-            $changeLog   = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
 
             $info = $addressInfo(new InfoRequest((int)$_GET['id']));
             if ($info->address) {
-                $log = $changeLog(new ChangeLogRequest($info->address->id));
-                return new Views\InfoView($info, $log);
+                return new Views\InfoView($info);
             }
             else {
                 $_SESSION['errorMessages'] = $info->errors;

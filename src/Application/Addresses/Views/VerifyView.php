@@ -6,8 +6,8 @@
 declare (strict_types=1);
 namespace Application\Addresses\Views;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Template;
 
 class VerifyView extends Template
 {
