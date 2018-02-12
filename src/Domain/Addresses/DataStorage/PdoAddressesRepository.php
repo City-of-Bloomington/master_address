@@ -9,12 +9,9 @@ namespace Domain\Addresses\DataStorage;
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
-use Domain\Addresses\UseCases\Info\InfoRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
-use Domain\Addresses\UseCases\Update\UpdateRequest;
 
 use Domain\ChangeLogs\ChangeLogEntry;
-use Domain\Townships\Entities\Township;
 
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
 {

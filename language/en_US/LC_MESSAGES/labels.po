@@ -234,6 +234,14 @@ msgstr "New Designation Type"
 msgid "streetDesignationType_edit"
 msgstr "Edit Designation Type"
 
+msgid "streetName"
+msgid_plural "streetNames"
+msgstr[0] "Name"
+msgstr[1] "Names"
+
+msgid "streetName_search"
+msgstr "Find a name"
+
 msgid "subunitType"
 msgid_plural "subunitTypes"
 msgstr[0] "Subunit Type"

@@ -13,8 +13,7 @@ use Domain\Addresses\Parser;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
-use Domain\Streets\UseCases\Update\UpdateRequest;
-use Domain\Streets\UseCases\Update\UpdateResponse;
+use Domain\Streets\UseCases\Search\SearchResponse;
 
 class Controller extends BaseController
 {
@@ -23,7 +22,7 @@ class Controller extends BaseController
     /**
      * Converts Parser fieldnames to SearchRequest fieldnames
      */
-    private static function extractStreetFields(array $parse): array
+    public static function extractStreetFields(array $parse): array
     {
         $query = [];
         if (!empty($parse[Parser::DIRECTION     ])) { $query['direction'     ] = $parse[Parser::DIRECTION     ]; }
@@ -41,10 +40,12 @@ class Controller extends BaseController
 
         $query  = !empty($_GET['street'])
                 ? self::extractStreetFields($parser($_GET['street']))
-                : [];
-        $response = $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page));
+                : null;
+        $res    = $query
+                ? $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page))
+                : new SearchResponse();
 
-        return new Views\SearchView($response, self::ITEMS_PER_PAGE, $page);
+        return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
 
     public function view(array $params)

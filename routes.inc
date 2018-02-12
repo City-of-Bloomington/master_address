@@ -70,7 +70,7 @@ $ROUTES->attach('streetDesignations', "/streets/designations", function ($r) {
 });
 $ROUTES->attach('streetNames', "/streets/names", function ($r) {
     $r->setTokens(['id'=>'[a-z0-9]+']);
-    $r->setValues(['controller'=> 'Application\Streets\Names\NamesController']);
+    $r->setValues(['controller'=> 'Application\Streets\Names\Controller']);
 
     $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
     $r->add('index',  '')             ->addValues(['action'=>'index' ]);

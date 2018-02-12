@@ -8,4 +8,6 @@ screen.css
 screen.css.map
 *.mo
 *.retry
-
+.buildpath
+.project
+.settings
