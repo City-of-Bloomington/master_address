@@ -13,8 +13,7 @@ use Domain\Addresses\Parser;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Info\InfoRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
-use Domain\Addresses\UseCases\Update\UpdateRequest;
-use Domain\Addresses\UseCases\Update\UpdateResponse;
+use Domain\Addresses\UseCases\Search\SearchResponse;
 
 use Domain\ChangeLogs\ChangeLogRequest;
 
@@ -51,8 +50,11 @@ class Controller extends BaseController
 
         $query  = !empty($_GET['address'])
                 ? self::translateFields($parser($_GET['address']))
-                : [];
-        $res    = $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page));
+                : null;
+        $res    = $query
+                ? $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page))
+                : new SearchResponse();
+
         return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
 

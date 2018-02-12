@@ -7,9 +7,7 @@ declare (strict_types=1);
 namespace Domain\Addresses\DataStorage;
 
 use Domain\Addresses\Entities\Address;
-use Domain\Addresses\UseCases\Info\InfoRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
-use Domain\Addresses\UseCases\Update\UpdateRequest;
 
 interface AddressesRepository
 {

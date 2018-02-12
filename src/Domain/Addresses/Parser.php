@@ -8,10 +8,6 @@ namespace Domain\Addresses;
 
 use Domain\Addresses\DataStorage\AddressesRepository;
 
-use Application\Subunits\Type       as SubunitType;
-use Application\Subunits\TypesTable as SubunitTypes;
-use Application\Streets\Types\TypesTable  as Types;
-
 class Parser
 {
     const NUMBER_PREFIX  = 'street_number_prefix';
@@ -163,7 +159,7 @@ class Parser
 					$output[self::SUBUNIT_ID] = $matches['subunitIdentifier'];
 					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 					// Just ignore anything that's not a known type
 				}
 			}

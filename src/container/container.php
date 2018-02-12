@@ -22,13 +22,17 @@ if ($platform == 'Pgsql' && !empty($conf['schema'])) {
 //---------------------------------------------------------
 $repos = [
     'Addresses', 'Jurisdictions', 'People', 'Plats',
-    'Streets', 'Subdivisions', 'Towns', 'Townships', 'Users'
+    'Streets', 'Subdivisions', 'Towns', 'Townships', 'Users',
 ];
 foreach ($repos as $t) {
     $DI->params[ "Domain\\$t\\DataStorage\\Pdo{$t}Repository"]["pdo"] = $pdo;
     $DI->set(    "Domain\\$t\\DataStorage\\{$t}Repository",
     $DI->lazyNew("Domain\\$t\\DataStorage\\Pdo{$t}Repository"));
 }
+$DI->params[ 'Domain\Streets\Names\DataStorage\PdoNamesRepository']['pdo'] = $pdo;
+$DI->set(    'Domain\Streets\Names\DataStorage\NamesRepository',
+$DI->lazyNew('Domain\Streets\Names\DataStorage\PdoNamesRepository'));
+
 
 //---------------------------------------------------------
 // Metadata providers
@@ -72,3 +76,6 @@ foreach (['Addresses', 'Streets'] as $t) {
     $DI->set(    "Domain\\$t\\UseCases\\ChangeLog\\ChangeLog",
     $DI->lazyNew("Domain\\$t\\UseCases\\ChangeLog\\ChangeLog"));
 }
+$DI->params[ 'Domain\Streets\Names\UseCases\Search\Search']['repository'] = $DI->get('Domain\Streets\Names\DataStorage\NamesRepository');
+$DI->set(    'Domain\Streets\Names\UseCases\Search\Search',
+$DI->lazyNew('Domain\Streets\Names\UseCases\Search\Search'));
