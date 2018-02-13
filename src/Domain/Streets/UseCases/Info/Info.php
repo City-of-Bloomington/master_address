@@ -21,9 +21,9 @@ class Info
     {
         $info = new InfoResponse();
         try {
-            $info->street       = $this->repo->load        ($req->id);
-            $info->changeLog    = $this->repo->changeLog   ($req->id);
-            $info->designations = $this->repo->designations($req->id);
+            $info->street       = $this->repo->load         ($req->id);
+            $info->changeLog    = $this->repo->loadChangeLog($req->id);
+            $info->designations = $this->repo->designations ($req->id);
         }
         catch (\Exception $e) {
             $info->errors = [$e->getMessage()];
