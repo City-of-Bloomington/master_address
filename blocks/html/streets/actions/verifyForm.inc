@@ -15,7 +15,7 @@ $user  = parent::escape(implode(' ', [$_SESSION['USER']->firstname, $_SESSION['U
     <form method="post" action="<?= parent::generateUri('streets.verify'); ?>">
         <fieldset>
             <input type="hidden" name="id" value="<?= $id; ?>" />
-            <p><?= sprintf($this->_('street_verify_statement', 'messages'), $user); ?></p>
+            <p><?= sprintf($this->_('verify_statement', 'messages'), $user); ?></p>
             <?php
                 $helper = $this->template->getHelper('field');
                 echo $helper->field([

@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param VerifyRequest $this->request
+ * @param Address       $this->address
  */
-$id    = $this->request->address->getId();
+$id    = $this->request->address_id;
 $notes = parent::escape($this->request->notes);
+$user  = parent::escape(implode(' ', [$_SESSION['USER']->firstname, $_SESSION['USER']->lastname]));
 ?>
 <section>
     <header><h1><?= $this->_('address_verify'); ?></h1></header>
@@ -13,7 +15,7 @@ $notes = parent::escape($this->request->notes);
         <form method="post" action="<?= parent::generateUri('addresses.verify'); ?>">
             <fieldset>
                 <input type="hidden" name="id" value="<?= $id; ?>" />
-                <p><?= sprintf($this->_('address_verify_statement', 'messages'), $_SESSION['USER']->getFullname()); ?></p>
+                <p><?= sprintf($this->_('verify_statement', 'messages'), $user); ?></p>
                 <?php
                     $helper = $this->template->getHelper('field');
                     echo $helper->field([
@@ -33,7 +35,6 @@ $notes = parent::escape($this->request->notes);
         </form>
         <table class="<?= $status; ?>">
         <?php
-            $this->address = $this->request->address;
             $this->_include('addresses/partials/streetData.inc');
             $this->_include('addresses/partials/nonStreetData.inc');
         ?>

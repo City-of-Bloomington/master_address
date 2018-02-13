@@ -11,6 +11,8 @@ use Domain\Addresses\Entities\Address;
 class InfoResponse
 {
     public $address;
+    public $locations = [];
+    public $subunits  = [];
     public $changeLog = [];
     public $errors    = [];
 }

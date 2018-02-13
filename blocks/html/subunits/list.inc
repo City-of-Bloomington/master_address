@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array   $this->subunits
  * @param Address $this->address
@@ -12,6 +12,7 @@ use Application\People\Person;
         <h2><?= $this->_(['subunit', 'subunits', count($this->subunits)]); ?></h2>
         <div class="tools">
         <?php
+            /*
             if (isset($this->address) && Person::isAllowed('subunits', 'update')) {
                 $helper = $this->template->getHelper('buttonLink');
                 echo $helper->buttonLink(
@@ -20,6 +21,7 @@ use Application\People\Person;
                     'add'
                 );
             }
+            */
         ?>
         </div>
     </header>
@@ -36,17 +38,14 @@ use Application\People\Person;
         <tbody>
         <?php
 			foreach ($this->subunits as $s) {
-                $url    = parent::generateUri('subunits.view', ['id'=>$s->getId()]);
-                $type   = parent::escape($s->getType());
-				$number = parent::escape($s->getIdentifier());
-				$status = parent::escape($s->getStatus());
+                $url = parent::generateUri('subunits.view', ['id'=>$s->id]);
 				echo "
-				<tr><td><a href=\"$url\">$type</a></td>
-					<td><a href=\"$url\">$number</a></td>
-					<td>$status</td>
-					<td>{$s->getLatitude()},{$s->getLongitude()}</td>
-					<td>{$s->getX()},{$s->getY()}</td>
-					<td></td>
+				<tr><td><a href=\"$url\">{$s->type_code}</a></td>
+					<td><a href=\"$url\">{$s->identifier}</a></td>
+					<td>{$s->status}</td>
+					<td>{$s->latitude},{$s->longitude}</td>
+					<td>{$s->state_plane_x},{$s->state_plane_y}</td>
+					<td>{$s->usng}</td>
 				</tr>
 				";
 			}

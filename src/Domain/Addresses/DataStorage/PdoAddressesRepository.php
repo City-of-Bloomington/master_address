@@ -9,6 +9,8 @@ namespace Domain\Addresses\DataStorage;
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
+use Domain\Addresses\Entities\Location;
+use Domain\Addresses\Entities\Subunit;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 
 use Domain\ChangeLogs\ChangeLogEntry;
@@ -163,7 +165,25 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return parent::saveEntity($address);
     }
 
-    public function changeLog(int $address_id): array
+    public function logChange(ChangeLogEntry $entry): int
+    {
+        $insert = $this->queryFactory->newInsert();
+        $insert->into('address_change_log')
+               ->cols([
+                    'address_id'  => $entry->entity_id,
+                    'person_id'   => $entry->person_id,
+                    'contact_id'  => $entry->contact_id,
+                    'action'      => $entry->action,
+                    'notes'       => $entry->notes
+               ]);
+        $query = $this->pdo->prepare($insert->getStatement());
+        $query->execute($insert->getBindValues());
+        
+        $pk = $insert->getLastInsertIdName($this->primaryKey);
+        return (int)$this->pdo->lastInsertId($pk);
+    }
+    
+    public function loadChangeLog(int $address_id): array
     {
         $changeLog = [];
         $sql = "select l.address_id as entity_id,
@@ -175,12 +195,50 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 left join people        c on l.contact_id=p.id
                 where address_id=?";
 
-        $query = $this->pdo->prepare($sql);
-        $query->execute([$address_id]);
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+        foreach ($this->doQuery($sql, [$address_id]) as $row) {
             $changeLog[] = ChangeLogEntry::hydrate($row);
         }
         return $changeLog;
+    }
+    
+    public function locations(int $address_id): array
+    {
+        $locations = [];
+        $sql = "select  l.*,
+                        t.code as type_code, t.name as type_name,
+                        s.status
+                from locations l
+                join location_types t on l.type_id=t.id
+                left join location_status s on (
+                    l.location_id=s.location_id
+                    and start_date <= CURRENT_DATE
+                    and (end_date is null or end_date >= CURRENT_DATE)
+                )
+                where address_id=? and subunit_id is null";
+        foreach ($this->doQuery($sql, [$address_id]) as $row) {
+            $locations[] = new Location($row);
+        }
+        return $locations;
+    }
+    
+    public function subunits(int $address_id): array
+    {
+        $subunits = [];
+        $sql = "select  s.*,
+                        t.code as type_code, t.name as type_name,
+                        x.status
+                from subunits s
+                left join subunit_types t on s.type_id=t.id
+                left join subunit_status x on (
+                    s.id=x.subunit_id
+                    and start_date <= CURRENT_DATE
+                    and (end_date is null or end_date >= CURRENT_DATE)
+                )
+                where address_id=?";
+        foreach ($this->doQuery($sql, [$address_id]) as $row) {
+            $subunits[] = new Subunit($row);
+        }
+        return $subunits;
     }
 
     //---------------------------------------------------------------
@@ -193,19 +251,16 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
     public function townships(): array
     {
-        $result = $this->pdo->query('select id, name from townships order by name');
-        return $result->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->doQuery('select id, name from townships order by name');
     }
 
     public function streetTypes(): array
     {
-        $result = $this->pdo->query('select * from street_types order by name');
-        return $result->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->doQuery('select * from street_types order by name');
     }
 
     public function subunitTypes(): array
     {
-        $result = $this->pdo->query('select * from subunit_types order by name');
-        return $result->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->doQuery('select * from subunit_types order by name');
     }
 }
