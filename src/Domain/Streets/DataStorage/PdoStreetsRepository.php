@@ -111,8 +111,26 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             'notes'   => $street->notes
         ]);
     }
+    
+    public function logChange(ChangeLogEntry $entry): int
+    {
+        $insert = $this->queryFactory->newInsert();
+        $insert->into('street_change_log')
+               ->cols([
+                    'street_id'  => $entry->entity_id,
+                    'person_id'  => $entry->person_id,
+                    'contact_id' => $entry->contact_id,
+                    'action'     => $entry->action,
+                    'notes'      => $entry->notes
+               ]);
+        $query = $this->pdo->prepare($insert->getStatement());
+        $query->execute($insert->getBindValues());
+        
+        $pk = $insert->getLastInsertIdName($this->primaryKey);
+        return (int)$this->pdo->lastInsertId($pk);
+    }
 
-    public function changeLog(int $street_id): array
+    public function loadChangeLog(int $street_id): array
     {
         $changeLog = [];
         $sql = "select l.street_id as entity_id,

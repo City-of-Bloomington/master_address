@@ -16,28 +16,25 @@ $town   = parent::escape($this->street->town_name);
 ?>
 <section>
     <header>
-        <h2><?= $this->_('street_info'); ?></h2>
+        <h2><?= $name ?></h2>
         <div class="tools">
         <?php
-            /*
-            $actions = ['verify', 'correct', 'changeStatus'];
-            $helper = $this->template->getHelper('buttonLink');
+            $helper  = $this->template->getHelper('buttonLink');
+            $actions = ['verify'];#, 'correct', 'changeStatus'];
             foreach ($actions as $a) {
                 if (parent::isAllowed('streets', $a)) {
                     echo $helper->buttonLink(
-                        parent::generateUri("streets.$a").'?id='.$this->street->id,
+                        parent::generateUri("streets.$a", ['id' => $this->street->id]),
                         $this->_($a),
                         'edit'
                     );
                 }
             }
-            */
         ?>
         </div>
     </header>
 	<table>
         <tr><th><?= $this->_('id'    ); ?></th><td><?= $this->street->id; ?></td></tr>
-        <tr><th><?= $this->_('name'  ); ?></th><td><?= $name;   ?></td></tr>
         <tr><th><?= $this->_('status'); ?></th><td><?= $status; ?></td></tr>
         <tr><th><?= $this->_('town'  ); ?></th><td><?= $town;   ?></td></tr>
 	</table>

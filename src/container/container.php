@@ -70,11 +70,10 @@ $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->get('Do
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));
 
-// Change Logs
 foreach (['Addresses', 'Streets'] as $t) {
-    $DI->params[ "Domain\\$t\\UseCases\\ChangeLog\\ChangeLog"]["repository"] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
-    $DI->set(    "Domain\\$t\\UseCases\\ChangeLog\\ChangeLog",
-    $DI->lazyNew("Domain\\$t\\UseCases\\ChangeLog\\ChangeLog"));
+    $DI->params[ "Domain\\$t\\UseCases\\Verify\\Verify"]["repository"] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
+    $DI->set(    "Domain\\$t\\UseCases\\Verify\\Verify",
+    $DI->lazyNew("Domain\\$t\\UseCases\\Verify\\Verify"));
 }
 $DI->params[ 'Domain\Streets\Names\UseCases\Search\Search']['repository'] = $DI->get('Domain\Streets\Names\DataStorage\NamesRepository');
 $DI->set(    'Domain\Streets\Names\UseCases\Search\Search',

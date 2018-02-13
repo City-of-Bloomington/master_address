@@ -16,6 +16,7 @@ class ChangeLogEntry
     public $action;
     public $notes;
 
+    // Foreign key fields
     public $person_firstname;
     public $person_lastname;
     public $contact_firstname;

@@ -14,6 +14,7 @@ use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
+use Domain\Streets\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
 {
@@ -72,26 +73,34 @@ class Controller extends BaseController
 
     public function verify(array $params)
     {
-        if (!empty($_REQUEST['id'])) {
-            try { $street = new Street($_REQUEST['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-        }
-
-        if (isset($street)) {
-            if (isset($_POST['id'])) {
-                $verification = new Messages\VerifyRequest($street, $_SESSION['USER'], $_POST['notes']);
-                try {
-                    $street->verify($verification);
-                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street->getId()]));
-                    exit();
-                }
-                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        $user_id = $_SESSION['USER']->id;
+        
+        if (isset($_POST['id'])) {
+            echo "Posting...\n";
+            $request  = new VerifyRequest((int)$_POST['id'], $user_id, $_POST['notes']);
+            $verify   = $this->di->get('Domain\Streets\UseCases\Verify\Verify');
+            $response = $verify($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
+                exit();
             }
-            else {
-                $verification = new Messages\VerifyRequest($street, $_SESSION['USER']);
-            }
-            return new Views\Actions\VerifyView(['request'=>$verification]);
+            else { $_SESSION['errorMessages'] = $response->errors; }
         }
+        else if (!empty($_REQUEST['id'])) {
+            $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
+            $req  = new InfoRequest((int)$_REQUEST['id']);
+            try {
+                $res = $info($req);
+                $request = new VerifyRequest($res->street->id, $user_id);
+            }
+            catch (\Exception $e) { $_SESSION['errorMessages'] = $res->errors; }
+        }
+        
+        if (isset($request)) {
+            return new Views\VerifyView($request, $res);
+        }
+        
+        exit();
         return new \Application\Views\NotFoundView();
     }
 
