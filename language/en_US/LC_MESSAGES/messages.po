@@ -1,5 +1,5 @@
 # Translation
-# Copyright (C) 2013-2017 City of Bloomington
+# Copyright (C) 2013-2018 City of Bloomington
 # This file is distributed under the same license as the Blossom package.
 domain "messages"
 
@@ -22,8 +22,8 @@ msgstr "Signed in as %s"
 msgid "no_results"
 msgstr "No %s found"
 
-msgid "street_verify_statement"
-msgstr "I, %s, verify that this street is accurate at this point in time."
+msgid "verify_statement"
+msgstr "I, %s, verify that this information is accurate at this point in time."
 
 msgid "missingField"
 msgstr "You must provide a %s"

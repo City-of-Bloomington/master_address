@@ -11,8 +11,8 @@
         <h1><?= $this->title ?></h1>
         <div class="tools">
         <?php
-            /*
             $h       = $this->template->getHelper('buttonLink');
+            /*
             $status  = $this->address->status;
             $actions = ['correct','update','readdress','verify'];
             if ($status == 'retired') {
@@ -22,18 +22,19 @@
             else {
                 $actions[] = 'retire';
             }
+            */
+            $actions = ['verify'];
 
             foreach ($actions as $a) {
                 if (parent::isAllowed('addresses', $a)) {
                     echo $h->buttonLink(
-                        parent::generateUri("addresses.$a").'?id='.$this->address->getId(),
+                        parent::generateUri("addresses.$a", ['id'=>$this->address->id]),
                         $this->_($a),
                         'edit'
                     );
 
                 }
             }
-            */
         ?>
         </div>
     </header>

@@ -14,6 +14,7 @@ use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Info\InfoRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Search\SearchResponse;
+use Domain\Addresses\UseCases\Verify\VerifyRequest;
 
 use Domain\ChangeLogs\ChangeLogRequest;
 
@@ -80,26 +81,32 @@ class Controller extends BaseController
 
     public function verify(array $params)
     {
-        if (!empty($_REQUEST['id'])) {
-            try { $address = new Address($_REQUEST['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-        }
-
-        if (isset($address)) {
-            if (isset($_POST['id'])) {
-                $verification = new Messages\VerifyRequest($address, $_SESSION['USER'], $_POST['notes']);
-                try {
-                    $address->verify($verification);
-                    header('Location: '.View::generateUrl('addresses.view', ['id'=>$address->getId()]));
-                    exit();
-                }
-                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        $user_id = $_SESSION['USER']->id;
+        
+        if (isset($_POST['id'])) {
+            $request  = new VerifyRequest((int)$_POST['id'], $user_id, $_POST['notes']);
+            $verify   = $this->di->get('Domain\Addresses\UseCases\Verify\Verify');
+            $response = $verify($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('addresses.view', ['id'=>$request->address_id]));
+                exit();
             }
-            else {
-                $verification = new Messages\VerifyRequest($address, $_SESSION['USER']);
-            }
-            return new Views\VerifyView(['request'=>$verification]);
+            else { $_SESSION['errorMessages'] = $response->errors; }
         }
+        else if (!empty($_REQUEST['id'])) {
+            $info = $this->di->get('Domain\Addresses\UseCases\Info\Info');
+            $req  = new InfoRequest((int)$_REQUEST['id']);
+            try {
+                $res = $info($req);
+                $request = new VerifyRequest($res->address->id, $user_id);
+            }
+            catch (\Exception $e) { $_SESSION['errorMessages'] = $res->errors; }
+        }
+        
+        if (isset($request)) {
+            return new Views\VerifyView($request, $res);
+        }
+        
         return new \Application\Views\NotFoundView();
     }
 }

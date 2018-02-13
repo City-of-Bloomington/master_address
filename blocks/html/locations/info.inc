@@ -1,15 +1,14 @@
 <?php
 /**
- * @copyright 2014-2017 City of Bloomington, Indiana
+ * @copyright 2014-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Location $this->location
  */
 $fields = [
-    'id', 'status', 'type', 'mailable', 'occupiable', 'active', 'trashDay', 'recycleWeek'
+    'location_id', 'status', 'type_code', 'mailable', 'occupiable', 'active', 'trash_day', 'recycle_week'
 ];
 foreach ($fields as $f) {
-    $get = 'get'.ucfirst($f);
-    $$f  = parent::escape($this->location->$get());
+    $$f  = parent::escape($this->location->$f);
 }
 ?>
 <table>

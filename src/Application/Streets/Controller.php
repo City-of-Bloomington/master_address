@@ -76,7 +76,6 @@ class Controller extends BaseController
         $user_id = $_SESSION['USER']->id;
         
         if (isset($_POST['id'])) {
-            echo "Posting...\n";
             $request  = new VerifyRequest((int)$_POST['id'], $user_id, $_POST['notes']);
             $verify   = $this->di->get('Domain\Streets\UseCases\Verify\Verify');
             $response = $verify($request);
@@ -100,7 +99,6 @@ class Controller extends BaseController
             return new Views\VerifyView($request, $res);
         }
         
-        exit();
         return new \Application\Views\NotFoundView();
     }
 

@@ -28,9 +28,9 @@ class InfoView extends Template
             'title'   => $this->vars['title']
         ]);
 
-        $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes'   => $info->changeLog]);
-        #$this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $this->address->getLocations()]);
-        #$this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'   => $this->address, 'subunits' => $this->address->getSubunits()]);
+        $this->blocks[]              = new Block('changeLogs/changeLog.inc', ['changes'   => $info->changeLog]);
+        $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
+        $this->blocks['panel-one'][] = new Block('subunits/list.inc',        ['address'   => $info->address, 'subunits' => $info->subunits]);
     }
 
     public static function addressToString(Address $a): string

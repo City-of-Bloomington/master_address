@@ -109,4 +109,11 @@ abstract class PdoRepository
         $result = $this->pdo->query($select->getStatement());
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
+    
+    protected function doQuery(string $sql, ?array $params=null): array
+    {
+        $query = $this->pdo->prepare($sql);
+        $query->execute($params);
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

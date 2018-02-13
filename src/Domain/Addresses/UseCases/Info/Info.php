@@ -21,8 +21,10 @@ class Info
     {
         $info = new InfoResponse();
         try {
-            $info->address   = $this->repo->load     ($req->id);
-            $info->changeLog = $this->repo->changeLog($req->id);
+            $info->address   = $this->repo->load         ($req->id);
+            $info->changeLog = $this->repo->loadChangeLog($req->id);
+            $info->locations = $this->repo->locations    ($req->id);
+            $info->subunits  = $this->repo->subunits     ($req->id);
         }
         catch (\Exception $e) {
             $info->errors = [$e->getMessage()];
