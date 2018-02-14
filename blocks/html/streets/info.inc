@@ -20,7 +20,7 @@ $town   = parent::escape($this->street->town_name);
         <div class="tools">
         <?php
             $helper  = $this->template->getHelper('buttonLink');
-            $actions = ['verify'];#, 'correct', 'changeStatus'];
+            $actions = ['verify', 'correct'];#, 'correct', 'changeStatus'];
             foreach ($actions as $a) {
                 if (parent::isAllowed('streets', $a)) {
                     echo $helper->buttonLink(

@@ -7,6 +7,8 @@ declare (strict_types=1);
 namespace Domain\Streets\UseCases\Verify;
 
 use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\ChangeLogs\ChangeLogResponse;
+use Domain\ChangeLogs\Metadata as ChangeLog;
 use Domain\Streets\DataStorage\StreetsRepository;
 
 class Verify
@@ -18,18 +20,18 @@ class Verify
         $this->repo = $repository;
     }
     
-    public function __invoke(VerifyRequest $req): VerifyResponse
+    public function __invoke(VerifyRequest $req): ChangeLogResponse
     {
         try {
-            return new VerifyResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => 'verify',
+            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+                'action'    => ChangeLog::$actions['verify'],
                 'entity_id' => $req->street_id,
                 'person_id' => $req->user_id,
                 'notes'     => $req->notes
             ])));
         }
         catch (\Exception $e) {
-            return new VerifyResponse(null, [$e->getMessage()]);
+            return new ChangeLogResponse(null, [$e->getMessage()]);
         }
     }
 }

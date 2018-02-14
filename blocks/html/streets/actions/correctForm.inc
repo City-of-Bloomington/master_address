@@ -1,16 +1,13 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @param CorrectRequest $this->request
  */
-use Application\Towns\TownsTable;
-
-$id          = $this->request->street->getId();
-$town_id     = parent::escape($this->request->streetInfo['town_id']);
-$streetNotes = parent::escape($this->request->streetInfo['notes'  ]);
-$contact_id  = parent::escape($this->request->changeLog['contact_id']);
-$changeNotes = parent::escape($this->request->changeLog['notes'     ]);
+$id      = $this->request->street_id;
+$town_id = $this->request->town_id;
+$notes       = parent::escape($this->request->notes);
+$changeNotes = parent::escape($this->request->change_notes);
 ?>
 <section>
     <header>
@@ -18,7 +15,7 @@ $changeNotes = parent::escape($this->request->changeLog['notes'     ]);
     </header>
     <form method="post" action="<?= $this->generateUri('streets.correct'); ?>">
         <fieldset><legend><?= $this->_('street_info'); ?></legend>
-            <input name="id" type="hidden" value="<?php echo $id; ?>" />
+            <input name="id" type="hidden" value="<?= $id; ?>" />
             <?php
                 $helper = $this->template->getHelper('field');
 

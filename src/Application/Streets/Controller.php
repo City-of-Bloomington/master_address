@@ -14,7 +14,6 @@ use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
-use Domain\Streets\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
 {
@@ -70,15 +69,27 @@ class Controller extends BaseController
         }
         return new \Application\Views\NotFoundView();
     }
-
-    public function verify(array $params)
+    
+    public function verify      (array $params) { return $this->doChangeLogUseCase('Verify'      ); }
+    public function correct     (array $params) { return $this->doChangeLogUseCase('Correct'     ); }
+    public function changeStatus(array $params) { return $this->doChangeLogUseCase('ChangeStatus'); }
+    
+    /**
+     * @param  string $action  The use case name (case-sensitive)
+     * @return View
+     */
+    private function doChangeLogUseCase(string $action)
     {
+        
+        $useCaseRequest = "Domain\\Streets\\UseCases\\$action\\{$action}Request";
+        $useCaseView    = "Application\\Streets\\Views\\{$action}View";
+        
         $user_id = $_SESSION['USER']->id;
         
         if (isset($_POST['id'])) {
-            $request  = new VerifyRequest((int)$_POST['id'], $user_id, $_POST['notes']);
-            $verify   = $this->di->get('Domain\Streets\UseCases\Verify\Verify');
-            $response = $verify($request);
+            $request  = new $useCaseRequest((int)$_POST['id'], $user_id, $_POST);
+            $useCase  = $this->di->get("Domain\\Streets\\UseCases\\$action\\$action");
+            $response = $useCase($request);
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
                 exit();
@@ -90,65 +101,15 @@ class Controller extends BaseController
             $req  = new InfoRequest((int)$_REQUEST['id']);
             try {
                 $res = $info($req);
-                $request = new VerifyRequest($res->street->id, $user_id);
+                $request = new $useCaseRequest($res->street->id, $user_id);
             }
             catch (\Exception $e) { $_SESSION['errorMessages'] = $res->errors; }
         }
         
         if (isset($request)) {
-            return new Views\VerifyView($request, $res);
+            return new $useCaseView($request, $res);
         }
         
-        return new \Application\Views\NotFoundView();
-    }
-
-    public function correct(array $params)
-    {
-        if (!empty($_REQUEST['id'])) {
-            try { $street  = new Street($_REQUEST['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-        }
-
-        if (isset($street)) {
-            if (isset($_POST['id'])) {
-                $correction = new Messages\CorrectRequest($street, $_SESSION['USER'], $_POST);
-                try {
-                    $street->correct($correction);
-                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street->getId()]));
-                    exit();
-                }
-                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-            }
-            else {
-                $correction = new Messages\CorrectRequest($street, $_SESSION['USER']);
-            }
-            return new Views\Actions\CorrectView(['request'=>$correction]);
-        }
-        return new \Application\Views\NotFoundView();
-    }
-
-    public function changeStatus(array $params)
-    {
-        if (!empty($_REQUEST['id'])) {
-            try { $street  = new Street($_REQUEST['id']); }
-            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-        }
-
-        if (isset($street)) {
-            if (isset($_POST['id'])) {
-                $change = new Messages\StatusChangeRequest($street, $_SESSION['USER'], $_POST);
-                try {
-                    $street->changeStatus($change);
-                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street->getId()]));
-                    exit();
-                }
-                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
-            }
-            else {
-                $change = new Messages\StatusChangeRequest($street, $_SESSION['USER']);
-            }
-            return new Views\Actions\StatusChangeView(['request'=>$change]);
-        }
         return new \Application\Views\NotFoundView();
     }
 }

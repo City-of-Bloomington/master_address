@@ -6,12 +6,7 @@
 declare (strict_types=1);
 namespace Domain\ChangeLogs;
 
-class ChangeLogRequest
+interface ChangeLogRequest
 {
-    public $entity_id;
-
-    public function __construct(int $id)
-    {
-        $this->entity_id = $id;
-    }
+    public function __construct(int $entity_id, int $user_id, ?array $data=null);
 }
