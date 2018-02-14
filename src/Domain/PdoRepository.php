@@ -70,20 +70,22 @@ abstract class PdoRepository
 
 	protected function saveEntity($entity): int
 	{
+        $primaryKey = $this->primaryKey;
+        
         $data = [];
         foreach ($entity as $k=>$v) {
-            if ($k != $this->primaryKey) { $data[$k] = $v; }
+            if ($k != $primaryKey) { $data[$k] = $v; }
         }
 
-        if ($entity->id) {
+        if ($entity->$primaryKey) {
             // Update
             $update = $this->queryFactory->newUpdate();
             $update->table($this->tablename)
                    ->cols($data)
-                   ->where("{$this->primaryKey}=?", $entity->id);
+                   ->where("{$this->primaryKey}=?", $entity->$primaryKey);
             $query = $this->pdo->prepare($update->getStatement());
             $query->execute($update->getBindValues());
-            return $entity->id;
+            return $entity->$primaryKey;
         }
         else {
             // Insert
@@ -92,7 +94,7 @@ abstract class PdoRepository
                    ->cols($data);
             $query = $this->pdo->prepare($insert->getStatement());
             $query->execute($insert->getBindValues());
-            $pk = $insert->getLastInsertIdName($this->primaryKey);
+            $pk = $insert->getLastInsertIdName($primaryKey);
             return (int)$this->pdo->lastInsertId($pk);
         }
 	}

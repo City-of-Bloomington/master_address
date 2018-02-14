@@ -16,8 +16,6 @@ use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Search\SearchResponse;
 use Domain\Addresses\UseCases\Verify\VerifyRequest;
 
-use Domain\ChangeLogs\ChangeLogRequest;
-
 class Controller extends BaseController
 {
     const ITEMS_PER_PAGE = 20;
@@ -79,14 +77,23 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    public function verify(array $params)
+    public function verify(array $params) { return $this->doChangeLogUseCase('Verify'); }
+    
+    /**
+     * @param  string $action  The use case name (case-sensitive)
+     * @return View
+     */
+    private function doChangeLogUseCase(string $action)
     {
+        $useCaseRequest = "Domain\\Addresses\\UseCases\\$action\\{$action}Request";
+        $useCaseView    = "Application\\Addresses\\Views\\{$action}View";
+        
         $user_id = $_SESSION['USER']->id;
         
         if (isset($_POST['id'])) {
-            $request  = new VerifyRequest((int)$_POST['id'], $user_id, $_POST['notes']);
-            $verify   = $this->di->get('Domain\Addresses\UseCases\Verify\Verify');
-            $response = $verify($request);
+            $request  = new $useCaseRequest((int)$_POST['id'], $user_id, $_POST);
+            $useCase  = $this->di->get("Domain\\Addresses\\UseCases\\$action\\$action");
+            $response = $useCase($request);
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('addresses.view', ['id'=>$request->address_id]));
                 exit();
@@ -98,13 +105,13 @@ class Controller extends BaseController
             $req  = new InfoRequest((int)$_REQUEST['id']);
             try {
                 $res = $info($req);
-                $request = new VerifyRequest($res->address->id, $user_id);
+                $request = new $useCaseRequest($res->address->id, $user_id);
             }
             catch (\Exception $e) { $_SESSION['errorMessages'] = $res->errors; }
         }
         
         if (isset($request)) {
-            return new Views\VerifyView($request, $res);
+            return new $useCaseView($request, $res);
         }
         
         return new \Application\Views\NotFoundView();

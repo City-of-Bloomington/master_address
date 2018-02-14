@@ -8,12 +8,12 @@ namespace Domain\ChangeLogs;
 
 class ChangeLogResponse
 {
-    public $changeLog = [];
-    public $errors    = [];
-
-    public function __construct(?array $changeLog=null, ?array $errors=null)
+    public $entry_id;
+    public $errors = [];
+    
+    public function __construct(int $entry_id, ?array $errors=null)
     {
-        $this->changeLog = $changeLog;
-        $this->errors    = $errors;
+        $this->entry_id = $entry_id;
+        $this->errors   = $errors;
     }
 }

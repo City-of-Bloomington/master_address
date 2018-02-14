@@ -73,7 +73,10 @@ $ROUTES->attach('streets', "/streets", function ($r) {
 
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    $r->add('verify', '/verify{/id}')->addValues(['action'=>'verify']);
+    
+    foreach (['verify', 'correct'] as $a) {
+        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
+    }
 });
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);

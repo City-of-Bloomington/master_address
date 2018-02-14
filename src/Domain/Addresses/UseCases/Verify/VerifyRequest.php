@@ -6,17 +6,20 @@
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Verify;
 
-class VerifyRequest
+use Domain\ChangeLogs\ChangeLogRequest;
+
+class VerifyRequest implements ChangeLogRequest
 {
     public $address_id;
     
     public $user_id;
     public $notes;
     
-    public function __construct(int $address_id, int $user_id, ?string $notes=null)
+    public function __construct(int $address_id, int $user_id, ?array $data=null)
     {
         $this->address_id = $address_id;
         $this->user_id    = $user_id;
-        $this->notes      = $notes;
+        
+        if (!empty($data['notes'])) { $this->notes = $data['notes']; }
     }
 }

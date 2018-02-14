@@ -13,7 +13,7 @@ use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
-use Domain\Streets\UseCases\Update\UpdateRequest;
+use Domain\Streets\UseCases\Correct\CorrectRequest;
 use Domain\Townships\Entities\Township;
 
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
@@ -98,18 +98,12 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $result['rows'] = $streets;
         return $result;
     }
-
-    /**
-     * Saves a street and returns the ID for the street
-     */
-    public function save(Street $street): int
+    
+    public function correct(CorrectRequest $req)
     {
-        return parent::saveEntity([
-            'id'      => $street->id,
-            'town_id' => $street->town_id,
-            'status'  => $street->status,
-            'notes'   => $street->notes
-        ]);
+        $sql = 'update streets set town_id=?, notes=? where id=?';
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$req->town_id, $req->notes, $req->street_id]);
     }
     
     public function logChange(ChangeLogEntry $entry): int
