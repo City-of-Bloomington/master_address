@@ -9,41 +9,34 @@ namespace Application\Addresses\Views;
 use Application\Block;
 use Application\Template;
 
-use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Info\InfoResponse;
+use Domain\Addresses\UseCases\Correct\CorrectRequest;
+use Domain\Streets\Entities\Street;
 
-class InfoView extends Template
+class CorrectView extends Template
 {
-    public function __construct(InfoResponse $info)
+    public function __construct(CorrectRequest $request, InfoResponse $info, ?Street $street=null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
+        $this->vars['title'] = $this->_('correct');
 
-        $this->vars['title'] = self::addressToString($info->address);
-
-        if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
-
-        $this->blocks[] = new Block('addresses/info.inc', [
-            'address' => $info->address,
-            'title'   => $this->vars['title']
-        ]);
-
+        $vars = [];
+        foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
+        if ($street) {
+            $vars['street_id'  ] = $street->id;
+            $vars['street_name'] = parent::escape(implode(' ', [
+                $street->direction,
+                $street->name,
+                $street->post_direction,
+                $street->suffix_code
+            ]));
+        }
+        $this->blocks[] = new Block('addresses/actions/correctForm.inc', $vars);
+        
         $this->blocks[]              = new Block('addresses/statusLog.inc',  ['statuses'  => $info->statusLog]);
         $this->blocks[]              = new Block('changeLogs/changeLog.inc', ['changes'   => $info->changeLog]);
         $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
         $this->blocks['panel-one'][] = new Block('subunits/list.inc',        ['address'   => $info->address, 'subunits' => $info->subunits]);
-    }
-
-    public static function addressToString(Address $a): string
-    {
-        return implode(' ', [
-            $a->street_number_prefix,
-            $a->street_number,
-            $a->street_number_suffix,
-            $a->street_direction,
-            $a->street_name,
-            $a->street_suffix_code,
-            $a->street_post_direction
-        ]);
     }
 }

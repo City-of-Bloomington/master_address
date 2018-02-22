@@ -11,6 +11,7 @@ use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\Entities\Location;
 use Domain\Addresses\Entities\Subunit;
+use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 
 use Domain\ChangeLogs\ChangeLogEntry;
@@ -151,18 +152,29 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $result['rows'] = $addresses;
         return $result;
     }
-
-    /**
-     * Saves a address and returns the ID for the address
-     */
-    public function save(Address $address): int
+    
+    public function correct(CorrectRequest $req)
     {
-        // Remove the fields from foreign key tables
-        unset($address->jurisdiction_name);
-        unset($address->township_name);
-        unset($address->subdivision_name);
-
-        return parent::saveEntity($address);
+        $sql = "update addresses 
+                set street_id=?,
+                    street_number_prefix=?,
+                    street_number=?,
+                    street_number_suffix=?,
+                    zip=?,
+                    zipplus4=?,
+                    notes=?
+                where id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->street_id,
+            $req->street_number_prefix,
+            $req->street_number,
+            $req->street_number_suffix,
+            $req->zip,
+            $req->zipplus4,
+            $req->notes,
+            $req->address_id
+        ]);
     }
 
     public function logChange(ChangeLogEntry $entry): int
@@ -193,12 +205,28 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 from address_change_log l
                 left join people        p on l.person_id=p.id
                 left join people        c on l.contact_id=p.id
-                where address_id=?";
+                where address_id=?
+                order by l.action_date desc";
 
         foreach ($this->doQuery($sql, [$address_id]) as $row) {
             $changeLog[] = ChangeLogEntry::hydrate($row);
         }
         return $changeLog;
+    }
+    
+    public function loadStatusLog(int $address_id): array
+    {
+        $statusLog = [];
+        $sql = "select id, status, start_date, end_date
+                from address_status
+                where address_id=?
+                order by start_date desc";
+        foreach ($this->doQuery($sql, [$address_id]) as $row) {
+            $row['start_date'] = !empty($row['start_date']) ? new \DateTime($row['start_date']) : null;
+            $row['end_date'  ] = !empty($row['end_date'  ]) ? new \DateTime($row['end_date'  ]) : null;
+            $statusLog[] = $row;
+        }
+        return $statusLog;
     }
     
     public function locations(int $address_id): array

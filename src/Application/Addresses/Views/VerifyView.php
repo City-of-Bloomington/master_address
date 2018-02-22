@@ -21,6 +21,7 @@ class VerifyView extends Template
         $this->vars['title'] = $this->_('verify');
 
         $this->blocks[] = new Block('addresses/actions/verifyForm.inc',      ['address'   => $info->address, 'request'  => $request]);
+        $this->blocks[]              = new Block('addresses/statusLog.inc',  ['statuses'  => $info->statusLog]);
         $this->blocks[]              = new Block('changeLogs/changeLog.inc', ['changes'   => $info->changeLog]);
         $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
         $this->blocks['panel-one'][] = new Block('subunits/list.inc',        ['address'   => $info->address, 'subunits' => $info->subunits]);

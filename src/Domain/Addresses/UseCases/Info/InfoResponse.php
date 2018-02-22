@@ -14,5 +14,6 @@ class InfoResponse
     public $locations = [];
     public $subunits  = [];
     public $changeLog = [];
+    public $statusLog = [];
     public $errors    = [];
 }

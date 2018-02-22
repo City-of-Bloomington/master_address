@@ -23,7 +23,7 @@
                 $actions[] = 'retire';
             }
             */
-            $actions = ['verify'];
+            $actions = ['verify', 'correct'];
 
             foreach ($actions as $a) {
                 if (parent::isAllowed('addresses', $a)) {

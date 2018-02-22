@@ -9,6 +9,7 @@ namespace Application\Streets\Views;
 use Application\Block;
 use Application\Template;
 use Application\Paginator;
+use Application\Url;
 
 use Domain\Streets\UseCases\Search\SearchResponse;
 
@@ -23,8 +24,13 @@ class SearchView extends Template
         if (count($response->errors)) {
             $_SESSION['errorMessages'] = $response->errors;
         }
-
-        $this->blocks[] = new Block('streets/searchForm.inc', ['streets' => $response->streets]);
+        
+        $this->blocks[] = new Block('streets/searchForm.inc', [
+            'street'     => !empty($_GET['street']) ? parent::escape($_GET['street']) : '',
+            'streets'    => $response->streets,
+            'hidden'     => parent::filterActiveParams($_GET, ['street']),
+            'return_url' => !empty($_GET['return_url']) ? new Url($_GET['return_url']) : null
+        ]);
 
         if ($response->total > $itemsPerPage) {
             $this->blocks[] = new Block('pageNavigation.inc', [
