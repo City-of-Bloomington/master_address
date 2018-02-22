@@ -3,6 +3,7 @@
  * @copyright 2015-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
+/*
 use Application\People\Person;
 
 $links  = [];
@@ -33,3 +34,4 @@ if ($links) {
     $helper = $this->getHelper('dropdown');
     echo $helper->dropdown($links, $this->_('admin'), 'Administrator_menu');
 }
+*/
