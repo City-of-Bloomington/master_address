@@ -9,7 +9,8 @@ namespace Application\Addresses;
 use Application\Controller as BaseController;
 use Application\View;
 
-use Domain\Addresses\Parser;
+use Domain\Addresses\UseCases\Parse\Parse;
+use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
@@ -23,16 +24,16 @@ class Controller extends BaseController
     /**
      * Converts Parser fieldnames to SearchRequest fieldnames
      */
-    private static function translateFields(array $parse): array
+    private static function translateFields(ParseResponse $parse): array
     {
         $query = [];
         foreach ($parse as $k=>$v) {
-            if (!empty($v)) {
+            if ($v) {
                 switch ($k) {
-                    case Parser::DIRECTION:      $query['street_direction'     ] = $v; break;
-                    case Parser::STREET_NAME:    $query['street_name'          ] = $v; break;
-                    case Parser::POST_DIRECTION: $query['street_post_direction'] = $v; break;
-                    case Parser::STREET_TYPE:    $query['street_suffix_code'   ] = $v; break;
+                    case Parse::DIRECTION:      $query['street_direction'     ] = $v; break;
+                    case Parse::STREET_NAME:    $query['street_name'          ] = $v; break;
+                    case Parse::POST_DIRECTION: $query['street_post_direction'] = $v; break;
+                    case Parse::STREET_TYPE:    $query['street_suffix_code'   ] = $v; break;
                     default:
                         $query[$k] = $v;
                 }
@@ -45,7 +46,7 @@ class Controller extends BaseController
     {
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
         $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
-        $parser = $this->di->get('Domain\Addresses\Parser');
+        $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
 
         $query  = !empty($_GET['address'])
                 ? self::translateFields($parser($_GET['address']))
@@ -59,6 +60,11 @@ class Controller extends BaseController
 
     public function parse(array $params)
     {
+        if (!empty($_GET['address'])) {
+            $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
+            return new Views\ParseView($parser($_GET['address']));
+        }
+        return new Views\ParseView();
     }
 
     public function view(array $params)

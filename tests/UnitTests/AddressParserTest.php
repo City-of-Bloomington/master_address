@@ -3,7 +3,7 @@
  * @copyright 2014-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
-use Domain\Addresses\Parser;
+use Domain\Addresses\UseCases\Parse\Parse;
 use PHPUnit\Framework\TestCase;
 
 class AddressParserTest extends TestCase
@@ -12,7 +12,7 @@ class AddressParserTest extends TestCase
     public static function setUpBeforeClass()
     {
         global $DI;
-        self::$parser = $DI->get('Domain\Addresses\Parser');
+        self::$parser = $DI->get('Domain\Addresses\UseCases\Parse\Parse');
     }
 
 	public function addressProvider()
@@ -65,7 +65,7 @@ class AddressParserTest extends TestCase
 	public function testAddressParsing($input, $output)
 	{
         $parser = self::$parser;
-        $parse = $parser($input);
+        $parse  = array_filter((array)$parser($input));
 		$this->assertEquals($output, $parse);
 	}
 
@@ -75,7 +75,7 @@ class AddressParserTest extends TestCase
 	public function testStreetParsing($input, $output)
 	{
         $parser = self::$parser;
-        $parse = $parser($input, 'streetNameOnly');
+        $parse  = array_filter((array)$parser($input, 'streetNameOnly'));
 		$this->assertEquals($output, $parse);
 	}
 }

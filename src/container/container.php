@@ -52,9 +52,9 @@ $DI->params[ 'Domain\Auth\AuthenticationService']['config'    ] = $AUTHENTICATIO
 $DI->set(    'Domain\Auth\AuthenticationService',
 $DI->lazyNew('Domain\Auth\AuthenticationService'));
 
-$DI->params[ 'Domain\Addresses\Parser']['repository'] = $DI->get('Domain\Addresses\DataStorage\AddressesRepository');
-$DI->set(    'Domain\Addresses\Parser',
-$DI->lazyNew('Domain\Addresses\Parser'));
+$DI->params[ 'Domain\Addresses\UseCases\Parse\Parse']['repository'] = $DI->get('Domain\Addresses\DataStorage\AddressesRepository');
+$DI->set(    'Domain\Addresses\UseCases\Parse\Parse',
+$DI->lazyNew('Domain\Addresses\UseCases\Parse\Parse'));
 
 //---------------------------------------------------------
 // Use Cases
