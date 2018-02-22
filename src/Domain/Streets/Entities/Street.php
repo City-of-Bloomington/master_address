@@ -40,4 +40,14 @@ class Street
             if (!empty($data['suffix_code'   ])) { $this->suffix_code    = $data['suffix_code']; }
         }
     }
+    
+    public function getStreetName(): string
+    {
+        return implode(' ', [
+            $this->direction,
+            $this->name,
+            $this->post_direction,
+            $this->suffix_code
+        ]);
+    }
 }

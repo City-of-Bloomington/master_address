@@ -16,6 +16,11 @@ class Metadata
     {
         $this->repo = $repository;
     }
+    
+    public static $requiredFields = [
+        'street_id', 'street_number', 'zip', 'section',
+        'address_type', 'jurisdiction_id', 'township_id'
+    ];
 
     public function trash_days()    { return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; }
     public function recycle_weeks() { return ['A', 'B']; }

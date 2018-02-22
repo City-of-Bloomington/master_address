@@ -227,4 +227,15 @@ class Template extends View
 			include APPLICATION_HOME."/templates/{$this->outputFormat}/$file";
 		}
 	}
+	
+    public static function filterActiveParams(array $array, array $activeParams): array
+    {
+        $out = [];
+        foreach ($array as $k=>$v) {
+            if ($v && !in_array($k, $activeParams)) {
+                $out[$k] = parent::escape($v);
+            }
+        }
+        return $out;
+    }
 }

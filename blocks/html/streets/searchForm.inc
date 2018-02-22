@@ -2,7 +2,10 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param array $this->streets
+ * @param string $this->street     The search string
+ * @param array  $this->streets    Array of street results
+ * @param array  $this->hidden     Hidden inputs to preserve
+ * @param Url    $this->return_url Url to link street results to
  */
 ?>
 <section>
@@ -17,15 +20,19 @@
                     'name'  => 'street',
                     'id'    => 'street',
                     'label' => $this->_('street'),
-                    'value' => !empty($_GET['street']) ? parent::escape($_GET['street']) : null
+                    'value' => $this->street
                 ]);
+                
+                foreach ($this->hidden as $k=>$v) {
+                    echo "<input type=\"hidden\" name=\"$k\" value=\"$v\" />";
+                }
             ?>
             <button type="submit" class="search"><?= $this->_('search'); ?></button>
         </fieldset>
     </form>
     <?php
         if (!count($this->streets)) {
-            if (isset($_GET['street'])) {
+            if ($this->street) {
                 echo sprintf($this->_('no_results', 'messages'), $this->_(['street', 'streets', 2]));
             }
         }

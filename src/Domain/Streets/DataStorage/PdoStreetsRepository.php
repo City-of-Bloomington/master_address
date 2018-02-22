@@ -85,7 +85,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                     break;
 
                     case 'name':
-                        $select->where("n.$f like ?", $req->$f);
+                        $select->where("n.$f like ?", "{$req->$f}%");
                     break;
                 }
             }

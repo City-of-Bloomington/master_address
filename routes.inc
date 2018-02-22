@@ -81,9 +81,9 @@ $ROUTES->attach('streets', "/streets", function ($r) {
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);
 
-    #foreach (\Application\Addresses\Address::$actions as $a) {
-    #    $r->add($a, "/$a")->addValues(['action'=>$a]);
-    #}
+    foreach (['verify', 'correct'] as $a) {
+        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
+    }
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
     $r->add('verify', '/verify{/id}')->addValues(['action'=>'verify']);

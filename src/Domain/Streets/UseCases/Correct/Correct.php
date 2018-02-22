@@ -26,7 +26,7 @@ class Correct
             $this->repo->correct($req);
             
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => ChangeLog::$actions['verify'],
+                'action'    => ChangeLog::$actions['correct'],
                 'entity_id' => $req->street_id,
                 'person_id' => $req->user_id,
                 'notes'     => $req->change_notes

@@ -49,6 +49,7 @@ class Field extends Helper
                 case 'radio':
                 case 'checkbox':
                 case 'person':
+                case 'chooser':
                 case 'file':
                     $class[]     = $params['type'];
                     $renderInput = $params['type'];
@@ -244,11 +245,11 @@ class Field extends Helper
     /**
      * Parameters:
      *
-     * label string
-     * name  string
-     * id    string
-     * value Person   Value must be a Person object
-     * type  string   HTML5 input tag type (text, email, date, etc.)
+     * name    string
+     * id      string
+     * value   int      The ID of the currently chosen object
+     * display string   The string to display for the currently chosen object
+     * url     string   The URI to the chooser
      *
      * @param array  $params
      * @param string $required  The string for the attribute 'required="true"'
@@ -258,5 +259,24 @@ class Field extends Helper
     {
         $h = $this->template->getHelper('personChooser');
         return $h->personChooser($params['name'], $params['id'], $params['value']);
+    }
+    
+    /**
+     * Parameters:
+     *
+     * name    string
+     * id      string
+     * value   int      The ID of the currently chosen object
+     * display string   The string to display for the currently chosen object
+     * url     string   The URI to the chooser
+     *
+     * @param array  $params
+     * @param string $required  The string for the attribute 'required="true"'
+     * @param string $attr      The string for any and all additional attributes
+     */
+    public function chooser(array $params, ?bool $required=false, ?string $attr=null)
+    {
+        $h = $this->template->getHelper('chooser');
+        return $h->chooser($params['name'], $params['id'], $params['url'], $params['value'], $params['display']);
     }
 }
