@@ -86,6 +86,7 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     }
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+    $r->add('parse',  '/parse')      ->addValues(['action'=>'parse' ]);
     $r->add('verify', '/verify{/id}')->addValues(['action'=>'verify']);
 });
 $ROUTES->attach('locationTypes', "/locations/types", function ($r) {

@@ -19,9 +19,8 @@
  *				)
  *
  *
- * @copyright 2011 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->address
+ * @copyright 2011-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param ParseResponse $this->parse
  */
-echo json_encode($this->address);
+echo json_encode($this->parse, JSON_PRETTY_PRINT);

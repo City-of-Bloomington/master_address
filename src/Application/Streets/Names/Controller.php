@@ -20,7 +20,7 @@ class Controller extends BaseController
     {
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
         $search = $this->di->get('Domain\Streets\Names\UseCases\Search\Search');
-        $parser = $this->di->get('Domain\Addresses\Parser');
+        $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
 
         $query  = !empty($_GET['street'])
                 ? StreetController::extractStreetFields($parser($_GET['street']))

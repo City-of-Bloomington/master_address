@@ -9,7 +9,8 @@ namespace Application\Streets;
 use Application\Controller as BaseController;
 use Application\View;
 
-use Domain\Addresses\Parser;
+use Domain\Addresses\UseCases\Parse\Parse;
+use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -22,13 +23,13 @@ class Controller extends BaseController
     /**
      * Converts Parser fieldnames to SearchRequest fieldnames
      */
-    public static function extractStreetFields(array $parse): array
+    public static function extractStreetFields(ParseResponse $parse): array
     {
         $query = [];
-        if (!empty($parse[Parser::DIRECTION     ])) { $query['direction'     ] = $parse[Parser::DIRECTION     ]; }
-        if (!empty($parse[Parser::STREET_NAME   ])) { $query['name'          ] = $parse[Parser::STREET_NAME   ]; }
-        if (!empty($parse[Parser::POST_DIRECTION])) { $query['post_direction'] = $parse[Parser::POST_DIRECTION]; }
-        if (!empty($parse[Parser::STREET_TYPE   ])) { $query['suffix_code'   ] = $parse[Parser::STREET_TYPE   ]; }
+        if (!empty($parse->{Parse::DIRECTION     })) { $query['direction'     ] = $parse->{Parse::DIRECTION     }; }
+        if (!empty($parse->{Parse::STREET_NAME   })) { $query['name'          ] = $parse->{Parse::STREET_NAME   }; }
+        if (!empty($parse->{Parse::POST_DIRECTION})) { $query['post_direction'] = $parse->{Parse::POST_DIRECTION}; }
+        if (!empty($parse->{Parse::STREET_TYPE   })) { $query['suffix_code'   ] = $parse->{Parse::STREET_TYPE   }; }
         return $query;
     }
 
@@ -36,7 +37,7 @@ class Controller extends BaseController
     {
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
         $search = $this->di->get('Domain\Streets\UseCases\Search\Search');
-        $parser = $this->di->get('Domain\Addresses\Parser');
+        $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
 
         $query  = !empty($_GET['street'])
                 ? self::extractStreetFields($parser($_GET['street']))

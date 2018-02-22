@@ -19,14 +19,13 @@
  *				)
  *
  *
- * @copyright 2011 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->address
+ * @copyright 2011-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param ParseResponse $this->parse
  */
 echo "<address>";
-foreach ($this->address as $key=>$value) {
-	$value = View::escape($value);
+foreach ($this->parse as $key=>$value) {
+	$value = parent::escape($value);
 	echo "<$key>$value</$key>";
 }
 echo "</address>";
