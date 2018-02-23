@@ -11,16 +11,22 @@ use Application\Template;
 
 use Domain\Addresses\UseCases\Search\SearchResponse;
 use Domain\Streets\UseCases\Info\InfoResponse;
-use Domain\Streets\UseCases\Verify\VerifyRequest;
+use Domain\Streets\UseCases\Correct\CorrectRequest;
+use Domain\Streets\Metadata;
 
-class VerifyView extends Template
+class CorrectView extends Template
 {
-    public function __construct(VerifyRequest $request, InfoResponse $info, SearchResponse $addressSearch)
+    public function __construct(CorrectRequest $request, InfoResponse $info, Metadata $metadata, SearchResponse $addressSearch)
     {
         parent::__construct('two-column', 'html');
-        $this->vars['title'] = $this->_('verify');
-
-        $this->blocks[] = new Block('streets/actions/verifyForm.inc', ['request' => $request]);
+        $this->vars['title'] = $this->_('correct');
+        
+        $vars = ['towns' => $metadata->towns()];
+        foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
+        
+        
+        $this->blocks[] = new Block('streets/actions/correctForm.inc', $vars);
+        
         $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes' => $info->changeLog]);
         $this->blocks[] = new Block('streets/designations.inc', [
             'street'       => $info->street,

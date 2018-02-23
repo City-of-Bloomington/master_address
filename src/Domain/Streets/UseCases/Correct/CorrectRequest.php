@@ -10,12 +10,14 @@ use Domain\ChangeLogs\ChangeLogRequest;
 
 class CorrectRequest implements ChangeLogRequest
 {
+    // Street fields
     public $street_id;
     public $town_id;
     public $notes;
-    public $change_notes;
     
+    // Change log entry
     public $user_id;
+    public $change_notes;
     
     public function __construct(int $street_id, int $user_id, ?array $data=null)
     {

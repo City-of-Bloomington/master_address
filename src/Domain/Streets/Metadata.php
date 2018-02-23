@@ -6,6 +6,8 @@
 declare (strict_types=1);
 namespace Domain\Streets;
 
+use Domain\Streets\DataStorage\StreetsRepository;
+
 class Metadata
 {
     private $repo;

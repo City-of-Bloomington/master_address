@@ -20,7 +20,7 @@ class Correct
         $this->repo = $repository;
     }
     
-    public function __invoke(CorrectRequest $req): CorrectResponse
+    public function __invoke(CorrectRequest $req): ChangeLogResponse
     {
         try {
             $this->repo->correct($req);
@@ -33,7 +33,7 @@ class Correct
             ])));
         }
         catch (\Exception $e) {
-            return new CorrectResponse(null, [$e->getMessage()]);
+            return new ChangeLogResponse(null, [$e->getMessage()]);
         }
     }
 }
