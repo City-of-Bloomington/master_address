@@ -11,22 +11,21 @@ $title = parent::escape("{$this->subunit->type_code} {$this->subunit->identifier
         <h1><?= $title; ?></h1>
         <div class="tools">
         <?php
-            /*
             $h       = $this->template->getHelper('buttonLink');
+            /*
             $status  = $this->subunit->getStatus()->getStatus();
             $actions = ['correct', 'verify', $status=='retired' ? 'unretire' : 'retire'];
-
+            */
+            $actions = ['verify'];
             foreach ($actions as $a) {
-                if (Person::isAllowed('subunits', $a)) {
+                if (parent::isAllowed('subunits', $a)) {
                     echo $h->buttonLink(
-                        parent::generateUri("subunits.$a"),
+                        parent::generateUri("subunits.$a", ['id' => $this->subunit->id]),
                         $this->_($a),
                         'edit'
                     );
-
                 }
             }
-            */
         ?>
         </div>
     </header>

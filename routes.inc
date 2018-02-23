@@ -46,10 +46,9 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->add('update', '/update{/id}')->addValues(['action'=>'update']);
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-
-    #foreach (\Application\Subunits\Subunit::$actions as $a) {
-    #    $r->add($a, "/$a")->addValues(['action'=>$a]);
-    #}
+    foreach (['verify', 'correct'] as $a) {
+        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
+    }
 });
 $ROUTES->attach('streetTypes', "/streets/types", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Types\TypesController']);
@@ -73,7 +72,7 @@ $ROUTES->attach('streets', "/streets", function ($r) {
 
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
-    
+
     foreach (['verify', 'correct'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
@@ -81,13 +80,12 @@ $ROUTES->attach('streets', "/streets", function ($r) {
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);
 
-    foreach (['verify', 'correct'] as $a) {
-        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
-    }
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
     $r->add('parse',  '/parse')      ->addValues(['action'=>'parse' ]);
-    $r->add('verify', '/verify{/id}')->addValues(['action'=>'verify']);
+    foreach (['verify', 'correct'] as $a) {
+        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
+    }
 });
 $ROUTES->attach('locationTypes', "/locations/types", function ($r) {
     $r->setValues(['controller'=> 'Application\Locations\TypesController']);

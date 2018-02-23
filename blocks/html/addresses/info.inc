@@ -38,7 +38,7 @@
         ?>
         </div>
     </header>
-    <table class="<?= $status; ?>">
+    <table class="<?= $this->address->status; ?>">
     <?php
         $this->_include('addresses/partials/nonStreetData.inc');
         $this->_include('addresses/partials/streetData.inc');

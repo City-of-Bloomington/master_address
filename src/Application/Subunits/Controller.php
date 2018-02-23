@@ -9,6 +9,8 @@ namespace Application\Subunits;
 use Application\Controller as BaseController;
 use Application\View;
 
+use Domain\Subunits\UseCases\Verify\VerifyRequest;
+
 class Controller extends BaseController
 {
     public function view(array $params)
@@ -22,6 +24,35 @@ class Controller extends BaseController
                 $_SESSION['errorMessages'] = $info->errors;
             }
         }
+        return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Declare that a subunit is correct at the current time
+     */
+    public function verify(array $params)
+    {
+        if (isset($_POST['id'])) {
+            $request  = new VerifyRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $verify   = $this->di->get('Domain\Subunits\UseCases\Verify\Verify');
+            $response = $verify($request);
+
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $subunit_id = (int)$_REQUEST['id'];
+
+            return new Views\VerifyView(
+                new VerifyRequest(   $subunit_id, $_SESSION['USER']->id),
+                $this->subunitInfo(  $subunit_id)
+            );
+        }
+
         return new \Application\Views\NotFoundView();
     }
 
