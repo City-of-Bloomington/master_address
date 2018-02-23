@@ -9,12 +9,11 @@ namespace Domain\Addresses\DataStorage;
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
-use Domain\Addresses\Entities\Location;
-use Domain\Addresses\Entities\Subunit;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 
 use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\ChangeLogs\Metadata as ChangeLog;
 
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
 {
@@ -198,15 +197,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function loadChangeLog(int $address_id): array
     {
         $changeLog = [];
-        $sql = "select l.address_id as entity_id,
-                       l.id, l.person_id, l.contact_id, l.action_date, l.action, l.notes,
-                       p.firstname as  person_firstname, p.lastname as  person_lastname,
-                       c.firstname as contact_firstname, c.lastname as contact_lastname
-                from address_change_log l
-                left join people        p on l.person_id=p.id
-                left join people        c on l.contact_id=p.id
-                where address_id=?
-                order by l.action_date desc";
+        $sql = ChangeLog::sqlForLog('address');
 
         foreach ($this->doQuery($sql, [$address_id]) as $row) {
             $changeLog[] = ChangeLogEntry::hydrate($row);
@@ -232,19 +223,15 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function locations(int $address_id): array
     {
         $locations = [];
-        $sql = "select  l.*,
-                        t.code as type_code, t.name as type_name,
-                        s.status
-                from locations l
-                join location_types t on l.type_id=t.id
-                left join location_status s on (
-                    l.location_id=s.location_id
-                    and start_date <= CURRENT_DATE
-                    and (end_date is null or end_date >= CURRENT_DATE)
-                )
-                where address_id=? and subunit_id is null";
-        foreach ($this->doQuery($sql, [$address_id]) as $row) {
-            $locations[] = new Location($row);
+        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
+        $select = $repo->baseSelect();
+        $select->where('l.address_id=?', $address_id);
+        $select->where('l.subunit_id is null');
+        
+        $query = $this->pdo->prepare($select->getStatement());
+        $query->execute($select->getBindValues());
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $locations[] = new \Domain\Locations\Entities\Location($row);
         }
         return $locations;
     }
@@ -252,19 +239,14 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function subunits(int $address_id): array
     {
         $subunits = [];
-        $sql = "select  s.*,
-                        t.code as type_code, t.name as type_name,
-                        x.status
-                from subunits s
-                left join subunit_types t on s.type_id=t.id
-                left join subunit_status x on (
-                    s.id=x.subunit_id
-                    and start_date <= CURRENT_DATE
-                    and (end_date is null or end_date >= CURRENT_DATE)
-                )
-                where address_id=?";
-        foreach ($this->doQuery($sql, [$address_id]) as $row) {
-            $subunits[] = new Subunit($row);
+        $repo = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
+        $select = $repo->baseSelect();
+        $select->where('s.address_id=?', $address_id);
+        
+        $query = $this->pdo->prepare($select->getStatement());
+        $query->execute($select->getBindValues());
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $subunits[] = new \Domain\Subunits\Entities\Subunit($row);
         }
         return $subunits;
     }

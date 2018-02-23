@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\Addresses\Entities;
+namespace Domain\Locations\Entities;
 
 class Location
 {
