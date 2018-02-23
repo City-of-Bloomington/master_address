@@ -11,7 +11,7 @@ class ChangeLogResponse
     public $entry_id;
     public $errors = [];
     
-    public function __construct(int $entry_id, ?array $errors=null)
+    public function __construct(?int $entry_id=null, ?array $errors=null)
     {
         $this->entry_id = $entry_id;
         $this->errors   = $errors;

@@ -12,9 +12,10 @@ use Application\View;
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Streets\Entities\Street;
-use Domain\Streets\UseCases\Info\InfoRequest;
+use Domain\Streets\UseCases\Correct\CorrectRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
+use Domain\Streets\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
 {
@@ -52,17 +53,10 @@ class Controller extends BaseController
     public function view(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            $streetInfo    = $this->di->get('Domain\Streets\UseCases\Info\Info');
-            $addressSearch = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+            $info = $this->streetInfo((int)$_REQUEST['id']);
 
-            $infoRequest = new InfoRequest((int)$_REQUEST['id']);
-
-            $info = $streetInfo($infoRequest);
             if ($info->street) {
-                $addresses = $addressSearch(new \Domain\Addresses\UseCases\Search\SearchRequest([
-                    'street_id'=>$info->street->id
-                ]));
-                return new Views\InfoView($info, $addresses);
+                return new Views\InfoView($info, $this->addressSearch($info->street->id));
             }
             else {
                 $_SESSION['errorMessages'] = $info->errors;
@@ -71,46 +65,75 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
     
-    public function verify      (array $params) { return $this->doChangeLogUseCase('Verify'      ); }
-    public function correct     (array $params) { return $this->doChangeLogUseCase('Correct'     ); }
-    public function changeStatus(array $params) { return $this->doChangeLogUseCase('ChangeStatus'); }
-    
     /**
-     * @param  string $action  The use case name (case-sensitive)
-     * @return View
+     * Declare that a street is correct at the current time
      */
-    private function doChangeLogUseCase(string $action)
+    public function verify(array $params)
     {
-        
-        $useCaseRequest = "Domain\\Streets\\UseCases\\$action\\{$action}Request";
-        $useCaseView    = "Application\\Streets\\Views\\{$action}View";
-        
-        $user_id = $_SESSION['USER']->id;
-        
         if (isset($_POST['id'])) {
-            $request  = new $useCaseRequest((int)$_POST['id'], $user_id, $_POST);
-            $useCase  = $this->di->get("Domain\\Streets\\UseCases\\$action\\$action");
-            $response = $useCase($request);
+            $request  = new VerifyRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $verify   = $this->di->get('Domain\Streets\UseCases\Verify\Verify');
+            $response = $verify($request);
+            
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
                 exit();
             }
             else { $_SESSION['errorMessages'] = $response->errors; }
         }
-        else if (!empty($_REQUEST['id'])) {
-            $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
-            $req  = new InfoRequest((int)$_REQUEST['id']);
-            try {
-                $res = $info($req);
-                $request = new $useCaseRequest($res->street->id, $user_id);
-            }
-            catch (\Exception $e) { $_SESSION['errorMessages'] = $res->errors; }
-        }
         
-        if (isset($request)) {
-            return new $useCaseView($request, $res);
+        if (!empty($_REQUEST['id'])) {
+            $street_id = (int)$_REQUEST['id'];
+            
+            return new Views\VerifyView(
+                new VerifyRequest(   $street_id, $_SESSION['USER']->id),
+                $this->streetInfo(   $street_id),
+                $this->addressSearch($street_id)
+            );
         }
         
         return new \Application\Views\NotFoundView();
+    }
+    
+    /**
+     * Correct an error in the primary attributes of a street
+     */
+    public function correct(array $params)
+    {
+        if (isset($_POST['id'])) {
+            $request  = new CorrectRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $correct  = $this->di->get('Domain\Streets\UseCases\Correct\Correct');
+            $response = $correct($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+        
+        if (!empty($_REQUEST['id'])) {
+            $street_id = (int)$_REQUEST['id'];
+            $info      = $this->streetInfo($street_id);
+            return new Views\CorrectView(
+                new CorrectRequest($street_id, $_SESSION['USER']->id, (array)$info->street),
+                $info,
+                $this->di->get('Domain\Streets\Metadata'),
+                $this->addressSearch($street_id)
+            );
+        }
+        return new \Application\Views\NotFoundView();
+    }
+    
+    private function streetInfo(int $street_id): \Domain\Streets\UseCases\Info\InfoResponse
+    {
+        $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
+        $req  = new \Domain\Streets\UseCases\Info\InfoRequest($street_id);
+        return $info($req);
+    }
+    
+    private function addressSearch(int $street_id): \Domain\Addresses\UseCases\Search\SearchResponse
+    {
+        $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+        return $search(new \Domain\Addresses\UseCases\Search\SearchRequest(['street_id' => $street_id]));
     }
 }

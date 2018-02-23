@@ -2,64 +2,57 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @param CorrectRequest $this->request
+ * @param string $this->street_id
+ * @param string $this->town_id
+ * @param string $this->notes
+ * @param string $this->user_id
+ * @param string $this->change_notes
+ * @param array  $this->towns        Town options for the select dropdown
  */
-$id      = $this->request->street_id;
-$town_id = $this->request->town_id;
-$notes       = parent::escape($this->request->notes);
-$changeNotes = parent::escape($this->request->change_notes);
 ?>
 <section>
     <header>
         <h1><?= $this->_('correct'); ?></h1>
     </header>
-    <form method="post" action="<?= $this->generateUri('streets.correct'); ?>">
+    <form method="post">
         <fieldset><legend><?= $this->_('street_info'); ?></legend>
-            <input name="id" type="hidden" value="<?= $id; ?>" />
+            <input name="id" type="hidden" value="<?= $this->street_id; ?>" />
             <?php
                 $helper = $this->template->getHelper('field');
 
                 $options = [['value'=>'']];
-                $table = new TownsTable();
-                $list  = $table->find();
-                foreach ($list as $t) { $options[] = ['value'=>$t->getId(), 'label'=>parent::escape($t->getName())]; }
+                foreach ($this->towns as $t) { $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])]; }
                 echo $helper->field([
-                    'name'    => 'street[town_id]',
-                    'id'      => 'street-town_id',
-                    'label'   => $this->_('town'),
-                    'type'    => 'select',
-                    'value'   => $town_id,
-                    'options' => $options
+                    'name'     => 'town_id',
+                    'id'       => 'town_id',
+                    'label'    => $this->_('town'),
+                    'type'     => 'select',
+                    'value'    => $this->town_id,
+                    'options'  => $options  
                 ]);
 
                 echo $helper->field([
-                    'name'  => 'street[notes]',
-                    'id'    => 'street-notes',
+                    'name'  => 'notes',
+                    'id'    => 'notes',
                     'label' => $this->_('notes'),
                     'type'  => 'textarea',
-                    'value' => $streetNotes
+                    'value' => $this->notes
                 ]);
             ?>
         </fieldset>
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
             <?php
                 echo $helper->field([
-                    'name'  => 'change[contact_id]',
-                    'id'    => 'change-contact_id',
-                    'label' => $this->_('contact'),
-                    'value' => $contact_id
-                ]);
-                echo $helper->field([
-                    'name'  => 'change[notes]',
-                    'id'    => 'change-notes',
+                    'name'  => 'change_notes',
+                    'id'    => 'change_notes',
                     'label' => $this->_('notes'),
                     'type'  => 'textarea',
-                    'value' => $changeNotes
+                    'value' => $this->change_notes
                 ]);
 
                 $helper = $this->template->getHelper('saveAndCancelButtons');
                 echo $helper->saveAndCancelButtons(
-                    parent::generateUri('streets.view', ['id'=>$id])
+                    parent::generateUri('streets.view', ['id'=>$this->street_id])
                 );
             ?>
         </fieldset>

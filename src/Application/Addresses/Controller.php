@@ -99,8 +99,8 @@ class Controller extends BaseController
         }
         
         if (!empty($_REQUEST['id'])) {
-            $info    = $this->addressInfo((int)$_REQUEST['address_id']);
-            $request = new VerifyRequest($info->address_id, $_SESSION['USER']->id);
+            $info    = $this->addressInfo((int)$_REQUEST['id']);
+            $request = new VerifyRequest($info->address->id, $_SESSION['USER']->id);
             return new Views\VerifyView($request, $info);
         }
         
@@ -108,7 +108,7 @@ class Controller extends BaseController
     }
     
     /**
-     * Correct an error in the primary attributes of this address
+     * Correct an error in the primary attributes of an address
      */
     public function correct(array $params)
     {

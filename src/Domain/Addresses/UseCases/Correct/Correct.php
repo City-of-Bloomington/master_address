@@ -35,7 +35,7 @@ class Correct
             ])));
         }
         catch (\Exception $e) {
-            return new CorrectResponse(null, [$e->getMessage()]);
+            return new ChangeLogResponse(null, [$e->getMessage()]);
         }
     }
 }
