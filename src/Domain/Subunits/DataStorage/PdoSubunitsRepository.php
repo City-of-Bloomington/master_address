@@ -88,6 +88,24 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         return $locations;
     }
 
+    public function logChange(ChangeLogEntry $entry): int
+    {
+        $insert = $this->queryFactory->newInsert();
+        $insert->into('subunit_change_log')
+               ->cols([
+                    'subunit_id' => $entry->entity_id,
+                    'person_id'  => $entry->person_id,
+                    'contact_id' => $entry->contact_id,
+                    'action'     => $entry->action,
+                    'notes'      => $entry->notes
+               ]);
+        $query = $this->pdo->prepare($insert->getStatement());
+        $query->execute($insert->getBindValues());
+
+        $pk = $insert->getLastInsertIdName($this->primaryKey);
+        return (int)$this->pdo->lastInsertId($pk);
+    }
+
     public function loadChangeLog(int $subunit_id): array
     {
         $changeLog = [];

@@ -30,4 +30,9 @@ class User
             if (!empty($data['authentication_method'])) { $this->authentication_method = $data['authentication_method']; }
         }
     }
+
+    public function getFullname(): string
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
 }

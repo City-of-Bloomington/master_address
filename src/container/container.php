@@ -71,7 +71,7 @@ $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->get('Do
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));
 
-foreach (['Addresses', 'Streets'] as $t) {
+foreach (['Addresses', 'Streets', 'Subunits'] as $t) {
     foreach (['Load', 'Verify', 'Correct'] as $a) {
         $DI->params[ "Domain\\$t\\UseCases\\$a\\$a"]["repository"] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
         $DI->set(    "Domain\\$t\\UseCases\\$a\\$a",
