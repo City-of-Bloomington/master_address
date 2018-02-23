@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright 2009-2017 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Subunit $this->subunit
  */
-use Application\People\Person;
+$title = parent::escape("{$this->subunit->type_code} {$this->subunit->identifier}");
 ?>
 <section>
     <header>
-        <h1><?= $this->_('subunit_info'); ?></h1>
+        <h1><?= $title; ?></h1>
         <div class="tools">
         <?php
+            /*
             $h       = $this->template->getHelper('buttonLink');
             $status  = $this->subunit->getStatus()->getStatus();
             $actions = ['correct', 'verify', $status=='retired' ? 'unretire' : 'retire'];
@@ -25,10 +26,11 @@ use Application\People\Person;
 
                 }
             }
+            */
         ?>
         </div>
     </header>
-    <table class="<?= $status; ?>">
+    <table class="<?= $this->subunit->status; ?>">
     <?php $this->_include('subunits/partials/subunitData.inc'); ?>
     </table>
 </section>

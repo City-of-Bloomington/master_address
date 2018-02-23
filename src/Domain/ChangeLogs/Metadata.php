@@ -26,4 +26,17 @@ class Metadata
         'unretire'  => 'unretired',
         'verify'    => 'verified'
     ];
+    
+    public static function sqlForLog(string $entityName)
+    {
+        return "select l.{$entityName}_id as entity_id,
+                       l.id, l.person_id, l.contact_id, l.action_date, l.action, l.notes,
+                       p.firstname as  person_firstname, p.lastname as  person_lastname,
+                       c.firstname as contact_firstname, c.lastname as contact_lastname
+                from {$entityName}_change_log l
+                left join people p on l.person_id=p.id
+                left join people c on l.contact_id=p.id
+                where {$entityName}_id=?
+                order by l.action_date desc";
+    }
 }
