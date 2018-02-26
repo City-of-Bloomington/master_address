@@ -17,8 +17,11 @@ use Domain\ChangeLogs\Metadata as ChangeLog;
 
 class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 {
+    use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
+
     protected $tablename   = 'subunits';
     protected $entityClass = '\Domain\Subunits\Entities\Subunit';
+    protected $changeLogType = 'subunit';
 
     /**
      * Maps response fieldnames to the names used in the database
@@ -86,35 +89,6 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
             $locations[] = new \Domain\Locations\Entities\Location($row);
         }
         return $locations;
-    }
-
-    public function logChange(ChangeLogEntry $entry): int
-    {
-        $insert = $this->queryFactory->newInsert();
-        $insert->into('subunit_change_log')
-               ->cols([
-                    'subunit_id' => $entry->entity_id,
-                    'person_id'  => $entry->person_id,
-                    'contact_id' => $entry->contact_id,
-                    'action'     => $entry->action,
-                    'notes'      => $entry->notes
-               ]);
-        $query = $this->pdo->prepare($insert->getStatement());
-        $query->execute($insert->getBindValues());
-
-        $pk = $insert->getLastInsertIdName($this->primaryKey);
-        return (int)$this->pdo->lastInsertId($pk);
-    }
-
-    public function loadChangeLog(int $subunit_id): array
-    {
-        $changeLog = [];
-        $sql = ChangeLog::sqlForLog('subunit');
-
-        foreach ($this->doQuery($sql, [$subunit_id]) as $row) {
-            $changeLog[] = ChangeLogEntry::hydrate($row);
-        }
-        return $changeLog;
     }
 
     public function loadStatusLog(int $subunit_id): array
