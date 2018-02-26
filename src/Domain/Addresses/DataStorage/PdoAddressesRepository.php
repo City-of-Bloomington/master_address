@@ -18,7 +18,8 @@ use Domain\ChangeLogs\Metadata as ChangeLog;
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
 {
     use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
-    protected $changeLogType = 'address';
+    use \Domain\StatusLogs\DataStorage\StatusLogTrait;
+    protected $logType = 'address';
 
     const TYPE_STREET = 1;
 
@@ -177,21 +178,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             $req->notes,
             $req->address_id
         ]);
-    }
-
-    public function loadStatusLog(int $address_id): array
-    {
-        $statusLog = [];
-        $sql = "select id, status, start_date, end_date
-                from address_status
-                where address_id=?
-                order by start_date desc";
-        foreach ($this->doQuery($sql, [$address_id]) as $row) {
-            $row['start_date'] = !empty($row['start_date']) ? new \DateTime($row['start_date']) : null;
-            $row['end_date'  ] = !empty($row['end_date'  ]) ? new \DateTime($row['end_date'  ]) : null;
-            $statusLog[] = $row;
-        }
-        return $statusLog;
     }
 
     public function locations(int $address_id): array

@@ -19,7 +19,7 @@ use Domain\Townships\Entities\Township;
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 {
     use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
-    protected $changeLogType = 'street';
+    protected $logType = 'street';
 
     const TYPE_STREET = 1;
 
