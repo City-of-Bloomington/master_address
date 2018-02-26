@@ -9,6 +9,7 @@ namespace Application\Subunits;
 use Application\Controller as BaseController;
 use Application\View;
 
+use Domain\Subunits\UseCases\Retire\RetireRequest;
 use Domain\Subunits\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
@@ -54,6 +55,36 @@ class Controller extends BaseController
         }
 
         return new \Application\Views\NotFoundView();
+    }
+
+    public function retire(array $params)
+    {
+        if (isset($_POST['id'])) {
+            $request  = new RetireRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $retire   = $this->di->get('Domain\Subunits\UseCases\Retire\Retire');
+            $response = $retire($request);
+
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $subunit_id = (int)$_REQUEST['id'];
+
+            return new Views\RetireView(
+                new RetireRequest(   $subunit_id, $_SESSION['USER']->id),
+                $this->subunitInfo(  $subunit_id)
+            );
+        }
+
+        return new \Application\Views\NotFoundView();
+    }
+
+    public function correct(array $params)
+    {
     }
 
     private function subunitInfo(int $subunit_id): \Domain\Subunits\UseCases\Info\InfoResponse

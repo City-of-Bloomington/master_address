@@ -91,4 +91,10 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         }
         return $locations;
     }
+
+    public function saveLocationStatus(int $location_id, string $status)
+    {
+        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
+        $repo->saveStatus($location_id, $status);
+    }
 }

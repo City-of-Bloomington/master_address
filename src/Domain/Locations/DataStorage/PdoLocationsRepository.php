@@ -14,9 +14,12 @@ use Domain\Locations\UseCases\Search\SearchRequest;
 
 class PdoLocationsRepository extends PdoRepository implements LocationsRepository
 {
-    protected $tablename = 'locations';
+    use \Domain\Logs\DataStorage\StatusLogTrait;
+    protected $logType     = 'location';
+
+    protected $tablename   = 'locations';
     protected $entityClass = '\Domain\Locations\Entities\Location';
-    
+
     /**
      * Maps response fieldnames to the names used in the database
      */
@@ -34,7 +37,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         'type_code'    => ['prefix'=>'t', 'dbName' => 'code'        ],
         'type_name'    => ['prefix'=>'t', 'dbName' => 'name'        ]
     ];
-    
+
     public function columns(): array
     {
         static $cols = [];
@@ -45,7 +48,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         }
         return $cols;
     }
-    
+
     public function baseSelect(): SelectInterface
     {
         $select = $this->queryFactory->newSelect();
@@ -56,7 +59,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
 
         return $select;
     }
-    
+
     public function load(int $location_id): Location
     {
         $select = $this->baseSelect();
@@ -68,7 +71,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         }
         throw new \Exception('locations/unknown');
     }
-    
+
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
