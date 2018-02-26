@@ -16,7 +16,7 @@ $title = parent::escape("{$this->subunit->type_code} {$this->subunit->identifier
             $status  = $this->subunit->getStatus()->getStatus();
             $actions = ['correct', 'verify', $status=='retired' ? 'unretire' : 'retire'];
             */
-            $actions = ['verify'];
+            $actions = ['verify', 'retire'];
             foreach ($actions as $a) {
                 if (parent::isAllowed('subunits', $a)) {
                     echo $h->buttonLink(

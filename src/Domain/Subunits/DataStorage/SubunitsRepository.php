@@ -17,8 +17,10 @@ interface SubunitsRepository
     public function locations    (int $subunit_id): array;
     public function loadChangeLog(int $subunit_id): array;
     public function loadStatusLog(int $subunit_id): array;
+    public function getStatus    (int $subunit_id): string;
 
     // Write functions
     public function logChange(ChangeLogEntry   $entry): int;
-    public function saveStatus(int $subunit_id, string $status);
+    public function saveStatus        (int $subunit_id,  string $status);
+    public function saveLocationStatus(int $location_id, string $status);
 }

@@ -19,11 +19,13 @@ interface AddressesRepository
     public function subunits     (int $address_id): array;
     public function loadChangeLog(int $address_id): array;
     public function loadStatusLog(int $address_id): array;
+    public function getStatus    (int $address_id): string;
     public function search   (SearchRequest  $req): array;
 
     // Write functions
     public function correct(CorrectRequest $request);
     public function logChange(ChangeLogEntry $entry): int;
+    public function saveStatus(int $address_id, string $status);
 
     // Metadata functions
     public function cities      (): array;
