@@ -18,6 +18,9 @@ use Domain\Townships\Entities\Township;
 
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 {
+    use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
+    protected $changeLogType = 'street';
+
     const TYPE_STREET = 1;
 
     protected $tablename   = 'streets';
@@ -98,50 +101,12 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $result['rows'] = $streets;
         return $result;
     }
-    
+
     public function correct(CorrectRequest $req)
     {
         $sql = 'update streets set town_id=?, notes=? where id=?';
         $query = $this->pdo->prepare($sql);
         $query->execute([$req->town_id, $req->notes, $req->street_id]);
-    }
-    
-    public function logChange(ChangeLogEntry $entry): int
-    {
-        $insert = $this->queryFactory->newInsert();
-        $insert->into('street_change_log')
-               ->cols([
-                    'street_id'  => $entry->entity_id,
-                    'person_id'  => $entry->person_id,
-                    'contact_id' => $entry->contact_id,
-                    'action'     => $entry->action,
-                    'notes'      => $entry->notes
-               ]);
-        $query = $this->pdo->prepare($insert->getStatement());
-        $query->execute($insert->getBindValues());
-        
-        $pk = $insert->getLastInsertIdName($this->primaryKey);
-        return (int)$this->pdo->lastInsertId($pk);
-    }
-
-    public function loadChangeLog(int $street_id): array
-    {
-        $changeLog = [];
-        $sql = "select l.street_id as entity_id,
-                       l.id, l.person_id, l.contact_id, l.action_date, l.action, l.notes,
-                       p.firstname as  person_firstname, p.lastname as  person_lastname,
-                       c.firstname as contact_firstname, c.lastname as contact_lastname
-                from street_change_log l
-                left join people        p on l.person_id=p.id
-                left join people        c on l.contact_id=p.id
-                where street_id=?";
-
-        $query = $this->pdo->prepare($sql);
-        $query->execute([$street_id]);
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $changeLog[] = ChangeLogEntry::hydrate($row);
-        }
-        return $changeLog;
     }
 
     public function designations(int $street_id): array

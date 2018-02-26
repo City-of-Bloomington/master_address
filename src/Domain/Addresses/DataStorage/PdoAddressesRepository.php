@@ -17,6 +17,9 @@ use Domain\ChangeLogs\Metadata as ChangeLog;
 
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
 {
+    use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
+    protected $changeLogType = 'address';
+
     const TYPE_STREET = 1;
 
     protected $tablename   = 'addresses';
@@ -151,10 +154,10 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $result['rows'] = $addresses;
         return $result;
     }
-    
+
     public function correct(CorrectRequest $req)
     {
-        $sql = "update addresses 
+        $sql = "update addresses
                 set street_id=?,
                     street_number_prefix=?,
                     street_number=?,
@@ -176,35 +179,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         ]);
     }
 
-    public function logChange(ChangeLogEntry $entry): int
-    {
-        $insert = $this->queryFactory->newInsert();
-        $insert->into('address_change_log')
-               ->cols([
-                    'address_id'  => $entry->entity_id,
-                    'person_id'   => $entry->person_id,
-                    'contact_id'  => $entry->contact_id,
-                    'action'      => $entry->action,
-                    'notes'       => $entry->notes
-               ]);
-        $query = $this->pdo->prepare($insert->getStatement());
-        $query->execute($insert->getBindValues());
-        
-        $pk = $insert->getLastInsertIdName($this->primaryKey);
-        return (int)$this->pdo->lastInsertId($pk);
-    }
-    
-    public function loadChangeLog(int $address_id): array
-    {
-        $changeLog = [];
-        $sql = ChangeLog::sqlForLog('address');
-
-        foreach ($this->doQuery($sql, [$address_id]) as $row) {
-            $changeLog[] = ChangeLogEntry::hydrate($row);
-        }
-        return $changeLog;
-    }
-    
     public function loadStatusLog(int $address_id): array
     {
         $statusLog = [];
@@ -219,7 +193,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         }
         return $statusLog;
     }
-    
+
     public function locations(int $address_id): array
     {
         $locations = [];
@@ -227,7 +201,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $select = $repo->baseSelect();
         $select->where('l.address_id=?', $address_id);
         $select->where('l.subunit_id is null');
-        
+
         $query = $this->pdo->prepare($select->getStatement());
         $query->execute($select->getBindValues());
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
@@ -235,14 +209,14 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         }
         return $locations;
     }
-    
+
     public function subunits(int $address_id): array
     {
         $subunits = [];
         $repo = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
         $select = $repo->baseSelect();
         $select->where('s.address_id=?', $address_id);
-        
+
         $query = $this->pdo->prepare($select->getStatement());
         $query->execute($select->getBindValues());
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
