@@ -18,10 +18,11 @@ use Domain\ChangeLogs\Metadata as ChangeLog;
 class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 {
     use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
+    use \Domain\StatusLogs\DataStorage\StatusLogTrait;
+    protected $logType = 'subunit';
 
     protected $tablename   = 'subunits';
     protected $entityClass = '\Domain\Subunits\Entities\Subunit';
-    protected $changeLogType = 'subunit';
 
     /**
      * Maps response fieldnames to the names used in the database
@@ -89,20 +90,5 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
             $locations[] = new \Domain\Locations\Entities\Location($row);
         }
         return $locations;
-    }
-
-    public function loadStatusLog(int $subunit_id): array
-    {
-        $statusLog = [];
-        $sql = "select id, status, start_date, end_date
-                from subunit_status
-                where subunit_id=?
-                order by start_date desc";
-        foreach ($this->doQuery($sql, [$subunit_id]) as $row) {
-            $row['start_date'] = !empty($row['start_date']) ? new \DateTime($row['start_date']) : null;
-            $row['end_date'  ] = !empty($row['end_date'  ]) ? new \DateTime($row['end_date'  ]) : null;
-            $statusLog[] = $row;
-        }
-        return $statusLog;
     }
 }

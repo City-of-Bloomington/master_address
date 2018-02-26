@@ -20,4 +20,5 @@ interface SubunitsRepository
 
     // Write functions
     public function logChange(ChangeLogEntry   $entry): int;
+    public function saveStatus(int $subunit_id, string $status);
 }

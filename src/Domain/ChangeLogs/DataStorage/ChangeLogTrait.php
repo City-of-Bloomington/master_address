@@ -13,9 +13,9 @@ trait ChangeLogTrait
     public function logChange(ChangeLogEntry $entry): int
     {
         $insert = $this->queryFactory->newInsert();
-        $insert->into("{$this->changeLogType}_change_log")
+        $insert->into("{$this->logType}_change_log")
                ->cols([
-                    "{$this->changeLogType}_id" => $entry->entity_id,
+                    "{$this->logType}_id" => $entry->entity_id,
                     'person_id'  => $entry->person_id,
                     'contact_id' => $entry->contact_id,
                     'action'     => $entry->action,
@@ -31,14 +31,14 @@ trait ChangeLogTrait
     public function loadChangeLog(int $entity_id): array
     {
         $changeLog = [];
-        $sql = "select l.{$this->changeLogType}_id as entity_id,
+        $sql = "select l.{$this->logType}_id as entity_id,
                        l.id, l.person_id, l.contact_id, l.action_date, l.action, l.notes,
                        p.firstname as  person_firstname, p.lastname as  person_lastname,
                        c.firstname as contact_firstname, c.lastname as contact_lastname
-                from {$this->changeLogType}_change_log l
+                from {$this->logType}_change_log l
                 left join people p on l.person_id=p.id
                 left join people c on l.contact_id=p.id
-                where {$this->changeLogType}_id=?
+                where {$this->logType}_id=?
                 order by l.action_date desc";
 
         foreach ($this->doQuery($sql, [$entity_id]) as $row) {
