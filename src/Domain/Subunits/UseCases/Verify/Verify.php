@@ -6,9 +6,9 @@
 declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Verify;
 
-use Domain\ChangeLogs\ChangeLogEntry;
-use Domain\ChangeLogs\ChangeLogResponse;
-use Domain\ChangeLogs\Metadata as ChangeLog;
+use Domain\Logs\Entities\ChangeLogEntry;
+use Domain\Logs\ChangeLogResponse;
+use Domain\Logs\Metadata as ChangeLog;
 use Domain\Subunits\DataStorage\SubunitsRepository;
 
 class Verify

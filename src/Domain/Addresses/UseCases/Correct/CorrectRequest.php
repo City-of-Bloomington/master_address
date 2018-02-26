@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Correct;
 
-use Domain\ChangeLogs\ChangeLogRequest;
+use Domain\Logs\ChangeLogRequest;
 
 class CorrectRequest implements ChangeLogRequest
 {
@@ -18,15 +18,15 @@ class CorrectRequest implements ChangeLogRequest
     public $zip;
     public $zipplus4;
     public $notes;
-    
+
     public $user_id;
     public $change_notes;
-    
+
     public function __construct(int $address_id, int $user_id, ?array $data=null)
     {
         $this->address_id = $address_id;
         $this->user_id    = $user_id;
-        
+
         if (!empty($data['street_id'           ])) { $this->street_id     = (int)$data['street_id'    ]; }
         if (!empty($data['street_number'       ])) { $this->street_number = (int)$data['street_number']; }
         if (!empty($data['zip'                 ])) { $this->zip           = (int)$data['zip'          ]; }

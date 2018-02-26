@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\ChangeLogs\DataStorage;
+namespace Domain\Logs\DataStorage;
 
-use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\Logs\Entities\ChangeLogEntry;
 
 trait ChangeLogTrait
 {

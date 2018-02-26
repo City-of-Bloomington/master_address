@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Streets\DataStorage;
 
-use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\Logs\Entities\ChangeLogEntry;
 
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
@@ -20,7 +20,7 @@ interface StreetsRepository
     public function loadChangeLog(int $street_id): array;
     public function designations (int $street_id): array;
     public function search   (SearchRequest $req): array;
-    
+
     // Write functions
     public function correct  (CorrectRequest $request);
     public function logChange(ChangeLogEntry   $entry): int;
@@ -30,5 +30,5 @@ interface StreetsRepository
     public function types(): array;
     public function towns(): array;
 
-    
+
 }

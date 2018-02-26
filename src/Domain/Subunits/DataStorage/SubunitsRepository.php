@@ -8,7 +8,7 @@ namespace Domain\Subunits\DataStorage;
 
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\UseCases\Search\SearchRequest;
-use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\Logs\Entities\ChangeLogEntry;
 
 interface SubunitsRepository
 {

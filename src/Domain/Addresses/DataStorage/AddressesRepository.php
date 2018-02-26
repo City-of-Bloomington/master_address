@@ -9,7 +9,7 @@ namespace Domain\Addresses\DataStorage;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
-use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\Logs\Entities\ChangeLogEntry;
 
 interface AddressesRepository
 {
@@ -20,7 +20,7 @@ interface AddressesRepository
     public function loadChangeLog(int $address_id): array;
     public function loadStatusLog(int $address_id): array;
     public function search   (SearchRequest  $req): array;
-    
+
     // Write functions
     public function correct(CorrectRequest $request);
     public function logChange(ChangeLogEntry $entry): int;
