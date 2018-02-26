@@ -6,20 +6,20 @@
 declare (strict_types=1);
 namespace Domain\Streets\UseCases\Verify;
 
-use Domain\ChangeLogs\ChangeLogEntry;
-use Domain\ChangeLogs\ChangeLogResponse;
-use Domain\ChangeLogs\Metadata as ChangeLog;
+use Domain\Logs\Entities\ChangeLogEntry;
+use Domain\Logs\ChangeLogResponse;
+use Domain\Logs\Metadata as ChangeLog;
 use Domain\Streets\DataStorage\StreetsRepository;
 
 class Verify
 {
     private $repo;
-    
+
     public function __construct(StreetsRepository $repository)
     {
         $this->repo = $repository;
     }
-    
+
     public function __invoke(VerifyRequest $req): ChangeLogResponse
     {
         try {

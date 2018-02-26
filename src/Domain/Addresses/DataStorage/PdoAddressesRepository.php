@@ -12,13 +12,13 @@ use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 
-use Domain\ChangeLogs\ChangeLogEntry;
-use Domain\ChangeLogs\Metadata as ChangeLog;
+use Domain\Logs\Entities\ChangeLogEntry;
+use Domain\Logs\Metadata as ChangeLog;
 
 class PdoAddressesRepository extends PdoRepository implements AddressesRepository
 {
-    use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
-    use \Domain\StatusLogs\DataStorage\StatusLogTrait;
+    use \Domain\Logs\DataStorage\ChangeLogTrait;
+    use \Domain\Logs\DataStorage\StatusLogTrait;
     protected $logType = 'address';
 
     const TYPE_STREET = 1;

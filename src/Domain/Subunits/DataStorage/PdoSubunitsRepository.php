@@ -12,13 +12,13 @@ use Domain\PdoRepository;
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\Entities\Location;
 
-use Domain\ChangeLogs\ChangeLogEntry;
-use Domain\ChangeLogs\Metadata as ChangeLog;
+use Domain\Logs\Entities\ChangeLogEntry;
+use Domain\Logs\Metadata as ChangeLog;
 
 class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 {
-    use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
-    use \Domain\StatusLogs\DataStorage\StatusLogTrait;
+    use \Domain\Logs\DataStorage\ChangeLogTrait;
+    use \Domain\Logs\DataStorage\StatusLogTrait;
     protected $logType = 'subunit';
 
     protected $tablename   = 'subunits';

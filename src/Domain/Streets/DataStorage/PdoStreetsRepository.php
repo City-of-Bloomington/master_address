@@ -8,7 +8,7 @@ namespace Domain\Streets\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
-use Domain\ChangeLogs\ChangeLogEntry;
+use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Info\InfoRequest;
@@ -18,7 +18,7 @@ use Domain\Townships\Entities\Township;
 
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 {
-    use \Domain\ChangeLogs\DataStorage\ChangeLogTrait;
+    use \Domain\Logs\DataStorage\ChangeLogTrait;
     protected $logType = 'street';
 
     const TYPE_STREET = 1;

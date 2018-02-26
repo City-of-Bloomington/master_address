@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Verify;
 
-use Domain\ChangeLogs\ChangeLogRequest;
+use Domain\Logs\ChangeLogRequest;
 
 class VerifyRequest implements ChangeLogRequest
 {
