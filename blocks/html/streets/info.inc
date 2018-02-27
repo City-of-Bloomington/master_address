@@ -4,13 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Street $this->street
  */
-$name = parent::escape(implode(' ', [
-    $this->street->direction,
-    $this->street->name,
-    $this->street->post_direction,
-    $this->street->suffix_code
-]));
 $status = $this->_($this->street->status);
+$name   = parent::escape($this->street->__toString());
 $notes  = parent::escape($this->street->notes);
 $town   = parent::escape($this->street->town_name);
 ?>

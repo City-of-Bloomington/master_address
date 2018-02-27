@@ -78,4 +78,17 @@ class Address
             }
         }
     }
+
+    public function __toString()
+    {
+        return implode(' ', [
+            $this->street_number_prefix,
+            $this->street_number,
+            $this->street_number_suffix,
+            $this->street_direction,
+            $this->street_name,
+            $this->street_suffix_code,
+            $this->street_post_direction
+        ]);
+    }
 }

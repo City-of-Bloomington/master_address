@@ -34,10 +34,10 @@ class Metadata
     ];
 
     public static $statuses = [
-        STATUS_CURRENT,
-        STATUS_RETIRED,
-        STATUS_PROPOSED,
-        STATUS_DUPLICATE,
-        STATUS_TEMPORARY
+        self::STATUS_CURRENT,
+        self::STATUS_RETIRED,
+        self::STATUS_PROPOSED,
+        self::STATUS_DUPLICATE,
+        self::STATUS_TEMPORARY
     ];
 }

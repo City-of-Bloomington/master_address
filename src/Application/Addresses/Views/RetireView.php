@@ -10,20 +10,20 @@ use Application\Block;
 use Application\Template;
 
 use Domain\Addresses\UseCases\Info\InfoResponse;
-use Domain\Addresses\UseCases\Verify\VerifyRequest;
+use Domain\Addresses\UseCases\Retire\RetireRequest;
 
-class VerifyView extends Template
+class RetireView extends Template
 {
-    public function __construct(VerifyRequest $request, InfoResponse $info)
+    public function __construct(RetireRequest $request, InfoResponse $info)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
-        $this->vars['title'] = $this->_('verify');
+        $this->vars['title'] = $this->_('retire');
 
-        $this->blocks[] = new Block('generic/verifyForm.inc', [
+        $this->blocks[] = new Block('generic/retireForm.inc', [
             'id'         => $request->address_id,
             'notes'      => parent::escape($request->notes),
-            'help'       => parent::escape(sprintf($this->_('verify_statement', 'messages'), $_SESSION['USER']->getFullname())),
+            'help'       => parent::escape(sprintf($this->_('retire_statement', 'messages'), $_SESSION['USER']->getFullname())),
             'return_url' => parent::generateUri('addresses.view', ['id'=>$request->address_id])
         ]);
         $this->blocks[] = new Block('addresses/info.inc', [

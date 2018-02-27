@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @param string $this->id
  * @param string $this->notes
- * @param string $this->user        Full name of the current user
+ * @param string $this->help        Message to display at the top of form
  * @param string $this->return_url  Url to use for the cancel button
  */
 ?>
@@ -15,7 +15,7 @@
     <form method="post">
         <fieldset>
             <input type="hidden" name="id" value="<?= $this->id; ?>" />
-            <p><?= sprintf($this->_('verify_statement', 'messages'), $this->user); ?></p>
+            <p><?= $this->help ?></p>
             <?php
                 $helper = $this->template->getHelper('field');
                 echo $helper->field([

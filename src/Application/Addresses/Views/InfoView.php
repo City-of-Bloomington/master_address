@@ -19,7 +19,7 @@ class InfoView extends Template
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
 
-        $this->vars['title'] = self::addressToString($info->address);
+        $this->vars['title'] = $info->address->__toString();
 
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
@@ -32,18 +32,5 @@ class InfoView extends Template
         $this->blocks[]              = new Block('changeLogs/changeLog.inc', ['changes'   => $info->changeLog]);
         $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
         $this->blocks['panel-one'][] = new Block('subunits/list.inc',        ['address'   => $info->address, 'subunits' => $info->subunits]);
-    }
-
-    public static function addressToString(Address $a): string
-    {
-        return implode(' ', [
-            $a->street_number_prefix,
-            $a->street_number,
-            $a->street_number_suffix,
-            $a->street_direction,
-            $a->street_name,
-            $a->street_suffix_code,
-            $a->street_post_direction
-        ]);
     }
 }

@@ -5,6 +5,7 @@
  * @param Address $this->address
  * @param string  $this->title
  */
+use Domain\Logs\Metadata as Log;
 ?>
 <section>
     <header>
@@ -24,6 +25,12 @@
             }
             */
             $actions = ['verify', 'correct'];
+            if ($this->address->status == Log::STATUS_RETIRED) {
+
+            }
+            else {
+                $actions[] = 'retire';
+            }
 
             foreach ($actions as $a) {
                 if (parent::isAllowed('addresses', $a)) {

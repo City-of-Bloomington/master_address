@@ -16,7 +16,7 @@ class ControllerTest extends TestCase
             $controller = $r->values['controller'];
             $action     = $r->values['action'    ];
             $c = new $controller();
-            $this->assertTrue(method_exists($c, $action), "$controller is missing $action\n");
+            $this->assertTrue(method_exists($c, $action), "$controller is missing $action()\n");
         }
     }
 }
