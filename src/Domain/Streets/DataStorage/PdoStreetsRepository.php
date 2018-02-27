@@ -109,6 +109,13 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $query->execute([$req->town_id, $req->notes, $req->street_id]);
     }
 
+    public function saveStatus(int $street_id, string $status)
+    {
+        $sql = 'update streets set status=? where id=?';
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$status, $street_id]);
+    }
+
     public function designations(int $street_id): array
     {
         $designations = [];

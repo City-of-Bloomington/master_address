@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Street $this->street
  */
+use Domain\Logs\Metadata as Log;
+
 $status = $this->_($this->street->status);
 $name   = parent::escape($this->street->__toString());
 $notes  = parent::escape($this->street->notes);
@@ -16,6 +18,12 @@ $town   = parent::escape($this->street->town_name);
         <?php
             $helper  = $this->template->getHelper('buttonLink');
             $actions = ['verify', 'correct'];#, 'correct', 'changeStatus'];
+            if ($this->street->status == Log::STATUS_RETIRED) {
+            }
+            else {
+                $actions = ['retire'];
+            }
+
             foreach ($actions as $a) {
                 if (parent::isAllowed('streets', $a)) {
                     echo $helper->buttonLink(
