@@ -24,7 +24,7 @@ class VerifyView extends Template
         $this->blocks[] = new Block('generic/verifyForm.inc', [
             'id'         => $request->subunit_id,
             'notes'      => parent::escape($request->notes),
-            'user'       => parent::escape($_SESSION['USER']->getFullname()),
+            'help'       => parent::escape(sprintf($this->_('verify_statement', 'messages'), $_SESSION['USER']->getFullname())),
             'return_url' => parent::generateUri('subunits.view', ['id'=>$request->subunit_id])
         ]);
 

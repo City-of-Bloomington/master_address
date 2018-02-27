@@ -211,6 +211,12 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $subunits;
     }
 
+    public function saveLocationStatus(int $location_id, string $status)
+    {
+        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
+        $repo->saveStatus($location_id, $status);
+    }
+
     //---------------------------------------------------------------
     // Metadata Functions
     //---------------------------------------------------------------

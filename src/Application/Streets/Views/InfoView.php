@@ -22,7 +22,7 @@ class InfoView extends Template
 
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
-        $this->vars['title'] = parent::escape($info->street->name);
+        $this->vars['title'] = parent::escape($info->street->__toString());
 
         $this->blocks[] = new Block('streets/info.inc',         ['street'  => $info->street   ]);
         $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes' => $info->changeLog]);
