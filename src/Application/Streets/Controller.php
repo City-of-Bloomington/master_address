@@ -66,35 +66,9 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    /**
-     * Declare that a street is correct at the current time
-     */
-    public function verify(array $params)
-    {
-        if (isset($_POST['id'])) {
-            $request  = new VerifyRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $verify   = $this->di->get('Domain\Streets\UseCases\Verify\Verify');
-            $response = $verify($request);
-
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
-                exit();
-            }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
-
-        if (!empty($_REQUEST['id'])) {
-            $street_id = (int)$_REQUEST['id'];
-
-            return new Views\VerifyView(
-                new VerifyRequest(   $street_id, $_SESSION['USER']->id),
-                $this->streetInfo(   $street_id),
-                $this->addressSearch($street_id)
-            );
-        }
-
-        return new \Application\Views\NotFoundView();
-    }
+    public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
+    public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
+    public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
 
     /**
      * Correct an error in the primary attributes of a street
@@ -126,14 +100,23 @@ class Controller extends BaseController
     }
 
     /**
-     * Change the status for a street to RETIRED
+     * Standard use case handler involving a Change Log Entry
+     *
+     * The use case name should be the capitalized version, matching the
+     * directory name in /src/Domain.
+     *
+     * @param string $name  The short (capitalized) use case name
      */
-    public function retire(array $params)
+    private function doBasicChangeLogUseCase(string $name)
     {
+        $useCase        = "Domain\\Streets\\UseCases\\$name\\$name";
+        $useCaseRequest = "Domain\\Streets\\UseCases\\$name\\{$name}Request";
+        $useCaseView    = "Application\\Streets\\Views\\{$name}View";
+
         if (isset($_POST['id'])) {
-            $request  = new RetireRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $retire   = $this->di->get('Domain\Streets\UseCases\Retire\Retire');
-            $response = $retire($request);
+            $request  = new $useCaseRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $handle   = $this->di->get($useCase);
+            $response = $handle($request);
 
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
@@ -145,8 +128,8 @@ class Controller extends BaseController
         if (!empty($_REQUEST['id'])) {
             $street_id = (int)$_REQUEST['id'];
 
-            return new Views\RetireView(
-                new RetireRequest(   $street_id, $_SESSION['USER']->id),
+            return new $useCaseView(
+                new $useCaseRequest( $street_id, $_SESSION['USER']->id),
                 $this->streetInfo(   $street_id),
                 $this->addressSearch($street_id)
             );

@@ -19,9 +19,10 @@ $town   = parent::escape($this->street->town_name);
             $helper  = $this->template->getHelper('buttonLink');
             $actions = ['verify', 'correct'];#, 'correct', 'changeStatus'];
             if ($this->street->status == Log::STATUS_RETIRED) {
+                $actions[] = 'unretire';
             }
             else {
-                $actions = ['retire'];
+                $actions[] = 'retire';
             }
 
             foreach ($actions as $a) {
