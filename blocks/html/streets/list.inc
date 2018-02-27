@@ -10,10 +10,10 @@
     <tbody>
     <?php
         foreach ($this->streets as $street) {
-            $name   = parent::escape($street->getStreetName());
+            $name   = parent::escape($street->__toString());
             $status = parent::escape($street->status);
             $town   = parent::escape($street->town_name);
-            
+
             if ($this->return_url) {
                 $this->return_url->street_id = $street->id;
                 $uri = $this->return_url;
@@ -21,7 +21,7 @@
             else {
                 $uri = parent::generateUri('streets.view', ['id'=>$street->id]);
             }
-                
+
             echo "
             <tr><td><a href=\"$uri\">{$street->id}</a></td>
                 <td><a href=\"$uri\">$name</a></td>

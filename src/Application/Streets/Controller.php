@@ -13,6 +13,7 @@ use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Correct\CorrectRequest;
+use Domain\Streets\UseCases\Retire\RetireRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
 use Domain\Streets\UseCases\Verify\VerifyRequest;
@@ -64,7 +65,7 @@ class Controller extends BaseController
         }
         return new \Application\Views\NotFoundView();
     }
-    
+
     /**
      * Declare that a street is correct at the current time
      */
@@ -74,27 +75,27 @@ class Controller extends BaseController
             $request  = new VerifyRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
             $verify   = $this->di->get('Domain\Streets\UseCases\Verify\Verify');
             $response = $verify($request);
-            
+
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
                 exit();
             }
             else { $_SESSION['errorMessages'] = $response->errors; }
         }
-        
+
         if (!empty($_REQUEST['id'])) {
             $street_id = (int)$_REQUEST['id'];
-            
+
             return new Views\VerifyView(
                 new VerifyRequest(   $street_id, $_SESSION['USER']->id),
                 $this->streetInfo(   $street_id),
                 $this->addressSearch($street_id)
             );
         }
-        
+
         return new \Application\Views\NotFoundView();
     }
-    
+
     /**
      * Correct an error in the primary attributes of a street
      */
@@ -110,7 +111,7 @@ class Controller extends BaseController
             }
             else { $_SESSION['errorMessages'] = $response->errors; }
         }
-        
+
         if (!empty($_REQUEST['id'])) {
             $street_id = (int)$_REQUEST['id'];
             $info      = $this->streetInfo($street_id);
@@ -123,14 +124,44 @@ class Controller extends BaseController
         }
         return new \Application\Views\NotFoundView();
     }
-    
+
+    /**
+     * Change the status for a street to RETIRED
+     */
+    public function retire(array $params)
+    {
+        if (isset($_POST['id'])) {
+            $request  = new RetireRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $retire   = $this->di->get('Domain\Streets\UseCases\Retire\Retire');
+            $response = $retire($request);
+
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $street_id = (int)$_REQUEST['id'];
+
+            return new Views\RetireView(
+                new RetireRequest(   $street_id, $_SESSION['USER']->id),
+                $this->streetInfo(   $street_id),
+                $this->addressSearch($street_id)
+            );
+        }
+
+        return new \Application\Views\NotFoundView();
+    }
+
     private function streetInfo(int $street_id): \Domain\Streets\UseCases\Info\InfoResponse
     {
         $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
         $req  = new \Domain\Streets\UseCases\Info\InfoRequest($street_id);
         return $info($req);
     }
-    
+
     private function addressSearch(int $street_id): \Domain\Addresses\UseCases\Search\SearchResponse
     {
         $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');

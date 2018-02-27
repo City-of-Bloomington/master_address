@@ -37,7 +37,7 @@ trait ChangeLogTrait
                        c.firstname as contact_firstname, c.lastname as contact_lastname
                 from {$this->logType}_change_log l
                 left join people p on l.person_id=p.id
-                left join people c on l.contact_id=p.id
+                left join people c on l.contact_id=c.id
                 where {$this->logType}_id=?
                 order by l.action_date desc";
 

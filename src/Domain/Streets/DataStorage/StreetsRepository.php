@@ -24,11 +24,9 @@ interface StreetsRepository
     // Write functions
     public function correct  (CorrectRequest $request);
     public function logChange(ChangeLogEntry   $entry): int;
-
+    public function saveStatus(int $street_id, string $status);
 
     // Metadata functions
     public function types(): array;
     public function towns(): array;
-
-
 }
