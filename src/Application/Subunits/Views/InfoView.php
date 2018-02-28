@@ -23,6 +23,7 @@ class InfoView extends Template
 
         $actions = ['verify'];
         if ($info->subunit->status == Log::STATUS_CURRENT) {
+            $actions[] = 'correct';
             $actions[] = 'retire';
         }
         else {
@@ -35,8 +36,8 @@ class InfoView extends Template
             'actions' => $actions
         ]);
 
-        $this->blocks[]              = new Block('addresses/statusLog.inc',  ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('changeLogs/changeLog.inc', ['changes'   => $info->changeLog]);
+        $this->blocks[]              = new Block('logs/statusLog.inc',  ['statuses'  => $info->statusLog]);
+        $this->blocks[]              = new Block('logs/changeLog.inc', ['changes'   => $info->changeLog]);
         $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
     }
 }

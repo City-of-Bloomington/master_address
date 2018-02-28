@@ -25,7 +25,7 @@ class InfoView extends Template
         $this->vars['title'] = parent::escape($info->street->__toString());
 
         $this->blocks[] = new Block('streets/info.inc',         ['street'  => $info->street   ]);
-        $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes' => $info->changeLog]);
+        $this->blocks[] = new Block('logs/changeLog.inc', ['changes' => $info->changeLog]);
         $this->blocks[] = new Block('streets/designations.inc', [
             'street'       => $info->street,
             'designations' => $info->designations

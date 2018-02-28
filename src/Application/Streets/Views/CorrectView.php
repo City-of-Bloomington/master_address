@@ -20,14 +20,14 @@ class CorrectView extends Template
     {
         parent::__construct('two-column', 'html');
         $this->vars['title'] = $this->_('correct');
-        
+
         $vars = ['towns' => $metadata->towns()];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
-        
-        
+
+
         $this->blocks[] = new Block('streets/actions/correctForm.inc', $vars);
-        
-        $this->blocks[] = new Block('changeLogs/changeLog.inc', ['changes' => $info->changeLog]);
+
+        $this->blocks[] = new Block('logs/changeLog.inc', ['changes' => $info->changeLog]);
         $this->blocks[] = new Block('streets/designations.inc', [
             'street'       => $info->street,
             'designations' => $info->designations

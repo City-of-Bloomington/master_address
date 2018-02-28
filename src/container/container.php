@@ -38,7 +38,7 @@ $DI->lazyNew('Domain\Streets\Names\DataStorage\PdoNamesRepository'));
 //---------------------------------------------------------
 // Metadata providers
 //---------------------------------------------------------
-$contexts = ['Addresses', 'Plats', 'Streets', 'Subdivisions'];
+$contexts = ['Addresses', 'Plats', 'Streets', 'Subdivisions', 'Subunits'];
 foreach ($contexts as $t) {
     $DI->params[ "Domain\\$t\\Metadata"]['repository'] = $DI->get("Domain\\$t\\DataStorage\\{$t}Repository");
     $DI->set(    "Domain\\$t\\Metadata",

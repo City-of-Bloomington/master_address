@@ -9,8 +9,7 @@ namespace Application\Subunits;
 use Application\Controller as BaseController;
 use Application\View;
 
-use Domain\Subunits\UseCases\Retire\RetireRequest;
-use Domain\Subunits\UseCases\Verify\VerifyRequest;
+use Domain\Subunits\UseCases\Correct\CorrectRequest;
 
 class Controller extends BaseController
 {
@@ -28,13 +27,37 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
+    /**
+     * Correct an error in the primary attributes of a subunit
+     */
+    public function correct(array $params)
+    {
+        if (isset($_POST['id'])) {
+            $request  = new CorrectRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $correct  = $this->di->get('Domain\Subunits\UseCases\Correct\Correct');
+            $response = $correct($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $info    = $this->subunitInfo((int)$_REQUEST['id']);
+            $request = new CorrectRequest($info->subunit->id, $_SESSION['USER']->id, (array)$info->subunit);
+            return new Views\CorrectView(
+                $request,
+                $info,
+                $this->di->get('Domain\Subunits\Metadata')
+            );
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
     public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
     public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
     public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
-
-    public function correct(array $params)
-    {
-    }
 
     /**
      * Standard use case handler involving a ChangeLogEntry
