@@ -19,12 +19,12 @@ use Domain\Addresses\Metadata as Address;
 ?>
 <section>
     <header><h1><?= $this->_('correct'); ?></h1></header>
-    <form method="post" action="<?= parent::generateUri('addresses.correct'); ?>">
+    <form method="post">
         <fieldset>
             <input name="id" type="hidden" value="<?= $this->address_id; ?>" />
             <?php
                 $h = $this->template->getHelper('field');
-                
+
                 echo $h->field([
                     'name'  => 'street_number_prefix',
                     'id'    => 'street_number_prefix',
@@ -45,7 +45,7 @@ use Domain\Addresses\Metadata as Address;
                     'label' => $this->_('street_number_suffix'),
                     'value' => $this->street_number_suffix
                 ]);
-                
+
                 echo $h->field([
                     'name'    => 'street_id',
                     'id'      => 'street_id',
@@ -55,7 +55,7 @@ use Domain\Addresses\Metadata as Address;
                     'type'    => 'chooser',
                     'url'     => new Url(parent::generateUrl('streets.index'))
                 ]);
-                
+
                 echo $h->field([
                     'name'     => 'zip',
                     'id'       => 'zip',
@@ -64,7 +64,7 @@ use Domain\Addresses\Metadata as Address;
                     'type'     => 'number',
                     'required' => true
                 ]);
-                
+
                 echo $h->field([
                     'name'     => 'zipplus4',
                     'id'       => 'zipplus4',
@@ -72,7 +72,7 @@ use Domain\Addresses\Metadata as Address;
                     'value'    => $this->zipplus4,
                     'type'     => 'number'
                 ]);
-                
+
                 echo $h->field([
                     'name'     => 'notes',
                     'id'       => 'notes',
@@ -82,7 +82,7 @@ use Domain\Addresses\Metadata as Address;
                 ]);
             ?>
         </fieldset>
-        
+
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
             <?php
                 echo $h->field([
@@ -92,7 +92,7 @@ use Domain\Addresses\Metadata as Address;
                     'value'    => $this->change_notes,
                     'type'     => 'textarea'
                 ]);
-                
+
                 $h = $this->template->getHelper('saveAndCancelButtons');
                 echo $h->saveAndCancelButtons(parent::generateUri('addresses.view', ['id'=>$this->address_id]));
             ?>

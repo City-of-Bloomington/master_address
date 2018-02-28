@@ -11,6 +11,7 @@ use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\Entities\Location;
+use Domain\Subunits\UseCases\Correct\CorrectRequest;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
@@ -91,10 +92,33 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         }
         return $locations;
     }
+    //---------------------------------------------------------------
+    // Write Functions
+    //---------------------------------------------------------------
+    public function correct(CorrectRequest $req)
+    {
+        $sql = "update subunits
+                set type_id=?, identifier=?, notes=?
+                where id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->type_id, $req->identifier, $req->notes,
+            $req->subunit_id
+        ]);
+    }
 
     public function saveLocationStatus(int $location_id, string $status)
     {
         $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
         $repo->saveStatus($location_id, $status);
+    }
+
+    //---------------------------------------------------------------
+    // Metadata Functions
+    //---------------------------------------------------------------
+    public function types(): array
+    {
+        $result = $this->pdo->query('select * from subunit_types order by name');
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

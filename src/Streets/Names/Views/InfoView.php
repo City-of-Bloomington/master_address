@@ -20,7 +20,7 @@ class InfoView extends Template
 
 
         $this->blocks[] = new Block('streets/info.inc',                      ['street' => $this->street]);
-        $this->blocks[] = new Block('changeLogs/changeLog.inc',              ['changes'=> $this->street->getChangeLog()]);
+        $this->blocks[] = new Block('logs/changeLog.inc',              ['changes'=> $this->street->getChangeLog()]);
         $this->blocks['panel-one'][] = new Block('streets/designations.inc', ['street' => $this->street]);
         $this->blocks['panel-one'][] = new Block('addresses/list.inc',    ['addresses' => $this->street->getAddresses()]);
     }
