@@ -47,7 +47,7 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
 
     #$r->add('update', '/update{/id}')->addValues(['action'=>'update']);
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
-    foreach (['verify', 'correct', 'retire'] as $a) {
+    foreach (['verify', 'correct', 'retire', 'unretire'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });

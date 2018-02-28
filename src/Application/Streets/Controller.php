@@ -100,7 +100,7 @@ class Controller extends BaseController
     }
 
     /**
-     * Standard use case handler involving a Change Log Entry
+     * Standard use case handler involving a ChangeLogEntry
      *
      * The use case name should be the capitalized version, matching the
      * directory name in /src/Domain.

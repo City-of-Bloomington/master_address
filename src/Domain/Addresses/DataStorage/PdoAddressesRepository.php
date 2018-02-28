@@ -100,7 +100,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('LEFT', 'street_names        sn', 'sd.street_name_id=sn.id')
                ->join('LEFT', 'street_types        st', 'sn.suffix_code_id=st.id')
-               ->join('LEFT', 'address_status  status', 'a.id=status.address_id and status.start_date <= CURRENT_DATE and (status.end_date is null or status.end_date >= CURRENT_DATE)');
+               ->join('LEFT', 'address_status  status', 'a.id=status.address_id and status.start_date <= now() and (status.end_date is null or status.end_date >= now())');
 
         return $select;
     }
