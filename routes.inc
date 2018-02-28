@@ -85,7 +85,7 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
     $r->add('index',  '')            ->addValues(['action'=>'index' ]);
     $r->add('parse',  '/parse')      ->addValues(['action'=>'parse' ]);
-    foreach (['verify', 'correct', 'retire'] as $a) {
+    foreach (['verify', 'correct', 'retire', 'unretire'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });

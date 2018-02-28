@@ -83,32 +83,6 @@ class Controller extends BaseController
     }
 
     /**
-     * Declare that an address is correct at the current time
-     */
-    public function verify(array $params)
-    {
-        if (isset($_POST['id'])) {
-            $request  = new VerifyRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $verify   = $this->di->get('Domain\Addresses\UseCases\Verify\Verify');
-            $response = $verify($request);
-
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('addresses.view', ['id'=>$request->address_id]));
-                exit();
-            }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
-
-        if (!empty($_REQUEST['id'])) {
-            $info    = $this->addressInfo((int)$_REQUEST['id']);
-            $request = new VerifyRequest($info->address->id, $_SESSION['USER']->id);
-            return new Views\VerifyView($request, $info);
-        }
-
-        return new \Application\Views\NotFoundView();
-    }
-
-    /**
      * Correct an error in the primary attributes of an address
      */
     public function correct(array $params)
@@ -135,15 +109,28 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
+    public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
+    public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
+    public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
+
     /**
-	 * Sets the latest status for this address to RETIRED
+     * Standard use case handler involving a ChangeLogEntry
+     *
+     * The use case name should be the capitalized version, matching the
+     * directory name in /src/Domain.
+     *
+     * @param string $name  The short (capitalized) use case name
      */
-    public function retire(array $params)
+    private function doBasicChangeLogUseCase(string $name)
     {
+        $useCase        = "Domain\\Addresses\\UseCases\\$name\\$name";
+        $useCaseRequest = "Domain\\Addresses\\UseCases\\$name\\{$name}Request";
+        $useCaseView    = "Application\\Addresses\\Views\\{$name}View";
+
         if (isset($_POST['id'])) {
-            $request  = new RetireRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $retire   = $this->di->get('Domain\Addresses\UseCases\Retire\Retire');
-            $response = $retire($request);
+            $request  = new $useCaseRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $handle   = $this->di->get($useCase);
+            $response = $handle($request);
 
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('addresses.view', ['id'=>$request->address_id]));
@@ -153,9 +140,12 @@ class Controller extends BaseController
         }
 
         if (!empty($_REQUEST['id'])) {
-            $info    = $this->addressInfo((int)$_REQUEST['id']);
-            $request = new RetireRequest($info->address->id, $_SESSION['USER']->id);
-            return new Views\RetireView($request, $info);
+            $address_id = (int)$_REQUEST['id'];
+
+            return new $useCaseView(
+                new $useCaseRequest($address_id, $_SESSION['USER']->id),
+                $this->addressInfo( $address_id)
+            );
         }
 
         return new \Application\Views\NotFoundView();

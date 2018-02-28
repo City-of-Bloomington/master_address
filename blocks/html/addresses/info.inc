@@ -3,9 +3,9 @@
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Address $this->address
+ * @param array   $this->actions   Actions to draw button links for
  * @param string  $this->title
  */
-use Domain\Logs\Metadata as Log;
 ?>
 <section>
     <header>
@@ -13,33 +13,16 @@ use Domain\Logs\Metadata as Log;
         <div class="tools">
         <?php
             $h       = $this->template->getHelper('buttonLink');
-            /*
-            $status  = $this->address->status;
-            $actions = ['correct','update','readdress','verify'];
-            if ($status == 'retired') {
-                $actions[] = 'unretire';
-                $actions[] = 'reassign';
-            }
-            else {
-                $actions[] = 'retire';
-            }
-            */
-            $actions = ['verify', 'correct'];
-            if ($this->address->status == Log::STATUS_RETIRED) {
+            if ($this->actions) {
+                foreach ($this->actions as $a) {
+                    if (parent::isAllowed('addresses', $a)) {
+                        echo $h->buttonLink(
+                            parent::generateUri("addresses.$a", ['id'=>$this->address->id]),
+                            $this->_($a),
+                            'edit'
+                        );
 
-            }
-            else {
-                $actions[] = 'retire';
-            }
-
-            foreach ($actions as $a) {
-                if (parent::isAllowed('addresses', $a)) {
-                    echo $h->buttonLink(
-                        parent::generateUri("addresses.$a", ['id'=>$this->address->id]),
-                        $this->_($a),
-                        'edit'
-                    );
-
+                    }
                 }
             }
         ?>
