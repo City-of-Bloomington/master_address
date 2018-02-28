@@ -60,7 +60,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $select->cols($this->columns())
                ->from("{$this->tablename}     s")
                ->join('LEFT', 'subunit_types  t', 's.type_id=t.id')
-               ->join('LEFT', 'subunit_status x', 's.id=x.subunit_id and x.start_date <= CURRENT_DATE and (x.end_date is null or x.end_date >= CURRENT_DATE)');
+               ->join('LEFT', 'subunit_status x', 's.id=x.subunit_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())');
 
         return $select;
     }

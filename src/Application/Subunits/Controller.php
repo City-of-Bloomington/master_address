@@ -28,63 +28,50 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    /**
-     * Declare that a subunit is correct at the current time
-     */
-    public function verify(array $params)
-    {
-        if (isset($_POST['id'])) {
-            $request  = new VerifyRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $verify   = $this->di->get('Domain\Subunits\UseCases\Verify\Verify');
-            $response = $verify($request);
-
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
-                exit();
-            }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
-
-        if (!empty($_REQUEST['id'])) {
-            $subunit_id = (int)$_REQUEST['id'];
-
-            return new Views\VerifyView(
-                new VerifyRequest(   $subunit_id, $_SESSION['USER']->id),
-                $this->subunitInfo(  $subunit_id)
-            );
-        }
-
-        return new \Application\Views\NotFoundView();
-    }
-
-    public function retire(array $params)
-    {
-        if (isset($_POST['id'])) {
-            $request  = new RetireRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $retire   = $this->di->get('Domain\Subunits\UseCases\Retire\Retire');
-            $response = $retire($request);
-
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
-                exit();
-            }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
-
-        if (!empty($_REQUEST['id'])) {
-            $subunit_id = (int)$_REQUEST['id'];
-
-            return new Views\RetireView(
-                new RetireRequest(   $subunit_id, $_SESSION['USER']->id),
-                $this->subunitInfo(  $subunit_id)
-            );
-        }
-
-        return new \Application\Views\NotFoundView();
-    }
+    public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
+    public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
+    public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
 
     public function correct(array $params)
     {
+    }
+
+    /**
+     * Standard use case handler involving a ChangeLogEntry
+     *
+     * The use case name should be the capitalized version, matching the
+     * directory name in /src/Domain.
+     *
+     * @param string $name  The short (capitalized) use case name
+     */
+    private function doBasicChangeLogUseCase(string $name)
+    {
+        $useCase        = "Domain\\Subunits\\UseCases\\$name\\$name";
+        $useCaseRequest = "Domain\\Subunits\\UseCases\\$name\\{$name}Request";
+        $useCaseView    = "Application\\Subunits\\Views\\{$name}View";
+
+        if (isset($_POST['id'])) {
+            $request  = new $useCaseRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $handle   = $this->di->get($useCase);
+            $response = $handle($request);
+
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $subunit_id = (int)$_REQUEST['id'];
+
+            return new $useCaseView(
+                new $useCaseRequest($subunit_id, $_SESSION['USER']->id),
+                $this->subunitInfo( $subunit_id)
+            );
+        }
+
+        return new \Application\Views\NotFoundView();
     }
 
     private function subunitInfo(int $subunit_id): \Domain\Subunits\UseCases\Info\InfoResponse

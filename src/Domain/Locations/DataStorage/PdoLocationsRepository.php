@@ -55,7 +55,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $select->cols($this->columns())
                ->from("{$this->tablename}     l")
                ->join('LEFT', 'location_types  t', 'l.type_id=t.id')
-               ->join('LEFT', 'location_status x', 'l.location_id=x.location_id and x.start_date <= CURRENT_DATE and (x.end_date is null or x.end_date >= CURRENT_DATE)');
+               ->join('LEFT', 'location_status x', 'l.location_id=x.location_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())');
 
         return $select;
     }

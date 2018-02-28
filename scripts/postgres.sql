@@ -191,8 +191,8 @@ create table address_status (
     id          serial           primary key,
     address_id  integer          not null,
     status      address_statuses not null,
-    start_date  date,
-    end_date    date,
+    start_date  timestamp        not null default now(),
+    end_date    timestamp,
     foreign key (address_id) references addresses(id)
 );
 
@@ -218,8 +218,8 @@ create table subunit_status (
     id          serial           primary key,
     subunit_id  integer          not null,
     status      address_statuses not null,
-    start_date  date,
-    end_date    date,
+    start_date  timestamp        not null default now(),
+    end_date    timestamp,
     foreign key (subunit_id) references subunits(id)
 );
 
@@ -252,8 +252,8 @@ create table location_status (
 	id           serial           primary key,
 	location_id  integer          not null,
 	status       address_statuses not null,
-	start_date   date,
-	end_date     date
+    start_date  timestamp         not null default now(),
+    end_date    timestamp
 );
 
 -- mast_addr_assignment_contacts
@@ -272,7 +272,7 @@ create table people (
 	notification  boolean,
 	coordination  boolean,
 	username      varchar(40) unique,
-	password      varchar(40),
+	password      varchar(255),
 	role          varchar(30),
 	authentication_method varchar(40)
 );
@@ -284,7 +284,7 @@ create table address_assignment_log (
 	subunit_id   integer,
 	person_id    integer,
 	contact_id   integer,
-	action_date  timestamp   with time zone not null default now(),
+	action_date  timestamp   not null default now(),
 	action       varchar(20) not null,
 	notes        varchar(240),
 	foreign key (address_id) references addresses(id),
@@ -298,7 +298,7 @@ create table address_change_log (
 	address_id  integer     not null,
 	person_id   integer     not null,
 	contact_id  integer,
-	action_date timestamp   with time zone not null default now(),
+	action_date timestamp   not null default now(),
 	action      varchar(20) not null,
 	notes       varchar(255),
 	foreign key (address_id) references addresses(id),
@@ -307,12 +307,12 @@ create table address_change_log (
 );
 
 create table location_change_log (
-    id              serial  primary key,
-    location_id     integer not null,
-    old_location_id integer not null,
+    id              serial    primary key,
+    location_id     integer   not null,
+    old_location_id integer   not null,
     person_id       integer,
     contact_id      integer,
-    action_date     timestamp   with time zone not null default now(),
+    action_date     timestamp not null default now(),
     action          varchar(20),
     notes           varchar(240),
 	foreign key (person_id ) references people(id),
@@ -324,7 +324,7 @@ create table street_change_log (
 	street_id    integer     not null,
 	person_id    integer     not null,
 	contact_id   integer,
-	action_date  timestamp   with time zone not null default now(),
+	action_date  timestamp   not null default now(),
 	action       varchar(20) not null,
 	notes        varchar(255),
 	foreign key (street_id)  references streets (id),
@@ -337,7 +337,7 @@ create table subunit_change_log (
 	subunit_id   integer     not null,
 	person_id    integer     not null,
 	contact_id   integer,
-	action_date  timestamp   with time zone not null default now(),
+	action_date  timestamp   not null default now(),
 	action       varchar(20) not null,
 	notes        varchar(255),
 	foreign key (subunit_id) references subunits(id),

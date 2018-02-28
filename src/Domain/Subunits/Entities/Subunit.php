@@ -18,14 +18,14 @@ class Subunit
     public $latitude;
     public $longitude;
     public $usng;
-    
+
     // Foreign key value from subunit_status
     public $status;
-    
+
     // Foreign key values from subunit_types
     public $type_code;
     public $type_name;
-    
+
     public function __construct(?array $data=null)
     {
         foreach ($this as $f=>$v) {
@@ -38,16 +38,18 @@ class Subunit
                     case 'state_plane_y':
                         $this->$f = (int)$data[$f];
                     break;
-                    
+
                     case 'latitude':
                     case 'longitude':
                         $this->$f = (float)$data[$f];
                     break;
-                    
+
                     default:
                         $this->$f = $data[$f];
                 }
             }
         }
     }
+
+    public function __toString()  { return "{$this->type_code} {$this->identifier}"; }
 }

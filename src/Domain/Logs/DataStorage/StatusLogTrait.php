@@ -31,8 +31,8 @@ trait StatusLogTrait
         $sql = "select status
                 from  {$this->logType}_status
                 where {$this->logType}_id=?
-                  and start_date <= CURRENT_DATE
-                  and (end_date is null or end_date >= CURRENT_DATE)";
+                  and start_date <= now()
+                  and (end_date is null or end_date >= now())";
         $query = $this->pdo->prepare($sql);
         $query->execute([$entity_id]);
         $result = $query->fetchAll(\PDO::FETCH_COLUMN);
@@ -61,7 +61,7 @@ trait StatusLogTrait
 		// Do our data cleanup - use today's date on all the empty end dates
 		if ($currentStatus && $currentStatus != $status) {
             $sql = "update {$this->logType}_status
-                    set end_date=CURRENT_DATE - interval '1 day'
+                    set end_date=now()
                     where {$this->logType}_id=? and end_date is null";
             $query = $this->pdo->prepare($sql);
             $query->execute([$entity_id]);
@@ -73,7 +73,7 @@ trait StatusLogTrait
 		if (!$currentStatus || ($currentStatus != $status)) {
             $sql = "insert into {$this->logType}_status
                     ({$this->logType}_id, status, start_date)
-                    values(?, ?, CURRENT_DATE)";
+                    values(?, ?, now())";
             $query = $this->pdo->prepare($sql);
             $query->execute([$entity_id, $status]);
 		}
