@@ -20,7 +20,10 @@ class InfoView extends Template
 
         $this->vars['title'] = parent::escape($info->name);
 
-        $this->blocks[] = new Block('streets/names/info.inc',        ['name'         => $info->name        ]);
+        $this->blocks[] = new Block('streets/names/info.inc', [
+            'name'    => $info->name,
+            'actions' => parent::isAllowed('streetNames', 'correct') ? ['correct'] : []
+        ]);
         $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
     }
 }

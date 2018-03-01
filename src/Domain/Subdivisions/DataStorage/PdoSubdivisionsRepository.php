@@ -16,25 +16,36 @@ use Domain\Townships\Entities\Township;
 
 class PdoSubdivisionsRepository extends PdoRepository implements SubdivisionsRepository
 {
-    protected $tablename   = 'subdivisions';
-    protected $entityClass = '\Domain\Subdivisions\Entities\Subdivision';
+    const TABLE = 'subdivisions';
 
     public static $DEFAULT_SORT = ['name'];
+    public static $fieldmap = [
+        'id'                    => ['prefix'=>'s', 'dbName'=>'id'          ],
+        'name'                  => ['prefix'=>'s', 'dbName'=>'name'        ],
+        'phase'                 => ['prefix'=>'s', 'dbName'=>'phase'       ],
+        'status'                => ['prefix'=>'s', 'dbName'=>'status'      ],
+        'township_id'           => ['prefix'=>'s', 'dbName'=>'township_id' ],
+        'township_name'         => ['prefix'=>'t', 'dbName'=>'name'        ],
+        'township_code'         => ['prefix'=>'t', 'dbName'=>'code'        ],
+        'township_quarter_code' => ['prefix'=>'t', 'dbName'=>'quarter_code']
+    ];
+
     public function columns(): array
     {
-        return [
-            's.id', 's.name', 's.phase', 's.status', 's.township_id',
-            't.name as township_name',
-            't.code as township_code',
-            't.quarter_code as township_quarter_code'
-        ];
+        static $cols = [];
+        if (!$cols) {
+            foreach (self::$fieldmap as $responseName=>$map) {
+                $cols[] = "$map[prefix].$map[dbName] as $responseName";
+            }
+        }
+        return $cols;
     }
 
     private function baseSelect(): SelectInterface
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename} as s")
+               ->from(self::TABLE.' s')
                ->join('LEFT', 'townships as t', 's.township_id=t.id');
         return $select;
     }
@@ -59,16 +70,17 @@ class PdoSubdivisionsRepository extends PdoRepository implements SubdivisionsRep
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
-        foreach (parent::columns() as $f) {
+        foreach (self::$fieldmap as $f=>$m) {
+            $column = "$m[prefix].$m[dbName]";
             if (!empty($req->$f)) {
                 switch ($f) {
                     case 'phase':
                     case 'township_id':
-                        $select->where("$f=?", $req->$f);
+                        $select->where("$column=?", $req->$f);
                     break;
 
                     default:
-                        $select->where("$f like ?", $req->$f);
+                        $select->where("$column like ?", "{$req->$f}%");
                 }
             }
         }
@@ -83,15 +95,7 @@ class PdoSubdivisionsRepository extends PdoRepository implements SubdivisionsRep
 
     public function distinct(string $field): array
     {
-        $select = $this->queryFactory->newSelect();
-        $select->distinct()
-               ->cols([$field])
-               ->from($this->tablename)
-               ->where("$field is not null")
-               ->orderBy([$field]);
-
-        $result = $this->pdo->query($select->getStatement());
-        return $result->fetchAll(\PDO::FETCH_COLUMN);
+        return parent::distinctFromTable($field, self::TABLE);
     }
 
     public function townships(): array
@@ -103,13 +107,14 @@ class PdoSubdivisionsRepository extends PdoRepository implements SubdivisionsRep
     /**
      * Saves a subdivision and returns the ID for the subdivision
      */
-    public function save(Subdivision $subdivision): int
+    public function save(Subdivision $s): int
     {
-        // Remove the township fields from the data to be saved
-        unset($subdivision->township_name);
-        unset($subdivision->township_code);
-        unset($subdivision->township_quarter_code);
-
-        return parent::saveEntity($subdivision);
+        return parent::saveToTable([
+            'id'          => $s->id,
+            'name'        => $s->name,
+            'phase'       => $s->phase,
+            'status'      => $s->status,
+            'township_id' => $s->township_id
+        ], self::TABLE);
     }
 }

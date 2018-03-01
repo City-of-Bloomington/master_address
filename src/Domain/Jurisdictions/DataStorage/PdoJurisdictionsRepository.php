@@ -15,15 +15,15 @@ use Domain\Jurisdictions\UseCases\Update\UpdateRequest;
 
 class PdoJurisdictionsRepository extends PdoRepository implements JurisdictionsRepository
 {
-    protected $tablename   = 'jurisdictions';
-    protected $entityClass = '\Domain\Jurisdictions\Entities\Jurisdiction';
+    const TABLE = 'jurisdictions';
 
     public static $DEFAULT_SORT = ['name'];
+    public static $columns = ['id', 'name'];
 
     public function load(InfoRequest $req): Jurisdiction
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols($this->columns())->from($this->tablename);
+        $select->cols(self::$columns)->from(self::TABLE);
         $select->where('id=?', $req->id);
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
@@ -35,9 +35,9 @@ class PdoJurisdictionsRepository extends PdoRepository implements JurisdictionsR
     public function search(SearchRequest $req): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols($this->columns())->from($this->tablename);
+        $select->cols(self::$columns)->from(self::TABLE);
 
-        foreach ($this->columns() as $f) {
+        foreach (self::$columns as $f) {
             if (!empty($req->$f)) {
                 $select->where("$f like ?", $req->$f);
             }
@@ -52,6 +52,6 @@ class PdoJurisdictionsRepository extends PdoRepository implements JurisdictionsR
      */
     public function save(Jurisdiction $jurisdiction): int
     {
-        return parent::saveEntity($jurisdiction);
+        return parent::saveToTable((array)$jurisdiction, self::TABLE);
     }
 }

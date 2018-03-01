@@ -22,8 +22,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     use \Domain\Logs\DataStorage\StatusLogTrait;
     protected $logType = 'subunit';
 
-    protected $tablename   = 'subunits';
-    protected $entityClass = '\Domain\Subunits\Entities\Subunit';
+    const TABLE = 'subunits';
 
     /**
      * Maps response fieldnames to the names used in the database
@@ -59,7 +58,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename}     s")
+               ->from(self::TABLE.' s')
                ->join('LEFT', 'subunit_types  t', 's.type_id=t.id')
                ->join('LEFT', 'subunit_status x', 's.id=x.subunit_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())');
 

@@ -12,10 +12,13 @@ use Domain\Users\UseCases\Search\SearchRequest;
 
 class PdoUsersRepository extends PdoRepository implements UsersRepository
 {
-    protected $tablename   = 'people';
-    protected $entityClass = '\Domain\Users\Entities\User';
+    const TABLE = 'people';
 
     public static $DEFAULT_SORT = ['lastname', 'firstname'];
+    public function columns(): array
+    {
+        return array_keys(get_class_vars('Domain\Users\Entities\User'));
+    }
 
     private function getBaseSelect()
     {
@@ -61,7 +64,7 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
 
         foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
-                $select->where("$f like ?", $req->$f);
+                $select->where("$f like ?", "{$req->$f}%");
             }
         }
         $order = $req->order ? $req->order : self::$DEFAULT_SORT;
@@ -76,21 +79,15 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
      */
     public function save(User $user): int
     {
-        return parent::saveEntity($user);
+        return parent::saveToTable((array)$user, self::TABLE);
     }
 
     public function delete(int $id)
     {
-        $update = $this->queryFactory->newUpdate();
-        $update->table($this->tablename)
-               ->where('id=?', $id)
-               ->cols([
-                    'username' => null,
-                    'password' => null,
-                    'role'     => null,
-                    'authentication_method' => null
-                ]);
-        $query = $this->pdo->prepare($update->getStatement());
-        $query->execute($update->getBindValues());
+        $sql = 'update '.self::TABLE."
+                set username=null, password=null, role=null, authentication_method=null
+                where id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$id]);
     }
 }

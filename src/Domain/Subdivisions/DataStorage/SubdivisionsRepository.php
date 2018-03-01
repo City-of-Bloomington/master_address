@@ -16,6 +16,8 @@ interface SubdivisionsRepository
     public function load    (InfoRequest   $req): Subdivision;
     public function search  (SearchRequest $req): array;
     public function save    (Subdivision  $subd): int;
-    public function distinct(string      $field): array;
+
+    // Metadata functions
+    public function distinct(string $field): array;
     public function townships(): array;
 }

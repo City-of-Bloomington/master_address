@@ -15,15 +15,20 @@ use Domain\People\UseCases\Update\UpdateRequest;
 
 class PdoPeopleRepository extends PdoRepository implements PeopleRepository
 {
-    protected $tablename   = 'people';
-    protected $entityClass = '\Domain\People\Entities\Person';
+    const TABLE = 'people';
 
     public static $DEFAULT_SORT = ['lastname', 'firstname'];
+    public function columns()
+    {
+        static $columns;
+        if (!$columns) { $columns = array_keys(get_class_vars('Domain\People\Entities\Person')); }
+        return $columns;
+    }
 
     public function load(InfoRequest $req): Person
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols($this->columns())->from($this->tablename);
+        $select->cols($this->columns())->from(self::TABLE);
         $select->where('id=?', $req->id);
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
@@ -35,7 +40,7 @@ class PdoPeopleRepository extends PdoRepository implements PeopleRepository
     public function search(SearchRequest $req): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols($this->columns())->from($this->tablename);
+        $select->cols($this->columns())->from(self::TABLE);
 
         foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
@@ -52,6 +57,6 @@ class PdoPeopleRepository extends PdoRepository implements PeopleRepository
      */
     public function save(Person $person): int
     {
-        return parent::saveEntity($person);
+        return parent::saveToTable((array)$person, self::TABLE);
     }
 }

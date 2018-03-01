@@ -16,25 +16,10 @@ abstract class PdoRepository
     protected $pdo;
     protected $queryFactory;
 
-    protected $tablename;
-    protected $entityClass;
-    protected $primaryKey = 'id';
-
     public function __construct(\PDO $pdo)
     {
         $this->pdo          = $pdo;
         $this->queryFactory = new QueryFactory(ucfirst($pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)));
-    }
-
-    public function columns(): array
-    {
-        static $cols;
-        if (!$cols) {
-            foreach (get_class_vars($this->entityClass) as $k=>$v) {
-                $cols[] = $k;
-            }
-        }
-        return $cols;
     }
 
 	public function performSelect(SelectInterface $select, int $itemsPerPage=null, int $currentPage=null) : array
@@ -68,50 +53,43 @@ abstract class PdoRepository
         ];
 	}
 
-	protected function saveEntity($entity): int
+	protected function saveToTable(array $data, string $table, ?string $pk='id'): int
 	{
-        $primaryKey = $this->primaryKey;
-        
-        $data = [];
-        foreach ($entity as $k=>$v) {
-            if ($k != $primaryKey) { $data[$k] = $v; }
-        }
-
-        if ($entity->$primaryKey) {
+        if (!empty($data[$pk])) {
             // Update
+            $id = $data[$pk];
+            unset($data[$pk]);
+
             $update = $this->queryFactory->newUpdate();
-            $update->table($this->tablename)
-                   ->cols($data)
-                   ->where("{$this->primaryKey}=?", $entity->$primaryKey);
+            $update->table($table)->cols($data)->where("$pk=?", $id);
             $query = $this->pdo->prepare($update->getStatement());
             $query->execute($update->getBindValues());
-            return $entity->$primaryKey;
+            return $id;
         }
         else {
             // Insert
             $insert = $this->queryFactory->newInsert();
-            $insert->into($this->tablename)
-                   ->cols($data);
+            $insert->into($table)->cols($data);
             $query = $this->pdo->prepare($insert->getStatement());
             $query->execute($insert->getBindValues());
-            $pk = $insert->getLastInsertIdName($primaryKey);
-            return (int)$this->pdo->lastInsertId($pk);
+            $id = $insert->getLastInsertIdName($pk);
+            return (int)$this->pdo->lastInsertId($id);
         }
 	}
 
-    public function distinct(string $field): array
+    public function distinctFromTable(string $field, string $table): array
     {
         $select = $this->queryFactory->newSelect();
         $select->distinct()
                ->cols([$field])
-               ->from($this->tablename)
+               ->from($table)
                ->where("$field is not null")
                ->orderBy([$field]);
 
         $result = $this->pdo->query($select->getStatement());
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
-    
+
     protected function doQuery(string $sql, ?array $params=null): array
     {
         $query = $this->pdo->prepare($sql);

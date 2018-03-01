@@ -67,8 +67,9 @@ $ROUTES->attach('streetDesignations', "/streets/designations", function ($r) {
 $ROUTES->attach('streetNames', "/streets/names", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Names\Controller']);
 
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
-    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+    $r->add('view',    '/{id}'        )->addValues(['action'=>'view'   ]);
+    $r->add('index',   ''             )->addValues(['action'=>'index'  ]);
+    $r->add('correct', '/correct{/id}')->addValues(['action'=>'correct']);
 });
 $ROUTES->attach('streets', "/streets", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Controller']);

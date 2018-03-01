@@ -10,14 +10,13 @@ use Domain\PdoRepository;
 
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\Streets\Entities\Designation;
-use Domain\Streets\Names\Entities\Name;
+use Domain\Streets\Entities\Name;
 use Domain\Streets\Names\UseCases\Search\SearchRequest;
 use Domain\Streets\Names\UseCases\Update\UpdateRequest;
 
 class PdoNamesRepository extends PdoRepository implements NamesRepository
 {
-    protected $tablename   = 'street_names';
-    protected $entityClass = '\Domain\StreetNames\Entities\StreetName';
+    const TABLE = 'street_names';
 
     public static $DEFAULT_SORT = ['name'];
 
@@ -33,7 +32,7 @@ class PdoNamesRepository extends PdoRepository implements NamesRepository
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename}   n")
+               ->from(self::TABLE.' n')
                ->join('LEFT', 'street_types t', 'n.suffix_code_id=t.id');
         return $select;
     }
@@ -114,6 +113,14 @@ class PdoNamesRepository extends PdoRepository implements NamesRepository
      */
     public function save(Name $name): int
     {
-        return parent::saveEntity($name);
+        return parent::saveToTable([
+            'id'             => $name->id,
+            'direction'      => $name->direction,
+            'name'           => $name->name,
+            'post_direction' => $name->post_direction,
+            'suffix_code_id' => $name->suffix_code_id,
+            'notes'          => $name->notes
+        ],
+        self::TABLE);
     }
 }

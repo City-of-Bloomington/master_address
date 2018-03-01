@@ -9,6 +9,7 @@ namespace Application\Streets\Names;
 
 use Application\Controller as BaseController;
 use Application\Streets\Controller as StreetController;
+use Domain\Streets\Names\UseCases\Correct\CorrectRequest;
 use Domain\Streets\Names\UseCases\Search\SearchRequest;
 use Domain\Streets\Names\UseCases\Search\SearchResponse;
 
@@ -42,6 +43,30 @@ class Controller extends BaseController
             else {
                 $_SESSION['errorMessages'] = $info->errors;
             }
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    public function correct()
+    {
+        if (isset($_POST['id'])) {
+            $request  = new CorrectRequest($_POST);
+            $correct  = $this->di->get('Domain\Streets\Names\UseCases\Correct\Correct');
+            $response = $correct($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('streetNames.view', ['id'=>$request->id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $info = $this->nameInfo((int)$_REQUEST['id']);
+            return new Views\CorrectView(
+                new CorrectRequest((array)$info->name),
+                $info,
+                $this->di->get('Domain\Streets\Metadata')
+            );
         }
         return new \Application\Views\NotFoundView();
     }
