@@ -89,7 +89,7 @@ class Parse
 
 		// Lookup table variables
 		$cities       = $this->metadata->cities();
-		$directions   = $this->metadata->directions();
+		$directions   = Metadata::$directions;
 		$streetTypes  = $this->getStreetTypes();
 		$subunitTypes = $this->getSubunitTypes();
 

@@ -30,7 +30,7 @@ foreach (['current', 'notification', 'coordination'] as $f) {
 
                 echo $field->field(['name'=>'agency',    'id'=>'agency',    'label'=>$this->_('agency'),    'value'=>$agency]);
                 echo $field->field(['name'=>'email',     'id'=>'email',     'label'=>$this->_('email'),     'value'=>$email, 'type'=>'email']);
-                echo $field->field(['name'=>'phone',     'id'=>'phone',     'label'=>$this->_('phone'),     'value'=>$phone  'type'=>'tel'  ]);
+                echo $field->field(['name'=>'phone',     'id'=>'phone',     'label'=>$this->_('phone'),     'value'=>$phone, 'type'=>'tel'  ]);
 
                 $options = [['value'=>'']];
                 foreach (Person::CONTACT_TYPES() as $t) { $options[] = ['value'=>$t]; }

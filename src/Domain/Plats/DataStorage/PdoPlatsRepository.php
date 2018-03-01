@@ -16,26 +16,40 @@ use Domain\Townships\Entities\Township;
 
 class PdoPlatsRepository extends PdoRepository implements PlatsRepository
 {
-    protected $tablename   = 'plats';
-    protected $entityClass = '\Domain\Plats\Entities\Plat';
+    const TABLE = 'plats';
 
     public static $DEFAULT_SORT = ['name'];
+    public static $fieldmap = [
+        'id'                    => ['prefix'=>'p', 'dbName'=>'id'          ],
+        'name'                  => ['prefix'=>'p', 'dbName'=>'name'        ],
+        'plat_type'             => ['prefix'=>'p', 'dbName'=>'plat_type'   ],
+        'cabinet'               => ['prefix'=>'p', 'dbName'=>'cabinet'     ],
+        'envelope'              => ['prefix'=>'p', 'dbName'=>'envelope'    ],
+        'start_date'            => ['prefix'=>'p', 'dbName'=>'start_date'  ],
+        'end_date'              => ['prefix'=>'p', 'dbName'=>'end_date'    ],
+        'notes'                 => ['prefix'=>'p', 'dbName'=>'notes'       ],
+        'township_id'           => ['prefix'=>'p', 'dbName'=>'township_id' ],
+        'township_name'         => ['prefix'=>'t', 'dbName'=>'name'        ],
+        'township_code'         => ['prefix'=>'t', 'dbName'=>'code'        ],
+        'township_quarter_code' => ['prefix'=>'t', 'dbName'=>'quarter_code']
+    ];
+
     public function columns(): array
     {
-        return [
-            'p.id', 'p.plat_type', 'p.name', 'p.cabinet', 'p.envelope', 'p.notes',
-            'p.township_id', 'p.start_date', 'p.end_date',
-            't.name as township_name',
-            't.code as township_code',
-            't.quarter_code as township_quarter_code'
-        ];
+        static $cols = [];
+        if (!$cols) {
+            foreach (self::$fieldmap as $responseName=>$map) {
+                $cols[] = "$map[prefix].$map[dbName] as $responseName";
+            }
+        }
+        return $cols;
     }
 
     private function baseSelect(): SelectInterface
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename} as p")
+               ->from(self::TABLE.' as p')
                ->join('LEFT', 'townships as t', 'p.township_id=t.id');
         return $select;
     }
@@ -62,17 +76,18 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
-        foreach (parent::columns() as $f) {
+        foreach (self::$fieldmap as $f=>$m) {
+            $column = "$m[prefix].$m[dbName]";
             if (!empty($req->$f)) {
                 switch ($f) {
                     case 'cabinet':
                     case 'plat_type':
                     case 'township_id':
-                        $select->where("$f=?", $req->$f);
+                        $select->where("$column=?", $req->$f);
                     break;
 
                     default:
-                        $select->where("$f like ?", $req->$f);
+                        $select->where("$column like ?", "{$req->$f}%");
                 }
             }
         }
@@ -96,7 +111,7 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
      */
     public function save(Plat $plat): int
     {
-        return parent::saveEntity([
+        return parent::saveToTable([
             'id'          => $plat->id,
             'name'        => $plat->name,
             'plat_type'   => $plat->plat_type,
@@ -106,7 +121,12 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
             'township_id' => $plat->township_id,
             'start_date'  => $plat->start_date ? $plat->start_date->format(parent::DATE_FORMAT) : null,
             'end_date'    => $plat->  end_date ? $plat->  end_date->format(parent::DATE_FORMAT) : null
+        ],
+        self::TABLE);
+    }
 
-        ]);
+    public function distinct(string $field): array
+    {
+        return parent::distinctFromTable($field, self::TABLE);
     }
 }

@@ -22,9 +22,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     protected $logType = 'street';
 
     const TYPE_STREET = 1;
-
-    protected $tablename   = 'streets';
-    protected $entityClass = '\Domain\Streets\Entities\Street';
+    const TABLE = 'streets';
 
     public static $DEFAULT_SORT = ['n.name'];
 
@@ -60,7 +58,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename}          s")
+               ->from(self::TABLE.' s')
                ->join('LEFT', 'towns            town', 's.town_id=town.id')
                ->join('LEFT', 'street_designations d', 's.id=d.street_id and d.type_id='.self::TYPE_STREET)
                ->join('LEFT', 'street_names        n', 'd.street_name_id=n.id')
@@ -88,9 +86,9 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
-        foreach (parent::columns() as $f) {
+        foreach (self::$fieldmap as $f=>$m) {
             if (!empty($req->$f)) {
-                $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
+                $column = "$m[prefix].$m[dbName]";
                 switch ($f) {
                     case 'name':
                         $select->where("$column like ?", "{$req->$f}%");

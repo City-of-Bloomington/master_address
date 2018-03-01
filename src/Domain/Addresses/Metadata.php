@@ -51,15 +51,12 @@ class Metadata
         return $cities;
     }
 
-    public function directions(): array
-    {
-        return [
-            'NORTH' => 'N',
-            'EAST'  => 'E',
-            'SOUTH' => 'S',
-            'WEST'  => 'W'
-        ];
-    }
+    public static $directions = [
+        'NORTH' => 'N',
+        'EAST'  => 'E',
+        'SOUTH' => 'S',
+        'WEST'  => 'W'
+    ];
 
     public function streetTypes(): array
     {

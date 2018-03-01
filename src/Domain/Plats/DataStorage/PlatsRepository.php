@@ -16,6 +16,8 @@ interface PlatsRepository
     public function load    (InfoRequest   $req): Plat;
     public function search  (SearchRequest $req): array;
     public function save    (Plat         $plat): int;
-    public function distinct(string      $field): array;
+
+    // Metadata functions
     public function townships(): array;
+    public function distinct(string $field): array;
 }

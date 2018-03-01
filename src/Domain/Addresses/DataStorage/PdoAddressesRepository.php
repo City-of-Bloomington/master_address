@@ -22,9 +22,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     protected $logType = 'address';
 
     const TYPE_STREET = 1;
-
-    protected $tablename   = 'addresses';
-    protected $entityClass = '\Domain\Addresses\Entities\Address';
+    const TABLE = 'addresses';
 
     public static $DEFAULT_SORT = [
         'street_name',
@@ -91,7 +89,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename}    a")
+               ->from(self::TABLE.' a')
                ->join('LEFT', 'townships     t',   'a.township_id=t.id')
                ->join('LEFT', 'jurisdictions j',   'a.jurisdiction_id=j.id')
                ->join('LEFT', 'plats         p',   'a.plat_id=p.id')
@@ -125,9 +123,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
-        foreach (parent::columns() as $f) {
+        foreach (self::$fieldmap as $f=>$m) {
             if (!empty($req->$f)) {
-                $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
+                $column = "$m[prefix].$m[dbName]";
                 switch ($f) {
                     case 'street_number':
                         // Postgres requires converting int to varchar before

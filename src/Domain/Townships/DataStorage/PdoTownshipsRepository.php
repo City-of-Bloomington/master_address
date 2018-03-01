@@ -15,15 +15,18 @@ use Domain\Townships\UseCases\Update\UpdateRequest;
 
 class PdoTownshipsRepository extends PdoRepository implements TownshipsRepository
 {
-    protected $tablename   = 'townships';
-    protected $entityClass = '\Domain\Townships\Entities\Township';
+    const TABLE = 'townships';
 
     public static $DEFAULT_SORT = ['name'];
+    public function columns(): array
+    {
+        return array_keys(get_class_vars('Domain\Townships\Entities\Township'));
+    }
 
     public function load(InfoRequest $req): Township
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols($this->columns())->from($this->tablename);
+        $select->cols($this->columns())->from(self::TABLE);
         $select->where('id=?', $req->id);
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
@@ -35,7 +38,7 @@ class PdoTownshipsRepository extends PdoRepository implements TownshipsRepositor
     public function search(SearchRequest $req): array
     {
         $select = $this->queryFactory->newSelect();
-        $select->cols($this->columns())->from($this->tablename);
+        $select->cols($this->columns())->from(self::TABLE);
 
         foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
@@ -52,6 +55,6 @@ class PdoTownshipsRepository extends PdoRepository implements TownshipsRepositor
      */
     public function save(Township $township): int
     {
-        return parent::saveEntity($township);
+        return parent::saveToTable((array)$township, self::TABLE);
     }
 }
