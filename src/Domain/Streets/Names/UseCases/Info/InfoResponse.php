@@ -10,11 +10,6 @@ use Domain\Streets\Names\Entities\Name;
 class InfoResponse
 {
     public $name;
-    public $errors = [];
-    
-    public function __construct(Name $name=null, ?array $errors=null)
-    {
-        $this->name  = $name;
-        $this->erros = $errors;
-    }
+    public $designations = [];
+    public $errors       = [];
 }

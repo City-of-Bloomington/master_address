@@ -13,11 +13,12 @@ declare (strict_types=1);
         foreach ($fields as $f) {
             $$f = parent::escape($n->$f);
         }
+        $uri = parent::generateUri('streetNames.view', ['id' => $n->id]);
         echo "
-        <tr><td>$direction</td>
-            <td>$name</td>
-            <td>$post_direction</td>
-            <td>$suffix_code</td>
+        <tr><td><a href=\"$uri\">$direction</a></td>
+            <td><a href=\"$uri\">$name</a></td>
+            <td><a href=\"$uri\">$post_direction</a></td>
+            <td><a href=\"$uri\">$suffix_code</a></td>
         </tr>
         ";
     }

@@ -80,6 +80,8 @@ foreach (['Addresses', 'Streets', 'Subunits'] as $t) {
 }
 $DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire'] = $DI->get('Domain\Subunits\UseCases\Retire\Retire');
 
-$DI->params[ 'Domain\Streets\Names\UseCases\Search\Search']['repository'] = $DI->get('Domain\Streets\Names\DataStorage\NamesRepository');
-$DI->set(    'Domain\Streets\Names\UseCases\Search\Search',
-$DI->lazyNew('Domain\Streets\Names\UseCases\Search\Search'));
+foreach (['Info', 'Search'] as $a) {
+    $DI->params[ "Domain\\Streets\\Names\\UseCases\\$a\\$a"]['repository'] = $DI->get('Domain\Streets\Names\DataStorage\NamesRepository');
+    $DI->set(    "Domain\\Streets\\Names\\UseCases\\$a\\$a",
+    $DI->lazyNew("Domain\\Streets\\Names\\UseCases\\$a\\$a"));
+}

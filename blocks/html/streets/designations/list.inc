@@ -2,7 +2,6 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Street $this->street
  * @param array  $this->designations
  */
 ?>
