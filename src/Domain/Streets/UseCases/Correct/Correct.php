@@ -10,6 +10,8 @@ use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Streets\DataStorage\StreetsRepository;
+use Domain\Streets\UseCases\Validate\Validate;
+use Domain\Streets\UseCases\Validate\ValidateResponse;
 
 class Correct
 {
@@ -23,6 +25,11 @@ class Correct
     public function __invoke(CorrectRequest $req): ChangeLogResponse
     {
         try {
+            $validation = $this->validate($req);
+            if ($validation->errors) {
+                return new ChangeLogResponse(null, $validation->errors);
+            }
+
             $this->repo->correct($req);
 
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
@@ -35,5 +42,15 @@ class Correct
         catch (\Exception $e) {
             return new ChangeLogResponse(null, [$e->getMessage()]);
         }
+    }
+
+    private function validate(CorrectRequest $req): ValidateResponse
+    {
+        $validate = new Validate();
+        $street = $this->repo->load($req->street_id);
+        foreach ($req as $k=>$v) {
+            if (property_exists($street, $k)) { $street->$k = $v; }
+        }
+        return $validate($street);
     }
 }
