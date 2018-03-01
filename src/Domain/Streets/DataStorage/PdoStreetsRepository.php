@@ -27,14 +27,33 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     protected $entityClass = '\Domain\Streets\Entities\Street';
 
     public static $DEFAULT_SORT = ['n.name'];
+
+    /**
+     * Maps response fieldnames to the names used in the database
+     */
+    public static $fieldmap = [
+        'id'             => ['prefix'=>'s',    'dbName'=>'id'            ],
+        'status'         => ['prefix'=>'s',    'dbName'=>'status'        ],
+        'notes'          => ['prefix'=>'s',    'dbName'=>'notes'         ],
+        'town_id'        => ['prefix'=>'s',    'dbName'=>'town_id'       ],
+        'town_name'      => ['prefix'=>'town', 'dbName'=>'name'          ],
+        'town_code'      => ['prefix'=>'town', 'dbName'=>'code'          ],
+        'name_id'        => ['prefix'=>'n',    'dbName'=>'id'            ],
+        'direction'      => ['prefix'=>'n',    'dbName'=>'direction'     ],
+        'name'           => ['prefix'=>'n',    'dbName'=>'name'          ],
+        'post_direction' => ['prefix'=>'n',    'dbName'=>'post_direction'],
+        'suffix_code'    => ['prefix'=>'t',    'dbName'=>'code'          ]
+    ];
+
     public function columns(): array
     {
-        return [
-            's.id', 's.status', 's.notes', 's.town_id',
-            'town.name as town_name', 'town.code as town_code',
-            'n.id as name_id', 'n.direction', 'n.name', 'n.post_direction',
-            't.code as suffix_code'
-        ];
+        static $cols = [];
+        if (!$cols) {
+            foreach (self::$fieldmap as $responseName=>$map) {
+                $cols[] = "$map[prefix].$map[dbName] as $responseName";
+            }
+        }
+        return $cols;
     }
 
     private function baseSelect(): SelectInterface
@@ -71,25 +90,14 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $select = $this->baseSelect();
         foreach (parent::columns() as $f) {
             if (!empty($req->$f)) {
+                $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
                 switch ($f) {
-                    case 'id':
-                    case 'status':
-                    case 'town_id':
-                        $select->where("s.$f=?", $req->$f);
-                    break;
-
-                    case 'suffix_code':
-                        $select->where("t.code=?", $req->$f);
-                    break;
-
-                    case 'direction':
-                    case 'post_direction':
-                        $select->where("n.$f=?", $req->$f);
-                    break;
-
                     case 'name':
-                        $select->where("n.$f like ?", "{$req->$f}%");
+                        $select->where("$column like ?", "{$req->$f}%");
                     break;
+
+                    default:
+                        $select->where("$column=?", $req->$f);
                 }
             }
         }
@@ -132,8 +140,8 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                         n.post_direction,
                         t.code           as suffix_code
                 from street_designations d
-                    join street_designation_types dt on d.type_id=dt.id
-                    join street_names n on d.street_name_id=n.id
+                     join street_designation_types dt on d.type_id=dt.id
+                     join street_names n on d.street_name_id=n.id
                 left join street_types t on n.suffix_code_id=t.id
                 where d.street_id=?";
 

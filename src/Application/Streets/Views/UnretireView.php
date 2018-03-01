@@ -26,12 +26,9 @@ class UnretireView extends Template
             'help'       => parent::escape(sprintf($this->_('unretire_statement', 'messages'), $_SESSION['USER']->getFullname())),
             'return_url' => parent::generateUri('streets.view', ['id'=>$request->street_id])
         ]);
-        $this->blocks[] = new Block('streets/info.inc',         ['street'  => $info->street   ]);
-        $this->blocks[] = new Block('logs/changeLog.inc', ['changes' => $info->changeLog]);
-        $this->blocks[] = new Block('streets/designations.inc', [
-            'street'       => $info->street,
-            'designations' => $info->designations
-        ]);
+        $this->blocks[] = new Block('streets/info.inc',              ['street'       => $info->street      ]);
+        $this->blocks[] = new Block('logs/changeLog.inc',            ['changes'      => $info->changeLog   ]);
+        $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
         $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $addressSearch->addresses]);
     }
 }

@@ -27,11 +27,8 @@ class CorrectView extends Template
 
         $this->blocks[] = new Block('streets/actions/correctForm.inc', $vars);
 
-        $this->blocks[] = new Block('logs/changeLog.inc', ['changes' => $info->changeLog]);
-        $this->blocks[] = new Block('streets/designations.inc', [
-            'street'       => $info->street,
-            'designations' => $info->designations
-        ]);
+        $this->blocks[] = new Block('logs/changeLog.inc',            ['changes'      => $info->changeLog]);
+        $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
         $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $addressSearch->addresses]);
     }
 }

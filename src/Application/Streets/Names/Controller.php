@@ -31,4 +31,25 @@ class Controller extends BaseController
 
         return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
+
+    public function view()
+    {
+        if (!empty($_GET['id'])) {
+            $info = $this->nameInfo((int)$_GET['id']);
+            if ($info->name) {
+                return new Views\InfoView($info);
+            }
+            else {
+                $_SESSION['errorMessages'] = $info->errors;
+            }
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    private function nameInfo(int $name_id)
+    {
+        $info = $this->di->get('Domain\Streets\Names\UseCases\Info\Info');
+        $req  = new \Domain\Streets\Names\UseCases\Info\InfoRequest($name_id);
+        return $info($req);
+    }
 }

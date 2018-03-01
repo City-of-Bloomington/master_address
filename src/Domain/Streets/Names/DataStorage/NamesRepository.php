@@ -12,7 +12,13 @@ use Domain\Streets\Names\UseCases\Update\UpdateRequest;
 
 interface NamesRepository
 {
-    public function   load(int            $id): Name;
+    // Read functions
+    public function    load     (int $name_id): Name;
+    public function designations(int $name_id): array;
     public function search(SearchRequest $req): array;
+
+    // Write functions
     public function save  (Name         $name): int;
+
+    // Metadata
 }

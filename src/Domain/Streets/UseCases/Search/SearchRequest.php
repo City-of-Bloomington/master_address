@@ -14,6 +14,7 @@ class SearchRequest
     public $town_id;
 
     // Fields from street_names
+    public $name_id;
     public $direction;
     public $name;
     public $post_direction;
@@ -31,6 +32,7 @@ class SearchRequest
             if (!empty($data['status' ])) { $this->status  =      $data['status' ]; }
             if (!empty($data['town_id'])) { $this->town_id = (int)$data['town_id']; }
 
+            if (!empty($data['name_id'       ])) { $this->name_id   = (int)$data['name_id'       ]; }
             if (!empty($data['direction'     ])) { $this->direction      = $data['direction'     ]; }
             if (!empty($data['name'          ])) { $this->name           = $data['name'          ]; }
             if (!empty($data['post_direction'])) { $this->post_direction = $data['post_direction']; }
