@@ -47,7 +47,11 @@ class AddressParserTest extends TestCase
 			['2437 Walnut Street Pike',              ['street_number'=>'2437',                   'street_name'=>'Walnut Street',    'streetType'=>'PIKE']],
 			['623 s washington st',                  ['street_number'=>'623',  'direction'=>'S', 'street_name'=>'washington',       'streetType'=>'ST']],
 			['4750 N State Road 37',                 ['street_number'=>'4750', 'direction'=>'N', 'street_name'=>'State Road 37']],
-			['300 E State Road 45 46 Bypass Unit 2', ['street_number'=>'300',  'direction'=>'E', 'street_name'=>'State Road 45 46', 'streetType'=>'BYP', 'subunitType'=>'UNIT', 'subunitIdentifier'=>'2']]
+			['300 E State Road 45 46 Bypass Unit 2', ['street_number'=>'300',  'direction'=>'E', 'street_name'=>'State Road 45 46', 'streetType'=>'BYP', 'subunitType'=>'UNIT', 'subunitIdentifier'=>'2']],
+			['100 S West Pointe CT', ['street_number'=>'100', 'direction'=>'S', 'street_name'=>'West Pointe', 'streetType'=>'CT']],
+			['100 W East Branch Rd', ['street_number'=>'100', 'direction'=>'W', 'street_name'=>'East Branch', 'streetType'=>'RD']],
+			['100 N North St',       ['street_number'=>'100', 'direction'=>'N', 'street_name'=>'North',       'streetType'=>'ST']],
+			['100 S East Side Dr',   ['street_number'=>'100', 'direction'=>'S', 'street_name'=>'East Side',   'streetType'=>'DR']]
 		];
 	}
 
