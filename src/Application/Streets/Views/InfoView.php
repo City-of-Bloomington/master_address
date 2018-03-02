@@ -26,7 +26,13 @@ class InfoView extends Template
 
         $this->blocks[] = new Block('streets/info.inc',              ['street'  => $info->street           ]);
         $this->blocks[] = new Block('logs/changeLog.inc',            ['changes' => $info->changeLog        ]);
-        $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
+
+        $this->blocks[] = new Block('streets/designations/list.inc', [
+            'designations' => $info->designations,
+            'street_id'    => $info->street->id,
+            'actions'      => parent::isAllowed('streets','alias') ? ['alias'] : []
+
+        ]);
         $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $search->addresses]);
     }
 }

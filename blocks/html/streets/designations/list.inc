@@ -3,11 +3,27 @@
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array  $this->designations
+ * @param array  $this->actions      Optional
+ * @param int    $this->street_id    Optional
  */
 ?>
 <section>
     <header>
         <h2><?= $this->_(['designation', 'designations', count($this->designations)]); ?></h2>
+        <div class="tools">
+        <?php
+            if ($this->actions && $this->street_id) {
+                $h = $this->template->getHelper('buttonLink');
+                foreach ($this->actions as $a) {
+                    echo $h->buttonLink(
+                        parent::generateUri("streets.$a", ['id'=>$this->street_id]),
+                        $this->_($a),
+                        'edit'
+                    );
+                }
+            }
+        ?>
+        </div>
     </header>
 	<table>
 		<thead>
@@ -25,12 +41,7 @@
                 $start = $d->start_date ? $d->start_date->format(DATE_FORMAT) : '';
                 $end   = $d->end_date   ? $d->end_date  ->format(DATE_FORMAT) : '';
 
-                $name = parent::escape(implode(' ', [
-                    $d->direction,
-                    $d->name,
-                    $d->suffix_code,
-                    $d->post_direction
-                ]));
+                $name  = parent::escape($d);
 				$type  = parent::escape($d->type);
 
 				echo "

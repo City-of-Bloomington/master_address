@@ -3,6 +3,8 @@
  * @copyright 2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array $this->names
+ * @param array  $this->hidden     Hidden inputs to preserve
+ * @param Url    $this->return_url Url to link results to
  */
 declare (strict_types=1);
 ?>
@@ -20,6 +22,9 @@ declare (strict_types=1);
                     'label' => $this->_('street'),
                     'value' => !empty($_GET['street']) ? parent::escape($_GET['street']) : null
                 ]);
+                foreach ($this->hidden as $k=>$v) {
+                    echo "<input type=\"hidden\" name=\"$k\" value=\"$v\" />";
+                }
             ?>
             <button type="submit" class="search"><?= $this->_('search'); ?></button>
         </fieldset>

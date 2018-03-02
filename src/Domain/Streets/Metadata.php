@@ -25,9 +25,7 @@ class Metadata
     public function types(): array
     {
         static $types = [];
-        if (!$types) {
-            $types = $this->repo->types();
-        }
+        if (!$types) { $types = $this->repo->types(); }
         return $types;
     }
 
@@ -36,5 +34,12 @@ class Metadata
         static $towns = [];
         if (!$towns) { $towns = $this->repo->towns(); }
         return $towns;
+    }
+
+    public function designationTypes(): array
+    {
+        static $types = [];
+        if (!$types) { $types = $this->repo->designationTypes(); }
+        return $types;
     }
 }
