@@ -99,7 +99,8 @@ class Parse
 		$address = preg_replace('/\s+/',              ' ', $address);
 
 		if ($parseType=='address') {
-			//echo "Looking for number: |$address|\n";
+			#echo "Looking for number: |$address|\n";
+
 			$fraction = '\d\/\d';
 			$directionCodePattern = implode('', $directions);
 			$numberPattern = "(?<prefix>$fraction\s|[A-Z]\s)?(?<number>\d+)(?<suffix>\s$fraction\s|\-\d+\s|\s?[A-Z]\s)?(?<direction>[$directionCodePattern]\s)?";
@@ -126,8 +127,8 @@ class Parse
 				}
 				$address = trim(preg_replace("#^$matches[0]#i",'',$address));
 			}
-
-			//echo "Looking for Zip: |$address|\n";
+			#print_r(array_filter((array)$output));
+			#echo "Looking for Zip: |$address|\n";
 			$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
 			if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
 				$output->{self::ZIP} = trim($matches['zip']);
@@ -137,20 +138,20 @@ class Parse
 				$address = trim(preg_replace("/\s$zipPattern$/i",'',$address));
 			}
 
-			//echo "Looking for State: |$address|\n";
+			#echo "Looking for State: |$address|\n";
 			if (preg_match("/\s(?<state>IN)\b/i",$address,$matches)) {
 				$output->{self::STATE} = trim($matches['state']);
 				$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
 			}
 
-			//echo "Looking for city: |$address|\n";
+			#echo "Looking for city: |$address|\n";
 			$cityPattern = implode('|', $cities);
 			if (preg_match("/\s(?<city>$cityPattern)$/i",$address,$matches)) {
 				$output->{self::CITY} = trim($matches['city']);
 				$address = trim(preg_replace("/\s$matches[city]$/i",'',$address));
 			}
 
-			//echo "Looking for subunit: |$address|\n";
+			#echo "Looking for subunit: |$address|\n";
 			$subunitTypePattern = implode('|',array_merge($subunitTypes, array_keys($subunitTypes)));
 			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
 			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
@@ -166,33 +167,56 @@ class Parse
 			}
 		}
 
-		//echo "Looking for Street Name: |$address|\n";
-		$fullDirectionPattern = implode('|',array_merge($directions, array_keys($directions)));
-		$streetTypePattern = implode('|',array_merge($streetTypes, array_keys($streetTypes)));
-		$streetPattern = "
-		(
-			(?<dir>$fullDirectionPattern)\s(?<type>$streetTypePattern)\b
-			|
-			((?<direction>$fullDirectionPattern)\s)?
-			(
-				(?<name>[\w\s]+)
-				(\s(?<streetType>$streetTypePattern)\b)
-				(\s(?<postdirection>$fullDirectionPattern)\b)?
-				$
-				|
-				(?<streetName>[\w\s]+)
-				(\s(?<postdir>$fullDirectionPattern))\b
-				$
-				|
-				(?<street>[\w\s]+)
-				(\s(?<stype>$streetTypePattern)\b)?
-				(\s(?<pdir>$fullDirectionPattern)\b)?
-				$
-			)
-		)
-		";
+		#echo "Looking for Street Name: |$address|\n";
+		$fullDirectionPattern = implode('|',array_merge($directions,  array_keys($directions )));
+		$streetTypePattern    = implode('|',array_merge($streetTypes, array_keys($streetTypes)));
+		// If we've already found a direction, do not include the direction
+		// portion in the regular expression.
+		if ($output->{self::DIRECTION}) {
+            $streetPattern = "
+            (
+                (?<name>[\w\s]+)
+                (\s(?<streetType>$streetTypePattern)\b)
+                (\s(?<postdirection>$fullDirectionPattern)\b)?
+                $
+                |
+                (?<streetName>[\w\s]+)
+                (\s(?<postdir>$fullDirectionPattern))\b
+                $
+                |
+                (?<street>[\w\s]+)
+                (\s(?<stype>$streetTypePattern)\b)?
+                (\s(?<pdir>$fullDirectionPattern)\b)?
+                $
+            )
+            ";
+		}
+		else {
+            $streetPattern = "
+            (
+                (?<dir>$fullDirectionPattern)\s(?<type>$streetTypePattern)\b
+                |
+                ((?<direction>$fullDirectionPattern)\s)?
+                (
+                    (?<name>[\w\s]+)
+                    (\s(?<streetType>$streetTypePattern)\b)
+                    (\s(?<postdirection>$fullDirectionPattern)\b)?
+                    $
+                    |
+                    (?<streetName>[\w\s]+)
+                    (\s(?<postdir>$fullDirectionPattern))\b
+                    $
+                    |
+                    (?<street>[\w\s]+)
+                    (\s(?<stype>$streetTypePattern)\b)?
+                    (\s(?<pdir>$fullDirectionPattern)\b)?
+                    $
+                )
+            )
+            ";
+        }
 		preg_match("/$streetPattern/ix",$address,$matches);
-		//print_r($matches);
+		#print_r($matches);
 		foreach ($matches as $key=>$value) {
 			if (!is_int($key) && trim($value)) {
 				// The regular expression for street names required some duplication.
