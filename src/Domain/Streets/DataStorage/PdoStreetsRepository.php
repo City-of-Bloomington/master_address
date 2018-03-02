@@ -11,6 +11,7 @@ use Domain\PdoRepository;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Street;
+use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Correct\CorrectRequest;
@@ -122,6 +123,18 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $query->execute([$status, $street_id]);
     }
 
+    public function addDesignation(AliasRequest $req)
+    {
+        $now = new \DateTime();
+        return parent::saveToTable([
+            'street_id'      => $req->street_id,
+            'street_name_id' => $req->name_id,
+            'type_id'        => $req->type_id,
+            'rank'           => $req->rank,
+            'start_date'     => $now->format('c')
+        ], 'street_designations');
+    }
+
     public function designations(int $street_id): array
     {
         $designations = [];
@@ -163,6 +176,12 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     public function types(): array
     {
         $result = $this->pdo->query('select * from street_types order by name');
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function designationTypes(): array
+    {
+        $result = $this->pdo->query('select * from street_designation_types order by name');
         return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

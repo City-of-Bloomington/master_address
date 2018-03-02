@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param string $this->street_id
  * @param string $this->town_id
  * @param string $this->notes
@@ -28,7 +28,7 @@
                     'label'    => $this->_('town'),
                     'type'     => 'select',
                     'value'    => $this->town_id,
-                    'options'  => $options  
+                    'options'  => $options
                 ]);
 
                 echo $helper->field([

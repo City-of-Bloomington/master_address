@@ -12,6 +12,7 @@ use Application\View;
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Streets\Entities\Street;
+use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Correct\CorrectRequest;
 use Domain\Streets\UseCases\Retire\RetireRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -99,6 +100,36 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
+    public function alias(array $params)
+    {
+        if (isset($_POST['id'])) {
+            $request  = new AliasRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
+            $alias    = $this->di->get('Domain\Streets\UseCases\Alias\Alias');
+            $response = $alias($request);
+            if (!count($response->errors)) {
+                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        if (!empty($_REQUEST['id'])) {
+            $street_id = (int)$_REQUEST['id'];
+            $info      = $this->streetInfo($street_id);
+            $name      = !empty($_REQUEST['name_id'])
+                       ? $this->name((int)$_REQUEST['name_id'])
+                       : $this->name($info->street->name_id);
+
+            return new Views\AliasView(
+                new AliasRequest($street_id, $_SESSION['USER']->id, (array)$info->street),
+                $info,
+                $this->di->get('Domain\Streets\Metadata'),
+                $name
+            );
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
     /**
      * Standard use case handler involving a ChangeLogEntry
      *
@@ -149,5 +180,13 @@ class Controller extends BaseController
     {
         $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
         return $search(new \Domain\Addresses\UseCases\Search\SearchRequest(['street_id' => $street_id]));
+    }
+
+    private function name(int $name_id): \Domain\Streets\Entities\Name
+    {
+        $load = $this->di->get('Domain\Streets\Names\UseCases\Load\Load');
+        $res  = $load($name_id);
+        if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
+        return $res->name;
     }
 }

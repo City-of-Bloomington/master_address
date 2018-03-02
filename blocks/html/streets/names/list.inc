@@ -3,6 +3,7 @@
  * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array $this->names
+ * @param Url   $this->return_url
  */
 declare (strict_types=1);
 ?>
@@ -13,7 +14,15 @@ declare (strict_types=1);
         foreach ($fields as $f) {
             $$f = parent::escape($n->$f);
         }
-        $uri = parent::generateUri('streetNames.view', ['id' => $n->id]);
+
+        if ($this->return_url) {
+            $this->return_url->name_id = $n->id;
+            $uri = $this->return_url;
+        }
+        else {
+            $uri = parent::generateUri('streetNames.view', ['id' => $n->id]);
+        }
+
         echo "
         <tr><td><a href=\"$uri\">$direction</a></td>
             <td><a href=\"$uri\">$name</a></td>

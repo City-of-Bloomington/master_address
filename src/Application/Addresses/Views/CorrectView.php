@@ -25,12 +25,7 @@ class CorrectView extends Template
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
         if ($street) {
             $vars['street_id'  ] = $street->id;
-            $vars['street_name'] = parent::escape(implode(' ', [
-                $street->direction,
-                $street->name,
-                $street->post_direction,
-                $street->suffix_code
-            ]));
+            $vars['street_name'] = parent::escape($street);
         }
         $this->blocks[] = new Block('addresses/actions/correctForm.inc', $vars);
 

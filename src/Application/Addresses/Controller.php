@@ -161,8 +161,7 @@ class Controller extends BaseController
     private function street(int $street_id): ?\Domain\Streets\Entities\Street
     {
         $load = $this->di->get('Domain\Streets\UseCases\Load\Load');
-        $req  = new \Domain\Streets\UseCases\Load\LoadRequest($street_id);
-        $res  = $load($req);
+        $res  = $load($street_id);
         if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
         return $res->street;
     }

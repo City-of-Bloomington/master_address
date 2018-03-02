@@ -50,4 +50,14 @@ class Designation
         if (!empty($row['end_date'  ])) { $row['end_date'  ] = new \DateTime($row['end_date'  ]); }
         return new Designation($row);
     }
+
+    public function __toString()
+    {
+        return implode(' ', [
+            $this->direction,
+            $this->name,
+            $this->suffix_code,
+            $this->post_direction
+        ]);
+    }
 }
