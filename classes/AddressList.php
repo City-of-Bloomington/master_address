@@ -453,28 +453,51 @@ class AddressList extends ZendDbResultIterator
 														array_keys(self::getDirections())));
 		$streetTypePattern = implode('|',array_merge(self::getStreetTypes(),
 													array_keys(self::getStreetTypes())));
-		$streetPattern = "
-		(
-			(?<dir>$fullDirectionPattern)\s(?<type>$streetTypePattern)\b
-			|
-			((?<direction>$fullDirectionPattern)\s)?
-			(
-				(?<name>[\w\s]+)
-				(\s(?<streetType>$streetTypePattern)\b)
-				(\s(?<postdirection>$fullDirectionPattern)\b)?
-				$
-				|
-				(?<streetName>[\w\s]+)
-				(\s(?<postdir>$fullDirectionPattern))\b
-				$
-				|
-				(?<street>[\w\s]+)
-				(\s(?<stype>$streetTypePattern)\b)?
-				(\s(?<pdir>$fullDirectionPattern)\b)?
-				$
-			)
-		)
-		";
+		// If we've already found a direction, do not include the direction
+		// portion in the regular expression.
+		if (!empty($output['direction'])) {
+            $streetPattern = "
+            (
+                (?<name>[\w\s]+)
+                (\s(?<streetType>$streetTypePattern)\b)
+                (\s(?<postdirection>$fullDirectionPattern)\b)?
+                $
+                |
+                (?<streetName>[\w\s]+)
+                (\s(?<postdir>$fullDirectionPattern))\b
+                $
+                |
+                (?<street>[\w\s]+)
+                (\s(?<stype>$streetTypePattern)\b)?
+                (\s(?<pdir>$fullDirectionPattern)\b)?
+                $
+            )
+            ";
+		}
+		else {
+            $streetPattern = "
+            (
+                (?<dir>$fullDirectionPattern)\s(?<type>$streetTypePattern)\b
+                |
+                ((?<direction>$fullDirectionPattern)\s)?
+                (
+                    (?<name>[\w\s]+)
+                    (\s(?<streetType>$streetTypePattern)\b)
+                    (\s(?<postdirection>$fullDirectionPattern)\b)?
+                    $
+                    |
+                    (?<streetName>[\w\s]+)
+                    (\s(?<postdir>$fullDirectionPattern))\b
+                    $
+                    |
+                    (?<street>[\w\s]+)
+                    (\s(?<stype>$streetTypePattern)\b)?
+                    (\s(?<pdir>$fullDirectionPattern)\b)?
+                    $
+                )
+            )
+            ";
+        }
 		preg_match("/$streetPattern/ix",$address,$matches);
 		//print_r($matches);
 		foreach ($matches as $key=>$value) {
