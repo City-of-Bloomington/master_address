@@ -32,10 +32,11 @@ class Alias
 
             $this->repo->addDesignation($req);
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => ChangeLog::$actions['alias'],
-                'entity_id' => $req->street_id,
-                'person_id' => $req->user_id,
-                'notes'     => $req->change_notes
+                'action'     => ChangeLog::$actions['alias'],
+                'entity_id'  => $req->street_id,
+                'person_id'  => $req->user_id,
+                'contact_id' => $req->contact_id,
+                'notes'      => $req->change_notes
             ])));
         }
         catch (\Exception $e) {
@@ -57,7 +58,7 @@ class Alias
         }
         // Make sure there's no duplicate names
         foreach ($this->repo->designations($req->street_id) as $d) {
-            if ($d->street_id == $req->street_id) {
+            if ($d->name_id == $req->name_id) {
                 $errors[] = 'streets/duplicateDesignation';
             }
         }

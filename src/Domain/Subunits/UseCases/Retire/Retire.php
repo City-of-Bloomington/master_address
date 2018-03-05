@@ -34,10 +34,11 @@ class Retire
             }
 
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => Log::$actions['retire'],
-                'entity_id' => $req->subunit_id,
-                'person_id' => $req->user_id,
-                'notes'     => $req->notes
+                'action'     => Log::$actions['retire'],
+                'entity_id'  => $req->subunit_id,
+                'person_id'  => $req->user_id,
+                'contact_id' => $req->contact_id,
+                'notes'      => $req->change_notes
             ])));
         }
         catch (\Exception $e) {

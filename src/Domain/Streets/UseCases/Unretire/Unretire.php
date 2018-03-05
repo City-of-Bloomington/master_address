@@ -26,10 +26,11 @@ class Unretire
             $this->repo->saveStatus($req->street_id, Log::STATUS_CURRENT);
 
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => Log::$actions['unretire'],
-                'entity_id' => $req->street_id,
-                'person_id' => $req->user_id,
-                'notes'     => $req->notes
+                'action'     => Log::$actions['unretire'],
+                'entity_id'  => $req->street_id,
+                'person_id'  => $req->user_id,
+                'contact_id' => $req->contact_id,
+                'notes'      => $req->change_notes
             ])));
         }
         catch (\Exception $e) {

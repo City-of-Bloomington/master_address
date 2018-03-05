@@ -31,6 +31,7 @@ class InfoView extends Template
                     : 'retire';
         }
 
+        $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
         $this->blocks[] = new Block('addresses/info.inc', [
             'address' => $info->address,
             'title'   => $this->vars['title'],

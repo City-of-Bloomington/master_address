@@ -18,6 +18,7 @@ class CorrectRequest implements ChangeLogRequest
 
     // Change log entry
     public $user_id;
+    public $contact_id;
     public $change_notes;
 
     public function __construct(int $subunit_id, int $user_id, ?array $data=null)
@@ -28,6 +29,7 @@ class CorrectRequest implements ChangeLogRequest
         if (!empty($data['type_id'     ])) { $this->type_id = (int)$data['type_id'     ]; }
         if (!empty($data['identifier'  ])) { $this->identifier   = $data['identifier'  ]; }
         if (!empty($data['notes'       ])) { $this->notes        = $data['notes'       ]; }
-        if (!empty($data['change_notes'])) { $this->change_notes = $data['change_notes']; }
+        if (!empty($data['contact_id'  ])) { $this->contact_id = (int)$data['contact_id'  ]; }
+        if (!empty($data['change_notes'])) { $this->change_notes =    $data['change_notes']; }
     }
 }

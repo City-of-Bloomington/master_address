@@ -4,11 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\People\UseCases\Info;
+namespace Domain\People\UseCases\Load;
 
 use Domain\People\DataStorage\PeopleRepository;
 
-class Info
+class Load
 {
     private $repo;
 
@@ -17,13 +17,13 @@ class Info
         $this->repo = $repository;
     }
 
-    public function __invoke(InfoRequest $req): InfoResponse
+    public function __invoke(int $person_id): LoadResponse
     {
         try {
-            return new InfoResponse($this->repo->load($req->id));
+            return new LoadResponse($this->repo->load($person_id));
         }
         catch (\Exception $e) {
-            return new InfoResponse(null, [$e->getMessage()]);
+            return new LoadResponse(null, [$e->getMessage()]);
         }
     }
 }

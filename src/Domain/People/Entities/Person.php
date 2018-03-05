@@ -37,6 +37,11 @@ class Person
         }
     }
 
+    public function __toString()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
+
 	public static function CONTACT_TYPES(): array
 	{
         return [

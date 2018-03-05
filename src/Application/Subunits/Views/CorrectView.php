@@ -12,16 +12,25 @@ use Application\Template;
 use Domain\Subunits\Metadata;
 use Domain\Subunits\UseCases\Info\InfoResponse;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
+use Domain\People\Entities\Person;
 
 class CorrectView extends Template
 {
-    public function __construct(CorrectRequest $request, InfoResponse $info, Metadata $metadata)
+    public function __construct(CorrectRequest $request,
+                                InfoResponse   $info,
+                                Metadata       $metadata,
+                                ?Person        $contact=null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
         $this->vars['title'] = $this->_('correct');
 
-        $vars = ['types' => $metadata->types()];
+        $vars = [
+            'types'        => $metadata->types(),
+            'contact_id'   => $contact ? $contact->id           : null,
+            'contact_name' => $contact ? $contact->__toString() : null,
+            'change_notes' => parent::escape($request->change_notes),
+        ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
         $this->blocks[] = new Block('subunits/actions/correctForm.inc', $vars);
 

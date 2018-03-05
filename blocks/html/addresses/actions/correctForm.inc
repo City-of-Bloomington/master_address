@@ -12,7 +12,9 @@
  * @param string $this->zipplus4;
  * @param string $this->notes;
  * @param string $this->user_id;
- * @param string $this->change_notes;
+ * @param string $this->contact_id   Change log contact person
+ * @param string $this->contact_name Change log contact person
+ * @param string $this->change_notes
  */
 use Application\Url;
 use Domain\Addresses\Metadata as Address;
@@ -85,13 +87,7 @@ use Domain\Addresses\Metadata as Address;
 
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
             <?php
-                echo $h->field([
-                    'name'     => 'change_notes',
-                    'id'       => 'change_notes',
-                    'label'    => $this->_('notes'),
-                    'value'    => $this->change_notes,
-                    'type'     => 'textarea'
-                ]);
+                $this->_include('logs/changeLogFields.inc');
 
                 $h = $this->template->getHelper('saveAndCancelButtons');
                 echo $h->saveAndCancelButtons(parent::generateUri('addresses.view', ['id'=>$this->address_id]));

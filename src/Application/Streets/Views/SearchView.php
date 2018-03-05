@@ -24,12 +24,13 @@ class SearchView extends Template
         if (count($response->errors)) {
             $_SESSION['errorMessages'] = $response->errors;
         }
-        
+
         $this->blocks[] = new Block('streets/searchForm.inc', [
-            'street'     => !empty($_GET['street']) ? parent::escape($_GET['street']) : '',
-            'streets'    => $response->streets,
-            'hidden'     => parent::filterActiveParams($_GET, ['street']),
-            'return_url' => !empty($_GET['return_url']) ? new Url($_GET['return_url']) : null
+            'street'         => !empty($_GET['street']) ? parent::escape($_GET['street']) : '',
+            'streets'        => $response->streets,
+            'hidden'         => parent::filterActiveParams($_GET, ['street']),
+            'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
+            'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id'
         ]);
 
         if ($response->total > $itemsPerPage) {

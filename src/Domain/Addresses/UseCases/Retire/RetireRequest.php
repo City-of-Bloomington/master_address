@@ -13,13 +13,15 @@ class RetireRequest implements ChangeLogRequest
     public $address_id;
 
     public $user_id;
-    public $notes;
+    public $contact_id;
+    public $change_notes;
 
     public function __construct(int $address_id, int $user_id, ?array $data=null)
     {
         $this->address_id = $address_id;
         $this->user_id    = $user_id;
 
-        if (!empty($data['notes'])) { $this->notes = $data['notes']; }
+        if (!empty($data['contact_id'  ])) { $this->contact_id = (int)$data['contact_id'  ]; }
+        if (!empty($data['change_notes'])) { $this->change_notes =    $data['change_notes']; }
     }
 }

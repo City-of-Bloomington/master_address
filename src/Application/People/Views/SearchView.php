@@ -9,6 +9,7 @@ namespace Application\People\Views;
 use Application\Block;
 use Application\Template;
 use Application\Paginator;
+use Application\Url;
 
 use Domain\People\UseCases\Search\SearchResponse;
 
@@ -24,7 +25,17 @@ class SearchView extends Template
             $_SESSION['errorMessages'] = $response->errors;
         }
 
-        $this->blocks[] = new Block('people/findForm.inc', ['people'=>$response->people]);
+        $vars = ['people' => $response->people];
+
+        $fields = ['firstname', 'lastname', 'email'];
+        foreach ($fields as $f) {
+            $vars[$f] = !empty($_GET[$f]) ? parent::escape($_GET[$f]) : '';
+        }
+        $vars['hidden'    ] = parent::filterActiveParams($_GET, $fields);
+        $vars['callback_url'  ] = !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null;
+        $vars['callback_field'] = !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id';
+
+        $this->blocks[] = new Block('people/findForm.inc', $vars);
 
         if ($response->total > $itemsPerPage) {
             $this->blocks[] = new Block('pageNavigation.inc', [

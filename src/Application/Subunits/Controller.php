@@ -16,7 +16,7 @@ class Controller extends BaseController
     public function view(array $params)
     {
         if (!empty($_GET['id'])) {
-            $info = $this->subunitInfo((int)$_GET['id']);
+            $info = parent::subunitInfo((int)$_GET['id']);
             if ($info->subunit) {
                 return new Views\InfoView($info);
             }
@@ -32,24 +32,34 @@ class Controller extends BaseController
      */
     public function correct(array $params)
     {
-        if (isset($_POST['id'])) {
-            $request  = new CorrectRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $correct  = $this->di->get('Domain\Subunits\UseCases\Correct\Correct');
-            $response = $correct($request);
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
-                exit();
+        $subunit_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($subunit_id) {
+            if (isset($_POST['id'])) {
+                $request  = new CorrectRequest($subunit_id, $_SESSION['USER']->id, $_POST);
+                $correct  = $this->di->get('Domain\Subunits\UseCases\Correct\Correct');
+                $response = $correct($request);
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('subunits.view', ['id'=>$subunit_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
             }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
 
-        if (!empty($_REQUEST['id'])) {
-            $info    = $this->subunitInfo((int)$_REQUEST['id']);
-            $request = new CorrectRequest($info->subunit->id, $_SESSION['USER']->id, (array)$info->subunit);
+            $info    = parent::subunitInfo($subunit_id);
+            $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
+            if (!isset($request)) {
+                $request = new CorrectRequest($subunit_id, $_SESSION['USER']->id, [
+                    'type_id'    => $info->subunit->type_id,
+                    'identifier' => $info->subunit->identifier,
+                    'notes'      => $info->subunit->notes,
+                    'contact_id' => $contact ? $contact->id : null
+                ]);
+            }
             return new Views\CorrectView(
                 $request,
                 $info,
-                $this->di->get('Domain\Subunits\Metadata')
+                $this->di->get('Domain\Subunits\Metadata'),
+                $contact
             );
         }
         return new \Application\Views\NotFoundView();
@@ -73,34 +83,32 @@ class Controller extends BaseController
         $useCaseRequest = "Domain\\Subunits\\UseCases\\$name\\{$name}Request";
         $useCaseView    = "Application\\Subunits\\Views\\{$name}View";
 
-        if (isset($_POST['id'])) {
-            $request  = new $useCaseRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $handle   = $this->di->get($useCase);
-            $response = $handle($request);
+        $subunit_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($subunit_id) {
+            if (isset($_POST['id'])) {
+                $request  = new $useCaseRequest($subunit_id, $_SESSION['USER']->id, $_POST);
+                $handle   = $this->di->get($useCase);
+                $response = $handle($request);
 
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('subunits.view', ['id'=>$request->subunit_id]));
-                exit();
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('subunits.view', ['id'=>$subunit_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
             }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
 
-        if (!empty($_REQUEST['id'])) {
-            $subunit_id = (int)$_REQUEST['id'];
 
-            return new $useCaseView(
-                new $useCaseRequest($subunit_id, $_SESSION['USER']->id),
-                $this->subunitInfo( $subunit_id)
-            );
+            $info    = parent::subunitInfo($subunit_id);
+            $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
+            if (!isset($request)) {
+                $request = new $useCaseRequest($subunit_id, $_SESSION['USER']->id, [
+                    'contact_id' => $contact ? $contact->id : null
+                ]);
+            }
+
+            return new $useCaseView($request, $info);
         }
 
         return new \Application\Views\NotFoundView();
-    }
-
-    private function subunitInfo(int $subunit_id): \Domain\Subunits\UseCases\Info\InfoResponse
-    {
-        $info = $this->di->get('Domain\Subunits\UseCases\Info\Info');
-        $req  = new \Domain\Subunits\UseCases\Info\InfoRequest($subunit_id);
-        return $info($req);
     }
 }

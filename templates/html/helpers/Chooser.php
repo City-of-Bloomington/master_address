@@ -28,12 +28,13 @@ class Chooser extends Helper
     {
 		#$this->template->addToAsset('scripts', BASE_URI.'/js/people/chooser.js');
 
-		$return_url = new Url(Url::current_url(BASE_HOST));
-		if (isset($return_url->callback_field)) { unset($return_url->callback_field); }
-		
-		$chooserUrl->return_url = $return_url->__toString();
+		$callback_url = new Url(Url::current_url(BASE_HOST));
+		if (isset($callback_url->callback_field)) { unset($callback_url->callback_field); }
 
-		#$personChooser = BASE_URI."/people?callback_field=$fieldname;return_url=$return_url";
+		$chooserUrl->callback_field = $fieldname;
+		$chooserUrl->callback_url   = $callback_url->__toString();
+
+		#$personChooser = BASE_URI."/people?callback_field=$fieldname;return_url=$callback_url";
 
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}\" id=\"{$fieldId}\" value=\"$value\" />

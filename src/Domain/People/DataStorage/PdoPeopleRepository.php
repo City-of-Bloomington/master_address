@@ -25,11 +25,11 @@ class PdoPeopleRepository extends PdoRepository implements PeopleRepository
         return $columns;
     }
 
-    public function load(InfoRequest $req): Person
+    public function load(int $person_id): Person
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())->from(self::TABLE);
-        $select->where('id=?', $req->id);
+        $select->where('id=?', $person_id);
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
             return new Person($result['rows'][0]);

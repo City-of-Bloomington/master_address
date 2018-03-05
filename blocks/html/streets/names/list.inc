@@ -2,8 +2,9 @@
 /**
  * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param array $this->names
- * @param Url   $this->return_url
+ * @param array  $this->names
+ * @param Url    $this->callback_url   Url to link person results to
+ * @param string $this->callback_field Parameter to add to the callback_url
  */
 declare (strict_types=1);
 ?>
@@ -15,9 +16,9 @@ declare (strict_types=1);
             $$f = parent::escape($n->$f);
         }
 
-        if ($this->return_url) {
-            $this->return_url->name_id = $n->id;
-            $uri = $this->return_url;
+        if ($this->callback_url) {
+            $this->callback_url->{$this->callback_field} = $n->id;
+            $uri = $this->callback_url;
         }
         else {
             $uri = parent::generateUri('streetNames.view', ['id' => $n->id]);
