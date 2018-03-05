@@ -17,14 +17,7 @@
             <input type="hidden" name="id" value="<?= $this->id; ?>" />
             <p><?= $this->help ?></p>
             <?php
-                $helper = $this->template->getHelper('field');
-                echo $helper->field([
-                    'name'  => 'notes',
-                    'id'    => 'notes',
-                    'label' => $this->_('notes'),
-                    'type'  => 'textarea',
-                    'value' => $this->notes
-                ]);
+                $this->_include('logs/changeLogFields.inc');
 
                 $helper = $this->template->getHelper('saveAndCancelButtons');
                 echo $helper->saveAndCancelButtons($this->return_url);

@@ -13,7 +13,7 @@ use Domain\People\UseCases\Update\UpdateRequest;
 
 interface PeopleRepository
 {
-    public function   load(InfoRequest   $req): Person;
+    public function load(int $person_id): Person;
     public function search(SearchRequest $req): array;
     public function save(Person $person): int;
 }

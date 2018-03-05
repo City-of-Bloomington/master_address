@@ -2,7 +2,9 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param array $this->people
+ * @param array  $this->people
+ * @param Url    $this->callback_url   Url to link person results to
+ * @param string $this->callback_field Parameter to add to the callback_url
  */
 ?>
 <section>
@@ -15,7 +17,7 @@
 
             if (parent::isAllowed('people', 'add')) {
                 echo $helper->buttonLink(
-                    self::generateUri('people.update')."?return_url=$return_url",
+                    parent::generateUri('people.update')."?return_url=$return_url",
                     $this->translate('person_add'),
                     'add'
                 );
@@ -33,8 +35,14 @@
 		<tbody>
 		<?php
 			foreach ($this->people as $person) {
-				$name = self::escape("{$person->firstname} {$person->lastname}");
-				$url  = self::generateUri('people.view', ['id'=>$person->id]);
+				$name = parent::escape("{$person->firstname} {$person->lastname}");
+				if ($this->callback_url) {
+                    $this->callback_url->{$this->callback_field} = $person->id;
+                    $url = $this->callback_url->__toString();
+				}
+				else {
+                    $url = parent::generateUri('people.view', ['id'=>$person->id]);
+                }
 				echo "
 				<tr><td><a href=\"$url\">$name</a></td>
 					<td><a href=\"$url\">{$person->email}</a></td>

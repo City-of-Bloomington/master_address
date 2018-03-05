@@ -36,10 +36,11 @@ class Unretire
             }
 
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => Log::$actions['unretire'],
-                'entity_id' => $req->address_id,
-                'person_id' => $req->user_id,
-                'notes'     => $req->notes
+                'action'     => Log::$actions['unretire'],
+                'entity_id'  => $req->address_id,
+                'person_id'  => $req->user_id,
+                'contact_id' => $req->contact_id,
+                'notes'      => $req->change_notes
             ])));
         }
         catch (\Exception $e) {

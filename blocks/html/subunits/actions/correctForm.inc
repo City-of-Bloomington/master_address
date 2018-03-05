@@ -6,7 +6,9 @@
  * @param string $this->type_id;
  * @param string $this->identifier;
  * @param string $this->notes;
- * @param string $this->change_notes;
+ * @param string $this->contact_id    Change log contact person
+ * @param string $this->contact_name  Change log contact person
+ * @param string $this->change_notes
  * @param array  $this->types         Subunit types to populate dropdown
  */
 ?>
@@ -48,13 +50,7 @@
         </fieldset>
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
             <?php
-                echo $h->field([
-                    'name'     => 'change_notes',
-                    'id'       => 'change_notes',
-                    'label'    => $this->_('notes'),
-                    'value'    => $this->change_notes,
-                    'type'     => 'textarea'
-                ]);
+                $this->_include('logs/changeLogFields.inc');
 
                 $h = $this->template->getHelper('saveAndCancelButtons');
                 echo $h->saveAndCancelButtons(parent::generateUri('subunits.view', ['id'=>$this->subunit_id]));

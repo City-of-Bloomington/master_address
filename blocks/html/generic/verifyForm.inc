@@ -2,10 +2,12 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @param string $this->id
- * @param string $this->notes
- * @param string $this->help        Message to display at the top of form
- * @param string $this->return_url  Url to use for the cancel button
+ * @param string $this->id           Entity ID for the change log entry
+ * @param string $this->contact_id   Change log contact person
+ * @param string $this->contact_name Change log contact person
+ * @param string $this->change_notes
+ * @param string $this->help         Message to display at the top of form
+ * @param string $this->return_url   Url to use for the cancel button
  */
 ?>
 <section>
@@ -17,14 +19,7 @@
             <input type="hidden" name="id" value="<?= $this->id; ?>" />
             <p><?= $this->help ?></p>
             <?php
-                $helper = $this->template->getHelper('field');
-                echo $helper->field([
-                    'name'  => 'notes',
-                    'id'    => 'notes',
-                    'label' => $this->_('notes'),
-                    'type'  => 'textarea',
-                    'value' => $this->notes
-                ]);
+                $this->_include('logs/changeLogFields.inc');
 
                 $helper = $this->template->getHelper('saveAndCancelButtons');
                 echo $helper->saveAndCancelButtons($this->return_url);

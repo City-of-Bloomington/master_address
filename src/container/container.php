@@ -67,6 +67,10 @@ foreach ($repos as $t) {
         $DI->lazyNew("Domain\\$t\\UseCases\\$a\\$a"));
     }
 }
+$DI->params[ 'Domain\People\UseCases\Load\Load']['repository'] = $DI->get('Domain\People\DataStorage\PeopleRepository');
+$DI->set(    'Domain\People\UseCases\Load\Load',
+$DI->lazyNew('Domain\People\UseCases\Load\Load'));
+
 $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->get('Domain\Users\DataStorage\UsersRepository');
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));

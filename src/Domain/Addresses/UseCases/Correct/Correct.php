@@ -28,10 +28,11 @@ class Correct
             $this->repo->correct($req);
 
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => ChangeLog::$actions['correct'],
-                'entity_id' => $req->address_id,
-                'person_id' => $req->user_id,
-                'notes'     => $req->change_notes
+                'action'     => ChangeLog::$actions['correct'],
+                'entity_id'  => $req->address_id,
+                'person_id'  => $req->user_id,
+                'contact_id' => $req->contact_id,
+                'notes'      => $req->change_notes
             ])));
         }
         catch (\Exception $e) {

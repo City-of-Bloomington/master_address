@@ -26,9 +26,10 @@ class SearchView extends Template
         }
 
         $this->blocks[] = new Block('streets/names/searchForm.inc', [
-            'names'      => $response->names,
-            'hidden'     => parent::filterActiveParams($_GET, ['street']),
-            'return_url' => !empty($_GET['return_url']) ? new Url($_GET['return_url']) : null
+            'names'          => $response->names,
+            'hidden'         => parent::filterActiveParams($_GET, ['street']),
+            'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
+            'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id'
         ]);
 
         if ($response->total > $itemsPerPage) {

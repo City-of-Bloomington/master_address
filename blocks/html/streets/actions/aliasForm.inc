@@ -6,6 +6,8 @@
  * @param int    $this->name_id
  * @param int    $this->type_id
  * @param int    $this->rank
+ * @param string $this->contact_id   Change log contact person
+ * @param string $this->contact_name Change log contact person
  * @param string $this->change_notes
  * @param string $this->return_url
  * @param string $this->name          Display string for the current street name
@@ -56,13 +58,7 @@ use Application\Url;
         </fieldset>
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
             <?php
-                echo $h->field([
-                    'name'    => 'change_notes',
-                    'id'      => 'change_notes',
-                    'label'   => $this->_('notes'),
-                    'value'   => $this->change_notes,
-                    'type'    => 'textarea'
-                ]);
+                $this->_include('logs/changeLogFields.inc');
 
                 $h = $this->template->getHelper('saveAndCancelButtons');
                 echo $h->saveAndCancelButtons($this->return_url);

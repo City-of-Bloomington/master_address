@@ -16,6 +16,7 @@ class AliasRequest
 
     // Change log entry
     public $user_id;
+    public $contact_id;
     public $change_notes;
 
     public function __construct(int $street_id, int $user_id, ?array $data=null)
@@ -27,6 +28,7 @@ class AliasRequest
         if (!empty($data['type_id'])) { $this->type_id = (int)$data['type_id']; }
         if (!empty($data['rank'   ])) { $this->rank    = (int)$data['rank'   ]; }
 
-        if (!empty($data['change_notes'])) { $this->change_notes = $data['change_notes']; }
+        if (!empty($data['contact_id'  ])) { $this->contact_id = (int)$data['contact_id'  ]; }
+        if (!empty($data['change_notes'])) { $this->change_notes =    $data['change_notes']; }
     }
 }

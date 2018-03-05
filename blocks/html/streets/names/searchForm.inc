@@ -2,9 +2,10 @@
 /**
  * @copyright 2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param array $this->names
- * @param array  $this->hidden     Hidden inputs to preserve
- * @param Url    $this->return_url Url to link results to
+ * @param array  $this->names
+ * @param array  $this->hidden         Hidden inputs to preserve
+ * @param Url    $this->callback_url   Url to link person results to
+ * @param string $this->callback_field Parameter to add to the callback_url
  */
 declare (strict_types=1);
 ?>

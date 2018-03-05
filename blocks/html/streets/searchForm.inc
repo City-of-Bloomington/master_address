@@ -2,10 +2,11 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param string $this->street     The search string
- * @param array  $this->streets    Array of street results
- * @param array  $this->hidden     Hidden inputs to preserve
- * @param Url    $this->return_url Url to link street results to
+ * @param string $this->street         The search string
+ * @param array  $this->streets        Array of street results
+ * @param array  $this->hidden         Hidden inputs to preserve
+ * @param Url    $this->callback_url   Url to link person results to
+ * @param string $this->callback_field Parameter to add to the callback_url
  */
 ?>
 <section>
@@ -22,7 +23,7 @@
                     'label' => $this->_('street'),
                     'value' => $this->street
                 ]);
-                
+
                 foreach ($this->hidden as $k=>$v) {
                     echo "<input type=\"hidden\" name=\"$k\" value=\"$v\" />";
                 }

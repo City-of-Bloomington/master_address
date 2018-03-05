@@ -68,6 +68,8 @@ abstract class PdoRepository
         }
         else {
             // Insert
+            unset($data[$pk]);
+
             $insert = $this->queryFactory->newInsert();
             $insert->into($table)->cols($data);
             $query = $this->pdo->prepare($insert->getStatement());

@@ -55,7 +55,7 @@ class Controller extends BaseController
     public function view(array $params)
     {
         if (!empty($_REQUEST['id'])) {
-            $info = $this->streetInfo((int)$_REQUEST['id']);
+            $info = parent::streetInfo((int)$_REQUEST['id']);
 
             if ($info->street) {
                 return new Views\InfoView($info, $this->addressSearch($info->street->id));
@@ -76,25 +76,34 @@ class Controller extends BaseController
      */
     public function correct(array $params)
     {
-        if (isset($_POST['id'])) {
-            $request  = new CorrectRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $correct  = $this->di->get('Domain\Streets\UseCases\Correct\Correct');
-            $response = $correct($request);
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
-                exit();
+        $street_id = (int)$_REQUEST['id'];
+        if ($street_id) {
+            if (isset($_POST['id'])) {
+                $request  = new CorrectRequest($street_id, $_SESSION['USER']->id, $_POST);
+                $correct  = $this->di->get('Domain\Streets\UseCases\Correct\Correct');
+                $response = $correct($request);
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
             }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
+            $info    = parent::streetInfo($street_id);
+            $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
+            if (!isset($request)) {
+                $request = new CorrectRequest($street_id, $_SESSION['USER']->id, [
+                    'town_id'      => $info->street->town_id,
+                    'notes'        => $info->street->notes,
+                    'contact_id'   => $contact ? $contact->id : null
+                ]);
+            }
 
-        if (!empty($_REQUEST['id'])) {
-            $street_id = (int)$_REQUEST['id'];
-            $info      = $this->streetInfo($street_id);
             return new Views\CorrectView(
-                new CorrectRequest($street_id, $_SESSION['USER']->id, (array)$info->street),
+                $request,
                 $info,
                 $this->di->get('Domain\Streets\Metadata'),
-                $this->addressSearch($street_id)
+                $this->addressSearch($street_id),
+                $contact
             );
         }
         return new \Application\Views\NotFoundView();
@@ -102,29 +111,35 @@ class Controller extends BaseController
 
     public function alias(array $params)
     {
-        if (isset($_POST['id'])) {
-            $request  = new AliasRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $alias    = $this->di->get('Domain\Streets\UseCases\Alias\Alias');
-            $response = $alias($request);
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
-                exit();
+        $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($street_id) {
+            if (isset($_POST['id'])) {
+                $request  = new AliasRequest($street_id, $_SESSION['USER']->id, $_POST);
+                $alias    = $this->di->get('Domain\Streets\UseCases\Alias\Alias');
+                $response = $alias($request);
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
             }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
 
-        if (!empty($_REQUEST['id'])) {
-            $street_id = (int)$_REQUEST['id'];
-            $info      = $this->streetInfo($street_id);
-            $name      = !empty($_REQUEST['name_id'])
-                       ? $this->name((int)$_REQUEST['name_id'])
-                       : $this->name($info->street->name_id);
+            $info    = parent::streetInfo($street_id);
+            $name    = !empty($_GET['name_id'   ]) ? $this->name  ((int)$_GET['name_id'   ]) : null;
+            $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
+            if (!isset($request)) {
+                $request = new AliasRequest($street_id, $_SESSION['USER']->id, [
+                    'name_id'    => $name    ?    $name->id : null,
+                    'contact_id' => $contact ? $contact->id : null
+                ]);
+            }
 
             return new Views\AliasView(
-                new AliasRequest($street_id, $_SESSION['USER']->id, (array)$info->street),
+                $request,
                 $info,
                 $this->di->get('Domain\Streets\Metadata'),
-                $name
+                $name,
+                $contact
             );
         }
         return new \Application\Views\NotFoundView();
@@ -144,49 +159,40 @@ class Controller extends BaseController
         $useCaseRequest = "Domain\\Streets\\UseCases\\$name\\{$name}Request";
         $useCaseView    = "Application\\Streets\\Views\\{$name}View";
 
-        if (isset($_POST['id'])) {
-            $request  = new $useCaseRequest((int)$_POST['id'], $_SESSION['USER']->id, $_POST);
-            $handle   = $this->di->get($useCase);
-            $response = $handle($request);
+        $street_id = (int)$_REQUEST['id'];
+        if ($street_id) {
+            if (isset($_POST['id'])) {
+                $request  = new $useCaseRequest($street_id, $_SESSION['USER']->id, $_POST);
+                $handle   = $this->di->get($useCase);
+                $response = $handle($request);
 
-            if (!count($response->errors)) {
-                header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
-                exit();
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
             }
-            else { $_SESSION['errorMessages'] = $response->errors; }
-        }
-
-        if (!empty($_REQUEST['id'])) {
-            $street_id = (int)$_REQUEST['id'];
+            $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
+            if (!isset($request)) {
+                $request = new $useCaseRequest($street_id, $_SESSION['USER']->id, [
+                    'contact_id' => $contact ? $contact->id : null
+                ]);
+            }
 
             return new $useCaseView(
-                new $useCaseRequest( $street_id, $_SESSION['USER']->id),
-                $this->streetInfo(   $street_id),
-                $this->addressSearch($street_id)
+                $request,
+                parent::streetInfo(   $street_id),
+                $this->addressSearch($street_id),
+                $contact
             );
         }
 
         return new \Application\Views\NotFoundView();
     }
 
-    private function streetInfo(int $street_id): \Domain\Streets\UseCases\Info\InfoResponse
-    {
-        $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
-        $req  = new \Domain\Streets\UseCases\Info\InfoRequest($street_id);
-        return $info($req);
-    }
-
     private function addressSearch(int $street_id): \Domain\Addresses\UseCases\Search\SearchResponse
     {
         $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
         return $search(new \Domain\Addresses\UseCases\Search\SearchRequest(['street_id' => $street_id]));
-    }
-
-    private function name(int $name_id): \Domain\Streets\Entities\Name
-    {
-        $load = $this->di->get('Domain\Streets\Names\UseCases\Load\Load');
-        $res  = $load($name_id);
-        if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
-        return $res->name;
     }
 }

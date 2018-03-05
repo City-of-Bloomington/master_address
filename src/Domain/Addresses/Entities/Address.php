@@ -91,4 +91,23 @@ class Address
             $this->street_post_direction
         ]);
     }
+
+    public function streetName(): string
+    {
+        return implode(' ', [
+            $this->street_direction,
+            $this->street_name,
+            $this->street_suffix_code,
+            $this->street_post_direction
+        ]);
+    }
+
+    public function streetNumber(): string
+    {
+        return implode(' ', [
+            $this->street_number_prefix,
+            $this->street_number,
+            $this->street_number_suffix
+        ]);
+    }
 }

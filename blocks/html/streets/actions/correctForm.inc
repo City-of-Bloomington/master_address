@@ -5,10 +5,12 @@
  * @param string $this->street_id
  * @param string $this->town_id
  * @param string $this->notes
- * @param string $this->user_id
+ * @param string $this->contact_id   Change log contact person
+ * @param string $this->contact_name Change log contact person
  * @param string $this->change_notes
  * @param array  $this->towns        Town options for the select dropdown
  */
+use Application\Url;
 ?>
 <section>
     <header>
@@ -42,13 +44,7 @@
         </fieldset>
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
             <?php
-                echo $helper->field([
-                    'name'  => 'change_notes',
-                    'id'    => 'change_notes',
-                    'label' => $this->_('notes'),
-                    'type'  => 'textarea',
-                    'value' => $this->change_notes
-                ]);
+                $this->_include('logs/changeLogFields.inc');
 
                 $helper = $this->template->getHelper('saveAndCancelButtons');
                 echo $helper->saveAndCancelButtons(
