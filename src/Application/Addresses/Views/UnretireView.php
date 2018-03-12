@@ -23,6 +23,7 @@ class UnretireView extends Template
         parent::__construct('two-column', $format);
         $this->vars['title'] = $this->_('unretire');
 
+        $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
         $this->blocks[] = new Block('generic/unretireForm.inc', [
             'id'           => $request->address_id,
             'contact_id'   => $contact ? $contact->id           : null,
