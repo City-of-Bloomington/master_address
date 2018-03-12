@@ -25,6 +25,8 @@ class CorrectView extends Template
         parent::__construct('two-column', $format);
         $this->vars['title'] = $this->_('correct');
 
+        $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
+
         $vars = [
             'street_id'    => $street  ? $street->id            : null,
             'street_name'  => $street  ? $street->__toString()  : null,
