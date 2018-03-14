@@ -20,7 +20,8 @@ interface AddressesRepository
     public function loadChangeLog(int $address_id): array;
     public function loadStatusLog(int $address_id): array;
     public function getStatus    (int $address_id): string;
-    public function search   (SearchRequest  $req): array;
+
+    public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions
     public function correct(CorrectRequest $request);

@@ -11,11 +11,24 @@ foreach ($fields as $f) {
     $$f  = parent::escape($this->location->$f);
 }
 ?>
-<table>
-    <thead>
-        <tr><?php foreach ($fields as $f) { echo "<th>{$this->_($f)}</th>"; } ?></tr>
-    </thead>
-    <tbody>
-        <tr><?php foreach ($fields as $f) { echo "<td>{$$f}</td>"; } ?></tr>
-    </tbody>
-</table>
+<article>
+    <dl><?php
+            foreach ($fields as $f) {
+                echo "
+                <dt>{$this->_($f)}</dt>
+                <dd>{$$f}</dd>
+                ";
+
+            }
+        ?>
+        <dt><?= $this->_(['address', 'addresses', count($this->location->addresses)]); ?></dt>
+        <dd><ul><?php
+                    foreach ($this->location->addresses as $address) {
+                        $uri = parent::generateUri('addresses.view', ['id'=>$address->id]);
+                        echo "<li><a href=\"$uri\">$address</a></li>";
+                    }
+                ?>
+            </ul>
+        </dd>
+    </dl>
+</article>
