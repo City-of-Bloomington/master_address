@@ -17,14 +17,18 @@ class Location
     public $active;
     public $trash_day;
     public $recycle_week;
-    
+
     // Foreign key value from location_status
     public $status;
-    
+
     // Foreign key value for type_id
     public $type_code;
     public $type_name;
-    
+
+    // Addresses and/or Subunits with this location_id
+    public $addresses = [];
+    public $subunits  = [];
+
     public function __construct(?array $data=null)
     {
         foreach ($this as $f=>$v) {
@@ -36,13 +40,13 @@ class Location
                     case 'subunit_id':
                         $this->$f = (int)$data[$f];
                     break;
-                    
+
                     case 'mailable':
                     case 'occupiable':
                     case 'active':
                         $this->$f = $data[$f] ? true : false;
                     break;
-                    
+
                     default:
                         $this->$f = $data[$f];
                 }

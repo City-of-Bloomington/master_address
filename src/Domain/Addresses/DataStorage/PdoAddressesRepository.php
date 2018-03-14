@@ -120,33 +120,41 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         throw new \Exception('addresses/unknown');
     }
 
-    public function search(SearchRequest $req): array
+    public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select = $this->baseSelect();
-        foreach (self::$fieldmap as $f=>$m) {
-            if (!empty($req->$f)) {
-                $column = "$m[prefix].$m[dbName]";
-                switch ($f) {
-                    case 'street_number':
-                        // Postgres requires converting int to varchar before
-                        // doing a like comparison.
-                        // Unfortunately, the Aura SqlQuery butchers the ANSI-92
-                        // cast(street_number as varchar).  So, for now, we're
-                        // using the Postgres specific ::varchar syntax for
-                        // type casting.
-                        $select->where("$column::varchar like ?", "{$req->$f}%");
-                    break;
-                    case 'street_name':
-                        $select->where("$column like ?", "{$req->$f}%");
-                    break;
+        foreach ($fields as $f=>$v) {
+            if (!empty($v)) {
+                if (array_key_exists($f, self::$fieldmap)) {
+                    $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
+                    switch ($f) {
+                        case 'street_number':
+                            // Postgres requires converting int to varchar before
+                            // doing a like comparison.
+                            // Unfortunately, the Aura SqlQuery butchers the ANSI-92
+                            // cast(street_number as varchar).  So, for now, we're
+                            // using the Postgres specific ::varchar syntax for
+                            // type casting.
+                            $select->where("$column::varchar like ?", "$v%");
+                        break;
+                        case 'street_name':
+                            $select->where("$column like ?", "$v%");
+                        break;
 
-                    default:
-                        $select->where("$column=?", $req->$f);
+                        default:
+                            $select->where("$column=?", $v);
+                    }
+                }
+                else {
+                    if ($f == 'location_id') {
+                        $select->join('INNER', 'locations l', 'l.address_id=a.id and l.subunit_id is null');
+                        $select->where('l.location_id=?', $v);
+                    }
                 }
             }
         }
         $select->orderBy(self::$DEFAULT_SORT);
-        $result = $this->performSelect($select, $req->itemsPerPage, $req->currentPage);
+        $result = $this->performSelect($select, $itemsPerPage, $currentPage);
 
         $addresses = [];
         foreach ($result['rows'] as $r) { $addresses[] = self::hydrateAddress($r); }
@@ -189,7 +197,11 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $query = $this->pdo->prepare($select->getStatement());
         $query->execute($select->getBindValues());
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $locations[] = new \Domain\Locations\Entities\Location($row);
+            $result = $this->search(['location_id'=>$row['location_id']]);
+
+            $location = new \Domain\Locations\Entities\Location($row);
+            $location->addresses = $result['rows'];
+            $locations[] = $location;
         }
         return $locations;
     }

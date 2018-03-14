@@ -20,7 +20,7 @@ class Search
     public function __invoke(SearchRequest $req): SearchResponse
     {
         try {
-            $result = $this->repo->search($req);
+            $result = $this->repo->search((array)$req, $req->order, $req->itemsPerPage, $req->currentPage);
             return new SearchResponse($result['rows'], $result['total']);
         }
         catch (\Exception $e) {
