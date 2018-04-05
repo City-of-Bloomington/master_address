@@ -12,7 +12,6 @@
 	<table>
 		<thead>
 			<tr><th><?= $this->_('date'); ?></th>
-				<th></th>
 				<th><?= $this->_('action' ); ?></th>
 				<th><?= $this->_('person' ); ?></th>
 				<th><?= $this->_('contact'); ?></th>
@@ -29,7 +28,6 @@
                 $notes   = parent::escape($c->notes);
                 echo "
                 <tr><th>$date</th>
-                    <td></td>
                     <td>$action</td>
                     <td>$person</td>
                     <td>$contact</td>
