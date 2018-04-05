@@ -31,22 +31,13 @@
                 $jurisdiction = parent::escape($a->jurisdiction_name);
                 $city         = parent::escape($a->city);
 
-                $streetNumber = parent::escape(implode(' ', [
-                    $a->street_number_prefix,
-                    $a->street_number,
-                    $a->street_number_suffix
-                ]));
-                $streetName = parent::escape(implode(' ', [
-                    $a->street_direction,
-                    $a->street_name,
-                    $a->street_post_direction,
-                    $a->street_suffix_code
-                ]));
+                $address      = parent::escape($a->__toString());
+
                 $uri = parent::generateUri('addresses.view', ['id'=>$a->id]);
                 echo "
-                <tr><td><a href=\"$uri\">$streetNumber</a></td>
+                <tr><td><a href=\"$uri\">{$a->id}</a></td>
                     <td><a href=\"$uri\">$type</a></td>
-                    <td><a href=\"$uri\">$streetName</a></td>
+                    <td><a href=\"$uri\">$address</a></td>
                     <td><a href=\"$uri\">$status</a></td>
                     <td><a href=\"$uri\">$jurisdiction</a></td>
                     <td><a href=\"$uri\">$zip</a></td>
