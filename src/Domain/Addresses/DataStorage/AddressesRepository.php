@@ -21,6 +21,7 @@ interface AddressesRepository
     public function loadStatusLog(int $address_id): array;
     public function getStatus    (int $address_id): string;
 
+    public function find  (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions

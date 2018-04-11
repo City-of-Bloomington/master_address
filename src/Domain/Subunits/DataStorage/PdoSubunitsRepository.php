@@ -23,6 +23,10 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     protected $logType = 'subunit';
 
     const TABLE = 'subunits';
+    public static $DEFAULT_SORT = [
+        'type_id',
+        'identifier'
+    ];
 
     /**
      * Maps response fieldnames to the names used in the database
@@ -79,17 +83,59 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 
     public function locations(int $subunit_id): array
     {
-        $locations = [];
-        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
-        $select = $repo->baseSelect();
+        $output = [];
+        $locationRepo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
+        $addressRepo  = new \Domain\Addresses\DataStorage\PdoAddressesRepository($this->pdo);
+
+        $select = $locationRepo->baseSelect();
         $select->where('l.subunit_id=?', $subunit_id);
 
         $query = $this->pdo->prepare($select->getStatement());
         $query->execute($select->getBindValues());
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $locations[] = new \Domain\Locations\Entities\Location($row);
+            $subunits  =        $this->find(['location_id'=>$row['location_id']]);
+            $addresses = $addressRepo->find(['location_id'=>$row['location_id']]);
+
+            $location = new \Domain\Locations\Entities\Location($row);
+            $location->subunits  = $subunits['rows'];
+            $location->addresses = $addresses['rows'];
+            $output[] = $location;
         }
-        return $locations;
+        return $output;
+    }
+
+    /**
+     * Exact matching of field values
+     */
+    public function find(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
+        $select = $this->baseSelect();
+        foreach ($fields as $f=>$v) {
+            if (!empty($v)) {
+                if (array_key_exists($f, self::$fieldmap)) {
+                    $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
+                    $select->where("$column=?", $v);
+                }
+                else {
+                    if ($f == 'location_id') {
+                        $select->join('INNER', 'locations l', 'l.subunit_id=s.id');
+                        $select->where('l.location_id=?', $v);
+                    }
+                }
+            }
+        }
+        return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
+    }
+
+    private function doSelect(SelectInterface $select, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
+        $select->orderBy(self::$DEFAULT_SORT);
+        $result = parent::performSelect($select, $itemsPerPage, $currentPage);
+
+        $subunits = [];
+        foreach ($result['rows'] as $r) { $subunits[] = new Subunit($r); }
+        $result['rows'] = $subunits;
+        return $result;
     }
     //---------------------------------------------------------------
     // Write Functions
