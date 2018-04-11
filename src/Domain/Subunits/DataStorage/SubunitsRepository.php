@@ -20,6 +20,8 @@ interface SubunitsRepository
     public function loadStatusLog(int $subunit_id): array;
     public function getStatus    (int $subunit_id): string;
 
+    public function find(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
+
     // Write functions
     public function correct  (CorrectRequest $request);
     public function logChange(ChangeLogEntry   $entry): int;

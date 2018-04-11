@@ -113,13 +113,40 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $select = $this->baseSelect();
         $select->where('a.id=?', $address_id);
 
-        $result = $this->performSelect($select);
+        $result = parent::performSelect($select);
         if (count($result['rows'])) {
             return self::hydrateAddress($result['rows'][0]);
         }
         throw new \Exception('addresses/unknown');
     }
 
+    /**
+     * Find addresses with exact match to fields
+     */
+    public function find(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
+        $select = $this->baseSelect();
+        foreach ($fields as $f=>$v) {
+            if (!empty($v)) {
+                if (array_key_exists($f, self::$fieldmap)) {
+                    $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
+                    $select->where("$column=?", $v);
+                }
+                else {
+                    if ($f == 'location_id') {
+                        $select->distinct();
+                        $select->join('INNER', 'locations l', 'l.address_id=a.id');
+                        $select->where('l.location_id=?', $v);
+                    }
+                }
+            }
+        }
+        return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
+    }
+
+    /**
+     * Find addresses with wildcard matching of text fields
+     */
     public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select = $this->baseSelect();
@@ -153,14 +180,20 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 }
             }
         }
+        return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
+    }
+
+    private function doSelect(SelectInterface $select, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
         $select->orderBy(self::$DEFAULT_SORT);
-        $result = $this->performSelect($select, $itemsPerPage, $currentPage);
+        $result = parent::performSelect($select, $itemsPerPage, $currentPage);
 
         $addresses = [];
         foreach ($result['rows'] as $r) { $addresses[] = self::hydrateAddress($r); }
         $result['rows'] = $addresses;
         return $result;
     }
+
 
     public function correct(CorrectRequest $req)
     {
@@ -188,22 +221,26 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
     public function locations(int $address_id): array
     {
-        $locations = [];
-        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
-        $select = $repo->baseSelect();
+        $output = [];
+        $locationRepo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
+        $subunitRepo  = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
+
+        $select = $locationRepo->baseSelect();
         $select->where('l.address_id=?', $address_id);
         $select->where('l.subunit_id is null');
 
         $query = $this->pdo->prepare($select->getStatement());
         $query->execute($select->getBindValues());
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $result = $this->search(['location_id'=>$row['location_id']]);
+            $addresses =        $this->find(['location_id'=>$row['location_id']]);
+            $subunits  = $subunitRepo->find(['location_id'=>$row['location_id']]);
 
             $location = new \Domain\Locations\Entities\Location($row);
-            $location->addresses = $result['rows'];
-            $locations[] = $location;
+            $location->addresses = $addresses['rows'];
+            $location->subunits  = $subunits ['rows'];
+            $output[] = $location;
         }
-        return $locations;
+        return $output;
     }
 
     public function subunits(int $address_id): array
