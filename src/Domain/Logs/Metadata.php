@@ -14,23 +14,39 @@ class Metadata
     const STATUS_DUPLICATE = 'duplicate';
     const STATUS_TEMPORARY = 'temporary';
 
+    const ACTION_ACTIVATE  = 'activate';
+    const ACTION_ADD       = 'add';
+    const ACTION_ALIAS     = 'alias';
+    const ACTION_ASSIGN    = 'assign';
+    const ACTION_CHANGE    = 'change';
+    const ACTION_CORRECT   = 'correct';
+    const ACTION_CREATE    = 'create';
+    const ACTION_MOVE      = 'move';
+    const ACTION_PROPOSE   = 'propose';
+    const ACTION_READDRESS = 'readdress';
+    const ACTION_REASSIGN  = 'reassign';
+    const ACTION_RETIRE    = 'retire';
+    const ACTION_UPDATE    = 'update';
+    const ACTION_UNRETIRE  = 'unretire';
+    const ACTION_VERIFY    = 'verify';
+
     // Map the action name to the log message
 	public static $actions = [
-        'activate'  => 'activated',
-        'add'       => 'added',
-        'alias'     => 'added alias',
-        'assign'    => 'assigned',
-        'change'    => 'changed street name',
-        'correct'   => 'corrected',
-        'create'    => 'created',
-        'move'      => 'moved to location',
-        'propose'   => 'proposed',
-        'readdress' => 'readdressed',
-        'reassign'  => 'reassigned',
-        'retire'    => 'retired',
-        'update'    => 'updated',
-        'unretire'  => 'unretired',
-        'verify'    => 'verified'
+        self::ACTION_ACTIVATE  => 'activated',
+        self::ACTION_ADD       => 'added',
+        self::ACTION_ALIAS     => 'added alias',
+        self::ACTION_ASSIGN    => 'assigned',
+        self::ACTION_CHANGE    => 'changed street name',
+        self::ACTION_CORRECT   => 'corrected',
+        self::ACTION_CREATE    => 'created',
+        self::ACTION_MOVE      => 'moved to location',
+        self::ACTION_PROPOSE   => 'proposed',
+        self::ACTION_READDRESS => 'readdressed',
+        self::ACTION_REASSIGN  => 'reassigned',
+        self::ACTION_RETIRE    => 'retired',
+        self::ACTION_UPDATE    => 'updated',
+        self::ACTION_UNRETIRE  => 'unretired',
+        self::ACTION_VERIFY    => 'verified'
     ];
 
     public static $statuses = [
