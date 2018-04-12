@@ -9,6 +9,7 @@ namespace Application\Subunits;
 use Application\Controller as BaseController;
 use Application\View;
 
+use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
 
 class Controller extends BaseController
@@ -25,6 +26,39 @@ class Controller extends BaseController
             }
         }
         return new \Application\Views\NotFoundView();
+    }
+
+    public function add(array $params)
+    {
+        if (!empty($_REQUEST['address_id'])) {
+            $addressInfo = parent::addressInfo((int)$_REQUEST['address_id']);
+        }
+
+        if ($addressInfo) {
+            if (isset($_POST['address_id'])) {
+                $add      = $this->di->get('Domain\Subunits\UseCases\Add\Add');
+                $request  = new AddRequest($_SESSION['USER']->id, $_POST);
+                $response = $add($request);
+                if (!count($response->errors)) {
+                    header('Location: '.View::generateUrl('address.view', ['id'=>$request->addres_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
+            }
+
+            if (!isset($request)) {
+                $request = new AddRequest($_SESSION['USER']->id, $_GET);
+            }
+            return new Views\AddView(
+                $request,
+                $addressInfo,
+                $this->di->get('Domain\Subunits\Metadata'),
+                !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null
+            );
+        }
+        else {
+            return new \Application\Views\NotFoundView();
+        }
     }
 
     /**

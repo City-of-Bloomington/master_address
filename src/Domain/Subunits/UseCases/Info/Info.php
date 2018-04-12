@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Info;
 
 use Domain\Subunits\DataStorage\SubunitsRepository;
-use Domain\Locations\UseCases\Search\Search;
 
 class Info
 {

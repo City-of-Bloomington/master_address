@@ -12,16 +12,14 @@ use Application\People\Person;
         <h2><?= $this->_(['subunit', 'subunits', count($this->subunits)]); ?></h2>
         <div class="tools">
         <?php
-            /*
-            if (isset($this->address) && Person::isAllowed('subunits', 'update')) {
-                $helper = $this->template->getHelper('buttonLink');
-                echo $helper->buttonLink(
-                    parent::generateUri('subunits.update').'?address_id='.$this->address->getId(),
+            if (isset($this->address) && parent::isAllowed('subunits', 'add')) {
+                $h = $this->template->getHelper('buttonLink');
+                echo $h->buttonLink(
+                    parent::generateUri('subunits.add').'?address_id='.$this->address->id,
                     $this->_('subunit_add'),
                     'add'
                 );
             }
-            */
         ?>
         </div>
     </header>

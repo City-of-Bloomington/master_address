@@ -20,9 +20,14 @@ class Metadata
     public function types(): array
     {
         static $types = [];
-        if (!$types) {
-             $types = $this->repo->types();
-        }
+        if   (!$types) { $types = $this->repo->types(); }
+        return $types;
+    }
+
+    public function locationTypes(): array
+    {
+        static $types = [];
+        if   (!$types) { $types = $this->repo->locationTypes(); }
         return $types;
     }
 }

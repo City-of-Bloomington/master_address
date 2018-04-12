@@ -2,72 +2,85 @@
 /**
  * Draws the form fields for Locations
  *
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->locationData (optional)
+ * @copyright 2009-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param string $this->locationType_id;
+ * @param string $this->mailable;
+ * @param string $this->occupiable;
+ * @param string $this->trash_day;
+ * @param string $this->recycle_week;
+ * @param string $this->locationStatus;
+ *
+ * @param array  $this->locationTypes    Location types to populate dropdown
+ * @param array  $this->statuses         Statuses to populate dropdown
  */
-if (isset($this->location)) {
-	echo "
-	<tr><td colspan=\"2\">
-			<input type=\"hidden\" name=\"location_id\" value=\"{$this->location->getId()}\" />
-		</td>
-	</tr>
-	";
-	$this->locationData = $this->location->getUpdatableData($this->address);
-}
-?>
-	<tr><td><label for="location_type_id" class="required">Location Use Type</label></td>
-		<td><select name="location_type_id" id="location_type_id">
-				<?php
-					$locationType = isset($this->locationData['locationType'])
-									? $this->locationData['locationType']
-									: new LocationType("Residential Single Family");
-					$types = new LocationTypeList();
-					$types->find();
-					foreach ($types as $type) {
-						$selected = ($locationType->getId() == $type->getId())
-									? $selected = 'selected="selected"'
-									: '';
-						echo "<option $selected >{$type->getId()}</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
+use Domain\Locations\Metadata as Location;
 
-	<tr><td><label>Mailable</label></td>
-		<td><?php
-				$mailable = isset($this->locationData['mailable'])
-							? $this->locationData['mailable']
-							: 'unknown';
-				foreach (Location::getFlagValues() as $value) {
-					$checked = $mailable==$value ? 'checked="checked"' : '';
-					echo "
-					<label style=\"float:none;\">
-						<input name=\"mailable\" id=\"mailable_$value\" type=\"radio\" value=\"$value\" $checked />
-						$value
-					</label>
-					";
-				}
-			?>
-		</td>
-	</tr>
+$h = $this->template->getHelper('field');
 
-	<tr><td><label>Livable</label></td>
-		<td><?php
-				$livable = isset($this->locationData['livable'])
-							? $this->locationData['livable']
-							: 'unknown';
-				foreach (Location::getFlagValues() as $value) {
-					$checked = $livable==$value ? 'checked="checked"' : '';
-					echo "
-					<label style=\"float:none;\">
-						<input name=\"livable\" id=\"livable_$value\" type=\"radio\" value=\"$value\" $checked />
-						$value
-					</label>
-					";
-				}
-			?>
-		</td>
-	</tr>
+$options = [];
+foreach ($this->locationTypes as $t) { $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])]; }
+echo $h->field([
+    'name'     => 'locationType_id',
+    'id'       => 'locationType_id',
+    'label'    => $this->_('type'),
+    'type'     => 'select',
+    'value'    => $this->locationType_id,
+    'options'  => $options,
+    'required' => true
+]);
+
+$options = [
+    ['value'=>1, 'label'=>$this->_('yes')],
+    ['value'=>0, 'label'=>$this->_('no' )]
+];
+echo $h->field([
+    'name'     => 'mailable',
+    'id'       => 'mailable',
+    'label'    => $this->_('mailable'),
+    'type'     => 'radio',
+    'value'    => $this->mailable,
+    'options'  => $options
+]);
+
+echo $h->field([
+    'name'     => 'occupiable',
+    'id'       => 'occupiable',
+    'label'    => $this->_('occupiable'),
+    'type'     => 'radio',
+    'value'    => $this->occupiable,
+    'options'  => $options
+]);
+
+$options = [['value'=>'']];
+foreach (Location::$trash_days as $d) { $options[] = ['value'=>$d, 'label'=>$this->_($d)]; }
+echo $h->field([
+    'name'     => 'trash_day',
+    'id'       => 'trash_day',
+    'label'    => $this->_('trash_day'),
+    'type'     => 'select',
+    'value'    => $this->trash_day,
+    'options'  => $options
+]);
+
+$options = [['value'=>'']];
+foreach (Location::$recycle_weeks as $w) { $options[] = ['value'=>$w]; }
+echo $h->field([
+    'name'     => 'recycle_week',
+    'id'       => 'recycle_week',
+    'label'    => $this->_('recycle_week'),
+    'type'     => 'select',
+    'value'    => $this->recycle_week,
+    'options'  => $options
+]);
+
+$options = [];
+foreach ($this->statuses as $s) { $options[] = ['value'=>$s]; }
+echo $h->field([
+    'name'     => 'locationStatus',
+    'id'       => 'locationStatus',
+    'label'    => $this->_('locationStatus'),
+    'type'     => 'select',
+    'value'    => $this->locationStatus,
+    'options'  => $options
+]);

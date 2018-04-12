@@ -17,5 +17,6 @@ interface LocationsRepository
     public function loadStatusLog(int $location_id): array;
 
     // Write functions
+    public function save(Location $location): int;
     public function saveStatus(int $location_id, string $status);
 }

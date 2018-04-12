@@ -89,4 +89,18 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $result['rows'] = $locations;
         return $result;
     }
+
+    //---------------------------------------------------------------
+    // Write Functions
+    //---------------------------------------------------------------
+    public function save(Location $location): int
+    {
+        $data = [];
+        foreach (self::$fieldmap as $f=>$db) {
+            if ($db['prefix'] == 'l') {
+                $data[$db['dbName']] = $location->$f;
+            }
+        }
+        return parent::saveToTable($data, self::TABLE);
+    }
 }
