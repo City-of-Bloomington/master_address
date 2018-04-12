@@ -33,7 +33,7 @@ class Correct
             $this->repo->correct($req);
 
             return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
-                'action'    => ChangeLog::$actions['correct'],
+                'action'    => ChangeLog::$actions[ChangeLog::ACTION_CORRECT],
                 'entity_id' => $req->subunit_id,
                 'person_id' => $req->user_id,
                 'notes'     => $req->change_notes

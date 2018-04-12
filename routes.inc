@@ -45,8 +45,8 @@ $ROUTES->attach('subunitTypes', "/subunits/types", function ($r) {
 $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->setValues(['controller'=> 'Application\Subunits\Controller']);
 
-    #$r->add('update', '/update{/id}')->addValues(['action'=>'update']);
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
+    $r->add('view', '/{id}')->addValues(['action'=>'view']);
+    $r->add('add',   '/add')->addValues(['action'=>'add' ]);
     foreach (['verify', 'correct', 'retire', 'unretire'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }

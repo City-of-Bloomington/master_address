@@ -9,8 +9,10 @@ namespace Domain\Subunits\DataStorage;
 use Aura\SqlQuery\Common\SelectInterface;
 
 use Domain\PdoRepository;
+
+use Domain\Locations\Entities\Location;
 use Domain\Subunits\Entities\Subunit;
-use Domain\Subunits\Entities\Location;
+use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
 
 use Domain\Logs\Entities\ChangeLogEntry;
@@ -30,6 +32,8 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 
     /**
      * Maps response fieldnames to the names used in the database
+     *
+     * subunit_field => [database_info]
      */
     public static $fieldmap = [
         'id'            => ['prefix'=>'s', 'dbName' => 'id'           ],
@@ -140,6 +144,18 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     //---------------------------------------------------------------
     // Write Functions
     //---------------------------------------------------------------
+    public function save(Subunit $subunit): int
+    {
+        $data = [];
+        foreach (self::$fieldmap as $f=>$db) {
+            // Only save the subunits table fields
+            if ($db['prefix'] == 's') {
+                $data[$db['dbName']] = $subunit->$f;
+            }
+        }
+        return parent::saveToTable($data, self::TABLE);
+    }
+
     public function correct(CorrectRequest $req)
     {
         $sql = "update subunits
@@ -150,6 +166,12 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
             $req->type_id, $req->identifier, $req->notes,
             $req->subunit_id
         ]);
+    }
+
+    public function saveLocation(Location $location): int
+    {
+        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
+        return $repo->save($location);
     }
 
     public function saveLocationStatus(int $location_id, string $status)
@@ -164,6 +186,12 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     public function types(): array
     {
         $result = $this->pdo->query('select * from subunit_types order by name');
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function locationTypes(): array
+    {
+        $result = $this->pdo->query('select * from location_types order by name');
         return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -46,6 +46,14 @@ class Controller
         return $res->name;
     }
 
+    protected function address(int $address_id): ?\Domain\Addresses\Entities\Address
+    {
+        $load = $this->di->get('Domain\Addresses\UseCases\Load\Load');
+        $res  = $load($address_id);
+        if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
+        return $res->address;
+    }
+
     protected function street(int $street_id): ?\Domain\Streets\Entities\Street
     {
         $load = $this->di->get('Domain\Streets\UseCases\Load\Load');

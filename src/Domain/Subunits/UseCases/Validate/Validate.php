@@ -10,14 +10,16 @@ use Domain\Subunits\Entities\Subunit;
 
 class Validate
 {
+    const MISSING_ADDRESS = 'missingAddress';
+    const MISSING_STATUS  = 'missingStatus';
+
     public function __invoke(Subunit $subunit): ValidateResponse
     {
         $errors = [];
 
 		// Check for required fields
-		if (!$subunit->address_id) {
-            $errors[] = 'missingRequiredFields';
-		}
+		if (!$subunit->address_id) { $errors[] = self::MISSING_ADDRESS; }
+		if (!$subunit->status    ) { $errors[] = self::MISSING_STATUS;  }
 
         return new ValidateResponse($subunit, $errors);
     }
