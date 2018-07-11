@@ -21,7 +21,7 @@ class SearchView extends Template
         parent::__construct('default', $format);
 
         $this->vars['title'] = $this->_('streets_search');
-        if (count($response->errors)) {
+        if ($response->errors) {
             $_SESSION['errorMessages'] = $response->errors;
         }
 

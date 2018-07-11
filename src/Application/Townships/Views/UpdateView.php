@@ -18,7 +18,7 @@ class UpdateView extends Template
     {
         parent::__construct('default', 'html', []);
 
-        if ($res && count($res->errors)) {
+        if ($res && $res->errors) {
             $_SESSION['errorMessages'] = $res->errors;
         }
 
