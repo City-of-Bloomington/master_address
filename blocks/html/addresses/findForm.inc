@@ -23,7 +23,7 @@
         </fieldset>
     </form>
     <?php
-        if (!count($this->addresses)) {
+        if (!$this->addresses) {
             if (isset($_GET['address'])) {
                 echo sprintf($this->_('no_results', 'messages'), $this->_(['address', 'addresses', 10]));
             }
