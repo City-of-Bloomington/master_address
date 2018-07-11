@@ -32,7 +32,7 @@
         </fieldset>
     </form>
     <?php
-        if (!count($this->streets)) {
+        if (!$this->streets) {
             if ($this->street) {
                 echo sprintf($this->_('no_results', 'messages'), $this->_(['street', 'streets', 2]));
             }
