@@ -22,7 +22,7 @@ class ListView extends Template
         ];
         $this->vars = $vars;
 
-        if (count($response->errors)) {
+        if ($response->errors) {
             $_SESSION['errorMessages'][] = $response->errors;
         }
 

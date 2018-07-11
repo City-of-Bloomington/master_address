@@ -18,7 +18,7 @@ class InfoView extends Template
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
 
-        if (count($response->errors)) {
+        if ($response->errors) {
             $_SESSION['errorMessages'] = $response->errors;
         }
         $person = $response->person;

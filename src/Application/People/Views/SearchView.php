@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017 City of Bloomington, Indiana
+ * @copyright 2017-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
@@ -21,7 +21,7 @@ class SearchView extends Template
         parent::__construct('default', $format);
 
         $this->vars['title'] = $this->_('people_search');
-        if (count($response->errors)) {
+        if ($response->errors) {
             $_SESSION['errorMessages'] = $response->errors;
         }
 
