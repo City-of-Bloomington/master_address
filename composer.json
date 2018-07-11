@@ -4,8 +4,8 @@
         "url": "https://github.com/City-of-Bloomington/blossom-lib"
     }],
     "require": {
-        "php": ">=7.1",
-        "aura/di": "~2",
+        "php": ">=7.2",
+        "aura/di": "~3",
         "aura/router": "~2",
         "City-of-Bloomington/blossom-lib": "dev-viewmodel",
         "jasig/phpcas": "~1",
