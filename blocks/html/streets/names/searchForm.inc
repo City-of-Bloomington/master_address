@@ -31,7 +31,7 @@ declare (strict_types=1);
         </fieldset>
     </form>
     <?php
-        if (!count($this->names)) {
+        if (!$this->names) {
             if (isset($_GET['street'])) {
                 echo sprintf($this->_('no_results', 'messages'), $this->_(['streetName', 'streetNames', 2]));
             }
