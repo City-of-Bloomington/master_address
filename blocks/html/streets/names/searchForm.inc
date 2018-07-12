@@ -31,6 +31,15 @@ declare (strict_types=1);
         </fieldset>
     </form>
     <?php
+        if (parent::isAllowed('streetNames', 'add')) {
+            $h = $this->template->getHelper('buttonLink');
+            echo $h->buttonLink(
+                parent::generateUri('streetNames.add'),
+                $this->_('streetName_add'),
+                'add'
+            );
+        }
+
         if (!$this->names) {
             if (isset($_GET['street'])) {
                 echo sprintf($this->_('no_results', 'messages'), $this->_(['streetName', 'streetNames', 2]));

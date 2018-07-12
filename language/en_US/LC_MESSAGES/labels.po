@@ -242,6 +242,9 @@ msgstr[1] "Names"
 msgid "streetName_search"
 msgstr "Find a name"
 
+msgid "streetName_add"
+msgstr "New Name"
+
 msgid "subunit"
 msgid_plural "subunits"
 msgstr[0] "Subunit"
