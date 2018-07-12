@@ -90,7 +90,7 @@ foreach (['Load', 'Alias'] as $a) {
     $DI->lazyNew("Domain\\Streets\\UseCases\\$a\\$a"));
 }
 
-foreach (['Info', 'Search', 'Correct', 'Load'] as $a) {
+foreach (['Add', 'Info', 'Search', 'Correct', 'Load'] as $a) {
     $DI->params[ "Domain\\Streets\\Names\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Streets\Names\DataStorage\NamesRepository');
     $DI->set(    "Domain\\Streets\\Names\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Streets\\Names\\UseCases\\$a\\$a"));

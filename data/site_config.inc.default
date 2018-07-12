@@ -50,6 +50,7 @@ $DATABASES = [
  *
  * @see Domain\Auth
  */
+// Example for ADS style authentication
 $AUTHENTICATION_METHODS = [
 //  'ActiveDirectory' => [
 //      'classname'          => 'Site\Employee',
@@ -61,19 +62,21 @@ $AUTHENTICATION_METHODS = [
 //      'admin_pass'         => 'password'
 //  ]
 //
-//  'Ldap' => [
-//      'classname'          => 'Site\Employee',
-//      'server'             => 'ldaps://example.org:636',
-//      'base_dn'            => 'ou=people,o=ldap.domain.somewhere',
-//      'username_attribute' => 'uid',
-//      'user_binding'       => 'uid={username},'.DIRECTORY_BASE_DN,
-//      'admin_binding'      => 'uid=admin,'.DIRECTORY_BASE_DN,
-//      'admin_pass'         => 'password',
-//  ]
+// Example for LDAP style authentication
 //  'Employee' => [
-//      'classname' => 'Site\Employee',
-//      'server'    => 'http://localhost/directory',
+//      'classname'          => 'Site\Employee',
+//      'server'             => 'ldaps://cob.bloomington.in.gov:636',
+//      'base_dn'            => 'OU=Departments,DC=cob,DC=bloomington,DC=in,DC=gov',
+//      'username_attribute' => 'CN',
+//      'user_binding'       => '{username}@bloomington.in.gov',
+//      'admin_binding'      => 'adminro@bloomington.in.gov',
+//      'admin_pass'         => 'trickle2k'
 //  ]
+// Example for Directory webservice
+  'Employee' => [
+      'classname' => 'Site\Employee',
+      'server'    => 'https://apps.bloomington.in.gov/directory',
+  ]
 ];
 
 /**
