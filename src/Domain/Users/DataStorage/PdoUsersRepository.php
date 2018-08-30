@@ -33,9 +33,7 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
         $select = $this->getBaseSelect();
         $select->where("$key=?", $value);
         $result = $this->performSelect($select);
-        if ( count($result['rows'])) {
-            return new User($result['rows'][0]);
-        }
+        return count($result['rows']) ? new User($result['rows'][0]) : null;
     }
     public function loadById      (int    $id      ): ?User { return $this->loadByKey('id',       $id); }
     public function loadByUsername(string $username): ?User { return $this->loadByKey('username', $username); }
