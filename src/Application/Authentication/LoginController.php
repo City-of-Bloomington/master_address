@@ -49,18 +49,14 @@ class LoginController extends BaseController
 		// but that doesn't mean they have person record
 		// and even if they have a person record, they may not
 		// have a user account for that person record.
-		try {
-            $this->auth->identify(\phpCAS::getUser());
-            $_SESSION['USER'] = $this->auth->identify(\phpCAS::getUser());
+		try { $user = $this->auth->identify(\phpCAS::getUser()); }
+		catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
 
-			header("Location: {$this->return_url}");
-			exit();
-		}
-		catch (\Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-		}
+		if (isset($user) && $user) { $_SESSION['USER'] = $user; }
+		else { $_SESSION['errorMessages'][] = 'users/unknownUser'; }
 
-		return new LoginView(['return_url' => $this->return_url]);
+        header("Location: {$this->return_url}");
+        exit();
 	}
 
 	/**

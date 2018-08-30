@@ -23,9 +23,7 @@ class AuthenticationService
     public function identify(string $username): ?User
     {
         $user = $this->repo->loadByUsername($username);
-        if ($user) {
-            return $user;
-        }
+        return $user ? $user : null;
     }
 
     public function externalIdentify(string $method, string $username): ?ExternalIdentity
