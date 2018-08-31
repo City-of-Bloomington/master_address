@@ -11,11 +11,15 @@ use Application\Template;
 use Application\Paginator;
 use Application\Url;
 
+use Domain\Streets\Metadata;
 use Domain\Streets\UseCases\Search\SearchResponse;
 
 class SearchView extends Template
 {
-    public function __construct(SearchResponse $response, int $itemsPerPage, int $currentPage)
+    public function __construct(SearchResponse $response,
+                                Metadata       $metadata,
+                                int            $itemsPerPage,
+                                int            $currentPage)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
@@ -26,8 +30,12 @@ class SearchView extends Template
         }
 
         $this->blocks[] = new Block('streets/searchForm.inc', [
-            'street'         => !empty($_GET['street']) ? parent::escape($_GET['street']) : '',
+            'town_id'        => !empty($_GET['town_id']) ?           (int)$_GET['town_id']  : null,
+            'street'         => !empty($_GET['street' ]) ? parent::escape($_GET['street' ]) : '',
+            'status'         => !empty($_GET['status' ]) ? parent::escape($_GET['status' ]) : '',
             'streets'        => $response->streets,
+            'towns'          => $metadata->towns(),
+            'statuses'       => $metadata->statuses(),
             'hidden'         => parent::filterActiveParams($_GET, ['street']),
             'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
             'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id'
