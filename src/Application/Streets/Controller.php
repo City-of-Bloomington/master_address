@@ -36,6 +36,9 @@ class Controller extends BaseController
         return $query;
     }
 
+    /**
+     * Search screen for streets
+     */
     public function index(array $params)
     {
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -44,14 +47,23 @@ class Controller extends BaseController
 
         $query  = !empty($_GET['street'])
                 ? self::extractStreetFields($parser($_GET['street']))
-                : null;
+                : [];
+        if (!empty($_GET['town_id'])) { $query['town_id'] = (int)$_GET['town_id']; }
+        if (!empty($_GET['status' ])) { $query['status' ] =      $_GET['status' ]; }
+
         $res    = $query
                 ? $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page))
                 : new SearchResponse();
 
-        return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
+        return new Views\SearchView($res,
+                                    $this->di->get('Domain\Streets\Metadata'),
+                                    self::ITEMS_PER_PAGE,
+                                    $page);
     }
 
+    /**
+     * View information about a single street
+     */
     public function view(array $params)
     {
         if (!empty($_REQUEST['id'])) {
@@ -70,6 +82,11 @@ class Controller extends BaseController
     public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
     public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
     public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
+
+    public function add(array $params)
+    {
+        return new Views\AddView();
+    }
 
     /**
      * Correct an error in the primary attributes of a street
