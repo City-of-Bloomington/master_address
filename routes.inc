@@ -80,7 +80,7 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->add('index', '')     ->addValues(['action'=>'index']);
     $r->add('add',   '/add') ->addValues(['action'=>'add'  ]);
 
-    foreach (['verify', 'correct', 'retire', 'unretire', 'alias'] as $a) {
+    foreach (['verify', 'correct', 'changeStatus', 'alias'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });

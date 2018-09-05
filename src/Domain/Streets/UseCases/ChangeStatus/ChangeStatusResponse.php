@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\Streets\UseCases\Retire;
+namespace Domain\Streets\UseCases\ChangeStatus;
 
-class RetireResponse
+class ChangeStatusResponse
 {
     public $entry_id;    // The ID for the row in the log table
     public $street_id;

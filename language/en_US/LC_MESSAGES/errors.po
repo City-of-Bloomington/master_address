@@ -26,6 +26,9 @@ msgstr "The end date must come after the start date"
 msgid "invalidLogin"
 msgstr "The username and password combination you entered is not correct."
 
+msgid "invalidStatus"
+msgstr "That is not a valid status"
+
 msgid "noAccessAllowed"
 msgstr "Sorry, you're not allowed to go there."
 
