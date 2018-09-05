@@ -13,7 +13,7 @@ use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
-use Domain\Streets\UseCases\Correct\CorrectRequest;
+use Domain\Streets\UseCases\Update\UpdateRequest;
 
 interface StreetsRepository
 {
@@ -25,7 +25,7 @@ interface StreetsRepository
 
     // Write functions
     public function add      (AddRequest     $request): int;
-    public function correct  (CorrectRequest $request);
+    public function update   (UpdateRequest  $request);
     public function addDesignation(AliasRequest  $req): int;
     public function logChange(ChangeLogEntry   $entry): int;
     public function saveStatus(int $street_id, string $status);

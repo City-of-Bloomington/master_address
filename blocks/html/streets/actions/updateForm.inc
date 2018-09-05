@@ -14,7 +14,7 @@ use Application\Url;
 ?>
 <section>
     <header>
-        <h1><?= $this->_('correct'); ?></h1>
+        <h1><?= $this->_('update'); ?></h1>
     </header>
     <form method="post">
         <fieldset><legend><?= $this->_('street_info'); ?></legend>

@@ -16,7 +16,7 @@ use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\ChangeStatus\ChangeStatusRequest;
-use Domain\Streets\UseCases\Correct\CorrectRequest;
+use Domain\Streets\UseCases\Update\UpdateRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
 
@@ -103,16 +103,16 @@ class Controller extends BaseController
     }
 
     /**
-     * Correct an error in the primary attributes of a street
+     * Update an error in the primary attributes of a street
      */
-    public function correct(array $params): View
+    public function update(array $params): View
     {
         $street_id = (int)$_REQUEST['id'];
         if ($street_id) {
             if (isset($_POST['id'])) {
-                $request  = new CorrectRequest($street_id, $_SESSION['USER']->id, $_POST);
-                $correct  = $this->di->get('Domain\Streets\UseCases\Correct\Correct');
-                $response = $correct($request);
+                $request  = new UpdateRequest($street_id, $_SESSION['USER']->id, $_POST);
+                $update   = $this->di->get('Domain\Streets\UseCases\Update\Update');
+                $response = $update($request);
                 if (!count($response->errors)) {
                     header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
                     exit();
@@ -122,14 +122,14 @@ class Controller extends BaseController
             $info    = parent::streetInfo($street_id);
             $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
             if (!isset($request)) {
-                $request = new CorrectRequest($street_id, $_SESSION['USER']->id, [
+                $request = new UpdateRequest($street_id, $_SESSION['USER']->id, [
                     'town_id'      => $info->street->town_id,
                     'notes'        => $info->street->notes,
                     'contact_id'   => $contact ? $contact->id : null
                 ]);
             }
 
-            return new Views\CorrectView(
+            return new Views\UpdateView(
                 $request,
                 $info,
                 $this->di->get('Domain\Streets\Metadata'),

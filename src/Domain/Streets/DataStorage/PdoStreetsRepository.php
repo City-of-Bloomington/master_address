@@ -15,7 +15,7 @@ use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
-use Domain\Streets\UseCases\Correct\CorrectRequest;
+use Domain\Streets\UseCases\Update\UpdateRequest;
 use Domain\Townships\Entities\Township;
 
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
@@ -135,7 +135,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         throw new \Exception('databaseError');
     }
 
-    public function correct(CorrectRequest $req)
+    public function update(UpdateRequest $req)
     {
         $sql = 'update streets set town_id=?, notes=? where id=?';
         $query = $this->pdo->prepare($sql);

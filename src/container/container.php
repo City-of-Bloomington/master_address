@@ -85,7 +85,7 @@ foreach (['Addresses', 'Subunits'] as $t) {
 $DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire'] = $DI->lazyGet('Domain\Subunits\UseCases\Retire\Retire');
 
 // Streets
-foreach (['Add', 'Alias', 'ChangeStatus', 'Correct', 'Load'] as $a) {
+foreach (['Add', 'Alias', 'ChangeStatus', 'Update', 'Load'] as $a) {
     $DI->params[ "Domain\\Streets\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Streets\DataStorage\StreetsRepository');
     $DI->set(    "Domain\\Streets\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Streets\\UseCases\\$a\\$a"));

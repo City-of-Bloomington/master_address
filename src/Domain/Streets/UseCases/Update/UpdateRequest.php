@@ -4,11 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
-namespace Domain\Streets\UseCases\Correct;
+namespace Domain\Streets\UseCases\Update;
 
 use Domain\Logs\ChangeLogRequest;
 
-class CorrectRequest implements ChangeLogRequest
+class UpdateRequest implements ChangeLogRequest
 {
     // Street fields
     public $street_id;
