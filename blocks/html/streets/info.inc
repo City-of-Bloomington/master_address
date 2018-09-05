@@ -17,13 +17,7 @@ $town   = parent::escape($this->street->town_name);
         <div class="tools">
         <?php
             $helper  = $this->template->getHelper('buttonLink');
-            $actions = ['verify', 'correct'];#, 'correct', 'changeStatus'];
-            if ($this->street->status == Log::STATUS_RETIRED) {
-                $actions[] = 'unretire';
-            }
-            else {
-                $actions[] = 'retire';
-            }
+            $actions = ['verify', 'correct', 'changeStatus'];
 
             foreach ($actions as $a) {
                 if (parent::isAllowed('streets', $a)) {

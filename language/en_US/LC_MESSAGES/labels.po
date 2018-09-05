@@ -207,16 +207,8 @@ msgid_plural "streetDesignations"
 msgstr[0] "Designation"
 msgstr[1] "Designations"
 
-msgid "streetStatus"
-msgid_plural "streetStatuses"
-msgstr[0] "Street Status"
-msgstr[1] "Street Statuses"
-
-msgid "streetStatus_add"
-msgstr "New Street Status"
-
-msgid "streetStatus_edit"
-msgstr "Edit Street Status"
+msgid "changeStatus"
+msgstr "Change Status"
 
 msgid "streetType"
 msgid_plural "streetTypes"
