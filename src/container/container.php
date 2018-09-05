@@ -75,7 +75,7 @@ $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->lazyGet
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));
 
-foreach (['Addresses', 'Streets', 'Subunits'] as $t) {
+foreach (['Addresses', 'Subunits'] as $t) {
     foreach (['Add', 'Verify', 'Correct', 'Retire', 'Unretire'] as $a) {
         $DI->params[ "Domain\\$t\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\$t\\DataStorage\\{$t}Repository");
         $DI->set(    "Domain\\$t\\UseCases\\$a\\$a",
@@ -84,12 +84,14 @@ foreach (['Addresses', 'Streets', 'Subunits'] as $t) {
 }
 $DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire'] = $DI->lazyGet('Domain\Subunits\UseCases\Retire\Retire');
 
-foreach (['Load', 'Alias'] as $a) {
+// Streets
+foreach (['Add', 'Alias', 'ChangeStatus', 'Correct', 'Load'] as $a) {
     $DI->params[ "Domain\\Streets\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Streets\DataStorage\StreetsRepository');
     $DI->set(    "Domain\\Streets\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Streets\\UseCases\\$a\\$a"));
 }
 
+// Street Names
 foreach (['Add', 'Info', 'Search', 'Correct', 'Load'] as $a) {
     $DI->params[ "Domain\\Streets\\Names\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Streets\Names\DataStorage\NamesRepository');
     $DI->set(    "Domain\\Streets\\Names\\UseCases\\$a\\$a",
