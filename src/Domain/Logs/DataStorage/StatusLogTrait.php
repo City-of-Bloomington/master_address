@@ -36,9 +36,8 @@ trait StatusLogTrait
         $query = $this->pdo->prepare($sql);
         $query->execute([$entity_id]);
         $result = $query->fetchAll(\PDO::FETCH_COLUMN);
-        if (count($result)) {
-            return $result[0];
-        }
+
+        return count($result) ? $result[0] : '';
     }
 
 	/**

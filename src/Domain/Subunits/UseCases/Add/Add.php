@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Add;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Locations\Entities\Location;
 use Domain\Subunits\DataStorage\SubunitsRepository;
@@ -23,12 +22,14 @@ class Add
         $this->repo = $repository;
     }
 
-    public function __invoke(AddRequest $req): ChangeLogResponse
+    public function __invoke(AddRequest $req): AddResponse
     {
+        $subunit_id  = null;
+        $location_id = null;
         try {
             $validation = $this->validate($req);
             if ($validation && $validation->errors) {
-                return new ChangeLogResponse(null, $validation->errors);
+                return new AddResponse(null, $subunit_id, $location_id, $validation->errors);
             }
 
             $subunit = self::subunit($req);
@@ -40,15 +41,16 @@ class Add
             $location_id = $this->repo->saveLocation($location);
             $this->repo->saveLocationStatus($location_id, $req->locationStatus);
 
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'    => ChangeLog::$actions[ChangeLog::ACTION_ADD],
                 'entity_id' => $subunit_id,
                 'person_id' => $req->user_id,
                 'notes'     => $req->change_notes
-            ])));
+            ]));
+            return new AddResponse($log_id, $subunit_id, $location_id);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new AddResponse(null, $subunit_id, $location_id, [$e->getMessage()]);
         }
     }
 

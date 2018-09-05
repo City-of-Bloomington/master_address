@@ -11,6 +11,7 @@ use Domain\PdoRepository;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Street;
+use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -109,6 +110,31 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         return $result;
     }
 
+    /**
+     * Saves a new street to the database and returns the ID for the street
+     */
+    public function add(AddRequest $req): int
+    {
+        $this->pdo->beginTransaction();
+
+        $street_id = parent::saveToTable([
+            'town_id' => $req->town_id,
+            'status'  => $req->status,
+            'notes'   => $req->notes
+        ], self::TABLE);
+
+        if ($street_id) {
+            $designation    = new AliasRequest($street_id, $req->user_id, (array)$req);
+            $designation_id = $this->addDesignation($designation);
+            if ($designation_id) {
+                $this->pdo->commit();
+                return $street_id;
+            }
+        }
+        $this->pdo->rollBack();
+        throw new \Exception('databaseError');
+    }
+
     public function correct(CorrectRequest $req)
     {
         $sql = 'update streets set town_id=?, notes=? where id=?';
@@ -123,7 +149,10 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $query->execute([$status, $street_id]);
     }
 
-    public function addDesignation(AliasRequest $req)
+    /**
+     * @return int  The new designation_id
+     */
+    public function addDesignation(AliasRequest $req): int
     {
         $now = new \DateTime();
         return parent::saveToTable([

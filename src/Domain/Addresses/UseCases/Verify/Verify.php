@@ -9,7 +9,6 @@ declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Verify;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Addresses\DataStorage\AddressesRepository;
 
@@ -22,19 +21,21 @@ class Verify
         $this->repo = $repository;
     }
 
-    public function __invoke(VerifyRequest $req): ChangeLogResponse
+    public function __invoke(VerifyRequest $req): VerifyResponse
     {
+        $address_id = $req->address_id;
         try {
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['verify'],
-                'entity_id'  => $req->address_id,
+                'entity_id'  => $address_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ])));
+            ]));
+            return new VerifyResponse($log_id, $address_id);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new VerifyResponse(null, $address_id, [$e->getMessage()]);
         }
     }
 }

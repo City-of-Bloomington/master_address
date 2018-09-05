@@ -10,6 +10,9 @@ use Domain\Logs\Entities\ChangeLogEntry;
 
 trait ChangeLogTrait
 {
+    /**
+     * @return int The ID of the new row in the change log
+     */
     public function logChange(ChangeLogEntry $entry): int
     {
         $insert = $this->queryFactory->newInsert();

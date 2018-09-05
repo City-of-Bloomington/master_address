@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Unretire;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as Log;
 use Domain\Addresses\DataStorage\AddressesRepository;
 
@@ -20,31 +19,36 @@ class Unretire
         $this->repo  = $repository;
     }
 
-    public function __invoke(UnretireRequest $req): ChangeLogResponse
+    public function __invoke(UnretireRequest $req): UnretireResponse
     {
+        $address_id  = $req->address_id;
+        $location_id = null;
         try {
-            $this->repo->saveStatus($req->address_id, Log::STATUS_CURRENT);
+            $this->repo->saveStatus($address_id, Log::STATUS_CURRENT);
 
-            foreach ($this->repo->locations($req->address_id) as $location) {
+            $location_id = null;
+            foreach ($this->repo->locations($address_id) as $location) {
                 if (   $location->active
                     && $location->status == Log::STATUS_RETIRED) {
 
                     // Only set one location to current
-                    $this->repo->saveLocationStatus($location->location_id, Log::STATUS_CURRENT);
+                    $location_id = $location->location_id;
+                    $this->repo->saveLocationStatus($location_id, Log::STATUS_CURRENT);
                     break;
                 }
             }
 
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'     => Log::$actions['unretire'],
-                'entity_id'  => $req->address_id,
+                'entity_id'  => $address_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ])));
+            ]));
+            return new UnretireResponse($log_id, $address_id, $location_id);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new UnretireResponse(null,    $address_id, $location_id, [$e->getMessage()]);
         }
     }
 }

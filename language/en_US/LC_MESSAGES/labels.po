@@ -196,6 +196,12 @@ msgid_plural "streets"
 msgstr[0] "Street"
 msgstr[1] "Streets"
 
+msgid "street_add"
+msgstr "New Street"
+
+msgid "street_edit"
+msgstr "Edit Street"
+
 msgid "streetDesignation"
 msgid_plural "streetDesignations"
 msgstr[0] "Designation"

@@ -12,6 +12,7 @@ use Application\View;
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Streets\Entities\Street;
+use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Correct\CorrectRequest;
 use Domain\Streets\UseCases\Retire\RetireRequest;
@@ -85,7 +86,21 @@ class Controller extends BaseController
 
     public function add(array $params)
     {
-        return new Views\AddView();
+        $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
+
+        if (isset($_POST['status'])) {
+            $add      = $this->di->get('Domain\Streets\UseCases\Add\Add');
+            $response = $add($request);
+            if (!$response->errors) {
+                header('Location: '.View::generateUrl('streets.view', ['id'=>$response->street_id]));
+                exit();
+            }
+            else { $_SESSION['errorMessages'] = $response->errors; }
+        }
+
+        $name    = !empty($_REQUEST[   'name_id']) ? parent::name  ((int)$_REQUEST[   'name_id']) : null;
+        $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
+        return new Views\AddView($request, $this->di->get('Domain\Streets\Metadata'), $name, $contact);
     }
 
     /**

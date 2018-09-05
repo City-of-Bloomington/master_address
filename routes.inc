@@ -76,8 +76,9 @@ $ROUTES->attach('streetNames', "/streets/names", function ($r) {
 $ROUTES->attach('streets', "/streets", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Controller']);
 
-    $r->add('view',   '/{id}')       ->addValues(['action'=>'view'  ]);
-    $r->add('index',  '')            ->addValues(['action'=>'index' ]);
+    $r->add('view',  '/{id}')->addValues(['action'=>'view' ]);
+    $r->add('index', '')     ->addValues(['action'=>'index']);
+    $r->add('add',   '/add') ->addValues(['action'=>'add'  ]);
 
     foreach (['verify', 'correct', 'retire', 'unretire', 'alias'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
