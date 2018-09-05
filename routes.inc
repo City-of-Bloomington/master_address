@@ -76,13 +76,12 @@ $ROUTES->attach('streetNames', "/streets/names", function ($r) {
 $ROUTES->attach('streets', "/streets", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Controller']);
 
-    $r->add('view',  '/{id}')->addValues(['action'=>'view' ]);
-    $r->add('index', '')     ->addValues(['action'=>'index']);
-    $r->add('add',   '/add') ->addValues(['action'=>'add'  ]);
-
-    foreach (['verify', 'correct', 'changeStatus', 'alias'] as $a) {
-        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
-    }
+    $r->add('index',        ''     )->addValues(['action'=>'index'       ]);
+    $r->add('add',          '/add' )->addValues(['action'=>'add'         ]);
+    $r->add('view',         '/{id}')->addValues(['action'=>'view'        ]);
+    $r->add('alias',        '/{id}')->addValues(['action'=>'alias'       ]);
+    $r->add('correct',      '/{id}')->addValues(['action'=>'correct'     ]);
+    $r->add('changeStatus', '/{id}')->addValues(['action'=>'changeStatus']);
 });
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);

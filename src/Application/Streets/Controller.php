@@ -11,6 +11,7 @@ use Application\View;
 
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
+
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
@@ -18,7 +19,6 @@ use Domain\Streets\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\Streets\UseCases\Correct\CorrectRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
-use Domain\Streets\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
 {
@@ -40,7 +40,7 @@ class Controller extends BaseController
     /**
      * Search screen for streets
      */
-    public function index(array $params)
+    public function index(array $params): View
     {
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
         $search = $this->di->get('Domain\Streets\UseCases\Search\Search');
@@ -65,7 +65,7 @@ class Controller extends BaseController
     /**
      * View information about a single street
      */
-    public function view(array $params)
+    public function view(array $params): View
     {
         if (!empty($_REQUEST['id'])) {
             $info = parent::streetInfo((int)$_REQUEST['id']);
@@ -80,9 +80,10 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    public function verify      (array $p) { return $this->doBasicChangeLogUseCase('Verify'      ); }
-
-    public function add(array $params)
+    /**
+     * Add a new street
+     */
+    public function add(array $params): View
     {
         $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
 
@@ -104,7 +105,7 @@ class Controller extends BaseController
     /**
      * Correct an error in the primary attributes of a street
      */
-    public function correct(array $params)
+    public function correct(array $params): View
     {
         $street_id = (int)$_REQUEST['id'];
         if ($street_id) {
@@ -139,7 +140,11 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    public function alias(array $params)
+
+    /**
+     * Add a new street designation
+     */
+    public function alias(array $params): View
     {
         $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
         if ($street_id) {
@@ -175,6 +180,9 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
+    /**
+     * Change a street's status
+     */
     public function changeStatus(array $params): View
     {
         $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
@@ -203,50 +211,8 @@ class Controller extends BaseController
     }
 
     /**
-     * Standard use case handler involving a ChangeLogEntry
-     *
-     * The use case name should be the capitalized version, matching the
-     * directory name in /src/Domain.
-     *
-     * @param string $name  The short (capitalized) use case name
+     * Look up all the addresses for a street
      */
-    private function doBasicChangeLogUseCase(string $name)
-    {
-        $useCase        = "Domain\\Streets\\UseCases\\$name\\$name";
-        $useCaseRequest = "Domain\\Streets\\UseCases\\$name\\{$name}Request";
-        $useCaseView    = "Application\\Streets\\Views\\{$name}View";
-
-        $street_id = (int)$_REQUEST['id'];
-        if ($street_id) {
-            if (isset($_POST['id'])) {
-                $request  = new $useCaseRequest($street_id, $_SESSION['USER']->id, $_POST);
-                $handle   = $this->di->get($useCase);
-                $response = $handle($request);
-
-                if (!count($response->errors)) {
-                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
-                    exit();
-                }
-                else { $_SESSION['errorMessages'] = $response->errors; }
-            }
-            $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
-            if (!isset($request)) {
-                $request = new $useCaseRequest($street_id, $_SESSION['USER']->id, [
-                    'contact_id' => $contact ? $contact->id : null
-                ]);
-            }
-
-            return new $useCaseView(
-                $request,
-                parent::streetInfo(  $street_id),
-                $this->addressSearch($street_id),
-                $contact
-            );
-        }
-
-        return new \Application\Views\NotFoundView();
-    }
-
     private function addressSearch(int $street_id): \Domain\Addresses\UseCases\Search\SearchResponse
     {
         $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
