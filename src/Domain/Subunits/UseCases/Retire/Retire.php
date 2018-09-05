@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Retire;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as Log;
 use Domain\Subunits\DataStorage\SubunitsRepository;
 
@@ -20,8 +19,9 @@ class Retire
         $this->repo  = $repository;
     }
 
-    public function __invoke(RetireRequest $req): ChangeLogResponse
+    public function __invoke(RetireRequest $req): RetireResponse
     {
+        $location_ids = [];
         try {
             $this->repo->saveStatus($req->subunit_id, Log::STATUS_RETIRED);
 
@@ -29,20 +29,22 @@ class Retire
                 if (   $location->active
                     && $location->status == Log::STATUS_CURRENT) {
 
+                    $locations_ids[] = $location->location_id;
                     $this->repo->saveLocationStatus($location->location_id, Log::STATUS_RETIRED);
                 }
             }
 
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'     => Log::$actions['retire'],
                 'entity_id'  => $req->subunit_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ])));
+            ]));
+            return new RetireResponse($log_id, $req->subunit_id, $location_ids);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new RetireResponse(null, $req->subunit_id, $location_ids, [$e->getMessage()]);
         }
     }
 }

@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Streets\UseCases\Correct;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Streets\DataStorage\StreetsRepository;
 use Domain\Streets\UseCases\Validate\Validate;
@@ -22,26 +21,28 @@ class Correct
         $this->repo = $repository;
     }
 
-    public function __invoke(CorrectRequest $req): ChangeLogResponse
+    public function __invoke(CorrectRequest $req): CorrectResponse
     {
+        $street_id = $req->street_id;
         try {
             $validation = $this->validate($req);
             if ($validation->errors) {
-                return new ChangeLogResponse(null, $validation->errors);
+                return new CorrectResponse(null, $street_id, $validation->errors);
             }
 
             $this->repo->correct($req);
 
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['correct'],
-                'entity_id'  => $req->street_id,
+                'entity_id'  => $street_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ])));
+            ]));
+            return new CorrectResponse($log_id, $street_id);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new CorrectResponse(null,    $street_id, [$e->getMessage()]);
         }
     }
 

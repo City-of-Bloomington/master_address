@@ -21,39 +21,7 @@ use Application\Url;
         <fieldset>
             <input name="id" type="hidden" value="<?= $this->street_id; ?>" />
             <?php
-                $h = $this->template->getHelper('field');
-
-                $options = [];
-                foreach ($this->types as $t) { $options[] = ['value'=>$t['id'], 'label'=>parent::escape($t['name'])]; }
-                echo $h->field([
-                    'name'     => 'type_id',
-                    'id'       => 'type_id',
-                    'label'    => $this->_('type'),
-                    'value'    => $this->type_id,
-                    'type'     => 'select',
-                    'options'  => $options,
-                    'required' => true
-                ]);
-
-                echo $h->field([
-                    'name'     => 'name_id',
-                    'id'       => 'name_id',
-                    'label'    => $this->_('name'),
-                    'value'    => $this->name_id,
-                    'display'  => $this->name,
-                    'type'     => 'chooser',
-                    'url'      => new Url(parent::generateUrl('streetNames.index')),
-                    'required' => true
-                ]);
-
-                echo $h->field([
-                    'name'    => 'rank',
-                    'id'      => 'rank',
-                    'label'   => $this->_('rank'),
-                    'value'   => $this->rank,
-                    'type'    => 'number'
-                ]);
-
+                $this->_include('streets/actions/partials/designationFields.inc');
             ?>
         </fieldset>
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>

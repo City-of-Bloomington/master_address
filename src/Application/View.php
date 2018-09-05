@@ -208,7 +208,7 @@ abstract class View
     }
     public static function generateUrl($route_name, $params=[])
     {
-        return "$_SERVER[REQUEST_SCHEME]://$_SERVER[SERVER_NAME]".self::generateUri($route_name, $params);
+        return "https://".BASE_HOST.self::generateUri($route_name, $params);
     }
 
 	public static function isAllowed(string $resource, ?string $action=null): bool

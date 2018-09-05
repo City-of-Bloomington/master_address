@@ -9,6 +9,7 @@ namespace Domain\Streets\DataStorage;
 use Domain\Logs\Entities\ChangeLogEntry;
 
 use Domain\Streets\Entities\Street;
+use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -23,8 +24,9 @@ interface StreetsRepository
     public function search   (SearchRequest $req): array;
 
     // Write functions
+    public function add      (AddRequest     $request): int;
     public function correct  (CorrectRequest $request);
-    public function addDesignation(AliasRequest  $req);
+    public function addDesignation(AliasRequest  $req): int;
     public function logChange(ChangeLogEntry   $entry): int;
     public function saveStatus(int $street_id, string $status);
 

@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Verify;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Subunits\DataStorage\SubunitsRepository;
 
@@ -20,19 +19,20 @@ class Verify
         $this->repo = $repository;
     }
 
-    public function __invoke(VerifyRequest $req): ChangeLogResponse
+    public function __invoke(VerifyRequest $req): VerifyResponse
     {
         try {
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['verify'],
                 'entity_id'  => $req->subunit_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ])));
+            ]));
+            return new VerifyResponse($log_id, $req->subunit_id);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new VerifyResponse(null, $req->subunit_id, [$e->getMessage()]);
         }
     }
 }

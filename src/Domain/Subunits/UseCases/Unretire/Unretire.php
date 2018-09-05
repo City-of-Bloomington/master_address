@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Unretire;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\ChangeLogResponse;
 use Domain\Logs\Metadata as Log;
 use Domain\Subunits\DataStorage\SubunitsRepository;
 
@@ -20,8 +19,9 @@ class Unretire
         $this->repo  = $repository;
     }
 
-    public function __invoke(UnretireRequest $req): ChangeLogResponse
+    public function __invoke(UnretireRequest $req): UnretireResponse
     {
+        $location_id = null;
         try {
             $this->repo->saveStatus($req->subunit_id, Log::STATUS_CURRENT);
 
@@ -30,21 +30,23 @@ class Unretire
                     && $location->status == Log::STATUS_RETIRED) {
 
                     // Only set one location to current
-                    $this->repo->saveLocationStatus($location->location_id, Log::STATUS_CURRENT);
+                    $location_id = $location->location_id;
+                    $this->repo->saveLocationStatus($location_id, Log::STATUS_CURRENT);
                     break;
                 }
             }
 
-            return new ChangeLogResponse($this->repo->logChange(new ChangeLogEntry([
+            $log_id = $this->repo->logChange(new ChangeLogEntry([
                 'action'     => Log::$actions['unretire'],
                 'entity_id'  => $req->subunit_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ])));
+            ]));
+            return new UnretireResponse($log_id, $req->subunit_id, $location_id);
         }
         catch (\Exception $e) {
-            return new ChangeLogResponse(null, [$e->getMessage()]);
+            return new UnretireResponse(null, $req->subunit_id, $location_id, [$e->getMessage()]);
         }
     }
 }
