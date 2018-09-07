@@ -13,7 +13,6 @@ class Designation
     public $name_id;
     public $type_id;
     public $start_date;
-    public $end_date;
     public $rank;
 
     public $type;
@@ -32,7 +31,6 @@ class Designation
         if (!empty($data['rank'     ])) { $this->rank      = (int)$data['rank'     ]; }
 
         if (!empty($data['start_date'])) { $this->setStartDate($data['start_date']); }
-        if (!empty($data['end_date'  ])) { $this->setEndDate  ($data['end_date'  ]); }
 
         if (!empty($data['type'          ])) { $this->type           = $data['type'          ]; }
         if (!empty($data['direction'     ])) { $this->direction      = $data['direction'     ]; }
@@ -47,7 +45,6 @@ class Designation
     public static function hydrate(array $row)
     {
         if (!empty($row['start_date'])) { $row['start_date'] = new \DateTime($row['start_date']); }
-        if (!empty($row['end_date'  ])) { $row['end_date'  ] = new \DateTime($row['end_date'  ]); }
         return new Designation($row);
     }
 
