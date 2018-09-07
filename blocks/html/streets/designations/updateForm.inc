@@ -50,14 +50,6 @@ $title = $id ? $this->_('streetDesignation_edit') : $this->_('streetDesignation_
                 ]);
 
                 echo $helper->field([
-                    'name'     => 'endDate',
-                    'id'       => 'endDate',
-                    'label'    => $this->_('endDate'),
-                    'type'     => 'date',
-                    'value'    => $endDate
-                ]);
-
-                echo $helper->field([
                     'name'     => 'rank',
                     'id'       => 'rank',
                     'label'    => $this->_('rank'),

@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl-3.0.html GNU/AGPL, see LICENSE
  * @param array  $this->designations
  * @param array  $this->actions      Optional
  * @param int    $this->street_id    Optional
@@ -31,7 +31,6 @@
 				<th><?= $this->_('type'     ); ?></th>
 				<th><?= $this->_('name'     ); ?></th>
 				<th><?= $this->_('startDate'); ?></th>
-				<th><?= $this->_('endDate'  ); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -39,7 +38,6 @@
 		<?php
 			foreach ($this->designations as $d) {
                 $start = $d->start_date ? $d->start_date->format(DATE_FORMAT) : '';
-                $end   = $d->end_date   ? $d->end_date  ->format(DATE_FORMAT) : '';
 
                 $name  = parent::escape($d);
 				$type  = parent::escape($d->type);
@@ -49,7 +47,6 @@
                     <td>$type</td>
 					<td>$name</td>
 					<td>$start</td>
-					<td>$end</td>
 					<td></td>
                 </tr>
 				";
