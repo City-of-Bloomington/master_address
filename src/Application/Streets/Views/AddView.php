@@ -31,7 +31,16 @@ class AddView extends Template
             'statuses' => [Log::STATUS_CURRENT, Log::STATUS_PROPOSED],
             'types'    => $metadata->designationTypes()
         ];
-        foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
+        foreach ($request as $k=>$v) {
+            switch ($k) {
+                case 'start_date':
+                    $vars[$k] = $v;
+                    break;
+
+                default:
+                    $vars[$k] = parent::escape($v);
+            }
+        }
 
         // Display strings for *_id fields
         if ($name)    { $vars['name'        ] = $name   ->__toString(); }

@@ -13,16 +13,18 @@ class AliasRequest
     public $name_id;
     public $type_id;
     public $rank;
+    public $start_date;
 
     // Change log entry
     public $user_id;
     public $contact_id;
     public $change_notes;
 
-    public function __construct(int $street_id, int $user_id, ?array $data=null)
+    public function __construct(int $street_id, int $user_id, \DateTime $start_date, ?array $data=null)
     {
-        $this->street_id = $street_id;
-        $this->user_id   = $user_id;
+        $this->street_id  = $street_id;
+        $this->user_id    = $user_id;
+        $this->start_date = $start_date;
 
         if (!empty($data['name_id'])) { $this->name_id = (int)$data['name_id']; }
         if (!empty($data['type_id'])) { $this->type_id = (int)$data['type_id']; }

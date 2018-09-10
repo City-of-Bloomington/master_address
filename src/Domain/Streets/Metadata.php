@@ -19,7 +19,7 @@ class Metadata
 
     public function statuses(): array
     {
-        return ['current', 'corrected', 'proposed', 'retired'];
+        return ['current', 'proposed', 'retired'];
     }
 
     public function types(): array

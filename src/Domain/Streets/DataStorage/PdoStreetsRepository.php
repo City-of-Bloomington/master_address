@@ -124,7 +124,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         ], self::TABLE);
 
         if ($street_id) {
-            $designation    = new AliasRequest($street_id, $req->user_id, (array)$req);
+            $designation    = new AliasRequest($street_id, $req->user_id, $req->start_date, (array)$req);
             $designation_id = $this->addDesignation($designation);
             if ($designation_id) {
                 $this->pdo->commit();
@@ -154,13 +154,12 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
      */
     public function addDesignation(AliasRequest $req): int
     {
-        $now = new \DateTime();
         return parent::saveToTable([
             'street_id'      => $req->street_id,
             'street_name_id' => $req->name_id,
             'type_id'        => $req->type_id,
             'rank'           => $req->rank,
-            'start_date'     => $now->format('c')
+            'start_date'     => $req->start_date->format('c')
         ], 'street_designations');
     }
 
@@ -172,7 +171,6 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                         d.street_name_id as name_id,
                         d.type_id,
                         d.start_date,
-                        d.end_date,
                         d.rank,
                         dt.name          as type,
                         n.direction,

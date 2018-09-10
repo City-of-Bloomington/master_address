@@ -31,6 +31,7 @@ class AliasView extends Template
             'name_id'      => $request->name_id,
             'type_id'      => $request->type_id,
             'rank'         => $request->rank,
+            'start_date'   => $request->start_date,
             'contact_id'   => $contact ? $contact->id           : null,
             'contact_name' => $contact ? $contact->__toString() : null,
             'change_notes' => parent::escape($request->change_notes),
