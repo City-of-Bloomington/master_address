@@ -9,6 +9,7 @@ namespace Application\Streets\Views;
 use Application\Block;
 use Application\Template;
 
+use Domain\Logs\Metadata as Log;
 use Domain\Streets\Metadata;
 use Domain\Streets\Entities\Name;
 use Domain\Streets\UseCases\Add\AddRequest;
@@ -27,7 +28,7 @@ class AddView extends Template
         $vars = [
             'title'    => $this->vars['title'],
             'towns'    => $metadata->towns(),
-            'statuses' => $metadata->statuses(),
+            'statuses' => [Log::STATUS_CURRENT, Log::STATUS_PROPOSED],
             'types'    => $metadata->designationTypes()
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
