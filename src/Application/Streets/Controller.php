@@ -85,9 +85,9 @@ class Controller extends BaseController
      */
     public function add(array $params): View
     {
-        $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
+        $request = new AddRequest($_SESSION['USER']->id, self::readStartDate(), $_REQUEST);
 
-        if (isset($_POST['status'])) {
+        if (isset($_POST['status']) && !isset($_SESSION['errorMessages'])) {
             $add      = $this->di->get('Domain\Streets\UseCases\Add\Add');
             $response = $add($request);
             if (!$response->errors) {
@@ -100,6 +100,17 @@ class Controller extends BaseController
         $name    = !empty($_REQUEST[   'name_id']) ? parent::name  ((int)$_REQUEST[   'name_id']) : null;
         $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
         return new Views\AddView($request, $this->di->get('Domain\Streets\Metadata'), $name, $contact);
+    }
+
+    private static function readStartDate(): \DateTime
+    {
+        if (!empty($_REQUEST['start_date'])) {
+            try { $start_date = new \DateTime($_REQUEST['start_date']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'] = ['invalidDate']; }
+        }
+        if (!isset($start_date)) { $start_date = new \DateTime(); }
+
+        return $start_date;
     }
 
     /**
@@ -147,9 +158,11 @@ class Controller extends BaseController
     public function alias(array $params): View
     {
         $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+
         if ($street_id) {
+            $request   = new AliasRequest($street_id, $_SESSION['USER']->id, self::readStartDate(), $_REQUEST);
+
             if (isset($_POST['id'])) {
-                $request  = new AliasRequest($street_id, $_SESSION['USER']->id, $_POST);
                 $alias    = $this->di->get('Domain\Streets\UseCases\Alias\Alias');
                 $response = $alias($request);
                 if (!count($response->errors)) {
@@ -162,12 +175,6 @@ class Controller extends BaseController
             $info    = parent::streetInfo($street_id);
             $name    = !empty($_GET['name_id'   ]) ? $this->name  ((int)$_GET['name_id'   ]) : null;
             $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
-            if (!isset($request)) {
-                $request = new AliasRequest($street_id, $_SESSION['USER']->id, [
-                    'name_id'    => $name    ?    $name->id : null,
-                    'contact_id' => $contact ? $contact->id : null
-                ]);
-            }
 
             return new Views\AliasView(
                 $request,

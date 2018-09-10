@@ -2,11 +2,12 @@
 /**
  * @copyright 2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param int    $this->name_id       Street name ID
- * @param int    $this->type_id       Designation type ID
- * @param int    $this->rank
- * @param string $this->name          Display string for the current street name
- * @param array  $this->types         Designation type options
+ * @param int      $this->name_id       Street name ID
+ * @param int      $this->type_id       Designation type ID
+ * @param int      $this->rank
+ * @param DateTime $this->start_date
+ * @param string   $this->name          Display string for the current street name
+ * @param array    $this->types         Designation type options
  */
 declare (strict_types=1);
 use Application\Url;
@@ -42,4 +43,13 @@ echo $h->field([
     'label'   => $this->_('rank'),
     'value'   => $this->rank,
     'type'    => 'number'
+]);
+
+echo $h->field([
+    'name'     => 'start_date',
+    'id'       => 'start_date',
+    'label'    => 'startDate',
+    'type'     => 'date',
+    'value'    => $this->start_date,
+    'required' => true
 ]);
