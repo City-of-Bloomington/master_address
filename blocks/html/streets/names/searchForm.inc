@@ -31,7 +31,7 @@ declare (strict_types=1);
         </fieldset>
     </form>
     <?php
-        if (parent::isAllowed('streetNames', 'add')) {
+        if (!$this->callback_url && parent::isAllowed('streetNames', 'add')) {
             $h = $this->template->getHelper('buttonLink');
             echo $h->buttonLink(
                 parent::generateUri('streetNames.add'),

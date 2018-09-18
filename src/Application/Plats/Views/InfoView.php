@@ -22,7 +22,7 @@ class InfoView extends Template
 
         $this->vars['title'] = parent::escape($info->plat->name);
 
-        $this->blocks[]              = new Block('plats/info.inc',     ['plat'      => $info->plat]);
-        $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $search->addresses]);
+        $this->blocks[]              = new Block('plats/info.inc',      ['plat'      => $info->plat]);
+        $this->blocks['panel-one'][] = new Block('plats/addresses.inc', ['addresses' => $search->addresses]);
     }
 }

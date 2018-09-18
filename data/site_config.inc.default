@@ -99,3 +99,8 @@ define('DATETIME_FORMAT', DATE_FORMAT.' '.TIME_FORMAT);
 define('LOCALE', 'en_US');
 
 define('PAGINATION_ITEMS_PER_PAGE', 20);
+
+$DEFAULTS = [
+    'city'            => 'Bloomington',
+    'locationType_id' => 3
+];

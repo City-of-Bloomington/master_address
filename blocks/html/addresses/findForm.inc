@@ -29,7 +29,16 @@
             }
         }
         else {
-            $this->_include('addresses/list.inc');
+            echo "
+            <section>
+                <header>
+                    <h2>{$this->_(['address', 'addresses', count($this->addresses)])}</h2>
+                </header>
+            ";
+                $this->_include('addresses/list.inc');
+            echo "
+            </section>
+            ";
         }
     ?>
 </section>

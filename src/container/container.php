@@ -38,7 +38,7 @@ $DI->lazyNew('Domain\Streets\Names\DataStorage\PdoNamesRepository'));
 //---------------------------------------------------------
 // Metadata providers
 //---------------------------------------------------------
-$contexts = ['Addresses', 'Plats', 'Streets', 'Subdivisions', 'Subunits'];
+$contexts = ['Addresses', 'Locations', 'Plats', 'Streets', 'Subdivisions', 'Subunits'];
 foreach ($contexts as $t) {
     $DI->params[ "Domain\\$t\\Metadata"]['repository'] = $DI->lazyGet("Domain\\$t\\DataStorage\\{$t}Repository");
     $DI->set(    "Domain\\$t\\Metadata",
@@ -75,6 +75,8 @@ $DI->params[ 'Domain\Users\UseCases\Delete\Delete']['repository'] = $DI->lazyGet
 $DI->set(    'Domain\Users\UseCases\Delete\Delete',
 $DI->lazyNew('Domain\Users\UseCases\Delete\Delete'));
 
+// Addresses
+// Subunits
 foreach (['Addresses', 'Subunits'] as $t) {
     foreach (['Add', 'Verify', 'Correct', 'Retire', 'Unretire'] as $a) {
         $DI->params[ "Domain\\$t\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\$t\\DataStorage\\{$t}Repository");
@@ -83,6 +85,11 @@ foreach (['Addresses', 'Subunits'] as $t) {
     }
 }
 $DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire'] = $DI->lazyGet('Domain\Subunits\UseCases\Retire\Retire');
+
+// Locations
+$DI->params[ 'Domain\Locations\UseCases\Load\Load']['repository'] = $DI->lazyGet('Domain\Locations\DataStorage\LocationsRepository');
+$DI->set(    'Domain\Locations\UseCases\Load\Load',
+$DI->lazyNew('Domain\Locations\UseCases\Load\Load'));
 
 // Streets
 foreach (['Add', 'Alias', 'ChangeStatus', 'Update', 'Load'] as $a) {

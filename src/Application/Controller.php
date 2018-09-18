@@ -16,6 +16,14 @@ class Controller
         $this->di = $DI;
     }
 
+    protected function address(int $address_id): ?\Domain\Addresses\Entities\Address
+    {
+        $load = $this->di->get('Domain\Addresses\UseCases\Load\Load');
+        $res  = $load($address_id);
+        if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
+        return $res->address;
+    }
+
     protected function addressInfo(int $address_id): \Domain\Addresses\UseCases\Info\InfoResponse
     {
         $info = $this->di->get('Domain\Addresses\UseCases\Info\Info');
@@ -23,19 +31,12 @@ class Controller
         return $info($req);
     }
 
-    protected function streetInfo(int $street_id): \Domain\Streets\UseCases\Info\InfoResponse
+    protected function location(int $location_id): \Domain\Locations\Entities\Location
     {
-        $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
-        $req  = new \Domain\Streets\UseCases\Info\InfoRequest($street_id);
-        return $info($req);
-    }
-
-    protected function person(int $person_id): \Domain\People\Entities\Person
-    {
-        $load = $this->di->get('Domain\People\UseCases\Load\Load');
-        $res  = $load($person_id);
+        $load = $this->di->get('Domain\Locations\UseCases\Load\Load');
+        $res  = $load($location_id);
         if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
-        return $res->person;
+        return $res->location;
     }
 
     protected function name(int $name_id): \Domain\Streets\Entities\Name
@@ -46,12 +47,12 @@ class Controller
         return $res->name;
     }
 
-    protected function address(int $address_id): ?\Domain\Addresses\Entities\Address
+    protected function person(int $person_id): ?\Domain\People\Entities\Person
     {
-        $load = $this->di->get('Domain\Addresses\UseCases\Load\Load');
-        $res  = $load($address_id);
+        $load = $this->di->get('Domain\People\UseCases\Load\Load');
+        $res  = $load($person_id);
         if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
-        return $res->address;
+        return $res->person;
     }
 
     protected function street(int $street_id): ?\Domain\Streets\Entities\Street
@@ -61,6 +62,14 @@ class Controller
         if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
         return $res->street;
     }
+
+    protected function streetInfo(int $street_id): \Domain\Streets\UseCases\Info\InfoResponse
+    {
+        $info = $this->di->get('Domain\Streets\UseCases\Info\Info');
+        $req  = new \Domain\Streets\UseCases\Info\InfoRequest($street_id);
+        return $info($req);
+    }
+
 
     protected function subunitInfo(int $subunit_id): \Domain\Subunits\UseCases\Info\InfoResponse
     {

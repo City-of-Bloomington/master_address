@@ -12,7 +12,7 @@ class SearchRequest
     public $street_number_prefix;
     public $street_number;
     public $street_number_suffix;
-    public $adddress2;
+    public $address2;
     public $address_type;
     public $street_id;
     public $jurisdiction_id;

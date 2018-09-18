@@ -33,7 +33,7 @@ class Url
 	 * @param  array  $curl_options Additional options to set for the curl request
 	 * @return string
 	 */
-	public static function get($url, array $curl_options=null)
+	public static function get($url, array $curl_options=null): string
 	{
 		$request = curl_init($url);
 		if ($curl_options) {
@@ -58,7 +58,7 @@ class Url
 	 * @param  string $hostname Optional hostname to use
 	 * @return string
 	 */
-	public static function current_url($hostname=null)
+	public static function current_url($hostname=null): string
 	{
         if (!$hostname) { $hostname = $_SERVER['SERVER_NAME']; }
 

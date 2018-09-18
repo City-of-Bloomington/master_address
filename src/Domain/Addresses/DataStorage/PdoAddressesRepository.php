@@ -9,6 +9,7 @@ namespace Domain\Addresses\DataStorage;
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
+use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 
@@ -40,7 +41,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         'street_number_prefix' => ['prefix'=>'a', 'dbName'=>'street_number_prefix'],
         'street_number'        => ['prefix'=>'a', 'dbName'=>'street_number'       ],
         'street_number_suffix' => ['prefix'=>'a', 'dbName'=>'street_number_suffix'],
-        'adddress2'            => ['prefix'=>'a', 'dbName'=>'adddress2'           ],
+        'address2'             => ['prefix'=>'a', 'dbName'=>'address2'            ],
         'address_type'         => ['prefix'=>'a', 'dbName'=>'address_type'        ],
         'street_id'            => ['prefix'=>'a', 'dbName'=>'street_id'           ],
         'jurisdiction_id'      => ['prefix'=>'a', 'dbName'=>'jurisdiction_id'     ],
@@ -194,31 +195,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $result;
     }
 
-
-    public function correct(CorrectRequest $req)
-    {
-        $sql = "update addresses
-                set street_id=?,
-                    street_number_prefix=?,
-                    street_number=?,
-                    street_number_suffix=?,
-                    zip=?,
-                    zipplus4=?,
-                    notes=?
-                where id=?";
-        $query = $this->pdo->prepare($sql);
-        $query->execute([
-            $req->street_id,
-            $req->street_number_prefix,
-            $req->street_number,
-            $req->street_number_suffix,
-            $req->zip,
-            $req->zipplus4,
-            $req->notes,
-            $req->address_id
-        ]);
-    }
-
     public function locations(int $address_id): array
     {
         $output = [];
@@ -258,6 +234,109 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $subunits;
     }
 
+    //---------------------------------------------------------------
+    // Write functions
+    //---------------------------------------------------------------
+    /**
+     * Creates a new Address record
+     *
+     * @return int    The new address_id
+     */
+    public function add(AddRequest $req): int
+    {
+        // Prepare to save data for all address fields
+        $data = [];
+        foreach (self::$fieldmap as $f=>$map) {
+            if ($map['prefix'] == 'a'
+                && $f != 'id'
+                && $req->$f) {
+
+                $data[$f] = $req->$f;
+            }
+        }
+
+        $this->pdo->beginTransaction();
+
+        $address_id = parent::saveToTable($data, self::TABLE);
+        if ($address_id) {
+            if ($req->location_id) {
+                // Create a new row in locations by copying data from
+                // the active row for the location_id.
+                // The new row should not be active.
+                $sql = 'select * from locations where location_id=? order by active desc';
+                $result = parent::doQuery($sql, [$req->location_id]);
+                if (!count($result)) {
+                    $this->pdo->rollBack();
+                    throw new \Exception('locations/unknown');
+                }
+
+                $location = $result[0];
+                $location['address_id'] = $address_id;
+                $location['active'    ] = false;
+
+                $insert = $this->queryFactory->newInsert();
+                $insert->into('locations')->cols($location);
+                $query = $this->pdo->prepare($insert->getStatement());
+                $query->execute($insert->getBindValues());
+            }
+            else {
+                // Create a new row in locations using data from the request.
+                $insert = $this->queryFactory->newInsert();
+                $insert->into('locations')->cols([
+                    'address_id'   => $address_id,
+                    'type_id'      => $req->locationType_id,
+                    'mailable'     => $req->mailable,
+                    'occupiable'   => $req->occupiable,
+                    'active'       => $req->active,
+                    'trash_day'    => $req->trash_day,
+                    'recycle_week' => $req->recycle_week
+                ]);
+                $query = $this->pdo->prepare($insert->getStatement());
+                $query->execute($insert->getBindValues());
+
+                $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
+
+                // Save a new location status using the request status
+                $this->saveLocationStatus($location_id, $req->status);
+            }
+
+            // Save address status
+            $this->saveStatus($address_id, $req->status);
+
+            // Return the new address_id
+            $this->pdo->commit();
+            return $address_id;
+        }
+        $this->pdo->rollBack();
+        throw new \Exception('databaseError');
+    }
+
+
+    public function correct(CorrectRequest $req)
+    {
+        $sql = "update addresses
+                set street_id=?,
+                    street_number_prefix=?,
+                    street_number=?,
+                    street_number_suffix=?,
+                    zip=?,
+                    zipplus4=?,
+                    notes=?
+                where id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->street_id,
+            $req->street_number_prefix,
+            $req->street_number,
+            $req->street_number_suffix,
+            $req->zip,
+            $req->zipplus4,
+            $req->notes,
+            $req->address_id
+        ]);
+    }
+
+
     public function saveLocationStatus(int $location_id, string $status)
     {
         $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
@@ -269,12 +348,22 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     //---------------------------------------------------------------
     public function cities(): array
     {
-        return $this->distinct('city');
+        return parent::distinctFromTable('city', self::TABLE);
     }
 
-    public function townships(): array
+    public function jurisdictions(): array
     {
-        return $this->doQuery('select id, name from townships order by name');
+        return $this->doQuery('select * from jurisdictions order by name');
+    }
+
+    public function quarterSections(): array
+    {
+        return parent::distinctFromTable('quarter_section', self::TABLE);
+    }
+
+    public function sections(): array
+    {
+        return parent::distinctFromTable('section', self::TABLE);
     }
 
     public function streetTypes(): array
@@ -285,5 +374,20 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function subunitTypes(): array
     {
         return $this->doQuery('select * from subunit_types order by name');
+    }
+
+    public function townships(): array
+    {
+        return $this->doQuery('select * from townships order by name');
+    }
+
+    public function types(): array
+    {
+        return $this->distinctFromTable('address_type', self::TABLE);
+    }
+
+    public function zipCodes(): array
+    {
+        return parent::distinctFromTable('zip', self::TABLE);
     }
 }

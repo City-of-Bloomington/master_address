@@ -5,10 +5,6 @@
  * @param array  $this->addresses
  */
 ?>
-<section>
-    <header>
-        <h2><?= $this->_(['address', 'addresses', count($this->addresses)]); ?></h2>
-    </header>
     <table>
         <thead>
             <tr><th><?= $this->_('id'); ?></th>
@@ -49,4 +45,3 @@
         ?>
         </tbody>
     </table>
-</section>

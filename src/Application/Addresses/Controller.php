@@ -7,11 +7,13 @@ declare (strict_types=1);
 namespace Application\Addresses;
 
 use Application\Controller as BaseController;
+use Application\Url;
 use Application\View;
 
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Addresses\Entities\Address;
+use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Search\SearchResponse;
@@ -68,7 +70,7 @@ class Controller extends BaseController
         return new Views\ParseView();
     }
 
-    public function view(array $params)
+    public function view(array $params): View
     {
         if (!empty($_GET['id'])) {
             $info = parent::addressInfo((int)$_GET['id']);
@@ -80,6 +82,51 @@ class Controller extends BaseController
             }
         }
         return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Create a new address
+     */
+    public function add(array $params): Views\AddView
+    {
+        global $DEFAULTS;
+        $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
+        if (!$request->city           ) { $request->city            = $DEFAULTS['city'           ]; }
+        if (!$request->locationType_id) { $request->locationType_id = $DEFAULTS['locationType_id']; }
+
+        if (isset($_REQUEST['return_url'])) { $_SESSION['return_url'] = $_REQUEST['return_url']; }
+
+        if (isset($_POST['street_id'])) {
+
+            $add      = $this->di->get('Domain\Addresses\UseCases\Add\Add');
+            $response = $add($request);
+
+            if (!$response->errors) {
+                if (isset($_SESSION['return_url'])) {
+                    $return_url = new Url($_SESSION['return_url']);
+                    $return_url->address_id = $response->address_id;
+                    unset($_SESSION['return_url']);
+                }
+                else {
+                    $return_url = View::generateUrl('addresses.view', ['id'=>$response->address_id]);
+                }
+                header("Location: $return_url");
+                exit();
+            }
+            else {
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+        }
+
+        return new Views\AddView(
+            $request,
+            $this->di->get('Domain\Addresses\Metadata'),
+            $this->di->get('Domain\Locations\Metadata'),
+             isset($_SESSION['return_url' ]) ? $_SESSION['return_url'] : View::generateUrl('addresses.index'),
+            !empty($_REQUEST['street_id'  ]) ? parent::street  ((int)$_REQUEST['street_id'  ]) : null,
+            !empty($_REQUEST['contact_id' ]) ? parent::person  ((int)$_REQUEST['contact_id' ]) : null,
+            !empty($_REQUEST['location_id']) ? parent::location((int)$_REQUEST['location_id']) : null
+        );
     }
 
     /**

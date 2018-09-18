@@ -34,7 +34,7 @@ class Chooser extends Helper
 		$chooserUrl->callback_field = $fieldname;
 		$chooserUrl->callback_url   = $callback_url->__toString();
 
-		#$personChooser = BASE_URI."/people?callback_field=$fieldname;return_url=$callback_url";
+		if (isset($callback_url->$fieldname)) { unset($callback_url->$fieldname); }
 
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}\" id=\"{$fieldId}\" value=\"$value\" />
@@ -44,6 +44,7 @@ class Chooser extends Helper
 			onclick=\"CHOOSER.open(event, '$fieldId');\">
 			{$this->template->_('choose')}
 		</a>
+		<a class=\"reset button\" href=\"$callback_url\">{$this->template->_('reset')}</a>
 		";
 		return $html;
 	}
