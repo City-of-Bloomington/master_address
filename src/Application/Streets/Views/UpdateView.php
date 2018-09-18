@@ -35,6 +35,6 @@ class UpdateView extends Template
 
         $this->blocks[] = new Block('logs/changeLog.inc',            ['changes'      => $info->changeLog]);
         $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
-        $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $addressSearch->addresses]);
+        $this->blocks['panel-one'][] = new Block('streets/addresses.inc', ['addresses' => $addressSearch->addresses]);
     }
 }

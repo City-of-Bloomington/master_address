@@ -17,8 +17,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     use \Domain\Logs\DataStorage\StatusLogTrait;
     protected $logType     = 'location';
 
-    protected $tablename   = 'locations';
-    protected $entityClass = '\Domain\Locations\Entities\Location';
+    const TABLE = 'locations';
 
     /**
      * Maps response fieldnames to the names used in the database
@@ -53,7 +52,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from("{$this->tablename}     l")
+               ->from(self::TABLE.' l')
                ->join('LEFT', 'location_types  t', 'l.type_id=t.id')
                ->join('LEFT', 'location_status x', 'l.location_id=x.location_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())');
 
@@ -63,8 +62,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     public function load(int $location_id): Location
     {
         $select = $this->baseSelect();
-        $select->where('l.location_id=?', $subunit_id);
-
+        $select->where('l.location_id=?', $location_id);
         $result = $this->performSelect($select);
         if (count($result['rows'])) {
             return new Location($result['rows'][0]);
@@ -72,7 +70,12 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         throw new \Exception('locations/unknown');
     }
 
-    public function search(SearchRequest $req): array
+    /**
+     * Look up locations using exact matching
+     *
+     * @return array   An array of Location entities
+     */
+    public function find(SearchRequest $req): array
     {
         $select = $this->baseSelect();
         foreach (get_class_vars('\Domain\Locations\Entities\Location') as $f=>$v) {
@@ -102,5 +105,23 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
             }
         }
         return parent::saveToTable($data, self::TABLE);
+    }
+
+    //---------------------------------------------------------------
+    // Metadata functions
+    //---------------------------------------------------------------
+    public function types(): array
+    {
+        return parent::doQuery('select * from location_types');
+    }
+
+    public function trashDays(): array
+    {
+        return parent::distinctFromTable('trash_day', self::TABLE);
+    }
+
+    public function recycleWeeks(): array
+    {
+        return parent::distinctFromTable('recycle_week', self::TABLE);
     }
 }

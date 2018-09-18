@@ -3,18 +3,19 @@
  * Draws the form fields for Locations
  *
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
+ *
+ * @param array  $this->locationTypes   Location types to choose from
+ * @param array  $this->trashDays       Trash days to choose from
+ * @param array  $this->recycleWeeks    Recycle weeks to choose from
+ *
  * @param string $this->locationType_id;
  * @param string $this->mailable;
  * @param string $this->occupiable;
  * @param string $this->trash_day;
  * @param string $this->recycle_week;
- * @param string $this->locationStatus;
  *
- * @param array  $this->locationTypes    Location types to populate dropdown
- * @param array  $this->statuses         Statuses to populate dropdown
  */
-use Domain\Locations\Metadata as Location;
 
 $h = $this->template->getHelper('field');
 
@@ -53,7 +54,7 @@ echo $h->field([
 ]);
 
 $options = [['value'=>'']];
-foreach (Location::$trash_days as $d) { $options[] = ['value'=>$d, 'label'=>$this->_($d)]; }
+foreach ($this->trashDays as $d) { $options[] = ['value'=>$d, 'label'=>$this->_($d)]; }
 echo $h->field([
     'name'     => 'trash_day',
     'id'       => 'trash_day',
@@ -64,23 +65,12 @@ echo $h->field([
 ]);
 
 $options = [['value'=>'']];
-foreach (Location::$recycle_weeks as $w) { $options[] = ['value'=>$w]; }
+foreach ($this->recycleWeeks as $w) { $options[] = ['value'=>$w]; }
 echo $h->field([
     'name'     => 'recycle_week',
     'id'       => 'recycle_week',
     'label'    => $this->_('recycle_week'),
     'type'     => 'select',
     'value'    => $this->recycle_week,
-    'options'  => $options
-]);
-
-$options = [];
-foreach ($this->statuses as $s) { $options[] = ['value'=>$s]; }
-echo $h->field([
-    'name'     => 'locationStatus',
-    'id'       => 'locationStatus',
-    'label'    => $this->_('locationStatus'),
-    'type'     => 'select',
-    'value'    => $this->locationStatus,
     'options'  => $options
 ]);

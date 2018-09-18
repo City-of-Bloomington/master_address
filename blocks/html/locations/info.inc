@@ -30,5 +30,14 @@ foreach ($fields as $f) {
                 ?>
             </ul>
         </dd>
+        <dt><?= $this->_(['subunit', 'subunits', count($this->location->subunits)]); ?></dt>
+        <dd><ul><?php
+                    foreach ($this->location->subunits as $subunit) {
+                        $uri = parent::generateUri('subunits.view', ['id'=>$subunit->id]);
+                        echo "<li><a href=\"$uri\">$subunit</a></li>";
+                    }
+                ?>
+            </ul>
+        </dd>
     </dl>
 </article>

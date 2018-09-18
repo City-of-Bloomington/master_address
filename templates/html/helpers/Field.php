@@ -72,14 +72,14 @@ class Field extends Helper
 
         $input = $this->$renderInput($params, $required, $attr);
         $for   = !empty($params['id'   ]) ? " for=\"$params[id]\""                       : '';
-        $label = !empty($params['label']) ? "<dt><label$for>$params[label]</label></dt>" : '';
+        $label = !empty($params['label']) ? "<label$for>$params[label]</label>"          : '';
         $help  = !empty($params['help' ]) ? "<div class=\"help\">$params[help]</div>"    : '';
 
         return "
-        <dl$classes>
+        <div$classes>
             $label
-            <dd>$input$help</dd>
-        </dl>
+            $input$help
+        </div>
         ";
     }
 
@@ -260,7 +260,7 @@ class Field extends Helper
         $h = $this->template->getHelper('personChooser');
         return $h->personChooser($params['name'], $params['id'], $params['value']);
     }
-    
+
     /**
      * Parameters:
      *

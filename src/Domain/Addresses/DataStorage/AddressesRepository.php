@@ -30,8 +30,13 @@ interface AddressesRepository
     public function saveStatus(int $address_id, string $status);
 
     // Metadata functions
-    public function cities      (): array;
-    public function townships   (): array;
-    public function streetTypes (): array;
-    public function subunitTypes(): array;
+    public function cities         (): array;
+    public function jurisdictions  (): array;
+    public function quarterSections(): array;
+    public function sections       (): array;
+    public function streetTypes    (): array;
+    public function subunitTypes   (): array;
+    public function townships      (): array;
+    public function types          (): array;
+    public function zipCodes       (): array;
 }

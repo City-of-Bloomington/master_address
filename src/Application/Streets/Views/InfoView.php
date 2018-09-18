@@ -33,6 +33,9 @@ class InfoView extends Template
             'actions'      => parent::isAllowed('streets','alias') ? ['alias'] : []
 
         ]);
-        $this->blocks['panel-one'][] = new Block('addresses/list.inc', ['addresses' => $search->addresses]);
+        $this->blocks['panel-one'][] = new Block('streets/addresses.inc', [
+            'street_id' => $info->street->id,
+            'addresses' => $search->addresses
+        ]);
     }
 }

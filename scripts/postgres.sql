@@ -155,7 +155,7 @@ create table addresses (
     street_number_prefix varchar(8),
     street_number        integer not null,
     street_number_suffix varchar(8),
-    adddress2            varchar(64),
+    address2             varchar(64),
     address_type         varchar(16) not null,
     street_id            integer not null,
     jurisdiction_id      integer not null,

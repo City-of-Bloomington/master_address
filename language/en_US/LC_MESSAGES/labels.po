@@ -180,6 +180,14 @@ msgstr "New Direction"
 msgid "direction_edit"
 msgstr "Edit Direction"
 
+msgid "address"
+msgid_plural "addresses"
+msgstr[0] "Address"
+msgstr[1] "Addresses"
+
+msgid "address2"
+msgstr "Address 2"
+
 msgid "addressStatus"
 msgid_plural "addressStatuses"
 msgstr[0] "Address Status"

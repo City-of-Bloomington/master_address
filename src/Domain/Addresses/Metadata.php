@@ -28,6 +28,13 @@ class Metadata
     public function actions()       { return ['correct','update','readdress','unretire','reassign','retire','verify']; }
     public function statuses()      { return Log::$statuses; }
 
+    public static $directions = [
+        'NORTH' => 'N',
+        'EAST'  => 'E',
+        'SOUTH' => 'S',
+        'WEST'  => 'W'
+    ];
+
     public function cities(): array
     {
         static $cities = [
@@ -51,24 +58,58 @@ class Metadata
         return $cities;
     }
 
-    public static $directions = [
-        'NORTH' => 'N',
-        'EAST'  => 'E',
-        'SOUTH' => 'S',
-        'WEST'  => 'W'
-    ];
+
+    public function jurisdictions(): array
+    {
+        static $a;
+        if   (!$a) { $a = $this->repo->jurisdictions(); }
+        return $a;
+    }
+
+    public function quarterSections(): array
+    {
+        return ['NE', 'NW', 'SE', 'SW'];
+    }
+
+    public function sections(): array
+    {
+        static $a;
+        if   (!$a) { $a = $this->repo->sections(); }
+        return $a;
+    }
 
     public function streetTypes(): array
     {
-        static $types;
-        if (!$types) { $types = $this->repo->streetTypes(); }
-        return $types;
+        static $a;
+        if   (!$a) { $a = $this->repo->streetTypes(); }
+        return $a;
     }
 
     public function subunitTypes(): array
     {
-        static $types;
-        if (!$types) { $types = $this->repo->subunitTypes(); }
-        return $types;
+        static $a;
+        if   (!$a) { $a = $this->repo->subunitTypes(); }
+        return $a;
+    }
+
+    public function townships(): array
+    {
+        static $a;
+        if   (!$a) { $a = $this->repo->townships(); }
+        return $a;
+    }
+
+    public function types(): array
+    {
+        static $a;
+        if   (!$a) { $a = $this->repo->types(); }
+        return $a;
+    }
+
+    public function zipCodes(): array
+    {
+        static $a;
+        if   (!$a) { $a = $this->repo->zipCodes(); }
+        return $a;
     }
 }

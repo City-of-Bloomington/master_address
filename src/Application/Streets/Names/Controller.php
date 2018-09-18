@@ -58,7 +58,7 @@ class Controller extends BaseController
             $add = $this->di->get('Domain\Streets\Names\UseCases\Add\Add');
             $res = $add($request);
             if (!$res->errors) {
-                header('Location: '.View::generateUrl('streetNames.view', ['id'->$res->id]));
+                header('Location: '.View::generateUrl('streetNames.view', ['id'=>$res->id]));
                 exit();
             }
         }
