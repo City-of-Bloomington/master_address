@@ -272,12 +272,20 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
                 $location = $result[0];
                 $location['address_id'] = $address_id;
-                $location['active'    ] = false;
+                // Boolean fields have to be converted to explicit true/false
+                $location['active'    ] = 'false';
+                $location['mailable'  ] = $location['mailable'  ] ? 'true' : 'false';
+                $location['occupiable'] = $location['occupiable'] ? 'true' : 'false';
 
-                $insert = $this->queryFactory->newInsert();
+                $insert  = $this->queryFactory->newInsert();
                 $insert->into('locations')->cols($location);
-                $query = $this->pdo->prepare($insert->getStatement());
-                $query->execute($insert->getBindValues());
+                $sql     = $insert->getStatement();
+                $query   = $this->pdo->prepare($sql);
+                $success = $query->execute($insert->getBindValues());
+                if (!$success) {
+                    $this->pdo->rollBack();
+                    throw new \Exception('databaseError');
+                }
             }
             else {
                 // Create a new row in locations using data from the request.
@@ -291,8 +299,12 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                     'trash_day'    => $req->trash_day,
                     'recycle_week' => $req->recycle_week
                 ]);
-                $query = $this->pdo->prepare($insert->getStatement());
-                $query->execute($insert->getBindValues());
+                $query   = $this->pdo->prepare($insert->getStatement());
+                $success = $query->execute($insert->getBindValues());
+                if (!$success) {
+                    $this->pdo->rollBack();
+                    throw new \Exception('databaseError');
+                }
 
                 $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
 

@@ -58,7 +58,7 @@
         </fieldset>
     </form>
     <?php
-        if (parent::isAllowed('streets', 'add')) {
+        if (!$this->callback_url && parent::isAllowed('streets', 'add')) {
             $h = $this->template->getHelper('buttonLink');
             echo $h->buttonLink(
                 parent::generateUri('streets.add'),

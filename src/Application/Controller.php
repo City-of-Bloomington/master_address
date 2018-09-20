@@ -31,7 +31,7 @@ class Controller
         return $info($req);
     }
 
-    protected function location(int $location_id): \Domain\Locations\Entities\Location
+    protected function location(int $location_id): ?\Domain\Locations\Entities\Location
     {
         $load = $this->di->get('Domain\Locations\UseCases\Load\Load');
         $res  = $load($location_id);
@@ -39,7 +39,7 @@ class Controller
         return $res->location;
     }
 
-    protected function name(int $name_id): \Domain\Streets\Entities\Name
+    protected function name(int $name_id): ?\Domain\Streets\Entities\Name
     {
         $load = $this->di->get('Domain\Streets\Names\UseCases\Load\Load');
         $res  = $load($name_id);
