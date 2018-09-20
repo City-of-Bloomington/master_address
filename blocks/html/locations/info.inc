@@ -3,6 +3,7 @@
  * @copyright 2014-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Location $this->location
+ * @param boolean  $this->disableButtons (optional)
  */
 $fields = [
     'location_id', 'status', 'type_code', 'mailable', 'occupiable', 'active', 'trash_day', 'recycle_week'
@@ -12,32 +13,44 @@ foreach ($fields as $f) {
 }
 ?>
 <article>
-    <dl><?php
+    <table>
+        <?php
             foreach ($fields as $f) {
                 echo "
-                <dt>{$this->_($f)}</dt>
-                <dd>{$$f}</dd>
+                <tr><th>{$this->_($f)}</th>
+                    <td>{$$f}</td>
+                </tr>
                 ";
 
             }
         ?>
-        <dt><?= $this->_(['address', 'addresses', count($this->location->addresses)]); ?></dt>
-        <dd><ul><?php
+        <tr><th><?= $this->_(['address', 'addresses', count($this->location->addresses)]); ?></th>
+            <td><ul><?php
                     foreach ($this->location->addresses as $address) {
                         $uri = parent::generateUri('addresses.view', ['id'=>$address->id]);
                         echo "<li><a href=\"$uri\">$address</a></li>";
                     }
+                    if (!$this->disableButtons && parent::isAllowed('addresses', 'add')) {
+                        $h = $this->template->getHelper('buttonLink');
+                        echo $h->buttonLink(
+                            parent::generateUri('addresses.add')."?location_id=$location_id",
+                            $this->_('address_add'),
+                            'add'
+                        );
+                    }
                 ?>
-            </ul>
-        </dd>
-        <dt><?= $this->_(['subunit', 'subunits', count($this->location->subunits)]); ?></dt>
-        <dd><ul><?php
+                </ul>
+            </td>
+        </tr>
+        <tr><th><?= $this->_(['subunit', 'subunits', count($this->location->subunits)]); ?></th>
+            <td><ul><?php
                     foreach ($this->location->subunits as $subunit) {
                         $uri = parent::generateUri('subunits.view', ['id'=>$subunit->id]);
                         echo "<li><a href=\"$uri\">$subunit</a></li>";
                     }
                 ?>
-            </ul>
-        </dd>
-    </dl>
+                </ul>
+            </td>
+        </tr>
+    </table>
 </article>

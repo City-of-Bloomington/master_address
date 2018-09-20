@@ -272,7 +272,10 @@ use Application\Url;
         </fieldset>
         <fieldset><legend><?= $this->_('location_info'); ?></legend>
         <?php
-            if ($this->location_id) { $this->_include('locations/info.inc'); }
+            if ($this->location_id) {
+                $this->disableButtons = true;
+                $this->_include('locations/info.inc');
+            }
             else { $this->_include('locations/partials/locationFields.inc'); }
 
         ?>
