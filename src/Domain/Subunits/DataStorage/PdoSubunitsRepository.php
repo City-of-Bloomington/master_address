@@ -144,16 +144,57 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     //---------------------------------------------------------------
     // Write Functions
     //---------------------------------------------------------------
-    public function save(Subunit $subunit): int
+    /**
+     * @return int     The new subunit_id
+     */
+    public function add(AddRequest $req): int
     {
+        $this->pdo->beginTransaction();
+
+        // Save the subunit
+        // Prepare to save data for all subunit fields
         $data = [];
-        foreach (self::$fieldmap as $f=>$db) {
-            // Only save the subunits table fields
-            if ($db['prefix'] == 's') {
-                $data[$db['dbName']] = $subunit->$f;
+        foreach (self::$fieldmap as $f=>$map) {
+            if ($map['prefix'] == 's' && $f != 'id' && $req->$f) {
+                $data[$map['dbName']] = $req->$f;
             }
         }
-        return parent::saveToTable($data, self::TABLE);
+
+        $subunit_id = parent::saveToTable($data, self::TABLE);
+        if ($subunit_id) {
+            // Set the subunit status
+            $this->saveStatus($subunit_id, $req->status);
+
+            // Save the location
+            // Create a new row in locations using data from the request.
+            $insert = $this->queryFactory->newInsert();
+            $insert->into('locations')->cols([
+                'address_id'   => $req->address_id,
+                'subunit_id'   => $subunit_id,
+                'type_id'      => $req->locationType_id,
+                'mailable'     => $req->mailable,
+                'occupiable'   => $req->occupiable,
+                'active'       => 'true',
+                'trash_day'    => $req->trash_day,
+                'recycle_week' => $req->recycle_week
+            ]);
+            $query   = $this->pdo->prepare($insert->getStatement());
+            $success = $query->execute($insert->getBindValues());
+            if (!$success) {
+                $this->pdo->rollBack();
+                throw new \Exception('databaseError');
+            }
+
+            $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
+
+            // Set the location status
+            $this->saveLocationStatus($location_id, $req->status);
+
+            $this->pdo->commit();
+            return $subunit_id;
+        }
+        $this->pdo->rollBack();
+        throw new \Exception('databaseError');
     }
 
     public function correct(CorrectRequest $req)

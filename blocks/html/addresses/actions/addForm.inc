@@ -5,7 +5,9 @@
  *
  * @param string $this->cancel_url       The url that linked to this form
  *
+ *---------------------------------------------------------
  * Information to populate select dropdown options
+ *---------------------------------------------------------
  * @param array  $this->cities           Cities to choose from
  * @param array  $this->jurisdictions    Jurisdictions to choose from
  * @param array  $this->quarterSections  Quarter Sections to choose from
@@ -14,8 +16,10 @@
  * @param array  $this->townships        Townships to choose from
  * @param array  $this->types            Address types to choose from
  * @param array  $this->zipCodes         Zip codes to choose from
-
+ *
+ *---------------------------------------------------------
  * Address table fields
+ *---------------------------------------------------------
  * @param string $this->status
  * @param string $this->street_number_prefix
  * @param string $this->street_number
@@ -35,14 +39,17 @@
  * @param string $this->state
  * @param string $this->zip
  * @param string $this->zipplus4
+ * @param string $this->notes
+ * Geo Fields
  * @param string $this->state_plane_x
  * @param string $this->state_plane_y
  * @param string $this->latitude
  * @param string $this->longitude
  * @param string $this->usng
- * @param string $this->notes
  *
+ *---------------------------------------------------------
  * Location fields
+ *---------------------------------------------------------
  * @param array    $this->locationTypes  Location types to choose from
  * @param array    $this->trashDays      Trash days to choose from
  * @param array    $this->recycleWeeks   Recycle weeks to choose from
@@ -57,7 +64,9 @@
  * @param string   $this->trash_day
  * @param string   $this->recycle_week
  *
+ *---------------------------------------------------------
  * Change log fields
+ *---------------------------------------------------------
  * @param string $this->user_id
  * @param string $this->contact_id
  * @param string $this->contact_name  The displayable name for the chosen contact person
@@ -232,42 +241,7 @@ use Application\Url;
         </fieldset>
         <fieldset>
         <?php
-            echo $h->field([
-                'name'  => 'state_plane_x',
-                'id'    => 'state_plane_x',
-                'label' => $this->_('state_plane_x'),
-                'value' => $this->state_plane_x,
-                'type'  => 'number'
-            ]);
-            echo $h->field([
-                'name'  => 'state_plane_y',
-                'id'    => 'state_plane_y',
-                'label' => $this->_('state_plane_y'),
-                'value' => $this->state_plane_y,
-                'type'  => 'number'
-            ]);
-            echo $h->field([
-                'name'  => 'latitude',
-                'id'    => 'latitude',
-                'label' => $this->_('latitude'),
-                'value' => $this->latitude,
-                'type'  => 'number',
-                'attr'  => ['step' => '0.00000001']
-            ]);
-            echo $h->field([
-                'name'  => 'longitude',
-                'id'    => 'longitude',
-                'label' => $this->_('longitude'),
-                'value' => $this->longitude,
-                'type'  => 'number',
-                'attr'  => ['step' => '0.00000001']
-            ]);
-            echo $h->field([
-                'name'  => 'usng',
-                'id'    => 'usng',
-                'label' => $this->_('usng'),
-                'value' => $this->usng
-            ]);
+            $this->_include('addresses/partials/geoFields.inc');
         ?>
         </fieldset>
         <fieldset><legend><?= $this->_('location_info'); ?></legend>

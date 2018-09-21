@@ -10,26 +10,32 @@ use Application\Block;
 use Application\Template;
 
 use Domain\Addresses\UseCases\Info\InfoResponse;
-use Domain\Logs\Metadata as Log;
 use Domain\People\Entities\Person;
-use Domain\Subunits\Metadata;
+
+use Domain\Logs\Metadata      as Log;
+use Domain\Locations\Metadata as LocationMetadata;
+use Domain\Subunits\Metadata  as SubunitMetadata;
+
 use Domain\Subunits\UseCases\Add\AddRequest;
 
 
 class AddView extends Template
 {
-    public function __construct(AddRequest   $request,
-                                InfoResponse $info,
-                                Metadata     $metadata,
-                                ?Person      $contact=null)
+    public function __construct(AddRequest       $request,
+                                InfoResponse     $info,
+                                SubunitMetadata  $subunitMetadata,
+                                LocationMetadata $locationMetadata,
+                                ?Person          $contact=null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
         $this->vars['title'] = $this->_(Log::ACTION_ADD);
 
         $vars = [
-             'subunitTypes' => $metadata->types(),
-            'locationTypes' => $metadata->locationTypes(),
+             'subunitTypes' =>  $subunitMetadata->types(),
+            'locationTypes' => $locationMetadata->types(),
+            'trashDays'     => $locationMetadata->trashDays(),
+            'recycleWeeks'  => $locationMetadata->recycleWeeks(),
             'statuses'      => Log::$statuses
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); };
@@ -41,7 +47,14 @@ class AddView extends Template
 
         $this->blocks[]              = new Block('logs/statusLog.inc',      ['statuses'  => $info->statusLog]);
         $this->blocks[]              = new Block('logs/changeLog.inc',      ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $info->locations]);
-        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'   => $info->address, 'subunits' => $info->subunits]);
+        $this->blocks['panel-one'][] = new Block('locations/locations.inc', [
+            'locations'      => $info->locations,
+            'disableButtons' => true
+        ]);
+        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       [
+            'address'        => $info->address,
+            'subunits'       => $info->subunits,
+            'disableButtons' => true
+        ]);
     }
 }

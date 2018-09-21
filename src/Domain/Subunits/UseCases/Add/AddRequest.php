@@ -11,9 +11,10 @@ use Domain\Locations\Metadata as Location;
 class AddRequest
 {
     public $address_id;
+    public $status;
 
     // Subunit fields
-    public $subunitType_id;
+    public $type_id;
     public $identifier;
     public $notes;
     public $state_plane_x;
@@ -21,15 +22,13 @@ class AddRequest
     public $latitude;
     public $longitude;
     public $usng;
-    public $subunitStatus;
 
     // Location fields
-    public $locationType_id = Location::DEFAULT_TYPE_ID;
+    public $locationType_id;
     public $mailable;
     public $occupiable;
     public $trash_day;
     public $recycle_week;
-    public $locationStatus;
 
     // Change log entry
     public $user_id;
@@ -46,7 +45,7 @@ class AddRequest
             if (!empty($data[$f])) {
                 switch ($f) {
                     case 'address_id':
-                    case 'subunitType_id':
+                    case 'type_id':
                     case 'state_plane_x':
                     case 'state_plane_y':
                     case 'locationType_id':

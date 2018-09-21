@@ -56,4 +56,24 @@ class Metadata
         self::STATUS_DUPLICATE,
         self::STATUS_TEMPORARY
     ];
+
+    /**
+     * Returns the action message to write into a log, based on a given status
+     */
+    public static function actionForStatus(string $status): string
+    {
+        switch ($status) {
+            case self::STATUS_PROPOSED:
+            case self::STATUS_TEMPORARY:
+                return self::$actions[self::ACTION_PROPOSE];
+            break;
+
+            case self::STATUS_RETIRED:
+                return self::$actions[self::ACTION_RETIRE];
+            break;
+
+            default:
+                return self::$actions[self::ACTION_ADD];
+        }
+    }
 }
