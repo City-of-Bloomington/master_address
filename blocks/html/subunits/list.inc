@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array   $this->subunits
  * @param Address $this->address
+ * @param boolean $this->disableButtons (optional)
  */
 use Application\People\Person;
 ?>
@@ -12,7 +13,10 @@ use Application\People\Person;
         <h2><?= $this->_(['subunit', 'subunits', count($this->subunits)]); ?></h2>
         <div class="tools">
         <?php
-            if (isset($this->address) && parent::isAllowed('subunits', 'add')) {
+            if (isset($this->address)
+                && !$this->disableButtons
+                && parent::isAllowed('subunits', 'add')) {
+
                 $h = $this->template->getHelper('buttonLink');
                 echo $h->buttonLink(
                     parent::generateUri('subunits.add').'?address_id='.$this->address->id,

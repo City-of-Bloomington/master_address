@@ -4,16 +4,31 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param string $this->address_id;
  *
- * @param string $this->subunitType_id;
+ *---------------------------------------------------------
+ * Information to populate select dropdown options
+ *---------------------------------------------------------
+ * @param array  $this->subunitTypes     Subunit types to populate dropdown
+ * @param array  $this->locationTypes    Location types to populate dropdown
+ * @param array  $this->statuses         Statuses to populate dropdown
+ *
+ *---------------------------------------------------------
+ * Subunit table fields
+ *---------------------------------------------------------
+ * @param string $this->status;
+ *
+ * @param string $this->type_id;
  * @param string $this->identifier;
  * @param string $this->notes;
+ * Geo fields
  * @param string $this->state_plane_x;
  * @param string $this->state_plane_y;
  * @param string $this->latitude;
  * @param string $this->longitude;
  * @param string $this->usng;
- * @param string $this->subunitStatus;
  *
+ *---------------------------------------------------------
+ * Location table fields
+ *---------------------------------------------------------
  * @param string $this->locationType_id;
  * @param string $this->mailable;
  * @param string $this->occupiable;
@@ -21,18 +36,17 @@
  * @param string $this->recycle_week;
  * @param string $this->locationStatus;
  *
+ *---------------------------------------------------------
+ * Change log fields
+ *---------------------------------------------------------
  * @param string $this->user_id;
  * @param string $this->contact_id;
  * @param string $this->contact_name;
  * @param string $this->change_notes;
- *
- * @param array  $this->subunitTypes     Subunit types to populate dropdown
- * @param array  $this->locationTypes    Location types to populate dropdown
- * @param array  $this->statuses         Statuses to populate dropdown
  */
 ?>
 <section>
-    <header><h1><?= $this->_('add'); ?></h1></header>
+    <header><h1><?= $this->_('subunit_add'); ?></h1></header>
     <form method="post">
         <fieldset><legend><?= $this->_('subunit'); ?></legend>
             <input name="address_id" type="hidden" value="<?= $this->address_id; ?>" />
@@ -42,11 +56,11 @@
                 $options = [];
                 foreach ($this->statuses as $s) { $options[] = ['value' => $s, 'label'=>$this->_($s)]; }
                 echo $h->field([
-                    'name'     => 'subunitStatus',
-                    'id'       => 'subunitStatus',
+                    'name'     => 'status',
+                    'id'       => 'status',
                     'label'    => $this->_('status'),
                     'type'     => 'select',
-                    'value'    => $this->subunitStatus,
+                    'value'    => $this->status,
                     'options'  => $options,
                     'required' => true
                 ]);
@@ -54,11 +68,11 @@
                 $options = [];
                 foreach ($this->subunitTypes as $t) { $options[] = ['value'=>$t['id'], 'label'=>$t['code']]; }
                 echo $h->field([
-                    'name'     => 'subunitType_id',
-                    'id'       => 'subunitType_id',
+                    'name'     => 'type_id',
+                    'id'       => 'type_id',
                     'label'    => $this->_('type'),
                     'type'     => 'select',
-                    'value'    => $this->subunitType_id,
+                    'value'    => $this->type_id,
                     'options'  => $options,
                     'required' => true
                 ]);
@@ -72,53 +86,6 @@
                 ]);
 
                 echo $h->field([
-                    'name'     => 'state_plane_x',
-                    'id'       => 'state_plane_x',
-                    'label'    => $this->_('state_plane_x'),
-                    'value'    => $this->state_plane_x,
-                    'type'     => 'number'
-                ]);
-
-                echo $h->field([
-                    'name'     => 'state_plane_y',
-                    'id'       => 'state_plane_y',
-                    'label'    => $this->_('state_plane_y'),
-                    'value'    => $this->state_plane_y,
-                    'type'     => 'number'
-                ]);
-
-                echo $h->field([
-                    'name'     => 'latitude',
-                    'id'       => 'latitude',
-                    'label'    => $this->_('latitude'),
-                    'value'    => $this->latitude,
-                    'type'     => 'number',
-                    'attr'     => [
-                        'step' =>         '0.00000001',
-                        'placeholder' => '39.00000000'
-                    ]
-                ]);
-
-                echo $h->field([
-                    'name'     => 'longitude',
-                    'id'       => 'longitude',
-                    'label'    => $this->_('longitude'),
-                    'value'    => $this->longitude,
-                    'type'     => 'number',
-                    'attr'     => [
-                        'step' =>          '0.00000001',
-                        'placeholder' => '-86.00000000'
-                    ]
-                ]);
-
-                echo $h->field([
-                    'name'     => 'usng',
-                    'id'       => 'usng',
-                    'label'    => $this->_('usng'),
-                    'value'    => $this->usng,
-                ]);
-
-                echo $h->field([
                     'name'     => 'notes',
                     'id'       => 'notes',
                     'label'    => $this->_('notes'),
@@ -126,6 +93,12 @@
                     'type'     => 'textarea'
                 ]);
             ?>
+        </fieldset>
+
+        <fieldset>
+        <?php
+            $this->_include('addresses/partials/geoFields.inc');
+        ?>
         </fieldset>
 
         <fieldset><legend><?= $this->_('location'); ?></legend>

@@ -7,14 +7,13 @@ declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Add;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\Metadata as ChangeLog;
+use Domain\Logs\Metadata as Log;
 use Domain\Locations\Entities\Location;
 use Domain\Subunits\DataStorage\SubunitsRepository;
 use Domain\Subunits\Entities\Subunit;
 
 class Add
 {
-    const FAKE_SUBUNIT_ID = 999999; // Make sure this is not a real ID
     private $repo;
 
     public function __construct(SubunitsRepository $repository)
@@ -25,88 +24,38 @@ class Add
     public function __invoke(AddRequest $req): AddResponse
     {
         $subunit_id  = null;
-        $location_id = null;
+
+        $errors = $this->validate($req);
+        if ($errors) { return new AddResponse(null, null, $errors); }
+
         try {
-            $validation = $this->validate($req);
-            if ($validation && $validation->errors) {
-                return new AddResponse(null, $subunit_id, $location_id, $validation->errors);
-            }
-
-            $subunit = self::subunit($req);
-            $subunit_id = $this->repo->save($subunit);
-            $this->repo->saveStatus($subunit_id, $req->subunitStatus);
-
-            $location = self::location($req);
-            $location->subunit_id = $subunit_id;
-            $location_id = $this->repo->saveLocation($location);
-            $this->repo->saveLocationStatus($location_id, $req->locationStatus);
+            $subunit_id = $this->repo->add($req);
 
             $log_id = $this->repo->logChange(new ChangeLogEntry([
-                'action'    => ChangeLog::$actions[ChangeLog::ACTION_ADD],
+                'action'    => Log::actionForStatus($req->status),
                 'entity_id' => $subunit_id,
                 'person_id' => $req->user_id,
                 'notes'     => $req->change_notes
             ]));
-            return new AddResponse($log_id, $subunit_id, $location_id);
+            return new AddResponse($log_id, $subunit_id);
         }
         catch (\Exception $e) {
-            return new AddResponse(null, $subunit_id, $location_id, [$e->getMessage()]);
+            return new AddResponse(null, $subunit_id, [$e->getMessage()]);
         }
     }
 
-    /**
-     * Pulls the subunit fields out into a Subunit entity
-     */
-    private static function subunit(AddRequest $req): Subunit
-    {
-        return new Subunit([
-            'address_id'    => $req->address_id,
-            'type_id'       => $req->subunitType_id,
-            'identifier'    => $req->identifier,
-            'notes'         => $req->notes,
-            'state_plane_x' => $req->state_plane_x,
-            'state_plane_y' => $req->state_plane_y,
-            'latitude'      => $req->latitude,
-            'longitude'     => $req->longitude,
-            'usng'          => $req->usng,
-            'status'        => $req->subunitStatus
-        ]);
-    }
 
     /**
-     * Pulls the location fields out into a Location entity
+     * @param  AddRequest $req
+     * @return array            Any errors with the request
      */
-    private static function location(AddRequest $req): Location
+    private function validate(AddRequest $req): array
     {
-        return new Location([
-            'type_id'      => $req->locationType_id,
-            'address_id'   => $req->address_id,
-            'mailable'     => $req->mailable,
-            'occupiable'   => $req->occupiable,
-            'trash_day'    => $req->trash_day,
-            'recycle_week' => $req->recycle_week,
-            'status'       => $req->locationStatus
-        ]);
-    }
-
-    /**
-     * Validates the Subunit and Location data for a request
-     *
-     * @param  AddRequest       $req
-     * @return ValidateResponse
-     */
-    private function validate(AddRequest $req)
-    {
-        $validate = new \Domain\Subunits\UseCases\Validate\Validate();
-        $subunit  = self::subunit($req);
-        $validation = $validate($subunit);
-        if ($validation->errors) { return $validation; }
-
-        $validate = new \Domain\Locations\UseCases\Validate\Validate();
-        $location = self::location($req);
-        $location->subunit_id = self::FAKE_SUBUNIT_ID;
-        $location->active     = true;
-        $validation = $validate($location);
-        if ($validation->errors) { return $validation; }
+        $errors = [];
+        if (!$req->address_id     ) { $errors[] = 'subunits/missingAddress';    }
+        if (!$req->identifier     ) { $errors[] = 'subunits/missingIdentifier'; }
+        if (!$req->locationType_id) { $errors[] = 'locations/missingType';      }
+        if (!$req->status         ) { $errors[] = 'missingStatus';              }
+        return $errors;
     }
 }

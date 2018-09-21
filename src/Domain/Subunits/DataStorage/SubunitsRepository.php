@@ -25,9 +25,9 @@ interface SubunitsRepository
     public function find(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions
+    public function add         (AddRequest     $request): int;
     public function correct     (CorrectRequest $request);
     public function logChange   (ChangeLogEntry   $entry): int;
-    public function save        (Subunit        $subunit): int;
     public function saveLocation(Location      $location): int;
     public function saveStatus        (int $subunit_id,  string $status);
     public function saveLocationStatus(int $location_id, string $status);

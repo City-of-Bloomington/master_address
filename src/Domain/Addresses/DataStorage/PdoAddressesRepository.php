@@ -251,7 +251,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 && $f != 'id'
                 && $req->$f) {
 
-                $data[$f] = $req->$f;
+                $data[$map['dbName']] = $req->$f;
             }
         }
 
@@ -295,7 +295,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                     'type_id'      => $req->locationType_id,
                     'mailable'     => $req->mailable,
                     'occupiable'   => $req->occupiable,
-                    'active'       => $req->active,
+                    'active'       => 'true',
                     'trash_day'    => $req->trash_day,
                     'recycle_week' => $req->recycle_week
                 ]);

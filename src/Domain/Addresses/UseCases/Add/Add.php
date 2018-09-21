@@ -21,24 +21,13 @@ class Add
 
     public function __invoke(AddRequest $req): AddResponse
     {
+        $errors = $this->validate($req);
+        if ($errors) { return new AddResponse(null, null, $errors); }
+
         try {
             $address_id = $this->repo->add($req);
 
-            switch ($req->status) {
-                case Log::STATUS_PROPOSED:
-                case Log::STATUS_TEMPORARY:
-                    $action = Log::$actions[Log::ACTION_PROPOSE];
-                break;
-
-                case Log::STATUS_RETIRED:
-                    $action = Log::$actions[Log::ACTION_RETIRE];
-                break;
-
-                default:
-                    $action = Log::$actions[Log::ACTION_ADD];
-            }
-
-            $entry = new ChangeLogEntry(['action'     => $action,
+            $entry = new ChangeLogEntry(['action'     => Log::actionForStatus($req->status),
                                          'entity_id'  => $address_id,
                                          'person_id'  => $req->user_id,
                                          'contact_id' => $req->contact_id,
@@ -50,5 +39,22 @@ class Add
         catch (\Exception $e) {
             return new AddResponse(null, null, [$e->getMessage()]);
         }
+    }
+
+    /**
+     * Returns any and all errors with the request
+     *
+     * @return array  Any errors from the request
+     */
+    private function validate(AddRequest $req): array
+    {
+        $errors = [];
+        if (!$req->street_number  ) { $errors[] = 'addresses/missingStreetNumber'; }
+        if (!$req->address_type   ) { $errors[] = 'addresses/missingType';         }
+        if (!$req->street_id      ) { $errors[] = 'addresses/missingStreet';       }
+        if (!$req->jurisdiction_id) { $errors[] = 'addresses/missingJurisdiction'; }
+        if (!$req->state          ) { $errors[] = 'addresses/missingState';        }
+
+        return $errors;
     }
 }

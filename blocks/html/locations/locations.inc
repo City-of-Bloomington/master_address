@@ -2,7 +2,8 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param array $this->locations
+ * @param array   $this->locations
+ * @param boolean $this->disableButtons (optional)
  */
 use Application\Block;
 ?>
@@ -14,7 +15,7 @@ use Application\Block;
     </header>
     <div>
     <?php
-        $block = new Block('locations/info.inc');
+        $block = new Block('locations/info.inc', ['disableButtons' => $this->disableButtons]);
         foreach ($this->locations as $l) {
             $block->location = $l;
             echo $block->render('html', $this->template);
