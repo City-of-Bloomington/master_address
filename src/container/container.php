@@ -84,7 +84,11 @@ foreach (['Addresses', 'Subunits'] as $t) {
         $DI->lazyNew("Domain\\$t\\UseCases\\$a\\$a"));
     }
 }
-$DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire'] = $DI->lazyGet('Domain\Subunits\UseCases\Retire\Retire');
+$DI->params[ 'Domain\Addresses\UseCases\Renumber\Renumber']['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
+$DI->set(    'Domain\Addresses\UseCases\Renumber\Renumber',
+$DI->lazyNew('Domain\Addresses\UseCases\Renumber\Renumber'));
+
+$DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire']  = $DI->lazyGet('Domain\Subunits\UseCases\Retire\Retire');
 
 // Locations
 $DI->params[ 'Domain\Locations\UseCases\Load\Load']['repository'] = $DI->lazyGet('Domain\Locations\DataStorage\LocationsRepository');

@@ -25,6 +25,7 @@ class Metadata
     const ACTION_PROPOSE   = 'propose';
     const ACTION_READDRESS = 'readdress';
     const ACTION_REASSIGN  = 'reassign';
+    const ACTION_RENUMBER  = 'renumber';
     const ACTION_RETIRE    = 'retire';
     const ACTION_UPDATE    = 'update';
     const ACTION_UNRETIRE  = 'unretire';
@@ -43,6 +44,7 @@ class Metadata
         self::ACTION_PROPOSE   => 'proposed',
         self::ACTION_READDRESS => 'readdressed',
         self::ACTION_REASSIGN  => 'reassigned',
+        self::ACTION_RENUMBER  => 'renumbered',
         self::ACTION_RETIRE    => 'retired',
         self::ACTION_UPDATE    => 'updated',
         self::ACTION_UNRETIRE  => 'unretired',

@@ -62,6 +62,9 @@ msgstr "You must choose a jurisdiction"
 msgid "addresses/missingState"
 msgstr "You must provide the state"
 
+msgid "addresses/missingId"
+msgstr "Missing the address_id"
+
 msgid "designations/missingName"
 msgstr "You must choose a street name"
 

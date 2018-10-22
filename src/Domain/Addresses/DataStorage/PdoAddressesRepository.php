@@ -11,6 +11,7 @@ use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
+use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 
 use Domain\Logs\Entities\ChangeLogEntry;
@@ -346,6 +347,27 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             $req->notes,
             $req->address_id
         ]);
+    }
+
+    /**
+     * Save changes to street numbers for a bunch of addresses
+     */
+    public function renumber(RenumberRequest $request)
+    {
+        $sql = 'update addresses
+                set street_number_prefix=?,
+                    street_number=?,
+                    street_number_suffix=?
+                where id=?';
+        $query = $this->pdo->prepare($sql);
+        foreach ($request->address_numbers as $a) {
+            $query->execute([
+                $a->street_number_prefix,
+                $a->street_number,
+                $a->street_number_suffix,
+                $a->address_id
+            ]);
+        }
     }
 
 

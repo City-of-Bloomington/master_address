@@ -8,8 +8,10 @@ namespace Domain\Addresses\DataStorage;
 
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
+use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Logs\Entities\ChangeLogEntry;
+use Domain\Streets\UseCases\Renumber\AddressNumber;
 
 interface AddressesRepository
 {
@@ -25,7 +27,8 @@ interface AddressesRepository
     public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions
-    public function correct(CorrectRequest $request);
+    public function correct ( CorrectRequest $request);
+    public function renumber(RenumberRequest $request);
     public function logChange(ChangeLogEntry $entry): int;
     public function saveStatus(int $address_id, string $status);
 

@@ -11,6 +11,8 @@ use Application\View;
 
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
+use Domain\Addresses\UseCases\Renumber\AddressNumber;
+use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
@@ -213,6 +215,78 @@ class Controller extends BaseController
                 $this->addressSearch($street_id),
                 !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null
             );
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Change the street numbers for all current addresses on a street
+     */
+    public function renumber(array $params): View
+    {
+        $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($street_id) {
+
+            if (isset(   $_POST['addresses'])) {
+                $address_numbers = [];
+                foreach ($_POST['addresses'] as $address_id=>$a) {
+                    $address_numbers[] = new AddressNumber([
+                        'address_id'           => $address_id,
+                        'street_number_prefix' => $a['street_number_prefix'],
+                        'street_number'        => $a['street_number'       ],
+                        'street_number_suffix' => $a['street_number_suffix']
+                    ]);
+                }
+
+                $request  = new RenumberRequest(
+                    $address_numbers,
+                    $_SESSION['USER']->id,
+                    $_REQUEST
+                );
+                $renumber = $this->di->get('Domain\Addresses\UseCases\Renumber\Renumber');
+                $response = $renumber($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
+                    exit();
+                }
+                else { $_SESSION['errorMessages'] = $response->errors; }
+            }
+
+            if (!isset($request)) {
+                $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+                $r = $search(new \Domain\Addresses\UseCases\Search\SearchRequest([
+                    'street_id' => $street_id,
+                    'status'    => \Domain\Logs\Metadata::STATUS_CURRENT
+                ]));
+                if ($r->addresses) {
+                    $address_numbers = [];
+                    foreach ($r->addresses as $a) {
+                        $address_numbers[] = new AddressNumber([
+                            'address_id'           => $a->id,
+                            'street_number_prefix' => $a->street_number_prefix,
+                            'street_number'        => $a->street_number,
+                            'street_number_suffix' => $a->street_number_suffix
+                        ]);
+                    }
+                    $request  = new RenumberRequest(
+                        $address_numbers,
+                        $_SESSION['USER']->id,
+                        $_REQUEST
+                    );
+                }
+                else {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
+                    exit();
+                }
+            }
+
+            return new Views\RenumberView(
+                $request,
+                parent::streetInfo($street_id),
+                $this->addressSearch($street_id),
+                !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null
+            );
+
         }
         return new \Application\Views\NotFoundView();
     }
