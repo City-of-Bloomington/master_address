@@ -199,6 +199,51 @@ msgstr "New Address Status"
 msgid "addressStatus_edit"
 msgstr "Edit Address Status"
 
+msgid "street_number_prefix"
+msgstr "Prefix"
+
+msgid "street_number"
+msgstr "Number"
+
+msgid "street_number_suffix"
+msgstr "Suffix"
+
+msgid "city"
+msgstr "City"
+
+msgid "state"
+msgstr "State"
+
+msgid "zip"
+msgstr "Zip Code"
+
+msgid "zipplus4"
+msgstr "Zip Plus 4"
+
+msgid "section"
+msgstr "Section"
+
+msgid "quarter_section"
+msgstr "Quarter"
+
+msgid "notes"
+msgstr "Notes"
+
+msgid "state_plane_x"
+msgstr "State Plane X"
+
+msgid "state_plane_y"
+msgstr "State Plane Y"
+
+msgid "latitude"
+msgstr "Latitude"
+
+msgid "longitude"
+msgstr "Longitude"
+
+msgid "usng"
+msgstr "USNG"
+
 msgid "street"
 msgid_plural "streets"
 msgstr[0] "Street"

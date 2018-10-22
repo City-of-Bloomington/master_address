@@ -82,6 +82,7 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->add('alias',               '/alias/{id}')->addValues(['action'=>'alias'       ]);
     $r->add('update',             '/update/{id}')->addValues(['action'=>'update'      ]);
     $r->add('changeStatus', '/changeStatus/{id}')->addValues(['action'=>'changeStatus']);
+    $r->add('renumber',         '/renumber/{id}')->addValues(['action'=>'renumber'    ]);
 });
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);
