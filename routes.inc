@@ -35,14 +35,6 @@ foreach ($tables as $t) {
         $r->add('index',  '')             ->addValues(['action'=>'index' ]);
     });
 }
-/*
-$ROUTES->attach('subunitTypes', "/subunits/types", function ($r) {
-    $r->setValues(['controller'=> 'Application\Subunits\TypesController']);
-
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-});
-*/
 $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->setValues(['controller'=> 'Application\Subunits\Controller']);
 
@@ -52,19 +44,6 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });
-/*
-$ROUTES->attach('streetTypes', "/streets/types", function ($r) {
-    $r->setValues(['controller'=> 'Application\Streets\Types\TypesController']);
-
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-});
-$ROUTES->attach('streetDesignations', "/streets/designations", function ($r) {
-    $r->setValues(['controller'=> 'Application\Streets\Designations\DesignationsController']);
-
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-});
-*/
 $ROUTES->attach('streetNames', "/streets/names", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Names\Controller']);
 
@@ -81,8 +60,14 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->add('add',          '/add' )->addValues(['action'=>'add'         ]);
     $r->add('alias',               '/alias/{id}')->addValues(['action'=>'alias'       ]);
     $r->add('update',             '/update/{id}')->addValues(['action'=>'update'      ]);
+    $r->add('changeName',     '/changeName/{id}')->addValues(['action'=>'changeName'  ]);
     $r->add('changeStatus', '/changeStatus/{id}')->addValues(['action'=>'changeStatus']);
     $r->add('renumber',         '/renumber/{id}')->addValues(['action'=>'renumber'    ]);
+});
+$ROUTES->attach('designations', "/designations", function ($r) {
+    $r->setValues(['controller'=> 'Application\Streets\Designations\Controller']);
+
+    $r->add('update', '/update/{id}')->addValues(['action'=>'update']);
 });
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);

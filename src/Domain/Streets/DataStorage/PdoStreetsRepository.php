@@ -163,25 +163,29 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         ], 'street_designations');
     }
 
+
+    private static $designationSelect = "
+        select  d.id,
+                d.street_id,
+                d.street_name_id as name_id,
+                d.type_id,
+                d.start_date,
+                d.rank,
+                dt.name          as type,
+                n.direction,
+                n.name,
+                n.post_direction,
+                t.code           as suffix_code
+        from street_designations d
+                join street_designation_types dt on d.type_id=dt.id
+                join street_names n on d.street_name_id=n.id
+        left join street_types t on n.suffix_code_id=t.id
+    ";
     public function designations(int $street_id): array
     {
         $designations = [];
-        $sql = "select  d.id,
-                        d.street_id,
-                        d.street_name_id as name_id,
-                        d.type_id,
-                        d.start_date,
-                        d.rank,
-                        dt.name          as type,
-                        n.direction,
-                        n.name,
-                        n.post_direction,
-                        t.code           as suffix_code
-                from street_designations d
-                     join street_designation_types dt on d.type_id=dt.id
-                     join street_names n on d.street_name_id=n.id
-                left join street_types t on n.suffix_code_id=t.id
-                where d.street_id=?";
+        $sql = self::$designationSelect;
+        $sql.= ' where d.street_id=?';
 
         $query = $this->pdo->prepare($sql);
         $query->execute([$street_id]);
@@ -189,6 +193,30 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             $designations[] = Designation::hydrate($row);
         }
         return $designations;
+    }
+
+    public function loadDesignation(int $designation_id): Designation
+    {
+        $sql   = self::$designationSelect.' where d.id=?';
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$designation_id]);
+        $rows  = $query->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($rows)) {
+            return Designation::hydrate($rows[0]);
+        }
+
+        throw new \Exception('designations/unknown');
+    }
+
+    public function updateDesignation(\Domain\Streets\Designations\UseCases\Update\UpdateRequest $req)
+    {
+        $data = [
+            'id'         => $req->designation_id,
+            'type_id'    => $req->type_id,
+            'start_date' => $req->start_date->format('c'),
+            'rank'       => $req->rank
+        ];
+        parent::saveToTable($data, 'street_designations');
     }
 
     //---------------------------------------------------------------

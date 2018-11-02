@@ -16,6 +16,20 @@ class Controller
         $this->di = $DI;
     }
 
+    /**
+     * Reads a date field out of the request and converts it to a DateTime
+     */
+    public static function readDate(string $field): \DateTime
+    {
+        if (!empty($_REQUEST[$field])) {
+            try { $start_date = new \DateTime($_REQUEST[$field]); }
+            catch (\Exception $e) { $_SESSION['errorMessages'] = ['invalidDate']; }
+        }
+        if (!isset($start_date)) { $start_date = new \DateTime(); }
+
+        return $start_date;
+    }
+
     protected function address(int $address_id): ?\Domain\Addresses\Entities\Address
     {
         $load = $this->di->get('Domain\Addresses\UseCases\Load\Load');

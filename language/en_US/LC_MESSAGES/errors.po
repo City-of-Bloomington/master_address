@@ -17,6 +17,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en_US\n"
 
+msgid "missingStartDate"
+msgstr "You must provide a start date"
+
+msgid "missingEndDate"
+msgstr "You must provide an end date"
+
 msgid "invalidDate"
 msgstr "You provided an invalid date."
 

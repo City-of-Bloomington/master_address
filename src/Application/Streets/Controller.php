@@ -99,9 +99,12 @@ class Controller extends BaseController
             else { $_SESSION['errorMessages'] = $response->errors; }
         }
 
+        $metadata = $this->di->get('Domain\Streets\Metadata');
+        if (!$request->type_id) { $request->type_id = $metadata::TYPE_STREET; }
+
         $name    = !empty($_REQUEST[   'name_id']) ? parent::name  ((int)$_REQUEST[   'name_id']) : null;
         $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
-        return new Views\AddView($request, $this->di->get('Domain\Streets\Metadata'), $name, $contact);
+        return new Views\AddView($request, $metadata, $name, $contact);
     }
 
     private static function readStartDate(): \DateTime
