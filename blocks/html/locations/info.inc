@@ -5,6 +5,8 @@
  * @param Location $this->location
  * @param boolean  $this->disableButtons (optional)
  */
+use Application\Url;
+
 $fields = [
     'location_id', 'status', 'type_code', 'mailable', 'occupiable', 'active', 'trash_day', 'recycle_week'
 ];
@@ -32,8 +34,12 @@ foreach ($fields as $f) {
                     }
                     if (!$this->disableButtons && parent::isAllowed('addresses', 'add')) {
                         $h = $this->template->getHelper('buttonLink');
+                        $q = http_build_query([
+                            'location_id' => $location_id,
+                            'return_url'  => Url::current_url()
+                        ]);
                         echo $h->buttonLink(
-                            parent::generateUri('addresses.add')."?location_id=$location_id",
+                            parent::generateUri('addresses.add')."?$q",
                             $this->_('address_add'),
                             'add'
                         );
