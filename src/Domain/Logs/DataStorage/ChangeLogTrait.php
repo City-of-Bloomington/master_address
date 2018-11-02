@@ -7,6 +7,7 @@ declare (strict_types=1);
 namespace Domain\Logs\DataStorage;
 
 use Domain\Logs\Entities\ChangeLogEntry;
+use Domain\Logs\Metadata;
 
 trait ChangeLogTrait
 {
@@ -21,7 +22,7 @@ trait ChangeLogTrait
                     "{$this->logType}_id" => $entry->entity_id,
                     'person_id'  => $entry->person_id,
                     'contact_id' => $entry->contact_id,
-                    'action'     => $entry->action,
+                    'action'     => array_key_exists($entry->action, Metadata::$actions) ? Metadata::$actions[$entry->action] : $entry->action,
                     'notes'      => $entry->notes
                ]);
         $query = $this->pdo->prepare($insert->getStatement());

@@ -68,11 +68,17 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         return $select;
     }
 
+    /**
+     * Create a Street object from an array of data
+     */
     private static function hydrateStreet(array $row): Street
     {
         return new Street($row);
     }
 
+    /**
+     * Load a street object from the database
+     */
     public function load(int $street_id): Street
     {
         $select = $this->baseSelect();
@@ -85,6 +91,11 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         throw new \Exception('streets/unknown');
     }
 
+    /**
+     * Find streets in the database using loose matching
+     *
+     * @return array  An array of street objects
+     */
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
@@ -112,6 +123,8 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 
     /**
      * Saves a new street to the database and returns the ID for the street
+     *
+     * @return int  The new street_id
      */
     public function add(AddRequest $req): int
     {
@@ -135,6 +148,9 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         throw new \Exception('databaseError');
     }
 
+    /**
+     * Save a street back to the database
+     */
     public function update(UpdateRequest $req)
     {
         $sql = 'update streets set town_id=?, notes=? where id=?';
@@ -142,6 +158,9 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $query->execute([$req->town_id, $req->notes, $req->street_id]);
     }
 
+    /**
+     * Set the latest status for a street
+     */
     public function saveStatus(int $street_id, string $status)
     {
         $sql = 'update streets set status=? where id=?';
@@ -150,6 +169,8 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     }
 
     /**
+     * Save a new street designation to the database
+     *
      * @return int  The new designation_id
      */
     public function addDesignation(AliasRequest $req): int
@@ -163,51 +184,67 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         ], 'street_designations');
     }
 
+    private function designationSelect(): SelectInterface
+    {
+        $columns = ['d.id',
+                    'd.street_id',
+                    'd.street_name_id as name_id',
+                    'd.type_id',
+                    'd.start_date',
+                    'd.rank',
+                    'dt.name as type',
+                    'n.direction',
+                    'n.name',
+                    'n.post_direction',
+                    't.code as suffix_code'];
+        $select = $this->queryFactory->newSelect();
+        $select->cols($columns)
+               ->from('street_designations d')
+               ->join('INNER', 'street_designation_types dt', 'dt.id=d.type_id')
+               ->join('INNER', 'street_names              n',  'n.id=d.street_name_id')
+               ->join('LEFT' , 'street_types              t',  't.id=n.suffix_code_id');
+        return $select;
+    }
 
-    private static $designationSelect = "
-        select  d.id,
-                d.street_id,
-                d.street_name_id as name_id,
-                d.type_id,
-                d.start_date,
-                d.rank,
-                dt.name          as type,
-                n.direction,
-                n.name,
-                n.post_direction,
-                t.code           as suffix_code
-        from street_designations d
-                join street_designation_types dt on d.type_id=dt.id
-                join street_names n on d.street_name_id=n.id
-        left join street_types t on n.suffix_code_id=t.id
-    ";
-    public function designations(int $street_id): array
+    /**
+     * Query for street designations using exact matching
+     */
+    public function findDesignations(array $fields): array
     {
         $designations = [];
-        $sql = self::$designationSelect;
-        $sql.= ' where d.street_id=?';
 
-        $query = $this->pdo->prepare($sql);
-        $query->execute([$street_id]);
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $designations[] = Designation::hydrate($row);
+        $select = $this->designationSelect();
+        foreach ($fields as $f=>$v) {
+            switch ($f) {
+                case 'street_id':
+                case 'street_name_id':
+                case 'type_id':
+                    $select->where("d.$f=?", $v);
+                break;
+            }
         }
+        $result = $this->performSelect($select);
+        foreach ($result['rows'] as $r) { $designations[] = Designation::hydrate($r); }
         return $designations;
     }
 
+    /**
+     * Load a street designation object from the database
+     */
     public function loadDesignation(int $designation_id): Designation
     {
-        $sql   = self::$designationSelect.' where d.id=?';
-        $query = $this->pdo->prepare($sql);
-        $query->execute([$designation_id]);
-        $rows  = $query->fetchAll(\PDO::FETCH_ASSOC);
-        if (count($rows)) {
-            return Designation::hydrate($rows[0]);
+        $select = $this->designationSelect();
+        $select->where('d.id=?', $designation_id);
+        $result = $this->performSelect($select);
+        if (count($result['rows'])) {
+            return Designation::hydrate($result['rows'][0]);
         }
-
         throw new \Exception('designations/unknown');
     }
 
+    /**
+     * Save an existing street designation back to the database
+     */
     public function updateDesignation(\Domain\Streets\Designations\UseCases\Update\UpdateRequest $req)
     {
         $data = [

@@ -10,7 +10,8 @@ use Domain\Streets\DataStorage\StreetsRepository;
 
 class Metadata
 {
-    const TYPE_STREET = 1;
+    const TYPE_STREET   = 1;
+    const TYPE_HISTORIC = 2;
 
     private $repo;
 
