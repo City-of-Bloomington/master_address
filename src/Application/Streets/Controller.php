@@ -17,6 +17,7 @@ use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
+use Domain\Streets\UseCases\ChangeName\ChangeNameRequest;
 use Domain\Streets\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\Streets\UseCases\Update\UpdateRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -290,6 +291,43 @@ class Controller extends BaseController
                 !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null
             );
 
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Change the primary name for a street
+     *
+     * The previous primary name designation will be changed to HISTORIC
+     */
+    public function changeName(array $params): View
+    {
+        $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($street_id) {
+
+            $request = new ChangeNameRequest(
+                $street_id,
+                $_SESSION['USER']->id,
+                parent::readDate('start_date'),
+                $_REQUEST
+            );
+
+            if (isset($_POST['id'])) {
+                $change   = $this->di->get('Domain\Streets\UseCases\ChangeName\ChangeName');
+                $response = $change($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
+                    exit();
+                }
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+
+            return new Views\ChangeNameView(
+                $request,
+                parent::streetInfo($street_id),
+                !empty($_REQUEST[   'name_id']) ? parent::name  ((int)$_REQUEST[   'name_id']) : null,
+                !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null
+            );
         }
         return new \Application\Views\NotFoundView();
     }

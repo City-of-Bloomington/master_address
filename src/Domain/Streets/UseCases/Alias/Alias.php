@@ -57,7 +57,7 @@ class Alias
             $errors[] = 'streets/invalidAliasType';
         }
         // Make sure there's no duplicate names
-        foreach ($this->repo->designations($req->street_id) as $d) {
+        foreach ($this->repo->findDesignations(['street_id' => $req->street_id]) as $d) {
             if ($d->name_id == $req->name_id) {
                 $errors[] = 'streets/duplicateDesignation';
             }

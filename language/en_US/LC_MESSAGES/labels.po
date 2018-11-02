@@ -266,6 +266,9 @@ msgstr[1] "Designations"
 msgid "changeStatus"
 msgstr "Change Status"
 
+msgid "changeName"
+msgstr "Change Name"
+
 msgid "update"
 msgstr "Update"
 

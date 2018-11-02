@@ -19,10 +19,10 @@ use Domain\Streets\UseCases\Update\UpdateRequest;
 interface StreetsRepository
 {
     // Read functions
-    public function load           (int      $street_id): Street;
-    public function loadChangeLog  (int      $street_id): array;
-    public function designations   (int      $street_id): array;
-    public function loadDesignation(int $designation_id): Designation;
+    public function findDesignations(array       $fields): array;
+    public function load            (int      $street_id): Street;
+    public function loadChangeLog   (int      $street_id): array;
+    public function loadDesignation (int $designation_id): Designation;
     public function search   (SearchRequest $req): array;
 
     // Write functions

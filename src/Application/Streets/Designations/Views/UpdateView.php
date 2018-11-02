@@ -9,6 +9,7 @@ namespace Application\Streets\Designations\Views;
 use Application\Block;
 use Application\Template;
 
+use Domain\People\Entities\Person;
 use Domain\Streets\Designations\UseCases\Update\UpdateRequest;
 use Domain\Streets\Metadata;
 use Domain\Streets\UseCases\Info\InfoResponse;
