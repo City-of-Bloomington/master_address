@@ -9,7 +9,6 @@ namespace Domain\Subdivisions\UseCases\Update;
 use Domain\Subdivisions\Entities\Subdivision;
 use Domain\Subdivisions\DataStorage\SubdivisionsRepository;
 use Domain\Subdivisions\Metadata;
-use Domain\Subdivisions\UseCases\Validate\Validate;
 
 class Update
 {
@@ -22,17 +21,24 @@ class Update
 
     public function __invoke(UpdateRequest $req): UpdateResponse
     {
-        $validate = new Validate(new Metadata($this->repo));
-        $validation =  $validate(new Subdivision((array)$req));
-        if ($validation->errors) { return new UpdateResponse(null, $validation->errors); }
+        $errors = $this->validate($req);
+        if ($errors) { return new UpdateResponse(null, $errors); }
 
         try {
-            $id  = $this->repo->save($validation->subdivision);
+            $id  = $this->repo->save(new Subdivision((array)$req));
             $res = new UpdateResponse($id);
         }
         catch (\Exception $e) {
             $res = new UpdateResponse(null, [$e->getMessage()]);
         }
         return $res;
+    }
+
+    private function validate(UpdateRequest $req): array
+    {
+        $errors = [];
+        if (!$req->name) { $errors[] = 'missingName'; }
+        if (!$req->status) { $errors[] = 'missingStatus'; }
+        return $errors;
     }
 }

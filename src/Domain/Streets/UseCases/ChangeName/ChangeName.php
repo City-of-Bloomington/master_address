@@ -77,9 +77,9 @@ class ChangeName
     private function validate(ChangeNameRequest $request): array
     {
         $errors = [];
-        if (!$request->street_id ) { $errors[] = 'missingRequiredFields';    }
-        if (!$request->name_id   ) { $errors[] = 'designations/missingName'; }
-        if (!$request->start_date) { $errors[] = 'missingStartDate';         }
+        if (!$request->street_id ) { $errors[] = 'missingRequiredFields'; }
+        if (!$request->name_id   ) { $errors[] = 'missingName';           }
+        if (!$request->start_date) { $errors[] = 'missingStartDate';      }
         return $errors;
     }
 }

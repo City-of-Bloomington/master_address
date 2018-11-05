@@ -49,7 +49,7 @@ class Alias
     {
         $errors = [];
         if (!$req->street_id) { $errors[] = 'missingRequiredFields'; }
-        if (!$req->name_id  ) { $errors[] = 'designations/missingName'; }
+        if (!$req->name_id  ) { $errors[] = 'missingName'; }
         if (!$req->type_id  ) { $errors[] = 'designations/missingType'; }
 
         // You cannot create an Alias of type STREET

@@ -54,6 +54,7 @@ class Add
         if (!$req->street_id      ) { $errors[] = 'addresses/missingStreet';       }
         if (!$req->jurisdiction_id) { $errors[] = 'addresses/missingJurisdiction'; }
         if (!$req->state          ) { $errors[] = 'addresses/missingState';        }
+        if (!$req->zip            ) { $errors[] = 'addresses/missingZip';          }
 
         return $errors;
     }
