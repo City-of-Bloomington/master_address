@@ -52,7 +52,7 @@ class Add
         $errors = [];
         if (!$req->status ) { $errors[] = 'missingStatus'; }
         if (!$req->type_id) { $errors[] = 'designations/missingType'; }
-        if (!$req->name_id) { $errors[] = 'designations/missingName'; }
+        if (!$req->name_id) { $errors[] = 'missingName'; }
 
         if (   $req->status != ChangeLog::STATUS_CURRENT
             && $req->status != ChangeLog::STATUS_PROPOSED) {

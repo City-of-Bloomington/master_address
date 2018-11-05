@@ -9,8 +9,6 @@ namespace Domain\Subunits\UseCases\Correct;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Subunits\DataStorage\SubunitsRepository;
-Use Domain\Subunits\UseCases\Validate\Validate;
-use Domain\Subunits\UseCases\Validate\ValidateResponse;
 
 class Correct
 {
@@ -24,11 +22,6 @@ class Correct
     public function __invoke(CorrectRequest $req): CorrectResponse
     {
         try {
-            $validation = $this->validate($req);
-            if ($validation->errors) {
-                return new CorrectResponse(null, $req->subunit_id, $validation->errors);
-            }
-
             $this->repo->correct($req);
 
             $log_id = $this->repo->logChange(new ChangeLogEntry([
@@ -42,19 +35,5 @@ class Correct
         catch (\Exception $e) {
             return new CorrectResponse(null, $req->subunit_id, [$e->getMessage()]);
         }
-    }
-
-    /**
-     * Apply the corrected fields to the subunit and validate.
-     * This function does the validation without saving any data.
-     */
-    private function validate(CorrectRequest $req): ValidateResponse
-    {
-        $validate = new Validate();
-        $test = $this->repo->load($req->subunit_id);
-        foreach ($req as $k=>$v) {
-            if (property_exists($test, $k)) { $test->$k = $v; }
-        }
-        return $validate($test);
     }
 }

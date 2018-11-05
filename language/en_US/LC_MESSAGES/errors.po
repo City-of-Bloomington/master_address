@@ -17,11 +17,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en_US\n"
 
+msgid "missingEndDate"
+msgstr "You must provide an end date"
+
+msgid "missingName"
+msgstr "You must choose a name"
+
+msgid "missingRequiredFields"
+msgstr "You did not include all the required fields."
+
 msgid "missingStartDate"
 msgstr "You must provide a start date"
 
-msgid "missingEndDate"
-msgstr "You must provide an end date"
+msgid "missingStatus"
+msgstr "You must provide a status"
+
+msgid "missingTownship"
+msgstr "You must choose a township"
+
+msgid "missingType"
+msgstr "You must choose a type"
 
 msgid "invalidDate"
 msgstr "You provided an invalid date."
@@ -44,23 +59,11 @@ msgstr "You are not logged into this site anymore."
 msgid "passwordCorrupted"
 msgstr "Your password is corrupted.  Please contact a system administrator for help."
 
-msgid "missingRequiredFields"
-msgstr "You did not include all the required fields."
-
-msgid "missingStatus"
-msgstr "You must provide a status"
-
 msgid "addresses/duplicateAddress"
 msgstr "You are trying to save an address that is already duplicated in the system."
 
-msgid "addresses/missingStreetNumber"
-msgstr "You must provide a street number"
-
-msgid "addresses/missingType"
-msgstr "You must choose an address type"
-
-msgid "addresses/missingStreet"
-msgstr "You must choose a street"
+msgid "addresses/missingId"
+msgstr "Missing the address_id"
 
 msgid "addresses/missingJurisdiction"
 msgstr "You must choose a jurisdiction"
@@ -68,11 +71,17 @@ msgstr "You must choose a jurisdiction"
 msgid "addresses/missingState"
 msgstr "You must provide the state"
 
-msgid "addresses/missingId"
-msgstr "Missing the address_id"
+msgid "addresses/missingStreet"
+msgstr "You must choose a street"
 
-msgid "designations/missingName"
-msgstr "You must choose a street name"
+msgid "addresses/missingStreetNumber"
+msgstr "You must provide a street number"
+
+msgid "addresses/missingType"
+msgstr "You must choose an address type"
+
+msgid "addresses/missingZip"
+msgstr "You must provide a zip code"
 
 msgid "designations/missingType"
 msgstr "You must choose a designation type"

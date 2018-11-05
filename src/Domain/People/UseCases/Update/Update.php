@@ -8,7 +8,6 @@ namespace Domain\People\UseCases\Update;
 
 use Domain\People\Entities\Person;
 use Domain\People\DataStorage\PeopleRepository;
-use Domain\People\UseCases\Validate\Validate;
 
 class Update
 {
@@ -21,17 +20,24 @@ class Update
 
     public function __invoke(UpdateRequest $req): UpdateResponse
     {
-        $validate = new Validate();
-        $validation = $validate(new Person((array)$req));
-        if ($validation->errors) { return new UpdateResponse(null, $validation->errors); }
+        $errors = $this->validate($req);
+        if ($errors) { return new UpdateResponse(null, $errors); }
 
         try {
-            $id  = $this->repo->save($validation->person);
+            $id  = $this->repo->save(new Person((array)$req));
             $res = new UpdateResponse($id);
         }
         catch (\Exception $e) {
             $res = new UpdateResponse(null, [$e->getMessage()]);
         }
         return $res;
+    }
+
+    private function validate(UpdateRequest $req): array
+    {
+        $errors = [];
+        if (!$req->firstname) { $errors[] = 'missingFirstname'; }
+        if (!$req->lastname ) { $errors[] = 'missingLastname';  }
+        return $errors;
     }
 }

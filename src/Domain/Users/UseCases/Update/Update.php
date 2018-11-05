@@ -9,7 +9,6 @@ namespace Domain\Users\UseCases\Update;
 use Domain\Auth\AuthenticationService;
 use Domain\Users\Entities\User;
 use Domain\Users\DataStorage\UsersRepository;
-use Domain\Users\UseCases\Validate\Validate;
 
 class Update
 {
@@ -35,11 +34,10 @@ class Update
             }
         }
 
-        $validate = new Validate();
-        $validation = $validate(new User((array)$req));
-        if ($validation->errors) { return new UpdateResponse(null, $validation->errors); }
+        $errors = $this->validate($req);
+        if ($errors) { return new UpdateResponse(null, $errors); }
 
-        $user = $validation->user;
+        $user = new User((array)$req);
         if ( $req->password) {
             $user->password = $this->auth->password_hash($req->password);
         }
@@ -52,5 +50,17 @@ class Update
             $res = new UpdateResponse(null, [$e->getMessage()]);
         }
         return $res;
+    }
+
+    private function validate(UpdateRequest $req): array
+    {
+        $errors = [];
+        if (!$req->firstname) { $errors[] = 'missingFirstname'; }
+        if (!$req->lastname ) { $errors[] = 'missingLastname';  }
+        if (!$req->email    ) { $errors[] = 'missingEmail';     }
+        if (!$req->username ) { $errors[] = 'missingUsername';  }
+        if (!$req->role     ) { $errors[] = 'missingRole';      }
+        if (!$req->authentication_method ) { $errors[] = 'missingAuthenticationMethod'; }
+        return $errors;
     }
 }

@@ -8,7 +8,6 @@ namespace Domain\Plats\UseCases\Update;
 
 use Domain\Plats\Entities\Plat;
 use Domain\Plats\DataStorage\PlatsRepository;
-use Domain\Plats\UseCases\Validate\Validate;
 
 class Update
 {
@@ -21,17 +20,25 @@ class Update
 
     public function __invoke(UpdateRequest $req): UpdateResponse
     {
-        $validate = new Validate();
-        $validation = $validate(new Plat((array)$req));
-        if ($validation->errors) { return new UpdateResponse(null, $validation->errors); }
+        $errors = $this->validate($req);
+        if ($errors) { return new UpdateResponse(null, $errors); }
 
         try {
-            $id  = $this->repo->save($validation->plat);
+            $id  = $this->repo->save(new Plat((array)$req));
             $res = new UpdateResponse($id);
         }
         catch (\Exception $e) {
             $res = new UpdateResponse(null, [$e->getMessage()]);
         }
         return $res;
+    }
+
+    private function validate(UpdateRequest $req): array
+    {
+        $errors = [];
+        if (!$req->name       ) { $errors[] = 'missingName';     }
+        if (!$req->plat_type  ) { $errors[] = 'missingType';     }
+        if (!$req->township_id) { $errors[] = 'missingTownship'; }
+        return $errors;
     }
 }

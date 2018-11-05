@@ -17,6 +17,8 @@ use Domain\Users\UseCases\Delete\DeleteRequest;
 class Controller extends BaseController
 {
     const ITEMS_PER_PAGE = 20;
+    const DEFAULT_ROLE   = 'Public';
+    const DEFAULT_AUTH   = 'local';
 
 	public function index(array $params)
 	{
@@ -32,6 +34,8 @@ class Controller extends BaseController
         if (isset($_POST['firstname'])) {
             $update   = $this->di->get('Domain\Users\UseCases\Update\Update');
             $request  = new UpdateRequest($_POST);
+            if (!$request->role                 ) { $request->role                  = self::DEFAULT_ROLE; }
+            if (!$request->authentication_method) { $request->authentication_method = self::DEFAULT_AUTH; }
             $response = $update($request);
             if (!count($response->errors)) {
                 header('Location: '.View::generateUrl('users.index'));
