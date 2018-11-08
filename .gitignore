@@ -4,8 +4,8 @@ build
 dist
 ansible/roles/*
 vendor
-screen-*.css
-screen-*.css.map
+*.css
+*.css.map
 *.mo
 *.retry
 .buildpath
