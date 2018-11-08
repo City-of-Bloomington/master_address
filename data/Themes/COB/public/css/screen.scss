@@ -10,7 +10,7 @@
  * This CSS should only include properties that are not include in fn1.
  */
 @import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/vars.scss';
-@import 'modules/vars.scss';
-@import 'modules/header.scss';
-@import 'modules/table.scss';
-@import 'modules/main.scss';
+@import 'modules/vars';
+@import 'modules/layout';
+@import 'modules/table';
+@import 'modules/main';

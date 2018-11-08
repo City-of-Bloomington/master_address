@@ -8,14 +8,6 @@ COMMIT := $(shell git rev-parse --short HEAD)
 
 default: clean compile package
 
-clean:
-	rm -Rf build
-	mkdir build
-
-package:
-	rsync -rl --exclude-from=buildignore --delete . build/master_address
-	cd build && tar czf master_address.tar.gz master_address
-
 deps:
 ifndef SASS
 	$(error "sassc is not installed")
@@ -24,8 +16,17 @@ ifndef MSGFMT
 	$(error "gettext is not installed")
 endif
 
+clean:
+	rm -Rf build
+	mkdir build
+
 compile: deps $(LANGUAGES)
-	sassc -mt compact public/css/screen.scss public/css/screen-${VERSION}.css
+	cd                 public/css && sassc -mt compact screen.scss screen-${VERSION}.css
+	cd data/Themes/COB/public/css && sassc -mt compact screen.scss screen-${VERSION}.css
+
+package:
+	rsync -rl --exclude-from=buildignore --delete . build/master_address
+	cd build && tar czf master_address.tar.gz master_address
 
 $(LANGUAGES): deps
 	cd $@ && msgfmt -cv *.po

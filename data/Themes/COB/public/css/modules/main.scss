@@ -9,15 +9,15 @@ main {
 }
 
 .pageNavigation          { margin: $size-gutter; }
-.pageNavigation li       { display:inline; margin: $size-gutter; }
+.pageNavigation li       { display: inline; margin: $size-gutter; }
 
 @media print {
-    body { font-size:10pt; }
-    main { padding:0; }
+    body { font-size: 10pt; }
+    main { padding: 0; }
 
     body > header,
     body > footer,
     .dropdown {
-        display:none;
+        display: none;
     }
 }
