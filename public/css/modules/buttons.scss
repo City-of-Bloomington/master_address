@@ -1,18 +1,18 @@
 /**
  * Base styles for buttons and button links
+ *
+ * @copyright 2015-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 button, .button {
-    background-color:#ccc;
+    background-color: #ccc;
     border:1px solid #000;
-    border-radius:.5em;
-    //color: $color-heading-2;
-    display:inline-block;
+    border-radius: .5em;
+    display: inline-block;
     padding: .25em 1em;
-    //font-size: (14em/16);
-    //font-weight:bold;
     vertical-align: middle;
     &:hover {
-        cursor:pointer;
+        cursor: pointer;
     }
 }
 .add    {  }

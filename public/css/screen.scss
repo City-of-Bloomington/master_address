@@ -1,8 +1,11 @@
-@import 'sass-modules/_normalize';
-@import 'sass-modules/_layout';
-@import 'sass-modules/_header';
-@import 'sass-modules/_menu';
-@import 'sass-modules/_content-section';
-@import 'sass-modules/_field';
-@import 'sass-modules/_buttons';
-@import 'sass-modules/_tables';
+/**
+ * @copyright 2015-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ */
+@import 'modules/normalize';
+@import 'modules/layout';
+@import 'modules/header';
+@import 'modules/menu';
+@import 'modules/content-section';
+@import 'modules/buttons';
+@import 'modules/tables';
