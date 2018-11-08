@@ -44,11 +44,10 @@ class PdoPeopleRepository extends PdoRepository implements PeopleRepository
 
         foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
-                $select->where("$f like ?", $req->$f);
+                $select->where("lower($f) like ?", strtolower($req->$f).'%');
             }
         }
         $select->orderBy(self::$DEFAULT_SORT);
-
         return $this->performSelect($select, $req->itemsPerPage, $req->currentPage);
     }
 

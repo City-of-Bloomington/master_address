@@ -110,6 +110,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return new Address($row);
     }
 
+    /**
+     * Load an Address object from the database
+     */
     public function load(int $address_id): Address
     {
         $select = $this->baseSelect();
@@ -167,7 +170,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                             $select->where("$column::varchar like ?", "$v%");
                         break;
                         case 'street_name':
-                            $select->where("$column like ?", "$v%");
+                            $select->where("lower($column) like ?", strtolower("$v%"));
                         break;
 
                         default:
