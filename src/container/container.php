@@ -81,9 +81,9 @@ foreach (['Find', 'Load'] as $a) {
 
 // People
 foreach(['Info', 'Load', 'Search', 'Update'] as $a) {
-    $DI->params[ 'Domain\People\UseCases\Load\Load']['repository'] = $DI->lazyGet('Domain\People\DataStorage\PeopleRepository');
-    $DI->set(    'Domain\People\UseCases\Load\Load',
-    $DI->lazyNew('Domain\People\UseCases\Load\Load'));
+    $DI->params[ "Domain\\People\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\People\DataStorage\PeopleRepository');
+    $DI->set(    "Domain\\People\\UseCases\\$a\\$a",
+    $DI->lazyNew("Domain\\People\\UseCases\\$a\\$a"));
 }
 
 // Plats

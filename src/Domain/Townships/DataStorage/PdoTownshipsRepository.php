@@ -42,7 +42,7 @@ class PdoTownshipsRepository extends PdoRepository implements TownshipsRepositor
 
         foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
-                $select->where("$f like ?", $req->$f);
+                $select->where("lower($f) like ?", strtolower($req->$f).'%');
             }
         }
         $select->orderBy(self::$DEFAULT_SORT);

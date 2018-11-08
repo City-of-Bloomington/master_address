@@ -62,7 +62,7 @@ class PdoUsersRepository extends PdoRepository implements UsersRepository
 
         foreach ($this->columns() as $f) {
             if (!empty($req->$f)) {
-                $select->where("$f like ?", "{$req->$f}%");
+                $select->where("lower($f) like ?", strtolower("{$req->$f}%"));
             }
         }
         $order = $req->order ? $req->order : self::$DEFAULT_SORT;

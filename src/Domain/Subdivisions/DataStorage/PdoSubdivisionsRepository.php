@@ -80,7 +80,7 @@ class PdoSubdivisionsRepository extends PdoRepository implements SubdivisionsRep
                     break;
 
                     default:
-                        $select->where("$column like ?", "{$req->$f}%");
+                        $select->where("lower($column) like ?", strtolower("{$req->$f}%"));
                 }
             }
         }

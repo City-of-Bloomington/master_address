@@ -87,7 +87,7 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
                     break;
 
                     default:
-                        $select->where("$column like ?", "{$req->$f}%");
+                        $select->where("lower($column) like ?", strtolower("{$req->$f}%"));
                 }
             }
         }

@@ -104,7 +104,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                 $column = "$m[prefix].$m[dbName]";
                 switch ($f) {
                     case 'name':
-                        $select->where("$column like ?", "{$req->$f}%");
+                        $select->where("lower($column) like ?", strtolower("{$req->$f}%"));
                     break;
 
                     default:
