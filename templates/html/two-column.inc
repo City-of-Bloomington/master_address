@@ -10,15 +10,15 @@
 		$this->_include('partials/header.inc');
 	?>
 	<main>
-        <?php
-            $this->_include('partials/panel-one.inc');
-        ?>
         <div id="content-panel" class="panel">
             <?php
                 include BLOSSOM.'/errorMessages.php';
                 echo $this->includeBlocks();
             ?>
         </div>
+        <?php
+            $this->_include('partials/panel-one.inc');
+        ?>
 	</main>
 	<?php $this->_include('partials/footer.inc'); ?>
 </body>

@@ -3,18 +3,18 @@
 }
 
 .two-column {
-    main { overflow:auto; }
+    main { overflow: auto; }
 
-    #panel-one { float: right; width: 33.3333%; }
-    #content-panel { margin-right: 33.3333%;; }
+    #panel-one {  }
+    #content-panel {  }
 }
 
 .three-column {
-    main { overflow:auto; }
+    main { overflow: auto; }
 
-    #panel-one { float:left; width:180px; }
-    #panel-two { float:right; width:180px; }
-    #content-panel { margin-left: 190px; margin-right: 190px; }
+    #panel-one {  }
+    #panel-two {  }
+    #content-panel {  }
 }
 
-footer { clear:both; }
+footer { clear: both; }
