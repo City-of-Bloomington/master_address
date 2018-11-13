@@ -26,7 +26,7 @@ class Chooser extends Helper
                             ?string $value   = null,
                             ?string $display = null )
     {
-		#$this->template->addToAsset('scripts', BASE_URI.'/js/people/chooser.js');
+		$this->template->addToAsset('scripts', BASE_URI.'/js/chooser.js');
 
 		$callback_url = new Url(Url::current_url(BASE_HOST));
 		if (isset($callback_url->callback_field)) { unset($callback_url->callback_field); }
@@ -38,13 +38,14 @@ class Chooser extends Helper
 
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}\" id=\"{$fieldId}\" value=\"$value\" />
-		<span id=\"{$fieldId}-name\">$display</span>
+		<span id=\"{$fieldId}-display\">$display</span>
 		<a class=\"button chooser\"
 			href=\"$chooserUrl\"
-			onclick=\"CHOOSER.open(event, '$fieldId');\">
+			onclick=\"CHOOSER.open(event, '$fieldId', '$chooserUrl');\">
 			{$this->template->_('choose')}
 		</a>
 		<a class=\"reset button\" href=\"$callback_url\">{$this->template->_('reset')}</a>
+
 		";
 		return $html;
 	}

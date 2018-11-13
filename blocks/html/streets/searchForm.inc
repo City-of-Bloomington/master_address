@@ -15,7 +15,7 @@
 ?>
 <section>
     <header>
-        <h1><?= $this->_('street_search'); ?></h1>
+        <h1><?= $this->_(['street', 'streets', 100]); ?></h1>
     </header>
     <form method="get">
         <fieldset><legend><?= $this->_('search'); ?></legend>

@@ -1,10 +1,13 @@
 <?php
 /**
+ * @see public/js/chooser.js
+ *
  * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array  $this->names
  * @param Url    $this->callback_url   Url to link person results to
  * @param string $this->callback_field Parameter to add to the callback_url
+ * @param string $this->callback_js    Javascript function to call as a callback
  */
 declare (strict_types=1);
 ?>
@@ -16,7 +19,10 @@ declare (strict_types=1);
             $$f = parent::escape($n->$f);
         }
 
-        if ($this->callback_url) {
+        if ($this->callback_js) {
+            $uri = "javascript:self.opener.{$this->callback_js}('{$n->id}', '{$n->__toString()}');";
+        }
+        elseif ($this->callback_url) {
             $this->callback_url->{$this->callback_field} = $n->id;
             $uri = $this->callback_url;
         }

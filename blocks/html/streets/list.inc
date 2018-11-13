@@ -1,10 +1,14 @@
 <?php
 /**
+ * @see public/js/chooser.js
+ *
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ *
  * @param array  $this->streets
  * @param Url    $this->callback_url   Url to link person results to
  * @param string $this->callback_field Parameter to add to the callback_url
+ * @param string $this->callback_js    Javascript function to call as a callback
  */
 ?>
 <table>
@@ -15,7 +19,10 @@
             $status = parent::escape($street->status);
             $town   = parent::escape($street->town_name);
 
-            if ($this->callback_url) {
+            if ($this->callback_js) {
+                $uri = "javascript:self.opener.{$this->callback_js}('{$street->id}', '{$street->__toString()}');";
+            }
+            elseif ($this->callback_url) {
                 $this->callback_url->{$this->callback_field} = $street->id;
                 $uri = $this->callback_url;
             }

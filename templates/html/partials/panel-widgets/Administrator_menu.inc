@@ -13,7 +13,6 @@ $routes = [
     'users'         => 'user',
     'plats'         => 'plat',
     'subdivisions'  => 'subdivision',
-    'streets'       => 'street',
     'streetNames'   => 'streetName'
 ];
 foreach ($routes as $plural=>$singular) {

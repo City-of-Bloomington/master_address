@@ -24,11 +24,13 @@ class InfoView extends Template
 
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
+        $actions = null;
         if (isset($_SESSION['USER'])) {
-            $actions   = [Log::ACTION_VERIFY, Log::ACTION_CORRECT];
-            $actions[] = $info->address->status == Log::STATUS_RETIRED
-                    ? Log::ACTION_UNRETIRE
-                    : Log::ACTION_RETIRE;
+            $actions = [
+                Log::ACTION_VERIFY,
+                Log::ACTION_CORRECT,
+                ($info->address->status == Log::STATUS_RETIRED) ? Log::ACTION_UNRETIRE : Log::ACTION_RETIRE
+            ];
         }
 
         $this->blocks = [

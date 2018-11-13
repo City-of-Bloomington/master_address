@@ -17,7 +17,6 @@ interface NamesRepository
     public function    load     (int $name_id): Name;
     public function designations(int $name_id): array;
     public function search(SearchRequest $req): array;
-    public function duplicateCount(Name $name): int;
 
     // Write functions
     public function save          (Name        $name): int;
