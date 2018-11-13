@@ -92,11 +92,11 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
                ->from(self::TABLE.' a')
-               ->join('LEFT', 'townships     t',   'a.township_id=t.id')
-               ->join('LEFT', 'jurisdictions j',   'a.jurisdiction_id=j.id')
-               ->join('LEFT', 'plats         p',   'a.plat_id=p.id')
-               ->join('LEFT', 'subdivisions  sub', 'a.subdivision_id=sub.id')
-               ->join('LEFT', 'streets             s',  'a.street_id=s.id')
+               ->join('LEFT', 'townships            t', 'a.township_id=t.id')
+               ->join('LEFT', 'jurisdictions        j', 'a.jurisdiction_id=j.id')
+               ->join('LEFT', 'plats                p', 'a.plat_id=p.id')
+               ->join('LEFT', 'subdivisions       sub', 'a.subdivision_id=sub.id')
+               ->join('LEFT', 'streets              s', 'a.street_id=s.id')
                ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('LEFT', 'street_names        sn', 'sd.street_name_id=sn.id')
                ->join('LEFT', 'street_types        st', 'sn.suffix_code_id=st.id')
@@ -188,6 +188,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
     }
 
+
     private function doSelect(SelectInterface $select, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select->orderBy(self::$DEFAULT_SORT);
@@ -199,6 +200,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $result;
     }
 
+    /**
+     * Load location objects for an address
+     */
     public function locations(int $address_id): array
     {
         $output = [];
@@ -223,6 +227,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $output;
     }
 
+    /**
+     * Load subunit objects for an address
+     */
     public function subunits(int $address_id): array
     {
         $subunits = [];

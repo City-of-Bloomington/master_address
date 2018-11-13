@@ -7,6 +7,7 @@ declare (strict_types=1);
 namespace Domain\Streets\UseCases\Info;
 
 use Domain\Streets\DataStorage\StreetsRepository;
+use Domain\Logs\ChangeLogResponse;
 
 class Info
 {
@@ -22,8 +23,10 @@ class Info
         $info = new InfoResponse();
         try {
             $info->street       = $this->repo->load         ($req->id);
-            $info->changeLog    = $this->repo->loadChangeLog($req->id);
             $info->designations = $this->repo->findDesignations(['street_id'=>$req->id]);
+
+            $result = $this->repo->loadChangeLog($req->id);
+            $info->changeLog = new ChangeLogResponse($result['rows'], $result['total']);
         }
         catch (\Exception $e) {
             $info->errors = [$e->getMessage()];

@@ -14,6 +14,7 @@ use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
+use Domain\Addresses\UseCases\ChangeLog\ChangeLogRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Search\SearchResponse;
@@ -45,9 +46,13 @@ class Controller extends BaseController
         return $query;
     }
 
+    /**
+     * Address search
+     */
     public function index(array $params)
     {
-		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+		$page   = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+
         $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
         $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
 
@@ -58,9 +63,18 @@ class Controller extends BaseController
                 ? $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page))
                 : new SearchResponse();
 
+        if (View::isAllowed('addresses', 'changeLog')) {
+            $logPage   = !empty($_GET['logPage']) ? (int)$_GET['logPage'] : 1;
+            $log       = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
+            $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $logPage, true));
+            return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page, $changeLog, $logPage);
+        }
         return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }
 
+    /**
+     * Webservice for parsing address strings into parts
+     */
     public function parse(array $params)
     {
         if (!empty($_GET['address'])) {
@@ -70,6 +84,9 @@ class Controller extends BaseController
         return new Views\ParseView();
     }
 
+    /**
+     * Display information about a single address
+     */
     public function view(array $params): View
     {
         if (!empty($_GET['id'])) {
@@ -82,6 +99,18 @@ class Controller extends BaseController
             }
         }
         return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Display the address change log
+     */
+    public function changeLog(array $params): View
+    {
+        $log       = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
+		$page      = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+        $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $page, true));
+
+        return new Views\ChangeLogView($changeLog, self::ITEMS_PER_PAGE, $page);
     }
 
     /**

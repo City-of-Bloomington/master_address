@@ -57,7 +57,10 @@ $DI->lazyNew('Domain\Auth\AuthenticationService'));
 // Use Cases
 //---------------------------------------------------------
 // Addresses
-$useCases = ['Add', 'Correct', 'Info', 'Load', 'Parse', 'Renumber', 'Retire', 'Search', 'Unretire', 'Verify'];
+$useCases = [
+    'Add', 'ChangeLog', 'Correct', 'Info', 'Load', 'Parse',
+    'Renumber', 'Retire', 'Search', 'Unretire', 'Verify'
+];
 foreach ($useCases as $a) {
     $DI->params[ "Domain\\Addresses\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
     $DI->set(    "Domain\\Addresses\\UseCases\\$a\\$a",
