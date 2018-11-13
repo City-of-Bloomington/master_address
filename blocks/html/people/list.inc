@@ -1,10 +1,14 @@
 <?php
 /**
+ * @see public/js/chooser.js
+ *
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ *
  * @param array  $this->people
  * @param Url    $this->callback_url   Url to link person results to
  * @param string $this->callback_field Parameter to add to the callback_url
+ * @param string $this->callback_js    Javascript function to call as a callback
  */
 ?>
 <section>
@@ -28,15 +32,18 @@
 
 	<table>
 		<thead>
-			<tr><th><?= $this->_('name'    ); ?></th>
-				<th><?= $this->_('email'   ); ?></th>
+			<tr><th><?= $this->_('name' ); ?></th>
+				<th><?= $this->_('email'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
 			foreach ($this->people as $person) {
 				$name = parent::escape("{$person->firstname} {$person->lastname}");
-				if ($this->callback_url) {
+				if ($this->callback_js) {
+                    $url = "javascript:self.opener.{$this->callback_js}('{$person->id}', '{$person->__toString()}');";
+				}
+				elseif ($this->callback_url) {
                     $this->callback_url->{$this->callback_field} = $person->id;
                     $url = $this->callback_url->__toString();
 				}

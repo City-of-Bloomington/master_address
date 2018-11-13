@@ -6,10 +6,10 @@
  */
 ?>
 <section>
-    <header><h1><?= $this->_('address_search'); ?></h1></header>
+    <header><h1><?= $this->_(['address', 'addresses', 100]); ?></h1></header>
 
     <form method="get" action="<?= parent::generateUri('addresses.index'); ?>">
-        <fieldset><legend><?= $this->_('address'); ?></legend>
+        <fieldset><legend><?= $this->_('search'); ?></legend>
             <?php
                 $h = $this->template->getHelper('field');
                 echo $h->field([
