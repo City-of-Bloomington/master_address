@@ -21,23 +21,20 @@ class InfoView extends Template
 
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
-        $actions = ['verify'];
-        if ($info->subunit->status == Log::STATUS_CURRENT) {
-            $actions[] = 'correct';
-            $actions[] = 'retire';
-        }
-        else {
-            $actions[] = 'unretire';
-        }
+        $actions = ($info->subunit->status == Log::STATUS_CURRENT)
+                 ? ['verify', 'correct', 'retire']
+                 : ['verify', 'unretire'];
 
-        $this->blocks[] = new Block('subunits/info.inc', [
-            'subunit' => $info->subunit,
-            'title'   => parent::escape($info->subunit),
-            'actions' => $actions
-        ]);
-
-        $this->blocks[]              = new Block('logs/statusLog.inc',  ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('logs/changeLog.inc', ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
+        $this->blocks = [
+            new Block('subunits/info.inc',   ['subunit'   => $info->subunit,
+                                              'title'     => parent::escape($info->subunit),
+                                              'actions'   => $actions]),
+            new Block('logs/statusLog.inc',  ['statuses'  => $info->statusLog]),
+            new Block('logs/changeLog.inc',  ['entries'   => $info->changeLog->entries,
+                                              'total'     => $info->changeLog->total]),
+            'panel-one' => [
+                new Block('locations/locations.inc',  ['locations' => $info->locations])
+            ]
+        ];
     }
 }

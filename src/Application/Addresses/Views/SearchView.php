@@ -11,10 +11,15 @@ use Application\Template;
 use Application\Paginator;
 
 use Domain\Addresses\UseCases\Search\SearchResponse;
+use Domain\Logs\ChangeLogResponse;
 
 class SearchView extends Template
 {
-    public function __construct(SearchResponse $response, int $itemsPerPage, int $currentPage)
+    public function __construct(SearchResponse     $response,
+                                int                $itemsPerPage,
+                                int                $currentPage,
+                                ?ChangeLogResponse $changeLog    = null,
+                                ?int               $changeLogPage= null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
@@ -25,7 +30,6 @@ class SearchView extends Template
         }
 
         $this->blocks[] = new Block('addresses/findForm.inc', ['addresses' => $response->addresses]);
-
         if ($response->total > $itemsPerPage) {
             $this->blocks[] = new Block('pageNavigation.inc', [
                 'paginator' => new Paginator(
@@ -34,5 +38,16 @@ class SearchView extends Template
                     $currentPage
             )]);
         }
+
+        if ($changeLog) {
+            $this->blocks[] = new Block('logs/entityChangeLog.inc', [
+                'entries'      => $changeLog->entries,
+                'total'        => $changeLog->total,
+                'itemsPerPage' => $itemsPerPage,
+                'currentPage'  => $changeLogPage,
+                'moreLink'     => true
+            ]);
+        }
+
     }
 }

@@ -1,18 +1,20 @@
 <?php
 /**
- * Displays entries from a change log without any entity info.
+ * Displays entries from a change log, including the entity information
  *
- * This type of change log is typically displayed on info views for entitie.
- * Because we're already only displaying a single entity, there is no need
- * to include the entity info in the change log display.
+ * This type of display is used when showing a full dump of a change log.
+ * Since we're showing changes across a bunch of entities, we need to include
+ * the entity info for each change log entry.
  *
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018 City of Bloomington, Indiana
+ * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  * @param array $this->entries       An array of Domain\Logs\Entities\ChangeLogEntry
  * @param int   $this->total
  * @param int   $this->itemsPerPage
  * @param int   $this->currentPage
+ * @param bool  $this->moreLink
  */
+declare (strict_types=1);
 use Application\Block;
 use Application\Paginator;
 ?>
@@ -23,6 +25,7 @@ use Application\Paginator;
 	<table>
 		<thead>
 			<tr><th><?= $this->_('date'); ?></th>
+                <th></th>
 				<th><?= $this->_('action' ); ?></th>
 				<th><?= $this->_('person' ); ?></th>
 				<th><?= $this->_('contact'); ?></th>
@@ -33,12 +36,14 @@ use Application\Paginator;
 		<?php
             foreach ($this->entries as $c) {
                 $date    = $c->action_date->format(DATE_FORMAT);
+                $entity  = parent::escape($c->entity->__toString());
                 $person  = parent::escape("{$c->person_firstname} {$c->person_lastname}");
                 $contact = parent::escape("{$c->contact_firstname} {$c->contact_lastname}");
                 $action  = parent::escape($c->action);
                 $notes   = parent::escape($c->notes);
                 echo "
                 <tr><th>$date</th>
+                    <td>$entity</td>
                     <td>$action</td>
                     <td>$person</td>
                     <td>$contact</td>
@@ -51,13 +56,19 @@ use Application\Paginator;
     </table>
     <?php
         if ($this->itemsPerPage && $this->total > $this->itemsPerPage) {
-            $paginator = new Block('pageNavigation.inc', [
-                'paginator' => new Paginator(
-                    $this->total,
-                    $this->itemsPerPage,
-                    $this->currentPage
-            )]);
-            echo $paginator->render('html', $this->template);
+            if ($this->moreLink) {
+                $uri = parent::generateUri('addresses.changeLog');
+                echo "<a href=\"$uri\">{$this->_('more')}</a>";
+            }
+            else {
+                $paginator = new Block('pageNavigation.inc', [
+                    'paginator' => new Paginator(
+                        $this->total,
+                        $this->itemsPerPage,
+                        $this->currentPage
+                )]);
+                echo $paginator->render('html', $this->template);
+            }
         }
     ?>
 </section>

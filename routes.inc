@@ -72,28 +72,15 @@ $ROUTES->attach('designations', "/designations", function ($r) {
 $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->setValues(['controller'=> 'Application\Addresses\Controller']);
 
-    $r->add('view',   '/{id}' )->addValues(['action'=>'view' ]);
-    $r->add('index',  '')      ->addValues(['action'=>'index']);
-    $r->add('add',    '/add'  )->addValues(['action'=>'add'  ]);
-    $r->add('parse',  '/parse')->addValues(['action'=>'parse']);
+    $r->add('view',      '/{id}'     )->addValues(['action'=>'view'     ]);
+    $r->add('index',     ''          )->addValues(['action'=>'index'    ]);
+    $r->add('add',       '/add'      )->addValues(['action'=>'add'      ]);
+    $r->add('parse',     '/parse'    )->addValues(['action'=>'parse'    ]);
+    $r->add('changeLog', '/changeLog')->addValues(['action'=>'changeLog']);
     foreach (['verify', 'correct', 'retire', 'unretire'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });
-/*
-$ROUTES->attach('locationTypes', "/locations/types", function ($r) {
-    $r->setValues(['controller'=> 'Application\Locations\TypesController']);
-
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-});
-$ROUTES->attach('purposes', "/locations/purposes", function ($r) {
-    $r->setValues(['controller'=> 'Application\Locations\PurposesController']);
-
-    $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-    $r->add('index',  '')             ->addValues(['action'=>'index' ]);
-});
-*/
 
 // Controllers that only have index, view, update
 $tables = [

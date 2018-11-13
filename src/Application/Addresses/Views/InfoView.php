@@ -31,16 +31,21 @@ class InfoView extends Template
                     : Log::ACTION_RETIRE;
         }
 
-        $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
-        $this->blocks[] = new Block('addresses/info.inc', [
-            'address' => $info->address,
-            'title'   => $this->vars['title'],
-            'actions' => $actions
-        ]);
+        $this->blocks = [
+            new Block('addresses/breadcrumbs.inc', ['address'  => $info->address]),
 
-        $this->blocks[]              = new Block('logs/statusLog.inc',      ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('logs/changeLog.inc',      ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $info->locations]);
-        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       ['address'   => $info->address, 'subunits' => $info->subunits]);
+            new Block('addresses/info.inc',        ['address'  => $info->address,
+                                                    'title'    => $this->vars['title'],
+                                                    'actions'  => $actions]),
+
+            new Block('logs/statusLog.inc',        ['statuses' => $info->statusLog]),
+
+            new Block('logs/changeLog.inc',        ['entries'      => $info->changeLog->entries,
+                                                    'total'        => $info->changeLog->total]),
+            'panel-one' => [
+                new Block('locations/locations.inc', ['locations' => $info->locations]),
+                new Block('subunits/list.inc',       ['address'   => $info->address, 'subunits' => $info->subunits])
+            ]
+        ];
     }
 }

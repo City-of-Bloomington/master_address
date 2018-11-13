@@ -16,13 +16,16 @@ class ChangeLogEntry
     public $action;
     public $notes;
 
+    // Hydrated entity object for the log entry
+    public $entity;
+
     // Foreign key fields
     public $person_firstname;
     public $person_lastname;
     public $contact_firstname;
     public $contact_lastname;
 
-    public function __construct(?array $data=null)
+    public function __construct(?array $data=null, ?object $entity=null)
     {
         if ($data) {
             if (!empty($data['id'        ])) { $this->id         = (int)$data['id'        ]; }
@@ -39,6 +42,8 @@ class ChangeLogEntry
 
             if (!empty($data['action_date'])) { $this->setActionDate($data['action_date']); }
         }
+
+        $this->entity = $entity;
     }
 
     public function setActionDate(\DateTime $date) { $this->action_date = $date; }
@@ -50,9 +55,9 @@ class ChangeLogEntry
      * The constructor requires property values to already be of the correct type.
      * This function converts string values into their correct type.
      */
-    public static function hydrate(array $row): ChangeLogEntry
+    public static function hydrate(array $row, ?object $entity=null): ChangeLogEntry
     {
         if (!empty($row['action_date'])) { $row['action_date'] = new \DateTime($row['action_date']); }
-        return new ChangeLogEntry($row);
+        return new ChangeLogEntry($row, $entity);
     }
 }
