@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Subunits;
@@ -10,11 +10,13 @@ use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Subunits\UseCases\Add\AddRequest;
+use Domain\Subunits\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
+use Domain\Subunits\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
 {
-    public function view(array $params)
+    public function view(array $params): View
     {
         if (!empty($_GET['id'])) {
             $info = parent::subunitInfo((int)$_GET['id']);
@@ -28,7 +30,7 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    public function add(array $params)
+    public function add(array $params): View
     {
         global $DEFAULTS;
         $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
@@ -63,7 +65,7 @@ class Controller extends BaseController
     /**
      * Correct an error in the primary attributes of a subunit
      */
-    public function correct(array $params)
+    public function correct(array $params): View
     {
         $subunit_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
         if ($subunit_id) {
@@ -98,50 +100,61 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
-    public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
-    public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
-
     /**
-     * Standard use case handler involving a ChangeLogEntry
-     *
-     * The use case name should be the capitalized version, matching the
-     * directory name in /src/Domain.
-     *
-     * @param string $name  The short (capitalized) use case name
+     * Change the status on a subunit
      */
-    private function doBasicChangeLogUseCase(string $name)
+    public function changeStatus(array $params): View
     {
-        $useCase        = "Domain\\Subunits\\UseCases\\$name\\$name";
-        $useCaseRequest = "Domain\\Subunits\\UseCases\\$name\\{$name}Request";
-        $useCaseView    = "Application\\Subunits\\Views\\{$name}View";
-
         $subunit_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
         if ($subunit_id) {
-            if (isset($_POST['id'])) {
-                $request  = new $useCaseRequest($subunit_id, $_SESSION['USER']->id, $_POST);
-                $handle   = $this->di->get($useCase);
-                $response = $handle($request);
+            $change   = $this->di->get('Domain\Subunits\UseCases\ChangeStatus\ChangeStatus');
+            $request  = new ChangeStatusRequest($subunit_id, $_SESSION['USER']->id, $_REQUEST);
 
-                if (!count($response->errors)) {
+            if (isset($_POST['status'])) {
+                $response = $change($request);
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('subunits.view', ['id'=>$subunit_id]));
                     exit();
                 }
-                else { $_SESSION['errorMessages'] = $response->errors; }
+                $_SESSION['errorMessages'] = $response->errors;
             }
 
+            $info = parent::subunitInfo($subunit_id);
+            if (!$request->status) {
+                $request->status = $info->subunit->status;
+            }
 
-            $info    = parent::subunitInfo($subunit_id);
             $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
-            if (!isset($request)) {
-                $request = new $useCaseRequest($subunit_id, $_SESSION['USER']->id, [
-                    'contact_id' => $contact ? $contact->id : null
-                ]);
+
+            return new Views\ChangeStatusView($request, $info, $change::statuses(), $contact);
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Create a changeLog comment, declaring you have verified this subunit.
+     */
+    public function verify(array $params): View
+    {
+        $subunit_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($subunit_id) {
+            $request = new VerifyRequest($subunit_id, $_SESSION['USER']->id, $_REQUEST);
+            if (isset($_POST['id'])) {
+                $verify = $this->di->get('Domain\Subunits\UseCases\Verify\Verify');
+                $response = $verify($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('subunits.view', ['id'=>$subunit_id]));
+                    exit();
+                }
+                $_SESSION['errorMessages'] = $response->errors;
             }
 
-            return new $useCaseView($request, $info);
+            return new Views\VerifyView(
+                $request,
+                parent::subunitInfo($subunit_id),
+                !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null
+            );
         }
-
         return new \Application\Views\NotFoundView();
     }
 }

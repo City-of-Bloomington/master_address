@@ -58,15 +58,15 @@ $DI->lazyNew('Domain\Auth\AuthenticationService'));
 //---------------------------------------------------------
 // Addresses
 $useCases = [
-    'Add', 'ChangeLog', 'Correct', 'Info', 'Load', 'Parse',
-    'Renumber', 'Retire', 'Search', 'Unretire', 'Verify'
+    'Add', 'ChangeLog', 'ChangeStatus', 'Correct', 'Info', 'Load', 'Parse',
+    'Renumber', 'Search', 'Verify'
 ];
 foreach ($useCases as $a) {
     $DI->params[ "Domain\\Addresses\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
     $DI->set(    "Domain\\Addresses\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Addresses\\UseCases\\$a\\$a"));
 }
-$DI->params['Domain\Addresses\UseCases\Retire\Retire']['subunitRetire']  = $DI->lazyGet('Domain\Subunits\UseCases\Retire\Retire');
+$DI->params['Domain\Addresses\UseCases\ChangeStatus\ChangeStatus']['subunitChange'] = $DI->lazyGet('Domain\Subunits\UseCases\ChangeStatus\ChangeStatus');
 
 // Jurisdictions
 foreach (['Info', 'Search', 'Update', 'Validate'] as $a) {
@@ -125,7 +125,7 @@ foreach (['Info', 'Search', 'Update'] as $a) {
 }
 
 // Subunits
-foreach (['Add', 'Correct', 'Info', 'Retire', 'Unretire', 'Verify'] as $a) {
+foreach (['Add', 'ChangeStatus', 'Correct', 'Info', 'Verify'] as $a) {
     $DI->params[ "Domain\\Subunits\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Subunits\\DataStorage\\SubunitsRepository");
     $DI->set(    "Domain\\Subunits\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Subunits\\UseCases\\$a\\$a"));

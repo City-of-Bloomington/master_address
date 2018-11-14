@@ -41,9 +41,19 @@ use Application\Paginator;
                 $contact = parent::escape("{$c->contact_firstname} {$c->contact_lastname}");
                 $action  = parent::escape($c->action);
                 $notes   = parent::escape($c->notes);
+
+                if ($c->entity instanceof \Domain\Addresses\Entities\Address) {
+                    $uri = parent::generateUri('addresses.view', ['id'=>$c->entity->id]);
+                }
+                elseif ($c->entity instanceof \Domain\Streets\Entities\Street) {
+                    $uri = parent::generateUri('streets.view', ['id'=>$c->entity->id]);
+                }
+                elseif ($c->entity instanceof \Domain\Subunits\Entities\Subunit) {
+                    $uri = parent::generateUri('subunits.view', ['id'=>$c->entity->id]);
+                }
                 echo "
                 <tr><th>$date</th>
-                    <td>$entity</td>
+                    <td><a href=\"$uri\">$entity</a></td>
                     <td>$action</td>
                     <td>$person</td>
                     <td>$contact</td>

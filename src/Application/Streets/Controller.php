@@ -200,11 +200,11 @@ class Controller extends BaseController
     {
         $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
         if ($street_id) {
+            $change  = $this->di->get('Domain\Streets\UseCases\ChangeStatus\ChangeStatus');
             $request = new ChangeStatusRequest($street_id, $_SESSION['USER']->id, $_REQUEST);
 
             if (isset($_POST['id'])) {
-                $changeStatus = $this->di->get('Domain\Streets\UseCases\ChangeStatus\ChangeStatus');
-                $response     = $changeStatus($request);
+                $response = $change($request);
                 if (!$response->errors) {
                     header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
                     exit();
@@ -215,7 +215,7 @@ class Controller extends BaseController
             return new Views\ChangeStatusView(
                 $request,
                 parent::streetInfo  ($street_id),
-                $this->di->get('Domain\Streets\Metadata'),
+                $change::statuses(),
                 $this->addressSearch($street_id),
                 !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null
             );

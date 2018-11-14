@@ -40,7 +40,7 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
 
     $r->add('view', '/{id}')->addValues(['action'=>'view']);
     $r->add('add',   '/add')->addValues(['action'=>'add' ]);
-    foreach (['verify', 'correct', 'retire', 'unretire'] as $a) {
+    foreach (['changeStatus', 'correct', 'verify'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });
@@ -77,7 +77,7 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->add('add',       '/add'      )->addValues(['action'=>'add'      ]);
     $r->add('parse',     '/parse'    )->addValues(['action'=>'parse'    ]);
     $r->add('changeLog', '/changeLog')->addValues(['action'=>'changeLog']);
-    foreach (['verify', 'correct', 'retire', 'unretire'] as $a) {
+    foreach (['changeStatus', 'correct', 'verify'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });
