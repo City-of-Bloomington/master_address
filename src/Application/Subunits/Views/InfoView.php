@@ -22,8 +22,8 @@ class InfoView extends Template
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
         $actions = ($info->subunit->status == Log::STATUS_CURRENT)
-                 ? ['verify', 'correct', 'retire']
-                 : ['verify', 'unretire'];
+                 ? ['verify', 'changeStatus', 'correct']
+                 : ['verify', 'changeStatus'];
 
         $this->blocks = [
             new Block('subunits/info.inc',   ['subunit'   => $info->subunit,

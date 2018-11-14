@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Addresses;
@@ -10,15 +10,16 @@ use Application\Controller as BaseController;
 use Application\Url;
 use Application\View;
 
+use Domain\Addresses\Entities\Address;
+
 use Domain\Addresses\UseCases\Parse\Parse;
 use Domain\Addresses\UseCases\Parse\ParseResponse;
-use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\ChangeLog\ChangeLogRequest;
+use Domain\Addresses\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Search\SearchResponse;
-use Domain\Addresses\UseCases\Retire\RetireRequest;
 use Domain\Addresses\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
@@ -49,7 +50,7 @@ class Controller extends BaseController
     /**
      * Address search
      */
-    public function index(array $params)
+    public function index(array $params): View
     {
 		$page   = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
 
@@ -75,7 +76,7 @@ class Controller extends BaseController
     /**
      * Webservice for parsing address strings into parts
      */
-    public function parse(array $params)
+    public function parse(array $params): View
     {
         if (!empty($_GET['address'])) {
             $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
@@ -121,6 +122,7 @@ class Controller extends BaseController
         global $DEFAULTS;
         $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
         if (!$request->city           ) { $request->city            = $DEFAULTS['city'           ]; }
+        if (!$request->state          ) { $request->state           = $DEFAULTS['state'          ]; }
         if (!$request->locationType_id) { $request->locationType_id = $DEFAULTS['locationType_id']; }
 
         if (isset($_REQUEST['return_url'])) { $_SESSION['return_url'] = $_REQUEST['return_url']; }
@@ -161,7 +163,7 @@ class Controller extends BaseController
     /**
      * Correct an error in the primary attributes of an address
      */
-    public function correct(array $params)
+    public function correct(array $params): View
     {
         $address_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
         if ($address_id) {
@@ -196,49 +198,60 @@ class Controller extends BaseController
         return new \Application\Views\NotFoundView();
     }
 
-    public function verify  (array $p) { return $this->doBasicChangeLogUseCase('Verify'  ); }
-    public function retire  (array $p) { return $this->doBasicChangeLogUseCase('Retire'  ); }
-    public function unretire(array $p) { return $this->doBasicChangeLogUseCase('Unretire'); }
-
     /**
-     * Standard use case handler involving a ChangeLogEntry
-     *
-     * The use case name should be the capitalized version, matching the
-     * directory name in /src/Domain.
-     *
-     * @param string $name  The short (capitalized) use case name
+     * Change the status on an address
      */
-    private function doBasicChangeLogUseCase(string $name)
+    public function changeStatus(array $params): View
     {
-        $useCase        = "Domain\\Addresses\\UseCases\\$name\\$name";
-        $useCaseRequest = "Domain\\Addresses\\UseCases\\$name\\{$name}Request";
-        $useCaseView    = "Application\\Addresses\\Views\\{$name}View";
-
         $address_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
         if ($address_id) {
-            if (isset($_POST['id'])) {
-                $request  = new $useCaseRequest($address_id, $_SESSION['USER']->id, $_POST);
-                $handle   = $this->di->get($useCase);
-                $response = $handle($request);
+            $change  = $this->di->get('Domain\Addresses\UseCases\ChangeStatus\ChangeStatus');
+            $request = new ChangeStatusRequest($address_id, $_SESSION['USER']->id, $_REQUEST);
 
-                if (!count($response->errors)) {
-                    header('Location: '.View::generateUrl('addresses.view', ['id'=>$request->address_id]));
+            if (isset($_POST['status'])) {
+                $response = $change($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('addresses.view', ['id'=>$address_id]));
                     exit();
                 }
                 else { $_SESSION['errorMessages'] = $response->errors; }
             }
 
-            $info    = parent::addressInfo($address_id);
-            $contact = !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null;
-            if (!isset($request)) {
-                $request = new $useCaseRequest($address_id, $_SESSION['USER']->id, [
-                    'contact_id' => $contact ? $contact->id : null
-                ]);
+            $info     = parent::addressInfo($address_id);
+            $statuses = $change::statuses();
+            $contact  = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
+            if (!$request->status) {
+                $request->status = $info->address->status;
             }
 
-            return new $useCaseView($request, $info, $contact);
+            return new Views\ChangeStatusView($request, $info, $statuses, $contact);
         }
+        return new \Application\Views\NotFoundView();
+    }
 
+    /**
+     * Create a changeLog entry, declaring you have verified this address
+     */
+    public function verify(array $params): View
+    {
+        $address_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($address_id) {
+            $request = new VerifyRequest($address_id, $_SESSION['USER']->id, $_REQUEST);
+
+            if (isset($_POST['id'])) {
+                $verify   = $this->di->get('Domain\Addresses\UseCases\Verify\Verify');
+                $response = $verify($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('addresses.view', ['id'=>$address_id]));
+                    exit();
+                }
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+
+            $info     = parent::addressInfo($address_id);
+            $contact  = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
+            return new Views\VerifyView($request, $info, $contact);
+        }
         return new \Application\Views\NotFoundView();
     }
 }

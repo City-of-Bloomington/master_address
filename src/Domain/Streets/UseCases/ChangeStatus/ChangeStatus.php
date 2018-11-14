@@ -21,6 +21,8 @@ class ChangeStatus
         Log::STATUS_RETIRED  => Log::ACTION_RETIRE
     ];
 
+    public static function statuses(): array { return array_keys(self::$STATUS_LOG_ACTIONS); }
+
     public function __construct(StreetsRepository $repository)
     {
         $this->repo  = $repository;
