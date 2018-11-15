@@ -245,6 +245,41 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $subunits;
     }
 
+    public function changeLog(?int   $address_id  =null,
+                              ?array $order       =null,
+                              ?int   $itemsPerPage=null,
+                              ?int   $currentPage =null): array
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->cols(["l.{$this->logType}_id as entity_id", "'{$this->logType}' as type",
+                       'l.id', 'l.person_id', 'l.contact_id', 'l.action_date', 'l.action', 'l.notes',
+                       'p.firstname as  person_firstname', 'p.lastname as  person_lastname',
+                       'c.firstname as contact_firstname', 'c.lastname as contact_lastname',
+                       "concat_ws(' ', a.street_number_prefix, a.street_number, a.street_number_suffix,
+                                      sn.direction, sn.name, sn.post_direction, st.code) as entity"
+                     ])
+               ->from("{$this->logType}_change_log l")
+               ->join('INNER', 'addresses            a',  'a.id = l.address_id')
+               ->join('INNER', 'streets              s',  's.id = a.street_id')
+               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
+               ->join('INNER', 'street_types        st', 'st.id =sn.suffix_code_id')
+               ->join('LEFT',  'people               p',  'p.id = l.person_id')
+               ->join('LEFT',  'people               c',  'c.id = l.contact_id');
+        if ($address_id) {
+            $select->where("{$this->logType}_id=?", $address_id);
+        }
+        $select->orderBy(['l.action_date desc']);
+
+        $result = parent::performSelect($select, $itemsPerPage, $currentPage);
+        $changeLog = [];
+        foreach ($result['rows'] as $row) {
+            $changeLog[] = ChangeLogEntry::hydrate($row);
+        }
+        $result['rows'] = $changeLog;
+        return $result;
+    }
+
     //---------------------------------------------------------------
     // Write functions
     //---------------------------------------------------------------

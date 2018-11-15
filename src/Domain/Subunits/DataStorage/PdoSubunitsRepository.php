@@ -22,9 +22,11 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 {
     use \Domain\Logs\DataStorage\ChangeLogTrait;
     use \Domain\Logs\DataStorage\StatusLogTrait;
-    protected $logType = 'subunit';
 
-    const TABLE = 'subunits';
+    protected $logType = 'subunit';
+    const  TABLE       = 'subunits';
+    const  TYPE_STREET = 1;
+
     public static $DEFAULT_SORT = [
         'type_id',
         'identifier'
@@ -129,6 +131,43 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
             }
         }
         return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
+    }
+
+    public function changeLog(?int   $subunit_id  =null,
+                              ?array $order       =null,
+                              ?int   $itemsPerPage=null,
+                              ?int   $currentPage =null): array
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->cols(["l.{$this->logType}_id as entity_id", "'{$this->logType}' as type",
+                       'l.id', 'l.person_id', 'l.contact_id', 'l.action_date', 'l.action', 'l.notes',
+                       'p.firstname as  person_firstname', 'p.lastname as  person_lastname',
+                       'c.firstname as contact_firstname', 'c.lastname as contact_lastname',
+                       "concat_ws(' ', a.street_number_prefix, a.street_number, a.street_number_suffix,
+                                      sn.direction, sn.name, sn.post_direction, st.code,
+                                       u.identifier, ut.code) as entity"])
+               ->from("{$this->logType}_change_log l")
+               ->join('INNER', 'subunits             u',  'u.id = l.subunit_id')
+               ->join('INNER', 'subunit_types       ut', 'ut.id = u.type_id')
+               ->join('INNER', 'addresses            a',  'a.id = u.address_id')
+               ->join('INNER', 'streets              s',  's.id = a.street_id')
+               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
+               ->join('INNER', 'street_types        st', 'st.id =sn.suffix_code_id')
+               ->join('LEFT',  'people               p',  'p.id = l.person_id')
+               ->join('LEFT',  'people               c',  'c.id = l.contact_id');
+        if ($subunit_id) {
+            $select->where("{$this->logType}_id=?", $subunit_id);
+        }
+        $select->orderBy(['l.action_date desc']);
+
+        $result = parent::performSelect($select, $itemsPerPage, $currentPage);
+        $changeLog = [];
+        foreach ($result['rows'] as $row) {
+            $changeLog[] = ChangeLogEntry::hydrate($row);
+        }
+        $result['rows'] = $changeLog;
+        return $result;
     }
 
     private function doSelect(SelectInterface $select, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array

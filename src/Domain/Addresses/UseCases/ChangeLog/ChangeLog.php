@@ -21,11 +21,10 @@ class ChangeLog
     public function __invoke(ChangeLogRequest $req): ChangeLogResponse
     {
         try {
-            $result = $this->repo->loadChangeLog(null,
-                                                 $req->hydrateEntities,
-                                                 $req->order,
-                                                 $req->itemsPerPage,
-                                                 $req->currentPage);
+            $result = $this->repo->changeLog(null,
+                                             $req->order,
+                                             $req->itemsPerPage,
+                                             $req->currentPage);
             return new ChangeLogResponse($result['rows'], $result['total']);
         }
         catch (\Exception $e) {

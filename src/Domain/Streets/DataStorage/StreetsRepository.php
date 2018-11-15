@@ -21,9 +21,9 @@ interface StreetsRepository
     // Read functions
     public function findDesignations(array       $fields): array;
     public function load            (int      $street_id): Street;
-    public function loadChangeLog   (int      $street_id): array;
     public function loadDesignation (int $designation_id): Designation;
     public function search   (SearchRequest $req): array;
+    public function changeLog(?int $street_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions
     public function add      (AddRequest     $request): int;

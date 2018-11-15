@@ -26,7 +26,7 @@ class Info
             $info->statusLog = $this->repo->loadStatusLog($req->id);
             $info->locations = $this->repo->locations    ($req->id);
 
-            $result = $this->repo->loadChangeLog($req->id);
+            $result = $this->repo->changeLog($req->id);
             $info->changeLog = new ChangeLogResponse($result['rows'], $result['total']);
         }
         catch (\Exception $e) {
