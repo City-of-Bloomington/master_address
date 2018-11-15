@@ -67,7 +67,7 @@ class Controller extends BaseController
         if (View::isAllowed('addresses', 'changeLog')) {
             $logPage   = !empty($_GET['logPage']) ? (int)$_GET['logPage'] : 1;
             $log       = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
-            $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $logPage, true));
+            $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $logPage));
             return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page, $changeLog, $logPage);
         }
         return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
@@ -109,7 +109,7 @@ class Controller extends BaseController
     {
         $log       = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
 		$page      = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-        $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $page, true));
+        $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $page));
 
         return new Views\ChangeLogView($changeLog, self::ITEMS_PER_PAGE, $page);
     }

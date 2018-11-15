@@ -36,20 +36,24 @@ use Application\Paginator;
 		<?php
             foreach ($this->entries as $c) {
                 $date    = $c->action_date->format(DATE_FORMAT);
-                $entity  = parent::escape($c->entity->__toString());
+                $entity  = parent::escape($c->entity);
                 $person  = parent::escape("{$c->person_firstname} {$c->person_lastname}");
                 $contact = parent::escape("{$c->contact_firstname} {$c->contact_lastname}");
                 $action  = parent::escape($c->action);
                 $notes   = parent::escape($c->notes);
 
-                if ($c->entity instanceof \Domain\Addresses\Entities\Address) {
-                    $uri = parent::generateUri('addresses.view', ['id'=>$c->entity->id]);
-                }
-                elseif ($c->entity instanceof \Domain\Streets\Entities\Street) {
-                    $uri = parent::generateUri('streets.view', ['id'=>$c->entity->id]);
-                }
-                elseif ($c->entity instanceof \Domain\Subunits\Entities\Subunit) {
-                    $uri = parent::generateUri('subunits.view', ['id'=>$c->entity->id]);
+                switch ($c->type) {
+                    case 'address':
+                        $uri = parent::generateUri('addresses.view', ['id'=>$c->entity_id]);
+                    break;
+
+                    case 'streets':
+                        $uri = parent::generateUri('streets.view', ['id'=>$c->entity_id]);
+                    break;
+
+                    case 'subunits':
+                        $uri = parent::generateUri('subunits.view', ['id'=>$c->entity_id]);
+                    break;
                 }
                 echo "
                 <tr><th>$date</th>

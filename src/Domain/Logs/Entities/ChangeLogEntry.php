@@ -9,6 +9,7 @@ namespace Domain\Logs\Entities;
 class ChangeLogEntry
 {
     public $id;
+    public $type;
     public $entity_id;
     public $person_id;
     public $contact_id;
@@ -16,7 +17,7 @@ class ChangeLogEntry
     public $action;
     public $notes;
 
-    // Hydrated entity object for the log entry
+    // String representation of the entity
     public $entity;
 
     // Foreign key fields
@@ -25,7 +26,7 @@ class ChangeLogEntry
     public $contact_firstname;
     public $contact_lastname;
 
-    public function __construct(?array $data=null, ?object $entity=null)
+    public function __construct(?array $data=null)
     {
         if ($data) {
             if (!empty($data['id'        ])) { $this->id         = (int)$data['id'        ]; }
@@ -33,6 +34,8 @@ class ChangeLogEntry
             if (!empty($data['person_id' ])) { $this->person_id  = (int)$data['person_id' ]; }
             if (!empty($data['contact_id'])) { $this->contact_id = (int)$data['contact_id']; }
 
+            if (!empty($data['type'             ])) { $this->type              = $data['type'  ]; }
+            if (!empty($data['entity'           ])) { $this->entity            = $data['entity']; }
             if (!empty($data['action'           ])) { $this->action            = $data['action']; }
             if (!empty($data['notes'            ])) { $this->notes             = $data['notes' ]; }
             if (!empty($data['person_firstname' ])) { $this->person_firstname  = $data['person_firstname' ]; }
@@ -42,8 +45,6 @@ class ChangeLogEntry
 
             if (!empty($data['action_date'])) { $this->setActionDate($data['action_date']); }
         }
-
-        $this->entity = $entity;
     }
 
     public function setActionDate(\DateTime $date) { $this->action_date = $date; }
@@ -55,9 +56,9 @@ class ChangeLogEntry
      * The constructor requires property values to already be of the correct type.
      * This function converts string values into their correct type.
      */
-    public static function hydrate(array $row, ?object $entity=null): ChangeLogEntry
+    public static function hydrate(array $row): ChangeLogEntry
     {
         if (!empty($row['action_date'])) { $row['action_date'] = new \DateTime($row['action_date']); }
-        return new ChangeLogEntry($row, $entity);
+        return new ChangeLogEntry($row);
     }
 }
