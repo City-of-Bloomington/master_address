@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Address $this->address optional
  * @param Street  $this->street  optional
- * @param string  $this->action  optional
  */
 
 if ($this->address) {
@@ -17,24 +16,18 @@ elseif ($this->street) {
     $street = parent::escape($this->street);
 }
 ?>
-<div class="breadcrumbs">
-	<ul><li><a href="<?= parent::generateUri('streets.index'); ?>">Streets</a></li>
-		<?php
-			if (isset($street)) {
-                $uri = parent::generateUri('streets.view', ['id'=>$street_id]);
-				echo "<li><a href=\"$uri\">$street</a></li>";
-			}
+<nav class="breadcrumbs">
+	<a href="<?= parent::generateUri('streets.index'); ?>">Streets</a>
+    <?php
+        if (isset($street)) {
+            $uri = parent::generateUri('streets.view', ['id'=>$street_id]);
+            echo "<a href=\"$uri\">$street</a>";
+        }
 
-			if (isset($address)) {
-				$number = $this->address->streetNumber();
-				$uri = parent::generateUri('addresses.view', ['id'=>$this->address->id]);
-                echo "<li><a href=\"$uri\">$number</a></li>";
-			}
-
-			if (isset($this->action)) {
-				$action = $this->_($this->action);
-				echo "<li>$action</li>";
-			}
-		?>
-	</ul>
-</div>
+        if (isset($address)) {
+            $number = $this->address->streetNumber();
+            $uri = parent::generateUri('addresses.view', ['id'=>$this->address->id]);
+            echo "<a href=\"$uri\">$number</a>";
+        }
+    ?>
+</nav>
