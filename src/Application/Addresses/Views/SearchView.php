@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Addresses\Views;
@@ -29,25 +29,31 @@ class SearchView extends Template
             $_SESSION['errorMessages'] = $response->errors;
         }
 
-        $this->blocks[] = new Block('addresses/findForm.inc', ['addresses' => $response->addresses]);
-        if ($response->total > $itemsPerPage) {
-            $this->blocks[] = new Block('pageNavigation.inc', [
-                'paginator' => new Paginator(
-                    $response->total,
-                    $itemsPerPage,
-                    $currentPage
-            )]);
+        if ($format != 'html') {
+            $this->blocks = [
+                new Block('addresses/list.inc', ['addresses' => $response->addresses])
+            ];
         }
+        else {
+            $this->blocks[] = new Block('addresses/findForm.inc', ['addresses' => $response->addresses]);
+            if ($response->total > $itemsPerPage) {
+                $this->blocks[] = new Block('pageNavigation.inc', [
+                    'paginator' => new Paginator(
+                        $response->total,
+                        $itemsPerPage,
+                        $currentPage
+                )]);
+            }
 
-        if ($changeLog) {
-            $this->blocks[] = new Block('logs/entityChangeLog.inc', [
-                'entries'      => $changeLog->entries,
-                'total'        => $changeLog->total,
-                'itemsPerPage' => $itemsPerPage,
-                'currentPage'  => $changeLogPage,
-                'moreLink'     => true
-            ]);
+            if ($changeLog) {
+                $this->blocks[] = new Block('logs/entityChangeLog.inc', [
+                    'entries'      => $changeLog->entries,
+                    'total'        => $changeLog->total,
+                    'itemsPerPage' => $itemsPerPage,
+                    'currentPage'  => $changeLogPage,
+                    'moreLink'     => true
+                ]);
+            }
         }
-
     }
 }
