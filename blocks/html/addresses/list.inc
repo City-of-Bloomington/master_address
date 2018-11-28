@@ -28,6 +28,7 @@
                 $city         = parent::escape($a->city);
 
                 $address      = parent::escape($a->__toString());
+                $subunits     = isset($a->subunit_count) ? $a->subunit_count : '';
 
                 $uri = parent::generateUri('addresses.view', ['id'=>$a->id]);
                 echo "
@@ -38,7 +39,7 @@
                     <td><a href=\"$uri\">$jurisdiction</a></td>
                     <td><a href=\"$uri\">$zip</a></td>
                     <td><a href=\"$uri\">$city</a></td>
-                    <td></td>
+                    <td>$subunits</td>
                 </tr>
                 ";
             }

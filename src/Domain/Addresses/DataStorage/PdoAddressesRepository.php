@@ -107,7 +107,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
     private static function hydrateAddress(array $row): Address
     {
-        return new Address($row);
+        $a = new Address($row);
+        if (isset($row['subunit_count'])) { $a->subunit_count = (int)$row['subunit_count']; }
+        return $a;
     }
 
     /**
@@ -154,7 +156,14 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
      */
     public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
-        $select = $this->baseSelect();
+        $current = ChangeLog::STATUS_CURRENT;
+        $select  = $this->baseSelect();
+        $cols    = $this->columns();
+        $cols[]  = "( select count(*)
+                      from subunits       x
+                      join subunit_status xs on x.id=xs.subunit_id and xs.start_date <= now() and (xs.end_date is null or xs.end_date >= now()) and xs.status='$current'
+                      where x.address_id=a.id) as subunit_count";
+        $select->cols($cols);
         foreach ($fields as $f=>$v) {
             if (!empty($v)) {
                 if (array_key_exists($f, self::$fieldmap)) {
