@@ -21,10 +21,10 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 {
     use \Domain\Logs\DataStorage\ChangeLogTrait;
     use \Domain\Logs\DataStorage\StatusLogTrait;
-    protected $logType = 'address';
 
     const TYPE_STREET = 1;
-    const TABLE = 'addresses';
+    const TABLE       = 'addresses';
+    const LOG_TYPE    = 'address';
 
     public static $DEFAULT_SORT = [
         'street_name',
@@ -215,15 +215,11 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function locations(int $address_id): array
     {
         $output = [];
-        $locationRepo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
         $subunitRepo  = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
 
-        $select = $locationRepo->baseSelect();
-        $select->where('l.address_id=?', $address_id);
-        $select->where('l.subunit_id is null');
-
-        $query = $this->pdo->prepare($select->getStatement());
-        $query->execute($select->getBindValues());
+        $sql   = "select * from locations where address_id=? and subunit_id is null";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$address_id]);
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             $addresses =        $this->find(['location_id'=>$row['location_id']]);
             $subunits  = $subunitRepo->find(['location_id'=>$row['location_id']]);
@@ -259,15 +255,16 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                               ?int   $itemsPerPage=null,
                               ?int   $currentPage =null): array
     {
-        $select = $this->queryFactory->newSelect();
-        $select->cols(["l.{$this->logType}_id as entity_id", "'{$this->logType}' as type",
+        $logType = self::LOG_TYPE;
+        $select  = $this->queryFactory->newSelect();
+        $select->cols(["l.{$logType}_id as entity_id", "'{$logType}' as type",
                        'l.id', 'l.person_id', 'l.contact_id', 'l.action_date', 'l.action', 'l.notes',
                        'p.firstname as  person_firstname', 'p.lastname as  person_lastname',
                        'c.firstname as contact_firstname', 'c.lastname as contact_lastname',
                        "concat_ws(' ', a.street_number_prefix, a.street_number, a.street_number_suffix,
                                       sn.direction, sn.name, sn.post_direction, st.code) as entity"
                      ])
-               ->from("{$this->logType}_change_log l")
+               ->from("{$logType}_change_log l")
                ->join('INNER', 'addresses            a',  'a.id = l.address_id')
                ->join('INNER', 'streets              s',  's.id = a.street_id')
                ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
@@ -276,7 +273,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->join('LEFT',  'people               p',  'p.id = l.person_id')
                ->join('LEFT',  'people               c',  'c.id = l.contact_id');
         if ($address_id) {
-            $select->where("{$this->logType}_id=?", $address_id);
+            $select->where("{$logType}_id=?", $address_id);
         }
         $select->orderBy(['l.action_date desc']);
 
@@ -364,11 +361,11 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
 
                 // Save a new location status using the request status
-                $this->saveLocationStatus($location_id, $req->status);
+                $this->saveStatus($location_id, $req->status, 'location');
             }
 
             // Save address status
-            $this->saveStatus($address_id, $req->status);
+            $this->saveStatus($address_id, $req->status, self::LOG_TYPE);
 
             // Return the new address_id
             $this->pdo->commit();
@@ -422,13 +419,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 $a->address_id
             ]);
         }
-    }
-
-
-    public function saveLocationStatus(int $location_id, string $status)
-    {
-        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
-        $repo->saveStatus($location_id, $status);
     }
 
     //---------------------------------------------------------------

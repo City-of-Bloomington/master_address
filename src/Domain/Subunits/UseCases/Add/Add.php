@@ -31,12 +31,13 @@ class Add
         try {
             $subunit_id = $this->repo->add($req);
 
-            $log_id = $this->repo->logChange(new ChangeLogEntry([
+            $entry = new ChangeLogEntry([
                 'action'    => Log::actionForStatus($req->status),
                 'entity_id' => $subunit_id,
                 'person_id' => $req->user_id,
                 'notes'     => $req->change_notes
-            ]));
+            ]);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new AddResponse($log_id, $subunit_id);
         }
         catch (\Exception $e) {

@@ -34,15 +34,16 @@ class ChangeStatus
         if ($errors) { return new ChangeStatusResponse(null, $req->street_id, $errors); }
 
         try {
-            $this->repo->saveStatus($req->street_id, $req->status);
+            $this->repo->saveStatus($req->street_id, $req->status, $this->repo::LOG_TYPE);
 
-            $log_id = $this->repo->logChange(new ChangeLogEntry([
+            $entry = new ChangeLogEntry([
                 'action'     => self::$STATUS_LOG_ACTIONS[$req->status],
                 'entity_id'  => $req->street_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ]));
+            ]);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new ChangeStatusResponse($log_id, $req->street_id);
         }
         catch (\Exception $e) {

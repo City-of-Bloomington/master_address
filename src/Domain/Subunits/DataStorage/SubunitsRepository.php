@@ -18,19 +18,17 @@ interface SubunitsRepository
     // Read functions
     public function load         (int $subunit_id): Subunit;
     public function locations    (int $subunit_id): array;
-    public function loadStatusLog(int $subunit_id): array;
-    public function getStatus    (int $subunit_id): string;
+    public function loadStatusLog(int $subunit_id, string $logType): array;
+    public function getStatus    (int $subunit_id, string $logType): string;
 
     public function find    (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function changeLog(?int $subunit_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions
-    public function add         (AddRequest     $request): int;
-    public function correct     (CorrectRequest $request);
-    public function logChange   (ChangeLogEntry   $entry): int;
-    public function saveLocation(Location      $location): int;
-    public function saveStatus        (int $subunit_id,  string $status);
-    public function saveLocationStatus(int $location_id, string $status);
+    public function add       (AddRequest     $request): int;
+    public function correct   (CorrectRequest $request);
+    public function logChange (ChangeLogEntry   $entry, string $logType): int;
+    public function saveStatus(int $subunit_id,  string $status, string $logType);
 
     // Metadata functions
     public function types(): array;

@@ -66,7 +66,7 @@ class ChangeName
                                          'person_id'  => $request->user_id,
                                          'contact_id' => $request->contact_id,
                                          'notes'      => $request->change_notes]);
-            $log_id = $this->repo->logChange($entry);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new ChangeNameResponse($log_id, $designation_id);
         }
         catch (\Exception $e) {

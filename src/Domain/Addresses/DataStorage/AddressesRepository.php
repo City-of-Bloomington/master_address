@@ -19,8 +19,8 @@ interface AddressesRepository
     public function load         (int $address_id): Address;
     public function locations    (int $address_id): array;
     public function subunits     (int $address_id): array;
-    public function loadStatusLog(int $address_id): array;
-    public function getStatus    (int $address_id): string;
+    public function loadStatusLog(int $address_id, string $logType): array;
+    public function getStatus    (int $address_id, string $logType): string;
 
     public function find    (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function search  (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
@@ -29,8 +29,8 @@ interface AddressesRepository
     // Write functions
     public function correct ( CorrectRequest $request);
     public function renumber(RenumberRequest $request);
-    public function logChange(ChangeLogEntry $entry): int;
-    public function saveStatus(int $address_id, string $status);
+    public function logChange(ChangeLogEntry $entry, string $logType): int;
+    public function saveStatus(int $address_id, string $status, string $logType);
 
     // Metadata functions
     public function cities         (): array;
@@ -42,4 +42,5 @@ interface AddressesRepository
     public function townships      (): array;
     public function types          (): array;
     public function zipCodes       (): array;
+
 }

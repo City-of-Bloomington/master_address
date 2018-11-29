@@ -14,16 +14,16 @@ trait ChangeLogTrait
     /**
      * @return int The ID of the new row in the change log
      */
-    public function logChange(ChangeLogEntry $entry): int
+    public function logChange(ChangeLogEntry $entry, string $logType): int
     {
         $insert = $this->queryFactory->newInsert();
-        $insert->into("{$this->logType}_change_log")
+        $insert->into("{$logType}_change_log")
                ->cols([
-                    "{$this->logType}_id" => $entry->entity_id,
-                    'person_id'  => $entry->person_id,
-                    'contact_id' => $entry->contact_id,
-                    'action'     => array_key_exists($entry->action, Metadata::$actions) ? Metadata::$actions[$entry->action] : $entry->action,
-                    'notes'      => $entry->notes
+                    "{$logType}_id" => $entry->entity_id,
+                    'person_id'     => $entry->person_id,
+                    'contact_id'    => $entry->contact_id,
+                    'action'        => array_key_exists($entry->action, Metadata::$actions) ? Metadata::$actions[$entry->action] : $entry->action,
+                    'notes'         => $entry->notes
                ]);
         $query = $this->pdo->prepare($insert->getStatement());
         $query->execute($insert->getBindValues());

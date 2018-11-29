@@ -23,9 +23,9 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     use \Domain\Logs\DataStorage\ChangeLogTrait;
     use \Domain\Logs\DataStorage\StatusLogTrait;
 
-    protected $logType = 'subunit';
-    const  TABLE       = 'subunits';
-    const  TYPE_STREET = 1;
+    const LOG_TYPE    = 'subunit';
+    const TABLE       = 'subunits';
+    const TYPE_STREET = 1;
 
     public static $DEFAULT_SORT = [
         'type_id',
@@ -90,14 +90,11 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     public function locations(int $subunit_id): array
     {
         $output = [];
-        $locationRepo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
         $addressRepo  = new \Domain\Addresses\DataStorage\PdoAddressesRepository($this->pdo);
 
-        $select = $locationRepo->baseSelect();
-        $select->where('l.subunit_id=?', $subunit_id);
-
-        $query = $this->pdo->prepare($select->getStatement());
-        $query->execute($select->getBindValues());
+        $sql   = "select * from locations where subunit_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$subunit_id]);
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             $subunits  =        $this->find(['location_id'=>$row['location_id']]);
             $addresses = $addressRepo->find(['location_id'=>$row['location_id']]);
@@ -138,15 +135,16 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
                               ?int   $itemsPerPage=null,
                               ?int   $currentPage =null): array
     {
+        $logType = self::LOG_TYPE;
         $select = $this->queryFactory->newSelect();
-        $select->cols(["l.{$this->logType}_id as entity_id", "'{$this->logType}' as type",
+        $select->cols(["l.{$logType}_id as entity_id", "'{$logType}' as type",
                        'l.id', 'l.person_id', 'l.contact_id', 'l.action_date', 'l.action', 'l.notes',
                        'p.firstname as  person_firstname', 'p.lastname as  person_lastname',
                        'c.firstname as contact_firstname', 'c.lastname as contact_lastname',
                        "concat_ws(' ', a.street_number_prefix, a.street_number, a.street_number_suffix,
                                       sn.direction, sn.name, sn.post_direction, st.code,
                                        u.identifier, ut.code) as entity"])
-               ->from("{$this->logType}_change_log l")
+               ->from("{$logType}_change_log l")
                ->join('INNER', 'subunits             u',  'u.id = l.subunit_id')
                ->join('INNER', 'subunit_types       ut', 'ut.id = u.type_id')
                ->join('INNER', 'addresses            a',  'a.id = u.address_id')
@@ -157,7 +155,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
                ->join('LEFT',  'people               p',  'p.id = l.person_id')
                ->join('LEFT',  'people               c',  'c.id = l.contact_id');
         if ($subunit_id) {
-            $select->where("{$this->logType}_id=?", $subunit_id);
+            $select->where("{$logType}_id=?", $subunit_id);
         }
         $select->orderBy(['l.action_date desc']);
 
@@ -202,7 +200,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $subunit_id = parent::saveToTable($data, self::TABLE);
         if ($subunit_id) {
             // Set the subunit status
-            $this->saveStatus($subunit_id, $req->status);
+            $this->saveStatus($subunit_id, $req->status, self::LOG_TYPE);
 
             // Save the location
             // Create a new row in locations using data from the request.
@@ -227,7 +225,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
             $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
 
             // Set the location status
-            $this->saveLocationStatus($location_id, $req->status);
+            $this->saveStatus($location_id, $req->status, 'location');
 
             $this->pdo->commit();
             return $subunit_id;
@@ -246,18 +244,6 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
             $req->type_id, $req->identifier, $req->notes,
             $req->subunit_id
         ]);
-    }
-
-    public function saveLocation(Location $location): int
-    {
-        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
-        return $repo->save($location);
-    }
-
-    public function saveLocationStatus(int $location_id, string $status)
-    {
-        $repo = new \Domain\Locations\DataStorage\PdoLocationsRepository($this->pdo);
-        $repo->saveStatus($location_id, $status);
     }
 
     //---------------------------------------------------------------

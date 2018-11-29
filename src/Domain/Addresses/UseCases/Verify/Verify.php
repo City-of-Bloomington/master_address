@@ -25,13 +25,14 @@ class Verify
     {
         $address_id = $req->address_id;
         try {
-            $log_id = $this->repo->logChange(new ChangeLogEntry([
+            $entry = new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['verify'],
                 'entity_id'  => $address_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ]));
+            ]);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new VerifyResponse($log_id, $address_id);
         }
         catch (\Exception $e) {

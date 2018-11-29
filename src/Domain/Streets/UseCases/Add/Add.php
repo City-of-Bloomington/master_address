@@ -39,7 +39,7 @@ class Add
                                          'person_id'  => $req->user_id,
                                          'contact_id' => $req->contact_id,
                                          'notes'      => $req->change_notes]);
-            $log_id = $this->repo->logChange($entry);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new AddResponse($log_id, $street_id);
         }
         catch (\Exception $e) {
