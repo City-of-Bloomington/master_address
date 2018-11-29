@@ -29,7 +29,7 @@ interface StreetsRepository
     public function add      (AddRequest     $request): int;
     public function update   (UpdateRequest  $request);
     public function addDesignation(AliasRequest  $req): int;
-    public function logChange(ChangeLogEntry   $entry): int;
+    public function logChange(ChangeLogEntry   $entry, string $logType): int;
     public function saveStatus(int $street_id, string $status);
     public function updateDesignation(\Domain\Streets\Designations\UseCases\Update\UpdateRequest $req);
 

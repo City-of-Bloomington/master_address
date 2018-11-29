@@ -23,7 +23,7 @@ class Info
         $info = new InfoResponse();
         try {
             $info->address   = $this->repo->load         ($req->id);
-            $info->statusLog = $this->repo->loadStatusLog($req->id);
+            $info->statusLog = $this->repo->loadStatusLog($req->id, $this->repo::LOG_TYPE);
             $info->locations = $this->repo->locations    ($req->id);
             $info->subunits  = $this->repo->subunits     ($req->id);
 

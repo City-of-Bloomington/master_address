@@ -30,14 +30,15 @@ class Alias
                 return new AliasResponse(null, $street_id, null, $errors);
             }
 
-            $designation_id = $this->repo->addDesignation($req);
-            $log_id         = $this->repo->logChange(new ChangeLogEntry([
+            $entry = new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['alias'],
                 'entity_id'  => $req->street_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ]));
+            ]);
+            $designation_id = $this->repo->addDesignation($req);
+            $log_id         = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new AliasResponse($log_id, $street_id, $designation_id);
         }
         catch (\Exception $e) {

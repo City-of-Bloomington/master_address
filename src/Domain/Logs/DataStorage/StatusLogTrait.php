@@ -8,12 +8,12 @@ namespace Domain\Logs\DataStorage;
 
 trait StatusLogTrait
 {
-    public function loadStatusLog(int $entity_id): array
+    public function loadStatusLog(int $entity_id, string $logType): array
     {
         $statusLog = [];
         $sql = "select id, status, start_date, end_date
-                from  {$this->logType}_status
-                where {$this->logType}_id=?
+                from  {$logType}_status
+                where {$logType}_id=?
                 order by start_date desc";
         foreach ($this->doQuery($sql, [$entity_id]) as $row) {
             $row['start_date'] = !empty($row['start_date']) ? new \DateTime($row['start_date']) : null;
@@ -26,11 +26,11 @@ trait StatusLogTrait
     /**
      * Looks up the current status
      */
-    public function getStatus(int $entity_id): string
+    public function getStatus(int $entity_id, string $logType): string
     {
         $sql = "select status
-                from  {$this->logType}_status
-                where {$this->logType}_id=?
+                from  {$logType}_status
+                where {$logType}_id=?
                   and start_date <= now()
                   and (end_date is null or end_date >= now())";
         $query = $this->pdo->prepare($sql);
@@ -52,16 +52,16 @@ trait StatusLogTrait
 	 * There maybe be multiple status changes in the database, that have not had
 	 * their end dates set.  They didn't use to do it that way, but now they do.
 	 */
-    public function saveStatus(int $entity_id, string $status)
+    public function saveStatus(int $entity_id, string $status, string $logType)
     {
 		$currentStatus = $this->getStatus($entity_id);
 
 		// If we have a current status, and it's not the same as the new one,
 		// Do our data cleanup - use today's date on all the empty end dates
 		if ($currentStatus && $currentStatus != $status) {
-            $sql = "update {$this->logType}_status
+            $sql = "update {$logType}_status
                     set end_date=now()
-                    where {$this->logType}_id=? and end_date is null";
+                    where {$logType}_id=? and end_date is null";
             $query = $this->pdo->prepare($sql);
             $query->execute([$entity_id]);
 		}
@@ -70,8 +70,8 @@ trait StatusLogTrait
 		// we have a new status - go ahead and save it.
 		// The data should be nice and clean now
 		if (!$currentStatus || ($currentStatus != $status)) {
-            $sql = "insert into {$this->logType}_status
-                    ({$this->logType}_id, status, start_date)
+            $sql = "insert into {$logType}_status
+                    ({$logType}_id, status, start_date)
                     values(?, ?, now())";
             $query = $this->pdo->prepare($sql);
             $query->execute([$entity_id, $status]);

@@ -21,10 +21,10 @@ use Domain\Townships\Entities\Township;
 class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 {
     use \Domain\Logs\DataStorage\ChangeLogTrait;
-    protected $logType = 'street';
 
+    const TABLE       = 'streets';
+    const LOG_TYPE    = 'street';
     const TYPE_STREET = 1;
-    const TABLE = 'streets';
 
     public static $DEFAULT_SORT = ['n.name'];
 
@@ -126,14 +126,15 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                               ?int   $itemsPerPage=null,
                               ?int   $currentPage =null): array
     {
-        $select = $this->queryFactory->newSelect();
-        $select->cols(["l.{$this->logType}_id as entity_id", "'{$this->logType}' as type",
+        $logType = self::LOG_TYPE;
+        $select  = $this->queryFactory->newSelect();
+        $select->cols(["l.{$logType}_id as entity_id", "'{$logType}' as type",
                        'l.id', 'l.person_id', 'l.contact_id', 'l.action_date', 'l.action', 'l.notes',
                        'p.firstname as  person_firstname', 'p.lastname as  person_lastname',
                        'c.firstname as contact_firstname', 'c.lastname as contact_lastname',
                        "concat_ws(' ', sn.direction, sn.name, sn.post_direction, st.code) as entity"
                      ])
-               ->from("{$this->logType}_change_log l")
+               ->from("{$logType}_change_log l")
                ->join('INNER', 'streets              s',  's.id = l.street_id')
                ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
@@ -141,7 +142,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                ->join('LEFT',  'people               p',  'p.id = l.person_id')
                ->join('LEFT',  'people               c',  'c.id = l.contact_id');
         if ($street_id) {
-            $select->where("l.{$this->logType}_id=?", $street_id);
+            $select->where("l.{$logType}_id=?", $street_id);
         }
         $select->orderBy(['l.action_date desc']);
 

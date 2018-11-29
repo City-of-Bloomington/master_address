@@ -26,13 +26,14 @@ class Correct
         try {
             $this->repo->correct($req);
 
-            $log_id = $this->repo->logChange(new ChangeLogEntry([
+            $entry = new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['correct'],
                 'entity_id'  => $req->address_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ]));
+            ]);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
 
             return new CorrectResponse($log_id, $req->address_id);
         }

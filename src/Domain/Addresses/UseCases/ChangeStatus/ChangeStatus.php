@@ -39,7 +39,7 @@ class ChangeStatus
         if ($errors) { return new ChangeStatusResponse(null, $req->address_id, $errors); }
 
         try {
-            $this->repo->saveStatus($req->address_id, $req->status);
+            $this->repo->saveStatus($req->address_id, $req->status, $this->repo::LOG_TYPE);
 
             if ($req->status == Log::STATUS_RETIRED) {
                 // Retire all the current subunits
@@ -62,17 +62,18 @@ class ChangeStatus
                 if (   $location->active
                     && $location->status != $req->status) {
 
-                    $this->repo->saveLocationStatus($location->location_id, $req->status);
+                    $this->saveStatus($location->location_id, $req->status, 'location');
                 }
             }
 
-            $log_id = $this->repo->logChange(new ChangeLogEntry([
+            $entry = new ChangeLogEntry([
                 'action'     => self::$STATUS_LOG_ACTIONS[$req->status],
                 'entity_id'  => $req->address_id,
                 'person_id'  => $req->user_id,
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
-            ]));
+            ]);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
             return new ChangeStatusResponse($log_id, $req->address_id);
         }
         catch (\Exception $e) {
