@@ -15,7 +15,7 @@
 	<main>
         <div id="content-panel" class="panel">
             <?php
-                include BLOSSOM.'/errorMessages.php';
+                include APPLICATION_HOME.'/templates/errorMessages.inc';
                 echo $this->includeBlocks();
             ?>
         </div>
