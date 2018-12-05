@@ -1,4 +1,4 @@
 <?php
 header('Content-type: application/json; charset=utf-8');
-include BLOSSOM.'/errorMessages.php';
+include APPLICATION_HOME.'/templates/errorMessages.inc';
 echo $this->includeBlocks();
