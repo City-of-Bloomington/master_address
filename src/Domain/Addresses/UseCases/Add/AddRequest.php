@@ -56,7 +56,7 @@ class AddRequest
     public function __construct(int $user_id, ?array $data=null)
     {
         if ($data) {
-            foreach ($this as $f=>$v) {
+            foreach (array_keys((array)$this) as $f) {
                 if (!empty($data[$f])) {
                     switch ($f) {
                         case 'street_id':

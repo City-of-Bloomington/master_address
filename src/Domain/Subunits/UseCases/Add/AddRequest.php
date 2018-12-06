@@ -6,8 +6,6 @@
 declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Add;
 
-use Domain\Locations\Metadata as Location;
-
 class AddRequest
 {
     public $address_id;
@@ -41,7 +39,7 @@ class AddRequest
 
         if (isset($data['user_id'])) { unset($data['user_id']); }
 
-        foreach ($this as $f=>$v) {
+        foreach (array_keys((array)$this) as $f) {
             if (!empty($data[$f])) {
                 switch ($f) {
                     case 'address_id':

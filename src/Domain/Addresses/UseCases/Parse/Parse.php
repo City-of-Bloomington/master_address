@@ -97,6 +97,8 @@ class Parse
 		//echo "Starting with |$string|\n";
 		$address = preg_replace('/[^a-z0-9\-\s\/]/i', '',  $string);
 		$address = preg_replace('/\s+/',              ' ', $address);
+		
+		$matches = null;
 
 		if ($parseType=='address') {
 			#echo "Looking for number: |$address|\n";
@@ -157,7 +159,7 @@ class Parse
 			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
 				try {
                     $type = strtoupper($matches['subunitType']);
-					$output->{self::SUBUNIT_TYPE} = in_array($type, $subunitTypes) ? $type : $subunitType[$type];
+					$output->{self::SUBUNIT_TYPE} = in_array($type, $subunitTypes) ? $type : $subunitTypes[$type];
 					$output->{self::SUBUNIT_ID} = $matches['subunitIdentifier'];
 					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 				}

@@ -8,8 +8,6 @@ namespace Domain\Subdivisions\UseCases\Search;
 
 use Domain\Subdivisions\Metadata;
 use Domain\Subdivisions\DataStorage\SubdivisionsRepository;
-use Domain\Subdivisions\Entities\Subdivision;
-use Domain\UseCase;
 
 class Search
 {

@@ -11,7 +11,6 @@ use Application\Template;
 
 use Domain\Subdivisions\Metadata;
 use Domain\Subdivisions\UseCases\Update\UpdateRequest;
-use Domain\Subdivisions\UseCases\Update\UpdateResponse;
 
 class UpdateView extends Template
 {

@@ -14,7 +14,6 @@ use Domain\Addresses\UseCases\Parse\ParseResponse;
 use Domain\Addresses\UseCases\Renumber\AddressNumber;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 
-use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\ChangeName\ChangeNameRequest;

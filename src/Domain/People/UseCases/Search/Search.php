@@ -6,7 +6,6 @@
 declare (strict_types=1);
 namespace Domain\People\UseCases\Search;
 
-use Domain\UseCase;
 use Domain\People\DataStorage\PeopleRepository;
 use Domain\People\Entities\Person;
 

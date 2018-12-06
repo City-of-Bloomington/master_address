@@ -9,7 +9,6 @@ namespace Domain\Plats\DataStorage;
 use Domain\Plats\Entities\Plat;
 use Domain\Plats\UseCases\Info\InfoRequest;
 use Domain\Plats\UseCases\Search\SearchRequest;
-use Domain\Plats\UseCases\Update\UpdateRequest;
 
 interface PlatsRepository
 {

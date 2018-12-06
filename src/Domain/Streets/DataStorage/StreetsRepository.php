@@ -12,7 +12,6 @@ use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
-use Domain\Streets\UseCases\Info\InfoRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Update\UpdateRequest;
 

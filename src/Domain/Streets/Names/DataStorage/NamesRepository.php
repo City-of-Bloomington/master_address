@@ -7,9 +7,7 @@ declare (strict_types=1);
 namespace Domain\Streets\Names\DataStorage;
 
 use Domain\Streets\Entities\Name;
-use Domain\Streets\Names\UseCases\Alias\AliasRequest;
 use Domain\Streets\Names\UseCases\Search\SearchRequest;
-use Domain\Streets\Names\UseCases\Update\UpdateRequest;
 
 interface NamesRepository
 {

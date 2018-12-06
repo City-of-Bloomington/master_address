@@ -83,8 +83,8 @@ abstract class View
 	 * to add in some other characters to clean.  While here, we might as well
 	 * have it trim out the whitespace too.
 	 *
-	 * @param array|string $input
-	 * @param CONSTANT $quotes Optional, the desired constant to use for the htmlspecidalchars call
+	 * @param  array|string $input
+	 * @param  int          $quotes Optional, the desired constant to use for the htmlspecidalchars call
 	 * @return string
 	 */
 	public static function escape($input, $quotes=ENT_QUOTES)

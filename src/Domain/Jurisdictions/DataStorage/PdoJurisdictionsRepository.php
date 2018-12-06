@@ -11,7 +11,6 @@ use Domain\PdoRepository;
 use Domain\Jurisdictions\Entities\Jurisdiction;
 use Domain\Jurisdictions\UseCases\Info\InfoRequest;
 use Domain\Jurisdictions\UseCases\Search\SearchRequest;
-use Domain\Jurisdictions\UseCases\Update\UpdateRequest;
 
 class PdoJurisdictionsRepository extends PdoRepository implements JurisdictionsRepository
 {

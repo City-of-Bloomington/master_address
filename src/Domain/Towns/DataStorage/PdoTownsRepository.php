@@ -11,7 +11,6 @@ use Domain\PdoRepository;
 use Domain\Towns\Entities\Town;
 use Domain\Towns\UseCases\Info\InfoRequest;
 use Domain\Towns\UseCases\Search\SearchRequest;
-use Domain\Towns\UseCases\Update\UpdateRequest;
 
 class PdoTownsRepository extends PdoRepository implements TownsRepository
 {

@@ -7,7 +7,6 @@ declare (strict_types=1);
 namespace Application\People;
 
 use Application\Controller as BaseController;
-use Application\View;
 
 use Domain\People\Entities\Person;
 use Domain\People\UseCases\Info\InfoRequest;

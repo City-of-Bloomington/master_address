@@ -9,8 +9,6 @@ namespace Domain\Streets\UseCases\Add;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
 use Domain\Streets\DataStorage\StreetsRepository;
-use Domain\Streets\UseCases\Alias\Alias;
-use Domain\Streets\UseCases\Alias\AliasRequest;
 
 class Add
 {

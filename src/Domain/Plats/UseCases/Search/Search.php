@@ -8,8 +8,6 @@ namespace Domain\Plats\UseCases\Search;
 
 use Domain\Plats\Metadata;
 use Domain\Plats\DataStorage\PlatsRepository;
-use Domain\Plats\Entities\Plat;
-use Domain\UseCase;
 
 class Search
 {

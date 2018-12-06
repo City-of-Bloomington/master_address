@@ -8,9 +8,7 @@ namespace Domain\Subunits\UseCases\Add;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as Log;
-use Domain\Locations\Entities\Location;
 use Domain\Subunits\DataStorage\SubunitsRepository;
-use Domain\Subunits\Entities\Subunit;
 
 class Add
 {

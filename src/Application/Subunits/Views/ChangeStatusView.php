@@ -9,7 +9,6 @@ namespace Application\Subunits\Views;
 use Application\Block;
 use Application\Template;
 
-use Domain\Subunits\Metadata;
 use Domain\Subunits\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\Subunits\UseCases\Info\InfoResponse;
 use Domain\People\Entities\Person;

@@ -9,7 +9,6 @@ namespace Domain\Townships\DataStorage;
 use Domain\Townships\Entities\Township;
 use Domain\Townships\UseCases\Info\InfoRequest;
 use Domain\Townships\UseCases\Search\SearchRequest;
-use Domain\Townships\UseCases\Update\UpdateRequest;
 
 interface TownshipsRepository
 {

@@ -5,7 +5,6 @@
  */
 declare (strict_types=1);
 namespace Domain\Plats\Entities;
-use Domain\Townships\Entities\Township;
 
 class Plat
 {

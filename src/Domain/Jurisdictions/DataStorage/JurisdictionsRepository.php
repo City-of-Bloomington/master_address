@@ -9,7 +9,6 @@ namespace Domain\Jurisdictions\DataStorage;
 use Domain\Jurisdictions\Entities\Jurisdiction;
 use Domain\Jurisdictions\UseCases\Info\InfoRequest;
 use Domain\Jurisdictions\UseCases\Search\SearchRequest;
-use Domain\Jurisdictions\UseCases\Update\UpdateRequest;
 
 interface JurisdictionsRepository
 {

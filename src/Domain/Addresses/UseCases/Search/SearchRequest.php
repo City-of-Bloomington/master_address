@@ -49,7 +49,7 @@ class SearchRequest
     public function __construct(?array $data=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null)
     {
         if ($data) {
-            foreach ($this as $k=>$v) {
+            foreach (array_keys((array)$this) as $k) {
                 if (!empty($data[$k])) {
                     switch ($k) {
                         case 'id':

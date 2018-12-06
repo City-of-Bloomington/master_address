@@ -6,8 +6,6 @@
 declare (strict_types=1);
 namespace Domain\Townships\UseCases\Search;
 
-use Domain\Users\Entities\User;
-
 class SearchRequest
 {
     public $id;

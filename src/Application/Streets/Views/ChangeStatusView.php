@@ -10,7 +10,6 @@ use Application\Block;
 use Application\Template;
 
 use Domain\Addresses\UseCases\Search\SearchResponse;
-use Domain\Streets\Metadata;
 use Domain\Streets\UseCases\Info\InfoResponse;
 use Domain\Streets\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\People\Entities\Person;

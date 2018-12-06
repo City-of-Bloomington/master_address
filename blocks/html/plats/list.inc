@@ -59,4 +59,4 @@
 		?>
 		</tbody>
 	</table>
-</div>
+</section>

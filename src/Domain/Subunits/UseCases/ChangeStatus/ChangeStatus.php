@@ -45,7 +45,6 @@ class ChangeStatus
             // Update the status on this subunit's active location
             foreach ($this->repo->locations($req->subunit_id) as $location) {
                 if ($location->active) {
-                    $locations_id = $location->location_id;
                     $this->repo->saveStatus($location->location_id, $req->status, 'location');
                     break;
                 }

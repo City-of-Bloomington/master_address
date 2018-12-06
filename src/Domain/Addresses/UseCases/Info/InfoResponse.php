@@ -6,8 +6,6 @@
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Info;
 
-use Domain\Addresses\Entities\Address;
-
 class InfoResponse
 {
     public $address;

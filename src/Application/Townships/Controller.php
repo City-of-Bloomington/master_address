@@ -9,11 +9,8 @@ use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Townships\Entities\Township;
-use Domain\Townships\UseCases\Info\Info;
 use Domain\Townships\UseCases\Info\InfoRequest;
-use Domain\Townships\UseCases\Search\Search;
 use Domain\Townships\UseCases\Search\SearchRequest;
-use Domain\Townships\UseCases\Update\Update;
 use Domain\Townships\UseCases\Update\UpdateRequest;
 
 class Controller extends BaseController

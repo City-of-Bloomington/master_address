@@ -6,7 +6,6 @@
 declare (strict_types=1);
 namespace Domain\Jurisdictions\UseCases\Search;
 
-use Domain\UseCase;
 use Domain\Jurisdictions\DataStorage\JurisdictionsRepository;
 use Domain\Jurisdictions\Entities\Jurisdiction;
 

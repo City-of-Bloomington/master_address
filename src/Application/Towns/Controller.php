@@ -9,11 +9,8 @@ use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Towns\Entities\Town;
-use Domain\Towns\UseCases\Info\Info;
 use Domain\Towns\UseCases\Info\InfoRequest;
-use Domain\Towns\UseCases\Search\Search;
 use Domain\Towns\UseCases\Search\SearchRequest;
-use Domain\Towns\UseCases\Update\Update;
 use Domain\Towns\UseCases\Update\UpdateRequest;
 
 

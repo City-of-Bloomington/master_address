@@ -6,7 +6,7 @@
  */
 ?>
 <nav class="breadcrumbs">
-    <a href="<?php echo BASE_URL; ?>/streets">Streets</a></li>
+    <a href="<?php echo BASE_URL; ?>/streets">Streets</a>
     <?php
         if (isset($this->street)) {
             $name = View::escape($this->street->getStreetName());
