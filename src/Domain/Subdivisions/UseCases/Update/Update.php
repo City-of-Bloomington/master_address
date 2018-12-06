@@ -8,7 +8,6 @@ namespace Domain\Subdivisions\UseCases\Update;
 
 use Domain\Subdivisions\Entities\Subdivision;
 use Domain\Subdivisions\DataStorage\SubdivisionsRepository;
-use Domain\Subdivisions\Metadata;
 
 class Update
 {

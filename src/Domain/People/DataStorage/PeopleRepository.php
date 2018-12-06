@@ -7,9 +7,7 @@ declare (strict_types=1);
 namespace Domain\People\DataStorage;
 
 use Domain\People\Entities\Person;
-use Domain\People\UseCases\Info\InfoRequest;
 use Domain\People\UseCases\Search\SearchRequest;
-use Domain\People\UseCases\Update\UpdateRequest;
 
 interface PeopleRepository
 {

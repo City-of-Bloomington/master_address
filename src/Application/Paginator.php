@@ -22,7 +22,7 @@ class Paginator
     }
 
     /**
-     * @return stdClass
+     * @return \stdClass
      */
     public function getPages(): \stdClass
     {

@@ -9,7 +9,6 @@ namespace Domain\Towns\DataStorage;
 use Domain\Towns\Entities\Town;
 use Domain\Towns\UseCases\Info\InfoRequest;
 use Domain\Towns\UseCases\Search\SearchRequest;
-use Domain\Towns\UseCases\Update\UpdateRequest;
 
 interface TownsRepository
 {

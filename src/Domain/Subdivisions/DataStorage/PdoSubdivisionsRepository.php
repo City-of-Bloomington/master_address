@@ -11,8 +11,6 @@ use Domain\PdoRepository;
 use Domain\Subdivisions\Entities\Subdivision;
 use Domain\Subdivisions\UseCases\Info\InfoRequest;
 use Domain\Subdivisions\UseCases\Search\SearchRequest;
-use Domain\Subdivisions\UseCases\Update\UpdateRequest;
-use Domain\Townships\Entities\Township;
 
 class PdoSubdivisionsRepository extends PdoRepository implements SubdivisionsRepository
 {

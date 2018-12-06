@@ -4,10 +4,9 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 ?>
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?= $lang; ?>">
 <?php
 	$this->_include('partials/head.inc');
 ?>

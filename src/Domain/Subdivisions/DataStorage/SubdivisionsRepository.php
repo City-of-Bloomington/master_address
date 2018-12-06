@@ -9,7 +9,6 @@ namespace Domain\Subdivisions\DataStorage;
 use Domain\Subdivisions\Entities\Subdivision;
 use Domain\Subdivisions\UseCases\Info\InfoRequest;
 use Domain\Subdivisions\UseCases\Search\SearchRequest;
-use Domain\Subdivisions\UseCases\Update\UpdateRequest;
 
 interface SubdivisionsRepository
 {

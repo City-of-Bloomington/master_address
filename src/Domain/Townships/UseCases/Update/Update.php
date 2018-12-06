@@ -8,7 +8,7 @@ namespace Domain\Townships\UseCases\Update;
 
 use Domain\Townships\Entities\Township;
 use Domain\Townships\DataStorage\TownshipsRepository;
-use
+
 class Update
 {
     private $repo;

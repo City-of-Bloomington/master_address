@@ -5,7 +5,6 @@
  */
 declare (strict_types=1);
 namespace Domain\Subdivisions\Entities;
-use Domain\Townships\Entities\Township;
 
 class Subdivision
 {

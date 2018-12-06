@@ -9,7 +9,6 @@ namespace Domain\Streets\Names\UseCases\Add;
 use Domain\Streets\Entities\Name;
 use Domain\Streets\Names\DataStorage\NamesRepository;
 use Domain\Streets\Names\UseCases\Validate\Validate;
-use Domain\Streets\Names\UseCases\Validate\ValidateResponse;
 
 class Add
 {

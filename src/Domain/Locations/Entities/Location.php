@@ -31,7 +31,7 @@ class Location
 
     public function __construct(?array $data=null)
     {
-        foreach ($this as $f=>$v) {
+        foreach (array_keys((array)$this) as $f) {
             if (!empty($data[$f])) {
                 switch ($f) {
                     case 'location_id':

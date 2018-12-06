@@ -138,7 +138,7 @@ class Template extends View
 			}
 			else {
 				// Go through the template looking for what they asked for
-				foreach ($this->blocks as $key=>$value) {
+				foreach ($this->blocks as $value) {
 					// If we find a block that matches, render that block
 					if ($value instanceof Block) {
 						if ($value->getFile() == $target) {

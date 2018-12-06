@@ -6,7 +6,6 @@
 declare (strict_types=1);
 namespace Domain\Townships\UseCases\Search;
 
-use Domain\UseCase;
 use Domain\Townships\DataStorage\TownshipsRepository;
 use Domain\Townships\Entities\Township;
 

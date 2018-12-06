@@ -8,10 +8,6 @@ namespace Application\Authentication;
 use Application\Controller as BaseController;
 use Application\View;
 
-use Domain\Auth\AuthenticationService;
-use Domain\Users\Entities\User;
-use Domain\Users\DataStorage\PdoUsersRepository;
-
 class LoginController extends BaseController
 {
 	private $return_url;

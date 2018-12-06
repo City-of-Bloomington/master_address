@@ -11,8 +11,6 @@ use Domain\PdoRepository;
 use Domain\Plats\Entities\Plat;
 use Domain\Plats\UseCases\Info\InfoRequest;
 use Domain\Plats\UseCases\Search\SearchRequest;
-use Domain\Plats\UseCases\Update\UpdateRequest;
-use Domain\Townships\Entities\Township;
 
 class PdoPlatsRepository extends PdoRepository implements PlatsRepository
 {

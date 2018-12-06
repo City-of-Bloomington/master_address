@@ -42,7 +42,7 @@ class Designation
     public function setStartDate(\DateTime $d) { $this->start_date = $d; }
     public function setEndDate  (\DateTime $d) { $this->end_date   = $d; }
 
-    public static function hydrate(array $row)
+    public static function hydrate(array $row): Designation
     {
         if (!empty($row['start_date'])) { $row['start_date'] = new \DateTime($row['start_date']); }
         return new Designation($row);

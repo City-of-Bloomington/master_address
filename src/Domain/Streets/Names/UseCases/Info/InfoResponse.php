@@ -5,7 +5,6 @@
  */
 declare (strict_types=1);
 namespace Domain\Streets\Names\UseCases\Info;
-use Domain\Streets\Entities\Name;
 
 class InfoResponse
 {

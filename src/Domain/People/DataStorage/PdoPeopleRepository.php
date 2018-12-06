@@ -9,9 +9,7 @@ namespace Domain\People\DataStorage;
 use Domain\PdoRepository;
 
 use Domain\People\Entities\Person;
-use Domain\People\UseCases\Info\InfoRequest;
 use Domain\People\UseCases\Search\SearchRequest;
-use Domain\People\UseCases\Update\UpdateRequest;
 
 class PdoPeopleRepository extends PdoRepository implements PeopleRepository
 {

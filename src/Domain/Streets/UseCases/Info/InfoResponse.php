@@ -6,8 +6,6 @@
 declare (strict_types=1);
 namespace Domain\Streets\UseCases\Info;
 
-use Domain\Streets\Entities\Street;
-
 class InfoResponse
 {
     public $street;

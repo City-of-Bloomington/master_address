@@ -8,7 +8,6 @@ namespace Application\Addresses\Views;
 
 use Application\Block;
 use Application\Template;
-use Application\Paginator;
 
 use Domain\Logs\ChangeLogResponse;
 

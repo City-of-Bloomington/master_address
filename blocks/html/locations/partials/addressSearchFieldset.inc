@@ -11,5 +11,5 @@ $address = !empty($_REQUEST['address']) ? View::escape($_REQUEST['address']) : '
         <label  for="address">Street Address</label>
         <input name="address" id="address" value="<?php echo $address; ?>" />
     </div>
-    <button type="submit" class="search">Search</search>
+    <button type="submit" class="search">Search</button>
 </fieldset>

@@ -9,11 +9,9 @@ namespace Application\Plats;
 use Application\Controller as BaseController;
 use Application\View;
 
-use Domain\Plats\Entities\Plat;
 use Domain\Plats\UseCases\Info\InfoRequest;
 use Domain\Plats\UseCases\Search\SearchRequest;
 use Domain\Plats\UseCases\Update\UpdateRequest;
-use Domain\Plats\UseCases\Update\UpdateResponse;
 
 class Controller extends BaseController
 {
@@ -42,7 +40,7 @@ class Controller extends BaseController
                 return new Views\InfoView($infoResponse, $addressResponse);
             }
             else {
-                $_SESSION['errorMessages'] = $res->errors;
+                $_SESSION['errorMessages'] = $infoResponse->errors;
             }
         }
         return new \Application\Views\NotFoundView();

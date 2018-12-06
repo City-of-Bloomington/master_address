@@ -11,7 +11,6 @@ use Application\Template;
 
 use Domain\Plats\Metadata;
 use Domain\Plats\UseCases\Update\UpdateRequest;
-use Domain\Plats\UseCases\Update\UpdateResponse;
 
 class UpdateView extends Template
 {
