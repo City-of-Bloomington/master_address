@@ -1,6 +1,5 @@
 SASS := $(shell command -v sassc 2> /dev/null)
 MSGFMT := $(shell command -v msgfmt 2> /dev/null)
-VERSION := $(shell command git rev-parse HEAD | cut -c 1-8)
 LANGUAGES := $(wildcard language/*/LC_MESSAGES)
 
 VERSION := $(shell cat VERSION | tr -d "[:space:]")

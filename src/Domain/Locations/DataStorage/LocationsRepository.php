@@ -8,6 +8,9 @@ namespace Domain\Locations\DataStorage;
 
 interface LocationsRepository
 {
+    // Read functions
+    public function find(array $fields): array;
+
     // Metadata functions
     public function types       (): array;
     public function trashDays   (): array;

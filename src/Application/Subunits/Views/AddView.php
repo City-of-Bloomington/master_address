@@ -43,18 +43,17 @@ class AddView extends Template
             $vars['contact_name'] = $contact->__toString();
         }
 
-        $this->blocks[] = new Block('subunits/actions/addForm.inc', $vars);
+        $this->blocks = [
+            new Block('subunits/breadcrumbs.inc',    ['address' => $info->address]),
+            new Block('subunits/actions/addForm.inc', $vars),
+            'panel-one' => [
+                new Block('subunits/list.inc', [
+                    'address'        => $info->address,
+                    'subunits'       => $info->subunits,
+                    'disableButtons' => true
+                ])
+            ]
 
-        $this->blocks[]              = new Block('logs/statusLog.inc',      ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('logs/changeLog.inc',      ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc', [
-            'locations'      => $info->locations,
-            'disableButtons' => true
-        ]);
-        $this->blocks['panel-one'][] = new Block('subunits/list.inc',       [
-            'address'        => $info->address,
-            'subunits'       => $info->subunits,
-            'disableButtons' => true
-        ]);
+        ];
     }
 }

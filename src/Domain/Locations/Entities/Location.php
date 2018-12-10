@@ -31,6 +31,11 @@ class Location
 
     public function __construct(?array $data=null)
     {
+        if ($data) { $this->setData($data); }
+    }
+
+    public function setData(array $data)
+    {
         foreach (array_keys((array)$this) as $f) {
             if (!empty($data[$f])) {
                 switch ($f) {

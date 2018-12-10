@@ -45,14 +45,6 @@ class Controller
         return $info($req);
     }
 
-    protected function location(int $location_id): ?\Domain\Locations\Entities\Location
-    {
-        $load = $this->di->get('Domain\Locations\UseCases\Load\Load');
-        $res  = $load($location_id);
-        if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
-        return $res->location;
-    }
-
     protected function name(int $name_id): ?\Domain\Streets\Entities\Name
     {
         $load = $this->di->get('Domain\Streets\Names\UseCases\Load\Load');

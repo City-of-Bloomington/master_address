@@ -9,6 +9,7 @@ namespace Domain\Subunits\UseCases\Info;
 class InfoResponse
 {
     public $subunit;
+    public $address;
     public $locations = [];
     public $changeLog = [];
     public $statusLog = [];

@@ -12,7 +12,9 @@ use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
-use Domain\Addresses\UseCases\Search\SearchRequest;
+
+use Domain\Locations\DataStorage\PdoLocationsRepository;
+use Domain\Locations\Entities\Location;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
@@ -197,7 +199,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
     }
 
-
     private function doSelect(SelectInterface $select, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select->orderBy(self::$DEFAULT_SORT);
@@ -210,44 +211,22 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     }
 
     /**
-     * Load location objects for an address
+     * Alias for PdoLocationsRepository::find()
      */
-    public function locations(int $address_id): array
+    public function findLocations(array $fields): array
     {
-        $output = [];
-        $subunitRepo  = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
-
-        $sql   = "select * from locations where address_id=? and subunit_id is null";
-        $query = $this->pdo->prepare($sql);
-        $query->execute([$address_id]);
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $addresses =        $this->find(['location_id'=>$row['location_id']]);
-            $subunits  = $subunitRepo->find(['location_id'=>$row['location_id']]);
-
-            $location = new \Domain\Locations\Entities\Location($row);
-            $location->addresses = $addresses['rows'];
-            $location->subunits  = $subunits ['rows'];
-            $output[] = $location;
-        }
-        return $output;
+        $locationsRepo = new PdoLocationsRepository($this->pdo);
+        return $locationsRepo->find($fields);
     }
 
-    /**
-     * Load subunit objects for an address
-     */
-    public function subunits(int $address_id): array
-    {
-        $subunits = [];
-        $repo = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
-        $select = $repo->baseSelect();
-        $select->where('s.address_id=?', $address_id);
 
-        $query = $this->pdo->prepare($select->getStatement());
-        $query->execute($select->getBindValues());
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $subunits[] = new \Domain\Subunits\Entities\Subunit($row);
-        }
-        return $subunits;
+    /**
+     * Alias for PdoSubunitsRepository::find()
+     */
+    public function findSubunits(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
+        $repo   = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
+        return $repo->find($fields, $order, $itemsPerPage, $currentPage);
     }
 
     public function changeLog(?int   $address_id  =null,
@@ -311,65 +290,37 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
         $address_id = parent::saveToTable($data, self::TABLE);
         if ($address_id) {
-            if ($req->location_id) {
-                // Create a new row in locations by copying data from
-                // the active row for the location_id.
-                // The new row should not be active.
-                $sql = 'select * from locations where location_id=? order by active desc';
-                $result = parent::doQuery($sql, [$req->location_id]);
-                if (!count($result)) {
-                    $this->pdo->rollBack();
-                    throw new \Exception('locations/unknown');
+            $location      = new Location([
+                'type_id'      => $req->locationType_id,
+                'mailable'     => $req->mailable,
+                'occupiable'   => $req->occupiable,
+                'trash_day'    => $req->trash_day,
+                'recycle_week' => $req->recycle_week,
+                'address_id'   => $address_id
+            ]);
+            try {
+                // Only activate the address for the location when it is a new
+                // address and a new location.
+                // If we are adding to an existing location, do not activate the
+                // address for that location
+                $locationsRepo = new PdoLocationsRepository($this->pdo);
+                $location_id   = $locationsRepo->assign($location);
+                if (!$req->location_id) {
+                    $locationsRepo->activateAddress($location_id, $address_id);
                 }
 
-                $location = $result[0];
-                $location['address_id'] = $address_id;
-                // Boolean fields have to be converted to explicit true/false
-                $location['active'    ] = 'false';
-                $location['mailable'  ] = $location['mailable'  ] ? 'true' : 'false';
-                $location['occupiable'] = $location['occupiable'] ? 'true' : 'false';
+                // Save address status
+                $this->saveStatus         ($address_id,  $req->status,           self::LOG_TYPE);
+                $locationsRepo->saveStatus($location_id, $req->status, $locationsRepo::LOG_TYPE);
 
-                $insert  = $this->queryFactory->newInsert();
-                $insert->into('locations')->cols($location);
-                $sql     = $insert->getStatement();
-                $query   = $this->pdo->prepare($sql);
-                $success = $query->execute($insert->getBindValues());
-                if (!$success) {
-                    $this->pdo->rollBack();
-                    throw new \Exception('databaseError');
-                }
+                // Return the new address_id
+                $this->pdo->commit();
+                return $address_id;
             }
-            else {
-                // Create a new row in locations using data from the request.
-                $insert = $this->queryFactory->newInsert();
-                $insert->into('locations')->cols([
-                    'address_id'   => $address_id,
-                    'type_id'      => $req->locationType_id,
-                    'mailable'     => $req->mailable,
-                    'occupiable'   => $req->occupiable,
-                    'active'       => 'true',
-                    'trash_day'    => $req->trash_day,
-                    'recycle_week' => $req->recycle_week
-                ]);
-                $query   = $this->pdo->prepare($insert->getStatement());
-                $success = $query->execute($insert->getBindValues());
-                if (!$success) {
-                    $this->pdo->rollBack();
-                    throw new \Exception('databaseError');
-                }
-
-                $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
-
-                // Save a new location status using the request status
-                $this->saveStatus($location_id, $req->status, 'location');
+            catch (\Exception $e) {
+                $this->pdo->rollBack();
+                throw $e;
             }
-
-            // Save address status
-            $this->saveStatus($address_id, $req->status, self::LOG_TYPE);
-
-            // Return the new address_id
-            $this->pdo->commit();
-            return $address_id;
         }
         $this->pdo->rollBack();
         throw new \Exception('databaseError');

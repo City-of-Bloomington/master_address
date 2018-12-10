@@ -35,7 +35,7 @@ class Renumber
         ]);
         foreach ($req->address_numbers as $a) {
             $logEntry->entity_id = $a->address_id;
-            $log_id = $this->repo->logChange($logEntry, $this->repo::LOG_TYPE);
+            $this->repo->logChange($logEntry, $this->repo::LOG_TYPE);
         }
         return new RenumberResponse();
     }

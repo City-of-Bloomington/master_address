@@ -9,16 +9,14 @@ namespace Domain\Addresses\DataStorage;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
-use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Streets\UseCases\Renumber\AddressNumber;
 
 interface AddressesRepository
 {
     // Read functions
     public function load         (int $address_id): Address;
-    public function locations    (int $address_id): array;
-    public function subunits     (int $address_id): array;
+    public function findLocations(array $fields): array;
+    public function findSubunits (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function loadStatusLog(int $address_id, string $logType): array;
     public function getStatus    (int $address_id, string $logType): string;
 

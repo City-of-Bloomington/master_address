@@ -73,13 +73,12 @@
  * @param string $this->change_notes
  */
 declare (strict_types=1);
-use Application\Url;
 ?>
 <section>
     <header><h1><?= $this->_('address_add'); ?></h1></header>
 
     <form method="post">
-        <fieldset>
+        <fieldset><legend><?= $this->_('address'); ?></legend>
         <?php
             $h = $this->template->getHelper('field');
 
@@ -96,171 +95,25 @@ use Application\Url;
                 'required' => true
             ]);
 
-            #address_type
-            $options = [['value'=>'']];
-            foreach ($this->types as $c) { $options[] = ['value'=>$c]; }
-            echo $h->field([
-                'name'     => 'address_type',
-                'id'       => 'address_type',
-                'label'    => $this->_('type'),
-                'value'    => $this->address_type,
-                'type'     => 'select',
-                'options'  => $options,
-                'required' => true
-            ]);
-
-            echo $h->field([
-                'name'  => 'street_number_prefix',
-                'id'    => 'street_number_prefix',
-                'label' => $this->_('street_number_prefix'),
-                'value' => $this->street_number_prefix
-            ]);
-            echo $h->field([
-                'name'     => 'street_number',
-                'id'       => 'street_number',
-                'label'    => $this->_('street_number'),
-                'value'    => $this->street_number,
-                'type'     => 'number',
-                'required' => true
-            ]);
-            echo $h->field([
-                'name'  => 'street_number_suffix',
-                'id'    => 'street_number_suffix',
-                'label' => $this->_('street_number_suffix'),
-                'value' => $this->street_number_suffix
-            ]);
-
-            echo $h->field([
-                'name'     => 'street_id',
-                'id'       => 'street_id',
-                'label'    => $this->_('street'),
-                'type'     => 'chooser',
-                'url'      => new Url(parent::generateUrl('streets.index')),
-                'value'    => $this->street_id,
-                'display'  => $this->street_name,
-                'required' => true
-            ]);
-
-            echo $h->field([
-                'name'  => 'address2',
-                'id'    => 'address2',
-                'label' => $this->_('address2'),
-                'value' => $this->address2
-            ]);
-
-            $options = [['value'=>'']];
-            foreach ($this->zipCodes as $z) { $options[] = ['value' => $z]; }
-            echo $h->field([
-                'name'     => 'zip',
-                'id'       => 'zip',
-                'label'    => $this->_('zip'),
-                'value'    => $this->zip,
-                'type'     => 'select',
-                'options'  => $options,
-                'required' => true
-            ]);
-
-            echo $h->field([
-                'name'     => 'zipplus4',
-                'id'       => 'zipplus4',
-                'label'    => $this->_('zipplus4'),
-                'value'    => $this->zipplus4,
-                'type'     => 'number'
-            ]);
-
-            $options = [];
-            foreach ($this->cities as $c) { $options[] = ['value'=>$c]; }
-            echo $h->field([
-                'name'     => 'city',
-                'id'       => 'city',
-                'label'    => $this->_('city'),
-                'value'    => $this->city,
-                'type'     => 'select',
-                'options'  => $options,
-                'required' => true
-            ]);
-
-            $options = [];
-            foreach ($this->jurisdictions as $c) { $options[] = ['value'=>$c['id'], 'label'=>parent::escape($c['name'])]; }
-            echo $h->field([
-                'name'     => 'jurisdiction_id',
-                'id'       => 'jurisdiction_id',
-                'label'    => $this->_('jurisdiction'),
-                'value'    => $this->jurisdiction_id,
-                'type'     => 'select',
-                'options'  => $options,
-                'required' => true
-            ]);
-
-            #plat_id
-            #plat_lot_number
-
-            $options = [['value'=>'']];
-            foreach ($this->townships as $c) { $options[] = ['value'=>$c['id'], 'label'=>parent::escape($c['name'])]; }
-            echo $h->field([
-                'name'     => 'township_id',
-                'id'       => 'township_id',
-                'label'    => $this->_('township'),
-                'value'    => $this->township_id,
-                'type'     => 'select',
-                'options'  => $options,
-                'required' => true
-            ]);
-
-
-            $options = [['value'=>'']];
-            foreach ($this->sections as $c) { $options[] = ['value'=>$c]; }
-            echo $h->field([
-                'name'     => 'section',
-                'id'       => 'section',
-                'label'    => $this->_('section'),
-                'value'    => $this->section,
-                'type'     => 'select',
-                'options'  => $options
-            ]);
-
-            $options = [['value'=>'']];
-            foreach ($this->quarterSections as $c) { $options[] = ['value'=>$c]; }
-            echo $h->field([
-                'name'     => 'quarter_section',
-                'id'       => 'quarter_section',
-                'label'    => $this->_('quarter_section'),
-                'value'    => $this->quarter_section,
-                'type'     => 'select',
-                'options'  => $options
-            ]);
-
-            echo $h->field([
-                'name'     => 'notes',
-                'id'       => 'notes',
-                'label'    => $this->_('notes'),
-                'value'    => $this->notes,
-                'type'     => 'textarea'
-            ]);
+            $this->_include('addresses/partials/addressFields.inc');
         ?>
         </fieldset>
-        <fieldset>
-        <?php
-            $this->_include('addresses/partials/geoFields.inc');
-        ?>
-        </fieldset>
-        <fieldset><legend><?= $this->_('location_info'); ?></legend>
-        <?php
-            if ($this->location_id) {
-                $this->disableButtons = true;
-                $this->_include('locations/info.inc');
-            }
-            else { $this->_include('locations/partials/locationFields.inc'); }
 
-        ?>
+        <fieldset><legend><?= $this->_('geometry'); ?></legend>
+        <?php $this->_include('addresses/partials/geoFields.inc'); ?>
         </fieldset>
+
+        <fieldset><legend><?= $this->_('location'); ?></legend>
+        <?php $this->_include('locations/partials/locationFields.inc'); ?>
+        </fieldset>
+
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>
-            <?php
-                $this->_include('logs/changeLogFields.inc');
+        <?php
+            $this->_include('logs/changeLogFields.inc');
 
-                $h = $this->template->getHelper('saveAndCancelButtons');
-                echo $h->saveAndCancelButtons($this->cancel_url);
-            ?>
+            $h = $this->template->getHelper('saveAndCancelButtons');
+            echo $h->saveAndCancelButtons($this->cancel_url);
+        ?>
         </fieldset>
     </form>
 </section>

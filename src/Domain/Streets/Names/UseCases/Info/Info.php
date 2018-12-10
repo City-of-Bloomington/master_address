@@ -24,7 +24,7 @@ class Info
         $info = new InfoResponse();
         try {
             $info->name         = $this->repo->load($req->id);
-            $info->designations = $this->repo->findDesignations(['street_id'=>$req->id]);
+            $info->designations = $this->repo->designations($req->id);
         }
         catch (\Exception $e) {
             $info->errors = [$e->getMessage()];
