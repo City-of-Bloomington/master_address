@@ -54,7 +54,7 @@ trait StatusLogTrait
 	 */
     public function saveStatus(int $entity_id, string $status, string $logType)
     {
-		$currentStatus = $this->getStatus($entity_id);
+		$currentStatus = $this->getStatus($entity_id, $logType);
 
 		// If we have a current status, and it's not the same as the new one,
 		// Do our data cleanup - use today's date on all the empty end dates

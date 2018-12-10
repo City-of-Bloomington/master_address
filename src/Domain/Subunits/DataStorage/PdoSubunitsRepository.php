@@ -10,13 +10,16 @@ use Aura\SqlQuery\Common\SelectInterface;
 
 use Domain\PdoRepository;
 
+use Domain\Addresses\DataStorage\PdoAddressesRepository;
+use Domain\Locations\DataStorage\PdoLocationsRepository;
+use Domain\Addresses\Entities\Address;
 use Domain\Locations\Entities\Location;
+
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\Metadata as ChangeLog;
 
 class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 {
@@ -87,24 +90,31 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         throw new \Exception('subunits/unknown');
     }
 
-    public function locations(int $subunit_id): array
+    /**
+     * Alias for PdoAddressesRepository::load()
+     */
+    public function loadAddress(int $address_id): Address
     {
-        $output = [];
-        $addressRepo  = new \Domain\Addresses\DataStorage\PdoAddressesRepository($this->pdo);
+        $addressRepo = new PdoAddressesRepository($this->pdo);
+        return $addressRepo->load($address_id);
+    }
 
-        $sql   = "select * from locations where subunit_id=?";
-        $query = $this->pdo->prepare($sql);
-        $query->execute([$subunit_id]);
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $subunits  =        $this->find(['location_id'=>$row['location_id']]);
-            $addresses = $addressRepo->find(['location_id'=>$row['location_id']]);
+    /**
+     * Alias for PdoLocationsRepository::find()
+     */
+    public function findLocations(array $fields): array
+    {
+        $locationsRepo = new PdoLocationsRepository($this->pdo);
+        return $locationsRepo->find($fields);
+    }
 
-            $location = new \Domain\Locations\Entities\Location($row);
-            $location->subunits  = $subunits['rows'];
-            $location->addresses = $addresses['rows'];
-            $output[] = $location;
-        }
-        return $output;
+    /**
+     * Alias for PdoAddressesRepository::find()
+     */
+    public function findAddresses(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
+        $addressRepo = new PdoAddressesRepository($this->pdo);
+        return $addressRepo->find($fields, $order, $itemsPerPage, $currentPage);
     }
 
     /**
@@ -199,36 +209,31 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 
         $subunit_id = parent::saveToTable($data, self::TABLE);
         if ($subunit_id) {
-            // Set the subunit status
-            $this->saveStatus($subunit_id, $req->status, self::LOG_TYPE);
-
-            // Save the location
-            // Create a new row in locations using data from the request.
-            $insert = $this->queryFactory->newInsert();
-            $insert->into('locations')->cols([
-                'address_id'   => $req->address_id,
-                'subunit_id'   => $subunit_id,
+            $location      = new Location([
                 'type_id'      => $req->locationType_id,
                 'mailable'     => $req->mailable,
                 'occupiable'   => $req->occupiable,
-                'active'       => 'true',
                 'trash_day'    => $req->trash_day,
-                'recycle_week' => $req->recycle_week
+                'recycle_week' => $req->recycle_week,
+                'address_id'   => $req->address_id,
+                'subunit_id'   => $subunit_id
             ]);
-            $query   = $this->pdo->prepare($insert->getStatement());
-            $success = $query->execute($insert->getBindValues());
-            if (!$success) {
-                $this->pdo->rollBack();
-                throw new \Exception('databaseError');
+            try {
+                $locationsRepo = new PdoLocationsRepository($this->pdo);
+                $location_id   = $locationsRepo->assign($location);
+                $locationsRepo->activateSubunit($location_id, $subunit_id);
+
+                // Set the subunit status
+                         $this->saveStatus($subunit_id,  $req->status,           self::LOG_TYPE);
+                $locationsRepo->saveStatus($location_id, $req->status, $locationsRepo::LOG_TYPE);
+
+                $this->pdo->commit();
+                return $subunit_id;
             }
-
-            $location_id = (int)$this->pdo->lastInsertId('locations_location_id_seq');
-
-            // Set the location status
-            $this->saveStatus($location_id, $req->status, 'location');
-
-            $this->pdo->commit();
-            return $subunit_id;
+            catch (\Exception $e) {
+                $this->pdo->rollBack();
+                throw $e;
+            }
         }
         $this->pdo->rollBack();
         throw new \Exception('databaseError');

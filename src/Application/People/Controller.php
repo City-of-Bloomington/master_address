@@ -55,9 +55,7 @@ class Controller extends BaseController
             if (!count($response->errors)) {
                 $return_url = !empty($_SESSION['return_url'])
                             ? $_SESSION['return_url']
-                            : ($person->getId()
-                                ? parent::generateUrl('people.view', ['id'=>$response->id])
-                                : parent::generateUrl('people.view'));
+                            : parent::generateUrl('people.view', ['id'=>$response->id]);
                 unset($_SESSION['return_url']);
                 header('Location: '.$return_url);
                 exit();

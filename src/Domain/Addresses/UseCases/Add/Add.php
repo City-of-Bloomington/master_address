@@ -56,6 +56,8 @@ class Add
         if (!$req->state          ) { $errors[] = 'addresses/missingState';        }
         if (!$req->zip            ) { $errors[] = 'addresses/missingZip';          }
 
+        if (!$req->locationType_id) { $errors[] = 'locations/missingType';         }
+
         return $errors;
     }
 }

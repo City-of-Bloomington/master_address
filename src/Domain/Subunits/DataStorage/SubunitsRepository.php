@@ -6,22 +6,21 @@
 declare (strict_types=1);
 namespace Domain\Subunits\DataStorage;
 
-use Domain\Locations\Entities\Location;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
-use Domain\Subunits\UseCases\Search\SearchRequest;
 
 interface SubunitsRepository
 {
     // Read functions
     public function load         (int $subunit_id): Subunit;
-    public function locations    (int $subunit_id): array;
     public function loadStatusLog(int $subunit_id, string $logType): array;
     public function getStatus    (int $subunit_id, string $logType): string;
 
-    public function find    (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
+    public function find         (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
+    public function findLocations(array $fields): array;
+    public function findAddresses(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function changeLog(?int $subunit_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions

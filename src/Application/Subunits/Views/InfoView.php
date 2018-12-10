@@ -26,12 +26,13 @@ class InfoView extends Template
                  : ['verify', 'changeStatus'];
 
         $this->blocks = [
-            new Block('subunits/info.inc',   ['subunit'   => $info->subunit,
-                                              'title'     => parent::escape($info->subunit),
-                                              'actions'   => $actions]),
-            new Block('logs/statusLog.inc',  ['statuses'  => $info->statusLog]),
-            new Block('logs/changeLog.inc',  ['entries'   => $info->changeLog->entries,
-                                              'total'     => $info->changeLog->total]),
+            new Block('subunits/breadcrumbs.inc', ['address'  => $info->address]),
+            new Block('subunits/info.inc',        ['subunit'  => $info->subunit,
+                                                   'title'    => parent::escape($info->subunit),
+                                                   'actions'  => $actions]),
+            new Block('logs/statusLog.inc',       ['statuses' => $info->statusLog]),
+            new Block('logs/changeLog.inc',       ['entries'  => $info->changeLog->entries,
+                                                   'total'    => $info->changeLog->total]),
             'panel-one' => [
                 new Block('locations/locations.inc',  ['locations' => $info->locations])
             ]
