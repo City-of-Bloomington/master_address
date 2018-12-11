@@ -11,10 +11,12 @@ use Domain\PdoRepository;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
+use Domain\Addresses\UseCases\Readdress\ReaddressRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 
 use Domain\Locations\DataStorage\PdoLocationsRepository;
 use Domain\Locations\Entities\Location;
+use Domain\Subunits\DataStorage\PdoSubunitsRepository;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
@@ -225,7 +227,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
      */
     public function findSubunits(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
-        $repo   = new \Domain\Subunits\DataStorage\PdoSubunitsRepository($this->pdo);
+        $repo = new PdoSubunitsRepository($this->pdo);
         return $repo->find($fields, $order, $itemsPerPage, $currentPage);
     }
 
@@ -291,6 +293,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $address_id = parent::saveToTable($data, self::TABLE);
         if ($address_id) {
             $location      = new Location([
+                'location_id'  => $req->location_id,
                 'type_id'      => $req->locationType_id,
                 'mailable'     => $req->mailable,
                 'occupiable'   => $req->occupiable,
@@ -299,15 +302,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 'address_id'   => $address_id
             ]);
             try {
-                // Only activate the address for the location when it is a new
-                // address and a new location.
-                // If we are adding to an existing location, do not activate the
-                // address for that location
                 $locationsRepo = new PdoLocationsRepository($this->pdo);
                 $location_id   = $locationsRepo->assign($location);
-                if (!$req->location_id) {
-                    $locationsRepo->activateAddress($location_id, $address_id);
-                }
+                $locationsRepo->activateAddress($location_id, $address_id);
 
                 // Save address status
                 $this->saveStatus         ($address_id,  $req->status,           self::LOG_TYPE);
@@ -352,6 +349,25 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     }
 
     /**
+     * @return int  The new address_id
+     */
+    public function readdress(ReaddressRequest $req): int
+    {
+        $old_address_id = $req->address_id;
+        $old_address    = $this->load($old_address_id);
+
+        // Retire the old address
+        if ($old_address->status != ChangeLog::STATUS_RETIRED) {
+            $this->saveStatus($old_address_id, ChangeLog::STATUS_RETIRED, self::LOG_TYPE);
+        }
+
+        // Create the new address at the same location
+        $addRequest = new AddRequest($req->user_id, (array)$req);
+        $addRequest->status = ChangeLog::STATUS_CURRENT;
+        return $this->add($addRequest);
+    }
+
+    /**
      * Save changes to street numbers for a bunch of addresses
      */
     public function renumber(RenumberRequest $request)
@@ -372,51 +388,95 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         }
     }
 
+    /**
+     * Change the address_id for a subunit
+     */
+    public function moveSubunitsToAddress(int $old_address_id, int $new_address_id)
+    {
+        $sql = "update locations set address_id=?
+                where address_id=? and subunit_id in
+                (select id from subunits where address_id=?)";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$new_address_id, $old_address_id, $old_address_id]);
+
+        $sql = "update subunits set address_id=? where address_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$new_address_id, $old_address_id]);
+    }
+
     //---------------------------------------------------------------
     // Metadata Functions
     //---------------------------------------------------------------
     public function cities(): array
     {
-        return parent::distinctFromTable('city', self::TABLE);
+        $sql = "select distinct city from addresses
+                where city is not null
+                order by city";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function jurisdictions(): array
     {
-        return $this->doQuery('select * from jurisdictions order by name');
+        $sql = "select * from jurisdictions order by name";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function quarterSections(): array
     {
-        return parent::distinctFromTable('quarter_section', self::TABLE);
+        $sql = "select distinct quarter_section from addresses
+                where quarter_section is not null
+                order by quarter_section";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function sections(): array
     {
-        return parent::distinctFromTable('section', self::TABLE);
+        $sql = "select distinct section from addresses
+                where section is not null
+                order by section";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function streetTypes(): array
     {
-        return $this->doQuery('select * from street_types order by name');
+        $sql = "select * from street_types order by name";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function subunitTypes(): array
     {
-        return $this->doQuery('select * from subunit_types order by name');
+        $sql = "select * from subunit_types order by name";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function townships(): array
     {
-        return $this->doQuery('select * from townships order by name');
+        $sql = 'select * from townships order by name';
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function types(): array
     {
-        return $this->distinctFromTable('address_type', self::TABLE);
+        $sql = "select distinct address_type from addresses
+                where address_type is not null
+                order by address_type";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function zipCodes(): array
     {
-        return parent::distinctFromTable('zip', self::TABLE);
+        $sql = "select distinct zip from addresses
+                where zip is not null
+                order by zip";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

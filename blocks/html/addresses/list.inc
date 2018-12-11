@@ -13,7 +13,6 @@
                 <th><?= $this->_('status'); ?></th>
                 <th><?= $this->_('jurisdiction'); ?></th>
                 <th><?= $this->_('zip'); ?></th>
-                <th><?= $this->_('city'); ?></th>
                 <th><?= $this->_(['subunit', 'subunits', 10]); ?></th>
             </tr>
         </thead>
@@ -38,7 +37,6 @@
                     <td><a href=\"$uri\">$status</a></td>
                     <td><a href=\"$uri\">$jurisdiction</a></td>
                     <td><a href=\"$uri\">$zip</a></td>
-                    <td><a href=\"$uri\">$city</a></td>
                     <td>$subunits</td>
                 </tr>
                 ";

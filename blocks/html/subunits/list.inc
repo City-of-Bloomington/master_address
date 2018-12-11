@@ -27,31 +27,5 @@ use Application\People\Person;
         ?>
         </div>
     </header>
-    <table>
-        <thead>
-            <tr><th><?= $this->_('type'); ?></th>
-                <th><?= $this->_('id'); ?></th>
-                <th><?= $this->_('status'); ?></th>
-                <th><?= "{$this->_('latitude')},{$this->_('longitude')}"; ?></th>
-                <th><?= "{$this->_('x')},{$this->_('y')}"; ?></th>
-                <th><?= $this->_('USNG'); ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-			foreach ($this->subunits as $s) {
-                $url = parent::generateUri('subunits.view', ['id'=>$s->id]);
-				echo "
-				<tr><td><a href=\"$url\">{$s->type_code}</a></td>
-					<td><a href=\"$url\">{$s->identifier}</a></td>
-					<td>{$s->status}</td>
-					<td>{$s->latitude},{$s->longitude}</td>
-					<td>{$s->state_plane_x},{$s->state_plane_y}</td>
-					<td>{$s->usng}</td>
-				</tr>
-				";
-			}
-        ?>
-        </tbody>
-    </table>
+    <?php $this->_include('subunits/table.inc'); ?>
 </section>

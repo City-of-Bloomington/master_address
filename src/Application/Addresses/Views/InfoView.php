@@ -9,9 +9,7 @@ namespace Application\Addresses\Views;
 use Application\Block;
 use Application\Template;
 
-use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Info\InfoResponse;
-use Domain\Logs\Metadata as Log;
 
 class InfoView extends Template
 {
@@ -31,7 +29,7 @@ class InfoView extends Template
 
                 new Block('addresses/info.inc',        ['address'  => $info->address,
                                                         'title'    => $this->vars['title'],
-                                                        'actions'  => ['verify', 'changeStatus', 'correct']]),
+                                                        'actions'  => ['verify', 'changeStatus', 'correct', 'readdress']]),
 
                 new Block('logs/statusLog.inc',        ['statuses' => $info->statusLog]),
 
