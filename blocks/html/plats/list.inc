@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->plats
  */
 ?>
@@ -35,9 +35,17 @@
 		</thead>
 		<tbody>
 		<?php
-
 			foreach ($this->plats as $plat) {
-				$uri       = self::generateUri('plats.view', ['id'=>$plat->id]);
+                if ($this->callback_js) {
+                    $uri = "javascript:self.opener.{$this->callback_js}('{$plat->id}', '{$plat->name}');";
+                }
+                elseif ($this->callback_url) {
+                    $this->callback_url->{$this->callback_field} = $plat->id;
+                    $uri = $this->callback_url;
+                }
+                else {
+                    $uri = parent::generateUri('plats.view', ['id'=>$plat->id]);
+                }
 				$name      = parent::escape($plat->name);
 				$type      = parent::escape($plat->plat_type);
 				$cabinet   = parent::escape($plat->cabinet);
