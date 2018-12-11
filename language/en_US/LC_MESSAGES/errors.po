@@ -1,0 +1,117 @@
+# Translation
+# Copyright 2016-2018 City of Bloomington
+# This file is distributed under the same license as Master Address
+#
+domain "errors"
+
+msgid ""
+msgstr ""
+"Project-Id-Version: master_address\n"
+"Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
+"Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
+"Language-Team: City of Bloomington <dev@bloomington.in.gov>\n"
+"PO-Revision-Date: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+msgid "missingEndDate"
+msgstr "You must provide an end date"
+
+msgid "missingName"
+msgstr "You must choose a name"
+
+msgid "missingRequiredFields"
+msgstr "You did not include all the required fields."
+
+msgid "missingStartDate"
+msgstr "You must provide a start date"
+
+msgid "missingStatus"
+msgstr "You must provide a status"
+
+msgid "missingTownship"
+msgstr "You must choose a township"
+
+msgid "missingType"
+msgstr "You must choose a type"
+
+msgid "invalidDate"
+msgstr "You provided an invalid date."
+
+msgid "invalidEndDate"
+msgstr "The end date must come after the start date"
+
+msgid "invalidLogin"
+msgstr "The username and password combination you entered is not correct."
+
+msgid "invalidStatus"
+msgstr "That is not a valid status"
+
+msgid "noAccessAllowed"
+msgstr "Sorry, you're not allowed to go there."
+
+msgid "notLoggedIn"
+msgstr "You are not logged into this site anymore."
+
+msgid "passwordCorrupted"
+msgstr "Your password is corrupted.  Please contact a system administrator for help."
+
+msgid "addresses/duplicateAddress"
+msgstr "You are trying to save an address that is already duplicated in the system."
+
+msgid "addresses/missingId"
+msgstr "Missing the address_id"
+
+msgid "addresses/missingJurisdiction"
+msgstr "You must choose a jurisdiction"
+
+msgid "addresses/missingState"
+msgstr "You must provide the state"
+
+msgid "addresses/missingStreet"
+msgstr "You must choose a street"
+
+msgid "addresses/missingStreetNumber"
+msgstr "You must provide a street number"
+
+msgid "addresses/missingType"
+msgstr "You must choose an address type"
+
+msgid "addresses/missingZip"
+msgstr "You must provide a zip code"
+
+msgid "designations/missingType"
+msgstr "You must choose a designation type"
+
+msgid "ldap/unknownUser"
+msgstr "That username is not in LDAP.  You cannot set LDAP authentication if the user is not in LDAP."
+
+msgid "locations/missingType"
+msgstr "You must choose a location type"
+
+msgid "locations/unknown"
+msgstr "That location does not exist"
+
+msgid "streets/duplicateDesignation"
+msgstr "The street already uses that name"
+
+msgid "streets/invalidAliasType"
+msgstr "You cannot create an alias of type::STREET"
+
+msgid "subunits/missingAddress"
+msgstr "You must provide an address"
+
+msgid "subunits/missingIdentifier"
+msgstr "You must provide an identifier"
+
+msgid "subunits/missingLocation"
+msgstr "Missing location"
+
+msgid "users/missingPerson_id"
+msgstr "You can only create user accounts for people who are already in the system, or are in LDAP."
+
+msgid "users/unknownUser"
+msgstr "That person does not have a user account for this application"

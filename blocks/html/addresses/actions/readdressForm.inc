@@ -1,42 +1,82 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2009-2018 City of Bloomington, Indiana
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Address $this->address
+ *---------------------------------------------------------
+ * Location fields
+ *---------------------------------------------------------
+ * @param string   $this->address_id
+ * @param string   $this->location_id    Readdressing preserves the location_id
+ *
+ * @param array    $this->locationTypes  Location types to choose from
+ * @param array    $this->trashDays      Trash days to choose from
+ * @param array    $this->recycleWeeks   Recycle weeks to choose from
+ * @param string   $this->locationType_id
+ * @param string   $this->mailable
+ * @param string   $this->occupiable
+ * @param string   $this->active
+ * @param string   $this->trash_day
+ * @param string   $this->recycle_week
+ * @param string   $this->retireSubunits  Whether to retire or readdress any subunits
+ *
+ *---------------------------------------------------------
+ * Change log fields
+ *---------------------------------------------------------
+ * @param string $this->user_id
+ * @param string $this->contact_id
+ * @param string $this->contact_name  The displayable name for the chosen contact person
+ * @param string $this->change_notes
  */
 ?>
-<h1>Change Of Address</h1>
-<script type="text/javascript">
-function handleReaddressAddress(form) {
-	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'readdress','<?php echo BASE_URL; ?>');
-	}
-}
-</script>
-<form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="handleReaddressAddress(this); return false;">
-	<fieldset>
-		<input type="hidden" name="action" value="readdress" />
-		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
+<section>
+    <header><h1><?= $this->_('readdress'); ?></h1></header>
+    <form method="post">
+        <fieldset>
+            <input name="id"          type="hidden" value="<?= $this->address_id; ?>" />
+            <input name="location_id" type="hidden" value="<?= $this->location_id; ?>" />
 
-		<table>
-			<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
-		</table>
+            <?php $this->_include('addresses/partials/addressFields.inc'); ?>
+        </fieldset>
 
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
+        <fieldset>
+            <?php $this->_include('addresses/partials/geoFields.inc'); ?>
+        </fieldset>
 
-		<button type="submit" class="save">Save Changes</button>
-	</fieldset>
-</form>
-<?php
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetSelector.inc';
+        <fieldset>
+            <legend><?= $this->_('location_info'); ?></legend>
+            <?php $this->_include('locations/partials/locationFields.inc'); ?>
+        </fieldset>
 
-	$status = strtolower($this->address->getStatus()->getDescription());
-	echo "<table class=\"$status\">";
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
-	include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
-	echo "</table>";
-?>
+        <?php
+            if ($this->subunits) {
+                echo "<fieldset><legend>{$this->_(['subunit', 'subunits', 10])}</legend>";
+                $h = $this->template->getHelper('field');
+                $options = [
+                    ['value'=>1, 'label'=>$this->_('retire'   )],
+                    ['value'=>0, 'label'=>$this->_('readdress')]
+                ];
+                echo $h->field([
+                    'name'     => 'retireSubunits',
+                    'id'       => 'retireSubunits',
+                    'type'     => 'select',
+                    'value'    => $this->retireSubunits,
+                    'options'  => $options
+                ]);
+
+                $this->_include('subunits/table.inc');
+
+                echo "</fieldset>";
+            }
+        ?>
+
+        <fieldset><legend><?= $this->_('changeLog'); ?></legend>
+            <?php
+                $this->_include('logs/changeLogFields.inc');
+
+                $h = $this->template->getHelper('saveAndCancelButtons');
+                echo $h->saveAndCancelButtons(parent::generateUri('addresses.view', ['id'=>$this->address_id]));
+            ?>
+        </fieldset>
+    </form>
+</section>

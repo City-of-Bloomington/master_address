@@ -1,42 +1,97 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Address $this->address
+ * @copyright 2009-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param string $this->address_id;
+ * @param string $this->street_id;
+ * @param string $this->street_number_prefix;
+ * @param string $this->street_number;
+ * @param string $this->street_number_suffix;
+ * @param string $this->street_name
+ * @param string $this->zip;
+ * @param string $this->zipplus4;
+ * @param string $this->notes;
+ * @param string $this->user_id;
+ * @param string $this->contact_id   Change log contact person
+ * @param string $this->contact_name Change log contact person
+ * @param string $this->change_notes
  */
+use Application\Url;
+use Domain\Addresses\Metadata as Address;
 ?>
-<h1>Correct this address</h1>
-<script type="text/javascript">
-function handleCorrectAddress(form) {
-	if (FRAMEWORK.checkRequiredFields()) {
-		FRAMEWORK.getChangeLog(form,'correct','<?php echo BASE_URL; ?>');
-	}
-}
-</script>
-<form method="post" action="<?php echo BASE_URL; ?>/addresses/actions.php"
-	onsubmit="handleCorrectAddress(this); return false;">
-	<fieldset>
-		<input type="hidden" name="action" value="correct" />
-		<input type="hidden" name="address_id" value="<?php echo $this->address->getId(); ?>" />
+<section>
+    <header><h1><?= $this->_('correct'); ?></h1></header>
+    <form method="post">
+        <fieldset>
+            <input name="id" type="hidden" value="<?= $this->address_id; ?>" />
+            <?php
+                $h = $this->template->getHelper('field');
 
-		<table>
-			<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/streetFields.inc'; ?>
-		</table>
+                echo $h->field([
+                    'name'  => 'street_number_prefix',
+                    'id'    => 'street_number_prefix',
+                    'label' => $this->_('street_number_prefix'),
+                    'value' => $this->street_number_prefix
+                ]);
+                echo $h->field([
+                    'name'     => 'street_number',
+                    'id'       => 'street_number',
+                    'label'    => $this->_('street_number'),
+                    'value'    => $this->street_number,
+                    'type'     => 'number',
+                    'required' => true
+                ]);
+                echo $h->field([
+                    'name'  => 'street_number_suffix',
+                    'id'    => 'street_number_suffix',
+                    'label' => $this->_('street_number_suffix'),
+                    'value' => $this->street_number_suffix
+                ]);
 
-		<?php include APPLICATION_HOME.'/blocks/html/addresses/partials/notesField.inc'; ?>
+                echo $h->field([
+                    'name'    => 'street_id',
+                    'id'      => 'street_id',
+                    'label'   => $this->_('street'),
+                    'value'   => $this->street_id,
+                    'display' => $this->street_name,
+                    'type'    => 'chooser',
+                    'url'     => new Url(parent::generateUrl('streets.index'))
+                ]);
 
-		<button type="submit" class="save">Save Changes</button>
-	</fieldset>
-</form>
-<?php
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/streetSelector.inc';
+                echo $h->field([
+                    'name'     => 'zip',
+                    'id'       => 'zip',
+                    'label'    => $this->_('zip'),
+                    'value'    => $this->zip,
+                    'type'     => 'number',
+                    'required' => true
+                ]);
 
-	$status = strtolower($this->address->getStatus()->getDescription());
-	echo "<table class=\"$status\">";
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/requiredData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/unrequiredData.inc';
-	include APPLICATION_HOME.'/blocks/html/locations/partials/locationData.inc';
-	include APPLICATION_HOME.'/blocks/html/addresses/partials/sanitationData.inc';
-	echo "</table>";
-?>
+                echo $h->field([
+                    'name'     => 'zipplus4',
+                    'id'       => 'zipplus4',
+                    'label'    => $this->_('zipplus4'),
+                    'value'    => $this->zipplus4,
+                    'type'     => 'number'
+                ]);
+
+                echo $h->field([
+                    'name'     => 'notes',
+                    'id'       => 'notes',
+                    'label'    => $this->_('notes'),
+                    'value'    => $this->notes,
+                    'type'     => 'textarea'
+                ]);
+            ?>
+        </fieldset>
+
+        <fieldset><legend><?= $this->_('changeLog'); ?></legend>
+            <?php
+                $this->_include('logs/changeLogFields.inc');
+
+                $h = $this->template->getHelper('saveAndCancelButtons');
+                echo $h->saveAndCancelButtons(parent::generateUri('addresses.view', ['id'=>$this->address_id]));
+            ?>
+        </fieldset>
+    </form>
+</section>

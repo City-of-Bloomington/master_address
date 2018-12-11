@@ -1,15 +1,13 @@
-<form method="post" action="<?php echo BASE_URL; ?>/login/login.php">
-	<fieldset><legend>Login</legend>
-		<input name="return_url" type="hidden" value="<?php echo View::escape($_SERVER['REQUEST_URI']); ?>" />
-		<table>
-			<tr><th><label for="username">Username:</label></th>
-				<td><input name="username" id="username" /></td><td></td>
-			</tr>
-			<tr><th><label for="password">Password:</label></th>
-				<td><input type="password" name="password" id="password" /></td>
-				<td><button type="submit" class="login">Login</button></td>
-			</tr>
-		</table>
+<form method="post" action="<?= self::generateUri('login.login'); ?>">
+	<fieldset><legend><?= $this->_('login'); ?></legend>
+		<input name="return_url" type="hidden" value="<?= self::escape($this->return_url); ?>" />
 
+		<?php
+            $h = $this->template->getHelper('field');
+            echo $h->field(['name'=>'username', 'id'=>'username', 'label'=>$this->_('username'), 'required'=>true]);
+            echo $h->field(['name'=>'password', 'id'=>'password', 'label'=>$this->_('password'), 'required'=>true, 'type'=>'password']);
+		?>
+
+		<button type="submit" class="login"><?= $this->_('login'); ?></button>
 	</fieldset>
 </form>

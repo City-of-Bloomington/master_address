@@ -1,0 +1,14 @@
+FROM php:7.2-apache-stretch
+ADD --chown=www-data:staff master_address /srv/sites/master_address
+ADD master_address/docker/apache.conf /etc/apache2/sites-available/000-default.conf
+ADD master_address/docker/phpinfo.php /var/www/html/phpinfo.php
+
+RUN a2enmod rewrite \
+ && apt-get update && apt-get install -y libpq-dev libldap2-dev libicu-dev gettext locales \
+ && docker-php-ext-install pdo_pgsql ldap intl gettext
+
+ENV LANG en_US.UTF-8
+RUN sed --in-place '/en_US.UTF-8/s/^#//' /etc/locale.gen && locale-gen en_US.UTF-8
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY master_address/docker/php.ini "$PHP_INI_DIR/conf.d/local.ini"

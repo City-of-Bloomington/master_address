@@ -1,28 +1,14 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Address $this->address	You must pass either an address
- * @param Subunit $this->subunit	or a subunit
+ * @copyright 2009-2018 City of Bloomington, Indiana
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param Address $this->address
  */
-if (isset($this->subunit)) {
-	$address = $this->subunit->getAddress();
-}
-else {
-	$address = $this->address;
-}
+$streetUrl  = parent::generateUri(  'streets.view', ['id'=>$this->address->street_id]);
+$addressUrl = parent::generateUri('addresses.view', ['id'=>$this->address->id       ]);
 ?>
-<div class="breadcrumbs">
-	<ul><li><a href="<?php echo BASE_URL; ?>/addresses">Addresses</a></li>
-		<?php
-			$name = View::escape($address->getStreetName());
-			echo "<li><a href=\"{$address->getURL()}\">$name</a></li>";
-			if (isset($address)) {
-				echo "
-				<li><a href=\"{$address->getURL()}\">{$address->getStreet_number()}</a></li>
-				";
-			}
-		?>
-	</ul>
-</div>
+<nav class="breadcrumbs">
+    <a href="<?= BASE_URL; ?>/addresses"><?= $this->_(['address', 'addresses', 10]); ?></a>
+    <a href="<?= $streetUrl;  ?>"><?= $this->address->streetName();   ?></a>
+    <a href="<?= $addressUrl; ?>"><?= $this->address->streetNumber(); ?></a>
+</nav>

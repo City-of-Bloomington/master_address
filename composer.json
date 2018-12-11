@@ -1,0 +1,16 @@
+{
+    "require": {
+        "php": ">=7.2",
+        "aura/di": "~3",
+        "aura/router": "~2",
+        "aura/sqlquery": "~2",
+        "jasig/phpcas": "~1",
+        "zendframework/zend-permissions-acl": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "src/Application/",
+            "Domain\\": "src/Domain"
+        }
+    }
+}

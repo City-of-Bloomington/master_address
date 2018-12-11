@@ -1,0 +1,45 @@
+.full-width {
+    #content-panel { }
+}
+
+.callback {
+    #content-panel { }
+}
+
+.two-column {
+    main {
+        overflow: auto;
+        column-gap: $size-gutter;
+
+        @media all and (min-width: $viewport-large) {
+            display: grid;
+            grid-template-columns: $viewport-medium 1fr;
+        }
+    }
+
+    #panel-one {  }
+    #content-panel {  }
+}
+
+.three-column {
+    main {
+        overflow: auto;
+        column-gap: $size-gutter;
+
+        @media all and (min-width: $viewport-medium) {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+        }
+
+        @media all and (min-width: $viewport-large) {
+            display: grid;
+            grid-template-columns: 320px 320px 1fr;
+        }
+    }
+
+    #panel-one {  }
+    #panel-two {  }
+    #content-panel {  }
+}
+
+footer { clear: both; }
