@@ -16,8 +16,9 @@ class SearchView extends Template
 {
     public function __construct(SearchResponse $response, int $itemsPerPage, int $currentPage)
     {
-        $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
-        parent::__construct('default', $format);
+        $template = !empty($_REQUEST['callback']) ? 'callback'          : 'default';
+        $format   = !empty($_REQUEST['format'  ]) ? $_REQUEST['format'] : 'html';
+        parent::__construct($template, $format);
 
         $this->vars['title'] = $this->_('plats_search');
         if ($response->errors) {
@@ -26,7 +27,10 @@ class SearchView extends Template
 
         $this->blocks[] = new Block('plats/searchForm.inc', [
             'plats'   => $response->plats,
-            'options' => $response->options
+            'options' => $response->options,
+            'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
+            'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'plat_id',
+            'callback_js'    => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null
         ]);
 
         if ($response->total > $itemsPerPage) {

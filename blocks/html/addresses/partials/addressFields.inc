@@ -140,7 +140,24 @@ echo $h->field([
 ]);
 
 #plat_id
+echo $h->field([
+    'name'     => 'plat_id',
+    'id'       => 'plat_id',
+    'label'    => $this->_('plat'),
+    'type'     => 'chooser',
+    'url'      => new Url(parent::generateUrl('plats.index')),
+    'value'    => $this->plat_id,
+    'display'  => $this->plat_id
+]);
+
 #plat_lot_number
+echo $h->field([
+    'name'     => 'plat_lot_number',
+    'id'       => 'plat_lot_number',
+    'label'    => $this->_('plat_lot_number'),
+    'value'    => $this->plat_lot_number
+]);
+
 
 $options = [['value'=>'']];
 foreach ($this->townships as $c) { $options[] = ['value'=>$c['id'], 'label'=>parent::escape($c['name'])]; }
