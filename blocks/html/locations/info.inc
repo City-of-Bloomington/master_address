@@ -1,39 +1,62 @@
 <?php
 /**
- * @copyright 2014 City of Bloomington, Indiana
+ * @copyright 2014-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->location
+ * @param Location $this->location
+ * @param boolean  $this->disableButtons (optional)
  */
+use Application\Url;
+
 $fields = [
-    'location_id', 'addressString', 'location_type_id', 'street_address_id', 'subunit_id',
-    'mailable_flag', 'livable_flag', 'active',
+    'location_id', 'status', 'type_code', 'mailable', 'occupiable', 'active', 'trash_day', 'recycle_week'
 ];
 foreach ($fields as $f) {
-    $$f = View::escape($this->location[$f]);
+    $$f  = parent::escape($this->location->$f);
 }
-
-$url = BASE_URL.'/addresses/viewAddress.php?address_id='.$street_address_id;
 ?>
-<h2>Location ID <?php echo $location_id; ?></h2>
-<h3><?php echo "<a href=\"$url\">$addressString</a>"; ?></h3>
-<table>
-    <tr><th>Location Use Type</th>
-        <td><?php echo $location_type_id; ?></td>
-    </tr>
-    <tr><th>Street Address ID</th>
-        <td><?php echo $street_address_id; ?></td>
-    </tr>
-    <tr><th>Subunit ID</th>
-        <td><?php echo $subunit_id; ?></td>
-    </tr>
-    <tr><th>Mailable</th>
-        <td><?php echo $mailable_flag; ?></td>
-    </tr>
-    <tr><th>Livable</th>
-        <td><?php echo $livable_flag; ?></td>
-    </tr>
-    <tr><th>Active</th>
-        <td><?php echo $active; ?></td>
-    </tr>
-</table>
+<article>
+    <table>
+        <?php
+            foreach ($fields as $f) {
+                echo "
+                <tr><th>{$this->_($f)}</th>
+                    <td>{$$f}</td>
+                </tr>
+                ";
+
+            }
+        ?>
+        <tr><th><?= $this->_(['address', 'addresses', count($this->location->addresses)]); ?></th>
+            <td><ul><?php
+                    foreach ($this->location->addresses as $address) {
+                        $uri = parent::generateUri('addresses.view', ['id'=>$address->id]);
+                        echo "<li><a href=\"$uri\">$address</a></li>";
+                    }
+                    if (!$this->disableButtons && parent::isAllowed('addresses', 'add')) {
+                        $h = $this->template->getHelper('buttonLink');
+                        $q = http_build_query([
+                            'location_id' => $location_id,
+                            'return_url'  => Url::current_url()
+                        ]);
+                        echo $h->buttonLink(
+                            parent::generateUri('addresses.add')."?$q",
+                            $this->_('address_add'),
+                            'add'
+                        );
+                    }
+                ?>
+                </ul>
+            </td>
+        </tr>
+        <tr><th><?= $this->_(['subunit', 'subunits', count($this->location->subunits)]); ?></th>
+            <td><ul><?php
+                    foreach ($this->location->subunits as $subunit) {
+                        $uri = parent::generateUri('subunits.view', ['id'=>$subunit->id]);
+                        echo "<li><a href=\"$uri\">$subunit</a></li>";
+                    }
+                ?>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</article>

@@ -1,5 +1,3 @@
-<div id="panel-one">
-<?php
-	echo $this->includeBlocks('panel-one');
-?>
+<div id="panel-one" class="panel">
+<?= $this->includeBlocks('panel-one'); ?>
 </div>

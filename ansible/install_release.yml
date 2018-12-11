@@ -1,0 +1,45 @@
+---
+- hosts: "master_address"
+  become: "yes"
+  roles:
+    - "City-of-Bloomington.php"
+
+  tasks:
+    - name: "Install php and related packages"
+      apt:
+        name: "{{ packages }}"
+        state: "present"
+      vars:
+        packages:
+        - "php-pgsql"
+
+    - name: "Apache site configuration"
+      template:
+        src: "master_address.conf"
+        dest: "/etc/apache2/sites-enabled/conf.d/master_address.conf"
+      notify: "apache_restart"
+
+    - name: "Create installation directories"
+      file:
+        path: "{{ item }}"
+        state: "directory"
+        owner: "www-data"
+        group: "staff"
+      with_items:
+        - "{{ ma_install_path }}"
+        - "{{ ma_backup_path  }}"
+        - "{{ ma_site_home    }}"
+
+    - name: "Update application permissions"
+      file:
+        path:    "{{ item }}"
+        state:   "directory"
+        owner:   "www-data"
+        group:   "staff"
+        mode:    "g+rw"
+        recurse: "yes"
+      with_items:
+        - "{{ ma_install_path }}"
+        - "{{ ma_backup_path  }}"
+        - "{{ ma_site_home    }}"
+...

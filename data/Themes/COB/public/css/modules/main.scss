@@ -1,0 +1,23 @@
+footer {
+    margin-top: ($size-gutter*2);
+    padding: $size-gutter;
+    font-size: $font-size-small;
+}
+
+main {
+    padding-left: $size-gutter;
+}
+
+.pageNavigation          { margin: $size-gutter; }
+.pageNavigation li       { display: inline; margin: $size-gutter; }
+
+@media print {
+    body { font-size: 10pt; }
+    main { padding: 0; }
+
+    body > header,
+    body > footer,
+    .dropdown {
+        display: none;
+    }
+}

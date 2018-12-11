@@ -1,0 +1,16 @@
+---
+ma_version: "2.0.2"
+ma_archive_path: "../build/master_address.tar.gz"
+ma_install_path: "/srv/sites/master_address"
+ma_backup_path:  "/srv/backups/master_address"
+ma_site_home:    "{{ ma_install_path }}/data"
+
+ma_base_uri: "/master_address"
+ma_base_url: "https://{{ ansible_host }}{{ ma_base_uri }}"
+
+ma_db:
+  name:     "gis"
+  schema:   "address"
+  username: "master_address"
+  password: "{{ vault_ma_db.password }}"
+...
