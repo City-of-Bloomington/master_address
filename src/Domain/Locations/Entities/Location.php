@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Locations\Entities;
@@ -14,6 +14,7 @@ class Location
     public $subunit_id;
     public $mailable;
     public $occupiable;
+    public $group_quarter;
     public $active;
     public $trash_day;
     public $recycle_week;
@@ -48,6 +49,7 @@ class Location
 
                     case 'mailable':
                     case 'occupiable':
+                    case 'group_quarter':
                     case 'active':
                         $this->$f = $data[$f] ? true : false;
                     break;

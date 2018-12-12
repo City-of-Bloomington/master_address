@@ -38,6 +38,7 @@ class ReaddressRequest
     public $locationType_id;
     public $mailable;
     public $occupiable;
+    public $group_quarter;
     public $trash_day;
     public $recycle_week;
 
@@ -87,6 +88,7 @@ class ReaddressRequest
 
                     case 'mailable':
                     case 'occupiable':
+                    case 'group_quarter':
                     case 'retireSubunits':
                         $this->$f = $data[$f] ? true : false;
                     break;

@@ -24,18 +24,19 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
      */
     public static $fieldmap = [
         // property  => [dbColumn info]
-        'location_id'  => ['prefix'=>'l', 'dbName'=>'location_id' ],
-        'type_id'      => ['prefix'=>'l', 'dbName'=>'type_id'     ],
-        'address_id'   => ['prefix'=>'l', 'dbName'=>'address_id'  ],
-        'subunit_id'   => ['prefix'=>'l', 'dbName'=>'subunit_id'  ],
-        'mailable'     => ['prefix'=>'l', 'dbName'=>'mailable'    ],
-        'occupiable'   => ['prefix'=>'l', 'dbName'=>'occupiable'  ],
-        'active'       => ['prefix'=>'l', 'dbName'=>'active'      ],
-        'trash_day'    => ['prefix'=>'l', 'dbName'=>'trash_day'   ],
-        'recycle_week' => ['prefix'=>'l', 'dbName'=>'recycle_week'],
-        'type_code'    => ['prefix'=>'t', 'dbName'=>'code'        ],
-        'type_name'    => ['prefix'=>'t', 'dbName'=>'name'        ],
-        'status'       => ['prefix'=>'x', 'dbName'=>'status'      ]
+        'location_id'  => ['prefix'=>'l', 'dbName'=>'location_id'  ],
+        'type_id'      => ['prefix'=>'l', 'dbName'=>'type_id'      ],
+        'address_id'   => ['prefix'=>'l', 'dbName'=>'address_id'   ],
+        'subunit_id'   => ['prefix'=>'l', 'dbName'=>'subunit_id'   ],
+        'mailable'     => ['prefix'=>'l', 'dbName'=>'mailable'     ],
+        'occupiable'   => ['prefix'=>'l', 'dbName'=>'occupiable'   ],
+        'group_quarter'=> ['prefix'=>'l', 'dbName'=>'group_quarter'],
+        'active'       => ['prefix'=>'l', 'dbName'=>'active'       ],
+        'trash_day'    => ['prefix'=>'l', 'dbName'=>'trash_day'    ],
+        'recycle_week' => ['prefix'=>'l', 'dbName'=>'recycle_week' ],
+        'type_code'    => ['prefix'=>'t', 'dbName'=>'code'         ],
+        'type_name'    => ['prefix'=>'t', 'dbName'=>'name'         ],
+        'status'       => ['prefix'=>'x', 'dbName'=>'status'       ]
     ];
 
     public function columns(): array
@@ -76,6 +77,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                 switch ($f) {
                     case 'mailable':
                     case 'occupiable':
+                    case 'group_quarter':
                     case 'active':
                         $select->where("$column=?", $v ? 'true' : 'false');
                     break;

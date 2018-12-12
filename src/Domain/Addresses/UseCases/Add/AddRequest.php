@@ -40,6 +40,7 @@ class AddRequest
     public $locationType_id;
     public $mailable;
     public $occupiable;
+    public $group_quarter;
     public $trash_day;
     public $recycle_week;
 
@@ -79,6 +80,7 @@ class AddRequest
 
                         case 'mailable':
                         case 'occupiable':
+                        case 'group_quarter':
                             $this->$f = $data[$f] ? true : false;
                         break;
 

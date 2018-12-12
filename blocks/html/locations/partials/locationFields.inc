@@ -12,6 +12,7 @@
  * @param string $this->locationType_id;
  * @param string $this->mailable;
  * @param string $this->occupiable;
+ * @param string $this->group_quarter
  * @param string $this->trash_day;
  * @param string $this->recycle_week;
  *
@@ -50,6 +51,15 @@ echo $h->field([
     'label'    => $this->_('occupiable'),
     'type'     => 'radio',
     'value'    => $this->occupiable,
+    'options'  => $options
+]);
+
+echo $h->field([
+    'name'     => 'group_quarter',
+    'id'       => 'group_quarter',
+    'label'    => $this->_('group_quarter'),
+    'type'     => 'radio',
+    'value'    => $this->group_quarter,
     'options'  => $options
 ]);
 
