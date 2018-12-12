@@ -140,6 +140,9 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
     }
 
+    /**
+     * Returns an array of ChangeLog entries
+     */
     public function changeLog(?int   $subunit_id  =null,
                               ?array $order       =null,
                               ?int   $itemsPerPage=null,
@@ -209,15 +212,11 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 
         $subunit_id = parent::saveToTable($data, self::TABLE);
         if ($subunit_id) {
-            $location      = new Location([
-                'type_id'      => $req->locationType_id,
-                'mailable'     => $req->mailable,
-                'occupiable'   => $req->occupiable,
-                'trash_day'    => $req->trash_day,
-                'recycle_week' => $req->recycle_week,
-                'address_id'   => $req->address_id,
-                'subunit_id'   => $subunit_id
-            ]);
+            $location = new Location((array)$req);
+            // This field is named differently in the AddRequest
+            $location->type_id    = $req->locationType_id;
+            $location->subunit_id = $subunit_id;
+
             try {
                 $locationsRepo = new PdoLocationsRepository($this->pdo);
                 $location_id   = $locationsRepo->assign($location);

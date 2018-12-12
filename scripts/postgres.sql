@@ -1,5 +1,5 @@
--- @copyright 2017 City of Bloomington, Indiana
--- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+-- @copyright 2017-2018 City of Bloomington, Indiana
+-- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE
 set search_path = address;
 
 --
@@ -39,6 +39,7 @@ create table jurisdictions (
 create type directions       as enum('N', 'E', 'S', 'W');
 create type address_statuses as enum('current', 'retired', 'proposed', 'duplicate', 'temporary');
 create type  street_statuses as enum('current', 'retired', 'proposed', 'corrected');
+create type address_types    as enum('Facility', 'Parcel', 'Property', 'Street', 'Temporary', 'Utility');
 
 create table street_types (
     id   serial      primary key,
@@ -59,13 +60,11 @@ create table location_types (
     description varchar(128) not null
 );
 
-create table location_purposes (
+create table purposes (
     id           serial       primary key,
     name         varchar(128) not null,
     purpose_type varchar(32)  not null
 );
-
-
 
 --
 -- Core tables
@@ -156,7 +155,7 @@ create table addresses (
     street_number        integer not null,
     street_number_suffix varchar(8),
     address2             varchar(64),
-    address_type         varchar(16) not null,
+    address_type         address_types not null,
     street_id            integer not null,
     jurisdiction_id      integer not null,
     township_id          integer,
@@ -231,15 +230,16 @@ create table subunit_status (
 -- This is a many to many relationship between addresses and locations.
 -- We use address and subunit tables as the primary entrance to this table
 create table locations (
-	location_id serial,
-	type_id     integer not null,
-	address_id  integer,
-	subunit_id  integer,
-	mailable    boolean,
-	occupiable  boolean,
-	active      boolean,
-    trash_day    trash_day,
-    recycle_week recycle_week,
+	location_id   serial,
+	type_id       integer not null,
+	address_id    integer,
+	subunit_id    integer,
+	mailable      boolean,
+	occupiable    boolean,
+	group_quarter boolean,
+	active        boolean,
+    trash_day     trash_day,
+    recycle_week  recycle_week,
 	unique (location_id, address_id, subunit_id),
 	foreign key (address_id) references addresses     (id),
 	foreign key (subunit_id) references subunits      (id),
@@ -253,6 +253,13 @@ create table location_status (
 	status       address_statuses not null,
     start_date  timestamp         not null default now(),
     end_date    timestamp
+);
+
+create table location_purposes (
+    location_id integer not null,
+    purpose_id  integer not null,
+    unique (location_id, purpose_id),
+    foreign key (purpose_id) references purposes (id)
 );
 
 -- mast_addr_assignment_contacts

@@ -292,15 +292,11 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
         $address_id = parent::saveToTable($data, self::TABLE);
         if ($address_id) {
-            $location      = new Location([
-                'location_id'  => $req->location_id,
-                'type_id'      => $req->locationType_id,
-                'mailable'     => $req->mailable,
-                'occupiable'   => $req->occupiable,
-                'trash_day'    => $req->trash_day,
-                'recycle_week' => $req->recycle_week,
-                'address_id'   => $address_id
-            ]);
+            $location = new Location((array)$req);
+            // This field is named differently in the AddRequest
+            $location->type_id    = $req->locationType_id;
+            $location->address_id = $address_id;
+
             try {
                 $locationsRepo = new PdoLocationsRepository($this->pdo);
                 $location_id   = $locationsRepo->assign($location);
