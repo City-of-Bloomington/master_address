@@ -32,8 +32,6 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         'occupiable'   => ['prefix'=>'l', 'dbName'=>'occupiable'   ],
         'group_quarter'=> ['prefix'=>'l', 'dbName'=>'group_quarter'],
         'active'       => ['prefix'=>'l', 'dbName'=>'active'       ],
-        'trash_day'    => ['prefix'=>'l', 'dbName'=>'trash_day'    ],
-        'recycle_week' => ['prefix'=>'l', 'dbName'=>'recycle_week' ],
         'type_code'    => ['prefix'=>'t', 'dbName'=>'code'         ],
         'type_name'    => ['prefix'=>'t', 'dbName'=>'name'         ],
         'status'       => ['prefix'=>'x', 'dbName'=>'status'       ]
@@ -187,25 +185,5 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $sql = "select * from location_types";
         $result = $this->pdo->query($sql);
         return $result->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public function trashDays(): array
-    {
-        $sql = "select distinct trash_day
-                from locations
-                where trash_day is not null
-                order by trash_day";
-        $result = $this->pdo->query($sql);
-        return $result->fetchAll(\PDO::FETCH_COLUMN);
-    }
-
-    public function recycleWeeks(): array
-    {
-        $sql = "select distinct recycle_week
-                from locations
-                where recycle_week is not null
-                order by recycle_week";
-        $result = $this->pdo->query($sql);
-        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

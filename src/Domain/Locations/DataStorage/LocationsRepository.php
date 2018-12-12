@@ -13,6 +13,4 @@ interface LocationsRepository
 
     // Metadata functions
     public function types       (): array;
-    public function trashDays   (): array;
-    public function recycleWeeks(): array;
 }

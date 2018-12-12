@@ -16,8 +16,6 @@ class Location
     public $occupiable;
     public $group_quarter;
     public $active;
-    public $trash_day;
-    public $recycle_week;
 
     // Foreign key value from location_status
     public $status;

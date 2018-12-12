@@ -42,9 +42,7 @@ class ReaddressView extends Template
             'types'           => $addressMetadata->types(),
             'townships'       => $addressMetadata->townships(),
             'zipCodes'        => $addressMetadata->zipCodes(),
-            'locationTypes'   => $locationMetadata->types(),
-            'trashDays'       => $locationMetadata->trashDays(),
-            'recycleWeeks'    => $locationMetadata->recycleWeeks()
+            'locationTypes'   => $locationMetadata->types()
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
 

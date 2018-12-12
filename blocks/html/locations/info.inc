@@ -9,8 +9,7 @@ use Application\Url;
 
 $fields = [
     'location_id', 'status', 'type_code',
-    'mailable', 'occupiable', 'group_quarter', 'active',
-    'trash_day', 'recycle_week'
+    'mailable', 'occupiable', 'group_quarter', 'active'
 ];
 foreach ($fields as $f) {
     $$f  = parent::escape($this->location->$f);

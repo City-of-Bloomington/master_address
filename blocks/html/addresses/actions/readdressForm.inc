@@ -10,14 +10,10 @@
  * @param string   $this->location_id    Readdressing preserves the location_id
  *
  * @param array    $this->locationTypes  Location types to choose from
- * @param array    $this->trashDays      Trash days to choose from
- * @param array    $this->recycleWeeks   Recycle weeks to choose from
  * @param string   $this->locationType_id
  * @param string   $this->mailable
  * @param string   $this->occupiable
  * @param string   $this->active
- * @param string   $this->trash_day
- * @param string   $this->recycle_week
  * @param string   $this->retireSubunits  Whether to retire or readdress any subunits
  *
  *---------------------------------------------------------
