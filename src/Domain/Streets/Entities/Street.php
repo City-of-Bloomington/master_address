@@ -12,15 +12,21 @@ class Street
     public $status;
     public $notes;
 
+    // Town fields
     public $town_id;
     public $town_name;
     public $town_code;
 
+    // Name fields
     public $name_id;
     public $direction;
     public $name;
     public $post_direction;
     public $suffix_code;
+
+    // Designation fields
+    public $type_id;
+    public $type_name;
 
     public function __construct(?array $data=null)
     {
@@ -38,6 +44,9 @@ class Street
             if (!empty($data['name'          ])) { $this->name           = $data['name']; }
             if (!empty($data['post_direction'])) { $this->post_direction = $data['post_direction']; }
             if (!empty($data['suffix_code'   ])) { $this->suffix_code    = $data['suffix_code']; }
+
+            if (!empty($data['type_id'       ])) { $this->type_id   = (int)$data['type_id'  ]; }
+            if (!empty($data['type_name'     ])) { $this->type_name =      $data['type_name']; }
         }
     }
 

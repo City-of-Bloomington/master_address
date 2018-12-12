@@ -40,7 +40,9 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         'direction'      => ['prefix'=>'n',    'dbName'=>'direction'     ],
         'name'           => ['prefix'=>'n',    'dbName'=>'name'          ],
         'post_direction' => ['prefix'=>'n',    'dbName'=>'post_direction'],
-        'suffix_code'    => ['prefix'=>'t',    'dbName'=>'code'          ]
+        'suffix_code'    => ['prefix'=>'t',    'dbName'=>'code'          ],
+        'type_id'        => ['prefix'=>'d',    'dbName'=>'type_id'       ],
+        'type_name'      => ['prefix'=>'dt',   'dbName'=>'name'          ]
     ];
 
     public function columns(): array
@@ -60,9 +62,10 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $select->cols($this->columns())
                ->from(self::TABLE.' s')
                ->join('LEFT', 'towns            town', 's.town_id=town.id')
-               ->join('LEFT', 'street_designations d', 's.id = d.street_id')
-               ->join('LEFT', 'street_names        n', 'n.id = d.street_name_id')
-               ->join('LEFT', 'street_types        t', 't.id = n.suffix_code_id');
+               ->join('INNER', 'street_designations       d',  's.id = d.street_id')
+               ->join('INNER', 'street_names              n',  'n.id = d.street_name_id')
+               ->join('INNER', 'street_types              t',  't.id = n.suffix_code_id')
+               ->join('INNER', 'street_designation_types dt', 'dt.id = d.type_id');
         return $select;
     }
 
@@ -80,6 +83,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     public function load(int $street_id): Street
     {
         $select = $this->baseSelect();
+        $select->where('d.type_id=?', self::TYPE_STREET);
         $select->where('s.id=?', $street_id);
 
         $result = $this->performSelect($select);

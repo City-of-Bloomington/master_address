@@ -18,6 +18,7 @@
             $name   = parent::escape($street->__toString());
             $status = parent::escape($street->status);
             $town   = parent::escape($street->town_name);
+            $type   = parent::escape($street->type_name);
 
             if ($this->callback_js) {
                 $uri = "javascript:self.opener.{$this->callback_js}('{$street->id}', '{$street->__toString()}');";
@@ -35,6 +36,7 @@
                 <td><a href=\"$uri\">$name</a></td>
                 <td><a href=\"$uri\">$town</a></td>
                 <td><a href=\"$uri\">$status</a></td>
+                <td><a href=\"$uri\">$type</a></td>
             </tr>
             ";
         }
