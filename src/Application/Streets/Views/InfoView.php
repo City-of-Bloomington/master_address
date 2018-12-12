@@ -28,17 +28,24 @@ class InfoView extends Template
         foreach (['alias', 'changeName'] as $a) {
             if (parent::isAllowed('streets', $a)) { $actions[] = $a; }
         }
-        $this->blocks = [
-            new Block('streets/info.inc',              ['street'       => $info->street]),
-            new Block('logs/changeLog.inc',            ['entries'      => $info->changeLog->entries,
-                                                        'total'        => $info->changeLog->total   ]),
-            new Block('streets/designations/list.inc', ['designations' => $info->designations,
-                                                        'street_id'    => $info->street->id,
-                                                        'actions'      => $actions            ]),
-            'panel-one' => [
-                new Block('streets/addresses.inc',     ['street_id'    => $info->street->id,
-                                                        'addresses'    => $search->addresses])
-            ]
-        ];
+        if ($format == 'html') {
+            $this->blocks = [
+                new Block('streets/info.inc',              ['street'       => $info->street]),
+                new Block('logs/changeLog.inc',            ['entries'      => $info->changeLog->entries,
+                                                            'total'        => $info->changeLog->total   ]),
+                new Block('streets/designations/list.inc', ['designations' => $info->designations,
+                                                            'street_id'    => $info->street->id,
+                                                            'actions'      => $actions            ]),
+                'panel-one' => [
+                    new Block('streets/addresses.inc',     ['street_id'    => $info->street->id,
+                                                            'addresses'    => $search->addresses])
+                ]
+            ];
+        }
+        else {
+            $this->blocks = [
+                new Block('streets/info.inc', ['info'=>$info])
+            ];
+        }
     }
 }

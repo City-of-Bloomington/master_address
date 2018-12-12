@@ -60,9 +60,9 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $select->cols($this->columns())
                ->from(self::TABLE.' s')
                ->join('LEFT', 'towns            town', 's.town_id=town.id')
-               ->join('LEFT', 'street_designations d', 's.id=d.street_id and d.type_id='.self::TYPE_STREET)
-               ->join('LEFT', 'street_names        n', 'd.street_name_id=n.id')
-               ->join('LEFT', 'street_types        t', 'n.suffix_code_id=t.id');
+               ->join('LEFT', 'street_designations d', 's.id = d.street_id')
+               ->join('LEFT', 'street_names        n', 'n.id = d.street_name_id')
+               ->join('LEFT', 'street_types        t', 't.id = n.suffix_code_id');
         return $select;
     }
 
