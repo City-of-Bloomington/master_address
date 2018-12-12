@@ -116,7 +116,7 @@ class Controller extends BaseController
     /**
      * Create a new address
      */
-    public function add(array $params): Views\AddView
+    public function add(array $params): View
     {
         global $DEFAULTS;
         $request = new AddRequest($_SESSION['USER']->id, $_REQUEST);
@@ -163,8 +163,6 @@ class Controller extends BaseController
                 $request->locationType_id = $fres->locations[0]->type_id;
                 $request->mailable        = $fres->locations[0]->mailable;
                 $request->occupiable      = $fres->locations[0]->occupiable;
-                $request->trash_day       = $fres->locations[0]->trash_day;
-                $request->recycle_week    = $fres->locations[0]->recycle_week;
             }
         }
 
@@ -288,8 +286,6 @@ class Controller extends BaseController
                         $request->locationType_id = $location->type_id;
                         $request->mailable        = $location->mailable;
                         $request->occupiable      = $location->occupiable;
-                        $request->trash_day       = $location->trash_day;
-                        $request->recycle_week    = $location->recycle_week;
                         break;
                     }
                 }

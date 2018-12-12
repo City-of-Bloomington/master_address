@@ -17,20 +17,6 @@ class Metadata
         $this->repo = $repository;
     }
 
-    public function trashDays(): array
-    {
-        static $a;
-        if   (!$a) { $a = $this->repo->trashDays(); }
-        return $a;
-    }
-
-    public function recycleWeeks(): array
-    {
-        static $a;
-        if   (!$a) { $a = $this->repo->recycleWeeks(); }
-        return $a;
-    }
-
     public function types(): array
     {
         static $a;

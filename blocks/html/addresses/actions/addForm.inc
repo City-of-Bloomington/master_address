@@ -51,8 +51,6 @@
  * Location fields
  *---------------------------------------------------------
  * @param array    $this->locationTypes  Location types to choose from
- * @param array    $this->trashDays      Trash days to choose from
- * @param array    $this->recycleWeeks   Recycle weeks to choose from
  * @param Location $this->location       The currently chosen location object
  * If there is not a location_id, then the rest of the fields
  * need to be filled in
@@ -61,8 +59,6 @@
  * @param string   $this->mailable
  * @param string   $this->occupiable
  * @param string   $this->active
- * @param string   $this->trash_day
- * @param string   $this->recycle_week
  *
  *---------------------------------------------------------
  * Change log fields

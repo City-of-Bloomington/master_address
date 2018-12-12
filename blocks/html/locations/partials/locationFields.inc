@@ -6,16 +6,11 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  *
  * @param array  $this->locationTypes   Location types to choose from
- * @param array  $this->trashDays       Trash days to choose from
- * @param array  $this->recycleWeeks    Recycle weeks to choose from
  *
  * @param string $this->locationType_id;
  * @param string $this->mailable;
  * @param string $this->occupiable;
  * @param string $this->group_quarter
- * @param string $this->trash_day;
- * @param string $this->recycle_week;
- *
  */
 
 $h = $this->template->getHelper('field');
@@ -60,27 +55,5 @@ echo $h->field([
     'label'    => $this->_('group_quarter'),
     'type'     => 'radio',
     'value'    => $this->group_quarter,
-    'options'  => $options
-]);
-
-$options = [['value'=>'']];
-foreach ($this->trashDays as $d) { $options[] = ['value'=>$d, 'label'=>$this->_($d)]; }
-echo $h->field([
-    'name'     => 'trash_day',
-    'id'       => 'trash_day',
-    'label'    => $this->_('trash_day'),
-    'type'     => 'select',
-    'value'    => $this->trash_day,
-    'options'  => $options
-]);
-
-$options = [['value'=>'']];
-foreach ($this->recycleWeeks as $w) { $options[] = ['value'=>$w]; }
-echo $h->field([
-    'name'     => 'recycle_week',
-    'id'       => 'recycle_week',
-    'label'    => $this->_('recycle_week'),
-    'type'     => 'select',
-    'value'    => $this->recycle_week,
     'options'  => $options
 ]);
