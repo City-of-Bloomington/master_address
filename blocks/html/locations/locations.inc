@@ -11,6 +11,7 @@ use Application\Url;
 $fields = [
     'location_id', 'status', 'type_code',
     'mailable', 'occupiable', 'group_quarter', 'active',
+    'trash_day', 'recycle_week',
     'address', 'subunit'
 ];
 ?>
