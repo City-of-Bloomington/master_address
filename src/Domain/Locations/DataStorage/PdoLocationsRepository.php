@@ -10,6 +10,7 @@ use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 
 use Domain\Locations\Entities\Location;
+use Domain\Streets\Metadata as Street;
 
 class PdoLocationsRepository extends PdoRepository implements LocationsRepository
 {
@@ -44,6 +45,14 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
             foreach (self::$fieldmap as $responseName=>$map) {
                 $cols[] = "$map[prefix].$map[dbName] as $responseName";
             }
+            $cols[] = "concat_ws(' ', sut.code, sub.identifier) as subunit";
+            $cols[] = "concat_ws(' ',  a.street_number_prefix,
+                                       a.street_number,
+                                       a.street_number_suffix,
+                                      sn.direction,
+                                      sn.name,
+                                      st.code,
+                                      sn.post_direction) as address";
         }
         return $cols;
     }
@@ -53,8 +62,15 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
                ->from(self::TABLE.' l')
-               ->join('INNER', 'location_types  t', 't.id=l.type_id')
-               ->join('LEFT',  'location_status x', 'l.location_id=x.location_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())');
+               ->join('INNER', 'location_types       t',  't.id = l.type_id')
+               ->join('LEFT',  'location_status      x',  'l.location_id=x.location_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())')
+               ->join('INNER', 'addresses            a',  'a.id = l.address_id')
+               ->join('INNER', 'streets              s',  's.id = a.street_id')
+               ->join('INNER', 'street_designations sd',  's.id = sd.street_id and sd.type_id='.Street::TYPE_STREET)
+               ->join('INNER', 'street_names        sn', 'sn.id = sd.street_name_id')
+               ->join('INNER', 'street_types        st', 'st.id = sn.suffix_code_id')
+               ->join('LEFT',  'subunits           sub','sub.id = l.subunit_id')
+               ->join('LEFT',  'subunit_types      sut','sut.id = sub.type_id');
         return $select;
     }
 

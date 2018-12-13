@@ -6,20 +6,35 @@
  * @param boolean $this->disableButtons (optional)
  */
 use Application\Block;
+use Application\Url;
+
+$fields = [
+    'location_id', 'status', 'type_code',
+    'mailable', 'occupiable', 'group_quarter', 'active',
+    'address', 'subunit'
+];
 ?>
 <section>
     <header>
         <h2><?= $this->_(['location', 'locations', count($this->locations)]); ?></h2>
-        <div class="tools">
-        </div>
     </header>
-    <div>
-    <?php
-        $block = new Block('locations/info.inc', ['disableButtons' => $this->disableButtons]);
-        foreach ($this->locations as $l) {
-            $block->location = $l;
-            echo $block->render('html', $this->template);
-        }
-    ?>
-    </div>
+    <table>
+        <thead>
+            <tr><?php foreach ($fields as $f) { echo "<th>{$this->_($f)}</th>"; } ?></tr>
+        </thead>
+        <tbody>
+        <?php
+            foreach ($this->locations as $l) {
+                echo '<tr>';
+                foreach ($fields as $f) {
+                    $v = parent::escape($l->$f);
+                    echo $f == 'location_id'
+                        ? "<th>$v</th>"
+                        : "<td>$v</td>";
+                }
+                echo '</tr>';
+            }
+        ?>
+        </tbody>
+    </table>
 </section>

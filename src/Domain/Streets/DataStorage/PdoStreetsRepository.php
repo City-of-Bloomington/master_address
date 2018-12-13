@@ -79,12 +79,19 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 
     /**
      * Load a street object from the database
+     *
+     * A street might have several names. We want to load the best name for
+     * the street.  A current street should have designation type of STREET.
+     * Retired streets might not have a STREET designation.
+     *
+     * STREET designation type = 1, so we order by designation type and take
+     * the first result
      */
     public function load(int $street_id): Street
     {
         $select = $this->baseSelect();
-        $select->where('d.type_id=?', self::TYPE_STREET);
         $select->where('s.id=?', $street_id);
+        $select->orderBy(['d.type_id']);
 
         $result = $this->performSelect($select);
         if (count($result['rows'])) {

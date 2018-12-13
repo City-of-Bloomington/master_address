@@ -24,9 +24,9 @@ class Location
     public $type_code;
     public $type_name;
 
-    // Addresses and/or Subunits with this location_id
-    public $addresses = [];
-    public $subunits  = [];
+    // String representations for Address and Subunit
+    public $address = '';
+    public $subunit = '';
 
     public function __construct(?array $data=null)
     {
