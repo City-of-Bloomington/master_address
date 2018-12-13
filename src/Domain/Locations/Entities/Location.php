@@ -24,6 +24,10 @@ class Location
     public $type_code;
     public $type_name;
 
+    // Sanitation fields
+    public $trash_day;
+    public $recycle_week;
+
     // String representations for Address and Subunit
     public $address = '';
     public $subunit = '';
