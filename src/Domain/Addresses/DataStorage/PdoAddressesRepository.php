@@ -165,7 +165,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $cols    = $this->columns();
         $cols[]  = "( select count(*)
                       from subunits       x
-                      join subunit_status xs on x.id=xs.subunit_id and xs.start_date <= now() and (xs.end_date is null or xs.end_date >= now()) and xs.status='$current'
+                      join subunit_status xs on x.id=xs.subunit_id and xs.start_date <= now() and (xs.end_date is null or xs.end_date >= now()) and xs.status=status.status
                       where x.address_id=a.id) as subunit_count";
         $select->cols($cols);
         foreach ($fields as $f=>$v) {
