@@ -30,8 +30,36 @@
     </header>
     <table class="<?= $this->address->status; ?>">
     <?php
-        $this->_include('addresses/partials/nonStreetData.inc');
-        $this->_include('addresses/partials/streetData.inc');
+        $fields = [
+            'id'              => 'id',
+            'address2'        => 'address2',
+            'type'            => 'address_type',
+            'jurisdiction'    => 'jurisdiction_name',
+            'plat'            => 'plat_name',
+            'plat_lot_number' => 'plat_lot_number',
+            'township'        => 'township_name',
+            'section'         => 'section',
+            'quarter'         => 'quarter_section',
+            'state_plane_x'   => 'state_plane_x',
+            'state_plane_y'   => 'state_plane_y',
+            'latitude'        => 'latitude',
+            'longitude'       => 'longitude',
+            'usng'            => 'usng',
+            'street_id'       => 'street_id',
+            'city'            => 'city',
+            'zip'             => 'zip',
+            'zipplus4'        => 'zipplus4'
+        ];
+        $required = [
+            'type', 'jurisdiction', 'section', 'township'
+        ];
+        foreach ($fields as $k=>$f) {
+            $$k = parent::escape($this->address->$f);
+            $class = in_array($k, $required)
+                ? $$k ? '' : ' class="missing"'
+                : '';
+            echo "<tr$class><th>{$this->_($k)}</th><td>{$$k}</td>";
+        }
     ?>
     </table>
     <?php
