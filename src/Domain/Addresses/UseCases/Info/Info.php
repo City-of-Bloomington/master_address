@@ -24,19 +24,10 @@ class Info
         try {
             $info->address   = $this->repo->load         ($req->id);
             $info->statusLog = $this->repo->loadStatusLog($req->id, $this->repo::LOG_TYPE);
-
-            // Load other addresses related to the locations
             $info->locations = $this->repo->findLocations([
                 'address_id' => $req->id,
                 'subunit_id' => null
             ]);
-            foreach ($info->locations as $i=>$l) {
-                $result = $this->repo->find(['location_id'=>$l->location_id]);
-                $info->locations[$i]->addresses = $result['rows'];
-
-                $result = $this->repo->findSubunits(['location_id' => $l->location_id]);
-                $info->locations[$i]->subunits = $result['rows'];
-            }
 
             $result = $this->repo->findSubunits(['address_id'=>$req->id]);
             $info->subunits = $result['rows'];
