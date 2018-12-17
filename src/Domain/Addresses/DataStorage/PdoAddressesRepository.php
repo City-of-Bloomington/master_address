@@ -278,14 +278,28 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     public function add(AddRequest $req): int
     {
         // Prepare to save data for all address fields
+        $fields = [
+            'street_number_prefix',
+            'street_number',
+            'street_number_suffix',
+            'address2',
+            'address_type',
+            'street_id',
+            'jurisdiction_id',
+            'township_id',
+            'subdivision_id',
+            'plat_id',
+            'section',
+            'quarter_section',
+            'plat_lot_number',
+            'city',
+            'state',
+            'zip',
+            'zipplus4'
+        ];
         $data = [];
-        foreach (self::$fieldmap as $f=>$map) {
-            if ($map['prefix'] == 'a'
-                && $f != 'id'
-                && $req->$f) {
-
-                $data[$map['dbName']] = $req->$f;
-            }
+        foreach ($fields as $f) {
+            if ($req->$f) { $data[$f] = $req->$f; }
         }
 
         $this->pdo->beginTransaction();

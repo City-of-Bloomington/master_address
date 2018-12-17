@@ -2,7 +2,29 @@
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param Address $this->address
+ *---------------------------------------------------------
+ * Address table fields
+ *---------------------------------------------------------
+ * @param string $this->status
+ * @param string $this->street_number_prefix
+ * @param string $this->street_number
+ * @param string $this->street_number_suffix
+ * @param string $this->street_id
+ * @param string $this->street_name           The displayable name for the chosen street_id
+ * @param string $this->address2
+ * @param string $this->address_type
+ * @param string $this->jurisdiction_id
+ * @param string $this->township_id
+ * @param string $this->subdivision_id
+ * @param string $this->plat_id
+ * @param string $this->section
+ * @param string $this->quarter_section
+ * @param string $this->plat_lot_number
+ * @param string $this->city
+ * @param string $this->state
+ * @param string $this->zip
+ * @param string $this->zipplus4
+ * @param string $this->notes
  *---------------------------------------------------------
  * Location fields
  *---------------------------------------------------------
@@ -33,10 +55,6 @@
             <input name="location_id" type="hidden" value="<?= $this->location_id; ?>" />
 
             <?php $this->_include('addresses/partials/addressFields.inc'); ?>
-        </fieldset>
-
-        <fieldset>
-            <?php $this->_include('addresses/partials/geoFields.inc'); ?>
         </fieldset>
 
         <fieldset>
