@@ -40,12 +40,6 @@
  * @param string $this->zip
  * @param string $this->zipplus4
  * @param string $this->notes
- * Geo Fields
- * @param string $this->state_plane_x
- * @param string $this->state_plane_y
- * @param string $this->latitude
- * @param string $this->longitude
- * @param string $this->usng
  *
  *---------------------------------------------------------
  * Location fields
@@ -93,10 +87,6 @@ declare (strict_types=1);
 
             $this->_include('addresses/partials/addressFields.inc');
         ?>
-        </fieldset>
-
-        <fieldset><legend><?= $this->_('geometry'); ?></legend>
-        <?php $this->_include('addresses/partials/geoFields.inc'); ?>
         </fieldset>
 
         <fieldset><legend><?= $this->_('location'); ?></legend>
