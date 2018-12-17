@@ -10,6 +10,7 @@ use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 
 use Domain\Locations\Entities\Location;
+use Domain\Locations\Entities\Sanitation;
 use Domain\Streets\Metadata as Street;
 
 class PdoLocationsRepository extends PdoRepository implements LocationsRepository
@@ -115,6 +116,18 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         return $locations;
     }
 
+    public function sanitation(int $location_id): Sanitation
+    {
+        $sql = 'select * from sanitation where location_id=?';
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$location_id]);
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return count($result)
+            ? new Sanitation($result[0])
+            : new Sanitation();
+    }
+
     //---------------------------------------------------------------
     // Write functions
     //---------------------------------------------------------------
@@ -196,6 +209,26 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $query->execute([$location_id, $subunit_id]);
     }
 
+    public function updateSanitation(Sanitation $s)
+    {
+        $old = $this->sanitation($s->location_id);
+        if ($old->location_id) {
+            // Update
+            $query = $this->queryFactory->newUpdate();
+            $query->table('sanitation')
+                  ->cols(['trash_day'    => $s->trash_day,
+                          'recycle_week' => $s->recycle_week])
+                  ->where('location_id=?',  $s->location_id);
+        }
+        else {
+            // Insert
+            $query  = $this->queryFactory->newInsert();
+            $query->into('sanitation')->cols((array)$s);
+        }
+        $q = $this->pdo->prepare($query->getStatement());
+        $q->execute($query->getBindValues());
+    }
+
     //---------------------------------------------------------------
     // Metadata functions
     //---------------------------------------------------------------
@@ -204,5 +237,25 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $sql = "select * from location_types";
         $result = $this->pdo->query($sql);
         return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function trashDays(): array
+    {
+        $sql = "select distinct trash_day
+                from sanitation
+                where trash_day is not null
+                order by trash_day";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function recycleWeeks(): array
+    {
+        $sql = "select distinct recycle_week
+                from sanitation
+                where recycle_week is not null
+                order by recycle_week";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

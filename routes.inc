@@ -82,6 +82,12 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     }
 });
 
+$ROUTES->attach('sanitation', '/sanitation', function ($r) {
+    $r->setValues(['controller'=> 'Application\Sanitation\Controller']);
+
+    $r->add('update', '/update')->addValues(['action'=>'update']);
+});
+
 // Controllers that only have index, view, update
 $tables = [
     'people', 'plats', 'subdivisions'
