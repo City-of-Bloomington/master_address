@@ -76,6 +76,8 @@ class LoginController extends BaseController
 	public function logout(array $params)
 	{
 		session_destroy();
+		\phpCAS::client(CAS_VERSION_2_0, CAS_SERVER, 443, CAS_URI, false);
+		\phpCAS::logout();
 		header('Location: '.$this->return_url);
 		exit();
 	}
