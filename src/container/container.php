@@ -76,10 +76,13 @@ foreach (['Info', 'Search', 'Update', 'Validate'] as $a) {
 }
 
 // Locations
-foreach (['Find'] as $a) {
-    $DI->params[ "Domain\\Locations\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Locations\DataStorage\LocationsRepository');
-    $DI->set(    "Domain\\Locations\\UseCases\\$a\\$a",
-    $DI->lazyNew("Domain\\Locations\\UseCases\\$a\\$a"));
+$DI->params[ "Domain\\Locations\\UseCases\\Find\\Find"]['repository'] = $DI->lazyGet('Domain\Locations\DataStorage\LocationsRepository');
+$DI->set(    "Domain\\Locations\\UseCases\\Find\\Find",
+$DI->lazyNew("Domain\\Locations\\UseCases\\Find\\Find"));
+foreach (['Load', 'Update'] as $a) {
+    $DI->params[ "Domain\\Locations\\Sanitation\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Locations\DataStorage\LocationsRepository');
+    $DI->set(    "Domain\\Locations\\Sanitation\\UseCases\\$a\\$a",
+    $DI->lazyNew("Domain\\Locations\\Sanitation\\UseCases\\$a\\$a"));
 }
 
 // People

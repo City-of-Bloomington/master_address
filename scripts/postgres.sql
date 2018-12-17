@@ -238,8 +238,6 @@ create table locations (
 	occupiable    boolean,
 	group_quarter boolean,
 	active        boolean,
-    trash_day     trash_day,
-    recycle_week  recycle_week,
 	unique (location_id, address_id, subunit_id),
 	foreign key (address_id) references addresses     (id),
 	foreign key (subunit_id) references subunits      (id),
@@ -260,6 +258,12 @@ create table location_purposes (
     purpose_id  integer not null,
     unique (location_id, purpose_id),
     foreign key (purpose_id) references purposes (id)
+);
+
+create table sanitation (
+    location_id  integer not null primary key,
+    trash_day    trash_day,
+    recycle_week recycle_week
 );
 
 -- mast_addr_assignment_contacts

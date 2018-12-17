@@ -56,7 +56,7 @@ class PdoNamesRepository extends PdoRepository implements NamesRepository
             if (!empty($req->$f)) {
                 switch ($f) {
                     case 'name':
-                        $select->where("n.$f like ?", "{$req->$f}%");
+                        $select->where("lower(n.$f) like ?", strtolower("{$req->$f}%"));
                     break;
 
                     case 'suffix_code':

@@ -19,23 +19,62 @@ $fields = [
     <header>
         <h2><?= $this->_(['location', 'locations', count($this->locations)]); ?></h2>
     </header>
-    <table>
-        <thead>
-            <tr><?php foreach ($fields as $f) { echo "<th>{$this->_($f)}</th>"; } ?></tr>
-        </thead>
-        <tbody>
-        <?php
-            foreach ($this->locations as $l) {
-                echo '<tr>';
-                foreach ($fields as $f) {
-                    $v = parent::escape($l->$f);
-                    echo $f == 'location_id'
-                        ? "<th>$v</th>"
-                        : "<td>$v</td>";
+    <?php
+        $locations = [];
+        foreach ($this->locations as $l) {
+            $locations[$l->location_id][] = $l;
+        }
+
+        $userCanEdit = parent::isAllowed('sanitation', 'update');
+        $h           = $this->template->getHelper('buttonLink');
+        $button      = '';
+        $editUri     = parent::generateUri('sanitation.update');
+        $return_url  = Url::current_url(BASE_HOST);
+
+        foreach ($locations as $location_id=>$list) {
+            foreach ($list as $l) {
+                foreach ($fields as $f) { $$f = parent::escape($l->$f); }
+
+                if (!$this->disableButtons && $userCanEdit) {
+                    $button = $h->buttonLink(
+                        "$editUri?location_id={$l->location_id};return_url=$return_url",
+                        $this->_('sanitation_edit'),
+                        'edit'
+                    );
                 }
-                echo '</tr>';
+                echo "
+                <article>
+                    <header><h3>$location_id</h3></header>
+                    <table>
+                        <thead>
+                            <tr><th></th>
+                                <th>{$this->_('active')}</th>
+                                <th>{$this->_('status')}</th>
+                                <th>{$this->_('type')}</th>
+                                <th>{$this->_('mailable')}</th>
+                                <th>{$this->_('occupiable')}</th>
+                                <th>{$this->_('group_quarter')}</th>
+                                <th>{$this->_('trash_day')}</th>
+                                <th>{$this->_('recycle_week')}</th>
+                                <th></th>
+                        </thead>
+                        <tbody>
+                            <tr><th>$address $subunit</th>
+                                <td>$active</td>
+                                <td>$status</td>
+                                <td>$type_code</td>
+                                <td>$mailable</td>
+                                <td>$occupiable</td>
+                                <td>$group_quarter</td>
+                                <td>$trash_day</td>
+                                <td>$recycle_week</td>
+                                <td>$button</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </article>
+                ";
             }
-        ?>
-        </tbody>
-    </table>
+        }
+    ?>
 </section>
