@@ -49,7 +49,7 @@ class Controller extends BaseController
         $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
 
         $query  = !empty($_GET['street'])
-                ? self::extractStreetFields($parser($_GET['street']))
+                ? self::extractStreetFields($parser($_GET['street'], 'street'))
                 : [];
         if (!empty($_GET['town_id'])) { $query['town_id'] = (int)$_GET['town_id']; }
         if (!empty($_GET['status' ])) { $query['status' ] =      $_GET['status' ]; }
