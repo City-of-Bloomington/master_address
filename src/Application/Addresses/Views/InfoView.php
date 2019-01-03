@@ -43,7 +43,7 @@ class InfoView extends Template
         }
         else {
             $this->blocks = [
-                new Block('addresses/info.inc', ['address' => $info->address])
+                new Block('addresses/info.inc', ['info' => $info])
             ];
         }
     }

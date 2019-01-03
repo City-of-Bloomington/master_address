@@ -60,8 +60,12 @@ $fields = [
                         'edit'
                     );
                 }
+
+                $uri = $l->subunit_id
+                    ? parent::generateUri( 'subunits.view', ['id'=>$l->subunit_id])
+                    : parent::generateUri('addresses.view', ['id'=>$l->address_id]);
                 echo "
-                <tr><th>$address $subunit</th>
+                <tr><th><a href=\"$uri\">$address $subunit</a></th>
                     <td>$active</td>
                     <td>$status</td>
                     <td>$type_code</td>
