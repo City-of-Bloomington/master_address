@@ -100,12 +100,32 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     }
 
     /**
-     * Alias for PdoLocationsRepository::find()
+     * Return all location rows for any location_id on this subunit
+     *
+     * Locations can have multiple address and addresses can have multiple
+     * locations.  We need to be able to know all the other addresses
+     * that are related to an address via the locations.
+     *
+     * This function returns all related location rows, not just the
+     * location rows with this subunit_id.
+     *
+     * The return array should match the data returned from LocationsRepository::find()
+     *
+     * @return array   An array of Location entities
      */
-    public function findLocations(array $fields): array
+    public function findLocations(int $subunit_id): array
     {
         $locationsRepo = new PdoLocationsRepository($this->pdo);
-        return $locationsRepo->find($fields);
+        $select = $locationsRepo->baseSelect();
+        $select->where("l.location_id in (
+                            select location_id from locations
+                            where subunit_id=?)", $subunit_id);
+        $query = $this->pdo->prepare($select->getStatement());
+        $query->execute($select->getBindValues());
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $locations[] = new Location($row);
+        }
+        return $locations;
     }
 
     /**
