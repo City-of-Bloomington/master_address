@@ -19,7 +19,7 @@ interface SubunitsRepository
     public function getStatus    (int $subunit_id, string $logType): string;
 
     public function find         (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
-    public function findLocations(array $fields): array;
+    public function findLocations(int $subunit_id): array;
     public function findAddresses(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function changeLog(?int $subunit_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 

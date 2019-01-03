@@ -31,8 +31,26 @@ $fields = [
         $editUri     = parent::generateUri('sanitation.update');
         $return_url  = Url::current_url(BASE_HOST);
 
-        foreach ($locations as $location_id=>$list) {
-            foreach ($list as $l) {
+        foreach (array_keys($locations) as $location_id) {
+            echo "
+            <article>
+                <header><h3>$location_id</h3></header>
+                <table>
+                    <thead>
+                        <tr><th></th>
+                            <th>{$this->_('active')}</th>
+                            <th>{$this->_('status')}</th>
+                            <th>{$this->_('type')}</th>
+                            <th>{$this->_('mailable')}</th>
+                            <th>{$this->_('occupiable')}</th>
+                            <th>{$this->_('group_quarter')}</th>
+                            <th>{$this->_('trash_day')}</th>
+                            <th>{$this->_('recycle_week')}</th>
+                            <th></th>
+                    </thead>
+                    <tbody>
+            ";
+            foreach ($locations[$location_id] as $l) {
                 foreach ($fields as $f) { $$f = parent::escape($l->$f); }
 
                 if (!$this->disableButtons && $userCanEdit) {
@@ -43,38 +61,24 @@ $fields = [
                     );
                 }
                 echo "
-                <article>
-                    <header><h3>$location_id</h3></header>
-                    <table>
-                        <thead>
-                            <tr><th></th>
-                                <th>{$this->_('active')}</th>
-                                <th>{$this->_('status')}</th>
-                                <th>{$this->_('type')}</th>
-                                <th>{$this->_('mailable')}</th>
-                                <th>{$this->_('occupiable')}</th>
-                                <th>{$this->_('group_quarter')}</th>
-                                <th>{$this->_('trash_day')}</th>
-                                <th>{$this->_('recycle_week')}</th>
-                                <th></th>
-                        </thead>
-                        <tbody>
-                            <tr><th>$address $subunit</th>
-                                <td>$active</td>
-                                <td>$status</td>
-                                <td>$type_code</td>
-                                <td>$mailable</td>
-                                <td>$occupiable</td>
-                                <td>$group_quarter</td>
-                                <td>$trash_day</td>
-                                <td>$recycle_week</td>
-                                <td>$button</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </article>
+                <tr><th>$address $subunit</th>
+                    <td>$active</td>
+                    <td>$status</td>
+                    <td>$type_code</td>
+                    <td>$mailable</td>
+                    <td>$occupiable</td>
+                    <td>$group_quarter</td>
+                    <td>$trash_day</td>
+                    <td>$recycle_week</td>
+                    <td>$button</td>
+                </tr>
                 ";
             }
+            echo "
+                    </tbody>
+                </table>
+            </article>
+            ";
         }
     ?>
 </section>

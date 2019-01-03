@@ -213,14 +213,34 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     }
 
     /**
-     * Alias for PdoLocationsRepository::find()
+     * Return all location rows for any location_id on this address
+     *
+     * Locations can have multiple address and addresses can have multiple
+     * locations.  We need to be able to know all the other addresses
+     * that are related to an address via the locations.
+     *
+     * This function returns all related location rows, not just the
+     * location rows with this address_id.
+     *
+     * The return array should match the data returned from LocationsRepository::find()
+     *
+     * @return array   An array of Location entities
      */
-    public function findLocations(array $fields): array
+    public function findLocations(int $address_id): array
     {
         $locationsRepo = new PdoLocationsRepository($this->pdo);
-        return $locationsRepo->find($fields);
+        $select = $locationsRepo->baseSelect();
+        $select->where("l.location_id in (
+                            select location_id from locations
+                            where address_id=?
+                              and subunit_id is null)", $address_id);
+        $query = $this->pdo->prepare($select->getStatement());
+        $query->execute($select->getBindValues());
+        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $locations[] = new Location($row);
+        }
+        return $locations;
     }
-
 
     /**
      * Alias for PdoSubunitsRepository::find()

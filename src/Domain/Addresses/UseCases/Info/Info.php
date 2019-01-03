@@ -24,10 +24,7 @@ class Info
         try {
             $info->address   = $this->repo->load         ($req->id);
             $info->statusLog = $this->repo->loadStatusLog($req->id, $this->repo::LOG_TYPE);
-            $info->locations = $this->repo->findLocations([
-                'address_id' => $req->id,
-                'subunit_id' => null
-            ]);
+            $info->locations = $this->repo->findLocations($req->id);
 
             $result = $this->repo->findSubunits(['address_id'=>$req->id]);
             $info->subunits = $result['rows'];

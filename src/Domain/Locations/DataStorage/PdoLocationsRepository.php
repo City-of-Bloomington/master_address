@@ -60,7 +60,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         return $cols;
     }
 
-    private function baseSelect(): SelectInterface
+    public function baseSelect(): SelectInterface
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())

@@ -15,7 +15,7 @@ interface AddressesRepository
 {
     // Read functions
     public function load         (int $address_id): Address;
-    public function findLocations(array $fields): array;
+    public function findLocations(int $address_id): array;
     public function findSubunits (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function loadStatusLog(int $address_id, string $logType): array;
     public function getStatus    (int $address_id, string $logType): string;
