@@ -2,6 +2,7 @@
 /**
  * @copyright 2013-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Address $this->address
+ * @param InfoResponse $this->info
  */
-echo json_encode($this->address, JSON_PRETTY_PRINT);
+$this->info->address->streetAddress = $this->info->address->__toString();
+echo json_encode($this->info, JSON_PRETTY_PRINT);

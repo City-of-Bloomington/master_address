@@ -81,33 +81,33 @@ class Address
 
     public function __toString()
     {
-        return implode(' ', [
-            $this->street_number_prefix,
-            $this->street_number,
-            $this->street_number_suffix,
-            $this->street_direction,
-            $this->street_name,
-            $this->street_suffix_code,
-            $this->street_post_direction
-        ]);
+        $out = [];
+        if ($this->street_number_prefix ) { $out[] = $this->street_number_prefix;  }
+        if ($this->street_number        ) { $out[] = $this->street_number;         }
+        if ($this->street_number_suffix ) { $out[] = $this->street_number_suffix;  }
+        if ($this->street_direction     ) { $out[] = $this->street_direction;      }
+        if ($this->street_name          ) { $out[] = $this->street_name;           }
+        if ($this->street_suffix_code   ) { $out[] = $this->street_suffix_code;    }
+        if ($this->street_post_direction) { $out[] = $this->street_post_direction; }
+        return implode(' ', $out);
     }
 
     public function streetName(): string
     {
-        return implode(' ', [
-            $this->street_direction,
-            $this->street_name,
-            $this->street_suffix_code,
-            $this->street_post_direction
-        ]);
+        $out = [];
+        if ($this->street_direction     ) { $out[] = $this->street_direction;      }
+        if ($this->street_name          ) { $out[] = $this->street_name;           }
+        if ($this->street_suffix_code   ) { $out[] = $this->street_suffix_code;    }
+        if ($this->street_post_direction) { $out[] = $this->street_post_direction; }
+        return implode(' ', $out);
     }
 
     public function streetNumber(): string
     {
-        return implode(' ', [
-            $this->street_number_prefix,
-            $this->street_number,
-            $this->street_number_suffix
-        ]);
+        $out = [];
+        if ($this->street_number_prefix) { $out[] = $this->street_number_prefix; }
+        if ($this->street_number       ) { $out[] = $this->street_number;        }
+        if ($this->street_number_suffix) { $out[] = $this->street_number_suffix; }
+        return implode(' ', $out);
     }
 }
