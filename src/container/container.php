@@ -23,7 +23,7 @@ if ($platform == 'Pgsql' && !empty($conf['schema'])) {
 $repos = [
     'Addresses', 'Jurisdictions', 'People', 'Plats',
     'Streets', 'Subdivisions', 'Towns', 'Townships', 'Users',
-    'Subunits', 'Locations'
+    'Subunits', 'Locations',
 ];
 foreach ($repos as $t) {
     $DI->params[ "Domain\\$t\\DataStorage\\Pdo{$t}Repository"]["pdo"] = $pdo;
@@ -100,7 +100,9 @@ foreach (['Info', 'Search', 'Update'] as $a) {
 }
 
 // Streets
-foreach (['Add', 'Alias', 'ChangeName', 'ChangeStatus', 'Info', 'Load', 'Search', 'Update'] as $a) {
+foreach (['Add', 'Alias', 'ChangeName', 'ChangeStatus', 'Info',
+          'Intersections', 'IntersectingStreets',
+          'Load', 'Search', 'Update'] as $a) {
     $DI->params[ "Domain\\Streets\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Streets\DataStorage\StreetsRepository');
     $DI->set(    "Domain\\Streets\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Streets\\UseCases\\$a\\$a"));

@@ -30,26 +30,33 @@ class SearchView extends Template
             $_SESSION['errorMessages'] = $response->errors;
         }
 
-        $this->blocks[] = new Block('streets/searchForm.inc', [
-            'town_id'        => !empty($_GET['town_id']) ?           (int)$_GET['town_id']  : null,
-            'street'         => !empty($_GET['street' ]) ? parent::escape($_GET['street' ]) : '',
-            'status'         => !empty($_GET['status' ]) ? parent::escape($_GET['status' ]) : '',
-            'streets'        => $response->streets,
-            'towns'          => $metadata->towns(),
-            'statuses'       => $metadata->statuses(),
-            'hidden'         => parent::filterActiveParams($_GET, ['street']),
-            'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
-            'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'street_id',
-            'callback_js'    => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null
-        ]);
+        if ($format == 'html') {
+            $this->blocks[] = new Block('streets/searchForm.inc', [
+                'town_id'        => !empty($_GET['town_id']) ?           (int)$_GET['town_id']  : null,
+                'street'         => !empty($_GET['street' ]) ? parent::escape($_GET['street' ]) : '',
+                'status'         => !empty($_GET['status' ]) ? parent::escape($_GET['status' ]) : '',
+                'streets'        => $response->streets,
+                'towns'          => $metadata->towns(),
+                'statuses'       => $metadata->statuses(),
+                'hidden'         => parent::filterActiveParams($_GET, ['street']),
+                'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
+                'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'street_id',
+                'callback_js'    => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null
+            ]);
 
-        if ($response->total > $itemsPerPage) {
-            $this->blocks[] = new Block('pageNavigation.inc', [
-                'paginator' => new Paginator(
-                    $response->total,
-                    $itemsPerPage,
-                    $currentPage
-            )]);
+            if ($response->total > $itemsPerPage) {
+                $this->blocks[] = new Block('pageNavigation.inc', [
+                    'paginator' => new Paginator(
+                        $response->total,
+                        $itemsPerPage,
+                        $currentPage
+                )]);
+            }
+        }
+        else {
+            $this->blocks = [
+                new Block('streets/list.inc', ['streets'=>$response->streets])
+            ];
         }
     }
 }

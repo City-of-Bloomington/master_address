@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
+ * @copyright 2017-2019 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
@@ -18,6 +18,7 @@ use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\ChangeName\ChangeNameRequest;
 use Domain\Streets\UseCases\ChangeStatus\ChangeStatusRequest;
+use Domain\Streets\UseCases\Intersections\IntersectionsRequest;
 use Domain\Streets\UseCases\Update\UpdateRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
@@ -329,6 +330,47 @@ class Controller extends BaseController
             );
         }
         return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Show intersection data for two streets
+     */
+    public function intersections(array $params): View
+    {
+        $res      = new \Domain\Streets\UseCases\Intersections\IntersectionsResponse();
+        $street_1 = !empty($_GET['street_id_1']) ? parent::street((int)$_GET['street_id_1']) : null;
+        $street_2 = !empty($_GET['street_id_2']) ? parent::street((int)$_GET['street_id_2']) : null;
+
+        if ($street_1 && $street_2) {
+            $find = $this->di->get('Domain\Streets\UseCases\Intersections\Intersections');
+            $req  = new IntersectionsRequest($_GET);
+            $res  = $find($req);
+        }
+        return new Views\IntersectionsView($res, $street_1, $street_2);
+    }
+
+    /**
+     * Show intersecting streets for a given street
+     *
+     * @param int $_GET[id]  The street_id
+     */
+    public function intersectingStreets(array $params): View
+    {
+        $res    = new \Domain\Streets\UseCases\IntersectingStreets\IntersectingStreetsResponse();
+        $street = null;
+        if (empty($_GET['id']) && !empty($_GET['street_id'])) {
+            $_GET['id'] = $_GET['street_id'];
+        }
+
+        if (!empty($_GET['id'])) {
+            $street_id = (int)$_GET['id'];
+            $street    = parent::street($street_id);
+            if ($street) {
+                $find = $this->di->get('Domain\Streets\UseCases\IntersectingStreets\IntersectingStreets');
+                $res  = $find($street->id);
+            }
+        }
+        return new Views\IntersectingStreetsView($res, $street);
     }
 
     /**

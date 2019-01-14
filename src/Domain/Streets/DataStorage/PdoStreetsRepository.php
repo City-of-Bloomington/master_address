@@ -10,6 +10,7 @@ use Aura\SqlQuery\Common\SelectInterface;
 use Domain\PdoRepository;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Streets\Entities\Designation;
+use Domain\Streets\Entities\Intersection;
 use Domain\Streets\Entities\Street;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
@@ -61,7 +62,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
                ->from(self::TABLE.' s')
-               ->join('LEFT', 'towns            town', 's.town_id=town.id')
+               ->join('LEFT', 'towns                   town', 's.town_id=town.id')
                ->join('INNER', 'street_designations       d',  's.id = d.street_id')
                ->join('INNER', 'street_names              n',  'n.id = d.street_name_id')
                ->join('INNER', 'street_types              t',  't.id = n.suffix_code_id')
@@ -297,6 +298,60 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             'rank'       => $req->rank
         ];
         parent::saveToTable($data, 'street_designations');
+    }
+
+    /**
+     * @return array  An array of Street entities
+     */
+    public function intersectingStreets(int $street_id): array
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->distinct()
+               ->cols($this->columns())
+               ->from(         'road.centerlines           c')
+               ->join('INNER', 'road.intersection_segments i',  'c.id=i.centerline_id')
+               ->join('INNER', 'road.centerlines           x',  'i.intersection_id=x.low_intersection_id or i.intersection_id=x.high_intersection_id')
+               ->join('INNER', 'streets                    s',  's.id=x.street_id')
+               ->join('LEFT' , 'towns                   town',  's.town_id=town.id')
+               ->join('INNER', 'street_designations        d',  's.id = d.street_id')
+               ->join('INNER', 'street_names               n',  'n.id = d.street_name_id')
+               ->join('INNER', 'street_types               t',  't.id = n.suffix_code_id')
+               ->join('INNER', 'street_designation_types  dt', 'dt.id = d.type_id')
+               ->where('c.street_id=?', $street_id)
+               ->where('s.id!=c.street_id'); // A street should not intersect iteself
+        $select->orderBy(self::$DEFAULT_SORT);
+
+        $query   = $this->pdo->prepare($select->getStatement());
+        $query->execute($select->getBindValues());
+        $result  = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        $streets = [];
+        foreach ($result as $r) {
+            $streets[] = self::hydrateStreet($r);
+        }
+        return $streets;
+    }
+
+    /**
+     * @return array  An array of Intersection entities
+     */
+    public function intersections(int $street_id_1, int $street_id_2): array
+    {
+        $sql = "select distinct i.*
+                from road.centerlines           c
+                join road.intersection_segments s on c.id=s.centerline_id
+                join road.centerlines           x on s.intersection_id=x.low_intersection_id or s.intersection_id=x.high_intersection_id
+                join road.intersections         i on i.id=s.intersection_id
+                where c.street_id=? and x.street_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$street_id_1, $street_id_2]);
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        $intersections = [];
+        foreach ($result as $r) {
+            $intersections[] = new Intersection($r);
+        }
+        return $intersections;
     }
 
     //---------------------------------------------------------------

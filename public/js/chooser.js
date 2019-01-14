@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Opens a popup window letting the user search for and choose a person
+ * Opens a popup window letting the user search for and choose something
  *
  * To use this script the HTML elements must have the correct IDs so
  * we can update those elements when the callback is triggered.
