@@ -1,46 +1,59 @@
 <?php
 /**
- * @copyright 2015 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2019 City of Bloomington, Indiana
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param string $this->street_1_id
+ * @param string $this->street_1_name
+ * @param string $this->street_2_id
+ * @param string $this->street_2_name
+ * @param array  $this->intersections
  */
-$street = !empty($_REQUEST['street']) ? View::escape($_REQUEST['street']) : '';
+declare (strict_types=1);
+use Application\Url;
 ?>
-<h2>Intersections</h2>
-<p>Find intersections for a street.</p>
-<div id="findStreetForm" class="yui-skin-sam">
-	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend>Search</legend>
-			<label for="street">Street</label>
-			<div id="findStreetForm-autocomplete" style="width:15em;">
-				<input name="street" id="street" value="<?= $street ; ?>" />
-				<div id="container"></div>
-			</div>
-			<button type="submit" class="search">Search</button>
-		</fieldset>
-	</form>
-</div>
+<section>
+    <header>
+        <h1><?= $this->_(['intersection', 'intersections', 10]); ?></h1>
+    </header>
 
-<script type="text/javascript">
-findStreetForm_autosuggest = function() {
-    var streetService = new YAHOO.util.XHRDataSource("<?php echo BASE_URL; ?>/streets/home.php");
-    streetService.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
-    streetService.responseSchema = {
-        resultsList: "streets",
-        fields: ["name"]
-    };
-    streetService.maxCacheEntries = 5;
+    <form method="get">
+        <fieldset>
+        <?php
+            $h = $this->template->getHelper('field');
 
-	var findStreetFormAC = new YAHOO.widget.AutoComplete("street",
-														"container",
-														streetService);
-	findStreetFormAC.generateRequest = function(query) {
-		return '?format=json;streetName=' + query;
-	}
+            echo $h->field([
+                'name'     => 'street_id_1',
+                'id'       => 'street_id_1',
+                'label'    => $this->_('street'),
+                'type'     => 'chooser',
+                'url'      => new Url(parent::generateUrl('streets.index')),
+                'value'    => $this->street_1_id,
+                'display'  => $this->street_1_name,
+                'required' => true
+            ]);
 
-    return{
-        streetService: streetService,
-		findStreetFormAC: findStreetFormAC
-    };
-}();
-</script>
+            echo $h->field([
+                'name'     => 'street_id_2',
+                'id'       => 'street_id_2',
+                'label'    => $this->_('street'),
+                'type'     => 'chooser',
+                'url'      => new Url(parent::generateUrl('streets.index')),
+                'value'    => $this->street_2_id,
+                'display'  => $this->street_2_name,
+                'required' => true
+            ]);
+        ?>
+            <button type="submit" class="search"><?= $this->_('search'); ?></button>
+        </fieldset>
+    </form>
+    <?php
+        if ($this->street_1_id && $this->street_2_id) {
+            if ($this->intersections) {
+                $this->_include('intersections/list.inc');
+            }
+            else {
+                echo sprintf($this->_('no_results', 'messages'), $this->_(['intersection', 'intersections', 10]));
+            }
+        }
+    ?>
+</section>

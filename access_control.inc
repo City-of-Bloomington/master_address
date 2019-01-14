@@ -25,11 +25,10 @@ foreach ($ROUTES->getRoutes() as $r) {
 }
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null, 'login');
-$ZEND_ACL->allow(null, 'home', ['index']);
+$ZEND_ACL->allow(null, 'home', 'index');
 $ZEND_ACL->allow(null, 'addresses', ['index', 'view', 'parse']);
-$ZEND_ACL->allow(null, 'streets',   ['index', 'view']);
+$ZEND_ACL->allow(null, 'streets',   ['index', 'view', 'intersections', 'intersectingStreets']);
 $ZEND_ACL->allow(null, 'subunits',  ['index', 'view']);
-
 
 $ZEND_ACL->allow('GIS');
 $ZEND_ACL->deny ('GIS', 'users');

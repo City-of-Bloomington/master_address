@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Addresses\Entities;
 
-class Address
+class Address implements \JsonSerializable
 {
     public $id;
     public $street_number_prefix;
@@ -109,5 +109,10 @@ class Address
         if ($this->street_number       ) { $out[] = $this->street_number;        }
         if ($this->street_number_suffix) { $out[] = $this->street_number_suffix; }
         return implode(' ', $out);
+    }
+
+    public function jsonSerialize()
+    {
+        return array_merge((array)$this, ['streetAddress'=>$this->__toString()]);
     }
 }

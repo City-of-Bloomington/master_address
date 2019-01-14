@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Streets\Entities;
 
-class Designation
+class Designation implements \JsonSerializable
 {
     public $id;
     public $street_id;
@@ -50,11 +50,16 @@ class Designation
 
     public function __toString()
     {
-        return implode(' ', [
-            $this->direction,
-            $this->name,
-            $this->suffix_code,
-            $this->post_direction
-        ]);
+        $out = [];
+        if ($this->direction     ) { $out[] = $this->direction;      }
+        if ($this->name          ) { $out[] = $this->name;           }
+        if ($this->post_direction) { $out[] = $this->post_direction; }
+        if ($this->suffix_code   ) { $out[] = $this->suffix_code;    }
+        return implode(' ', $out);
+    }
+
+    public function jsonSerialize()
+    {
+        return array_merge((array)$this, ['streetName'=>$this->__toString()]);
     }
 }
