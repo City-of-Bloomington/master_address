@@ -26,25 +26,32 @@ class SearchView extends Template
             $_SESSION['errorMessages'] = $response->errors;
         }
 
-        $this->blocks[] = new Block('people/findForm.inc', [
-            'people'        => $response->people,
-            'callback_url'  => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
-            'callback_field'=> !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id',
-            'callback_js'   => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null,
+        if ($format == 'html') {
+            $this->blocks[] = new Block('people/findForm.inc', [
+                'people'        => $response->people,
+                'callback_url'  => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
+                'callback_field'=> !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id',
+                'callback_js'   => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null,
 
-            'firstname'     => !empty($_GET['firstname'     ]) ? parent::escape($_GET['firstname'     ]) : '',
-            'lastname'      => !empty($_GET['lastname'      ]) ? parent::escape($_GET['lastname'      ]) : '',
-            'email'         => !empty($_GET['email'         ]) ? parent::escape($_GET['email'         ]) : '',
-            'hidden'        => parent::filterActiveParams($_GET, ['firstname', 'lastname', 'email']),
-        ]);
+                'firstname'     => !empty($_GET['firstname'     ]) ? parent::escape($_GET['firstname'     ]) : '',
+                'lastname'      => !empty($_GET['lastname'      ]) ? parent::escape($_GET['lastname'      ]) : '',
+                'email'         => !empty($_GET['email'         ]) ? parent::escape($_GET['email'         ]) : '',
+                'hidden'        => parent::filterActiveParams($_GET, ['firstname', 'lastname', 'email']),
+            ]);
 
-        if ($response->total > $itemsPerPage) {
-            $this->blocks[] = new Block('pageNavigation.inc', [
-                'paginator' => new Paginator(
-                    $response->total,
-                    $itemsPerPage,
-                    $currentPage
-            )]);
+            if ($response->total > $itemsPerPage) {
+                $this->blocks[] = new Block('pageNavigation.inc', [
+                    'paginator' => new Paginator(
+                        $response->total,
+                        $itemsPerPage,
+                        $currentPage
+                )]);
+            }
+        }
+        else {
+            $this->blocks = [
+                new Block('people/list.inc', ['people'=>$response->people])
+            ];
         }
     }
 }
