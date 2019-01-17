@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2016-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2016-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\People\Views;
@@ -24,6 +24,8 @@ class InfoView extends Template
         $person = $response->person;
 
         $this->vars['title'] = parent::escape("{$person->firstname} {$person->lastname}");
-		$this->blocks[] = new Block('people/info.inc', ['person'=>$person]);
+		$this->blocks = [
+            new Block('people/info.inc', ['person'=>$person])
+        ];
     }
 }

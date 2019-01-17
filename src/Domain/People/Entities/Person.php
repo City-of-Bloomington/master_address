@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\People\Entities;
 
-class Person
+class Person implements \JsonSerializable
 {
     public $id;
     public $firstname;
@@ -40,6 +40,11 @@ class Person
     public function __toString()
     {
         return "{$this->firstname} {$this->lastname}";
+    }
+
+    public function jsonSerialize()
+    {
+        return array_merge((array)$this, ['fullname'=>$this->__toString()]);
     }
 
 	public static function CONTACT_TYPES(): array
