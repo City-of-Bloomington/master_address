@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param int      $this->name_id       Street name ID
  * @param int      $this->type_id       Designation type ID
  * @param int      $this->rank
@@ -33,7 +33,7 @@ echo $h->field([
     'value'    => $this->name_id,
     'display'  => $this->name,
     'type'     => 'chooser',
-    'url'      => new Url(parent::generateUrl('streetNames.index')),
+    'chooser'  => 'streetName',
     'required' => true
 ]);
 

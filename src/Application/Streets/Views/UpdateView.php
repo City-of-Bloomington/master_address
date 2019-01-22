@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2017-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Streets\Views;
@@ -31,10 +31,19 @@ class UpdateView extends Template
         if ($contact && $contact->id === $request->contact_id) {
             $vars['contact_name'] = $contact->__toString();
         }
-        $this->blocks[] = new Block('streets/actions/updateForm.inc', $vars);
 
-        $this->blocks[] = new Block('logs/changeLog.inc',            ['changes'      => $info->changeLog]);
-        $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
-        $this->blocks['panel-one'][] = new Block('streets/addresses.inc', ['addresses' => $addressSearch->addresses]);
+        $this->blocks = [
+            new Block('streets/actions/updateForm.inc', $vars),
+            new Block('logs/changeLog.inc',            ['entries'      => $info->changeLog->entries,
+                                                        'total'        => $info->changeLog->total   ]),
+            new Block('streets/designations/list.inc', ['designations' => $info->designations,
+                                                        'street_id'    => $info->street->id,
+                                                        'disableButtons' => true
+                                                       ]),
+            'panel-one' => [
+                new Block('streets/addresses.inc', ['addresses'      => $addressSearch->addresses,
+                                                    'disableButtons' => true])
+            ]
+        ];
     }
 }

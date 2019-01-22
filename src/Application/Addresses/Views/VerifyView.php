@@ -23,22 +23,29 @@ class VerifyView extends Template
         parent::__construct('two-column', $format);
         $this->vars['title'] = $this->_('verify');
 
-        $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
-        $this->blocks[] = new Block('generic/verifyForm.inc', [
+        $vars = [
             'id'           => $request->address_id,
             'contact_id'   => $contact ? $contact->id           : null,
             'contact_name' => $contact ? $contact->__toString() : null,
             'change_notes' => parent::escape($request->change_notes),
             'help'         => parent::escape(sprintf($this->_('verify_statement', 'messages'), $_SESSION['USER']->getFullname())),
             'return_url'   => parent::generateUri('addresses.view', ['id'=>$request->address_id])
-        ]);
-        $this->blocks[] = new Block('addresses/info.inc', [
-            'address' => $info->address,
-            'title'   => $info->address->__toString()
-        ]);
-        $this->blocks[]              = new Block('logs/statusLog.inc',  ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('logs/changeLog.inc', ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
-        $this->blocks['panel-one'][] = new Block('subunits/list.inc',        ['address'   => $info->address, 'subunits' => $info->subunits]);
+        ];
+
+        $this->blocks = [
+            new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
+            new Block('generic/verifyForm.inc',      $vars),
+            new Block('addresses/info.inc',          ['address'   => $info->address,
+                                                      'title'     => $info->address->__toString()]),
+            new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
+            new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
+                                                      'total'     => $info->changeLog->total]),
+            'panel-one' => [
+                new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons'=>true]),
+                new Block('subunits/list.inc',       ['address'   => $info->address,   'disableButtons'=>true,
+                                                      'subunits'  => $info->subunits])
+            ]
+
+        ];
     }
 }

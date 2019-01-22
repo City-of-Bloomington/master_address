@@ -26,7 +26,7 @@ use Application\Url;
                 'id'       => 'street_id_1',
                 'label'    => $this->_('street'),
                 'type'     => 'chooser',
-                'url'      => new Url(parent::generateUrl('streets.index')),
+                'chooser'  => 'street',
                 'value'    => $this->street_1_id,
                 'display'  => $this->street_1_name,
                 'required' => true
@@ -37,7 +37,7 @@ use Application\Url;
                 'id'       => 'street_id_2',
                 'label'    => $this->_('street'),
                 'type'     => 'chooser',
-                'url'      => new Url(parent::generateUrl('streets.index')),
+                'chooser'  => 'street',
                 'value'    => $this->street_2_id,
                 'display'  => $this->street_2_name,
                 'required' => true
