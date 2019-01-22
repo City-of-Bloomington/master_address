@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2016-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2016-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Templates\Helpers;
 
@@ -277,6 +277,6 @@ class Field extends Helper
     public function chooser(array $params, ?bool $required=false, ?string $attr=null)
     {
         $h = $this->template->getHelper('chooser');
-        return $h->chooser($params['name'], $params['id'], $params['url'], $params['value'], $params['display']);
+        return $h->chooser($params['name'], $params['id'], $params['chooser'], $params['value'], $params['display']);
     }
 }

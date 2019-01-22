@@ -82,7 +82,7 @@ echo $h->field([
     'id'       => 'street_id',
     'label'    => $this->_('street'),
     'type'     => 'chooser',
-    'url'      => new Url(parent::generateUrl('streets.index')),
+    'chooser'  => 'street',
     'value'    => $this->street_id,
     'display'  => $this->street_name,
     'required' => true
@@ -145,7 +145,7 @@ echo $h->field([
     'id'       => 'plat_id',
     'label'    => $this->_('plat'),
     'type'     => 'chooser',
-    'url'      => new Url(parent::generateUrl('plats.index')),
+    'chooser'  => 'plat',
     'value'    => $this->plat_id,
     'display'  => $this->plat_id
 ]);
@@ -157,7 +157,6 @@ echo $h->field([
     'label'    => $this->_('plat_lot_number'),
     'value'    => $this->plat_lot_number
 ]);
-
 
 $options = [['value'=>'']];
 foreach ($this->townships as $c) { $options[] = ['value'=>$c['id'], 'label'=>parent::escape($c['name'])]; }

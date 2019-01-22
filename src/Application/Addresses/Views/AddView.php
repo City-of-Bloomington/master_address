@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -47,6 +47,8 @@ class AddView extends Template
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
 
-        $this->blocks[] = new Block('addresses/actions/addForm.inc', $vars);
+        $this->blocks = [
+            new Block('addresses/actions/addForm.inc', $vars)
+        ];
     }
 }

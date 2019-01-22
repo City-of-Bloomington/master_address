@@ -24,7 +24,7 @@ use Application\Url;
                 'id'       => 'street_id',
                 'label'    => $this->_('street'),
                 'type'     => 'chooser',
-                'url'      => new Url(parent::generateUrl('streets.index')),
+                'chooser'  => 'street',
                 'value'    => $this->street_id,
                 'display'  => $this->street_name,
                 'required' => true

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
+ * @copyright 2017-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -29,9 +29,6 @@ class SearchView extends Template
         if ($format == 'html') {
             $this->blocks[] = new Block('people/findForm.inc', [
                 'people'        => $response->people,
-                'callback_url'  => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
-                'callback_field'=> !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id',
-                'callback_js'   => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null,
 
                 'firstname'     => !empty($_GET['firstname'     ]) ? parent::escape($_GET['firstname'     ]) : '',
                 'lastname'      => !empty($_GET['lastname'      ]) ? parent::escape($_GET['lastname'      ]) : '',

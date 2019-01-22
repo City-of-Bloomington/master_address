@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2017-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Streets\Views;
@@ -26,7 +26,7 @@ class AliasView extends Template
         parent::__construct('two-column', 'html');
         $this->vars['title'] = $this->_('alias');
 
-        $this->blocks[] = new Block('streets/actions/aliasForm.inc', [
+        $vars = [
             'street_id'    => $request->street_id,
             'name_id'      => $request->name_id,
             'type_id'      => $request->type_id,
@@ -38,12 +38,16 @@ class AliasView extends Template
             'return_url'   => parent::generateUri('streets.view', ['id'=>$request->street_id]),
             'name'         => parent::escape($name),
             'types'        => $metadata->designationTypes()
-        ]);
-        $this->blocks[] = new Block('streets/info.inc', [
-            'street'         => $info->street,
-            'disableButtons' => true
-        ]);
-        $this->blocks[] = new Block('logs/changeLog.inc',              ['changes'      => $info->changeLog   ]);
-        $this->blocks[] = new Block('streets/designations/list.inc',   ['designations' => $info->designations]);
+        ];
+
+        $this->blocks = [
+            new Block('streets/actions/aliasForm.inc', $vars),
+            new Block('streets/info.inc',              ['street'         => $info->street,
+                                                        'disableButtons' => true]),
+            new Block('logs/changeLog.inc',            ['entries'        => $info->changeLog->entries,
+                                                        'total'          => $info->changeLog->total]),
+            new Block('streets/designations/list.inc', ['designations'   => $info->designations,
+                                                        'disableButtons' => true])
+        ];
     }
 }

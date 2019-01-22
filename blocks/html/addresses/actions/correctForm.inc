@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->address_id;
  * @param string $this->street_id;
  * @param string $this->street_number_prefix;
@@ -55,7 +55,7 @@ use Domain\Addresses\Metadata as Address;
                     'value'   => $this->street_id,
                     'display' => $this->street_name,
                     'type'    => 'chooser',
-                    'url'     => new Url(parent::generateUrl('streets.index'))
+                    'chooser' => 'street'
                 ]);
 
                 echo $h->field([

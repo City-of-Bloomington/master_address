@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Streets\Names\Views;
@@ -17,30 +17,33 @@ class SearchView extends Template
 {
     public function __construct(SearchResponse $response, int $itemsPerPage, int $currentPage)
     {
-        $template = !empty($_REQUEST['callback']) ? 'callback'          : 'default';
-        $format   = !empty($_REQUEST['format'  ]) ? $_REQUEST['format'] : 'html';
-        parent::__construct($template, $format);
+        $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
+        parent::__construct('default', $format);
 
         $this->vars['title'] = $this->_('streetName_search');
         if ($response->errors) {
             $_SESSION['errorMessages'] = $response->errors;
         }
 
-        $this->blocks[] = new Block('streets/names/searchForm.inc', [
-            'names'          => $response->names,
-            'hidden'         => parent::filterActiveParams($_GET, ['street']),
-            'callback_url'   => !empty($_GET['callback_url'  ]) ?        new Url($_GET['callback_url'  ]) : null,
-            'callback_field' => !empty($_GET['callback_field']) ? parent::escape($_GET['callback_field']) : 'person_id',
-            'callback_js'    => !empty($_GET['callback'      ]) ? parent::escape($_GET['callback'      ]) : null,
-        ]);
+        if ($format == 'html') {
+            $this->blocks[] = new Block('streets/names/searchForm.inc', [
+                'names'  => $response->names,
+                'hidden' => parent::filterActiveParams($_GET, ['street'])
+            ]);
 
-        if ($response->total > $itemsPerPage) {
-            $this->blocks[] = new Block('pageNavigation.inc', [
-                'paginator' => new Paginator(
-                    $response->total,
-                    $itemsPerPage,
-                    $currentPage
-            )]);
+            if ($response->total > $itemsPerPage) {
+                $this->blocks[] = new Block('pageNavigation.inc', [
+                    'paginator' => new Paginator(
+                        $response->total,
+                        $itemsPerPage,
+                        $currentPage
+                )]);
+            }
+        }
+        else {
+            $this->blocks = [
+                new Block('streets/names/list.inc', ['names'=>$response->names])
+            ];
         }
     }
 }

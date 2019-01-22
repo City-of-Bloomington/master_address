@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
+ * @copyright 2009-2019 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param int      $this->street_id
  * @param int      $this->name_id
@@ -28,7 +28,7 @@ use Application\Url;
                     'value'    => $this->name_id,
                     'display'  => $this->name,
                     'type'     => 'chooser',
-                    'url'      => new Url(parent::generateUrl('streetNames.index')),
+                    'chooser'  => 'streetName',
                     'required' => true
                 ]);
 
