@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
+ * @copyright 2017-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -25,18 +25,17 @@ class InfoView extends Template
 
         if ($format == 'html') {
             $this->blocks = [
-                new Block('addresses/breadcrumbs.inc', ['address'  => $info->address]),
+                new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
+                new Block('addresses/info.inc',          ['address'   => $info->address,
+                                                          'title'     => $this->vars['title'],
+                                                          'actions'   => ['verify', 'changeStatus', 'correct', 'readdress']]),
 
-                new Block('addresses/info.inc',        ['address'  => $info->address,
-                                                        'title'    => $this->vars['title'],
-                                                        'actions'  => ['verify', 'changeStatus', 'correct', 'readdress']]),
-
-                new Block('logs/statusLog.inc',        ['statuses' => $info->statusLog]),
-
-                new Block('logs/changeLog.inc',        ['entries'      => $info->changeLog->entries,
-                                                        'total'        => $info->changeLog->total]),
+                new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
+                new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
+                                                          'total'     => $info->changeLog->total]),
                 'panel-one' => [
                     new Block('locations/locations.inc', ['locations' => $info->locations]),
+                    new Block('addresses/purposes.inc',  ['purposes'  => $info->purposes ]),
                     new Block('subunits/list.inc',       ['address'   => $info->address, 'subunits' => $info->subunits])
                 ]
             ];

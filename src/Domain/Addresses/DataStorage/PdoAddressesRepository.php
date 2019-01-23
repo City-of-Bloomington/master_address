@@ -242,6 +242,19 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $locations;
     }
 
+    public function findPurposes(int $address_id): array
+    {
+        $sql = "select distinct p.*
+                from locations         l
+                join location_purposes x on l.location_id=x.location_id
+                join purposes          p on p.id=x.purpose_id
+                where l.subunit_id is null
+                  and l.address_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$address_id]);
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     /**
      * Alias for PdoSubunitsRepository::find()
      */

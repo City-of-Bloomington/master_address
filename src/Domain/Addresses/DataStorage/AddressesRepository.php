@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Addresses\DataStorage;
@@ -16,6 +16,7 @@ interface AddressesRepository
     // Read functions
     public function load         (int $address_id): Address;
     public function findLocations(int $address_id): array;
+    public function findPurposes (int $address_id): array;
     public function findSubunits (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function loadStatusLog(int $address_id, string $logType): array;
     public function getStatus    (int $address_id, string $logType): string;
