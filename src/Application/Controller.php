@@ -41,8 +41,7 @@ class Controller
     protected function addressInfo(int $address_id): \Domain\Addresses\UseCases\Info\InfoResponse
     {
         $info = $this->di->get('Domain\Addresses\UseCases\Info\Info');
-        $req  = new \Domain\Addresses\UseCases\Info\InfoRequest($address_id);
-        return $info($req);
+        return $info($address_id);
     }
 
     protected function name(int $name_id): ?\Domain\Streets\Entities\Name
