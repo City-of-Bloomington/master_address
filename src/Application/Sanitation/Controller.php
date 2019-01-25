@@ -10,7 +10,6 @@ use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Locations\Entities\Sanitation;
-use Domain\Locations\Sanitation\UseCases\Update\UpdateRequest;
 
 class Controller extends BaseController
 {
@@ -53,6 +52,6 @@ class Controller extends BaseController
                 $return_url
             );
         }
-        return new Application\Views\NotFoundView();
+        return new \Application\Views\NotFoundView();
     }
 }

@@ -331,5 +331,5 @@ var CHOOSER = {
             callback(results[event.target.dataset.index]);
         };
 
-        window.startChooser = startChooser;
+    window.startChooser = startChooser;
 })(window);

@@ -15,7 +15,6 @@ declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Readdress;
 
 use Domain\Addresses\DataStorage\AddressesRepository;
-use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as Log;
 

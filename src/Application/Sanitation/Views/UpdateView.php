@@ -11,7 +11,6 @@ use Application\Template;
 
 use Domain\Locations\Metadata;
 use Domain\Locations\Entities\Sanitation;
-use Domain\Locations\Sanitation\UseCases\Update\UpdateResponse;
 
 class UpdateView extends Template
 {

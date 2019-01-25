@@ -9,7 +9,6 @@ namespace Application\People\Views;
 use Application\Block;
 use Application\Template;
 use Application\Paginator;
-use Application\Url;
 
 use Domain\People\UseCases\Search\SearchResponse;
 

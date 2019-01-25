@@ -6,7 +6,6 @@
 declare (strict_types=1);
 namespace Application\Streets\Names\Views;
 
-use Application\Url;
 use Application\Block;
 use Application\Template;
 use Application\Paginator;

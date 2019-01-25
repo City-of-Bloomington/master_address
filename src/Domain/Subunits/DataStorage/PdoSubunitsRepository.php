@@ -115,8 +115,9 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
      */
     public function findLocations(int $subunit_id): array
     {
+        $locations     = [];
         $locationsRepo = new PdoLocationsRepository($this->pdo);
-        $select = $locationsRepo->baseSelect();
+        $select        = $locationsRepo->baseSelect();
         $select->where("l.location_id in (
                             select location_id from locations
                             where subunit_id=?)", $subunit_id);
