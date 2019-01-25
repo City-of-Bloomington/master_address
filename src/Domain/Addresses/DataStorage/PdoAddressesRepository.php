@@ -160,7 +160,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
      */
     public function search(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
-        $current = ChangeLog::STATUS_CURRENT;
         $select  = $this->baseSelect();
         $cols    = $this->columns();
         $cols[]  = "( select count(*)
@@ -228,8 +227,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
      */
     public function findLocations(int $address_id): array
     {
+        $locations     = [];
         $locationsRepo = new PdoLocationsRepository($this->pdo);
-        $select = $locationsRepo->baseSelect();
+        $select        = $locationsRepo->baseSelect();
         $select->where("l.location_id in (
                             select location_id from locations
                             where address_id=?

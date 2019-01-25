@@ -9,7 +9,6 @@ namespace Application\Streets\Views;
 use Application\Block;
 use Application\Template;
 use Application\Paginator;
-use Application\Url;
 
 use Domain\Streets\Metadata;
 use Domain\Streets\UseCases\Search\SearchResponse;
