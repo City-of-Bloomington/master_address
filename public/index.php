@@ -6,7 +6,7 @@
 /**
  * Grab a timestamp for calculating process time
  */
-$startTime = microtime(1);
+$startTime = microtime(true);
 
 include '../bootstrap.inc';
 
@@ -47,7 +47,7 @@ echo $view->render();
 
 if ($view->outputFormat === 'html') {
     # Calculate the process time
-    $endTime = microtime(1);
+    $endTime = microtime(true);
     $processTime = $endTime - $startTime;
     echo "<!-- Process Time: $processTime -->\n";
 
