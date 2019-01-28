@@ -126,6 +126,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
         $result = parent::performSelect($select);
         if (count($result['rows'])) {
+
             return self::hydrateAddress($result['rows'][0]);
         }
         throw new \Exception('addresses/unknown');
@@ -227,13 +228,22 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
      */
     public function findLocations(int $address_id): array
     {
+        // Performance Note:
+        //
+        // It's much faster to do a seperate query for the location_ids
+        // than it is to use this as a subquery
+        $sql    = "select location_id from locations where subunit_id is null and address_id=?";
+        $query  = $this->pdo->prepare($sql);
+        $query->execute([$address_id]);
+        $result = $query->fetchAll(\PDO::FETCH_COLUMN);
+        $location_ids = implode(',', $result);
+
+
         $locations     = [];
         $locationsRepo = new PdoLocationsRepository($this->pdo);
         $select        = $locationsRepo->baseSelect();
-        $select->where("l.location_id in (
-                            select location_id from locations
-                            where address_id=?
-                              and subunit_id is null)", $address_id);
+        $select->where("l.location_id in ($location_ids)");
+
         $query = $this->pdo->prepare($select->getStatement());
         $query->execute($select->getBindValues());
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
@@ -250,6 +260,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 join purposes          p on p.id=x.purpose_id
                 where l.subunit_id is null
                   and l.address_id=?";
+
         $query = $this->pdo->prepare($sql);
         $query->execute([$address_id]);
         return $query->fetchAll(\PDO::FETCH_ASSOC);
@@ -290,8 +301,8 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             $select->where("{$logType}_id=?", $address_id);
         }
         $select->orderBy(['l.action_date desc']);
-
         $result = parent::performSelect($select, $itemsPerPage, $currentPage);
+
         $changeLog = [];
         foreach ($result['rows'] as $row) {
             $changeLog[] = ChangeLogEntry::hydrate($row);
