@@ -367,3 +367,8 @@ msgstr "Status"
 
 msgid "phase"
 msgstr "Phase"
+
+msgid "report"
+msgid_plural "reports"
+msgstr[0] "Report"
+msgstr[1] "Reports"

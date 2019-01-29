@@ -32,7 +32,7 @@ define('THEME', 'COB');
  */
 $DATABASES = [
     'default' => [
-        'driver'   => 'mysql',
+        'driver'   => 'pgsql',
         'host'     => 'localhost',
         'dbname'   => 'master_address',
         'schema'   => '',
