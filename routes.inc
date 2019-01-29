@@ -104,3 +104,10 @@ foreach ($tables as $t) {
         $r->add('index',  '')            ->addValues(['action'=>'index' ]);
     });
 }
+
+$ROUTES->attach('reports', '/reports', function ($r) {
+    $r->setValues(['controller'=> 'Application\Reports\Controller']);
+
+    $r->add('report', '/{name}')->addValues(['action'=>'report']);
+    $r->add('index',  '')       ->addValues(['action'=>'index' ]);
+});

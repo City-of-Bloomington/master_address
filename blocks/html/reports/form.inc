@@ -1,0 +1,40 @@
+<?php
+/**
+ * @copyright 2019 City of Bloomington, Indiana
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param string $this->title
+ * @param array  $this->params  Parameter definitions
+ * @param array  $this->request Parameter values already submitted
+ * @param array  $this->result  Raw database result
+ */
+declare (strict_types=1);
+?>
+<section>
+    <header>
+        <h1><?= $this->title; ?></h1>
+    </header>
+
+    <form method="get">
+        <fieldset>
+        <?php
+            $h = $this->template->getHelper('field');
+            foreach ($this->params as $name=>$v) {
+                echo $h->field([
+                    'name'     => $name,
+                    'id'       => $name,
+                    'label'    => $this->_($name),
+                    'type'     => $v['type'],
+                    'value'    => $this->request[$name],
+                    'required' => true
+                ]);
+            }
+        ?>
+            <button type="submit" class="submit">Submit</button>
+        </fieldset>
+    </form>
+    <?php
+        if ($this->result) {
+            $this->_include('reports/output.inc');
+        }
+    ?>
+</section>

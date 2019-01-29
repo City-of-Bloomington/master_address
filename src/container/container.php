@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 use Aura\Di\ContainerBuilder;
@@ -23,7 +23,7 @@ if ($platform == 'Pgsql' && !empty($conf['schema'])) {
 $repos = [
     'Addresses', 'Jurisdictions', 'People', 'Plats',
     'Streets', 'Subdivisions', 'Towns', 'Townships', 'Users',
-    'Subunits', 'Locations',
+    'Subunits', 'Locations', 'Reports'
 ];
 foreach ($repos as $t) {
     $DI->params[ "Domain\\$t\\DataStorage\\Pdo{$t}Repository"]["pdo"] = $pdo;
@@ -154,4 +154,10 @@ foreach (['Delete', 'Info', 'Search', 'Update'] as $a) {
     $DI->params[ "Domain\\Users\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Users\\DataStorage\\UsersRepository");
     $DI->set(    "Domain\\Users\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Users\\UseCases\\$a\\$a"));
+}
+
+foreach (\Domain\Reports\Report::list() as $r) {
+    $DI->params[ "Site\Reports\\$r"]['pdo'] = $pdo;
+    $DI->set(    "Site\Reports\\$r",
+    $DI->lazyNew("Site\Reports\\$r"));
 }
