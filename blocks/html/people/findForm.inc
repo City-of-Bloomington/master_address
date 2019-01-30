@@ -1,13 +1,10 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2017-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->firstname
  * @param string $this->lastname
  * @param string $this->email
- * @param Url    $this->callback_url   Url to link person results to
- * @param string $this->callback_field Parameter to add to the callback_url
- * @param array  $this->hidden         Hidden inputs to preserve
  * @param array  $this->people         Array of people search results
  */
 declare (strict_types=1);
@@ -28,10 +25,6 @@ declare (strict_types=1);
                     'label' => $this->_($f),
                     'value' => $this->$f
                 ]);
-            }
-
-            foreach ($this->hidden as $k=>$v) {
-                echo "<input type=\"hidden\" name=\"$k\" value=\"$v\" />";
             }
         ?>
         <button type="submit" class="search"><?= $this->_('search'); ?></button>

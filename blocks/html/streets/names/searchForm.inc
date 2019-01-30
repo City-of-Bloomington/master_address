@@ -1,11 +1,8 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array  $this->names
- * @param array  $this->hidden         Hidden inputs to preserve
- * @param Url    $this->callback_url   Url to link person results to
- * @param string $this->callback_field Parameter to add to the callback_url
  */
 declare (strict_types=1);
 ?>
@@ -23,15 +20,12 @@ declare (strict_types=1);
                     'label' => $this->_('street'),
                     'value' => !empty($_GET['street']) ? parent::escape($_GET['street']) : null
                 ]);
-                foreach ($this->hidden as $k=>$v) {
-                    echo "<input type=\"hidden\" name=\"$k\" value=\"$v\" />";
-                }
             ?>
             <button type="submit" class="search"><?= $this->_('search'); ?></button>
         </fieldset>
     </form>
     <?php
-        if (!$this->callback_url && parent::isAllowed('streetNames', 'add')) {
+        if (parent::isAllowed('streetNames', 'add')) {
             $h = $this->template->getHelper('buttonLink');
             echo $h->buttonLink(
                 parent::generateUri('streetNames.add'),

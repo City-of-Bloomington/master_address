@@ -41,10 +41,6 @@ use Application\Url;
         }
 
         if ($this->streets) {
-            $this->callback_url = new Url(parent::generateUrl('streets.intersections'));
-            $this->callback_url->street_id_1 = $this->street_id;
-            $this->callback_field = 'street_id_2';
-
             $this->_include('streets/list.inc');
         }
     ?>

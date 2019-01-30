@@ -16,9 +16,8 @@ class SearchView extends Template
 {
     public function __construct(SearchResponse $response, int $itemsPerPage, int $currentPage)
     {
-        $template = !empty($_REQUEST['callback']) ? 'callback'          : 'default';
-        $format   = !empty($_REQUEST['format'  ]) ? $_REQUEST['format'] : 'html';
-        parent::__construct($template, $format);
+        $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
+        parent::__construct('default', $format);
 
         $this->vars['title'] = $this->_('people_search');
         if ($response->errors) {
@@ -28,11 +27,9 @@ class SearchView extends Template
         if ($format == 'html') {
             $this->blocks[] = new Block('people/findForm.inc', [
                 'people'        => $response->people,
-
-                'firstname'     => !empty($_GET['firstname'     ]) ? parent::escape($_GET['firstname'     ]) : '',
-                'lastname'      => !empty($_GET['lastname'      ]) ? parent::escape($_GET['lastname'      ]) : '',
-                'email'         => !empty($_GET['email'         ]) ? parent::escape($_GET['email'         ]) : '',
-                'hidden'        => parent::filterActiveParams($_GET, ['firstname', 'lastname', 'email']),
+                'firstname'     => !empty($_GET['firstname']) ? parent::escape($_GET['firstname']) : '',
+                'lastname'      => !empty($_GET['lastname' ]) ? parent::escape($_GET['lastname' ]) : '',
+                'email'         => !empty($_GET['email'    ]) ? parent::escape($_GET['email'    ]) : ''
             ]);
 
             if ($response->total > $itemsPerPage) {
