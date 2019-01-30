@@ -4,7 +4,7 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Site\Reports\AddressActivity;
+namespace Site\Reports\BloomingtonAddressActivity;
 
 use Domain\Reports\Report as BaseReport;
 use Domain\Reports\ReportResponse;
@@ -14,8 +14,8 @@ class Report extends BaseReport
     public static function metadata(): array
     {
         return [
-            'name'   => 'AddressActivity',
-            'title'  => 'County-wide Address and Subunit activity',
+            'name'   => 'BloomingtonAddressActivity',
+            'title'  => 'Bloomington Address and Subunit activity',
             'params' => [
                 'startDate' => [
                     'type'    => 'date',
