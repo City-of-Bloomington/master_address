@@ -2,8 +2,7 @@
 /**
  * @copyright 2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param string $this->title
- * @param array  $this->params  Parameter definitions
+ * @param array  $this->report  The report metadata
  * @param array  $this->request Parameter values already submitted
  * @param array  $this->results Raw database result
  */
@@ -11,14 +10,14 @@ declare (strict_types=1);
 ?>
 <section>
     <header>
-        <h1><?= $this->title; ?></h1>
+        <h1><?= $this->report['title']; ?></h1>
     </header>
 
     <form method="get">
         <fieldset>
         <?php
             $h = $this->template->getHelper('field');
-            foreach ($this->params as $name=>$v) {
+            foreach ($this->report['params'] as $name=>$v) {
                 echo $h->field([
                     'name'     => $name,
                     'id'       => $name,
@@ -34,7 +33,12 @@ declare (strict_types=1);
     </form>
     <?php
         if ($this->results  ) {
-            $this->_include('reports/output.inc');
+            if (file_exists(SITE_HOME.'/src/Reports/'.$this->report['name'].'.inc')) {
+                include SITE_HOME.'/src/Reports/'.$this->report['name'].'.inc';
+            }
+            else {
+                $this->_include('reports/output.inc');
+            }
         }
     ?>
 </section>

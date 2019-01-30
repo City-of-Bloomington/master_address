@@ -31,11 +31,9 @@ class ReportView extends Template
 
             $this->blocks = [
                 new Block('reports/form.inc', [
-                    'title'   => $this->vars['title'],
-                    'params'  => $metadata['params'],
                     'request' => $request,
                     'results' => $response->results,
-                    'report'  => $report
+                    'report'  => $metadata
                 ])
             ];
             if ($response->total > $itemsPerPage) {

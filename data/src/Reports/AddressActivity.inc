@@ -22,7 +22,9 @@ use Application\Url;
         <thead><tr>
         <?php
             foreach (array_keys($this->results[0]) as $k) {
-                echo "<th>{$this->_($k)}</th>";
+                if ($k != 'entity_id') {
+                    echo "<th>{$this->_($k)}</th>";
+                }
             }
         ?>
         </tr></thead>
@@ -30,9 +32,14 @@ use Application\Url;
         <tbody>
         <?php
             foreach ($this->results as $row) {
+                $route = $row['subunit'] ? 'subunits.view' : 'addresses.view';
+                $uri   = parent::generateUri($route, ['id'=>$row['entity_id']]);
+
                 echo '<tr>';
                 foreach ($row as $k=>$v) {
-                    echo "<td>$v</td>";
+                    if ($k != 'entity_id') {
+                        echo "<td><a href=\"$uri\">$v</a></td>";
+                    }
                 }
                 echo '</tr>';
             }

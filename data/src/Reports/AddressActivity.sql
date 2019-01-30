@@ -1,4 +1,5 @@
 select c.action_date,
+       c.address_id as entity_id,
        concat_ws(' ',a.street_number_prefix,
                      a.street_number,
                      a.street_number_suffix) as streetNumber,
@@ -30,6 +31,7 @@ where a.jurisdiction_id=1 -- Bloomington
 union all
 
 select c.action_date,
+       c.subunit_id as entity_id,
        concat_ws(' ',a.street_number_prefix,
                      a.street_number,
                      a.street_number_suffix) as streetNumber,
