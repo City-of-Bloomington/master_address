@@ -7,6 +7,7 @@ declare (strict_types=1);
 namespace Site\Reports;
 
 use Domain\Reports\Report;
+use Domain\Reports\ReportResponse;
 
 class AddressActivity extends Report
 {
@@ -28,15 +29,42 @@ class AddressActivity extends Report
         ];
     }
 
-    public function execute(array $request)
+    public function execute(array $request, ?int $itemsPerPage=null, ?int $currentPage=null): ReportResponse
     {
-        $query = $this->pdo->prepare(file_get_contents(__DIR__.'/AddressActivity.sql'));
-        $query->bindValue('start_date_1', $request['startDate']->format('Y-m-d'));
-        $query->bindValue('start_date_2', $request['startDate']->format('Y-m-d'));
-        $query->bindValue(  'end_date_1', $request[  'endDate']->format('Y-m-d'));
-        $query->bindValue(  'end_date_2', $request[  'endDate']->format('Y-m-d'));
+        $total     = null;
+        $startDate = $request['startDate']->format('Y-m-d');
+        $endDate   = $request[  'endDate']->format('Y-m-d');
+
+        $qq  = file_get_contents(__DIR__.'/AddressActivity.sql');
+        $sql = "($qq) order by action_date";
+        if ($itemsPerPage) {
+            $query = $this->pdo->prepare("select count(*) as count from ($qq) o");
+
+            $query->bindValue('start_date_1', $startDate);
+            $query->bindValue('start_date_2', $startDate);
+            $query->bindValue(  'end_date_1',   $endDate);
+            $query->bindValue(  'end_date_2',   $endDate);
+
+            $query->execute();
+
+            $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+            $total  = (int)$result[0]['count'];
+
+            $currentPage =  $currentPage ?  $currentPage : 1;
+            $offset      = $itemsPerPage * ($currentPage - 1);
+
+            $sql.= " limit $itemsPerPage offset $offset";
+        }
+
+        $query = $this->pdo->prepare($sql);
+        $query->bindValue('start_date_1', $startDate);
+        $query->bindValue('start_date_2', $startDate);
+        $query->bindValue(  'end_date_1',   $endDate);
+        $query->bindValue(  'end_date_2',   $endDate);
 
         $query->execute();
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return new ReportResponse($result, $total);
     }
 }
