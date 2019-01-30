@@ -11,6 +11,9 @@ use Application\Template;
 
 class ListView extends Template
 {
+    /**
+     * @param array $reports  Array of metadata for all the reports
+     */
     public function __construct(array $reports)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';

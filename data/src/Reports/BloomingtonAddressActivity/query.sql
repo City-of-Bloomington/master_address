@@ -24,7 +24,8 @@ join people              p on  p.id=c.person_id
 join locations           l on  a.id=l.address_id
 join location_types     lt on lt.id=l.type_id
 
-where c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
+where a.jurisdiction_id=1 -- Bloomington
+  and c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
   and action_date between :start_date_1 and :end_date_1
 
 union all
@@ -58,5 +59,6 @@ join people              p on   p.id=c.person_id
 join locations           l on sub.id=l.subunit_id
 join location_types     lt on  lt.id=l.type_id
 
-where c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
+where a.jurisdiction_id=1 -- Bloomington
+  and c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
   and c.action_date between :start_date_2 and :end_date_2

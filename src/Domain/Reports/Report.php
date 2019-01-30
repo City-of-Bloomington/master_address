@@ -21,12 +21,12 @@ abstract class Report
         }
         return $reports;
     }
+    abstract public static function metadata(): array;
 
     public function __construct(\PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
-    abstract public function metadata(): array;
     abstract public function execute(array $request, ?int $itemsPerPage=null, ?int $currentPage=null): ReportResponse;
 }

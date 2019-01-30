@@ -18,7 +18,12 @@ class Controller extends BaseController
      */
     public function index(array $params): View
     {
-        $reports = \Domain\Reports\Report::list();
+        $reports = [];
+        $list    = \Domain\Reports\Report::list();
+        foreach ($list as $r) {
+            $class     = "Site\Reports\\$r\Report";
+            $reports[] = $class::metadata();
+        }
         return new Views\ListView($reports);
     }
 
@@ -27,11 +32,13 @@ class Controller extends BaseController
      */
     public function report(array $params): View
     {
-        try { $report = $this->di->get("Site\Reports\\$params[name]\Report"); }
+        $class = "Site\Reports\\$params[name]\Report";
+
+        try { $report = $this->di->get($class); }
         catch (\Exception $e) { return new \Application\Views\NotFoundView(); }
 
 		$page     = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
-        $metadata = $report->metadata();
+        $metadata = $class::metadata();
         $request  = [];
 
         foreach ($metadata['params'] as $k=>$p) {
