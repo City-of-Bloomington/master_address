@@ -63,11 +63,14 @@ class Controller extends BaseController
                 ? $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page))
                 : new SearchResponse();
 
-        if (View::isAllowed('addresses', 'changeLog')) {
-            $logPage   = !empty($_GET['logPage']) ? (int)$_GET['logPage'] : 1;
-            $log       = $this->di->get('Domain\Addresses\UseCases\ChangeLog\ChangeLog');
-            $changeLog = $log(new ChangeLogRequest(null, self::ITEMS_PER_PAGE, $logPage));
-            return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page, $changeLog, $logPage);
+        if (View::isAllowed('reports', 'report')) {
+            $report = $this->di->get('Site\Reports\AddressActivity\Report');
+            $rres = $report->execute([
+                'startDate' => new \DateTime('-30 day'),
+                  'endDate' => new \DateTime()
+            ], self::ITEMS_PER_PAGE, 1);
+
+            return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page, $report, $rres);
         }
         return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
     }

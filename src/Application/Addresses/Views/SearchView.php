@@ -11,15 +11,16 @@ use Application\Template;
 use Application\Paginator;
 
 use Domain\Addresses\UseCases\Search\SearchResponse;
-use Domain\Logs\ChangeLogResponse;
+use Domain\Reports\Report;
+use Domain\Reports\ReportResponse;
 
 class SearchView extends Template
 {
     public function __construct(SearchResponse     $response,
                                 int                $itemsPerPage,
                                 int                $currentPage,
-                                ?ChangeLogResponse $changeLog    = null,
-                                ?int               $changeLogPage= null)
+                                ?Report            $report=null,
+                                ?ReportResponse    $rres  =null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
@@ -45,13 +46,12 @@ class SearchView extends Template
                 )]);
             }
 
-            if ($changeLog) {
-                $this->blocks[] = new Block('logs/entityChangeLog.inc', [
-                    'entries'      => $changeLog->entries,
-                    'total'        => $changeLog->total,
-                    'itemsPerPage' => $itemsPerPage,
-                    'currentPage'  => $changeLogPage,
-                    'moreLink'     => true
+            if ($report) {
+                $this->blocks[] = new Block('reports/output.inc', [
+                    'title'          => $this->_('activity'),
+                    'report'         => $report::metadata(),
+                    'results'        => $rres->results,
+                    'disableButtons' => true
                 ]);
             }
         }
