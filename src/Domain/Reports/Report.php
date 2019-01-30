@@ -16,9 +16,8 @@ abstract class Report
     public static function list(): array
     {
         $reports = [];
-        foreach (glob(SITE_HOME.'/src/Reports/*.php') as $f) {
-            preg_match('/(^.*)\.([^\.]+)$/', basename($f), $matches);
-            $reports[] = $matches[1];
+        foreach (glob(SITE_HOME.'/src/Reports/*', GLOB_ONLYDIR) as $f) {
+            $reports[] = basename($f);
         }
         return $reports;
     }

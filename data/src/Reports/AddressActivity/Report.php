@@ -4,12 +4,12 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Site\Reports;
+namespace Site\Reports\AddressActivity;
 
-use Domain\Reports\Report;
+use Domain\Reports\Report as BaseReport;
 use Domain\Reports\ReportResponse;
 
-class AddressActivity extends Report
+class Report extends BaseReport
 {
     public function metadata(): array
     {
@@ -35,7 +35,7 @@ class AddressActivity extends Report
         $startDate = $request['startDate']->format('Y-m-d');
         $endDate   = $request[  'endDate']->format('Y-m-d');
 
-        $qq  = file_get_contents(__DIR__.'/AddressActivity.sql');
+        $qq  = file_get_contents(__DIR__.'/query.sql');
         $sql = "($qq) order by action_date";
         if ($itemsPerPage) {
             $query = $this->pdo->prepare("select count(*) as count from ($qq) o");

@@ -157,7 +157,7 @@ foreach (['Delete', 'Info', 'Search', 'Update'] as $a) {
 }
 
 foreach (\Domain\Reports\Report::list() as $r) {
-    $DI->params[ "Site\Reports\\$r"]['pdo'] = $pdo;
-    $DI->set(    "Site\Reports\\$r",
-    $DI->lazyNew("Site\Reports\\$r"));
+    $DI->params[ "Site\Reports\\$r\Report"]['pdo'] = $pdo;
+    $DI->set(    "Site\Reports\\$r\Report",
+    $DI->lazyNew("Site\Reports\\$r\Report"));
 }
