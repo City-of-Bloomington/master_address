@@ -26,8 +26,7 @@ class SearchView extends Template
 
         if ($format == 'html') {
             $this->blocks[] = new Block('streets/names/searchForm.inc', [
-                'names'  => $response->names,
-                'hidden' => parent::filterActiveParams($_GET, ['street'])
+                'names'  => $response->names
             ]);
 
             if ($response->total > $itemsPerPage) {

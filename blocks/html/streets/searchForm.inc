@@ -1,16 +1,14 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ *
  * @param array  $this->towns          Town options for the select dropdown
  * @param array  $this->statuses       Status options for the select dropdown
  * @param string $this->street         The street name searched for
  * @param int    $this->town_id        The town_id searched for
  * @param string $this->status         The status searched for
  * @param array  $this->streets        Array of street results
- * @param array  $this->hidden         Hidden inputs to preserve
- * @param Url    $this->callback_url   Url to link person results to
- * @param string $this->callback_field Parameter to add to the callback_url
  */
 ?>
 <section>
@@ -49,19 +47,12 @@
                     'value'    => $this->status,
                     'options'  => $options
                 ]);
-
-                foreach ($this->hidden as $k=>$v) {
-                    echo "<input type=\"hidden\" name=\"$k\" value=\"$v\" />";
-                }
             ?>
             <button type="submit" class="search"><?= $this->_('search'); ?></button>
         </fieldset>
     </form>
     <?php
-        if (    $this->street
-            && !$this->callback_url
-            && parent::isAllowed('streets', 'add')) {
-
+        if ($this->street && parent::isAllowed('streets', 'add')) {
             $h = $this->template->getHelper('buttonLink');
             echo $h->buttonLink(
                 parent::generateUri('streets.add'),

@@ -35,8 +35,7 @@ class SearchView extends Template
                 'status'         => !empty($_GET['status' ]) ? parent::escape($_GET['status' ]) : '',
                 'streets'        => $response->streets,
                 'towns'          => $metadata->towns(),
-                'statuses'       => $metadata->statuses(),
-                'hidden'         => parent::filterActiveParams($_GET, ['street'])
+                'statuses'       => $metadata->statuses()
             ]);
 
             if ($response->total > $itemsPerPage) {
