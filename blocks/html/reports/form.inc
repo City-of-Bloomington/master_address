@@ -33,8 +33,8 @@ declare (strict_types=1);
     </form>
     <?php
         if ($this->results  ) {
-            if (file_exists(SITE_HOME.'/src/Reports/'.$this->report['name'].'.inc')) {
-                include SITE_HOME.'/src/Reports/'.$this->report['name'].'.inc';
+            if (file_exists(SITE_HOME.'/src/Reports/'.$this->report['name'].'/template.inc')) {
+                include     SITE_HOME.'/src/Reports/'.$this->report['name'].'/template.inc';
             }
             else {
                 $this->_include('reports/output.inc');

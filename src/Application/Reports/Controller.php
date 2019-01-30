@@ -27,7 +27,7 @@ class Controller extends BaseController
      */
     public function report(array $params): View
     {
-        try { $report = $this->di->get("Site\Reports\\$params[name]"); }
+        try { $report = $this->di->get("Site\Reports\\$params[name]\Report"); }
         catch (\Exception $e) { return new \Application\Views\NotFoundView(); }
 
 		$page     = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
