@@ -49,7 +49,7 @@ class ReportView extends Template
             $this->vars['title'] = $metadata['name'];
             if ($response) {
                 $this->blocks = [
-                    new Block('reports/output.inc', ['results'=>$response->results])
+                    new Block('reports/output.inc', ['results' => $response->results])
                 ];
             }
         }
