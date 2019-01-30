@@ -5,7 +5,7 @@
  * @param string $this->title
  * @param array  $this->params  Parameter definitions
  * @param array  $this->request Parameter values already submitted
- * @param array  $this->result  Raw database result
+ * @param array  $this->results Raw database result
  */
 declare (strict_types=1);
 ?>
@@ -33,7 +33,7 @@ declare (strict_types=1);
         </fieldset>
     </form>
     <?php
-        if ($this->result) {
+        if ($this->results  ) {
             $this->_include('reports/output.inc');
         }
     ?>

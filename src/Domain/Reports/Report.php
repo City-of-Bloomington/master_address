@@ -29,4 +29,5 @@ abstract class Report
     }
 
     abstract public function metadata(): array;
+    abstract public function execute(array $request, ?int $itemsPerPage=null, ?int $currentPage=null): ReportResponse;
 }

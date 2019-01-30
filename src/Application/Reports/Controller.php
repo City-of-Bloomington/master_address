@@ -11,6 +11,8 @@ use Application\View;
 
 class Controller extends BaseController
 {
+    const ITEMS_PER_PAGE = 10;
+
     /**
      * List the available reports
      */
@@ -28,6 +30,7 @@ class Controller extends BaseController
         try { $report = $this->di->get("Site\Reports\\$params[name]"); }
         catch (\Exception $e) { return new \Application\Views\NotFoundView(); }
 
+		$page     = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
         $metadata = $report->metadata();
         $request  = [];
 
@@ -46,8 +49,9 @@ class Controller extends BaseController
             }
         }
 
-        $response = $report->execute($request);
 
-        return new Views\ReportView($report, $request, $response);
+        $response = $report->execute($request, self::ITEMS_PER_PAGE, $page);
+
+        return new Views\ReportView($report, self::ITEMS_PER_PAGE, $page, $request, $response);
     }
 }

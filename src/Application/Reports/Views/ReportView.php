@@ -8,12 +8,18 @@ namespace Application\Reports\Views;
 
 use Application\Block;
 use Application\Template;
+use Application\Paginator;
 
 use Domain\Reports\Report;
+use Domain\Reports\ReportResponse;
 
 class ReportView extends Template
 {
-    public function __construct(Report $report, array $request, ?array $response=null)
+    public function __construct(Report          $report,
+                                int             $itemsPerPage,
+                                int             $currentPage,
+                                array           $request,
+                                ?ReportResponse $response=null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
@@ -28,16 +34,24 @@ class ReportView extends Template
                     'title'   => $this->vars['title'],
                     'params'  => $metadata['params'],
                     'request' => $request,
-                    'result'  => $response,
+                    'results' => $response->results,
                     'report'  => $report
                 ])
             ];
+            if ($response->total > $itemsPerPage) {
+                $this->blocks[] = new Block('pageNavigation.inc', [
+                    'paginator' => new Paginator(
+                        $response->total,
+                        $itemsPerPage,
+                        $currentPage
+                )]);
+            }
         }
         else {
             $this->vars['title'] = $metadata['name'];
             if ($response) {
                 $this->blocks = [
-                    new Block('reports/output.inc', ['result'=>$response])
+                    new Block('reports/output.inc', ['results'=>$response->results])
                 ];
             }
         }
