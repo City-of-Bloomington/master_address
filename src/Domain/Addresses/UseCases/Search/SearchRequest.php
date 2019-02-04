@@ -82,4 +82,45 @@ class SearchRequest
         if ($itemsPerPage) { $this->itemsPerPage = $itemsPerPage; }
         if ($currentPage ) { $this->currentPage  = $currentPage;  }
     }
+
+    public function isEmpty(): bool
+    {
+        // Check the most common fields first, so we can return quickly
+        // when there's stuff in this request.
+        $fields = [
+            'street_number',
+            'street_name',
+            'id',
+            'street_number_prefix',
+            'street_number_suffix',
+            'street_direction',
+            'street_post_direction',
+            'street_suffix_code',
+            'address2',
+            'address_type',
+            'street_id',
+            'jurisdiction_id',
+            'township_id',
+            'subdivision_id',
+            'plat_id',
+            'section',
+            'quarter_section',
+            'plat_lot_number',
+            'city',
+            'state',
+            'zip',
+            'zipplus4',
+            'state_plane_x',
+            'state_plane_y',
+            'latitude',
+            'longitude',
+            'usng',
+            'notes',
+            'status'
+        ];
+        foreach ($fields as $f) {
+            if ($this->$f) { return false; }
+        }
+        return true;
+    }
 }

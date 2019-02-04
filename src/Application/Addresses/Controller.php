@@ -51,17 +51,18 @@ class Controller extends BaseController
      */
     public function index(array $params): View
     {
-		$page   = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
+		$page     = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
 
-        $search = $this->di->get('Domain\Addresses\UseCases\Search\Search');
-        $parser = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
+        $search   = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+        $parser   = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
+        $metadata = $this->di->get('Domain\Addresses\Metadata');
 
-        $query  = !empty($_GET['address'])
-                ? self::translateFields($parser($_GET['address']))
-                : null;
-        $res    = $query
-                ? $search(new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page))
-                : new SearchResponse();
+        $query    = !empty($_GET['address'])
+                  ? self::translateFields($parser($_GET['address']))
+                  : $_GET;
+
+        $request  = new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page);
+        $response = !$request->isEmpty() ? $search($request) : null;
 
         if (View::isAllowed('reports', 'report')) {
             $report = $this->di->get('Site\Reports\AddressActivity\Report');
@@ -70,9 +71,9 @@ class Controller extends BaseController
                   'endDate' => new \DateTime()
             ], self::ITEMS_PER_PAGE, 1);
 
-            return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page, $report, $rres);
+            return new Views\SearchView($request, $response, self::ITEMS_PER_PAGE, $page, $metadata, $report, $rres);
         }
-        return new Views\SearchView($res, self::ITEMS_PER_PAGE, $page);
+        return new Views\SearchView($request, $response, self::ITEMS_PER_PAGE, $page, $metadata);
     }
 
     /**

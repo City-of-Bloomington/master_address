@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
+ * @copyright 2017-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -8,19 +8,22 @@ namespace Application\Addresses\Views;
 
 use Application\Block;
 use Application\Template;
-use Application\Paginator;
 
+use Domain\Addresses\Metadata;
+use Domain\Addresses\UseCases\Search\SearchRequest;
 use Domain\Addresses\UseCases\Search\SearchResponse;
 use Domain\Reports\Report;
 use Domain\Reports\ReportResponse;
 
 class SearchView extends Template
 {
-    public function __construct(SearchResponse     $response,
+    public function __construct(SearchRequest      $request,
+                                SearchResponse     $response,
                                 int                $itemsPerPage,
                                 int                $currentPage,
-                                ?Report            $report=null,
-                                ?ReportResponse    $rres  =null)
+                                Metadata           $address,
+                                ?Report            $report = null,
+                                ?ReportResponse    $rres   = null)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
@@ -30,30 +33,25 @@ class SearchView extends Template
             $_SESSION['errorMessages'] = $response->errors;
         }
 
+        $vars = [
+            'searching'    => !$request->isEmpty(),
+            'addresses'    => $response->addresses,
+            'total'        => $response->total,
+            'itemsPerPage' => $itemsPerPage,
+            'currentPage'  => $currentPage,
+            'directions'   => $address::$directions,
+            'cities'       => $address->cities(),
+            'streetTypes'  => $address->streetTypes()
+        ];
         if ($format != 'html') {
             $this->blocks = [
-                new Block('addresses/list.inc', ['addresses' => $response->addresses])
+                new Block('addresses/list.inc', $vars)
             ];
         }
         else {
-            $this->blocks[] = new Block('addresses/findForm.inc', ['addresses' => $response->addresses]);
-            if ($response->total > $itemsPerPage) {
-                $this->blocks[] = new Block('pageNavigation.inc', [
-                    'paginator' => new Paginator(
-                        $response->total,
-                        $itemsPerPage,
-                        $currentPage
-                )]);
-            }
+            foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
 
-            if ($report) {
-                $this->blocks[] = new Block('reports/output.inc', [
-                    'title'          => $this->_('activity'),
-                    'report'         => $report::metadata(),
-                    'results'        => $rres->results,
-                    'disableButtons' => true
-                ]);
-            }
+            $this->blocks[] = new Block('addresses/findForm.inc', $vars);
         }
     }
 }
