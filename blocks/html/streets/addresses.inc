@@ -8,10 +8,19 @@
  */
 declare (strict_types=1);
 use Application\Url;
+
+$min = 9999;
+$max = 0;
+foreach ($this->addresses as $a) {
+    if ($a->street_number < $min) { $min = $a->street_number; }
+    if ($a->street_number > $max) { $max = $a->street_number; }
+}
 ?>
 <section>
     <header>
-        <h2><?= $this->_(['address', 'addresses', count($this->addresses)]); ?></h2>
+        <h2><?= $this->_(['address', 'addresses', count($this->addresses)]); ?>
+            <?= "($min - $max)"; ?>
+        </h2>
         <div class="tools">
         <?php
             $userCanAdd = !$this->disableButtons && parent::isAllowed('addresses', 'add');
