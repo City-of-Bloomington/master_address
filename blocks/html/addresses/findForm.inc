@@ -27,11 +27,16 @@ foreach ($this->cities      as $c) { $cities     [] = ['value'=>$c]; }
 foreach ($this->directions  as $d) { $directions [] = ['value'=>$d]; }
 foreach ($this->streetTypes as $t) { $streetTypes[] = ['value'=>$t['id'], 'label'=>$t['code']]; }
 
+$advancedActive = $this->searching && (empty($_GET['address']) || !empty($this->block_start) || !empty($this->block_end))
+                ? 'open="true"'
+                : '';
+
 $h = $this->template->getHelper('field');
 ?>
 <section id="addressSearch">
     <header><h1><?= $this->_(['address', 'addresses', 100]); ?></h1></header>
-    <details><summary><?= $this->_('search_advanced'); ?></summary>
+    <details <?= $advancedActive; ?>>
+        <summary><?= $this->_('search_advanced'); ?></summary>
         <form method="get">
             <fieldset><legend><?= $this->_('block'); ?></legend>
             <?php
@@ -130,7 +135,7 @@ $h = $this->template->getHelper('field');
 
     <?php
         if (!$this->addresses) {
-            if (isset($_GET['address'])) {
+            if ($this->searching) {
                 echo sprintf($this->_('no_results', 'messages'), $this->_(['address', 'addresses', 10]));
             }
         }
