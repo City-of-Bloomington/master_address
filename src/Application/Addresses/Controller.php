@@ -62,7 +62,7 @@ class Controller extends BaseController
                   : $_GET;
 
         $request  = new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page);
-        $response = !$request->isEmpty() ? $search($request) : null;
+        $response = !$request->isEmpty() ? $search($request) : new SearchResponse();
 
         if (View::isAllowed('reports', 'report')) {
             $report = $this->di->get('Site\Reports\AddressActivity\Report');

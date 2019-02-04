@@ -39,6 +39,10 @@ class SearchRequest
     public $street_post_direction;
     public $street_suffix_code;
 
+    // Block range
+    public $block_start;
+    public $block_end;
+
     public $status;
 
     // Pagination fields
@@ -63,6 +67,8 @@ class SearchRequest
                         case 'zipplus4':
                         case 'state_plane_x':
                         case 'state_plane_y':
+                        case 'block_start':
+                        case 'block_end':
                             $this->$k = (int)$data[$k];
                         break;
 

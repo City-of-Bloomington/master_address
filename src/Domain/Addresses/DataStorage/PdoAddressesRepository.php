@@ -198,6 +198,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 }
             }
         }
+        if (!empty($fields['block_start']) && !empty($fields['block_end'])) {
+            $select->where('a.street_number between ? and ?', $fields['block_start'], $fields['block_end']);
+        }
         return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
     }
 
