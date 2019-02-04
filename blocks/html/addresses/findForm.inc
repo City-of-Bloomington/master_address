@@ -29,6 +29,77 @@ foreach ($this->streetTypes as $t) { $streetTypes[] = ['value'=>$t['id'], 'label
 <section id="addressSearch">
     <header><h1><?= $this->_(['address', 'addresses', 100]); ?></h1></header>
 
+    <form method="get">
+        <fieldset><legend><?= $this->_('search'); ?></legend>
+        <?php
+            $h = $this->template->getHelper('field');
+            echo $h->field([
+                'name'    => 'street_number_prefix',
+                'id'      => 'street_number_prefix',
+                'label'   => $this->_('street_number_prefix'),
+                'value'   => $this->street_number_prefix
+            ]);
+            echo $h->field([
+                'name'    => 'street_number',
+                'id'      => 'street_number',
+                'label'   => $this->_('street_number'),
+                'value'   => $this->street_number
+            ]);
+            echo $h->field([
+                'name'    => 'street_number_suffix',
+                'id'      => 'street_number_suffix',
+                'label'   => $this->_('street_number_suffix'),
+                'value'   => $this->street_number_suffix
+            ]);
+            echo $h->field([
+                'name'    => 'street_direction',
+                'id'      => 'street_direction',
+                'label'   => $this->_('street_direction'),
+                'value'   => $this->street_direction,
+                'type'    => 'select',
+                'options' => $directions
+            ]);
+            echo $h->field([
+                'name'    => 'street_name',
+                'id'      => 'street_name',
+                'label'   => $this->_('street_name'),
+                'value'   => $this->street_name
+            ]);
+            echo $h->field([
+                'name'    => 'street_post_direction',
+                'id'      => 'street_post_direction',
+                'label'   => $this->_('street_post_direction'),
+                'value'   => $this->street_post_direction,
+                'type'    => 'select',
+                'options' => $directions
+            ]);
+            echo $h->field([
+                'name'    => 'street_suffix_code',
+                'id'      => 'street_suffix_code',
+                'label'   => $this->_('street_suffix_code'),
+                'value'   => $this->street_suffix_code,
+                'type'    => 'select',
+                'options' => $streetTypes
+            ]);
+            echo $h->field([
+                'name'    => 'city',
+                'id'      => 'city',
+                'label'   => $this->_('city'),
+                'value'   => $this->city,
+                'type'    => 'select',
+                'options' => $cities
+            ]);
+            echo $h->field([
+                'name'    => 'zip',
+                'id'      => 'zip',
+                'label'   => $this->_('zip'),
+                'value'   => $this->zip
+            ]);
+        ?>
+            <button type="submit" class="search"><?= $this->_('search'); ?></button>
+        </fieldset>
+    </form>
+
     <?php
         if (!$this->addresses) {
             if (isset($_GET['address'])) {
