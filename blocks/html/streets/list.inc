@@ -6,6 +6,14 @@
  */
 ?>
 <table>
+    <thead>
+        <tr><th><?= $this->_('id'         ); ?></th>
+            <th><?= $this->_('name'       ); ?></th>
+            <th><?= $this->_('town'       ); ?></th>
+            <th><?= $this->_('status'     ); ?></th>
+            <th><?= $this->_('designation'); ?></th>
+        </tr>
+    </thead>
     <tbody>
     <?php
         foreach ($this->streets as $street) {
