@@ -104,3 +104,15 @@ $DEFAULTS = [
     'city'            => 'Bloomington',
     'locationType_id' => 3
 ];
+
+/**
+ * Graylog is a centralized log manager
+ *
+ * Uncomment to enable Graylog support.
+ *
+ * This application supports sending errors and exceptions to a graylog instance.
+ * This is handy for notifying developers of a problem before users notice.
+ ** @see https://graylog.org
+ */
+//define('GRAYLOG_DOMAIN', 'graylog.example.org');
+//define('GRAYLOG_PORT',   12201);

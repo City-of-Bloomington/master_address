@@ -44,14 +44,11 @@ if (!defined('STDIN')) {
 	session_start();
 }
 
-/**
- * Skidder is a web service for error loggin.  This application supports
- * logging errors to a Skidder server.  You must register for an application_id
- * on the skidder server you want to post errors to.
- */
-//$writer = new Blossom\Classes\Log\SkidderWriter('http://localhost/skidder/index', 100 );
-//$logger = new Zend\Log\Logger();
-//$logger->addWriter($writer);
-//Zend\Log\Logger::registerErrorHandler($logger);
-//Zend\Log\Logger::registerExceptionHandler($logger);
-//Zend\Log\Logger::registerFatalErrorShutdownFunction($logger);
+if (defined('GRAYLOG_DOMAIN') && defined('GRAYLOG_PORT')) {
+    $graylog = new Application\GraylogWriter(GRAYLOG_DOMAIN, GRAYLOG_PORT);
+    $logger  = new Zend\Log\Logger();
+    $logger->addWriter($graylog);
+    Zend\Log\Logger::registerErrorHandler($logger);
+    Zend\Log\Logger::registerExceptionHandler($logger);
+    Zend\Log\Logger::registerFatalErrorShutdownFunction($logger);
+}
