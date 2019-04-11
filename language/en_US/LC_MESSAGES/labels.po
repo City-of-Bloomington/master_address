@@ -95,8 +95,8 @@ msgstr[1] "Email Addresses"
 
 msgid "person"
 msgid_plural "people"
-msgstr[0] "Person"
-msgstr[1] "People"
+msgstr[0] "Contact"
+msgstr[1] "Contacts"
 
 msgid "user"
 msgid_plural "users"
@@ -104,16 +104,16 @@ msgstr[0] "User Account"
 msgstr[1] "User Accounts"
 
 msgid "person_info"
-msgstr "Person Info"
+msgstr "Contact Info"
 
 msgid "person_add"
-msgstr "Add a Person"
+msgstr "Add a Contact"
 
 msgid "person_edit"
-msgstr "Edit Person"
+msgstr "Edit Contact"
 
 msgid "people_search"
-msgstr "Find People"
+msgstr "Find Contacts"
 
 msgid "user_add"
 msgstr "Create Account"
