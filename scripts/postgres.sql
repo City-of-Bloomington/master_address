@@ -39,7 +39,7 @@ create table jurisdictions (
 create type directions       as enum('N', 'E', 'S', 'W');
 create type address_statuses as enum('current', 'retired', 'proposed', 'duplicate', 'temporary');
 create type  street_statuses as enum('current', 'retired', 'proposed', 'corrected');
-create type address_types    as enum('Facility', 'Parcel', 'Property', 'Street', 'Temporary', 'Utility');
+create type address_types    as enum('Facility', 'Property', 'Street', 'Temporary', 'Utility');
 
 create table street_types (
     id   serial      primary key,
@@ -122,6 +122,7 @@ create table street_names (
     notes             varchar(240),
     foreign key (suffix_code_id) references street_types(id)
 );
+create index on street_names(suffix_code_id);
 
 create table street_designations (
     id             serial primary key,
@@ -134,6 +135,9 @@ create table street_designations (
     foreign key (street_name_id) references street_names            (id),
     foreign key (type_id       ) references street_designation_types(id)
 );
+create index on street_designations(     street_id);
+create index on street_designations(street_name_id);
+create index on street_designations(       type_id);
 
 create table state_roads (
     id           serial primary key,
@@ -182,6 +186,11 @@ create table addresses (
     foreign key (plat_id          ) references plats        (id),
     foreign key (zip              ) references zip_codes(zip)
 );
+create index on addresses(      street_id);
+create index on addresses(jurisdiction_id);
+create index on addresses(    township_id);
+create index on addresses( subdivision_id);
+create index on addresses(        plat_id);
 create index on addresses using gist(geom);
 create trigger update_geom BEFORE INSERT OR UPDATE OF latitude, longitude ON addresses FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
 
@@ -193,6 +202,7 @@ create table address_status (
     end_date    timestamp,
     foreign key (address_id) references addresses(id)
 );
+create index on address_status(address_id);
 
 create table subunits (
     id            serial  primary key,
@@ -209,6 +219,8 @@ create table subunits (
     foreign key (address_id) references addresses    (id),
     foreign key (type_id   ) references subunit_types(id)
 );
+create index on subunits(address_id);
+create index on subunits(   type_id);
 create index on subunits using gist(geom);
 create trigger update_geom BEFORE INSERT OR UPDATE OF latitude, longitude ON subunits FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
 
@@ -220,6 +232,7 @@ create table subunit_status (
     end_date    timestamp,
     foreign key (subunit_id) references subunits(id)
 );
+create index on subunit_status(subunit_id);
 
 -- The primary key for locations is a composite.
 -- We did this to avoid confusion in the common scenario.
@@ -244,6 +257,9 @@ create table locations (
 	foreign key (type_id   ) references location_types(id)
 );
 create index on locations(location_id);
+create index on locations( address_id);
+create index on locations( subunit_id);
+create index on locations(    type_id);
 
 create table location_status (
 	id           serial           primary key,
@@ -252,6 +268,7 @@ create table location_status (
     start_date  timestamp         not null default now(),
     end_date    timestamp
 );
+create index on location_status(location_id);
 
 create table location_purposes (
     location_id integer not null,
@@ -265,6 +282,7 @@ create table sanitation (
     trash_day    trash_day,
     recycle_week recycle_week
 );
+create index on sanitation(location_id);
 
 -- mast_addr_assignment_contacts
 -- Removed address, city, state, and zip fields
@@ -285,22 +303,6 @@ create table people (
 	password      varchar(255),
 	role          varchar(30),
 	authentication_method varchar(40)
-);
-
-create table address_assignment_log (
-    id           serial      primary key,
-	address_id   integer     not null,
-	location_id  integer     not null,
-	subunit_id   integer,
-	person_id    integer,
-	contact_id   integer,
-	action_date  timestamp   not null default now(),
-	action       varchar(20) not null,
-	notes        varchar(240),
-	foreign key (address_id) references addresses(id),
-	foreign key (subunit_id) references subunits (id),
-	foreign key (person_id ) references people   (id),
-	foreign key (contact_id) references people   (id)
 );
 
 create table address_change_log (
