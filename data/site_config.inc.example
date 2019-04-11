@@ -102,6 +102,7 @@ define('PAGINATION_ITEMS_PER_PAGE', 20);
 
 $DEFAULTS = [
     'city'            => 'Bloomington',
+    'state'           => 'IN',
     'locationType_id' => 3
 ];
 
