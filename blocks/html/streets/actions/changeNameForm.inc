@@ -24,7 +24,7 @@ use Application\Url;
                 echo $h->field([
                     'name'     => 'name_id',
                     'id'       => 'name_id',
-                    'label'    => $this->_('name'),
+                    'label'    => $this->_('streetName'),
                     'value'    => $this->name_id,
                     'display'  => $this->name,
                     'type'     => 'chooser',
@@ -43,7 +43,7 @@ use Application\Url;
                 echo $h->field([
                     'name'     => 'start_date',
                     'id'       => 'start_date',
-                    'label'    => 'startDate',
+                    'label'    => $this->_('startDate'),
                     'type'     => 'date',
                     'value'    => $this->start_date,
                     'required' => true
