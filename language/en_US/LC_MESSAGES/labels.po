@@ -263,14 +263,14 @@ msgstr "Edit Street"
 
 msgid "designation"
 msgid_plural "designations"
-msgstr[0] "Designation"
-msgstr[1] "Designations"
+msgstr[0] "Street Name Designation"
+msgstr[1] "Street Name Designations"
 
 msgid "changeStatus"
 msgstr "Change Status"
 
 msgid "changeName"
-msgstr "Change Name"
+msgstr "Change Street Name Designation"
 
 msgid "update"
 msgstr "Update"
