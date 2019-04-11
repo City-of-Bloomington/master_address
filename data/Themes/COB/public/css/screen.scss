@@ -10,7 +10,6 @@
 @import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/normalize';
 @import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/html-elements';
 @import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/includes/header';
-@import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/nav1';
 @import '../../vendor/City-of-Bloomington/factory-number-one/components/breadcrumbs/breadcrumbs';
 @import '../../vendor/City-of-Bloomington/factory-number-one/components/button/button';
 @import '../../vendor/City-of-Bloomington/factory-number-one/components/dropdown/dropdown';
@@ -28,6 +27,7 @@ body > header {
             background: $color-content-background;
         }
     }
+    #nav1 a { font-weight: bold; font-size: $font-size-big; margin-right: 1em; }
 }
 
 form, fieldset { margin: 0; padding: 0; }
