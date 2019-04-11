@@ -32,10 +32,13 @@ class CorrectView extends Template
             'change_notes' => parent::escape($request->change_notes),
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
-        $this->blocks[] = new Block('subunits/actions/correctForm.inc', $vars);
-
-        $this->blocks[]              = new Block('logs/statusLog.inc',      ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('logs/changeLog.inc',      ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $info->locations]);
+        $this->blocks = [
+            new Block('subunits/actions/correctForm.inc', $vars),
+            new Block('logs/statusLog.inc', ['statuses'  => $info->statusLog]),
+            new Block('logs/changeLog.inc', ['changes'   => $info->changeLog]),
+            'panel-one' => [
+                new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons' => true])
+            ]
+        ];
     }
 }

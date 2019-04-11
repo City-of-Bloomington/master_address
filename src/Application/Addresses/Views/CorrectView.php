@@ -41,9 +41,10 @@ class CorrectView extends Template
             new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
                                                       'total'     => $info->changeLog->total]),
             'panel-one' => [
-                new Block('locations/locations.inc', ['locations' => $info->locations]),
+                new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons' => true]),
                 new Block('subunits/list.inc',       ['address'   => $info->address,
-                                                      'subunits'  => $info->subunits])
+                                                      'subunits'  => $info->subunits,
+                                                      'disableButtons' => true])
             ]
 
         ];
