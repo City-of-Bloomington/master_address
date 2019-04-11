@@ -9,12 +9,8 @@ $routes = [
     'jurisdictions' => 'jurisdiction',
     'towns'         => 'town',
     'townships'     => 'township',
-    'people'        => 'person',
     'users'         => 'user',
-    'plats'         => 'plat',
-    'reports'       => 'report',
-    'subdivisions'  => 'subdivision',
-    'streetNames'   => 'streetName'
+    'subdivisions'  => 'subdivision'
 ];
 foreach ($routes as $plural=>$singular) {
     if (parent::isAllowed($plural, 'index')) {

@@ -7,7 +7,7 @@ $h = $this->getHelper('field');
 $addressUri = parent::generateUri('addresses.index');
  $streetUri = parent::generateUri(  'streets.index');
 ?>
-<nav>
+<nav id="nav1">
     <div class="container">
         <form method="get" action="<?= $addressUri; ?>">
             <fieldset>
@@ -36,5 +36,22 @@ $addressUri = parent::generateUri('addresses.index');
                 <button type="submit" class="search"><?= $this->_('search'); ?></button>
             </fieldset>
         </form>
+    </div>
+    <div class="container">
+    <?php
+        $routes = [
+            'people'        => 'person',
+            'plats'         => 'plat',
+            'streetNames'   => 'streetName',
+            'reports'       => 'report'
+        ];
+        foreach ($routes as $plural=>$singular) {
+            if (parent::isAllowed($plural, 'index')) {
+                echo sprintf("<a href=\"%s\">%s</a>",
+                             parent::generateUri("$plural.index"),
+                             $this->_([$singular, $plural, 2]));
+            }
+        }
+    ?>
     </div>
 </nav>
