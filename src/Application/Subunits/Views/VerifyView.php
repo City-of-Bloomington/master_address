@@ -33,9 +33,13 @@ class VerifyView extends Template
             'return_url'   => parent::generateUri('subunits.view', ['id'=>$request->subunit_id])
         ]);
 
-        $this->blocks[]              = new Block('subunits/info.inc',        ['subunit'   => $info->subunit  ]);
-        $this->blocks[]              = new Block('logs/statusLog.inc',  ['statuses'  => $info->statusLog]);
-        $this->blocks[]              = new Block('logs/changeLog.inc', ['changes'   => $info->changeLog]);
-        $this->blocks['panel-one'][] = new Block('locations/locations.inc',  ['locations' => $info->locations]);
+        $this->blocks = [
+            new Block('subunits/info.inc',  ['subunit'  => $info->subunit  ]),
+            new Block('logs/statusLog.inc', ['statuses' => $info->statusLog]),
+            new Block('logs/changeLog.inc', ['changes'  => $info->changeLog]),
+            'panel-one' => [
+                new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButton' => true])
+            ]
+        ];
     }
 }

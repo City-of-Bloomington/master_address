@@ -16,6 +16,8 @@ class InfoView extends Template
 {
     public function __construct(InfoResponse $info)
     {
+        global $DEFAULTS;
+
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
 
@@ -24,6 +26,8 @@ class InfoView extends Template
         $actions = ($info->subunit->status == Log::STATUS_CURRENT)
                  ? ['verify', 'changeStatus', 'correct']
                  : ['verify', 'changeStatus'];
+
+        $sanitation_editable = $info->address->jurisdiction_name == $DEFAULTS['city'];
 
         $this->blocks = [
             new Block('subunits/breadcrumbs.inc', ['address'  => $info->address]),
@@ -34,7 +38,7 @@ class InfoView extends Template
             new Block('logs/changeLog.inc',       ['entries'  => $info->changeLog->entries,
                                                    'total'    => $info->changeLog->total]),
             'panel-one' => [
-                new Block('locations/locations.inc',  ['locations' => $info->locations])
+                new Block('locations/locations.inc',  ['locations' => $info->locations, 'disableButtons' => !$sanitation_editable])
             ]
         ];
     }
