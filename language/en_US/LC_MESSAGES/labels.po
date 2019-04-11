@@ -283,14 +283,14 @@ msgstr "Add Alias"
 
 msgid "streetName"
 msgid_plural "streetNames"
-msgstr[0] "Name"
-msgstr[1] "Names"
+msgstr[0] "Street Name"
+msgstr[1] "Street Names"
 
 msgid "streetName_search"
-msgstr "Find a name"
+msgstr "Find a street name"
 
 msgid "streetName_add"
-msgstr "New Name"
+msgstr "New Street Name"
 
 msgid "subunit"
 msgid_plural "subunits"
