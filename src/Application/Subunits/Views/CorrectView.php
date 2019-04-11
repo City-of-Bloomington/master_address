@@ -34,8 +34,9 @@ class CorrectView extends Template
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
         $this->blocks = [
             new Block('subunits/actions/correctForm.inc', $vars),
-            new Block('logs/statusLog.inc', ['statuses'  => $info->statusLog]),
-            new Block('logs/changeLog.inc', ['changes'   => $info->changeLog]),
+            new Block('logs/statusLog.inc', ['statuses' => $info->statusLog]),
+            new Block('logs/changeLog.inc', ['entries'  => $info->changeLog->entries,
+                                               'total'  => $info->changeLog->total]),
             'panel-one' => [
                 new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons' => true])
             ]
