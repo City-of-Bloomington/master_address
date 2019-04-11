@@ -11,9 +11,10 @@ use Application\Paginator;
 ?>
 <table>
     <thead>
-        <tr><th><?= $this->_('id'); ?></th>
-            <th><?= $this->_('type'); ?></th>
+        <tr>
             <th><?= $this->_('street'); ?></th>
+            <th><?= $this->_('id'); ?></th>
+            <th><?= $this->_('type'); ?></th>
             <th><?= $this->_('status'); ?></th>
             <th><?= $this->_('jurisdiction'); ?></th>
             <th><?= $this->_('zip'); ?></th>
@@ -35,9 +36,10 @@ use Application\Paginator;
 
             $uri = parent::generateUri('addresses.view', ['id'=>$a->id]);
             echo "
-            <tr><td><a href=\"$uri\">{$a->id}</a></td>
-                <td><a href=\"$uri\">$type</a></td>
+            <tr>
                 <td><a href=\"$uri\">$address</a></td>
+                <td><a href=\"$uri\">{$a->id}</a></td>
+                <td><a href=\"$uri\">$type</a></td>
                 <td><a href=\"$uri\">$status</a></td>
                 <td><a href=\"$uri\">$jurisdiction</a></td>
                 <td><a href=\"$uri\">$zip</a></td>
