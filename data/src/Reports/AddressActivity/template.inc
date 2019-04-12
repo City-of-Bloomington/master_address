@@ -25,15 +25,16 @@ use Application\Url;
         </div>
     </header>
     <table>
-        <thead><tr>
-        <?php
-            foreach (array_keys($this->results[0]) as $k) {
-                if ($k != 'entity_id') {
-                    echo "<th>{$this->_($k)}</th>";
-                }
-            }
-        ?>
-        </tr></thead>
+        <thead>
+            <tr><th><?= $this->_('action_date'  ); ?></th>
+                <th><?= $this->_('address'      ); ?></th>
+                <th><?= $this->_('zip'          ); ?></th>
+                <th><?= $this->_('action'       ); ?></th>
+                <th><?= $this->_('person'       ); ?></th>
+                <th><?= $this->_('address_type' ); ?></th>
+                <th><?= $this->_('location_type'); ?></th>
+            </tr>
+        </thead>
 
         <tbody>
         <?php
@@ -41,21 +42,27 @@ use Application\Url;
                 $route = $row['subunit'] ? 'subunits.view' : 'addresses.view';
                 $uri   = parent::generateUri($route, ['id'=>$row['entity_id']]);
 
-                echo '<tr>';
-                foreach ($row as $k=>$v) {
-                    switch ($k) {
-                        case 'entity_id': break;
+                $addr  = [$row['streetnumber'],
+                          $row['direction'   ],
+                          $row['name'        ],
+                          $row['code'        ]];
+                if ($row['post_direction']) { $addr[] = $row['post_direction']; }
+                if ($row['subunit'       ]) { $addr[] = $row['subunit'       ]; }
+                $address = implode(' ', $addr);
 
-                        case 'action_date':
-                            $d = new \DateTime($v);
-                            echo "<td><a href=\"$uri\">{$d->format(DATE_FORMAT)}</a></td>";
-                        break;
 
-                        default:
-                            echo "<td><a href=\"$uri\">$v</a></td>";
-                    }
-                }
-                echo '</tr>';
+                $date  = new \DateTime($row['action_date']);
+
+                echo "
+                <tr><td><a href=\"$uri\">{$date->format(DATE_FORMAT)}</a></td>
+                    <td><a href=\"$uri\">$address</a></td>
+                    <td><a href=\"$uri\">{$row['zip'          ]}</a></td>
+                    <td><a href=\"$uri\">{$row['action'       ]}</a></td>
+                    <td><a href=\"$uri\">{$row['person'       ]}</a></td>
+                    <td><a href=\"$uri\">{$row['address_type' ]}</a></td>
+                    <td><a href=\"$uri\">{$row['location_type']}</a></td>
+                </tr>
+                ";
             }
         ?>
         </tbody>
