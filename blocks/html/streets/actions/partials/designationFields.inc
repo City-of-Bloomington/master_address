@@ -38,11 +38,12 @@ echo $h->field([
 ]);
 
 echo $h->field([
-    'name'    => 'rank',
-    'id'      => 'rank',
-    'label'   => $this->_('rank'),
-    'value'   => $this->rank,
-    'type'    => 'number'
+    'name'     => 'rank',
+    'id'       => 'rank',
+    'label'    => $this->_('rank'),
+    'value'    => $this->rank,
+    'type'     => 'number',
+    'required' => true
 ]);
 
 echo $h->field([
