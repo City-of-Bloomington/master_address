@@ -23,7 +23,14 @@ body > header {
             background: $color-content-background;
         }
     }
-    #nav1 a { font-weight: bold; font-size: $font-size-big; margin-right: 1em; }
+}
+#nav1 {
+    background: $color-header;
+    a {
+        font-weight: bold; font-size: $font-size-big;
+        color: $color-content-background;
+        margin-right: 1em;
+    }
 }
 
 form, fieldset { margin: 0; padding: 0; }
