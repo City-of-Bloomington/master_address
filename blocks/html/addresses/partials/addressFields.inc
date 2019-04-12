@@ -196,7 +196,7 @@ echo $h->field([
 echo $h->field([
     'name'     => 'notes',
     'id'       => 'notes',
-    'label'    => $this->_('notes'),
+    'label'    => $this->_('address_notes'),
     'value'    => $this->notes,
     'type'     => 'textarea'
 ]);

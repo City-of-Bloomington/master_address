@@ -36,7 +36,7 @@ use Application\Url;
                 echo $helper->field([
                     'name'  => 'notes',
                     'id'    => 'notes',
-                    'label' => $this->_('notes'),
+                    'label' => $this->_('street_notes'),
                     'type'  => 'textarea',
                     'value' => $this->notes
                 ]);

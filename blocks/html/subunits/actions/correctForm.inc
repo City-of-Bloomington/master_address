@@ -42,7 +42,7 @@
                 echo $h->field([
                     'name'     => 'notes',
                     'id'       => 'notes',
-                    'label'    => $this->_('notes'),
+                    'label'    => $this->_('subunit_notes'),
                     'value'    => $this->notes,
                     'type'     => 'textarea'
                 ]);

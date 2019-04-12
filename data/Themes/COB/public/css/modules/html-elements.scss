@@ -54,8 +54,9 @@ legend {
     padding: 0 0 0 0;
 }
 label { font-weight: normal; }
+textarea { height: 3em; }
 @media all and (min-width:$viewport-medium) {
-    textarea { width:55ex; height:12em; }
+    textarea { width:55ex; }
 }
 
 @media print {

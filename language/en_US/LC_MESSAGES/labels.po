@@ -232,8 +232,20 @@ msgstr "Section"
 msgid "quarter_section"
 msgstr "Quarter"
 
-msgid "notes"
-msgstr "Notes"
+msgid "address_notes"
+msgstr "Address Notes"
+
+msgid "change_notes"
+msgstr "Change Notes"
+
+msgid "street_notes"
+msgstr "Street Notes"
+
+msgid "streetName_notes"
+msgstr "Street Name Notes"
+
+msgid "subunit_notes"
+msgstr "Subunit Notes"
 
 msgid "state_plane_x"
 msgstr "State Plane X"

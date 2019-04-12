@@ -85,7 +85,7 @@ foreach ($fields as $f) {
                 echo $h->field([
                     'name'     => 'notes',
                     'id'       => 'notes',
-                    'label'    => $this->_('notes'),
+                    'label'    => $this->_('plat_notes'),
                     'value'    => $notes,
                     'type'     => 'textarea'
                 ]);
