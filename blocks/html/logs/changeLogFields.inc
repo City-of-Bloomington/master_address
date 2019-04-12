@@ -23,7 +23,7 @@ echo $helper->field([
 echo $helper->field([
     'name'  => 'change_notes',
     'id'    => 'change_notes',
-    'label' => $this->_('notes'),
+    'label' => $this->_('change_notes'),
     'type'  => 'textarea',
     'value' => $this->change_notes
 ]);
