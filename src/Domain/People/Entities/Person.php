@@ -57,7 +57,7 @@ class Person implements \JsonSerializable
             'Emergency Services',
             'GIS',
             'Government Agency',
-            'Property Owner',
+            'Public',
             'Utility Provider'
         ];
 	}
