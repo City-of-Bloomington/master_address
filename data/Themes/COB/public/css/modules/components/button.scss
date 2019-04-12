@@ -1,0 +1,58 @@
+/**
+ * @copyright 2015-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ */
+button, .button {
+    font-family: $font-family-nav;
+    background: $color-action;
+    border:1px solid $color-border-input;
+    border-radius: $size-gutter;
+    box-sizing: content-box;
+    color: $color-content-background;
+    display: inline-block;
+    line-height: 1.2em;
+    margin-right: $size-gutter;
+    padding: $size-gutter ($size-gutter*2);
+    font-size: $font-size-small;
+    font-weight: normal;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: $size-gutter center;
+    background-size: ($size-gutter*2) ($size-gutter*2);
+
+    &:hover {
+        background-color: $color-action-hover;
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
+.icon {
+    cursor: pointer;
+    display: inline-block;
+    width:0; height:1em;
+    overflow: hidden;
+    text-indent: -1000em;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: ($size-gutter*2) ($size-gutter*2);
+}
+
+button, .button, .icon {
+    $imageSpace: $font-size-small * 2;
+    &.add      { background-image:url('images/fa-svg/gray/plus.svg'      ); padding-left:$imageSpace; }
+    &.edit     { background-image:url('images/fa-svg/gray/pencil.svg'    ); padding-left:$imageSpace; }
+    &.delete   { background-image:url('images/fa-svg/gray/times.svg'     ); padding-left:$imageSpace; }
+    &.submit   { background-image:url('images/fa-svg/gray/check.svg'     ); padding-left:$imageSpace; }
+    &.save     { background-image:url('images/fa-svg/gray/floppy-o.svg'  ); padding-left:$imageSpace; }
+    &.search   { background-image:url('images/fa-svg/gray/search.svg'    ); padding-left:$imageSpace; }
+    &.calendar { background-image:url('images/fa-svg/gray/calendar.svg'  ); padding-left:$imageSpace; }
+    &.location { background-image:url('images/fa-svg/gray/map-marker.svg'); padding-left:$imageSpace; }
+    &.map      { background-image:url('images/fa-svg/gray/globe.svg'     ); padding-left:$imageSpace; }
+    &.list     { background-image:url('images/fa-svg/gray/list-ul.svg'   ); padding-left:$imageSpace; }
+    &.print    { background-image:url('images/fa-svg/gray/print.svg'     ); padding-left:$imageSpace; }
+    &.reorder  { background-image:url('images/fa-svg/gray/reorder.svg'   ); padding-left:$imageSpace; }
+    &.user     { background-image:url('images/fa-svg/gray/user.svg'      ); padding-left:$imageSpace; }
+    &.upload   { background-image:url('images/fa-svg/gray/upload.svg'    ); padding-left:$imageSpace; }
+    &.download { background-image:url('images/fa-svg/gray/download.svg'  ); padding-left:$imageSpace; }
+}

@@ -1,21 +1,17 @@
 /**
  * City of Bloomington Theme
- *
- * This stylesheet extends the default Factory Number One CSS.
- * @see https://github.com/City-of-Bloomington/factory-number-one
  */
-@import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/vars';
 @import 'modules/vars';
 
-@import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/normalize';
-@import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/scss/modules/html-elements';
-@import '../../vendor/City-of-Bloomington/factory-number-one/themes/default/includes/header';
-@import '../../vendor/City-of-Bloomington/factory-number-one/components/breadcrumbs/breadcrumbs';
-@import '../../vendor/City-of-Bloomington/factory-number-one/components/button/button';
-@import '../../vendor/City-of-Bloomington/factory-number-one/components/dropdown/dropdown';
-@import '../../vendor/City-of-Bloomington/factory-number-one/components/field/field';
-@import '../../vendor/City-of-Bloomington/factory-number-one/components/pageNavigation/pageNavigation';
-@import '../../vendor/City-of-Bloomington/factory-number-one/components/table/table';
+@import 'modules/normalize';
+@import 'modules/html-elements';
+@import 'modules/header';
+@import 'modules/components/breadcrumbs';
+@import 'modules/components/button';
+@import 'modules/components/dropdown';
+@import 'modules/components/field';
+@import 'modules/components/pageNavigation';
+@import 'modules/components/table';
 
 @import 'modules/layout';
 @import 'modules/main';
