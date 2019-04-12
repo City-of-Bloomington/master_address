@@ -3,8 +3,9 @@ ADD --chown=www-data:staff master_address /srv/sites/master_address
 ADD master_address/docker/apache.conf /etc/apache2/sites-available/000-default.conf
 ADD master_address/docker/phpinfo.php /var/www/html/phpinfo.php
 
-RUN a2enmod rewrite \
- && apt-get update && apt-get install -y libpq-dev libldap2-dev libicu-dev gettext locales \
+RUN apt-get update \
+ && apt-get install -y libpq-dev libldap2-dev libicu-dev gettext locales \
+ && a2enmod rewrite && a2enmod remoteip \
  && docker-php-ext-install pdo_pgsql ldap intl gettext
 
 ENV LANG en_US.UTF-8
