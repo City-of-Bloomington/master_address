@@ -11,7 +11,7 @@ $pages = $this->paginator->getPages();
 
 if (count($pages->pagesInRange) > 1) {
 
-	$url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+	$url = new Url(Url::current_url(BASE_HOST));
 	$url->purgeEmptyParameters();
 
 	echo '<nav class="pageNavigation">';
