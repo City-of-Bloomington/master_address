@@ -18,7 +18,7 @@ fieldset > div {
     border-top: none;
     .help { display: inline-block; margin-left: ($size-gutter*2); }
 
-    label {
+    > label {
         font-family: $font-family-heading;
         font-size: $font-size-normal;
         font-weight: bold;
@@ -56,7 +56,7 @@ fieldset > div {
     @media all and (min-width: $viewport-medium) {
         background: $color-background-field;
 
-        label {
+        > label {
             color: $color-heading;
             font-size: $font-size-small;
             padding-left: $size-gutter;

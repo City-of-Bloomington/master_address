@@ -8,6 +8,7 @@
  *---------------------------------------------------------
  * Information to populate select dropdown options
  *---------------------------------------------------------
+ * @param array  $this->validActions     Action choices (Add, Assign, etc)
  * @param array  $this->cities           Cities to choose from
  * @param array  $this->jurisdictions    Jurisdictions to choose from
  * @param array  $this->quarterSections  Quarter Sections to choose from
@@ -68,9 +69,20 @@ declare (strict_types=1);
     <header><h1><?= $this->_('address_add'); ?></h1></header>
 
     <form method="post">
-        <fieldset><legend><?= $this->_('address'); ?></legend>
+        <fieldset>
         <?php
             $h = $this->template->getHelper('field');
+
+            $options = [];
+            foreach ($this->validActions as $a) { $options[] = ['value'=>$a, 'label'=>$this->_("action_help.address_$a", 'messages')]; }
+            echo $h->field([
+                'name'     => 'action',
+                'id'       => 'action',
+                'value'    => $this->action,
+                'type'     => 'radio',
+                'options'  => $options,
+                'required' => true
+            ]);
 
             #Status
             $options = [];
@@ -84,7 +96,11 @@ declare (strict_types=1);
                 'options'  => $options,
                 'required' => true
             ]);
+        ?>
+        </fieldset>
 
+        <fieldset><legend><?= $this->_('address'); ?></legend>
+        <?php
             $this->_include('addresses/partials/addressFields.inc');
         ?>
         </fieldset>

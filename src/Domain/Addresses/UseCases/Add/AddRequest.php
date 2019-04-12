@@ -6,9 +6,13 @@
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Add;
 
+use Domain\Logs\Metadata as Log;
+
 class AddRequest
 {
+    public $action = Log::ACTION_ASSIGN;
     public $status;
+
     public $street_number_prefix;
     public $street_number;
     public $street_number_suffix;

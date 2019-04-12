@@ -12,6 +12,7 @@ use Application\Template;
 use Domain\Addresses\Metadata as AddressMetadata;
 use Domain\Locations\Metadata as LocationMetadata;
 
+use Domain\Addresses\UseCases\Add\Add;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\People\Entities\Person;
 use Domain\Locations\Entities\Location;
@@ -43,7 +44,8 @@ class AddView extends Template
             'types'           => $addressMetadata->types(),
             'townships'       => $addressMetadata->townships(),
             'zipCodes'        => $addressMetadata->zipCodes(),
-            'locationTypes'   => $locationMetadata->types()
+            'locationTypes'   => $locationMetadata->types(),
+            'validActions'    => Add::$validActions
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
 

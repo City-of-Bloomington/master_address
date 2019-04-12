@@ -27,3 +27,9 @@ msgstr "I, %s, verify that this information is accurate at this point in time."
 
 msgid "missingField"
 msgstr "You must provide a %s"
+
+msgid "action_help.address_add"
+msgstr "Add a missing address"
+
+msgid "action_help.address_assign"
+msgstr "Assign a new address"

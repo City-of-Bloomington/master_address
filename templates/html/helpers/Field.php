@@ -158,7 +158,7 @@ class Field extends Helper
 
         $value = !empty($params['value']) ? $params['value'] : '';
 
-        $radioButtons = '';
+        $radioButtons = '<div>';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
                 $label   = !empty($o['label'])   ? $o['label']      : $o['value'];
@@ -167,6 +167,7 @@ class Field extends Helper
                 $radioButtons.= "<label><input name=\"$params[name]\" type=\"radio\" value=\"$o[value]\" $checked/> $label</label>";
             }
         }
+        $radioButtons .= '</div>';
         return $radioButtons;
     }
 
@@ -189,7 +190,7 @@ class Field extends Helper
 
         $values = !empty($params['value']) ? $params['value'] : [];
 
-        $inputs = '';
+        $inputs = '<div>';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
                 $label   = !empty($o['label'])            ? $o['label']      : $o['value'];
@@ -199,6 +200,7 @@ class Field extends Helper
                 $inputs.= "<label><input name=\"$name\" type=\"checkbox\" value=\"$o[value]\" $checked/> $label</label>";
             }
         }
+        $inputs .= '</div>';
         return $inputs;
     }
 
