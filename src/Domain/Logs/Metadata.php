@@ -75,7 +75,7 @@ class Metadata
             break;
 
             default:
-                return self::$actions[self::ACTION_ADD];
+                return self::$actions[self::ACTION_ASSIGN];
         }
     }
 }

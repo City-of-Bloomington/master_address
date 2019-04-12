@@ -12,6 +12,11 @@ use Domain\Logs\Metadata as Log;
 
 class Add
 {
+    public static $validActions = [
+        Log::ACTION_ASSIGN,
+        Log::ACTION_ADD
+    ];
+
     private $repo;
 
     public function __construct(AddressesRepository $repository)
@@ -26,8 +31,11 @@ class Add
 
         try {
             $address_id = $this->repo->add($req);
+            $action = $req->action == Log::ACTION_ASSIGN
+                    ? Log::actionForStatus($req->status)
+                    : $req->action;
 
-            $entry = new ChangeLogEntry(['action'     => Log::actionForStatus($req->status),
+            $entry = new ChangeLogEntry(['action'     => $action,
                                          'entity_id'  => $address_id,
                                          'person_id'  => $req->user_id,
                                          'contact_id' => $req->contact_id,
@@ -49,6 +57,11 @@ class Add
     private function validate(AddRequest $req): array
     {
         $errors = [];
+
+        if (!in_array($req->action, Add::$validActions)) {
+            $errors[] = 'invalidAction';
+        }
+
         if (!$req->street_number  ) { $errors[] = 'addresses/missingStreetNumber'; }
         if (!$req->address_type   ) { $errors[] = 'addresses/missingType';         }
         if (!$req->street_id      ) { $errors[] = 'addresses/missingStreet';       }
