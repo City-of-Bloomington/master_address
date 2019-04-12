@@ -8,5 +8,6 @@
         $this->_include('/partials/panel-widgets/Administrator_menu.inc');
     ?>
     </div>
-    <?php $this->_include('partials/nav1.inc'); ?>
+    <?php $this->_include('partials/search.inc'); ?>
 </header>
+<?php $this->_include('partials/nav1.inc'); ?>

@@ -11,5 +11,6 @@
         ?>
         </div>
     </div>
-    <?php $this->_include('partials/nav1.inc'); ?>
+    <?php $this->_include('partials/search.inc'); ?>
 </header>
+<?php $this->_include('partials/nav1.inc'); ?>
