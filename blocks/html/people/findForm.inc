@@ -31,6 +31,26 @@ declare (strict_types=1);
         </fieldset>
     </form>
     <?php
-        if ($this->people) { $this->_include('people/list.inc'); }
+        if ($this->firstname || $this->lastname || $this->email) {
+            $return_url = $_SERVER['REQUEST_URI'];
+            $helper = $this->template->getHelper('buttonLink');
+
+            if (parent::isAllowed('people', 'add')) {
+                echo $helper->buttonLink(
+                    parent::generateUri('people.update')."?return_url=$return_url",
+                    $this->translate('person_add'),
+                    'add'
+                );
+            }
+
+            if (!$this->people) {
+                echo '<div>';
+                echo sprintf($this->_('no_results', 'messages'), $this->_(['person', 'people', 2]));
+                echo '</div>';
+            }
+        }
+        if ($this->people) {
+            $this->_include('people/list.inc');
+        }
     ?>
 </section>
