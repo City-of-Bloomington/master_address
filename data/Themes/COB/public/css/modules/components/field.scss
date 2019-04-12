@@ -1,0 +1,79 @@
+input[type="tel"] { padding-left: 44px; }
+input.date, input.time { width:10em; }
+input[type="checkbox"], input[type="radio"] {
+    font-size: 1em;
+    padding: 0;
+    vertical-align: middle;
+    width:1em;
+    height:1em;
+}
+fieldset {
+    border: none;
+}
+
+fieldset > div {
+    margin: 0;
+    padding: $size-gutter 0;
+    overflow: auto;
+    border-top: none;
+    .help { display: inline-block; margin-left: ($size-gutter*2); }
+
+    label {
+        font-family: $font-family-heading;
+        font-size: $font-size-normal;
+        font-weight: bold;
+    }
+
+    input:not([type="checkbox"][type="radio"]) {
+        box-sizing: border-box;
+        border: 1px solid $color-border-input;
+        font-family: $font-family-default;
+        font-size: $font-size-normal;
+        padding: $size-gutter;
+        width: 100%;
+
+        &:focus {
+            background-color: $color-content-background;
+            border-color: $color-border-input-highlight;
+        }
+    }
+
+    &.checkbox, &.radio {
+        label {
+            display: block;
+            margin: 0;
+            vertical-align: middle;
+            margin-bottom: ($size-gutter/2);
+            padding: 0 0 0 1.6em;
+            vertical-align: middle;
+            line-height: 1.2em;
+        }
+    }
+    &.select   { }
+    &.textarea { }
+
+
+    @media all and (min-width: $viewport-medium) {
+        background: $color-background-field;
+
+        label {
+            color: $color-heading;
+            font-size: $font-size-small;
+            padding-left: $size-gutter;
+            width: 8em;
+        }
+        input:not([type="checkbox"][type="radio"]) {
+            font-size: $font-size-small;
+            width: 20em;
+            margin-left: 8em;
+
+            &.datePicker { width: inherit; }
+            &.timePicker { width: inherit; }
+        }
+        &.radio, &.checkbox, &.select {
+            label {
+                padding-top: $size-gutter;
+            }
+        }
+    }
+}
