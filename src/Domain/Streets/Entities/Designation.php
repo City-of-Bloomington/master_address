@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\Entities;
@@ -13,7 +13,7 @@ class Designation implements \JsonSerializable
     public $name_id;
     public $type_id;
     public $start_date;
-    public $rank;
+    public $rank = 1;
 
     public $type;
 

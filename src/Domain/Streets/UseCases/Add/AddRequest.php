@@ -16,7 +16,7 @@ class AddRequest
     // Designation fields
     public $type_id;
     public $name_id;
-    public $rank;
+    public $rank = 1;
     public $start_date;
 
     // Change log entry
