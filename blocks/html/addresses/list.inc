@@ -19,6 +19,7 @@ use Application\Paginator;
             <th><?= $this->_('jurisdiction'); ?></th>
             <th><?= $this->_('zip'); ?></th>
             <th><?= $this->_(['subunit', 'subunits', 10]); ?></th>
+            <th><?= $this->_('location_id'); ?></th>
         </tr>
     </thead>
     <tbody>
@@ -44,6 +45,7 @@ use Application\Paginator;
                 <td><a href=\"$uri\">$jurisdiction</a></td>
                 <td><a href=\"$uri\">$zip</a></td>
                 <td>$subunits</td>
+                <td>{$a->location_id}</td>
             </tr>
             ";
         }

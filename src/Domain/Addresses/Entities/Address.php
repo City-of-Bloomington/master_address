@@ -46,6 +46,7 @@ class Address implements \JsonSerializable
     public $street_suffix_code;
 
     public $status;
+    public $location_id;
 
     public function __construct(?array $data=null)
     {
@@ -63,6 +64,7 @@ class Address implements \JsonSerializable
                         case 'zipplus4':
                         case 'state_plane_x':
                         case 'state_plane_y':
+                        case 'location_id':
                             $this->$f = (int)$data[$f];
                         break;
 

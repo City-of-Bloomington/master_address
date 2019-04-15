@@ -48,7 +48,8 @@
             'street_id'       => 'street_id',
             'city'            => 'city',
             'zip'             => 'zip',
-            'zipplus4'        => 'zipplus4'
+            'zipplus4'        => 'zipplus4',
+            'location_id'     => 'location_id'
         ];
         $required = [
             'type', 'jurisdiction', 'section', 'township'
