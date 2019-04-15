@@ -11,3 +11,4 @@ vendor
 .buildpath
 .project
 .settings
+cob.values.yaml
