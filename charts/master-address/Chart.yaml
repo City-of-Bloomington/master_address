@@ -1,0 +1,11 @@
+apiVersion: v1
+appVersion: "2.0.0"
+description: A Helm chart for master-address
+home: https://github.com/City-of-Bloomington/master_address
+name: master-address
+version: 0.1.0
+keywords:
+  - php
+  - gis
+  - bloomington
+  - cob

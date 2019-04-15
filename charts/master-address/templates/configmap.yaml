@@ -1,0 +1,65 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "master_address.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "master_address.name" . }}
+    helm.sh/chart: {{ include "master_address.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  site_config.inc: |+
+    <?php
+    define('APPLICATION_NAME','Master Address');
+
+    // Workaround for CAS authentication
+    //
+    // Even though we're not using SSL in the container,
+    // we are always going to be proxying across from an SSL domain
+    define('BASE_URI' , '/master_address');
+    define('BASE_HOST', isset($_SERVER['HTTP_X_FORWARDED_HOST'])
+                            ? $_SERVER['HTTP_X_FORWARDED_HOST']
+                            : $_SERVER['SERVER_NAME']);
+
+    define('BASE_URI' , '/master_address');
+    define('BASE_URL' , "https://".BASE_HOST.BASE_URI);
+
+    define('THEME', 'COB');
+
+    $DATABASES = [
+        'default' => [
+            'driver'   => '{{ .Values.config.db.driver }}',
+            'host'     => '{{ .Values.config.db.host }}',
+            'dbname'   => '{{ .Values.config.db.dbname }}',
+            'schema'   => '{{ .Values.config.db.schema }}',
+            'username' => '{{ .Values.config.db.username }}',
+            'password' => '{{ .Values.config.db.password }}',
+            'options'  => []
+        ]
+    ];
+
+    $AUTHENTICATION_METHODS = [
+      'Employee' => [
+          'classname' => '{{ .Values.config.auth.employeeAuthClass }}',
+          'server'    => '{{ .Values.config.auth.employeeAuthServer }}',
+      ]
+    ];
+
+    define('CAS', APPLICATION_HOME.'{{ .Values.config.auth.cas.appHome }}');
+    define('CAS_SERVER','{{ .Values.config.auth.cas.server }}');
+    define('CAS_URI','{{ .Values.config.auth.cas.uri }}');
+
+    define('DATE_FORMAT',    'n/j/Y');
+    define('TIME_FORMAT',    'g:i a');
+    define('DATETIME_FORMAT', DATE_FORMAT.' '.TIME_FORMAT);
+    define('LOCALE', 'en_US');
+
+    define('PAGINATION_ITEMS_PER_PAGE', 20);
+
+    $DEFAULTS = [
+        'city'            => '{{ .Values.config.defaults.city }}',
+        'state'           => '{{ .Values.config.defaults.state }}',
+        'locationType_id' => {{ .Values.config.defaults.locationId }}
+    ];
+...
