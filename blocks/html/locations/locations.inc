@@ -16,9 +16,6 @@ $fields = [
 ];
 ?>
 <section>
-    <header>
-        <h2><?= $this->_(['location', 'locations', count($this->locations)]); ?></h2>
-    </header>
     <?php
         $locations = [];
         foreach ($this->locations as $l) {
@@ -34,7 +31,7 @@ $fields = [
         foreach (array_keys($locations) as $location_id) {
             echo "
             <article>
-                <header><h3>$location_id</h3></header>
+                <header><h3>{$this->_('location_id')} $location_id</h3></header>
                 <table>
                     <thead>
                         <tr><th></th>

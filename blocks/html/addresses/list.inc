@@ -13,7 +13,7 @@ use Application\Paginator;
     <thead>
         <tr>
             <th><?= $this->_('street'); ?></th>
-            <th><?= $this->_('id'); ?></th>
+            <th><?= $this->_('address_id'); ?></th>
             <th><?= $this->_('type'); ?></th>
             <th><?= $this->_('status'); ?></th>
             <th><?= $this->_('jurisdiction'); ?></th>

@@ -7,7 +7,7 @@
 ?>
 <table>
     <thead>
-        <tr><th><?= $this->_('id'         ); ?></th>
+        <tr><th><?= $this->_('street_id'  ); ?></th>
             <th><?= $this->_('name'       ); ?></th>
             <th><?= $this->_('town'       ); ?></th>
             <th><?= $this->_('status'     ); ?></th>
