@@ -72,7 +72,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                ->join('INNER', 'streets              s',  's.id = a.street_id')
                ->join('INNER', 'street_designations sd',  's.id = sd.street_id and sd.type_id='.Street::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id = sd.street_name_id')
-               ->join('INNER', 'street_types        st', 'st.id = sn.suffix_code_id')
+               ->join('LEFT',  'street_types        st', 'st.id = sn.suffix_code_id')
                ->join('LEFT',  'subunits           sub','sub.id = l.subunit_id')
                ->join('LEFT',  'subunit_types      sut','sut.id = sub.type_id');
         return $select;
