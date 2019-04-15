@@ -1,15 +1,35 @@
-FROM php:7.2-apache-stretch
+FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Indiana/Indianapolis
+RUN ln -snf /usr/share/zoneinfo/America/$TZ /etc/localtime \
+ && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get install -y apache2
+RUN a2enmod alias \
+ && a2enmod headers \
+ && a2enmod remoteip \
+ && a2enmod rewrite
+
+RUN apt-get install -y \
+php-common \
+php-cli \
+php-json \
+php-readline \
+php-mbstring \
+php-pgsql \
+php-intl \
+php-curl \
+php-ldap \
+php-xsl \
+libapache2-mod-php \
+gettext
+
+COPY master_address/docker/php.ini /etc/php/7.2/apache2/conf.d/local.ini
+COPY master_address/docker/php.ini /etc/php/7.2/cli/conf.d/local.ini
+
 ADD --chown=www-data:staff master_address /srv/sites/master_address
 ADD master_address/docker/apache.conf /etc/apache2/sites-available/000-default.conf
 ADD master_address/docker/phpinfo.php /var/www/html/phpinfo.php
 
-RUN apt-get update \
- && apt-get install -y libpq-dev libldap2-dev libicu-dev gettext locales \
- && a2enmod rewrite && a2enmod remoteip \
- && docker-php-ext-install pdo_pgsql ldap intl gettext
-
-ENV LANG en_US.UTF-8
-RUN sed --in-place '/en_US.UTF-8/s/^#//' /etc/locale.gen && locale-gen en_US.UTF-8
-
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-COPY master_address/docker/php.ini "$PHP_INI_DIR/conf.d/local.ini"
+ENTRYPOINT apachectl -D FOREGROUND
