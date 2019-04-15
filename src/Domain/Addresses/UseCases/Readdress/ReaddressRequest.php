@@ -26,6 +26,11 @@ class ReaddressRequest
     public $state;
     public $zip;
     public $zipplus4;
+    public $state_plane_x;
+    public $state_plane_y;
+    public $latitude;
+    public $longitude;
+    public $usng;
     public $notes;
 
     // Location fields
@@ -70,8 +75,15 @@ class ReaddressRequest
                     case 'subdivision_id':
                     case 'zip':
                     case 'zipplus4':
+                    case 'state_plane_x':
+                    case 'state_plane_y':
                     case 'locationType_id':
                         $this->$f = (int)$data[$f];
+                    break;
+
+                    case 'latitude':
+                    case 'longitude':
+                        $this->$f = (float)$data[$f];
                     break;
 
                     case 'mailable':
