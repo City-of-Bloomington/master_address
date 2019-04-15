@@ -51,8 +51,13 @@
     <header><h1><?= $this->_('readdress'); ?></h1></header>
     <form method="post">
         <fieldset>
-            <input name="id"          type="hidden" value="<?= $this->address_id; ?>" />
-            <input name="location_id" type="hidden" value="<?= $this->location_id; ?>" />
+            <input name="id"            type="hidden" value="<?= $this->address_id;    ?>" />
+            <input name="location_id"   type="hidden" value="<?= $this->location_id;   ?>" />
+            <input name="state_plane_x" type="hidden" value="<?= $this->state_plane_x; ?>" />
+            <input name="state_plane_y" type="hidden" value="<?= $this->state_plane_y; ?>" />
+            <input name="latitude"      type="hidden" value="<?= $this->latitude;      ?>" />
+            <input name="longitude"     type="hidden" value="<?= $this->longitude;     ?>" />
+            <input name="usng"          type="hidden" value="<?= $this->usng;          ?>" />
 
             <?php $this->_include('addresses/partials/addressFields.inc'); ?>
         </fieldset>
