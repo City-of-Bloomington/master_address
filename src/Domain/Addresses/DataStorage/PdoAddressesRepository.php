@@ -77,7 +77,8 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         'street_post_direction' => ['prefix'=>'sn', 'dbName'=>'post_direction'],
         'street_suffix_code'    => ['prefix'=>'st', 'dbName'=>'code'          ],
 
-        'status' => ['prefix'=>'status', 'dbName'=>'status']
+        'status'      => ['prefix' =>'status', 'dbName'=>'status'     ],
+        'location_id' => ['prefix' => 'l',     'dbName'=>'location_id']
     ];
 
     public function columns(): array
@@ -104,7 +105,8 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('LEFT', 'street_names        sn', 'sd.street_name_id=sn.id')
                ->join('LEFT', 'street_types        st', 'sn.suffix_code_id=st.id')
-               ->join('LEFT', 'address_status  status', 'a.id=status.address_id and status.start_date <= now() and (status.end_date is null or status.end_date >= now())');
+               ->join('LEFT', 'address_status  status', 'a.id=status.address_id and status.start_date <= now() and (status.end_date is null or status.end_date >= now())')
+               ->join('LEFT', 'locations            l', 'a.id=l.address_id and l.subunit_id is null and l.active');
 
         return $select;
     }
@@ -297,7 +299,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->join('INNER', 'streets              s',  's.id = a.street_id')
                ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
-               ->join('INNER', 'street_types        st', 'st.id =sn.suffix_code_id')
+               ->join('LEFT',  'street_types        st', 'st.id =sn.suffix_code_id')
                ->join('LEFT',  'people               p',  'p.id = l.person_id')
                ->join('LEFT',  'people               c',  'c.id = l.contact_id');
         if ($address_id) {
