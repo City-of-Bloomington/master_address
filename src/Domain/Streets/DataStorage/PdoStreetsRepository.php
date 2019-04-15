@@ -65,7 +65,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                ->join('LEFT', 'towns                   town', 's.town_id=town.id')
                ->join('INNER', 'street_designations       d',  's.id = d.street_id')
                ->join('INNER', 'street_names              n',  'n.id = d.street_name_id')
-               ->join('INNER', 'street_types              t',  't.id = n.suffix_code_id')
+               ->join( 'LEFT', 'street_types              t',  't.id = n.suffix_code_id')
                ->join('INNER', 'street_designation_types dt', 'dt.id = d.type_id');
         return $select;
     }
@@ -148,7 +148,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                ->join('INNER', 'streets              s',  's.id = l.street_id')
                ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
-               ->join('INNER', 'street_types        st', 'st.id =sn.suffix_code_id')
+               ->join('LEFT',  'street_types        st', 'st.id =sn.suffix_code_id')
                ->join('LEFT',  'people               p',  'p.id = l.person_id')
                ->join('LEFT',  'people               c',  'c.id = l.contact_id');
         if ($street_id) {
@@ -315,7 +315,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                ->join('LEFT' , 'towns                   town',  's.town_id=town.id')
                ->join('INNER', 'street_designations        d',  's.id = d.street_id')
                ->join('INNER', 'street_names               n',  'n.id = d.street_name_id')
-               ->join('INNER', 'street_types               t',  't.id = n.suffix_code_id')
+               ->join('LEFT',  'street_types               t',  't.id = n.suffix_code_id')
                ->join('INNER', 'street_designation_types  dt', 'dt.id = d.type_id')
                ->where('c.street_id=?', $street_id)
                ->where('s.id!=c.street_id'); // A street should not intersect iteself
