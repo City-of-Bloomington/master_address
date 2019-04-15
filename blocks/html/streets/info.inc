@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Street $this->street
  * @param bool   $this->disableButtons (optional)
  */
@@ -33,9 +33,9 @@ $town   = parent::escape($this->street->town_name);
         </div>
     </header>
 	<table>
-        <tr><th><?= $this->_('id'    ); ?></th><td><?= $this->street->id; ?></td></tr>
-        <tr><th><?= $this->_('status'); ?></th><td><?= $status; ?></td></tr>
-        <tr><th><?= $this->_('town'  ); ?></th><td><?= $town;   ?></td></tr>
+        <tr><th><?= $this->_('street_id'); ?></th><td><?= $this->street->id; ?></td></tr>
+        <tr><th><?= $this->_('status'   ); ?></th><td><?= $status; ?></td></tr>
+        <tr><th><?= $this->_('town'     ); ?></th><td><?= $town;   ?></td></tr>
 	</table>
 	<p><?= $notes; ?></p>
 </section>

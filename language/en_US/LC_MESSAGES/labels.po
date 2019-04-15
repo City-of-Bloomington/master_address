@@ -188,6 +188,9 @@ msgid_plural "addresses"
 msgstr[0] "Address"
 msgstr[1] "Addresses"
 
+msgid "address_id"
+msgstr "Address ID"
+
 msgid "address_add"
 msgstr "New Address"
 
@@ -267,6 +270,9 @@ msgid_plural "streets"
 msgstr[0] "Street"
 msgstr[1] "Streets"
 
+msgid "street_id"
+msgstr "Street ID"
+
 msgid "street_add"
 msgstr "New Street"
 
@@ -309,8 +315,14 @@ msgid_plural "subunits"
 msgstr[0] "Subunit"
 msgstr[1] "Subunits"
 
+msgid "subunit_id"
+msgstr "Subunit ID"
+
 msgid "subunit_add"
 msgstr "New Subunit"
+
+msgid "location_id"
+msgstr "Location ID"
 
 msgid "locationType"
 msgid_plural "locationTypes"

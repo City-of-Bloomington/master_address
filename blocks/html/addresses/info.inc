@@ -54,11 +54,12 @@
             'type', 'jurisdiction', 'section', 'township'
         ];
         foreach ($fields as $k=>$f) {
-            $$k = parent::escape($this->address->$f);
+            $label = $k == 'id' ? 'address_id' : $k;
+            $$k    = parent::escape($this->address->$f);
             $class = in_array($k, $required)
                 ? $$k ? '' : ' class="missing"'
                 : '';
-            echo "<tr$class><th>{$this->_($k)}</th><td>{$$k}</td>";
+            echo "<tr$class><th>{$this->_($label)}</th><td>{$$k}</td>";
         }
     ?>
     </table>
