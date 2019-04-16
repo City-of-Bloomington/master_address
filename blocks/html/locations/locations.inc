@@ -28,15 +28,16 @@ $fields = [
         $editUri     = parent::generateUri('sanitation.update');
         $return_url  = Url::current_url(BASE_HOST);
 
+
         foreach (array_keys($locations) as $location_id) {
+            $status  = parent::escape($locations[$location_id][0]->status);
             echo "
             <article>
-                <header><h3>{$this->_('location_id')} $location_id</h3></header>
+                <header><h3>{$this->_('location_id')} $location_id $status</h3></header>
                 <table>
                     <thead>
                         <tr><th></th>
                             <th>{$this->_('active')}</th>
-                            <th>{$this->_('status')}</th>
                             <th>{$this->_('type')}</th>
                             <th>{$this->_('mailable')}</th>
                             <th>{$this->_('occupiable')}</th>
@@ -64,7 +65,6 @@ $fields = [
                 echo "
                 <tr><th><a href=\"$uri\">$address $subunit</a></th>
                     <td>$active</td>
-                    <td>$status</td>
                     <td>$type_code</td>
                     <td>$mailable</td>
                     <td>$occupiable</td>
