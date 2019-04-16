@@ -32,6 +32,7 @@ use Application\Url;
                 <th><?= $this->_('action'       ); ?></th>
                 <th><?= $this->_('person'       ); ?></th>
                 <th><?= $this->_('address_type' ); ?></th>
+                <th><?= $this->_('location_id'  ); ?></th>
                 <th><?= $this->_('location_type'); ?></th>
             </tr>
         </thead>
@@ -60,6 +61,7 @@ use Application\Url;
                     <td><a href=\"$uri\">{$row['action'       ]}</a></td>
                     <td><a href=\"$uri\">{$row['person'       ]}</a></td>
                     <td><a href=\"$uri\">{$row['address_type' ]}</a></td>
+                    <td><a href=\"$uri\">{$row['location_id'  ]}</a></td>
                     <td><a href=\"$uri\">{$row['location_type']}</a></td>
                 </tr>
                 ";
