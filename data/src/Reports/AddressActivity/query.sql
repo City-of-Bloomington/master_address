@@ -1,3 +1,4 @@
+-- Address activity
 select c.action_date,
        c.address_id as entity_id,
        concat_ws(' ',a.street_number_prefix,
@@ -12,6 +13,7 @@ select c.action_date,
        c.action,
        concat_ws(' ', p.firstname, p.lastname) as person,
        a.address_type,
+       l.location_id,
       lt.name as location_type
 
 from address_change_log  c
@@ -21,14 +23,16 @@ join street_designations d on  s.id=d.street_id and d.type_id=1 -- STREET
 join street_names        n on  n.id=d.street_name_id
 join street_types        t on  t.id=n.suffix_code_id
 join people              p on  p.id=c.person_id
-join locations           l on  a.id=l.address_id
+join locations           l on  a.id=l.address_id and l.subunit_id is null
 join location_types     lt on lt.id=l.type_id
+
 
 where c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
   and action_date between :start_date_1 and :end_date_1
 
 union all
 
+-- Subunit activity
 select c.action_date,
        c.subunit_id as entity_id,
        concat_ws(' ',a.street_number_prefix,
@@ -44,6 +48,7 @@ select c.action_date,
        c.action,
        concat_ws(' ', p.firstname, p.lastname) as person,
        a.address_type,
+       l.location_id,
       lt.name as location_type
 
 from subunit_change_log  c
