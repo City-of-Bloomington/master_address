@@ -132,7 +132,7 @@ var CHOOSER = {
          */
         startPersonChooser = function (target) {
             target.innerHTML = '<form method="get" id="peopleSearchForm">'
-                             + '    <fieldset><legend>Find People</legend>'
+                             + '    <fieldset><legend>Find Someone</legend>'
                              + '        <div>'
                              + '            <label  for="sf">Firstname</label>'
                              + '            <input name="sf" id="sf" />'
