@@ -95,25 +95,30 @@ msgstr[1] "Email Addresses"
 
 msgid "person"
 msgid_plural "people"
+msgstr[0] "Person"
+msgstr[1] "People"
+
+msgid "contact"
+msgid_plural "contacts"
 msgstr[0] "Contact"
 msgstr[1] "Contacts"
 
 msgid "user"
 msgid_plural "users"
-msgstr[0] "User Account"
-msgstr[1] "User Accounts"
+msgstr[0] "User"
+msgstr[1] "Users"
 
 msgid "person_info"
-msgstr "Contact Info"
+msgstr "Person Info"
 
 msgid "person_add"
-msgstr "Add a Contact"
+msgstr "Add a Person"
 
 msgid "person_edit"
-msgstr "Edit Contact"
+msgstr "Edit Person"
 
 msgid "people_search"
-msgstr "Find Contacts"
+msgstr "Find Someone"
 
 msgid "user_add"
 msgstr "Create Account"

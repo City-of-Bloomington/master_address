@@ -6,8 +6,8 @@
  * Because we're already only displaying a single entity, there is no need
  * to include the entity info in the change log display.
  *
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->entries       An array of Domain\Logs\Entities\ChangeLogEntry
  * @param int   $this->total
  * @param int   $this->itemsPerPage
@@ -24,7 +24,7 @@ use Application\Paginator;
 		<thead>
 			<tr><th><?= $this->_('date'); ?></th>
 				<th><?= $this->_('action' ); ?></th>
-				<th><?= $this->_('person' ); ?></th>
+				<th><?= $this->_('user'   ); ?></th>
 				<th><?= $this->_('contact'); ?></th>
 				<th><?= $this->_('notes'  ); ?></th>
 			</tr>
