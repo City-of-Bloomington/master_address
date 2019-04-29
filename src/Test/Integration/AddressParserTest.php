@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright 2014-2017 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2014-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+declare (strict_types=1);
 use Domain\Addresses\UseCases\Parse\Parse;
 use PHPUnit\Framework\TestCase;
 
 class AddressParserTest extends TestCase
 {
     protected static $parser;
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         global $DI;
         self::$parser = $DI->get('Domain\Addresses\UseCases\Parse\Parse');

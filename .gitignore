@@ -8,6 +8,7 @@ vendor
 *.css.map
 *.mo
 *.retry
+.phpunit*
 .buildpath
 .project
 .settings

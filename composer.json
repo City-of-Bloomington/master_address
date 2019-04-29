@@ -9,10 +9,18 @@
         "zendframework/zend-log": "@stable",
         "zendframework/zend-permissions-acl": "@stable"
     },
+    "require-dev": {
+        "phpunit/phpunit": "@stable"
+    },
     "autoload": {
         "psr-4": {
             "Application\\": "src/Application/",
             "Domain\\": "src/Domain"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "src/Test"
         }
     }
 }

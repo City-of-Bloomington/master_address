@@ -77,7 +77,7 @@ $AUTHENTICATION_METHODS = [
 // Example for Directory webservice
   'Employee' => [
       'classname' => 'Site\Employee',
-      'server'    => 'https://apps.bloomington.in.gov/directory',
+      'server'    => 'https://localhost/directory',
   ]
 ];
 

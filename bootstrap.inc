@@ -19,10 +19,6 @@ define('VERSION', trim(file_get_contents(APPLICATION_HOME.'/VERSION')));
 define('SITE_HOME', !empty($_SERVER['SITE_HOME']) ? $_SERVER['SITE_HOME'] : __DIR__.'/data');
 include SITE_HOME.'/site_config.inc';
 
-//-------------------------------------------------------------------
-// Bootstrap code
-// No editing is usually needed after this point
-//-------------------------------------------------------------------
 /**
  * Enable autoloading for the PHP libraries
  */
