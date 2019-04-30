@@ -6,6 +6,8 @@
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Info;
 
+use Domain\Locations\Entities\Location;
+
 class InfoResponse
 {
     public $address;
@@ -15,4 +17,13 @@ class InfoResponse
     public $changeLog = [];
     public $statusLog = [];
     public $errors    = [];
+
+    public function activeCurrentLocation(): Location
+    {
+        foreach ($this->locations as $l) {
+            if ($l->active && $l->status == 'current') {
+                return $l;
+            }
+        }
+    }
 }

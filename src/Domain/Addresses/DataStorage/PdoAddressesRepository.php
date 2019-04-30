@@ -13,6 +13,7 @@ use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Readdress\ReaddressRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
+use Domain\Addresses\UseCases\Update\Request as UpdateRequest;
 
 use Domain\Locations\DataStorage\PdoLocationsRepository;
 use Domain\Locations\Entities\Location;
@@ -392,6 +393,50 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             $req->address_id
         ]);
     }
+
+    public function update(UpdateRequest $req)
+    {
+        $sql = "update addresses
+                set address2        =?,
+                    address_type    =?,
+                    jurisdiction_id =?,
+                    township_id     =?,
+                    subdivision_id  =?,
+                    plat_id         =?,
+                    section         =?,
+                    quarter_section =?,
+                    plat_lot_number =?,
+                    notes           =?
+                where id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->address2,
+            $req->address_type,
+            $req->jurisdiction_id,
+            $req->township_id,
+            $req->subdivision_id,
+            $req->plat_id,
+            $req->section,
+            $req->quarter_section,
+            $req->plat_lot_number,
+            $req->notes,
+            $req->address_id
+        ]);
+
+        $sql = "update locations set mailable=?, occupiable=?, group_quarter=?
+                from location_status
+                where address_id=? and subunit_id is null and active
+                and location_status.location_id=locations.location_id
+                and start_date <= now() and (end_date is null or end_date >= now())
+                and status='current'";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->mailable,
+            $req->occupiable,
+            $req->group_quarter,
+            $req->address_id
+        ]);
+  }
 
     /**
      * @return int  The new address_id

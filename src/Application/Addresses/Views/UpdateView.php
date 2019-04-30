@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2017-2019 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @copyright 2019 City of Bloomington, Indiana
+ * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Addresses\Views;
@@ -9,34 +9,37 @@ namespace Application\Addresses\Views;
 use Application\Block;
 use Application\Template;
 
+use Domain\Addresses\Metadata;
+use Domain\Addresses\UseCases\Update\Request;
 use Domain\Addresses\UseCases\Info\InfoResponse;
-use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\People\Entities\Person;
-use Domain\Streets\Entities\Street;
 
-class CorrectView extends Template
+class UpdateView extends Template
 {
-    public function __construct(CorrectRequest $request,
-                                InfoResponse   $info,
-                                ?Street        $street=null,
-                                ?Person        $contact=null)
+    public function __construct(Request      $request,
+                                Metadata     $metadata,
+                                InfoResponse $info,
+                                ?Person      $contact=null)
     {
-        $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
-        parent::__construct('two-column', $format);
-        $this->vars['title'] = $this->_('correct');
+        parent::__construct('two-column', 'html');
+        $this->vars['title'] = $this->_('update');
 
         $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
 
         $vars = [
-            'street_id'    => $street  ? $street->id            : null,
-            'street_name'  => $street  ? $street->__toString()  : null,
+            'jurisdictions'   => $metadata->jurisdictions(),
+            'quarterSections' => $metadata->quarterSections(),
+            'sections'        => $metadata->sections(),
+            'types'           => $metadata->types(),
+            'townships'       => $metadata->townships(),
             'contact_id'   => $contact ? $contact->id           : null,
             'contact_name' => $contact ? $contact->__toString() : null,
-            'change_notes' => parent::escape($request->change_notes)
         ];
-        foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
+        foreach ($request as $k=>$v) { $vars[$k] = is_string($v) ? parent::escape($v) : $v; }
+
         $this->blocks = [
-            new Block('addresses/actions/correctForm.inc', $vars),
+            new Block('addresses/breadcrumbs.inc',   ['address'   =>$info->address]),
+            new Block('addresses/actions/updateForm.inc', $vars),
             new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
             new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
                                                       'total'     => $info->changeLog->total]),

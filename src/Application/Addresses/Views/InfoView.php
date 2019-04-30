@@ -32,7 +32,7 @@ class InfoView extends Template
                 new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
                 new Block('addresses/info.inc',          ['address'   => $info->address,
                                                           'title'     => $this->vars['title'],
-                                                          'actions'   => ['verify', 'changeStatus', 'correct', 'readdress']]),
+                                                          'actions'   => ['verify', 'changeStatus', 'correct', 'update', 'readdress']]),
 
                 new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
                 new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,

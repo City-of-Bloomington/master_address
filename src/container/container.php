@@ -66,6 +66,10 @@ foreach ($useCases as $a) {
     $DI->set(    "Domain\\Addresses\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Addresses\\UseCases\\$a\\$a"));
 }
+$DI->params[ 'Domain\Addresses\UseCases\Update\Command']['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
+$DI->set(    'Domain\Addresses\UseCases\Update\Command',
+$DI->lazyNew('Domain\Addresses\UseCases\Update\Command'));
+
 $DI->params['Domain\Addresses\UseCases\ChangeStatus\ChangeStatus']['subunitChange'] = $DI->lazyGet('Domain\Subunits\UseCases\ChangeStatus\ChangeStatus');
 
 // Jurisdictions

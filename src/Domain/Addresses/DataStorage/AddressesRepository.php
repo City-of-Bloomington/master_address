@@ -9,6 +9,7 @@ namespace Domain\Addresses\DataStorage;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
+use Domain\Addresses\UseCases\Update\Request as UpdateRequest;
 use Domain\Logs\Entities\ChangeLogEntry;
 
 interface AddressesRepository
@@ -27,6 +28,7 @@ interface AddressesRepository
 
     // Write functions
     public function correct ( CorrectRequest $request);
+    public function update  (  UpdateRequest $request);
     public function renumber(RenumberRequest $request);
     public function logChange(ChangeLogEntry $entry, string $logType): int;
     public function saveStatus(int $address_id, string $status, string $logType);
