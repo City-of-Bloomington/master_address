@@ -43,7 +43,6 @@ use Application\Url;
 
 $h = $this->template->getHelper('field');
 
-#address_type
 $options = [['value'=>'']];
 foreach ($this->types as $c) { $options[] = ['value'=>$c]; }
 echo $h->field([
@@ -56,37 +55,7 @@ echo $h->field([
     'required' => true
 ]);
 
-echo $h->field([
-    'name'  => 'street_number_prefix',
-    'id'    => 'street_number_prefix',
-    'label' => $this->_('street_number_prefix'),
-    'value' => $this->street_number_prefix
-]);
-echo $h->field([
-    'name'     => 'street_number',
-    'id'       => 'street_number',
-    'label'    => $this->_('street_number'),
-    'value'    => $this->street_number,
-    'type'     => 'number',
-    'required' => true
-]);
-echo $h->field([
-    'name'  => 'street_number_suffix',
-    'id'    => 'street_number_suffix',
-    'label' => $this->_('street_number_suffix'),
-    'value' => $this->street_number_suffix
-]);
-
-echo $h->field([
-    'name'     => 'street_id',
-    'id'       => 'street_id',
-    'label'    => $this->_('street'),
-    'type'     => 'chooser',
-    'chooser'  => 'street',
-    'value'    => $this->street_id,
-    'display'  => $this->street_name,
-    'required' => true
-]);
+$this->_include('addresses/partials/streetFields.inc');
 
 echo $h->field([
     'name'  => 'address2',
@@ -127,77 +96,4 @@ echo $h->field([
     'required' => true
 ]);
 
-$options = [];
-foreach ($this->jurisdictions as $c) { $options[] = ['value'=>$c['id'], 'label'=>parent::escape($c['name'])]; }
-echo $h->field([
-    'name'     => 'jurisdiction_id',
-    'id'       => 'jurisdiction_id',
-    'label'    => $this->_('jurisdiction'),
-    'value'    => $this->jurisdiction_id,
-    'type'     => 'select',
-    'options'  => $options,
-    'required' => true
-]);
-
-#plat_id
-echo $h->field([
-    'name'     => 'plat_id',
-    'id'       => 'plat_id',
-    'label'    => $this->_('plat'),
-    'type'     => 'chooser',
-    'chooser'  => 'plat',
-    'value'    => $this->plat_id,
-    'display'  => $this->plat_id
-]);
-
-#plat_lot_number
-echo $h->field([
-    'name'     => 'plat_lot_number',
-    'id'       => 'plat_lot_number',
-    'label'    => $this->_('plat_lot_number'),
-    'value'    => $this->plat_lot_number
-]);
-
-$options = [['value'=>'']];
-foreach ($this->townships as $c) { $options[] = ['value'=>$c['id'], 'label'=>parent::escape($c['name'])]; }
-echo $h->field([
-    'name'     => 'township_id',
-    'id'       => 'township_id',
-    'label'    => $this->_('township'),
-    'value'    => $this->township_id,
-    'type'     => 'select',
-    'options'  => $options,
-    'required' => true
-]);
-
-
-$options = [['value'=>'']];
-foreach ($this->sections as $c) { $options[] = ['value'=>$c]; }
-echo $h->field([
-    'name'     => 'section',
-    'id'       => 'section',
-    'label'    => $this->_('section'),
-    'value'    => $this->section,
-    'type'     => 'select',
-    'options'  => $options
-]);
-
-$options = [['value'=>'']];
-foreach ($this->quarterSections as $c) { $options[] = ['value'=>$c]; }
-echo $h->field([
-    'name'     => 'quarter_section',
-    'id'       => 'quarter_section',
-    'label'    => $this->_('quarter_section'),
-    'value'    => $this->quarter_section,
-    'type'     => 'select',
-    'options'  => $options
-]);
-
-echo $h->field([
-    'name'     => 'notes',
-    'id'       => 'notes',
-    'label'    => $this->_('address_notes'),
-    'value'    => $this->notes,
-    'type'     => 'textarea'
-]);
-
+$this->_include('addresses/partials/descriptiveFields.inc');

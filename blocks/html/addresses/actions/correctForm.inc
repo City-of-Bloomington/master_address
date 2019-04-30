@@ -16,8 +16,6 @@
  * @param string $this->contact_name Change log contact person
  * @param string $this->change_notes
  */
-use Application\Url;
-use Domain\Addresses\Metadata as Address;
 ?>
 <section>
     <header><h1><?= $this->_('correct'); ?></h1></header>
@@ -27,36 +25,7 @@ use Domain\Addresses\Metadata as Address;
             <?php
                 $h = $this->template->getHelper('field');
 
-                echo $h->field([
-                    'name'  => 'street_number_prefix',
-                    'id'    => 'street_number_prefix',
-                    'label' => $this->_('street_number_prefix'),
-                    'value' => $this->street_number_prefix
-                ]);
-                echo $h->field([
-                    'name'     => 'street_number',
-                    'id'       => 'street_number',
-                    'label'    => $this->_('street_number'),
-                    'value'    => $this->street_number,
-                    'type'     => 'number',
-                    'required' => true
-                ]);
-                echo $h->field([
-                    'name'  => 'street_number_suffix',
-                    'id'    => 'street_number_suffix',
-                    'label' => $this->_('street_number_suffix'),
-                    'value' => $this->street_number_suffix
-                ]);
-
-                echo $h->field([
-                    'name'    => 'street_id',
-                    'id'      => 'street_id',
-                    'label'   => $this->_('street'),
-                    'value'   => $this->street_id,
-                    'display' => $this->street_name,
-                    'type'    => 'chooser',
-                    'chooser' => 'street'
-                ]);
+                $this->_include('addresses/partials/streetFields.inc');
 
                 echo $h->field([
                     'name'     => 'zip',
