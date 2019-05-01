@@ -1,13 +1,18 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Domain\Addresses\DataStorage;
+namespace Application\Addresses;
+use Domain\Addresses\DataStorage\AddressesRepository;
 
 use Aura\SqlQuery\Common\SelectInterface;
+
 use Application\PdoRepository;
+use Application\Locations\PdoLocationsRepository;
+use Application\Subunits\PdoSubunitsRepository;
+
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
@@ -15,9 +20,7 @@ use Domain\Addresses\UseCases\Readdress\ReaddressRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Addresses\UseCases\Update\Request as UpdateRequest;
 
-use Domain\Locations\DataStorage\PdoLocationsRepository;
 use Domain\Locations\Entities\Location;
-use Domain\Subunits\DataStorage\PdoSubunitsRepository;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;

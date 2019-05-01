@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Domain\Streets\DataStorage;
+namespace Application\Streets;
+use Domain\Streets\DataStorage\StreetsRepository;
 
 use Aura\SqlQuery\Common\SelectInterface;
 use Application\PdoRepository;

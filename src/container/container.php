@@ -26,13 +26,13 @@ $repos = [
     'Subunits', 'Locations', 'Reports'
 ];
 foreach ($repos as $t) {
-    $DI->params[ "Domain\\$t\\DataStorage\\Pdo{$t}Repository"]["pdo"] = $pdo;
-    $DI->set(    "Domain\\$t\\DataStorage\\{$t}Repository",
-    $DI->lazyNew("Domain\\$t\\DataStorage\\Pdo{$t}Repository"));
+    $DI->params[ "Application\\$t\\Pdo{$t}Repository"]["pdo"] = $pdo;
+    $DI->set("Domain\\$t\\DataStorage\\{$t}Repository",
+    $DI->lazyNew("Application\\$t\\Pdo{$t}Repository"));
 }
-$DI->params[ 'Domain\Streets\Names\DataStorage\PdoNamesRepository']['pdo'] = $pdo;
+$DI->params[ 'Application\Streets\PdoNamesRepository']['pdo'] = $pdo;
 $DI->set(    'Domain\Streets\Names\DataStorage\NamesRepository',
-$DI->lazyNew('Domain\Streets\Names\DataStorage\PdoNamesRepository'));
+$DI->lazyNew('Application\Streets\PdoNamesRepository'));
 
 
 //---------------------------------------------------------
@@ -98,7 +98,7 @@ foreach(['Info', 'Load', 'Search', 'Update'] as $a) {
 
 // Plats
 foreach (['Info', 'Search', 'Update'] as $a) {
-    $DI->params[ "Domain\\Plats\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Plats\\DataStorage\\PlatsRepository");
+    $DI->params[ "Domain\\Plats\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet('Domain\Plats\DataStorage\PlatsRepository');
     $DI->set(    "Domain\\Plats\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Plats\\UseCases\\$a\\$a"));
 }
@@ -135,27 +135,27 @@ foreach (['Info', 'Search', 'Update'] as $a) {
 
 // Subunits
 foreach (['Add', 'ChangeStatus', 'Correct', 'Info', 'Verify'] as $a) {
-    $DI->params[ "Domain\\Subunits\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Subunits\\DataStorage\\SubunitsRepository");
+    $DI->params[ "Domain\\Subunits\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet('Domain\Subunits\DataStorage\SubunitsRepository');
     $DI->set(    "Domain\\Subunits\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Subunits\\UseCases\\$a\\$a"));
 }
 
 // Towns
 foreach (['Info', 'Search', 'Update'] as $a) {
-    $DI->params[ "Domain\\Towns\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Towns\\DataStorage\\TownsRepository");
+    $DI->params[ "Domain\\Towns\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet('Domain\Towns\DataStorage\TownsRepository');
     $DI->set(    "Domain\\Towns\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Towns\\UseCases\\$a\\$a"));
 }
 
 // Townships
 foreach (['Info', 'Search', 'Update'] as $a) {
-    $DI->params[ "Domain\\Townships\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Townships\\DataStorage\\TownshipsRepository");
+    $DI->params[ "Domain\\Townships\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet('Domain\Townships\DataStorage\TownshipsRepository');
     $DI->set(    "Domain\\Townships\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Townships\\UseCases\\$a\\$a"));
 }
 
 foreach (['Delete', 'Info', 'Search', 'Update'] as $a) {
-    $DI->params[ "Domain\\Users\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet("Domain\\Users\\DataStorage\\UsersRepository");
+    $DI->params[ "Domain\\Users\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet('Domain\Users\DataStorage\UsersRepository');
     $DI->set(    "Domain\\Users\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Users\\UseCases\\$a\\$a"));
 }
