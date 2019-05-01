@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Jurisdictions\DataStorage;
 
-use Domain\PdoRepository;
+use Application\PdoRepository;
 
 use Domain\Jurisdictions\Entities\Jurisdiction;
 use Domain\Jurisdictions\UseCases\Info\InfoRequest;

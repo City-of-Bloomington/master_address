@@ -7,7 +7,7 @@ declare (strict_types=1);
 namespace Domain\Subdivisions\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
-use Domain\PdoRepository;
+use Application\PdoRepository;
 use Domain\Subdivisions\Entities\Subdivision;
 use Domain\Subdivisions\UseCases\Info\InfoRequest;
 use Domain\Subdivisions\UseCases\Search\SearchRequest;
