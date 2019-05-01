@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\People\DataStorage;
 
-use Domain\PdoRepository;
+use Application\PdoRepository;
 
 use Domain\People\Entities\Person;
 use Domain\People\UseCases\Search\SearchRequest;

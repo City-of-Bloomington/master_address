@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Streets\Names\DataStorage;
 
-use Domain\PdoRepository;
+use Application\PdoRepository;
 
 use Aura\SqlQuery\Common\SelectInterface;
 use Domain\Streets\Entities\Designation;

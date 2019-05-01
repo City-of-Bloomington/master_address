@@ -8,7 +8,7 @@ namespace Domain\Subunits\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
 
-use Domain\PdoRepository;
+use Application\PdoRepository;
 
 use Domain\Addresses\DataStorage\PdoAddressesRepository;
 use Domain\Locations\DataStorage\PdoLocationsRepository;

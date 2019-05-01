@@ -7,7 +7,7 @@ declare (strict_types=1);
 namespace Domain\Addresses\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
-use Domain\PdoRepository;
+use Application\PdoRepository;
 use Domain\Addresses\Entities\Address;
 use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;

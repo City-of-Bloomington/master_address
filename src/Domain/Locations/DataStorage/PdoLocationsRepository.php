@@ -7,7 +7,7 @@ declare (strict_types=1);
 namespace Domain\Locations\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
-use Domain\PdoRepository;
+use Application\PdoRepository;
 
 use Domain\Locations\Entities\Location;
 use Domain\Locations\Entities\Sanitation;

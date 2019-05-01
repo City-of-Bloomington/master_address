@@ -6,7 +6,7 @@
 declare (strict_types=1);
 namespace Domain\Towns\DataStorage;
 
-use Domain\PdoRepository;
+use Application\PdoRepository;
 
 use Domain\Towns\Entities\Town;
 use Domain\Towns\UseCases\Info\InfoRequest;

@@ -7,7 +7,7 @@ declare (strict_types=1);
 namespace Domain\Streets\DataStorage;
 
 use Aura\SqlQuery\Common\SelectInterface;
-use Domain\PdoRepository;
+use Application\PdoRepository;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Intersection;
