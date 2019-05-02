@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function index(array $params): View
     {
         if (View::isAllowed('reports', 'report')) {
-            $reports = new \Application\Reports\Controller();
+            $reports = new \Application\Reports\Controller($this->di);
             return $reports->report(['name'=>'AddressActivity']);
         }
         return new Template('default');
