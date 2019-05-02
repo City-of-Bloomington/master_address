@@ -16,7 +16,7 @@ if ($route) {
     if (isset($route->params['controller']) && isset($route->params['action'])) {
         $controller = $route->params['controller'];
         $action     = $route->params['action'];
-        $c = new $controller();
+        $c = new $controller($DI);
         if (method_exists($c, $action)) {
             list($resource, $permission) = explode('.', $route->name);
             $role = isset($_SESSION['USER']) ? $_SESSION['USER']->role : 'Anonymous';

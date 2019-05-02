@@ -8,15 +8,17 @@ namespace Application\Authentication;
 use Application\Controller as BaseController;
 use Application\View;
 
+use Aura\Di\Container;
+
 class LoginController extends BaseController
 {
 	private $return_url;
 	private $repo;
 	private $auth;
 
-	public function __construct()
+	public function __construct(Container $di)
 	{
-        parent::__construct();
+        parent::__construct($di);
 
 		$this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
 		$this->auth = $this->di->get('Domain\Auth\AuthenticationService');
