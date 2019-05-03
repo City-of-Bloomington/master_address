@@ -20,6 +20,14 @@ class AddressUpdateTest extends TestCase
     private const ADDRESS_ID = 2;
     private const USER_ID    = 3;
 
+    protected static $container;
+
+    public static function setUpBeforeClass(): void
+    {
+        global $DI;
+        self::$container = $DI;
+    }
+
     public function testRequestCreation()
     {
         $req  = new Request(self::ADDRESS_ID, self::USER_ID);
@@ -36,9 +44,7 @@ class AddressUpdateTest extends TestCase
 
     public function testSuccess()
     {
-        $repo = new TestAddressesRepository();
-
-        $update = new Command($repo);
+        $update = self::$container->get('Domain\Addresses\UseCases\Update\Command');
         $req    = new Request(self::ADDRESS_ID, self::USER_ID, ['address_type'=>'Test', 'jurisdiction_id'=>1]);
 
         $res = $update($req);
