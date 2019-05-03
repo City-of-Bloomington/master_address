@@ -289,17 +289,35 @@ msgid_plural "designations"
 msgstr[0] "Street Name Designation"
 msgstr[1] "Street Name Designations"
 
+msgid "changeLog"
+msgstr "Change Log"
+
+msgid "date"
+msgstr "Date"
+
+msgid "action"
+msgstr "Action"
+
 msgid "changeStatus"
 msgstr "Change Status"
 
 msgid "changeName"
 msgstr "Change Street Name Designation"
 
+msgid "correct"
+msgstr "Correct"
+
 msgid "update"
 msgstr "Update"
 
+msgid "readdress"
+msgstr "Readdress"
+
 msgid "renumber"
 msgstr "Renumber"
+
+msgid "verify"
+msgstr "Verify"
 
 msgid "alias"
 msgstr "Add Alias"
@@ -339,6 +357,27 @@ msgstr "New Location Type"
 
 msgid "locationType_edit"
 msgstr "Edit Location Type"
+
+msgid "active"
+msgstr "Active"
+
+msgid "mailable"
+msgstr "Mailable"
+
+msgid "occupiable"
+msgstr "Occupiable"
+
+msgid "group_quarter"
+msgstr "Group Quarters"
+
+msgid "sanitation_edit"
+msgstr "Sanitation"
+
+msgid "trash_day"
+msgstr "Trash Day"
+
+msgid "recycle_week"
+msgstr "Recycle Week"
 
 msgid "purpose"
 msgid_plural "purposes"

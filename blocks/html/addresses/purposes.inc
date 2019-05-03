@@ -7,7 +7,7 @@
 declare (strict_types=1);
 ?>
 <section>
-    <header><h2><?= $this->_('purposes'); ?></h2></header>
+    <header><h2><?= $this->_(['purpose', 'purposes', count($this->purposes)]); ?></h2></header>
     <table>
     <?php
         foreach ($this->purposes as $p) {
