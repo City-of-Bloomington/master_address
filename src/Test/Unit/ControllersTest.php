@@ -15,8 +15,8 @@ class ControllersTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $builder = new ContainerBuilder();
-        self::$container = $builder->newInstance();
+        global $DI;
+        self::$container = $DI;
     }
 
     public function controllers(): array
