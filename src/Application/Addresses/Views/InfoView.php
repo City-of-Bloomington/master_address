@@ -26,8 +26,6 @@ class InfoView extends Template
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
         if ($format == 'html') {
-            $sanitation_editable = $info->address->jurisdiction_name == $DEFAULTS['city'];
-
             $this->blocks = [
                 new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
                 new Block('addresses/info.inc',          ['address'   => $info->address,
@@ -38,7 +36,12 @@ class InfoView extends Template
                 new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
                                                           'total'     => $info->changeLog->total]),
                 'panel-one' => [
-                    new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons' => !$sanitation_editable]),
+                    new Block('addresses/locations.inc', [
+                        'locations'          => $info->locations,
+                        'userCanActivate'    => parent::isAllowed('addresses', 'activate'),
+                        'sanitationEditable' => $info->address->jurisdiction_name == $DEFAULTS['city']
+                                                && parent::isAllowed('sanitation', 'update')
+                    ]),
                     new Block('addresses/purposes.inc',  ['purposes'  => $info->purposes ]),
                     new Block('subunits/list.inc',       ['address'   => $info->address, 'subunits' => $info->subunits])
                 ]

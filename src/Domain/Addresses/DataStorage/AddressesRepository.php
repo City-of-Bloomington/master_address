@@ -27,6 +27,7 @@ interface AddressesRepository
     public function changeLog(?int $address_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
     // Write functions
+    public function activate(int $address_id, int $location_id);
     public function correct ( CorrectRequest $request);
     public function update  (  UpdateRequest $request);
     public function renumber(RenumberRequest $request);
