@@ -225,17 +225,15 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 
         // Save the subunit
         // Prepare to save data for all subunit fields
-        $data = [];
-        foreach (self::$fieldmap as $f=>$map) {
-            if ($map['prefix'] == 's' && $f != 'id' && $req->$f) {
-                $data[$map['dbName']] = $req->$f;
-            }
-        }
-
+        $data = [
+            'address_id'    => $req->address_id,
+            'type_id'       => $req->type_id,
+            'identifier'    => $req->identifier,
+            'notes'         => $req->notes
+        ];
         $subunit_id = parent::saveToTable($data, self::TABLE);
         if ($subunit_id) {
             $location = new Location((array)$req);
-            // This field is named differently in the AddRequest
             $location->type_id    = $req->locationType_id;
             $location->subunit_id = $subunit_id;
 
