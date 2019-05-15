@@ -66,9 +66,12 @@ foreach ($useCases as $a) {
     $DI->set(    "Domain\\Addresses\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Addresses\\UseCases\\$a\\$a"));
 }
-$DI->params[ 'Domain\Addresses\UseCases\Update\Command']['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
-$DI->set(    'Domain\Addresses\UseCases\Update\Command',
-$DI->lazyNew('Domain\Addresses\UseCases\Update\Command'));
+// I've started using a new naming pattern for the domain invokables
+foreach (['Activate', 'Update'] as $a) {
+    $DI->params[ "Domain\Addresses\UseCases\\$a\Command"]['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
+    $DI->set(    "Domain\Addresses\UseCases\\$a\Command",
+    $DI->lazyNew("Domain\Addresses\UseCases\\$a\Command"));
+}
 
 $DI->params['Domain\Addresses\UseCases\ChangeStatus\ChangeStatus']['subunitChange'] = $DI->lazyGet('Domain\Subunits\UseCases\ChangeStatus\ChangeStatus');
 

@@ -372,6 +372,25 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         throw new \Exception('databaseError');
     }
 
+    /**
+     * Makes an address the active one for a location.
+     *
+     * There should be only one active address per location.
+     */
+    public function activate(int $address_id, int $location_id)
+    {
+        $sql = "update locations set active=FALSE
+                where location_id=? and subunit_id is null";
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$location_id]);
+
+        $sql = "update locations set active=TRUE
+                where address_id=? and location_id=? and subunit_id is null";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$address_id, $location_id]);
+    }
+
 
     public function correct(CorrectRequest $req)
     {
