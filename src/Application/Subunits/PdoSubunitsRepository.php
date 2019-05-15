@@ -260,6 +260,24 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         throw new \Exception('databaseError');
     }
 
+    /**
+     * Flags a subunit as the active one for a location.
+     *
+     * There should only be one active subunit per location
+     */
+    public function activate(int $subunit_id, int $location_id)
+    {
+        $sql   = "update locations set active=FALSE
+                  where location_id=? and subunit_id is not null";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$location_id]);
+
+        $sql   = "update locations set active=TRUE
+                  where location_id=? and subunit_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$location_id, $subunit_id]);
+    }
+
     public function correct(CorrectRequest $req)
     {
         $sql = "update subunits

@@ -4,21 +4,21 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Domain\Addresses\UseCases\Activate;
+namespace Domain\Subunits\UseCases\Activate;
 
 class Request
 {
     public $location_id;
-    public $address_id;
+    public $subunit_id;
 
     // Change log fields
     public $user_id;
     public $contact_id;
     public $change_notes;
 
-    public function __construct(int $address_id, int $location_id, int $user_id, ?array $data=null)
+    public function __construct(int $subunit_id, int $location_id, int $user_id, ?array $data=null)
     {
-        $this->address_id  = $address_id;
+        $this->subunit_id  = $subunit_id;
         $this->location_id = $location_id;
         $this->user_id     = $user_id;
 

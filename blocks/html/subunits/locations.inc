@@ -63,7 +63,7 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
                 $checked = $l->active ? 'checked="true"' : '';
                 $uri     = "$activateUri?location_id=$location_id;subunit_id={$l->subunit_id}";
                 $active  = "<input type=\"radio\" $checked
-                                   onchange=\"document.location.href='$uri';\"/>"
+                                   onchange=\"document.location.href='$uri';\"/>";
             }
 
             $uri = parent::generateUri('subunits.view', ['id'=>$l->subunit_id]);

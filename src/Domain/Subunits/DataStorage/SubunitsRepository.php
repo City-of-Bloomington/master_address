@@ -25,6 +25,7 @@ interface SubunitsRepository
 
     // Write functions
     public function add       (AddRequest     $request): int;
+    public function activate  (int $subunit_id, int $location_id);
     public function correct   (CorrectRequest $request);
     public function logChange (ChangeLogEntry   $entry, string $logType): int;
     public function saveStatus(int $subunit_id,  string $status, string $logType);
