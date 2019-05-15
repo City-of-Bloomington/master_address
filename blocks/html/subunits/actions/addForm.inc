@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->address_id;
  *
  *---------------------------------------------------------
@@ -19,12 +19,6 @@
  * @param string $this->type_id;
  * @param string $this->identifier;
  * @param string $this->notes;
- * Geo fields
- * @param string $this->state_plane_x;
- * @param string $this->state_plane_y;
- * @param string $this->latitude;
- * @param string $this->longitude;
- * @param string $this->usng;
  *
  *---------------------------------------------------------
  * Location table fields
@@ -93,12 +87,6 @@
                     'type'     => 'textarea'
                 ]);
             ?>
-        </fieldset>
-
-        <fieldset>
-        <?php
-            $this->_include('addresses/partials/geoFields.inc');
-        ?>
         </fieldset>
 
         <fieldset><legend><?= $this->_('location'); ?></legend>

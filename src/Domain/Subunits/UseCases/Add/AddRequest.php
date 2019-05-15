@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Add;
@@ -15,11 +15,6 @@ class AddRequest
     public $type_id;
     public $identifier;
     public $notes;
-    public $state_plane_x;
-    public $state_plane_y;
-    public $latitude;
-    public $longitude;
-    public $usng;
 
     // Location fields
     public $locationType_id;
@@ -45,16 +40,9 @@ class AddRequest
                 switch ($f) {
                     case 'address_id':
                     case 'type_id':
-                    case 'state_plane_x':
-                    case 'state_plane_y':
                     case 'locationType_id':
                     case 'contact_id':
                         $this->$f = (int)$data[$f];
-                    break;
-
-                    case 'latitude':
-                    case 'longitude':
-                        $this->$f = (float)$data[$f];
                     break;
 
                     case 'mailable':
