@@ -3,25 +3,26 @@
  * @copyright 2009-2018 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.html GNU/AGPL, see LICENSE
  *
- * @param string $this->title
- * @param array  $this->towns        Towns to choose from in the select dropdown
- * @param array  $this->statuses     Statuses to choose from in the select dropdown
- * @param array  $this->types        Designation type options
+ * @param string   $this->title
+ * @param array    $this->towns        Towns to choose from in the select dropdown
+ * @param array    $this->statuses     Statuses to choose from in the select dropdown
+ * @param array    $this->types        Designation type options
  *
  * These are properties that the user previously submitted
- * @param int    $this->town_id      Street town ID
- * @param string $this->status       Street status
- * @param string $this->notes        Street notes
+ * @param int      $this->town_id      Street town ID
+ * @param string   $this->status       Street status
+ * @param string   $this->notes        Street notes
  *
- * @param int    $this->name_id      Street name ID
- * @param int    $this->type_id      Designation type ID
- * @param int    $this->rank
- * @param string $this->name         Display string for the current street name
+ * @param int      $this->name_id      Street name ID
+ * @param int      $this->type_id      Designation type ID
+ * @param int      $this->rank
+ * @param DateTime $this->start_date
+ * @param string   $this->name         Display string for the current street name
  *
- * @param int    $this->user_id      User who is submitting the new street
- * @param int    $this->contact_id   Contact ID for the change log
- * @param Person $this->contact_name Contact person's name
- * @param string $this->change_notes Change log notes
+ * @param int      $this->user_id      User who is submitting the new street
+ * @param int      $this->contact_id   Contact ID for the change log
+ * @param Person   $this->contact_name Contact person's name
+ * @param string   $this->change_notes Change log notes
  */
 ?>
 <section>
@@ -29,7 +30,7 @@
         <h1><?= $this->title; ?></h1>
     </header>
     <form method="post">
-        <fieldset><legend><?= $this->_('street_info'); ?></legend>
+        <fieldset>
         <?php
             $helper = $this->template->getHelper('field');
 
@@ -67,7 +68,25 @@
         </fieldset>
         <fieldset><legend><?= $this->_('designation'); ?></legend>
         <?php
-            $this->_include('streets/actions/partials/designationFields.inc');
+            echo $helper->field([
+                'name'     => 'name_id',
+                'id'       => 'name_id',
+                'label'    => $this->_('name'),
+                'value'    => $this->name_id,
+                'display'  => $this->name,
+                'type'     => 'chooser',
+                'chooser'  => 'streetName',
+                'required' => true
+            ]);
+
+            echo $helper->field([
+                'name'     => 'start_date',
+                'id'       => 'start_date',
+                'label'    => 'startDate',
+                'type'     => 'date',
+                'value'    => $this->start_date,
+                'required' => true
+            ]);
         ?>
         </fieldset>
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>

@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\Designations\UseCases\Update;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\Metadata as ChangeLog;
+use Domain\Logs\Metadata    as ChangeLog;
+use Domain\Streets\Metadata as Street;
 use Domain\Streets\DataStorage\StreetsRepository;
 
 class Update
@@ -24,6 +25,10 @@ class Update
         $errors = $this->validate($req);
         if ($errors) {
             return new UpdateResponse(null, $req->designation_id, $errors);
+        }
+
+        if ($req->type_id == STREET::TYPE_STREET) {
+            $req->rank = 1;
         }
 
         try {

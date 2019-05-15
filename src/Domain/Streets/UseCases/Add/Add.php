@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\UseCases\Add;
 
 use Domain\Logs\Entities\ChangeLogEntry;
-use Domain\Logs\Metadata as ChangeLog;
+use Domain\Logs\Metadata    as ChangeLog;
+use Domain\Streets\Metadata as Street;
 use Domain\Streets\DataStorage\StreetsRepository;
 
 class Add
@@ -49,7 +50,6 @@ class Add
     {
         $errors = [];
         if (!$req->status ) { $errors[] = 'missingStatus'; }
-        if (!$req->type_id) { $errors[] = 'designations/missingType'; }
         if (!$req->name_id) { $errors[] = 'missingName'; }
 
         if (   $req->status != ChangeLog::STATUS_CURRENT
