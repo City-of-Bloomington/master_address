@@ -142,6 +142,9 @@ foreach (['Add', 'ChangeStatus', 'Correct', 'Info', 'Verify'] as $a) {
     $DI->set(    "Domain\\Subunits\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Subunits\\UseCases\\$a\\$a"));
 }
+$DI->params[ "Domain\Subunits\UseCases\Activate\Command"]["repository"] = $DI->lazyGet('Domain\Subunits\DataStorage\SubunitsRepository');
+$DI->set(    "Domain\Subunits\UseCases\Activate\Command",
+$DI->lazyNew("Domain\Subunits\UseCases\Activate\Command"));
 
 // Towns
 foreach (['Info', 'Search', 'Update'] as $a) {

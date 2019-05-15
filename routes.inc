@@ -41,8 +41,9 @@ foreach ($tables as $t) {
 $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->setValues(['controller'=> 'Application\Subunits\Controller']);
 
-    $r->add('view', '/{id}')->addValues(['action'=>'view']);
-    $r->add('add',   '/add')->addValues(['action'=>'add' ]);
+    $r->add('view',     '/{id}'    )->addValues(['action'=>'view'    ]);
+    $r->add('add',      '/add'     )->addValues(['action'=>'add'     ]);
+    $r->add('activate', '/activate')->addValues(['action'=>'activate']);
     foreach (['changeStatus', 'correct', 'verify'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
@@ -68,7 +69,6 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->add('renumber',         '/renumber/{id}')->addValues(['action'=>'renumber'    ]);
     $r->add('intersections','/intersections')->addValues(['action'=>'intersections']);
     $r->add('intersectingStreets','/intersectingStreets{/id}')->addValues(['action'=>'intersectingStreets']);
-
 });
 $ROUTES->attach('designations', "/designations", function ($r) {
     $r->setValues(['controller'=> 'Application\Streets\Designations\Controller']);

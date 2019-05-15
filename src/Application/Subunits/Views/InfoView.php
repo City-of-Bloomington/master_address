@@ -38,7 +38,12 @@ class InfoView extends Template
             new Block('logs/changeLog.inc',       ['entries'  => $info->changeLog->entries,
                                                    'total'    => $info->changeLog->total]),
             'panel-one' => [
-                new Block('locations/locations.inc',  ['locations' => $info->locations, 'disableButtons' => !$sanitation_editable])
+                new Block('subunits/locations.inc', [
+                    'locations'          => $info->locations,
+                    'userCanActivate'    => parent::isAllowed('subunits', 'activate'),
+                    'sanitationEditable' => $info->address->jurisdiction_name == $DEFAULTS['city']
+                                            && parent::isAllowed('sanitation', 'update')
+                ])
             ]
         ];
     }
