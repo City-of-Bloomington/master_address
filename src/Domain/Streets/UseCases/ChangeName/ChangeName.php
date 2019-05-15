@@ -39,11 +39,12 @@ class ChangeName
                 'type_id'   => Metadata::TYPE_STREET
             ]);
             foreach ($designations as $d) {
-                $ur = new UpdateRequest(
+                $rank = $d->rank + 1;
+                $ur   = new UpdateRequest(
                     $d->id,
                     $request->user_id,
                     $d->start_date,
-                    ['type_id'=>Metadata::TYPE_HISTORIC, 'rank'=>$d->rank]
+                    ['type_id'=>Metadata::TYPE_HISTORIC, 'rank'=>$rank]
                 );
                 $this->repo->updateDesignation($ur);
             }
@@ -56,7 +57,7 @@ class ChangeName
                 [
                     'type_id' => Metadata::TYPE_STREET,
                     'name_id' => $request->name_id,
-                    'rank'    => $request->rank
+                    'rank'    => 1
                 ]
             );
             $designation_id = $this->repo->addDesignation($alias);

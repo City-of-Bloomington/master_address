@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
+ * @copyright 2009-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.html GNU/AGPL, see LICENSE
  * @param array  $this->designations
  * @param array  $this->actions        Optional
@@ -32,6 +32,7 @@
 			<tr><th><?= $this->_('type'     ); ?></th>
 				<th><?= $this->_('name'     ); ?></th>
 				<th><?= $this->_('startDate'); ?></th>
+				<th><?= $this->_('rank'     ); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -44,6 +45,7 @@
                 $name  = parent::escape($d);
 				$type  = parent::escape($d->type);
                 $start = $d->start_date ? $d->start_date->format(DATE_FORMAT) : '';
+                $rank  = $d->rank;
 
 				if ($userCanEdit) {
                     $button = $h->buttonLink(
@@ -57,6 +59,7 @@
 				<tr><td>$type</td>
 					<td>$name</td>
 					<td>$start</td>
+                    <td>$rank</td>
 					<td>$button</td>
                 </tr>
 				";

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -28,7 +28,6 @@ class ChangeNameView extends Template
         $vars = [
             'street_id'    => $info->street->id,
             'name_id'      => $req->name_id,
-            'rank'         => $req->rank,
             'start_date'   => $req->start_date,
             'contact_id'   => $req->contact_id,
             'change_notes' => $req->change_notes

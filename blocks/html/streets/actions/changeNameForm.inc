@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param int      $this->street_id
  * @param int      $this->name_id
- * @param int      $this->rank
  * @param DateTime $this->start_date
  * @param string   $this->contact_id   Change log contact person
  * @param string   $this->contact_name Change log contact person
@@ -29,15 +28,6 @@ use Application\Url;
                     'display'  => $this->name,
                     'type'     => 'chooser',
                     'chooser'  => 'streetName',
-                    'required' => true
-                ]);
-
-                echo $h->field([
-                    'name'     => 'rank',
-                    'id'       => 'rank',
-                    'label'    => $this->_('rank'),
-                    'value'    => $this->rank,
-                    'type'     => 'number',
                     'required' => true
                 ]);
 
