@@ -19,6 +19,7 @@ use Domain\Locations\Entities\Location;
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
+use Domain\Subunits\UseCases\Update\Request as UpdateRequest;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 
@@ -284,6 +285,27 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $query = $this->pdo->prepare($sql);
         $query->execute([
             $req->type_id, $req->identifier, $req->notes,
+            $req->subunit_id
+        ]);
+    }
+
+    public function update(UpdateRequest $req)
+    {
+        $sql = "update subunits set notes=? where id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$req->notes, $req->subunit_id]);
+
+        $sql = "update locations set mailable=?, occupiable=?, group_quarter=?
+                from location_status
+                where subunit_id=? and active
+                and location_status.location_id=locations.location_id
+                and start_date <= now() and (end_date is null or end_date >= now())
+                and status='current'";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->mailable,
+            $req->occupiable,
+            $req->group_quarter,
             $req->subunit_id
         ]);
     }

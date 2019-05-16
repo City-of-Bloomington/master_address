@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Subunits\Views;
@@ -16,24 +16,16 @@ class InfoView extends Template
 {
     public function __construct(InfoResponse $info)
     {
-        global $DEFAULTS;
-
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('two-column', $format);
 
         if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
 
-        $actions = ($info->subunit->status == Log::STATUS_CURRENT)
-                 ? ['verify', 'changeStatus', 'correct']
-                 : ['verify', 'changeStatus'];
-
-        $sanitation_editable = $info->address->jurisdiction_name == $DEFAULTS['city'];
-
         $this->blocks = [
             new Block('subunits/breadcrumbs.inc', ['address'  => $info->address]),
             new Block('subunits/info.inc',        ['subunit'  => $info->subunit,
                                                    'title'    => parent::escape($info->subunit),
-                                                   'actions'  => $actions]),
+                                                   'actions'  => self::permittedActions()]),
             new Block('logs/statusLog.inc',       ['statuses' => $info->statusLog]),
             new Block('logs/changeLog.inc',       ['entries'  => $info->changeLog->entries,
                                                    'total'    => $info->changeLog->total]),
@@ -41,10 +33,26 @@ class InfoView extends Template
                 new Block('subunits/locations.inc', [
                     'locations'          => $info->locations,
                     'userCanActivate'    => parent::isAllowed('subunits', 'activate'),
-                    'sanitationEditable' => $info->address->jurisdiction_name == $DEFAULTS['city']
-                                            && parent::isAllowed('sanitation', 'update')
+                    'sanitationEditable' => self::sanitationEditable($info)
                 ])
             ]
         ];
+    }
+
+    private static function permittedActions(): array
+    {
+        $actions = [];
+        foreach (['verify', 'changeStatus', 'correct', 'update'] as $a) {
+            if (parent::isAllowed('subunits', $a)) { $actions[] = $a; }
+        }
+        return $actions;
+    }
+
+    private static function sanitationEditable(InfoResponse $info): bool
+    {
+        global $DEFAULTS;
+
+        return $info->address->jurisdiction_name == $DEFAULTS['city']
+               && parent::isAllowed('sanitation', 'update');
     }
 }
