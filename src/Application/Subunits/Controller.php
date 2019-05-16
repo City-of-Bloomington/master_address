@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -12,6 +12,7 @@ use Application\View;
 use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\ChangeStatus\ChangeStatusRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
+use Domain\Subunits\UseCases\Update\Request as UpdateRequest;
 use Domain\Subunits\UseCases\Verify\VerifyRequest;
 
 class Controller extends BaseController
@@ -163,6 +164,30 @@ class Controller extends BaseController
             $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
 
             return new Views\ChangeStatusView($request, $info, $change::statuses(), $contact);
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    public function update(array $params): View
+    {
+        $subunit_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($subunit_id) {
+            $update  = $this->di->get('Domain\Subunits\UseCases\Update\Command');
+            $request = new UpdateRequest($subunit_id, $_SESSION['USER']->id, $_REQUEST);
+
+            if (isset($_POST['notes'])) {
+                $response = $update($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('subunits.view', ['id'=>$subunit_id]));
+                    exit();
+                }
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+
+            $info    = parent::subunitInfo($subunit_id);
+            $contact = !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null;
+            if (!$request->notes) { $request->notes = $info->subunit->notes; }
+            return new Views\UpdateView($request, $info, $contact);
         }
         return new \Application\Views\NotFoundView();
     }

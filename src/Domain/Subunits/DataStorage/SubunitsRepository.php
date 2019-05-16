@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Subunits\DataStorage;
@@ -10,6 +10,7 @@ use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
+use Domain\Subunits\UseCases\Update\Request as UpdateRequest;
 
 interface SubunitsRepository
 {
@@ -25,8 +26,9 @@ interface SubunitsRepository
 
     // Write functions
     public function add       (AddRequest     $request): int;
-    public function activate  (int $subunit_id, int $location_id);
     public function correct   (CorrectRequest $request);
+    public function update    (UpdateRequest  $request);
+    public function activate  (int $subunit_id, int $location_id);
     public function logChange (ChangeLogEntry   $entry, string $logType): int;
     public function saveStatus(int $subunit_id,  string $status, string $logType);
 

@@ -53,5 +53,8 @@ class Request implements ChangeLogRequest
         if (!empty($data['mailable'       ])) { $this->mailable        =      $data['mailable'     ] ? true : false; }
         if (!empty($data['occupiable'     ])) { $this->occupiable      =      $data['occupiable'   ] ? true : false; }
         if (!empty($data['group_quarter'  ])) { $this->group_quarter   =      $data['group_quarter'] ? true : false; }
+
+        if (!empty($data['contact_id'  ])) { $this->contact_id   = (int)$data['contact_id'  ]; }
+        if (!empty($data['change_notes'])) { $this->change_notes =      $data['change_notes']; }
     }
 }
