@@ -28,8 +28,8 @@ package:
 	cd build && tar czf master_address.tar.gz master_address
 
 docker: package
-	docker build -t docker-repo.bloomington.in.gov/library/master_address:${VERSION}-${COMMIT} -f docker/dockerfile build
-	docker push docker-repo.bloomington.in.gov/library/master_address:${VERSION}-${COMMIT}
+	docker build -t docker-repo.bloomington.in.gov/cob/master_address:${VERSION}-${COMMIT} -f docker/dockerfile build
+	docker push docker-repo.bloomington.in.gov/cob/master_address:${VERSION}-${COMMIT}
 
 $(LANGUAGES): deps
 	cd $@ && msgfmt -cv *.po
