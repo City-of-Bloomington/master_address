@@ -1,50 +1,35 @@
-FROM ubuntu:latest as build
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=America/Indiana/Indianapolis
-RUN ln -snf /usr/share/zoneinfo/America/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone
-
-
-RUN apt-get update && \
-    apt-get -y install sassc curl php-cli php-dom git php-zip unzip php-mbstring composer gettext make rsync
-
-WORKDIR /tmp/master_address
-COPY --chown=www-data:staff . /tmp/master_address
-RUN composer update
-RUN make compile package
-
-
 FROM ubuntu:latest
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Indiana/Indianapolis
 RUN ln -snf /usr/share/zoneinfo/America/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone
+ && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -y apache2
-RUN a2enmod alias && \
-    a2enmod headers && \
-    a2enmod remoteip && \
-    a2enmod rewrite
+RUN a2enmod alias \
+ && a2enmod headers \
+ && a2enmod remoteip \
+ && a2enmod rewrite
 
 RUN apt-get install -y \
-    php-common \
-    php-cli \
-    php-json \
-    php-readline \
-    php-mbstring \
-    php-pgsql \
-    php-intl \
-    php-curl \
-    php-ldap \
-    php-xsl \
-    libapache2-mod-php \
-    gettext
+php-common \
+php-cli \
+php-json \
+php-readline \
+php-mbstring \
+php-pgsql \
+php-intl \
+php-curl \
+php-ldap \
+php-xsl \
+libapache2-mod-php \
+gettext
 
-COPY --from=build /tmp/master_address/docker/php.ini /etc/php/7.2/apache2/conf.d/local.ini
-COPY --from=build /tmp/master_address/docker/php.ini /etc/php/7.2/cli/conf.d/local.ini
-COPY --from=build /tmp/master_address/docker/apache.conf /etc/apache2/sites-available/000-default.conf
-COPY --from=build /tmp/master_address/docker/phpinfo.php /var/www/html/phpinfo.php
+COPY master_address/docker/php.ini /etc/php/7.2/apache2/conf.d/local.ini
+COPY master_address/docker/php.ini /etc/php/7.2/cli/conf.d/local.ini
 
-COPY --from=build --chown=www-data:staff /tmp/master_address/build/master_address /srv/sites/master_address
+ADD --chown=www-data:staff master_address /srv/sites/master_address
+ADD master_address/docker/apache.conf /etc/apache2/sites-available/000-default.conf
+ADD master_address/docker/phpinfo.php /var/www/html/phpinfo.php
 
 ENTRYPOINT apachectl -D FOREGROUND
