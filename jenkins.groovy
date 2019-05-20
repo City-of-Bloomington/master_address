@@ -1,8 +1,15 @@
 pipeline {
+    agent none
     stages {
-        stage('build') {
+        stage ('build') {
+            agent {
+                dockerfile {
+                    filename 'docker/Dockerfile.jenkins'
+                    dir 'build'
+                }
+            }
             steps {
-                sh 'echo "building"'
+                echo 'Building image'
             }
         }
     }
