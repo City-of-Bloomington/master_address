@@ -10,7 +10,12 @@ $builder = new ContainerBuilder();
 $DI = $builder->newInstance();
 
 $conf = $DATABASES['default'];
-$pdo  = new PDO("$conf[driver]:dbname=$conf[dbname];host=$conf[host]", $conf['username'], $conf['password'], $conf['options']);
+try {
+    $pdo = new PDO("$conf[driver]:dbname=$conf[dbname];host=$conf[host]", $conf['username'], $conf['password'], $conf['options']);
+}
+catch (\Exception $e) {
+    die("Could not connect to database server\n");
+}
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $platform = ucfirst($pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
 if ($platform == 'Pgsql' && !empty($conf['schema'])) {
