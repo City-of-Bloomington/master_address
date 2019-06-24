@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y apache2
 RUN a2enmod alias \
  && a2enmod headers \
  && a2enmod remoteip \
- && a2enmod rewrite
+ && a2enmod rewrite \
+ && a2enmod ssl
 
 RUN apt-get install -y \
 php-common \
