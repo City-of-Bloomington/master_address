@@ -30,6 +30,31 @@
         - "{{ ma_backup_path  }}"
         - "{{ ma_site_home    }}"
 
+    - name: "Extract release"
+      unarchive:
+        src: "{{ ma_archive_path }}"
+        dest: "/usr/local/src"
+      register: "release"
+
+    - name: "Install release"
+      command: "rsync -rl /usr/local/src/master_address/ {{ ma_install_path }}/"
+      when: "release.changed"
+
+    - name: "Update site_home"
+      command: "rsync -rl /usr/local/src/master_address/data/ {{ ma_site_home }}/"
+      when: "release.changed"
+
+    - name: "Symlink the theme"
+      file:
+        state: "link"
+        src:  "{{ ma_site_home    }}/Themes/COB/public"
+        dest: "{{ ma_install_path }}/public/COB"
+
+    - name: "Update site_config"
+      template:
+        src: "site_config.j2"
+        dest: "{{ ma_site_home }}/site_config.inc"
+
     - name: "Update application permissions"
       file:
         path:    "{{ item }}"
