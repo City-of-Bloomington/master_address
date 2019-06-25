@@ -316,6 +316,9 @@ msgstr "Readdress"
 msgid "renumber"
 msgstr "Renumber"
 
+msgid "validate"
+msgstr "Validate"
+
 msgid "verify"
 msgstr "Verify"
 

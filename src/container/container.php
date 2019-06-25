@@ -71,7 +71,7 @@ foreach ($useCases as $a) {
     $DI->set(    "Domain\\Addresses\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Addresses\\UseCases\\$a\\$a"));
 }
-foreach (['Activate', 'Update'] as $a) {
+foreach (['Activate', 'Update', 'Validate'] as $a) {
     $DI->params[ "Domain\Addresses\UseCases\\$a\Command"]['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
     $DI->set(    "Domain\Addresses\UseCases\\$a\Command",
     $DI->lazyNew("Domain\Addresses\UseCases\\$a\Command"));

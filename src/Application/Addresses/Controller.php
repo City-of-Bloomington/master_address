@@ -28,27 +28,6 @@ class Controller extends BaseController
     const ITEMS_PER_PAGE = 20;
 
     /**
-     * Converts Parser fieldnames to SearchRequest fieldnames
-     */
-    private static function translateFields(ParseResponse $parse): array
-    {
-        $query = [];
-        foreach ($parse as $k=>$v) {
-            if ($v) {
-                switch ($k) {
-                    case Parse::DIRECTION:      $query['street_direction'     ] = $v; break;
-                    case Parse::STREET_NAME:    $query['street_name'          ] = $v; break;
-                    case Parse::POST_DIRECTION: $query['street_post_direction'] = $v; break;
-                    case Parse::STREET_TYPE:    $query['street_suffix_code'   ] = $v; break;
-                    default:
-                        $query[$k] = $v;
-                }
-            }
-        }
-        return $query;
-    }
-
-    /**
      * Address search
      */
     public function index(array $params): View
@@ -59,8 +38,8 @@ class Controller extends BaseController
         $parser   = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
         $metadata = $this->di->get('Domain\Addresses\Metadata');
 
-        $query    = !empty($_GET['address'])
-                  ? self::translateFields($parser($_GET['address']))
+        $query    =  !empty($_GET['address'])
+                  ? $parser($_GET['address'])->toSearchQuery()
                   : $_GET;
 
         $request  = new SearchRequest($query, null, self::ITEMS_PER_PAGE, $page);
@@ -88,6 +67,22 @@ class Controller extends BaseController
             return new Views\ParseView($parser($_GET['address']));
         }
         return new Views\ParseView();
+    }
+
+    /**
+     * Check whether an address string is valid or not
+     */
+    public function validate(array $params): View
+    {
+        if (!empty($_GET['query'])) {
+            $validate = $this->di->get('Domain\Addresses\UseCases\Validate\Command');
+            $response = $validate($_GET['query']);
+            if ($response->errors) {
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+            return new Views\ValidateView($_GET['query'], $response);
+        }
+        return new Views\ValidateView();
     }
 
     /**

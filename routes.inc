@@ -84,7 +84,7 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->add('parse',     '/parse'    )->addValues(['action'=>'parse'    ]);
     $r->add('changeLog', '/changeLog')->addValues(['action'=>'changeLog']);
     $r->add('activate',  '/activate' )->addValues(['action'=>'activate' ]);
-    foreach (['changeStatus', 'correct', 'update', 'readdress', 'verify'] as $a) {
+    foreach (['changeStatus', 'correct', 'update', 'readdress', 'validate', 'verify'] as $a) {
         $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
     }
 });
