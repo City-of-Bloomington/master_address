@@ -18,8 +18,7 @@ class ReportView extends Template
     public function __construct(Report          $report,
                                 int             $itemsPerPage,
                                 int             $currentPage,
-                                array           $request,
-                                ?ReportResponse $response=null)
+                                array           $request)
     {
         $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
         parent::__construct('default', $format);
@@ -27,6 +26,7 @@ class ReportView extends Template
         $metadata = $report->metadata();
 
         if ($format == 'html') {
+            $response = $report->execute($request, $itemsPerPage, $currentPage);
             $this->vars['title'] = parent::escape($metadata['title']);
 
             $this->blocks = [
@@ -46,6 +46,7 @@ class ReportView extends Template
             }
         }
         else {
+            $response = $report->execute($request);
             $this->vars['title'] = $metadata['name'];
             if ($response) {
                 $this->blocks = [
