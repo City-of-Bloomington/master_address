@@ -1,22 +1,6 @@
 "use strict";
 /**
- * Opens a popup window letting the user search for and choose something
- *
- * To use this script the HTML elements must have the correct IDs so
- * we can update those elements when the callback is triggered.
- * You then register the CHOOSER.start function as the onclick handler,
- * passing in the fieldId you are using for your inputs elements, and the type
- * of chooser you want (address, street, person, etc.)
- *
- * Here is the minimal HTML required:
- * <input id="{$fieldId}" value="" />
- * <span  id="{$fieldId}-display"></span>
- * <button onclick="CHOOSER.start('$fieldId', 'address');">Change Address</button>
- *
- * Example as it would appear in the final HTML:
- * <input id="reportedByPerson_id" value="" />
- * <span  id="reportedByPerson-display"></span>
- * <button onclick="CHOOSER.start('reportedByPerson_id', 'person');">Change Person</button>
+ * Opens a modal dialog, letting the user search for and choose something
  *
  * @see templates/html/helpers/Chooser.php
  *
@@ -28,18 +12,18 @@ var CHOOSER = {
     /**
      * Initiate a new modal instance for the chooser
      *
-     * @param string id   ID attribute of the input we're choosing for
-     * @param string type Chooser type (address, person, street, etc. )
+     * @param string   type     Chooser type (address, person, street, etc. )
+     * @param function callback Function to call once the user has chosen an address
+     * @param object   options  Storage for custom parameters for the instance
      */
-    start: function (id, type) {
+    start: function (type, callback, options) {
         let modal = document.getElementById('modal-container');
         if (!modal) { modal = CHOOSER.createModal(); }
 
         window.startChooser(
             document.getElementById('chooser'),
             function (data) {
-                document.getElementById(id).value = data.id;
-                document.getElementById(id + '-display').innerHTML = CHOOSER.displayValue(data, type);
+                callback(data, options);
                 CHOOSER.destroy();
             },
             type
