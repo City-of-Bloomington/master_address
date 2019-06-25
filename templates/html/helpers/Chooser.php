@@ -27,12 +27,13 @@ class Chooser extends Helper
                             ?string $display = null )
     {
 		$this->template->addToAsset('scripts', BASE_URI.'/js/chooser.js');
+		$this->template->addToAsset('scripts', BASE_URI.'/js/chooserHelper.js');
 
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}\" id=\"{$fieldId}\" value=\"$value\" />
 		<span id=\"{$fieldId}-display\">$display</span>
 		<button type=\"button\" class=\"chooser\"
-            onclick=\"CHOOSER.start('$fieldId', '$chooserType')\">
+            onclick=\"CHOOSER.start('$chooserType', CHOOSER_HELPER.handleChoice, {element_id:'$fieldId', type:'$chooserType'})\">
 			{$this->template->_('choose')}
 		</button>
 		";
