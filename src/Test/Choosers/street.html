@@ -37,7 +37,7 @@
                 <input name="street_id" id="street_id" />
 
                 <button type="button" class="search"
-                    onclick="STREET_CHOOSER.start(handleStreetChoice);">
+                    onclick="STREET_CHOOSER.start(handleStreetChoice, { streetQuery:document.getElementById('street').innerText});">
                     Choose a street
                 </button>
             </fieldset>

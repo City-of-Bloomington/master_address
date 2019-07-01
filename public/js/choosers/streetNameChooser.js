@@ -29,7 +29,7 @@ var STREETNAME_CHOOSER = {
             STREETNAME_CHOOSER.destroy();
         };
 
-        STREETNAME_CHOOSER.startStreetNameChooser(document.getElementById('chooser'));
+        STREETNAME_CHOOSER.startStreetNameChooser(document.getElementById('chooser'), options);
     },
 
     destroy: function () {
@@ -54,8 +54,9 @@ var STREETNAME_CHOOSER = {
      * Draw the HTML searchForm into the target DIV
      *
      * @param Element target  The DOM element to draw the chooser into
+     * @param object  options Instance parameters for the modal dialog
      */
-    startStreetNameChooser: function (target) {
+    startStreetNameChooser: function (target, options) {
         target.innerHTML = '<form method="get" id="streetNameSearchForm">'
                             + '    <fieldset><legend>Search</legend>'
                             + '        <div>'
@@ -72,8 +73,31 @@ var STREETNAME_CHOOSER = {
             e.preventDefault();
             STREETNAME_CHOOSER.searchStreetName(document.getElementById('sn').value);
         }, false);
+
+        if (options) { STREETNAME_CHOOSER.applyDefaultSearch(options); }
     },
 
+    /**
+     * Prepopulate the search form
+     *
+     * @param object options  Instance parameters to populate from
+     */
+    applyDefaultSearch: function (options) {
+        let submit = document.createEvent('Event');
+
+
+        if (options.sn) {
+            submit.initEvent('submit', true, true);
+            document.getElementById('sn').value = options.sn;
+            document.getElementById('streetNameSearchForm').dispatchEvent(submit);
+        }
+    },
+
+    /**
+     * Perform an async search request
+     *
+     * @param string street  The street name
+     */
     searchStreetName: function (street) {
         let req = new XMLHttpRequest();
 

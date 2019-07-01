@@ -55,6 +55,8 @@ To use one of these choosers in a web application:
 * load JS environment variables from Master Address
 * load JS chooser from Master Address
 
+Sometimes, you might want to pre-populate the search inputs when spawning the modal.  (For example: with a previous search entry).  In this case, in the options, you can pass parameters with the same name as the input IDs in the modal dialog.
+
 ```html
 <html>
 <head>
@@ -90,7 +92,7 @@ To use one of these choosers in a web application:
             <input name="street_id" id="street_id" />
 
             <button type="button" class="search"
-                onclick="STREET_CHOOSER.start(handleStreetChoice);">
+                onclick="STREET_CHOOSER.start(handleStreetChoice, {streetQuery: document.getElementById('street').value});">
                 Choose a street
             </button>
         </fieldset>

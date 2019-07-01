@@ -29,7 +29,7 @@ var ADDRESS_CHOOSER = {
             ADDRESS_CHOOSER.destroy();
         };
 
-        ADDRESS_CHOOSER.startAddressChooser(document.getElementById('chooser'));
+        ADDRESS_CHOOSER.startAddressChooser(document.getElementById('chooser'), options);
     },
 
     destroy: function () {
@@ -54,8 +54,9 @@ var ADDRESS_CHOOSER = {
      * Draw the HTML searchForm into the target DIV
      *
      * @param Element target  The DOM element to draw the chooser into
+     * @param object  options Instance parameters for the modal dialog
      */
-    startAddressChooser: function (target) {
+    startAddressChooser: function (target, options) {
         target.innerHTML = '<form method="get" id="addressSearchForm">'
                             + '    <fieldset><legend>Search</legend>'
                             + '        <div>'
@@ -72,8 +73,33 @@ var ADDRESS_CHOOSER = {
             e.preventDefault();
             ADDRESS_CHOOSER.searchAddress(document.getElementById('addressQuery').value);
         }, false);
+
+        if (options) {
+            ADDRESS_CHOOSER.applyDefaultSearch(options);
+        }
     },
 
+    /**
+     * Prepopulate the search form
+     *
+     * @param object options  Instance parameters to populate from
+     */
+    applyDefaultSearch: function (options) {
+        let submit = document.createEvent('Event');
+
+
+        if (options.addressQuery) {
+            submit.initEvent('submit', true, true);
+            document.getElementById('addressQuery').value = options.addressQuery;
+            document.getElementById('addressSearchForm').dispatchEvent(submit);
+        }
+    },
+
+    /**
+     * Perform an async search request
+     *
+     * @param string address
+     */
     searchAddress: function (address) {
         let req = new XMLHttpRequest();
 
