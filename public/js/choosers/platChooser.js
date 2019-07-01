@@ -29,7 +29,7 @@ var PLAT_CHOOSER = {
             PLAT_CHOOSER.destroy();
         };
 
-        PLAT_CHOOSER.startPlatChooser(document.getElementById('chooser'));
+        PLAT_CHOOSER.startPlatChooser(document.getElementById('chooser'), options);
     },
 
     destroy: function () {
@@ -54,8 +54,9 @@ var PLAT_CHOOSER = {
      * Draw the HTML searchForm into the target DIV
      *
      * @param Element target  The DOM element to draw the chooser into
+     * @param object  options Instance parameters for the modal dialog
      */
-    startPlatChooser: function (target) {
+    startPlatChooser: function (target, options) {
         target.innerHTML = '<form method="get" id="platSearchForm">'
                          + '    <fieldset><legend>Find Plat</legend>'
                          + '        <div>'
@@ -72,8 +73,33 @@ var PLAT_CHOOSER = {
             e.preventDefault();
             PLAT_CHOOSER.searchPlat(document.getElementById('pn').value);
         }, false);
+
+        if (options) {
+            PLAT_CHOOSER.applyDefaultSearch(options);
+        }
     },
 
+    /**
+     * Prepopulate the search form
+     *
+     * @param object options  Instance parameters to populate from
+     */
+    applyDefaultSearch: function (options) {
+        let submit = document.createEvent('Event');
+
+
+        if (options.pn) {
+            submit.initEvent('submit', true, true);
+            document.getElementById('pn').value = options.pn;
+            document.getElementById('platSearchForm').dispatchEvent(submit);
+        }
+    },
+
+    /**
+     * Perform an async search request
+     *
+     * @param string name  The plat name
+     */
     searchPlat: function (name) {
         let req = new XMLHttpRequest();
 

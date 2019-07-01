@@ -57,7 +57,7 @@
                     <input name="subunit_id_1" id="subunit_id_1" />
                     <span    id="address_id_1-display"></span>
                     <button  id="address_id_1-chooserButton" type="button" class="choose"
-                        onclick="ADDRESS_CHOOSER.start(handleChoice, {element_num:1})">Choose</button>
+                        onclick="ADDRESS_CHOOSER.start(handleChoice, {element_num:1, addressQuery:document.getElementById('address_id_1-display').innerText })">Choose</button>
                 </div>
                 <div>
                     <label  for="address_id_2">Address 2</label>

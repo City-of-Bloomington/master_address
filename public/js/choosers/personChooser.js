@@ -29,7 +29,7 @@ var PERSON_CHOOSER = {
             PERSON_CHOOSER.destroy();
         };
 
-        PERSON_CHOOSER.startPersonChooser(document.getElementById('chooser'));
+        PERSON_CHOOSER.startPersonChooser(document.getElementById('chooser'), options);
     },
 
     destroy: function () {
@@ -54,8 +54,9 @@ var PERSON_CHOOSER = {
      * Draw the HTML searchForm into the target DIV
      *
      * @param Element target  The DOM element to draw the chooser into
+     * @param object  options Instance parameters for the modal dialog
      */
-    startPersonChooser: function (target) {
+    startPersonChooser: function (target, options) {
         target.innerHTML = '<form method="get" id="peopleSearchForm">'
                          + '    <fieldset><legend>Find Someone</legend>'
                          + '        <div>'
@@ -84,8 +85,35 @@ var PERSON_CHOOSER = {
                 document.getElementById('se').value
             );
         }, false);
+
+        if (options) { PERSON_CHOOSER.applyDefaultSearch(options); }
     },
 
+    /**
+     * Prepopulate the search form
+     *
+     * @param object options  Instance parameters to populate
+     */
+    applyDefaultSearch: function (options) {
+        let submit = document.createEvent('Event');
+
+        if (options.sf) { document.getElementById('sf').value = options.sf; }
+        if (options.sl) { document.getElementById('sl').value = options.sl; }
+        if (options.se) { document.getElementById('se').value = options.se; }
+
+        if (options.sf || options.sl || options.se) {
+            submit.initEvent('submit', true, true);
+            document.getElementById('peopleSearchForm').dispatchEvent(submit);
+        }
+    },
+
+    /**
+     * Perform an async search request
+     *
+     * @param string firstname
+     * @param string lastname
+     * @param string email
+     */
     searchPerson: function (firstname, lastname, email) {
         let req = new XMLHttpRequest();
 

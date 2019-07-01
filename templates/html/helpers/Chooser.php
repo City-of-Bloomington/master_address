@@ -26,6 +26,7 @@ class Chooser extends Helper
                             ?string $value   = null,
                             ?string $display = null )
     {
+        $this->template->addToAsset('scripts', BASE_URI.'/js/choosers/env.php');
 		$this->template->addToAsset('scripts', BASE_URI."/js/choosers/{$chooserType}Chooser.js");
 		$this->template->addToAsset('scripts', BASE_URI.'/js/chooserHelper.js');
 
