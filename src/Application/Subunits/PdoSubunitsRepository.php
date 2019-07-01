@@ -55,7 +55,8 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         'usng'          => ['prefix'=>'s', 'dbName' => 'usng'         ],
         'status'        => ['prefix'=>'x', 'dbName' => 'status'       ],
         'type_code'     => ['prefix'=>'t', 'dbName' => 'code'         ],
-        'type_name'     => ['prefix'=>'t', 'dbName' => 'name'         ]
+        'type_name'     => ['prefix'=>'t', 'dbName' => 'name'         ],
+        'location_id'   => ['prefix'=>'l', 'dbName' => 'location_id'  ]
     ];
 
     public function columns(): array
@@ -75,7 +76,8 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $select->cols($this->columns())
                ->from(self::TABLE.' s')
                ->join('LEFT', 'subunit_types  t', 's.type_id=t.id')
-               ->join('LEFT', 'subunit_status x', 's.id=x.subunit_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())');
+               ->join('LEFT', 'subunit_status x', 's.id=x.subunit_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())')
+               ->join('LEFT', 'locations      l', 's.id=l.subunit_id and l.active');
 
         return $select;
     }
