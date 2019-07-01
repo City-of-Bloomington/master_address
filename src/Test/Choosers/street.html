@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        #modal-container {
+            position: fixed; top:50%; left:50%;
+            transform: translate(-50%, -50%);
+            z-index:100;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        #modal-container div { background-color: white; }
+        #modal-container #searchResults ul { list-style-type: none; }
+        #modal-container #searchResults li { cursor: pointer; }
+    </style>
+    <script type="text/javascript" src="https://bloomington.in.gov/master_address/js/choosers/env.php"></script>
+    <script type="text/javascript" src="https://bloomington.in.gov/master_address/js/choosers/streetChooser.js"></script>
+    <script type="text/javascript">
+        function handleStreetChoice(streetChoice) {
+            document.getElementById('street_id').value = streetChoice.id;
+            document.getElementById('street'   ).value = streetChoice.streetName;
+        }
+    </script>
+
+</head>
+<body>
+    <section class="editPanel">
+        <form method="post" action="test.php" id="segmentForm">
+            <fieldset>
+                <input name="street"    id="street"    />
+                <input name="street_id" id="street_id" />
+
+                <button type="button" class="search"
+                    onclick="STREET_CHOOSER.start(handleStreetChoice);">
+                    Choose a street
+                </button>
+            </fieldset>
+        </form>
+    </section>
+</body>
+</html>
