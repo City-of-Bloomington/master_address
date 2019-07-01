@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 declare (strict_types=1);
@@ -26,6 +26,8 @@ class Subunit
     public $type_code;
     public $type_name;
 
+    public $location_id;
+
     public function __construct(?array $data=null)
     {
         foreach (array_keys((array)$this) as $f) {
@@ -33,6 +35,7 @@ class Subunit
                 switch ($f) {
                     case 'id':
                     case 'address_id':
+                    case 'location_id':
                     case 'type_id':
                     case 'state_plane_x':
                     case 'state_plane_y':
