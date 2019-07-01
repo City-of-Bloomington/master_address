@@ -39,11 +39,65 @@ $address_id = parent::saveToTable($data, 'addresses');
 
 ### Choosers
 
-Urls that support choosing need to support passing in:
-* callback_field
-* callback_url
+Master Address hosts javascript choosers for:
 
-These generally are search forms that display results of things.  The urls are usually the same urls as the general purpose search.  The only difference is that if the callback_field and callback_url are passed in (via REQUEST parameters), then the results will link to the callback_url instead of the regular URL to that thing.
+* addresses
+* streets
+* plats
+* streetNames
+* people (requires authentication)
+
+Some example clients are available in the [Tests](https://github.com/City-of-Bloomington/master_address/tree/master/src/Test/Choosers).
+
+To use one of these choosers in a web application:
+
+* Declare CSS for the modal chooser
+* load JS environment variables from Master Address
+* load JS chooser from Master Address
+
+```html
+<html>
+<head>
+    <style type="text/css">
+        #modal-container {
+            position: fixed; top:50%; left:50%;
+            transform: translate(-50%, -50%);
+            z-index:100;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        #modal-container div { background-color: white; }
+        #modal-container #searchResults ul { list-style-type: none; }
+        #modal-container #searchResults li { cursor: pointer; }
+    </style>
+    <script src="https://bloomington.in.gov/master_address/js/choosers/env.php"></script>
+    <script src="https://bloomington.in.gov/master_address/js/choosers/streetChooser.js"></script>
+    <script>
+        function handleStreetChoice(streetChoice) {
+            document.getElementById('street_id').value = streetChoice.id;
+            document.getElementById('street'   ).value = streetChoice.streetName;
+        }
+    </script>
+
+</head>
+<body>
+    <form>
+        <fieldset>
+            <input name="street"    id="street"    />
+            <input name="street_id" id="street_id" />
+
+            <button type="button" class="search"
+                onclick="STREET_CHOOSER.start(handleStreetChoice);">
+                Choose a street
+            </button>
+        </fieldset>
+    </form>
+</body>
+</html>
+```
 
 ### Terminology
 * Find   - queries that do exact matching of fields

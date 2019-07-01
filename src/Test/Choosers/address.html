@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        #modal-container {
+            position: fixed; top:50%; left:50%;
+            transform: translate(-50%, -50%);
+            z-index:100;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        #modal-container div { background-color: white; }
+        #modal-container #searchResults ul { list-style-type: none; }
+        #modal-container #searchResults li { cursor: pointer; }
+    </style>
+    <script type="text/javascript" src="https://bloomington.in.gov/master_address/js/choosers/env.php"></script>
+    <script type="text/javascript" src="https://bloomington.in.gov/master_address/js/choosers/addressChooser.js"></script>
+    <script type="text/javascript">
+        var handleChoice = function (chosenAddress, options) {
+                let address_id   = 'address_id_' + options.element_num,
+                    subunit_id   = 'subunit_id_' + options.element_num,
+                    addressInput = document.getElementById(address_id),
+                    subunitInput = document.getElementById(subunit_id),
+                    display      = document.getElementById(address_id + '-display');
+
+                console.log(chosenAddress);
+
+                addressInput.value = chosenAddress.id;
+                display.innerHTML  = chosenAddress.streetAddress;
+
+                // An example of checking for a chosen subunit
+                //
+                // This just appends the subunit name to the displayed address
+                // string. But it's entirely up to you to decide what address
+                // information your application needs.
+                if (chosenAddress.subunit) {
+                    subunitInput.value = chosenAddress.subunit.id;
+                    display.innerHTML += ' ' + chosenAddress.subunit.type_code
+                                      +  ' ' + chosenAddress.subunit.identifier;
+                }
+            };
+    </script>
+</head>
+<body>
+    <section>
+        <form method="post" id="exampleUpdateForm" action="test.php">
+            <fieldset><legend>Update Record</legend>
+                <div>
+                    <label  for="address_id_1">Address 1</label>
+                    <input name="address_id_1" id="address_id_1" />
+                    <input name="subunit_id_1" id="subunit_id_1" />
+                    <span    id="address_id_1-display"></span>
+                    <button  id="address_id_1-chooserButton" type="button" class="choose"
+                        onclick="ADDRESS_CHOOSER.start(handleChoice, {element_num:1})">Choose</button>
+                </div>
+                <div>
+                    <label  for="address_id_2">Address 2</label>
+                    <input name="address_id_2" id="address_id_2" />
+                    <input name="subunit_id_2" id="subunit_id_2" />
+                    <span    id="address_id_2-display"></span>
+                    <button  id="address_id_2-chooserButton" type="button" class="choose"
+                        onclick="ADDRESS_CHOOSER.start(handleChoice, {element_num:2})">Choose</button>
+                </div>
+                <button type="submit" class="save">Save</button>
+            </fieldset>
+        </form>
+    </section>
+</body>
+</html>
