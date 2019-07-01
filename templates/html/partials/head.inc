@@ -4,6 +4,7 @@
     <?php $this->_include('partials/stylesheets.inc'); ?>
     <title><?= isset($this->title) ? self::escape($this->title) : APPLICATION_NAME; ?></title>
     <script type="text/javascript">
-        var ADDRESS_SERVICE = '<?= BASE_URL; ?>';
+        var BASE_URL = '<?= BASE_URL; ?>',
+            BASE_URI = '<?= BASE_URI; ?>';
     </script>
 </head>

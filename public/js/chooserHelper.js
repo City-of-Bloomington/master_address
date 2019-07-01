@@ -20,6 +20,12 @@ var CHOOSER_HELPER = {
             display = document.getElementById(options.element_id + '-display');
 
         input.value = choice.id;
-        display.innerHTML = CHOOSER.displayValue(choice, options.type);
+        switch (options.type) {
+            case 'address'   : display.innerHTML = choice.streetAddress; break;
+            case 'street'    : display.innerHTML = choice.streetName;    break;
+            case 'streetName': display.innerHTML = choice.streetName;    break;
+            case 'person'    : display.innerHTML = choice.fullname;      break;
+            case 'plat'      : display.innerHTML = choice.name + ', ' + choice.township_name; break;
+        }
     }
 };

@@ -26,14 +26,16 @@ class Chooser extends Helper
                             ?string $value   = null,
                             ?string $display = null )
     {
-		$this->template->addToAsset('scripts', BASE_URI.'/js/chooser.js');
+		$this->template->addToAsset('scripts', BASE_URI."/js/choosers/{$chooserType}Chooser.js");
 		$this->template->addToAsset('scripts', BASE_URI.'/js/chooserHelper.js');
+
+		$CHOOSER = strtoupper($chooserType).'_CHOOSER';
 
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}\" id=\"{$fieldId}\" value=\"$value\" />
 		<span id=\"{$fieldId}-display\">$display</span>
 		<button type=\"button\" class=\"chooser\"
-            onclick=\"CHOOSER.start('$chooserType', CHOOSER_HELPER.handleChoice, {element_id:'$fieldId', type:'$chooserType'})\">
+            onclick=\"$CHOOSER.start(CHOOSER_HELPER.handleChoice, {element_id:'$fieldId', type:'$chooserType'})\">
 			{$this->template->_('choose')}
 		</button>
 		";
