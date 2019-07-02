@@ -6,6 +6,8 @@ ansible/roles/*
 vendor
 *.css
 *.css.map
+*-*.js
+env-*.php
 *.mo
 *.retry
 .phpunit*
