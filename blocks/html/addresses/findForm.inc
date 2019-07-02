@@ -31,7 +31,7 @@ $advancedActive = $this->searching && (empty($_GET['address']) || !empty($this->
                 ? 'open="true"'
                 : '';
 
-$this->template->addToAsset('scripts', BASE_URI.'/js/addresses/advancedSearch.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/addresses/advancedSearch-'.VERSION.'.js');
 $h = $this->template->getHelper('field');
 ?>
 <section id="addressSearch">
