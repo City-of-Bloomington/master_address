@@ -13,6 +13,7 @@ fullnameOverride: ""
 
 
 config:
+  base-uri: "/master_address" 
   defaults:
     city: 
     state: 
