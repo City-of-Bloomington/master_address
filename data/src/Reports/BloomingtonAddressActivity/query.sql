@@ -14,16 +14,15 @@ select c.action_date,
        a.address_type,
        l.location_id,
       lt.name as location_type
-
-from address_change_log  c
-join addresses           a on  a.id=c.address_id
-join streets             s on  s.id=a.street_id
-join street_designations d on  s.id=d.street_id and d.type_id=1 -- STREET
-join street_names        n on  n.id=d.street_name_id
-join street_types        t on  t.id=n.suffix_code_id
-join people              p on  p.id=c.person_id
-join locations           l on  a.id=l.address_id and l.subunit_id is null
-join location_types     lt on lt.id=l.type_id
+from      address_change_log  c
+     join addresses           a on  a.id=c.address_id
+     join streets             s on  s.id=a.street_id
+     join street_designations d on  s.id=d.street_id and d.type_id=1 -- STREET
+     join street_names        n on  n.id=d.street_name_id
+left join street_types        t on  t.id=n.suffix_code_id
+     join people              p on  p.id=c.person_id
+     join locations           l on  a.id=l.address_id and l.subunit_id is null
+     join location_types     lt on lt.id=l.type_id
 
 where a.jurisdiction_id=1 -- Bloomington
   and c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
@@ -48,18 +47,17 @@ select c.action_date,
        a.address_type,
        l.location_id,
       lt.name as location_type
-
-from subunit_change_log  c
-join subunits          sub on sub.id=c.subunit_id
-join subunit_types      st on  st.id=sub.type_id
-join addresses           a on   a.id=sub.address_id
-join streets             s on   s.id=a.street_id
-join street_designations d on   s.id=d.street_id and d.type_id=1 -- STREET
-join street_names        n on   n.id=d.street_name_id
-join street_types        t on   t.id=n.suffix_code_id
-join people              p on   p.id=c.person_id
-join locations           l on sub.id=l.subunit_id
-join location_types     lt on  lt.id=l.type_id
+from      subunit_change_log  c
+     join subunits          sub on sub.id=c.subunit_id
+     join subunit_types      st on  st.id=sub.type_id
+     join addresses           a on   a.id=sub.address_id
+     join streets             s on   s.id=a.street_id
+     join street_designations d on   s.id=d.street_id and d.type_id=1 -- STREET
+     join street_names        n on   n.id=d.street_name_id
+left join street_types        t on   t.id=n.suffix_code_id
+     join people              p on   p.id=c.person_id
+     join locations           l on sub.id=l.subunit_id
+     join location_types     lt on  lt.id=l.type_id
 
 where a.jurisdiction_id=1 -- Bloomington
   and c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
