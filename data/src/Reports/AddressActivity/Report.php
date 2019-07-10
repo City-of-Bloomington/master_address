@@ -36,7 +36,7 @@ class Report extends BaseReport
         $endDate   = $request[  'endDate']->format('Y-m-d');
 
         $qq  = file_get_contents(__DIR__.'/query.sql');
-        $sql = "($qq) order by action_date";
+        $sql = "$qq order by action_date desc";
         if ($itemsPerPage) {
             $query = $this->pdo->prepare("select count(*) as count from ($qq) o");
 
