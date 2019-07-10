@@ -39,6 +39,9 @@ spec:
           - name: {{ include "master_address.fullname" . }}
             mountPath: "/srv/sites/master_address/data/site_config.inc"
             subPath: "site_config.inc"
+          - name: {{ include "master_address.fullname" . }}
+            mountPath: "/etc/apache2/sites-available/000-default.conf"
+            subPath: "000-default.conf"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

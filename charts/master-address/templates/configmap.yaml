@@ -17,12 +17,11 @@ data:
     //
     // Even though we're not using SSL in the container,
     // we are always going to be proxying across from an SSL domain
-    define('BASE_URI' , '/master_address');
+
     define('BASE_HOST', isset($_SERVER['HTTP_X_FORWARDED_HOST'])
                             ? $_SERVER['HTTP_X_FORWARDED_HOST']
                             : $_SERVER['SERVER_NAME']);
-
-    define('BASE_URI' , '/master_address');
+    define('BASE_URI' , '{{ .Values.config.base_uri }}');
     define('BASE_URL' , "https://".BASE_HOST.BASE_URI);
 
     define('THEME', 'COB');
@@ -62,4 +61,38 @@ data:
         'state'           => '{{ .Values.config.defaults.state }}',
         'locationType_id' => {{ .Values.config.defaults.locationId }}
     ];
+
+
+
+  000-default.conf: |+
+    DocumentRoot /var/www/html
+    <Directory  "/var/www/html">
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    <IfModule mod_remoteip.c>
+    RemoteIPHeader X-Forwarded-For
+    RemoteIPInternalProxy 10.20.20.19 10.20.22.10 10.20.24.20
+    LogFormat "%a %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    </IfModule>
+
+        ErrorLog /dev/stderr
+        TransferLog /dev/stdout
+
+    Alias {{ .Values.config.base_uri }} "/srv/sites/master_address/public"
+    <Directory            "/srv/sites/master_address/public">
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+
+        RewriteEngine On
+        RewriteBase {{ .Values.config.base_uri }}
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule .? {{ .Values.config.base_uri }}/index.php [NC,L]
+    </Directory>
+
+
 ...
