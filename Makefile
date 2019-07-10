@@ -33,9 +33,5 @@ package:
 	rsync -rl --exclude-from=buildignore . build/${APPNAME}
 	cd build && tar czf ${APPNAME}.tar.gz ${APPNAME}
 
-dockerfile:
-	docker build -t docker-repo.bloomington.in.gov/cob/${APPNAME}:${VERSION}-${COMMIT} .
-	docker push docker-repo.bloomington.in.gov/cob/${APPNAME}:${VERSION}-${COMMIT}
-
 $(LANGUAGES): deps
 	cd $@ && msgfmt -cv *.po
