@@ -115,3 +115,9 @@ $ROUTES->attach('reports', '/reports', function ($r) {
     $r->add('report', '/{name}')->addValues(['action'=>'report']);
     $r->add('index',  '')       ->addValues(['action'=>'index' ]);
 });
+
+$ROUTES->attach('zipCodes', '/zipCodes', function ($r) {
+    $r->setValues(['controller'=> 'Application\ZipCodes\Controller']);
+
+    $r->add('index',  '')->addValues(['action'=>'index' ]);
+});

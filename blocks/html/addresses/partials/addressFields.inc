@@ -65,7 +65,7 @@ echo $h->field([
 ]);
 
 $options = [['value'=>'']];
-foreach ($this->zipCodes as $z) { $options[] = ['value' => $z]; }
+foreach ($this->zipCodes as $z) { $options[] = ['value' => $z['zip']]; }
 echo $h->field([
     'name'     => 'zip',
     'id'       => 'zip',

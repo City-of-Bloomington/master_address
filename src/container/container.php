@@ -166,14 +166,22 @@ foreach (['Info', 'Search', 'Update'] as $a) {
     $DI->lazyNew("Domain\\Townships\\UseCases\\$a\\$a"));
 }
 
+// Users
 foreach (['Delete', 'Info', 'Search', 'Update'] as $a) {
     $DI->params[ "Domain\\Users\\UseCases\\$a\\$a"]["repository"] = $DI->lazyGet('Domain\Users\DataStorage\UsersRepository');
     $DI->set(    "Domain\\Users\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Users\\UseCases\\$a\\$a"));
 }
 
+// Zip Codes
+$DI->params[ "Domain\ZipCodes\UseCases\Index\Command"]["repository"] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
+$DI->set(    "Domain\ZipCodes\UseCases\Index\Command",
+$DI->lazyNew("Domain\ZipCodes\UseCases\Index\Command"));
+
+// Reports
 foreach (\Domain\Reports\Report::list() as $r) {
     $DI->params[ "Site\Reports\\$r\Report"]['pdo'] = $pdo;
     $DI->set(    "Site\Reports\\$r\Report",
     $DI->lazyNew("Site\Reports\\$r\Report"));
 }
+
