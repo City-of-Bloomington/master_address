@@ -445,7 +445,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             $req->address_id
         ]);
 
-        $sql = "update locations set mailable=?, occupiable=?, group_quarter=?
+        $sql = "update locations set type_id=?, mailable=?, occupiable=?, group_quarter=?
                 from location_status
                 where address_id=? and subunit_id is null and active
                 and location_status.location_id=locations.location_id
@@ -453,6 +453,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                 and status='current'";
         $query = $this->pdo->prepare($sql);
         $query->execute([
+            $req->locationType_id,
             $req->mailable,
             $req->occupiable,
             $req->group_quarter,

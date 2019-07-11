@@ -25,6 +25,7 @@ class Request implements ChangeLogRequest
     public $notes;
 
     // Location Fields
+    public $locationType_id;
     public $mailable;
     public $occupiable;
     public $group_quarter;
@@ -50,6 +51,7 @@ class Request implements ChangeLogRequest
         if (!empty($data['plat_lot_number'])) { $this->plat_lot_number =      $data['plat_lot_number']; }
         if (!empty($data['notes'          ])) { $this->notes           =      $data['notes'          ]; }
 
+        if (!empty($data['locationType_id'])) { $this->locationType_id = (int)$data['locationType_id']; }
         if (!empty($data['mailable'       ])) { $this->mailable        =      $data['mailable'     ] ? true : false; }
         if (!empty($data['occupiable'     ])) { $this->occupiable      =      $data['occupiable'   ] ? true : false; }
         if (!empty($data['group_quarter'  ])) { $this->group_quarter   =      $data['group_quarter'] ? true : false; }

@@ -8,9 +8,9 @@
  * @param array  $this->locationTypes   Location types to choose from
  *
  * @param string $this->locationType_id;
- * @param string $this->mailable;
- * @param string $this->occupiable;
- * @param string $this->group_quarter
+ * @param bool   $this->mailable;
+ * @param bool   $this->occupiable;
+ * @param bool   $this->group_quarter
  */
 
 $h = $this->template->getHelper('field');
@@ -27,4 +27,33 @@ echo $h->field([
     'required' => true
 ]);
 
-$this->_include('locations/partials/booleanFields.inc');
+$options = [
+    ['value'=>1, 'label'=>$this->_('yes')],
+    ['value'=>0, 'label'=>$this->_('no' )]
+];
+echo $h->field([
+    'name'     => 'mailable',
+    'id'       => 'mailable',
+    'label'    => $this->_('mailable'),
+    'type'     => 'radio',
+    'value'    => $this->mailable,
+    'options'  => $options
+]);
+
+echo $h->field([
+    'name'     => 'occupiable',
+    'id'       => 'occupiable',
+    'label'    => $this->_('occupiable'),
+    'type'     => 'radio',
+    'value'    => $this->occupiable,
+    'options'  => $options
+]);
+
+echo $h->field([
+    'name'     => 'group_quarter',
+    'id'       => 'group_quarter',
+    'label'    => $this->_('group_quarter'),
+    'type'     => 'radio',
+    'value'    => $this->group_quarter,
+    'options'  => $options
+]);

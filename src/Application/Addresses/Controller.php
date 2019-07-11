@@ -291,6 +291,7 @@ class Controller extends BaseController
                     'quarter_section' => $info->address->quarter_section,
                     'plat_lot_number' => $info->address->plat_lot_number,
                     'notes'           => $info->address->notes,
+                    'locationType_id' => $location ? $location->type_id       : null,
                     'mailable'        => $location ? $location->mailable      : null,
                     'occupiable'      => $location ? $location->occupiable    : null,
                     'group_quarter'   => $location ? $location->group_quarter : null
@@ -298,6 +299,7 @@ class Controller extends BaseController
             }
             return new Views\UpdateView($request,
                                         $this->di->get('Domain\Addresses\Metadata'),
+                                        $this->di->get('Domain\Locations\Metadata'),
                                         $info,
                                         $contact);
         }
