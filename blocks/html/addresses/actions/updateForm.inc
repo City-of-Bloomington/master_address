@@ -9,7 +9,8 @@
  * @param array  $this->quarterSections
  * @param array  $this->sections
  * @param array  $this->townships
- * @param array  $this->types
+ * @param array  $this->types            Address types
+ * @param array  $this->locationTypes    Location types
  *---------------------------------------------------------
  * Address table fields
  *---------------------------------------------------------
@@ -27,6 +28,7 @@
  *---------------------------------------------------------
  * Location fields
  *---------------------------------------------------------
+ * @param int    $this->locationType_id
  * @param bool   $this->mailable
  * @param bool   $this->occupiable
  * @param bool   $this->group_quarter
@@ -73,7 +75,7 @@ declare (strict_types=1);
 
         <fieldset><legend><?= $this->_('location'); ?></legend>
             <?php
-                $this->_include('locations/partials/booleanFields.inc');
+                $this->_include('locations/partials/locationFields.inc');
             ?>
         </fieldset>
 

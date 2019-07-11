@@ -9,17 +9,20 @@ namespace Application\Addresses\Views;
 use Application\Block;
 use Application\Template;
 
-use Domain\Addresses\Metadata;
+use Domain\Addresses\Metadata as AddressMetadata;
+use Domain\Locations\Metadata as LocationMetadata;
+
 use Domain\Addresses\UseCases\Update\Request;
 use Domain\Addresses\UseCases\Info\InfoResponse;
 use Domain\People\Entities\Person;
 
 class UpdateView extends Template
 {
-    public function __construct(Request      $request,
-                                Metadata     $metadata,
-                                InfoResponse $info,
-                                ?Person      $contact=null)
+    public function __construct(Request          $request,
+                                AddressMetadata  $addressMetadata,
+                                LocationMetadata $locationMetadata,
+                                InfoResponse     $info,
+                                ?Person          $contact=null)
     {
         parent::__construct('two-column', 'html');
         $this->vars['title'] = $this->_('update');
@@ -27,11 +30,12 @@ class UpdateView extends Template
         $this->blocks[] = new Block('addresses/breadcrumbs.inc', ['address'=>$info->address]);
 
         $vars = [
-            'jurisdictions'   => $metadata->jurisdictions(),
-            'quarterSections' => $metadata->quarterSections(),
-            'sections'        => $metadata->sections(),
-            'types'           => $metadata->types(),
-            'townships'       => $metadata->townships(),
+            'jurisdictions'   => $addressMetadata->jurisdictions(),
+            'quarterSections' => $addressMetadata->quarterSections(),
+            'sections'        => $addressMetadata->sections(),
+            'types'           => $addressMetadata->types(),
+            'townships'       => $addressMetadata->townships(),
+            'locationTypes'   => $locationMetadata->types(),
             'contact_id'   => $contact ? $contact->id           : null,
             'contact_name' => $contact ? $contact->__toString() : null,
         ];
