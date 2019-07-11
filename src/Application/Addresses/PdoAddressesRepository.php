@@ -586,10 +586,8 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
     public function zipCodes(): array
     {
-        $sql = "select distinct zip from addresses
-                where zip is not null
-                order by zip";
+        $sql = "select * from zip_codes order by city, zip";
         $result = $this->pdo->query($sql);
-        return $result->fetchAll(\PDO::FETCH_COLUMN);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

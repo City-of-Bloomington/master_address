@@ -229,7 +229,9 @@ msgid "state"
 msgstr "State"
 
 msgid "zip"
-msgstr "Zip Code"
+msgid_plural "zips"
+msgstr[0] "Zip Code"
+msgstr[1] "Zip Codes"
 
 msgid "zipplus4"
 msgstr "Zip Plus 4"
