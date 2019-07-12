@@ -11,15 +11,15 @@ use Application\View;
 class Field extends Helper
 {
     /**
-     * Parameters:
+     * Params keys:
      *
-     * label string
-     * name  string
-     * id    string
-     * value mixed
-     * type  string   HTML5 input tag type (text, email, date, etc.)
-     * required     Boolean
-     * attr         Additional attributes to include inside the input tag
+     * label      string
+     * name       string
+     * id         string
+     * value      mixed
+     * type       string   HTML5 input tag type (text, email, date, etc.)
+     * required   bool
+     * attr       array    Additional attributes to include inside the input tag
      *
      * @param array $params
      */
@@ -65,15 +65,12 @@ class Field extends Helper
 
         if (!empty($class)) { $classes = ' class="'.implode(' ', $class).'"'; }
 
-        $attr = '';
-        if (!empty(  $params['attr'])) {
-            foreach ($params['attr'] as $k=>$v) { $attr.= "$k=\"$v\""; }
-        }
+        $attr  = !empty($params['attr' ]) ? self::attributesToString($params['attr']) : '';
+        $for   = !empty($params['id'   ]) ? " for=\"$params[id]\""                    : '';
+        $label = !empty($params['label']) ? "<label$for>$params[label]</label>"       : '';
+        $help  = !empty($params['help' ]) ? "<div class=\"help\">$params[help]</div>" : '';
 
         $input = $this->$renderInput($params, $required, $attr);
-        $for   = !empty($params['id'   ]) ? " for=\"$params[id]\""                       : '';
-        $label = !empty($params['label']) ? "<label$for>$params[label]</label>"          : '';
-        $help  = !empty($params['help' ]) ? "<div class=\"help\">$params[help]</div>"    : '';
 
         return "
         <div$classes>
@@ -83,18 +80,19 @@ class Field extends Helper
         ";
     }
 
+    private static function attributesToString(array $attr): string
+    {
+        $out = '';
+        foreach ($attr as $k=>$v) { $out.= "$k=\"$v\""; }
+        return $out;
+    }
+
     /**
-     * Parameters:
+     * Returns HTML for a generic input element
      *
-     * label string
-     * name  string
-     * id    string
-     * value string
-     * type  string   HTML5 input tag type (text, email, date, etc.)
-     *
-     * @param array  $params
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function input(array $params, $required=null, $attr=null)
     {
@@ -109,17 +107,14 @@ class Field extends Helper
     }
 
     /**
-     * Parameters:
+     * Returns HTML for a select dropdown
      *
-     * label string
-     * name  string
-     * id    string
-     * value string
-     * type  string   HTML5 input tag type (text, email, date, etc.)
+     * Additional $params keys:
+     *     options  array  The choices to provide the user
      *
-     * @param array  $params
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function select(array $params, $required=null, $attr=null)
     {
@@ -130,9 +125,10 @@ class Field extends Helper
         $select = "<select name=\"$params[name]\" id=\"$params[id]\" $required $attr>";
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
+                $attr     = !empty($o['attr' ])   ? self::attributesToString($o['attr']) : '';
                 $label    = !empty($o['label'])   ? $o['label']       : $o['value'];
                 $selected = $value == $o['value'] ? 'selected="true"' : '';
-                $select.= "<option value=\"$o[value]\" $selected>$label</option>";
+                $select.= "<option value=\"$o[value]\" $selected $attr>$label</option>";
             }
         }
         $select.= "</select>";
@@ -140,17 +136,14 @@ class Field extends Helper
     }
 
     /**
-     * Parameters:
+     * Returns HTML for a set of radio buttons
      *
-     * label string
-     * name  string
-     * id    string
-     * value string
-     * type  string   HTML5 input tag type (text, email, date, etc.)
+     * Additional $params keys:
+     *     options  array  The choices to provide the user
      *
-     * @param array  $params
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function radio(array $params, $required=null, $attr=null)
     {
@@ -161,10 +154,11 @@ class Field extends Helper
         $radioButtons = '<div>';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
+                $attr    = !empty($o['attr' ])   ? self::attributesToString($o['attr']) : '';
                 $label   = !empty($o['label'])   ? $o['label']      : $o['value'];
                 $checked = $value == $o['value'] ? 'checked="true"' : '';
 
-                $radioButtons.= "<label><input name=\"$params[name]\" type=\"radio\" value=\"$o[value]\" $checked/> $label</label>";
+                $radioButtons.= "<label><input name=\"$params[name]\" type=\"radio\" value=\"$o[value]\" $attr $checked /> $label</label>";
             }
         }
         $radioButtons .= '</div>';
@@ -172,17 +166,14 @@ class Field extends Helper
     }
 
     /**
-     * Parameters:
+     * Returns HTML for a set of checkboxes
      *
-     * label string
-     * name  string
-     * id    string
-     * value array
-     * type  string   HTML5 input tag type (text, email, date, etc.)
+     * Additional $params keys:
+     *     options  array  The choices to provide the user
      *
-     * @param array  $params
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function checkbox(array $params, $required=null, $attr=null)
     {
@@ -193,11 +184,12 @@ class Field extends Helper
         $inputs = '<div>';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $label   = !empty($o['label'])            ? $o['label']      : $o['value'];
+                $attr    = !empty($o['attr' ]) ? self::attributesToString($o['attr']) : '';
+                $label   = !empty($o['label']) ? $o['label'] : $o['value'];
                 $checked = in_array($o['value'], $values) ? 'checked="true"' : '';
 
                 $name   = $params['name'].'['.$o['value'].']';
-                $inputs.= "<label><input name=\"$name\" type=\"checkbox\" value=\"$o[value]\" $checked/> $label</label>";
+                $inputs.= "<label><input name=\"$name\" type=\"checkbox\" value=\"$o[value]\" $attr $checked /> $label</label>";
             }
         }
         $inputs .= '</div>';
@@ -205,17 +197,11 @@ class Field extends Helper
     }
 
     /**
-     * Parameters:
+     * Returns HTML for a generic textarea element
      *
-     * label string
-     * name  string
-     * id    string
-     * value string
-     * type  string   HTML5 input tag type (text, email, date, etc.)
-     *
-     * @param array  $params
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function textarea(array $params, $required=null, $attr=null)
     {
@@ -227,17 +213,11 @@ class Field extends Helper
     }
 
     /**
-     * Parameters:
+     * Returns HTML for a file input
      *
-     * label string
-     * name  string
-     * id    string
-     * value string
-     * type  string   HTML5 input tag type (text, email, date, etc.)
-     *
-     * @param array  $params
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function file(array $params, $required=null, $attr=null)
     {
@@ -245,36 +225,20 @@ class Field extends Helper
     }
 
     /**
-     * Parameters:
+     * Returns HTML for a generic chooser
      *
-     * name    string
-     * id      string
-     * value   int      The ID of the currently chosen object
-     * display string   The string to display for the currently chosen object
-     * url     string   The URI to the chooser
+     * A chooser is javascript and HTML for a search-and-choose process.
+     * Choosers are usually displayed as a modal dialog.
      *
-     * @param array  $params
+     * @see Application\Template\Helpers\Chooser
+     *
+     * Additional $params keys:
+     *     display string   The string to display for the currently chosen object
+     *     url     string   The URI to the chooser
+     *
+     * @param array  $params    Raw params array passed to the field
      * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
-     */
-    public function person(array $params, $required=null, $attr=null)
-    {
-        $h = $this->template->getHelper('personChooser');
-        return $h->personChooser($params['name'], $params['id'], $params['value']);
-    }
-
-    /**
-     * Parameters:
-     *
-     * name    string
-     * id      string
-     * value   int      The ID of the currently chosen object
-     * display string   The string to display for the currently chosen object
-     * url     string   The URI to the chooser
-     *
-     * @param array  $params
-     * @param string $required  The string for the attribute 'required="true"'
-     * @param string $attr      The string for any and all additional attributes
+     * @param string $attr      The string representation of $params[attr]
      */
     public function chooser(array $params, ?bool $required=false, ?string $attr=null)
     {
