@@ -522,9 +522,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     //---------------------------------------------------------------
     public function cities(): array
     {
-        $sql = "select distinct city from addresses
-                where city is not null
-                order by city";
+        $sql = 'select distinct city from zip_codes order by city';
         $result = $this->pdo->query($sql);
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }

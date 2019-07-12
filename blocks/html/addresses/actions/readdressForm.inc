@@ -1,7 +1,17 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
+ * @copyright 2009-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ *---------------------------------------------------------
+ * Information to populate select dropdown options
+ *---------------------------------------------------------
+ * @param array  $this->cities           Cities to choose from
+ * @param array  $this->jurisdictions    Jurisdictions to choose from
+ * @param array  $this->quarterSections  Quarter Sections to choose from
+ * @param array  $this->sections         Sections to choose from
+ * @param array  $this->townships        Townships to choose from
+ * @param array  $this->types            Address types to choose from
+ * @param array  $this->zipCodes         Zip codes to choose from
  *---------------------------------------------------------
  * Address table fields
  *---------------------------------------------------------

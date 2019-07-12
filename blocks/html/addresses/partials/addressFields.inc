@@ -41,6 +41,7 @@
 declare (strict_types=1);
 use Application\Url;
 
+$this->template->addToAsset('scripts', BASE_URI.'/js/addresses/addressFields-'.VERSION.'.js');
 $h = $this->template->getHelper('field');
 
 $options = [['value'=>'']];
@@ -65,7 +66,13 @@ echo $h->field([
 ]);
 
 $options = [['value'=>'']];
-foreach ($this->zipCodes as $z) { $options[] = ['value' => $z['zip']]; }
+foreach ($this->zipCodes as $z) {
+    $options[] = [
+        'value' => $z['zip'],
+        'label' => "$z[zip] $z[city]",
+        'attr'  => ['data-city' => $z['city'], 'data-state' => $z['state']]
+    ];
+}
 echo $h->field([
     'name'     => 'zip',
     'id'       => 'zip',
@@ -75,6 +82,7 @@ echo $h->field([
     'options'  => $options,
     'required' => true
 ]);
+echo "<input name=\"city\" id=\"city\" type=\"hidden\" value=\"{$this->city}\" />";
 
 echo $h->field([
     'name'     => 'zipplus4',
@@ -82,18 +90,6 @@ echo $h->field([
     'label'    => $this->_('zipplus4'),
     'value'    => $this->zipplus4,
     'type'     => 'number'
-]);
-
-$options = [];
-foreach ($this->cities as $c) { $options[] = ['value'=>$c]; }
-echo $h->field([
-    'name'     => 'city',
-    'id'       => 'city',
-    'label'    => $this->_('city'),
-    'value'    => $this->city,
-    'type'     => 'select',
-    'options'  => $options,
-    'required' => true
 ]);
 
 $this->_include('addresses/partials/descriptiveFields.inc');
