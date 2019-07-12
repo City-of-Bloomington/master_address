@@ -37,27 +37,10 @@ class Metadata
 
     public function cities(): array
     {
-        static $cities = [
-            'Bedford',
-            'Bloomington',
-            'Clear Creek',
-            'Ellettsville',
-            'Gosport',
-            'Harrodsburg',
-            'Heltonville',
-            'Martinsville',
-            'Nashville',
-            'Smithville',
-            'Spencer',
-            'Springville',
-            'Stanford',
-            'Stinesville',
-            'Unionville'
-        ];
-        if (!$cities) { $cities = $this->repo->cities(); }
-        return $cities;
+        static $a;
+        if   (!$a) { $a = $this->repo->cities(); }
+        return $a;
     }
-
 
     public function jurisdictions(): array
     {
