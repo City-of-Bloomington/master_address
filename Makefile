@@ -9,7 +9,7 @@ JAVASCRIPT := $(shell find public -name '*.js' ! -name '*-*.js')
 VERSION := $(shell cat VERSION | tr -d "[:space:]")
 COMMIT := $(shell git rev-parse --short HEAD)
 
-default: clean compile package
+default: clean compile test package
 
 deps:
 ifndef SASS
@@ -29,6 +29,9 @@ compile: deps $(LANGUAGES)
 	cd data/Themes/COB/public/css && sassc -mt compact screen.scss screen-${VERSION}.css
 	for f in ${JAVASCRIPT}; do cp $$f $${f%.js}-${VERSION}.js; done
 	cd public/js/choosers && cp env.php env-${VERSION}.php
+
+test:
+	vendor/phpunit/phpunit/phpunit -c src/Test/Unit.xml
 
 package:
 	[[ -d build ]] || mkdir build
