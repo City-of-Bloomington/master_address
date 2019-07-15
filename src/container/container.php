@@ -172,6 +172,7 @@ foreach (['Delete', 'Info', 'Search', 'Update'] as $a) {
     $DI->set(    "Domain\\Users\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Users\\UseCases\\$a\\$a"));
 }
+$DI->params['Domain\Users\UseCases\Update\Update']['auth'] = $DI->lazyGet('Domain\Auth\AuthenticationService');
 
 // Zip Codes
 $DI->params[ "Domain\ZipCodes\UseCases\Index\Command"]["repository"] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
