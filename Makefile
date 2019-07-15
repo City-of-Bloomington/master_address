@@ -20,7 +20,7 @@ ifndef MSGFMT
 endif
 
 clean:
-	rm -Rf build/${APPNAME}
+	rm -Rf build/${APPNAME}*
 	for f in $(shell find public/js -name '*-*.js' ); do rm $$f; done
 	for f in $(shell find public/js -name '*-*.php'); do rm $$f; done
 
@@ -36,7 +36,7 @@ test:
 package:
 	[[ -d build ]] || mkdir build
 	rsync -rl --exclude-from=buildignore . build/${APPNAME}
-	cd build && tar czf ${APPNAME}.tar.gz ${APPNAME}
+	cd build && tar czf ${APPNAME}-${VERSION}.tar.gz ${APPNAME}
 
 $(LANGUAGES): deps
 	cd $@ && msgfmt -cv *.po
