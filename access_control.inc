@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 
@@ -10,9 +10,8 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 $ZEND_ACL = new Acl();
 $ZEND_ACL->addRole(new Role('Anonymous'))
-		 ->addRole(new Role('Public'),   'Anonymous')
-		 ->addRole(new Role('Engineering'), 'Public')
-		 ->addRole(new Role('GIS'))
+		 ->addRole(new Role('Public'), 'Anonymous')
+		 ->addRole(new Role('addressedit'))
 		 ->addRole(new Role('Administrator'));
 /**
  * Create resources for all the routes
@@ -30,6 +29,6 @@ $ZEND_ACL->allow(null, 'addresses', ['index', 'view', 'parse']);
 $ZEND_ACL->allow(null, 'streets',   ['index', 'view', 'intersections', 'intersectingStreets']);
 $ZEND_ACL->allow(null, 'subunits',  ['index', 'view']);
 
-$ZEND_ACL->allow('GIS');
-$ZEND_ACL->deny ('GIS', 'users');
+$ZEND_ACL->allow('addressedit');
+$ZEND_ACL->deny ('addressedit', 'users');
 $ZEND_ACL->allow('Administrator');
