@@ -182,7 +182,8 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         ], self::TABLE);
 
         if ($street_id) {
-            $designation    = new AliasRequest($street_id, $req->user_id, $req->start_date, [
+            $designation = new Designation([
+                'street_id'  => $street_id,
                 'start_date' => $req->start_date,
                 'name_id'    => $req->name_id,
                 'type_id'    => self::TYPE_STREET,
@@ -223,17 +224,18 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
      *
      * @return int  The new designation_id
      */
-    public function addDesignation(AliasRequest $req): int
+    public function addDesignation(Designation $d): int
     {
         return parent::saveToTable([
-            'street_id'      => $req->street_id,
-            'street_name_id' => $req->name_id,
-            'type_id'        => $req->type_id,
-            'rank'           => $this->nextDesignationRank($req->street_id),
-            'start_date'     => $req->start_date->format('c')
+            'street_id'      => $d->street_id,
+            'street_name_id' => $d->name_id,
+            'type_id'        => $d->type_id,
+            'rank'           => $d->rank,
+            'start_date'     => $d->start_date->format('c')
         ], 'street_designations');
     }
-    private function nextDesignationRank(int $street_id): int
+
+    public function nextDesignationRank(int $street_id): int
     {
         $sql   = 'select max(rank)+1 from street_designations where street_id=?';
         $query = $this->pdo->prepare($sql);
@@ -266,7 +268,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     /**
      * Query for street designations using exact matching
      */
-    public function findDesignations(array $fields): array
+    public function findDesignations(array $fields, ?array $sort=null): array
     {
         $designations = [];
 
@@ -280,6 +282,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                 break;
             }
         }
+        $select->orderBy($sort ?? ['d.street_id', 'd.rank']);
         $result = $this->performSelect($select);
         foreach ($result['rows'] as $r) { $designations[] = Designation::hydrate($r); }
         return $designations;

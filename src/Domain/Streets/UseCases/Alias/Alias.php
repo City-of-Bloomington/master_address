@@ -2,13 +2,14 @@
 /**
  * Add a new Designation for a Street
  *
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\UseCases\Alias;
 
 use Domain\Streets\DataStorage\StreetsRepository;
+use DOmain\Streets\Entities\Designation;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
 
@@ -23,12 +24,15 @@ class Alias
 
     public function __invoke(AliasRequest $req): AliasResponse
     {
-        $street_id = $req->street_id;
         try {
             $errors = $this->validate($req);
             if ($errors) {
-                return new AliasResponse(null, $street_id, null, $errors);
+                return new AliasResponse(null, $req->street_id, null, $errors);
             }
+
+            $des            = new Designation((array)$req);
+            $des->rank      = $this->repo->nextDesignationRank($req->street_id);
+            $designation_id = $this->repo->addDesignation($des);
 
             $entry = new ChangeLogEntry([
                 'action'     => ChangeLog::$actions['alias'],
@@ -37,12 +41,11 @@ class Alias
                 'contact_id' => $req->contact_id,
                 'notes'      => $req->change_notes
             ]);
-            $designation_id = $this->repo->addDesignation($req);
-            $log_id         = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
-            return new AliasResponse($log_id, $street_id, $designation_id);
+            $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
+            return new AliasResponse($log_id, $req->street_id, $designation_id);
         }
         catch (\Exception $e) {
-            return new AliasResponse(null,    $street_id, $designation_id, [$e->getMessage()]);
+            return new AliasResponse(null,    $req->street_id, $designation_id, [$e->getMessage()]);
         }
     }
 
