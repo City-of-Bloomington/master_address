@@ -5,7 +5,6 @@
  * @param int      $this->street_id
  * @param int      $this->name_id
  * @param int      $this->type_id
- * @param int      $this->rank
  * @param DateTime $this->start_date
  * @param string   $this->contact_id   Change log contact person
  * @param string   $this->contact_name Change log contact person
@@ -43,15 +42,6 @@
                     'display'  => $this->name,
                     'type'     => 'chooser',
                     'chooser'  => 'streetName',
-                    'required' => true
-                ]);
-
-                echo $h->field([
-                    'name'     => 'rank',
-                    'id'       => 'rank',
-                    'label'    => $this->_('rank'),
-                    'value'    => $this->rank,
-                    'type'     => 'number',
                     'required' => true
                 ]);
 
