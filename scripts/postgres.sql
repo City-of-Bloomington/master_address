@@ -131,6 +131,7 @@ create table street_designations (
     type_id        int    not null,
     start_date     date,
     rank           smallint,
+    unique (street_id, rank),
     foreign key (street_id     ) references streets                 (id),
     foreign key (street_name_id) references street_names            (id),
     foreign key (type_id       ) references street_designation_types(id)
