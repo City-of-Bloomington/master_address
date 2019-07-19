@@ -30,24 +30,27 @@ class AliasView extends Template
             'street_id'    => $request->street_id,
             'name_id'      => $request->name_id,
             'type_id'      => $request->type_id,
-            'rank'         => $request->rank,
             'start_date'   => $request->start_date,
             'contact_id'   => $contact ? $contact->id           : null,
             'contact_name' => $contact ? $contact->__toString() : null,
             'change_notes' => parent::escape($request->change_notes),
             'return_url'   => parent::generateUri('streets.view', ['id'=>$request->street_id]),
             'name'         => parent::escape($name),
-            'types'        => $metadata->designationTypes()
+            'types'        => self::filterType(Metadata::TYPE_STREET, $metadata->designationTypes())
         ];
 
         $this->blocks = [
-            new Block('streets/actions/aliasForm.inc', $vars),
-            new Block('streets/info.inc',              ['street'         => $info->street,
-                                                        'disableButtons' => true]),
-            new Block('logs/changeLog.inc',            ['entries'        => $info->changeLog->entries,
-                                                        'total'          => $info->changeLog->total]),
             new Block('streets/designations/list.inc', ['designations'   => $info->designations,
-                                                        'disableButtons' => true])
+                                                        'disableButtons' => true]),
+            new Block('streets/actions/aliasForm.inc', $vars)
         ];
+    }
+
+    private static function filterType(int $id, array $types): array
+    {
+        foreach ($types as $i=>$t) {
+            if ($t['id'] == $id) { unset($types[$i]); }
+        }
+        return $types;
     }
 }

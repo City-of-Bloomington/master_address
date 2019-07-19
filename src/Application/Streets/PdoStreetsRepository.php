@@ -229,9 +229,16 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             'street_id'      => $req->street_id,
             'street_name_id' => $req->name_id,
             'type_id'        => $req->type_id,
-            'rank'           => $req->rank,
+            'rank'           => $this->nextDesignationRank($req->street_id),
             'start_date'     => $req->start_date->format('c')
         ], 'street_designations');
+    }
+    private function nextDesignationRank(int $street_id): int
+    {
+        $sql   = 'select max(rank)+1 from street_designations where street_id=?';
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$street_id]);
+        return $query->fetchColumn();
     }
 
     private function designationSelect(): SelectInterface
