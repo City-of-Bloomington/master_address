@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -11,7 +11,6 @@ class UpdateRequest
     // Designation fields
     public $designation_id;
     public $type_id;
-    public $rank;
     public $start_date;
 
     // Change log entry
@@ -25,10 +24,9 @@ class UpdateRequest
         $this->user_id         = $user_id;
         $this->start_date      = $start_date;
 
-        if (!empty($data['type_id'])) { $this->type_id = (int)$data['type_id']; }
-        if (!empty($data['rank'   ])) { $this->rank    = (int)$data['rank'   ]; }
+        if (!empty($data['type_id'     ])) { $this->type_id      = (int)$data['type_id'     ]; }
 
-        if (!empty($data['contact_id'  ])) { $this->contact_id = (int)$data['contact_id'  ]; }
-        if (!empty($data['change_notes'])) { $this->change_notes =    $data['change_notes']; }
+        if (!empty($data['contact_id'  ])) { $this->contact_id   = (int)$data['contact_id'  ]; }
+        if (!empty($data['change_notes'])) { $this->change_notes =      $data['change_notes']; }
     }
 }

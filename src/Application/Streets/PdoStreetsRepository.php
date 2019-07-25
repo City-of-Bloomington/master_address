@@ -310,8 +310,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
         $data = [
             'id'         => $req->designation_id,
             'type_id'    => $req->type_id,
-            'start_date' => $req->start_date->format('c'),
-            'rank'       => $req->rank
+            'start_date' => $req->start_date->format('c')
         ];
         parent::saveToTable($data, 'street_designations');
     }

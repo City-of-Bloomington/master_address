@@ -86,6 +86,9 @@ msgstr "You must provide a zip code"
 msgid "designations/missingType"
 msgstr "You must choose a designation type"
 
+msgid "designations/cannotUpdateStreetType"
+msgstr "You cannot update a designation of type STREET.  You must use \"Change Street Name Designation\""
+
 msgid "ldap/unknownUser"
 msgstr "That username is not in LDAP.  You cannot set LDAP authentication if the user is not in LDAP."
 

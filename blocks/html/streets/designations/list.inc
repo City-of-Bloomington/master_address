@@ -47,7 +47,7 @@
                 $start = $d->start_date ? $d->start_date->format(DATE_FORMAT) : '';
                 $rank  = $d->rank;
 
-				if ($userCanEdit) {
+				if ($userCanEdit && $type != 'STREET') {
                     $button = $h->buttonLink(
                         parent::generateUri('designations.update', ['id'=>$d->id]),
                         $this->_('update'),

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -32,7 +32,6 @@ class UpdateView extends Template
             'street_id'      => $info->street->id,
             'designation_id' => $request->designation_id,
             'type_id'        => $request->type_id,
-            'rank'           => $request->rank,
             'start_date'     => $request->start_date,
             'contact_id'     => $contact ? $contact->id           : null,
             'contact_name'   => $contact ? $contact->__toString() : null,

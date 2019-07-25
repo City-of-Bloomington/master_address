@@ -1,11 +1,10 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  * @param int      $this->street_id
  * @param int      $this->designation_id
  * @param int      $this->type_id
- * @param int      $this->rank
  * @param DateTime $this->start_date
  * @param string   $this->contact_id   Change log contact person
  * @param string   $this->contact_name Change log contact person
@@ -31,15 +30,6 @@ declare (strict_types=1);
                     'value'    => $this->type_id,
                     'type'     => 'select',
                     'options'  => $options,
-                    'required' => true
-                ]);
-
-                echo $h->field([
-                    'name'     => 'rank',
-                    'id'       => 'rank',
-                    'label'    => $this->_('rank'),
-                    'value'    => $this->rank,
-                    'type'     => 'number',
                     'required' => true
                 ]);
 
