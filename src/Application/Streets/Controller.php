@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2017-2019 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Streets;
@@ -22,6 +22,8 @@ use Domain\Streets\UseCases\Intersections\IntersectionsRequest;
 use Domain\Streets\UseCases\Update\UpdateRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
 use Domain\Streets\UseCases\Search\SearchResponse;
+
+use Domain\Streets\Designations\UseCases\Reorder\Request as ReorderRequest;
 
 class Controller extends BaseController
 {
@@ -327,6 +329,32 @@ class Controller extends BaseController
                 !empty($_REQUEST[   'name_id']) ? parent::name  ((int)$_REQUEST[   'name_id']) : null,
                 !empty($_REQUEST['contact_id']) ? parent::person((int)$_REQUEST['contact_id']) : null
             );
+        }
+        return new \Application\Views\NotFoundView();
+    }
+
+    /**
+     * Update all a given street's designation ranks at once
+     */
+    public function reorder(array $params): View
+    {
+        $street_id = !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+        if ($street_id) {
+            if (isset($_POST['id'])) {
+                asort($_POST['designations']);
+                $designations = array_keys($_POST['designations']);
+
+                $reorder  = $this->di->get('Domain\Streets\Designations\UseCases\Reorder\Command');
+                $request  = new ReorderRequest($street_id, $designations);
+                $response = $reorder($request);
+                if (!$response->errors) {
+                    header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
+                    exit();
+                }
+                $_SESSION['errorMessages'] = $response->errors;
+            }
+            $info = parent::streetInfo($street_id);
+            return new Views\ReorderView($info);
         }
         return new \Application\Views\NotFoundView();
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\DataStorage;
@@ -31,6 +31,7 @@ interface StreetsRepository
     public function logChange     (ChangeLogEntry $entry, string $logType): int;
     public function saveStatus(int $street_id, string $status);
     public function updateDesignation(\Domain\Streets\Designations\UseCases\Update\UpdateRequest $req);
+    public function reorderDesignations(int $street_id, array $ids);
 
     // Metadata functions
     public function types(): array;

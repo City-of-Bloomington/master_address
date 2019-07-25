@@ -291,6 +291,12 @@ msgid_plural "designations"
 msgstr[0] "Street Name Designation"
 msgstr[1] "Street Name Designations"
 
+msgid "designation_edit"
+msgstr "Edit Street Name Designation"
+
+msgid "reorder"
+msgstr "Reorder"
+
 msgid "changeLog"
 msgstr "Change Log"
 

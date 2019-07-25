@@ -67,6 +67,7 @@ $ROUTES->attach('streets', "/streets", function ($r) {
     $r->add('changeName',     '/changeName/{id}')->addValues(['action'=>'changeName'  ]);
     $r->add('changeStatus', '/changeStatus/{id}')->addValues(['action'=>'changeStatus']);
     $r->add('renumber',         '/renumber/{id}')->addValues(['action'=>'renumber'    ]);
+    $r->add('reorder',           '/reorder/{id}')->addValues(['action'=>'reorder'     ]);
     $r->add('intersections','/intersections')->addValues(['action'=>'intersections']);
     $r->add('intersectingStreets','/intersectingStreets{/id}')->addValues(['action'=>'intersectingStreets']);
 });

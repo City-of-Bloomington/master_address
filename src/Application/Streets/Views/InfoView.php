@@ -25,7 +25,7 @@ class InfoView extends Template
         $this->vars['title'] = parent::escape($info->street->__toString());
 
         $actions = [];
-        foreach (['alias', 'changeName'] as $a) {
+        foreach (['alias', 'changeName', 'reorder'] as $a) {
             if (parent::isAllowed('streets', $a)) { $actions[] = $a; }
         }
         if ($format == 'html') {
