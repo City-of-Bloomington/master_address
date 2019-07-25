@@ -180,6 +180,7 @@ create table addresses (
     usng                 varchar(20),
     notes                varchar(240),
     geom public.geometry(Point, 2966),
+    unique(street_id, street_number_prefix, street_number, street_number_suffix),
     foreign key (street_id        ) references streets      (id),
     foreign key (jurisdiction_id  ) references jurisdictions(id),
     foreign key (township_id      ) references townships    (id),
