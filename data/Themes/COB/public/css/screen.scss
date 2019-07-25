@@ -45,7 +45,7 @@ summary { display: list-item; }
 
 #street_number_prefix,
 #street_number_suffix { width:2em; }
-#street_number, #zipplus4 { width:6em; }
+input[type="number"] { width:6em; }
 
 #addressSearch form {
     div {

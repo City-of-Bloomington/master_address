@@ -317,6 +317,25 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     }
 
     /**
+     * @param in    $street_id
+     * @param array $ids       An array of designation_ids in the desired order
+     */
+    public function reorderDesignations(int $street_id, array $ids)
+    {
+        $sql    = 'update street_designations set rank=null where street_id=?';
+        $update = $this->pdo->prepare($sql);
+        $update->execute([$street_id]);
+
+        $rank   = count($ids);
+        $sql    = 'update street_designations set rank=? where id=?';
+        $update = $this->pdo->prepare($sql);
+        foreach (array_reverse($ids) as $id) {
+            $update->execute([$rank, $id]);
+            $rank--;
+        }
+    }
+
+    /**
      * @return array  An array of Street entities
      */
     public function intersectingStreets(int $street_id): array

@@ -21,8 +21,9 @@ endif
 
 clean:
 	rm -Rf build/${APPNAME}*
-	for f in $(shell find public/js -name '*-*.js' ); do rm $$f; done
-	for f in $(shell find public/js -name '*-*.php'); do rm $$f; done
+	for f in $(shell find data/Themes -name '*-*.css*' ); do rm $$f; done
+	for f in $(shell find public/js   -name '*-*.js'   ); do rm $$f; done
+	for f in $(shell find public/js   -name '*-*.php'  ); do rm $$f; done
 
 compile: deps $(LANGUAGES)
 	cd                 public/css && sassc -mt compact screen.scss screen-${VERSION}.css
