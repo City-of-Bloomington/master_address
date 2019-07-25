@@ -44,11 +44,11 @@ class ChangeStatus
             if ($req->status == Log::STATUS_RETIRED) {
                 // Retire all the current subunits
                 // Make sure each subunit gets a changeLog entry for
-                $subunits = $this->repo->subunits($req->address_id);
-                if (count($subunits)) {
+                $subunits = $this->repo->findSubunits(['address_id'=>$req->address_id]);
+                if ($subunits['rows']) {
                     $change  = $this->subunitChange;
                     $request = new SubunitStatusChangeRequest(1, $req->user_id, (array)$req);
-                    foreach ($subunits as $subunit) {
+                    foreach ($subunits['rows'] as $subunit) {
                         if ($subunit->status != $req->status) {
                             $request->subunit_id = $subunit->id;
                             $change($request);
@@ -58,11 +58,11 @@ class ChangeStatus
             }
 
             // Update the status on the active location for this address
-            foreach ($this->repo->locations($req->address_id) as $location) {
+            foreach ($this->repo->findLocations($req->address_id) as $location) {
                 if (   $location->active
                     && $location->status != $req->status) {
 
-                    $this->saveStatus($location->location_id, $req->status, 'location');
+                    $this->repo->saveStatus($location->location_id, $req->status, 'location');
                 }
             }
 
