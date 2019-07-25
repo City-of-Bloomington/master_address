@@ -27,10 +27,6 @@ class Update
             return new UpdateResponse(null, $req->designation_id, $errors);
         }
 
-        if ($req->type_id == STREET::TYPE_STREET) {
-            $req->rank = 1;
-        }
-
         try {
             // Load the existing designation from the database, so we
             // have the street_id for writing the change log message.
@@ -58,6 +54,8 @@ class Update
     private function validate(UpdateRequest $req): array
     {
         $errors = [];
+        if ($req->type_id == STREET::TYPE_STREET) { $errors[] = 'designations/cannotUpdateStreetType'; }
+
         if (!$req->designation_id) { $errors[] = 'designations/missingId';   }
         if (!$req->type_id       ) { $errors[] = 'designations/missingType'; }
         if (!$req->start_date    ) { $errors[] = 'missingStartDate';         }

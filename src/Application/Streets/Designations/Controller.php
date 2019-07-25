@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -10,6 +10,7 @@ use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Streets\Designations\UseCases\Update\UpdateRequest;
+use Domain\Streets\Metadata as Street;
 
 class Controller extends BaseController
 {
@@ -22,12 +23,18 @@ class Controller extends BaseController
 
             $r = $load((int)$_REQUEST['id']);
             if ($r->errors) {
-                $_SESSION['errors'] = $r->errors;
+                $_SESSION['errorMessages'] = $r->errors;
                 return new \Application\Views\NotFoundView();
             }
 
             $designation = $r->designation;
             $street_id   = $designation->street_id;
+
+            if ($designation->type_id == Street::TYPE_STREET) {
+                $_SESSION['errorMessages'] = ['designations/cannotUpdateStreetType'];
+                header('Location: '.View::generateUrl('streets.view', ['id' => $street_id]));
+                exit();
+            }
 
             if (isset($_POST['id'])) {
                 $request  = new UpdateRequest(
