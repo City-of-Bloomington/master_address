@@ -24,18 +24,13 @@ class InfoView extends Template
 
         $this->vars['title'] = parent::escape($info->street->__toString());
 
-        $actions = [];
-        foreach (['alias', 'changeName', 'reorder'] as $a) {
-            if (parent::isAllowed('streets', $a)) { $actions[] = $a; }
-        }
         if ($format == 'html') {
             $this->blocks = [
                 new Block('streets/info.inc',              ['street'       => $info->street]),
                 new Block('logs/changeLog.inc',            ['entries'      => $info->changeLog->entries,
                                                             'total'        => $info->changeLog->total   ]),
                 new Block('streets/designations/list.inc', ['designations' => $info->designations,
-                                                            'street_id'    => $info->street->id,
-                                                            'actions'      => $actions            ]),
+                                                            'street_id'    => $info->street->id]),
                 'panel-one' => [
                     new Block('streets/addresses.inc',     ['street_id'    => $info->street->id,
                                                             'addresses'    => $search->addresses])
