@@ -180,7 +180,6 @@ create table addresses (
     usng                 varchar(20),
     notes                varchar(240),
     geom public.geometry(Point, 2966),
-    unique(street_id, street_number_prefix, street_number, street_number_suffix),
     foreign key (street_id        ) references streets      (id),
     foreign key (jurisdiction_id  ) references jurisdictions(id),
     foreign key (township_id      ) references townships    (id),
@@ -195,6 +194,10 @@ create index on addresses( subdivision_id);
 create index on addresses(        plat_id);
 create index on addresses using gist(geom);
 create trigger update_geom BEFORE INSERT OR UPDATE OF latitude, longitude ON addresses FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
+create unique index on addresses (street_id, street_number, street_number_prefix, street_number_suffix);
+create unique index on addresses (street_id, street_number, street_number_prefix) where street_number_suffix is null;
+create unique index on addresses (street_id, street_number, street_number_suffix) where street_number_prefix is null;
+create unique index on addresses (street_id, street_number) where street_number_prefix is null and street_number_suffix is null;
 
 create table address_status (
     id          serial           primary key,
