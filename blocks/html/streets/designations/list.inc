@@ -15,13 +15,15 @@
         <?php
             $h = $this->template->getHelper('buttonLink');
 
-            if (!$this->disableButtons && $this->actions && $this->street_id) {
-                foreach ($this->actions as $a) {
-                    echo $h->buttonLink(
-                        parent::generateUri("streets.$a", ['id'=>$this->street_id]),
-                        $this->_($a),
-                        'edit'
-                    );
+            if (!$this->disableButtons && $this->street_id) {
+                foreach (['alias', 'reorder'] as $a) {
+                    if (parent::isAllowed('streets', $a)) {
+                        echo $h->buttonLink(
+                            parent::generateUri("streets.$a", ['id'=>$this->street_id]),
+                            $this->_($a),
+                            'edit'
+                        );
+                    }
                 }
             }
         ?>
@@ -47,12 +49,28 @@
                 $start = $d->start_date ? $d->start_date->format(DATE_FORMAT) : '';
                 $rank  = $d->rank;
 
-				if ($userCanEdit && $type != 'STREET') {
-                    $button = $h->buttonLink(
-                        parent::generateUri('designations.update', ['id'=>$d->id]),
-                        $this->_('update'),
-                        'edit'
-                    );
+                if ($type == 'STREET') {
+                    if (!$this->disableButtons && parent::isAllowed('streets', 'changeName')) {
+                        $button = $h->buttonLink(
+                            parent::generateUri('streets.changeName', ['id'=>$d->street_id]),
+                            $this->_('changeName'),
+                            'edit'
+                        );
+                    }
+                }
+                else {
+                    if ($userCanEdit) {
+                        $button = $h->buttonLink(
+                            parent::generateUri('designations.update', ['id'=>$d->id]),
+                            $this->_('update'),
+                            'edit'
+                        );
+                    }
+                }
+
+                if (parent::isAllowed('streetNames', 'view')) {
+                    $uri = parent::generateUri('streetNames.view', ['id'=>$d->name_id]);
+                    $name = "<a href=\"$uri\">$name</a>";
                 }
 
 				echo "

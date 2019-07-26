@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Streets\Names\Views;
@@ -20,10 +20,9 @@ class InfoView extends Template
 
         $this->vars['title'] = parent::escape($info->name);
 
-        $this->blocks[] = new Block('streets/names/info.inc', [
-            'name'    => $info->name,
-            'actions' => parent::isAllowed('streetNames', 'correct') ? ['correct'] : []
-        ]);
-        $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
+        $this->blocks = [
+            new Block('streets/names/info.inc', ['name'    => $info->name   ]),
+            new Block('streets/list.inc',       ['streets' => $info->streets])
+        ];
     }
 }

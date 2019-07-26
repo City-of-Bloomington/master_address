@@ -310,7 +310,7 @@ msgid "changeStatus"
 msgstr "Change Status"
 
 msgid "changeName"
-msgstr "Change Street Name Designation"
+msgstr "Rename"
 
 msgid "correct"
 msgstr "Correct"

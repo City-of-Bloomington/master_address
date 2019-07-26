@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Application\Streets\Names\Views;
@@ -27,7 +27,9 @@ class CorrectView extends Template
         ];
         foreach ($request as $k=>$v) { $vars[$k] = parent::escape($v); }
 
-        $this->blocks[] = new Block('streets/names/correctForm.inc', $vars);
-        $this->blocks[] = new Block('streets/designations/list.inc', ['designations' => $info->designations]);
+        $this->blocks = [
+            new Block('streets/names/correctForm.inc', $vars),
+            new Block('streets/list.inc', ['streets' => $info->streets])
+        ];
     }
 }

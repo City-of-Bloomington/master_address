@@ -87,7 +87,6 @@ class PdoNamesRepository extends PdoRepository implements NamesRepository
                         d.street_name_id as name_id,
                         d.type_id,
                         d.start_date,
-                        d.end_date,
                         d.rank,
                         dt.name          as type,
                         n.direction,
@@ -106,6 +105,13 @@ class PdoNamesRepository extends PdoRepository implements NamesRepository
             $designations[] = Designation::hydrate($row);
         }
         return $designations;
+    }
+
+    public function streets(int $name_id): array
+    {
+        $streets = new PdoStreetsRepository($this->pdo);
+        $result  = $streets->search(new \Domain\Streets\UseCases\Search\SearchRequest(['name_id'=>$name_id]));
+        return $result['rows'];
     }
 
     /**

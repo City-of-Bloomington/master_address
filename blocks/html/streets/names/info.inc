@@ -1,8 +1,9 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Name $this->name
+ * @param bool $this->disableButtons (optional)
  */
 declare (strict_types=1);
 ?>
@@ -11,13 +12,15 @@ declare (strict_types=1);
         <h1><?= parent::escape($this->name); ?></h1>
         <div class="tools">
         <?php
-            $h = $this->template->getHelper('buttonLink');
-            foreach ($this->actions as $a) {
-                echo $h->buttonLink(
-                    parent::generateUri("streetNames.$a", ['id'=>$this->name->id]),
-                    $this->_($a),
-                    'edit'
-                );
+            if (!$this->disableButtons) {
+                $h = $this->template->getHelper('buttonLink');
+                if (parent::isAllowed('streetNames','correct')) {
+                    echo $h->buttonLink(
+                        parent::generateUri('streetNames.correct', ['id'=>$this->name->id]),
+                        $this->_('correct'),
+                        'edit'
+                    );
+                }
             }
         ?>
         </div>
