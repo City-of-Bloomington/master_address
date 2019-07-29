@@ -21,6 +21,7 @@ interface AddressesRepository
     public function findSubunits (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function loadStatusLog(int $address_id, string $logType): array;
     public function getStatus    (int $address_id, string $logType): string;
+    public function countMatching(string $table, array $fields): int;
 
     public function find    (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function search  (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
