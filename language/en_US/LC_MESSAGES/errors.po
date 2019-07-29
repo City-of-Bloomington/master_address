@@ -60,7 +60,7 @@ msgid "passwordCorrupted"
 msgstr "Your password is corrupted.  Please contact a system administrator for help."
 
 msgid "addresses/duplicateAddress"
-msgstr "You are trying to save an address that is already duplicated in the system."
+msgstr "You are trying to save an address that is already in the system."
 
 msgid "addresses/missingId"
 msgstr "Missing the address_id"

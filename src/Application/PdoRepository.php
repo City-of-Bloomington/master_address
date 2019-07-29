@@ -92,6 +92,21 @@ abstract class PdoRepository
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    public function countMatching(string $table, array $fields): int
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->cols(['count(*)'])
+               ->from($table);
+        foreach ($fields as $k=>$v) {
+            if ($v) { $select->where("$k=?", $v); }
+            else    { $select->where("$k is null"); }
+        }
+
+        $query = $this->pdo->prepare($select->getStatement());
+        $query->execute($select->getBindValues());
+        return (int)$query->fetchColumn();
+    }
+
     protected function doQuery(string $sql, ?array $params=null): array
     {
         $query = $this->pdo->prepare($sql);

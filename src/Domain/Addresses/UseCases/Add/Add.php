@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -61,6 +61,7 @@ class Add
         if (!in_array($req->action, Add::$validActions)) {
             $errors[] = 'invalidAction';
         }
+        if ($this->isDuplicateAddress($req)) { $errors[] = 'addresses/duplicateAddress'; }
 
         if (!$req->street_number  ) { $errors[] = 'addresses/missingStreetNumber'; }
         if (!$req->address_type   ) { $errors[] = 'addresses/missingType';         }
@@ -72,5 +73,16 @@ class Add
         if (!$req->locationType_id) { $errors[] = 'locations/missingType';         }
 
         return $errors;
+    }
+
+    private function isDuplicateAddress(AddRequest $req): bool
+    {
+        $count = $this->repo->countMatching('addresses', [
+                     'street_id'            => $req->street_id,
+                     'street_number_prefix' => $req->street_number_prefix,
+                     'street_number'        => $req->street_number,
+                     'street_number_suffix' => $req->street_number_suffix
+                 ]);
+        return $count ? true : false;
     }
 }
