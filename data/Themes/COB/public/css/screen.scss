@@ -44,8 +44,8 @@ details {
 }
 summary { display: list-item; }
 
-#street_number_prefix,
-#street_number_suffix { width:2em; }
+input.street_number_prefix,
+input.street_number_suffix { width:2em; }
 input[type="number"] { width:6em; }
 
 #addressSearch form {
