@@ -213,9 +213,14 @@ class Controller extends BaseController
                 else { $_SESSION['errorMessages'] = $response->errors; }
             }
 
+            $streetInfo = parent::streetInfo($street_id);
+            if (!$request->status) {
+                $request->status = $streetInfo->street->status;
+            }
+
             return new Views\ChangeStatusView(
                 $request,
-                parent::streetInfo  ($street_id),
+                $streetInfo,
                 $change::statuses(),
                 $this->addressSearch($street_id),
                 !empty($_GET['contact_id']) ? parent::person((int)$_GET['contact_id']) : null
