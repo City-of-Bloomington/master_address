@@ -8,7 +8,10 @@
 declare (strict_types=1);
 ?>
 <section>
-    <header><h1><?= $this->_('validate'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('validate'); ?></h1>
+        <p><?= $this->_('addresses.validate', 'messages'); ?></p>
+    </header>
     <form method="get">
         <fieldset>
             <?php
@@ -25,6 +28,7 @@ declare (strict_types=1);
     </form>
     <?php
         if ($this->address) {
+            $this->disableButtons = true;
             $this->_include('addresses/info.inc');
         }
     ?>

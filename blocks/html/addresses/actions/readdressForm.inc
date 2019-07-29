@@ -58,7 +58,10 @@
  */
 ?>
 <section>
-    <header><h1><?= $this->_('readdress'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('readdress'); ?></h1>
+        <p><?= $this->_('addresses.readdress', 'messages'); ?></p>
+    </header>
     <form method="post">
         <fieldset>
             <input name="id"            type="hidden" value="<?= $this->address_id;    ?>" />

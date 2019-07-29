@@ -43,7 +43,10 @@
 declare (strict_types=1);
 ?>
 <section>
-    <header><h1><?= $this->_('update'); ?></header>
+    <header>
+        <h1><?= $this->_('update'); ?></h1>
+        <p><?= $this->_('addresses.update', 'messages'); ?></p>
+    </header>
     <form method="post">
         <fieldset><legend><?= $this->_('address'); ?></legend>
             <input name="id" type="hidden" value="<?= $this->address_id; ?>" />

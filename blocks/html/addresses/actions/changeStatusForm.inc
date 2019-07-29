@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
+ * @copyright 2017-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  *
  * @param int    $this->address_id
@@ -15,7 +15,10 @@
 declare (strict_types=1);
 ?>
 <section>
-    <header><h1><?= $this->_('changeStatus'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('changeStatus'); ?></h1>
+        <p><?= $this->_('addresses.changeStatus', 'messages'); ?></p>
+    </header>
     <form method="post">
         <fieldset><legend><?= $this->_('address_info'); ?></legend>
             <input name="id" type="hidden" value="<?= $this->address_id; ?>" />

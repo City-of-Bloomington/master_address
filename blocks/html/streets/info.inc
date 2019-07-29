@@ -40,8 +40,10 @@ $town   = parent::escape($this->street->town_name);
                     ];
                 }
 
-                $block = new Block('toolbox.inc', ['actions' => $actions]);
-                echo $block->render('html', $this->template);
+                if ($actions) {
+                    $block = new Block('toolbox.inc', ['actions' => $actions]);
+                    echo $block->render('html', $this->template);
+                }
             }
         ?>
     </header>

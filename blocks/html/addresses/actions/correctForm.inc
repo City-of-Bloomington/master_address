@@ -18,7 +18,10 @@
  */
 ?>
 <section>
-    <header><h1><?= $this->_('correct'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('correct'); ?></h1>
+        <p><?= $this->_('addresses.correct', 'messages'); ?></p>
+    </header>
     <form method="post">
         <fieldset>
             <input name="id" type="hidden" value="<?= $this->address_id; ?>" />

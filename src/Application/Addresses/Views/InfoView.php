@@ -29,8 +29,7 @@ class InfoView extends Template
             $this->blocks = [
                 new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
                 new Block('addresses/info.inc',          ['address'   => $info->address,
-                                                          'title'     => $this->vars['title'],
-                                                          'actions'   => ['verify', 'changeStatus', 'correct', 'update', 'readdress']]),
+                                                          'title'     => $this->vars['title']]),
 
                 new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
                 new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
@@ -41,11 +40,11 @@ class InfoView extends Template
                         'userCanActivate'    => parent::isAllowed('addresses', 'activate'),
                         'sanitationEditable' => $info->address->jurisdiction_name == $DEFAULTS['city']
                                                 && parent::isAllowed('sanitation', 'update')
-                    ]),
-                    new Block('addresses/purposes.inc',  ['purposes'  => $info->purposes ]),
-                    new Block('subunits/list.inc',       ['address'   => $info->address, 'subunits' => $info->subunits])
+                    ])
                 ]
             ];
+            if ($info->purposes) { $this->blocks['panel-one'][] = new Block('addresses/purposes.inc', ['purposes' => $info->purposes]); }
+            if ($info->subunits) { $this->blocks['panel-one'][] = new Block('subunits/list.inc',      ['subunits' => $info->subunits]); }
         }
         else {
             $this->blocks = [

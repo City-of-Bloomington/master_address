@@ -34,6 +34,21 @@ msgstr "Add a missing address"
 msgid "action_help.address_assign"
 msgstr "Assign a new address"
 
+msgid "addresses.verify"
+msgstr "Confirm that the address is correct as is and report it"
+
+msgid "addresses.changeStatus"
+msgstr "Change the status of the address"
+
+msgid "addresses.correct"
+msgstr "Correct the address elements due to some housekeeping error"
+
+msgid "addresses.update"
+msgstr "Change related attributes of the address, but not the address itself"
+
+msgid "addresses.readdress"
+msgstr "Officially change an existing address to a new address"
+
 msgid "streets.update"
 msgstr "Update related attributes of the street, but not the street itself"
 
@@ -48,3 +63,6 @@ msgstr "Add an alias street name to a street"
 
 msgid "streets.reorder"
 msgstr "Rearrange the street designation ranks"
+
+msgid "subunits.add"
+msgstr "Add a subunit to the address - can be new or missing"

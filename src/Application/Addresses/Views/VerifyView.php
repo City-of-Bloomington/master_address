@@ -35,17 +35,17 @@ class VerifyView extends Template
         $this->blocks = [
             new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
             new Block('generic/verifyForm.inc',      $vars),
-            new Block('addresses/info.inc',          ['address'   => $info->address,
+            new Block('addresses/info.inc',          ['address'   => $info->address,  'disableButtons'=>true,
                                                       'title'     => $info->address->__toString()]),
             new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
             new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
                                                       'total'     => $info->changeLog->total]),
             'panel-one' => [
-                new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons'=>true]),
-                new Block('subunits/list.inc',       ['address'   => $info->address,   'disableButtons'=>true,
-                                                      'subunits'  => $info->subunits])
+                new Block('locations/locations.inc', ['locations' => $info->locations, 'disableButtons'=>true])
             ]
-
         ];
+        if ($info->subunits) {
+            $this->blocks['panel-one'][] = new Block('subunits/list.inc', ['subunits' => $info->subunits]);
+        }
     }
 }

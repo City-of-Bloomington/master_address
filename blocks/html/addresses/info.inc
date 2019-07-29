@@ -1,31 +1,44 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Address $this->address
- * @param array   $this->actions   Actions to draw button links for
  * @param string  $this->title
  */
+use Application\Block;
+
 ?>
 <section>
     <header>
         <h1><?= $this->title ?></h1>
-        <div class="tools">
         <?php
-            $h       = $this->template->getHelper('buttonLink');
-            if ($this->actions) {
-                foreach ($this->actions as $a) {
+            if (!$this->disableButtons) {
+                $h       = $this->template->getHelper('buttonLink');
+                $actions = [];
+                foreach (['verify', 'changeStatus', 'correct', 'update', 'readdress'] as $a) {
                     if (parent::isAllowed('addresses', $a)) {
-                        echo $h->buttonLink(
-                            parent::generateUri("addresses.$a", ['id'=>$this->address->id]),
-                            $this->_($a),
-                            'edit'
-                        );
+                        $actions[$a] = [
+                            'uri'   => parent::generateUri("addresses.$a", ['id'=>$this->address->id]),
+                            'class' => 'edit',
+                            'help'  => $this->_("addresses.$a", 'messages')
+                        ];
                     }
+
+                }
+
+                if (parent::isAllowed('subunits', 'add')) {
+                    $actions['subunit_add'] = [
+                        'uri'   => parent::generateUri('subunits.add').'?address_id='.$this->address->id,
+                        'class' => 'add',
+                        'help'  => $this->_('subunits.add', 'messages')
+                    ];
+                }
+                if ($actions) {
+                    $block = new Block('toolbox.inc', ['actions' => $actions]);
+                    echo $block->render('html', $this->template);
                 }
             }
         ?>
-        </div>
     </header>
     <table class="<?= $this->address->status; ?>">
     <?php
