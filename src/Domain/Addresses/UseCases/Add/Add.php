@@ -77,12 +77,12 @@ class Add
 
     private function isDuplicateAddress(AddRequest $req): bool
     {
-        $count = $this->repo->countMatching('addresses', [
-                     'street_id'            => $req->street_id,
-                     'street_number_prefix' => $req->street_number_prefix,
-                     'street_number'        => $req->street_number,
-                     'street_number_suffix' => $req->street_number_suffix
-                 ]);
-        return $count ? true : false;
+        $result = $this->repo->find([
+            'street_id'            => $req->street_id,
+            'street_number_prefix' => $req->street_number_prefix,
+            'street_number'        => $req->street_number,
+            'street_number_suffix' => $req->street_number_suffix
+        ]);
+        return count($result['rows']) ? true : false;
     }
 }

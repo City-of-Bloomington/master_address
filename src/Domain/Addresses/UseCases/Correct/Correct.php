@@ -23,6 +23,9 @@ class Correct
 
     public function __invoke(CorrectRequest $req): CorrectResponse
     {
+        $errors = $this->validate($req);
+        if ($errors) { return new CorrectResponse(null, $req->address_id, $errors); }
+
         try {
             $this->repo->correct($req);
 
@@ -40,5 +43,28 @@ class Correct
         catch (\Exception $e) {
             return new CorrectResponse(null,    $req->address_id, [$e->getMessage()]);
         }
+    }
+
+    private function validate(CorrectRequest $req): array
+    {
+        $errors = [];
+
+        if ($this->isDuplicateAddress($req)) { $errors[] = 'addresses/duplicateAddress'; }
+
+        return $errors;
+    }
+
+    private function isDuplicateAddress(CorrectRequest $req): bool
+    {
+        $result = $this->repo->find([
+            'street_id'            => $req->street_id,
+            'street_number_prefix' => $req->street_number_prefix,
+            'street_number'        => $req->street_number,
+            'street_number_suffix' => $req->street_number_suffix
+        ]);
+        foreach ($result['rows'] as $a) {
+            if ($a->id != $req->address_id) { return true; }
+        }
+        return false;
     }
 }
