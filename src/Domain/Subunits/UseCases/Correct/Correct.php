@@ -21,6 +21,9 @@ class Correct
 
     public function __invoke(CorrectRequest $req): CorrectResponse
     {
+        $errors = $this->validate($req);
+        if ($errors) { return new CorrectResponse(null, $req->subunit_id, $errors); }
+
         try {
             $this->repo->correct($req);
 
@@ -36,5 +39,29 @@ class Correct
         catch (\Exception $e) {
             return new CorrectResponse(null, $req->subunit_id, [$e->getMessage()]);
         }
+    }
+
+    private function validate(CorrectRequest $req): array
+    {
+        $errors = [];
+
+        if ($this->isDuplicateSubunit($req)) { $errors[] = 'subunits/duplicateSubunit'; }
+
+        return $errors;
+    }
+
+    private function isDuplicateSubunit(CorrectRequest $req): bool
+    {
+        $s = $this->repo->load($req->subunit_id);
+
+        $result = $this->repo->find([
+            'address_id' =>   $s->address_id,
+            'type_id'    => $req->type_id,
+            'identifier' => $req->identifier
+        ]);
+        foreach ($result['rows'] as $s) {
+            if ($s->id != $req->subunit_id) { return true; }
+        }
+        return false;
     }
 }

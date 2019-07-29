@@ -55,6 +55,18 @@ class Add
         if (!$req->identifier     ) { $errors[] = 'subunits/missingIdentifier'; }
         if (!$req->locationType_id) { $errors[] = 'locations/missingType';      }
         if (!$req->status         ) { $errors[] = 'missingStatus';              }
+
+        if ($this->isDuplicateSubunit($req)) { $errors[] = 'subunits/duplicateSubunit'; }
         return $errors;
+    }
+
+    private function isDuplicateSubunit(AddRequest $req): bool
+    {
+        $result = $this->repo->find([
+            'address_id' => $req->address_id,
+            'type_id'    => $req->type_id,
+            'identifier' => $req->identifier
+        ]);
+        return count($result['rows']) ? true : false;
     }
 }

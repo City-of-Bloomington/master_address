@@ -104,6 +104,9 @@ msgstr "The street already uses that name"
 msgid "streets/invalidAliasType"
 msgstr "You cannot create an alias of type::STREET"
 
+msgid "subunits/duplicateSubunit"
+msgstr "You are trying to save a subunit that is already in the system"
+
 msgid "subunits/missingAddress"
 msgstr "You must provide an address"
 
