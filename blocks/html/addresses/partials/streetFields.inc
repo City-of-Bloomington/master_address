@@ -15,7 +15,8 @@ echo $h->field([
     'name'  => 'street_number_prefix',
     'id'    => 'street_number_prefix',
     'label' => $this->_('street_number_prefix'),
-    'value' => $this->street_number_prefix
+    'value' => $this->street_number_prefix,
+    'attr'  => ['class' => 'street_number_prefix']
 ]);
 echo $h->field([
     'name'     => 'street_number',
@@ -29,7 +30,8 @@ echo $h->field([
     'name'  => 'street_number_suffix',
     'id'    => 'street_number_suffix',
     'label' => $this->_('street_number_suffix'),
-    'value' => $this->street_number_suffix
+    'value' => $this->street_number_suffix,
+    'attr'  => ['class' => 'street_number_suffix']
 ]);
 
 echo $h->field([

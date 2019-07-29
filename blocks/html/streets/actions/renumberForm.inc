@@ -40,11 +40,13 @@ declare (strict_types=1);
 
                     echo "
                     <tr><td><input name=\"addresses[$address_id][street_number_prefix]\"
-                                value=\"$street_number_prefix\" />
+                                  value=\"$street_number_prefix\"
+                                  class=\"street_number_prefix\"/>
                             <input name=\"addresses[$address_id][street_number]\"
-                                value=\"$street_number\" type=\"number\" />
+                                  value=\"$street_number\" type=\"number\" />
                             <input name=\"addresses[$address_id][street_number_suffix]\"
-                                value=\"$street_number_suffix\" />
+                                  value=\"$street_number_suffix\"
+                                  class=\"street_number_suffix\" />
                         </td>
                         <td>$current</td>
                         <td>$street</td>
