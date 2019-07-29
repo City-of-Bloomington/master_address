@@ -3,31 +3,12 @@
  * @copyright 2009-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.html GNU/AGPL, see LICENSE
  * @param array  $this->designations
- * @param array  $this->actions        Optional
- * @param int    $this->street_id      Optional
  * @param bool   $this->disableButtons Optional
  */
 ?>
 <section>
     <header>
         <h2><?= $this->_(['designation', 'designations', count($this->designations)]); ?></h2>
-        <div class="tools">
-        <?php
-            $h = $this->template->getHelper('buttonLink');
-
-            if (!$this->disableButtons && $this->street_id) {
-                foreach (['alias', 'reorder'] as $a) {
-                    if (parent::isAllowed('streets', $a)) {
-                        echo $h->buttonLink(
-                            parent::generateUri("streets.$a", ['id'=>$this->street_id]),
-                            $this->_($a),
-                            'edit'
-                        );
-                    }
-                }
-            }
-        ?>
-        </div>
     </header>
 	<table>
 		<thead>
@@ -42,6 +23,7 @@
 		<?php
             $userCanEdit = !$this->disableButtons && parent::isAllowed('designations', 'update');
             $button      = '';
+            $h           = $this->template->getHelper('buttonLink');
 
 			foreach ($this->designations as $d) {
                 $name  = parent::escape($d);

@@ -56,6 +56,9 @@ msgstr "Logout"
 msgid "help"
 msgstr "Help"
 
+msgid "actions"
+msgstr "Actions"
+
 msgid "type"
 msgid_plural "types"
 msgstr[0] "Type"

@@ -5,6 +5,9 @@
  * @param Street $this->street
  * @param bool   $this->disableButtons (optional)
  */
+use Application\Block;
+use Application\Url;
+
 $status = $this->_($this->street->status);
 $name   = parent::escape($this->street->__toString());
 $notes  = parent::escape($this->street->notes);
@@ -13,24 +16,34 @@ $town   = parent::escape($this->street->town_name);
 <section>
     <header>
         <h2><?= $name ?></h2>
-        <div class="tools">
         <?php
             if (!$this->disableButtons) {
                 $helper  = $this->template->getHelper('buttonLink');
-                $actions = ['update', 'changeStatus', 'renumber'];
-
-                foreach ($actions as $a) {
+                $actions = [];
+                foreach (['update', 'changeStatus', 'renumber', 'alias', 'reorder'] as $a) {
                     if (parent::isAllowed('streets', $a)) {
-                        echo $helper->buttonLink(
-                            parent::generateUri("streets.$a", ['id' => $this->street->id]),
-                            $this->_($a),
-                            'edit'
-                        );
+                        $actions[$a] = [
+                            'uri'   => parent::generateUri("streets.$a", ['id' => $this->street->id]),
+                            'class' => 'edit',
+                            'help'  => $this->_("streets.$a", 'messages')
+                        ];
                     }
                 }
+                if (parent::isAllowed('addresses', 'add')) {
+                    $actions['address_add'] = [
+                        'class' => 'add',
+                        'help'  => $this->_('action_help.address_assign', 'messages'),
+                        'uri'   => parent::generateUri('addresses.add').'?'.http_build_query([
+                                       'street_id'  => $this->street_id,
+                                       'return_url' => Url::current_url(BASE_HOST)
+                                   ])
+                    ];
+                }
+
+                $block = new Block('toolbox.inc', ['actions' => $actions]);
+                echo $block->render('html', $this->template);
             }
         ?>
-        </div>
     </header>
 	<table>
         <tr><th><?= $this->_('street_id'); ?></th><td><?= $this->street->id; ?></td></tr>
