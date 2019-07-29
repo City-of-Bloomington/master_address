@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2009-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->street_id
  * @param string $this->town_id
  * @param string $this->notes
@@ -15,6 +15,7 @@ use Application\Url;
 <section>
     <header>
         <h1><?= $this->_('update'); ?></h1>
+        <p><?= $this->_('streets.update', 'messages'); ?></p>
     </header>
     <form method="post">
         <fieldset><legend><?= $this->_('street_info'); ?></legend>

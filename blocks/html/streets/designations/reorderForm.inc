@@ -9,7 +9,10 @@ declare (strict_types=1);
 use Domain\Streets\Metadata;
 ?>
 <section>
-    <header><h1><?= $this->_('reorder'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('reorder'); ?></h1>
+        <p><?= $this->_('streets.reorder', 'messages'); ?></p>
+    </header>
 
     <form method="post">
         <fieldset>

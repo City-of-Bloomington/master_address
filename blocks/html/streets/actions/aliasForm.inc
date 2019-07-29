@@ -15,7 +15,10 @@
  */
 ?>
 <section>
-    <header><h1><?= $this->_('alias'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('alias'); ?></h1>
+        <p><?= $this->_('streets.alias', 'messages'); ?></p>
+    </header>
     <form method="post">
         <fieldset>
             <input name="id" type="hidden" value="<?= $this->street_id; ?>" />

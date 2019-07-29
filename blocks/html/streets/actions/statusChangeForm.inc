@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2017-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param int    $this->street_id
  * @param string $this->status
  * @param array  $this->statuses     Statuses to choose from in the select dropdown
@@ -14,7 +14,10 @@
 declare (strict_types=1);
 ?>
 <section>
-    <header><h1><?= $this->_('changeStatus'); ?></h1></header>
+    <header>
+        <h1><?= $this->_('changeStatus'); ?></h1>
+        <p><?= $this->_('streets.changeStatus', 'messages'); ?></p>
+    </header>
     <form method="post">
         <fieldset><legend><?= $this->_('street_info'); ?></legend>
             <input name="id" type="hidden" value="<?= $this->street_id; ?>" />
