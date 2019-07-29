@@ -4,11 +4,11 @@
  *
  * For a change of address, we need to preserve the old address.
  * We retire the old address, and create a new address at the same location
- * The new address will probably have a different street and street number.
+ * The new address must have a different street and street number.
  *
  * The new address will be on the same location as the old address.
  *
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2019 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -80,6 +80,8 @@ class Readdress
         if (!$req->address_id ) { $errors[] = 'addresses/unknown'; }
         if (!$req->location_id) { $errors[] = 'locations/unknown'; }
 
+        if ($this->isDuplicateAddress($req)) { $errors[] = 'addresses/duplicateAddress'; }
+
         if (!$req->street_number  ) { $errors[] = 'addresses/missingStreetNumber'; }
         if (!$req->address_type   ) { $errors[] = 'addresses/missingType';         }
         if (!$req->street_id      ) { $errors[] = 'addresses/missingStreet';       }
@@ -88,5 +90,16 @@ class Readdress
         if (!$req->zip            ) { $errors[] = 'addresses/missingZip';          }
 
         return $errors;
+    }
+
+    private function isDuplicateAddress(ReaddressRequest $req): bool
+    {
+        $result = $this->repo->find([
+            'street_id'            => $req->street_id,
+            'street_number_prefix' => $req->street_number_prefix,
+            'street_number'        => $req->street_number,
+            'street_number_suffix' => $req->street_number_suffix
+        ]);
+        return count($result['rows']) ? true : false;
     }
 }
