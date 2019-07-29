@@ -25,7 +25,6 @@ class TestAddressesRepository implements AddressesRepository
     public function findSubunits (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array { return []; }
     public function loadStatusLog(int $address_id, string $logType): array { return []; }
     public function getStatus    (int $address_id, string $logType): string { return "test"; }
-    public function countMatching(string $table, array $fields): int { return 1; }
 
     public function find    (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array { return []; }
     public function search  (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array { return []; }
