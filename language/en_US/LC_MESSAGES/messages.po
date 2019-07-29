@@ -1,6 +1,6 @@
 # Translation
-# Copyright (C) 2013-2018 City of Bloomington
-# This file is distributed under the same license as the Blossom package.
+# Copyright (C) 2013-2019 City of Bloomington
+# This file is distributed under the same license as the Master Address application.
 domain "messages"
 
 msgid ""
@@ -33,3 +33,18 @@ msgstr "Add a missing address"
 
 msgid "action_help.address_assign"
 msgstr "Assign a new address"
+
+msgid "streets.update"
+msgstr "Update related attributes of the street, but not the street itself"
+
+msgid "streets.changeStatus"
+msgstr "Change the status of the street"
+
+msgid "streets.renumber"
+msgstr "Correct multiple existing addresses on the street to a new number"
+
+msgid "streets.alias"
+msgstr "Add an alias street name to a street"
+
+msgid "streets.reorder"
+msgstr "Rearrange the street designation ranks"

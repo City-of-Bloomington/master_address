@@ -29,8 +29,7 @@ class InfoView extends Template
                 new Block('streets/info.inc',              ['street'       => $info->street]),
                 new Block('logs/changeLog.inc',            ['entries'      => $info->changeLog->entries,
                                                             'total'        => $info->changeLog->total   ]),
-                new Block('streets/designations/list.inc', ['designations' => $info->designations,
-                                                            'street_id'    => $info->street->id]),
+                new Block('streets/designations/list.inc', ['designations' => $info->designations]),
                 'panel-one' => [
                     new Block('streets/addresses.inc',     ['street_id'    => $info->street->id,
                                                             'addresses'    => $search->addresses])
