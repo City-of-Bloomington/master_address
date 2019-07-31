@@ -32,7 +32,7 @@ class InfoView extends Template
                                                           'title'     => $this->vars['title']])
             ];
             if ($info->statusLog) { $this->blocks[] = new Block('logs/statusLog.inc', ['statuses'  => $info->statusLog]); }
-            if ($info->changeLog) {
+            if ($info->changeLog->entries) {
                 $this->blocks[] = new Block('logs/changeLog.inc', ['entries'=>$info->changeLog->entries,
                                                                    'total'  =>$info->changeLog->total]);
             }
