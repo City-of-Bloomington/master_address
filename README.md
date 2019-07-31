@@ -2,13 +2,7 @@
 
 Web application for managing addressing for a city
 
-## System Requirements
-
-## Install
-
-### Ansible
-
-## Developers
+## Developer Notes
 
 When inserting or updating rows with null values, the database default values will not be applied if you explicitly provide a data array with a field set to null.  To get the database to apply the default value, you must leave null values completely out of the data array.
 

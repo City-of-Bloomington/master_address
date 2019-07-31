@@ -7,7 +7,6 @@ LANGUAGES := $(wildcard language/*/LC_MESSAGES)
 JAVASCRIPT := $(shell find public -name '*.js' ! -name '*-*.js')
 
 VERSION := $(shell cat VERSION | tr -d "[:space:]")
-COMMIT := $(shell git rev-parse --short HEAD)
 
 default: clean compile test package
 

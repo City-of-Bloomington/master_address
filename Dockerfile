@@ -40,7 +40,7 @@ WORKDIR /srv/sites/master_address
 COPY --chown=www-data:staff . /srv/sites/master_address
 RUN composer install --no-plugins --no-scripts
 
-RUN make compile
+RUN make compile test
 
 EXPOSE 80
 ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]
