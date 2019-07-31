@@ -23,26 +23,27 @@ class InfoView extends Template
 
         $this->vars['title'] = $info->address->__toString();
 
-        if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
-
         if ($format == 'html') {
+            if ($info->errors) { $_SESSION['errorMessages'] = $info->errors; }
+
             $this->blocks = [
                 new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
                 new Block('addresses/info.inc',          ['address'   => $info->address,
-                                                          'title'     => $this->vars['title']]),
-
-                new Block('logs/statusLog.inc',          ['statuses'  => $info->statusLog]),
-                new Block('logs/changeLog.inc',          ['entries'   => $info->changeLog->entries,
-                                                          'total'     => $info->changeLog->total]),
-                'panel-one' => [
-                    new Block('addresses/locations.inc', [
-                        'locations'          => $info->locations,
-                        'userCanActivate'    => parent::isAllowed('addresses', 'activate'),
-                        'sanitationEditable' => $info->address->jurisdiction_name == $DEFAULTS['city']
-                                                && parent::isAllowed('sanitation', 'update')
-                    ])
-                ]
+                                                          'title'     => $this->vars['title']])
             ];
+            if ($info->statusLog) { $this->blocks[] = new Block('logs/statusLog.inc', ['statuses'  => $info->statusLog]); }
+            if ($info->changeLog) {
+                $this->blocks[] = new Block('logs/changeLog.inc', ['entries'=>$info->changeLog->entries,
+                                                                   'total'  =>$info->changeLog->total]);
+            }
+            if ($info->locations) {
+                $this->blocks['panel-one'][] = new Block('addresses/locations.inc', [
+                    'locations'          => $info->locations,
+                    'userCanActivate'    => parent::isAllowed('addresses', 'activate'),
+                    'sanitationEditable' => $info->address->jurisdiction_name == $DEFAULTS['city']
+                                            && parent::isAllowed('sanitation', 'update')
+                ]);
+            }
             if ($info->purposes) { $this->blocks['panel-one'][] = new Block('addresses/purposes.inc', ['purposes' => $info->purposes]); }
             if ($info->subunits) { $this->blocks['panel-one'][] = new Block('subunits/list.inc',      ['subunits' => $info->subunits]); }
         }

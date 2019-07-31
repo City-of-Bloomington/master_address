@@ -237,6 +237,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
      */
     public function findLocations(int $address_id): array
     {
+        $locations = [];
         // Performance Note:
         //
         // It's much faster to do a seperate query for the location_ids
@@ -245,18 +246,17 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $query  = $this->pdo->prepare($sql);
         $query->execute([$address_id]);
         $result = $query->fetchAll(\PDO::FETCH_COLUMN);
-        $location_ids = implode(',', $result);
+        if ($result) {
+            $location_ids = implode(',', $result);
+            $locationsRepo = new PdoLocationsRepository($this->pdo);
+            $select        = $locationsRepo->baseSelect();
+            $select->where("l.location_id in ($location_ids)");
 
-
-        $locations     = [];
-        $locationsRepo = new PdoLocationsRepository($this->pdo);
-        $select        = $locationsRepo->baseSelect();
-        $select->where("l.location_id in ($location_ids)");
-
-        $query = $this->pdo->prepare($select->getStatement());
-        $query->execute($select->getBindValues());
-        foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
-            $locations[] = new Location($row);
+            $query = $this->pdo->prepare($select->getStatement());
+            $query->execute($select->getBindValues());
+            foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+                $locations[] = new Location($row);
+            }
         }
         return $locations;
     }

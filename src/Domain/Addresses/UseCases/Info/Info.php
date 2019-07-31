@@ -25,13 +25,13 @@ class Info
             $info->address   = $this->repo->load         ($address_id);
             $info->statusLog = $this->repo->loadStatusLog($address_id, $this->repo::LOG_TYPE);
             $info->locations = $this->repo->findLocations($address_id);
-            $info->purposes  = $this->repo->findPurposes ($address_id);
+            #$info->purposes  = $this->repo->findPurposes ($address_id);
 
-            $result = $this->repo->findSubunits(['address_id'=>$address_id]);
-            $info->subunits = $result['rows'];
+            #$result = $this->repo->findSubunits(['address_id'=>$address_id]);
+            #$info->subunits = $result['rows'];
 
-            $result = $this->repo->changeLog($address_id);
-            $info->changeLog = new ChangeLogResponse($result['rows'], $result['total']);
+            #$result = $this->repo->changeLog($address_id);
+            #$info->changeLog = new ChangeLogResponse($result['rows'], $result['total']);
         }
         catch (\Exception $e) {
             $info->errors = [$e->getMessage()];
