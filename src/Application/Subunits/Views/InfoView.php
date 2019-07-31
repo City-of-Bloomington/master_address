@@ -28,11 +28,10 @@ class InfoView extends Template
             $this->blocks = [
                 new Block('subunits/breadcrumbs.inc', ['address'  => $info->address]),
                 new Block('subunits/info.inc',        ['subunit'  => $info->subunit,
-                                                    'title'    => parent::escape($info->subunit),
-                                                    'actions'  => self::permittedActions()]),
+                                                       'title'    => parent::escape($info->subunit)]),
                 new Block('logs/statusLog.inc',       ['statuses' => $info->statusLog]),
                 new Block('logs/changeLog.inc',       ['entries'  => $info->changeLog->entries,
-                                                    'total'    => $info->changeLog->total]),
+                                                       'total'    => $info->changeLog->total]),
                 'panel-one' => [
                     new Block('subunits/locations.inc', [
                         'locations'          => $info->locations,
@@ -47,15 +46,6 @@ class InfoView extends Template
                 new Block('subunits/info.inc', ['info'=>$info])
             ];
         }
-    }
-
-    private static function permittedActions(): array
-    {
-        $actions = [];
-        foreach (['verify', 'changeStatus', 'correct', 'update'] as $a) {
-            if (parent::isAllowed('subunits', $a)) { $actions[] = $a; }
-        }
-        return $actions;
     }
 
     private static function sanitationEditable(InfoResponse $info): bool

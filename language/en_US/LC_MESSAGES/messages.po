@@ -66,3 +66,15 @@ msgstr "Rearrange the street designation ranks"
 
 msgid "subunits.add"
 msgstr "Add a subunit to the address - can be new or missing"
+
+msgid "subunits.changeStatus"
+msgstr "Change the status of the subunit"
+
+msgid "subunits.correct"
+msgstr "Correct the subunit's elements due to some housekeeping error"
+
+msgid "subunits.update"
+msgstr "Change related attributes of the subunit, but not the subunit itself"
+
+msgid "subunits.verify"
+msgstr "Confirm that the subunit is correct as is and report it"

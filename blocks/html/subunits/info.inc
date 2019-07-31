@@ -6,24 +6,27 @@
  * @param array   $this->actions   Actions to draw button links for
  * @param string  $this->title
  */
+use Application\Block;
 ?>
 <section>
     <header>
         <h1><?= $this->title; ?></h1>
-        <div class="tools">
         <?php
-            if ($this->actions) {
-                $h = $this->template->getHelper('buttonLink');
-                foreach ($this->actions as $a) {
-                    echo $h->buttonLink(
-                        parent::generateUri("subunits.$a", ['id' => $this->subunit->id]),
-                        $this->_($a),
-                        'edit'
-                    );
+            $actions = [];
+            foreach (['verify', 'changeStatus', 'correct', 'update'] as $a) {
+                if (parent::isAllowed('subunits', $a)) {
+                    $actions[$a] = [
+                        'uri'   => parent::generateUri("subunits.$a", ['id' => $this->subunit->id]),
+                        'class' => 'edit',
+                        'help'  => $this->_("subunits.$a", 'messages')
+                    ];
                 }
             }
+            if ($actions) {
+                $block = new Block('toolbox.inc', ['actions'=>$actions]);
+                echo $block->render('html', $this->template);
+            }
         ?>
-        </div>
     </header>
     <table class="<?= $this->subunit->status; ?>">
     <?php $this->_include('subunits/partials/subunitData.inc'); ?>
