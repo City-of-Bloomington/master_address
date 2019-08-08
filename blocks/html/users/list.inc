@@ -1,13 +1,12 @@
 <?php
 /**
- * @copyright 2007-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2007-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->users
  */
 ?>
 <section>
     <header>
-        <h1><?= $this->_(['user', 'users', count($this->users)]); ?></h1>
         <div class="tools">
         <?php
             $helper = $this->template->getHelper('buttonLink');

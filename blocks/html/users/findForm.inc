@@ -1,7 +1,9 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param array $this->roles
+ * @param array $this->authentication_methods
  */
 $fields = ['firstname', 'lastname', 'username', 'email', 'role', 'authentication_method'];
 foreach ($fields as $f) {
@@ -26,9 +28,8 @@ foreach ($fields as $f) {
                     ]);
                 }
 
-				global $ZEND_ACL;
 				$options = [['value'=>'']];
-				foreach (array_reverse($ZEND_ACL->getRoles()) as $r) { $options[] = ['value'=>$r]; }
+				foreach ($this->roles as $r) { $options[] = ['value'=>$r]; }
 				echo $h->field([
                     'name'     => 'role',
                     'id'       => 'role',
@@ -39,9 +40,8 @@ foreach ($fields as $f) {
 				]);
 
 
-                global $AUTHENTICATION_METHODS;
                 $options = [['value'=>'']];
-                foreach (array_keys($AUTHENTICATION_METHODS) as $m) { $options[] = ['value'=>$m]; }
+                foreach ($this->authentication_methods as $m) { $options[] = ['value'=>$m]; }
                 echo $h->field([
                     'name'     => 'authentication_method',
                     'id'       => 'authentication_method',

@@ -111,6 +111,9 @@ msgid_plural "users"
 msgstr[0] "User"
 msgstr[1] "Users"
 
+msgid "users_search"
+msgstr "Users"
+
 msgid "person_info"
 msgstr "Person Info"
 

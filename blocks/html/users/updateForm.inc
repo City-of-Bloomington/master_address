@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2006-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2006-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param User   $this->user
  * @param string $this->title
+ * @param array  $this->roles
+ * @param array  $this->authentication_methods
  */
 $fields = [
     'id', 'authentication_method', 'role', 'username',
@@ -24,9 +26,8 @@ foreach ($fields as $f) {
 			<?php
                 $field = $this->template->getHelper('field');
 
-                global $AUTHENTICATION_METHODS;
                 $options = [];
-                foreach (array_keys($AUTHENTICATION_METHODS) as $m) { $options[] = ['value'=>$m]; }
+                foreach ($this->authentication_methods as $m) { $options[] = ['value'=>$m]; }
                 echo $field->field([
                     'name'    => 'authentication_method',
                     'id'      => 'authentication_method',
@@ -40,8 +41,7 @@ foreach ($fields as $f) {
                 echo $field->field(['name'=>'password', 'id'=>'password', 'label'=>$this->_('password'), 'type'=>'password']);
 
 				$options = [];
-                global $ZEND_ACL;
-                foreach (array_reverse($ZEND_ACL->getRoles()) as $r) { $options[] = ['value'=>$r]; }
+                foreach ($this->roles as $r) { $options[] = ['value'=>$r]; }
 				echo $field->field([
                     'name'    => 'role',
                     'id'      => 'role',
