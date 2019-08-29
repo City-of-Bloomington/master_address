@@ -61,7 +61,6 @@ class Add
         if (!in_array($req->action, Add::$validActions)) {
             $errors[] = 'invalidAction';
         }
-        if ($this->isDuplicateAddress($req)) { $errors[] = 'addresses/duplicateAddress'; }
 
         if (!$req->street_number  ) { $errors[] = 'addresses/missingStreetNumber'; }
         if (!$req->address_type   ) { $errors[] = 'addresses/missingType';         }
@@ -71,6 +70,13 @@ class Add
         if (!$req->zip            ) { $errors[] = 'addresses/missingZip';          }
 
         if (!$req->locationType_id) { $errors[] = 'locations/missingType';         }
+
+        # If there are required fields missing, do not do the duplicate check.
+        # The duplicate check depends on some of there required fields.
+        # If they are missing, the duplicate check will return false positives.
+        if ($errors) { return $errors; }
+
+        if ($this->isDuplicateAddress($req)) { $errors[] = 'addresses/duplicateAddress'; }
 
         return $errors;
     }
