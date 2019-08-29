@@ -34,7 +34,7 @@ $town   = parent::escape($this->street->town_name);
                         'class' => 'add',
                         'help'  => $this->_('action_help.address_assign', 'messages'),
                         'uri'   => parent::generateUri('addresses.add').'?'.http_build_query([
-                                       'street_id'  => $this->street_id,
+                                       'street_id'  => $this->street->id,
                                        'return_url' => Url::current_url(BASE_HOST)
                                    ])
                     ];
