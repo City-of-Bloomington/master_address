@@ -4,7 +4,8 @@ ENV TZ=America/Indiana/Indianapolis
 RUN ln -snf /usr/share/zoneinfo/America/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y apache2
+RUN apt-get update && apt-get install -y apache2 locales \
+    && locale-gen en_US.UTF-8
 RUN a2enmod alias && \
     a2enmod headers && \
     a2enmod remoteip && \
