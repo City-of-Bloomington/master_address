@@ -9,7 +9,6 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   type: {{ .Values.service.type }}
-  externalTrafficPolicy: local
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http

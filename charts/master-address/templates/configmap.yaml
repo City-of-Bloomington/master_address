@@ -79,12 +79,12 @@ data:
 
     <IfModule mod_remoteip.c>
     RemoteIPHeader X-Forwarded-For
-    RemoteIPInternalProxy 10.20.20.19 10.20.22.10 10.20.24.20
+    RemoteIPInternalProxy 10.0.0.0/8
     LogFormat "%a %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
     </IfModule>
 
         ErrorLog /dev/stderr
-        TransferLog /dev/stdout
+        CustomLog /dev/stdout combined
 
     Alias {{ .Values.config.base_uri }} "/srv/sites/master_address/public"
     <Directory            "/srv/sites/master_address/public">
