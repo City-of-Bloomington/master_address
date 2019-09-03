@@ -38,10 +38,15 @@ data:
         ]
     ];
 
-    $AUTHENTICATION_METHODS = [
+    $DIRECTORY_CONFIG = [
       'Employee' => [
-          'classname' => '{{ .Values.config.auth.employeeAuthClass }}',
-          'server'    => '{{ .Values.config.auth.employeeAuthServer }}',
+          'classname'          => '{{ .Values.config.auth.ldap.classname          }}',
+          'server'             => '{{ .Values.config.auth.ldap.server             }}',
+          'base_dn'            => '{{ .Values.config.auth.ldap.base_dn            }}',
+          'username_attribute' => '{{ .Values.config.auth.ldap.username_attribute }}',
+          'user_binding'       => '{{ .Values.config.auth.ldap.user_binding       }}',
+          'admin_binding'      => '{{ .Values.config.auth.ldap.admin_binding      }}',
+          'admin_pass'         => '{{ .Values.config.auth.ldap.admin_pass         }}'
       ]
     ];
 
@@ -93,6 +98,4 @@ data:
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteRule .? {{ .Values.config.base_uri }}/index.php [NC,L]
     </Directory>
-
-
 ...

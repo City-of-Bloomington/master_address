@@ -1,7 +1,7 @@
-# Default values for master_address.
+# Empty example values for master_address.
 # This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+# Copy this file and declare your own variables to be passed into the templates.
+---
 replicaCount: 1
 
 image:
@@ -13,27 +13,33 @@ fullnameOverride: ""
 
 
 config:
-  base-uri: "/master_address" 
+  base_uri: "/master_address"
   defaults:
-    city: 
-    state: 
-    locationId: 
+    city:
+    state:
+    locationId:
 
   db:
     driver: #likely pgsql
-    host: 
-    dbname: 
-    schema: 
-    username: 
-    password: 
-  
+    host:
+    dbname:
+    schema:
+    username:
+    password:
+
   auth:
-    employeeAuthClass: 
-    employeeAuthServer: 
+    ldap:
+      classname:
+      server:
+      base_dn:
+      username_attribute:
+      user_binding:
+      admin_binding:
+      admin_pass:
     cas:
-      appHome: 
-      server: 
-      uri: 
+      appHome:
+      server:
+      uri:
 
 
 service:
@@ -72,3 +78,4 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+...
