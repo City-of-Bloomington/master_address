@@ -3,7 +3,7 @@
  * @copyright 2019 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
-include '../bootstrap.inc';
+include '../../bootstrap.inc';
 
 $tables = ['address', 'location', 'subunit'];
 
