@@ -1,4 +1,4 @@
--- @copyright 2017-2018 City of Bloomington, Indiana
+-- @copyright 2017-2019 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE
 set search_path = address;
 
@@ -204,7 +204,6 @@ create table address_status (
     address_id  integer          not null,
     status      address_statuses not null,
     start_date  timestamp        not null default now(),
-    end_date    timestamp,
     foreign key (address_id) references addresses(id)
 );
 create index on address_status(address_id);
@@ -234,7 +233,6 @@ create table subunit_status (
     subunit_id  integer          not null,
     status      address_statuses not null,
     start_date  timestamp        not null default now(),
-    end_date    timestamp,
     foreign key (subunit_id) references subunits(id)
 );
 create index on subunit_status(subunit_id);
@@ -270,8 +268,7 @@ create table location_status (
 	id           serial           primary key,
 	location_id  integer          not null,
 	status       address_statuses not null,
-    start_date  timestamp         not null default now(),
-    end_date    timestamp
+    start_date  timestamp         not null default now()
 );
 create index on location_status(location_id);
 

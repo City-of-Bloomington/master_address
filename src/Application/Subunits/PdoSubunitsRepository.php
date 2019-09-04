@@ -76,8 +76,8 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $select->cols($this->columns())
                ->from(self::TABLE.' s')
                ->join('LEFT', 'subunit_types  t', 's.type_id=t.id')
-               ->join('LEFT', 'subunit_status x', 's.id=x.subunit_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())')
-               ->join('LEFT', 'locations      l', 's.id=l.subunit_id and l.active');
+               ->join('LEFT', 'locations      l', 's.id=l.subunit_id and l.active')
+               ->joinSubSelect('LEFT', 'select distinct on (subunit_id) subunit_id, status from subunit_status order by subunit_id, start_date desc', 'x', 's.id=x.subunit_id');
 
         return $select;
     }
@@ -298,11 +298,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $query->execute([$req->notes, $req->subunit_id]);
 
         $sql = "update locations set mailable=?, occupiable=?, group_quarter=?
-                from location_status
-                where subunit_id=? and active
-                and location_status.location_id=locations.location_id
-                and start_date <= now() and (end_date is null or end_date >= now())
-                and status='current'";
+                where subunit_id=? and active";
         $query = $this->pdo->prepare($sql);
         $query->execute([
             $req->mailable,

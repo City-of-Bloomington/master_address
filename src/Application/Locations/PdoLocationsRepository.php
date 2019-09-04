@@ -67,7 +67,6 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         $select->cols($this->columns())
                ->from(self::TABLE.' l')
                ->join('INNER', 'location_types       t',  't.id = l.type_id')
-               ->join('LEFT',  'location_status      x',  'l.location_id=x.location_id and x.start_date <= now() and (x.end_date is null or x.end_date >= now())')
                ->join('LEFT',  'sanitation         san',  'l.location_id=san.location_id')
                ->join('INNER', 'addresses            a',  'a.id = l.address_id')
                ->join('INNER', 'streets              s',  's.id = a.street_id')
@@ -75,7 +74,8 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                ->join('INNER', 'street_names        sn', 'sn.id = sd.street_name_id')
                ->join('LEFT',  'street_types        st', 'st.id = sn.suffix_code_id')
                ->join('LEFT',  'subunits           sub','sub.id = l.subunit_id')
-               ->join('LEFT',  'subunit_types      sut','sut.id = sub.type_id');
+               ->join('LEFT',  'subunit_types      sut','sut.id = sub.type_id')
+               ->joinSubSelect('LEFT', 'select distinct on (location_id) location_id, status from location_status order by location_id, start_date desc', 'x', 'l.location_id=x.location_id');
         return $select;
     }
 

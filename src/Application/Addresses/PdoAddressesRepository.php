@@ -109,8 +109,8 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
                ->join('LEFT', 'street_names        sn', 'sd.street_name_id=sn.id')
                ->join('LEFT', 'street_types        st', 'sn.suffix_code_id=st.id')
-               ->join('LEFT', 'address_status  status', 'a.id=status.address_id and status.start_date <= now() and (status.end_date is null or status.end_date >= now())')
-               ->join('LEFT', 'locations            l', 'a.id=l.address_id and l.subunit_id is null and l.active');
+               ->join('LEFT', 'locations            l', 'a.id=l.address_id and l.subunit_id is null and l.active')
+               ->joinSubSelect('LEFT', 'select distinct on (address_id) address_id, status from address_status order by address_id, start_date desc', 'status', 'a.id=status.address_id');
 
         return $select;
     }
@@ -170,9 +170,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         $select  = $this->baseSelect();
         $cols    = $this->columns();
         $cols[]  = "( select count(*)
-                      from subunits       x
-                      join subunit_status xs on x.id=xs.subunit_id and xs.start_date <= now() and (xs.end_date is null or xs.end_date >= now()) and xs.status=status.status
-                      where x.address_id=a.id) as subunit_count";
+                    from subunits       x
+                    join (select distinct on (subunit_id) subunit_id, status from subunit_status order by subunit_id, start_date desc) as xs on x.id=xs.subunit_id
+                    where x.address_id=a.id) as subunit_count";
         $select->cols($cols);
         foreach ($fields as $f=>$v) {
             if (!empty($v)) {
@@ -445,12 +445,10 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             $req->address_id
         ]);
 
+
+
         $sql = "update locations set type_id=?, mailable=?, occupiable=?, group_quarter=?
-                from location_status
-                where address_id=? and subunit_id is null and active
-                and location_status.location_id=locations.location_id
-                and start_date <= now() and (end_date is null or end_date >= now())
-                and status='current'";
+                where address_id=? and subunit_id is null and active";
         $query = $this->pdo->prepare($sql);
         $query->execute([
             $req->locationType_id,
