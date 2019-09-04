@@ -3,24 +3,29 @@
  * @copyright 2019 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
-include './bootstrap.inc';
+include '../bootstrap.inc';
 
-$sql    = "select l.*, s.records
-           from address_status l
-           join (
-               select address_id, count(*) as records
-               from address_status group by address_id) s on l.address_id = s.address_id
-           where end_date is not null and records = 1";
+$tables = ['address', 'location', 'subunit'];
 
-$result = $pdo->query($sql);
+foreach ($tables as $table) {
+    echo "Fixing {$table} status\n";
+    $sql    = "select l.*, s.records
+            from {$table}_status l
+            join (
+                select {$table}_id, count(*) as records
+                from {$table}_status group by {$table}_id) s on l.{$table}_id = s.{$table}_id
+            where end_date is not null and records = 1";
 
-$sql    = "insert into address_status (address_id, status, start_date) values(?, ?, ?)";
-$insert = $pdo->prepare($sql);
+    $result = $pdo->query($sql);
 
-$sql    = "update address_status set end_date=null, start_date=? where id=?";
-$update = $pdo->prepare($sql);
+    $sql    = "insert into {$table}_status ({$table}_id, status, start_date) values(?, ?, ?)";
+    $insert = $pdo->prepare($sql);
 
-foreach ($result as $r) {
-    $insert->execute([ $r['address_id'], 'current', $r['start_date'] ]);
-    $update->execute([ $r['end_date'], $r['id'] ]);
+    $sql    = "update {$table}_status set end_date=null, start_date=? where id=?";
+    $update = $pdo->prepare($sql);
+
+    foreach ($result as $r) {
+        $insert->execute([ $r["{$table}_id"], 'current', $r['start_date'] ]);
+        $update->execute([ $r['end_date'], $r['id'] ]);
+    }
 }
