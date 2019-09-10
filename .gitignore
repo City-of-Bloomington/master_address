@@ -15,3 +15,4 @@ env-*.php
 .project
 .settings
 cob.values.yaml
+make.conf
