@@ -10,7 +10,7 @@ use Application\Block;
 ?>
 <section>
     <header>
-        <h1><?= $this->title ?></h1>
+        <h1><?= $this->address ?> (<?= $this->address->status; ?>)</h1>
         <?php
             if (!$this->disableButtons) {
                 $h       = $this->template->getHelper('buttonLink');

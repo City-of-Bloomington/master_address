@@ -28,8 +28,7 @@ class InfoView extends Template
 
             $this->blocks = [
                 new Block('addresses/breadcrumbs.inc',   ['address'   => $info->address]),
-                new Block('addresses/info.inc',          ['address'   => $info->address,
-                                                          'title'     => $this->vars['title']])
+                new Block('addresses/info.inc',          ['address'   => $info->address])
             ];
             if ($info->statusLog) { $this->blocks[] = new Block('logs/statusLog.inc', ['statuses'  => $info->statusLog]); }
             if ($info->changeLog->entries) {
