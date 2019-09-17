@@ -45,7 +45,7 @@ package:
 	cd build && tar czf ${APPNAME}-${VERSION}.tar.gz ${APPNAME}
 
 dockerfile:
-	docker build . -t ${DOCKER_REPO}/${APPNAME}:${VERSION}-${COMMIT}
+	docker build build/master_address -t ${DOCKER_REPO}/${APPNAME}:${VERSION}-${COMMIT}
 	docker push ${DOCKER_REPO}/${APPNAME}:${VERSION}-${COMMIT}
 
 $(LANGUAGES): deps
