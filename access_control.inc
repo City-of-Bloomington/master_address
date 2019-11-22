@@ -10,7 +10,7 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 $ZEND_ACL = new Acl();
 $ZEND_ACL->addRole(new Role('Anonymous'))
-		 ->addRole(new Role('Public'), 'Anonymous')
+		 ->addRole(new Role('viewer'), 'Anonymous')
 		 ->addRole(new Role('addressedit'))
 		 ->addRole(new Role('Administrator'));
 /**
@@ -29,6 +29,9 @@ $ZEND_ACL->allow(null, 'addresses', ['index', 'view', 'parse']);
 $ZEND_ACL->allow(null, 'streets',   ['index', 'view', 'intersections', 'intersectingStreets']);
 $ZEND_ACL->allow(null, 'subunits',  ['index', 'view']);
 
+$ZEND_ACL->allow('viewer', 'reports');
+
 $ZEND_ACL->allow('addressedit');
 $ZEND_ACL->deny ('addressedit', 'users');
+
 $ZEND_ACL->allow('Administrator');
