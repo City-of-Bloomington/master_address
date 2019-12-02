@@ -70,7 +70,7 @@ class ChangeName
             return new ChangeNameResponse($log_id, $designation_id);
         }
         catch (\Exception $e) {
-            return ChangeNameResponse(null, null, [$e->getMessage()]);
+            return new ChangeNameResponse(null, null, [$e->getMessage()]);
         }
     }
 
