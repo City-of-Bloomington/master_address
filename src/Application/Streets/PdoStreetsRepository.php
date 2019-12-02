@@ -13,6 +13,7 @@ use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Streets\Entities\Designation;
 use Domain\Streets\Entities\Intersection;
 use Domain\Streets\Entities\Street;
+use Domain\Streets\Metadata;
 use Domain\Streets\UseCases\Add\AddRequest;
 use Domain\Streets\UseCases\Alias\AliasRequest;
 use Domain\Streets\UseCases\Search\SearchRequest;
@@ -24,7 +25,6 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
 
     const TABLE       = 'streets';
     const LOG_TYPE    = 'street';
-    const TYPE_STREET = 1;
 
     public static $DEFAULT_SORT = ['n.name'];
 
@@ -147,7 +147,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                      ])
                ->from("{$logType}_change_log l")
                ->join('INNER', 'streets              s',  's.id = l.street_id')
-               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.Metadata::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
                ->join('LEFT',  'street_types        st', 'st.id =sn.suffix_code_id')
                ->join('LEFT',  'people               p',  'p.id = l.person_id')
@@ -186,7 +186,7 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                 'street_id'  => $street_id,
                 'start_date' => $req->start_date,
                 'name_id'    => $req->name_id,
-                'type_id'    => self::TYPE_STREET,
+                'type_id'    => Metadata::TYPE_STREET,
                 'rank'       => 1
             ]);
             $designation_id = $this->addDesignation($designation);
@@ -226,13 +226,34 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
      */
     public function addDesignation(Designation $d): int
     {
-        return parent::saveToTable([
-            'street_id'      => $d->street_id,
-            'street_name_id' => $d->name_id,
-            'type_id'        => $d->type_id,
-            'rank'           => $d->rank,
-            'start_date'     => $d->start_date->format('c')
-        ], 'street_designations');
+        $this->pdo->beginTransaction();
+        if ($d->type_id == Metadata::TYPE_STREET) {
+            // Make room in the ranks for the new STREET designation
+            $sql   = 'update street_designations set rank = rank+1 where street_id=?';
+            $query = $this->pdo->prepare($sql);
+            $query->execute([$d->street_id]);
+
+            // Set any existing STREET designations to HISTORIC
+            $sql   = 'update street_designations set type_id=? where street_id=? and type_id=?';
+            $query = $this->pdo->prepare($sql);
+            $query->execute([Metadata::TYPE_HISTORIC, $d->street_id, Metadata::TYPE_STREET]);
+        }
+
+        try {
+            $id = parent::saveToTable([
+                'street_id'      => $d->street_id,
+                'street_name_id' => $d->name_id,
+                'type_id'        => $d->type_id,
+                'rank'           => $d->rank,
+                'start_date'     => $d->start_date->format('c')
+            ], 'street_designations');
+            $this->pdo->commit();
+            return $id;
+        }
+        catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
     }
 
     public function nextDesignationRank(int $street_id): int

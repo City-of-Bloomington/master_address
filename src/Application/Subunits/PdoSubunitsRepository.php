@@ -15,7 +15,7 @@ use Application\Locations\PdoLocationsRepository;
 
 use Domain\Addresses\Entities\Address;
 use Domain\Locations\Entities\Location;
-
+use Domain\Streets\Metadata as Street;
 use Domain\Subunits\Entities\Subunit;
 use Domain\Subunits\UseCases\Add\AddRequest;
 use Domain\Subunits\UseCases\Correct\CorrectRequest;
@@ -30,7 +30,6 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
 
     const LOG_TYPE    = 'subunit';
     const TABLE       = 'subunits';
-    const TYPE_STREET = 1;
 
     public static $DEFAULT_SORT = [
         'type_id',
@@ -187,7 +186,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
                ->join('INNER', 'subunit_types       ut', 'ut.id = u.type_id')
                ->join('INNER', 'addresses            a',  'a.id = u.address_id')
                ->join('INNER', 'streets              s',  's.id = a.street_id')
-               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.Street::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
                ->join('INNER', 'street_types        st', 'st.id =sn.suffix_code_id')
                ->join('LEFT',  'people               p',  'p.id = l.person_id')

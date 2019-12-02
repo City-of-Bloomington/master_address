@@ -34,25 +34,6 @@ class ChangeName
         }
 
         try {
-            // Make room in the ranks for the new STREET designation
-            $designations = $this->repo->findDesignations(
-                ['street_id'=>$request->street_id],
-                ['rank desc']
-            );
-            foreach ($designations as $d) {
-                $this->repo->updateDesignation(new UpdateRequest(
-                    $d->id,
-                    $request->user_id,
-                    $d->start_date,
-                    [
-                        // Set any existing STREET designations to HISTORIC
-                        'type_id' => $d->type_id==Metadata::TYPE_STREET ? Metadata::TYPE_HISTORIC : $d->type_id,
-                        'rank'    => $d->rank + 1
-                    ]
-                ));
-            }
-
-            // Add the new STREET designation
             $designation_id = $this->repo->addDesignation(new Designation([
                 'street_id'  => $request->street_id,
                 'start_date' => $request->start_date,

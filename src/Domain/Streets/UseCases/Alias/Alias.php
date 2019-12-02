@@ -9,7 +9,8 @@ declare (strict_types=1);
 namespace Domain\Streets\UseCases\Alias;
 
 use Domain\Streets\DataStorage\StreetsRepository;
-use DOmain\Streets\Entities\Designation;
+use Domain\Streets\Entities\Designation;
+use Domain\Streets\Metadata as Street;
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
 
@@ -57,7 +58,7 @@ class Alias
         if (!$req->type_id  ) { $errors[] = 'designations/missingType'; }
 
         // You cannot create an Alias of type STREET
-        if ($req->type_id == $this->repo::TYPE_STREET) {
+        if ($req->type_id == Street::TYPE_STREET) {
             $errors[] = 'streets/invalidAliasType';
         }
         // Make sure there's no duplicate names

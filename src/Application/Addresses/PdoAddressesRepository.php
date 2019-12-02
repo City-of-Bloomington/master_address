@@ -21,6 +21,7 @@ use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Addresses\UseCases\Update\Request as UpdateRequest;
 
 use Domain\Locations\Entities\Location;
+use Domain\Streets\Metadata as Street;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
@@ -30,7 +31,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     use \Domain\Logs\DataStorage\ChangeLogTrait;
     use \Domain\Logs\DataStorage\StatusLogTrait;
 
-    const TYPE_STREET = 1;
     const TABLE       = 'addresses';
     const LOG_TYPE    = 'address';
 
@@ -106,7 +106,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->join('LEFT', 'plats                p', 'a.plat_id=p.id')
                ->join('LEFT', 'subdivisions       sub', 'a.subdivision_id=sub.id')
                ->join('LEFT', 'streets              s', 'a.street_id=s.id')
-               ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('LEFT', 'street_designations sd', 's.id=sd.street_id and sd.type_id='.Street::TYPE_STREET)
                ->join('LEFT', 'street_names        sn', 'sd.street_name_id=sn.id')
                ->join('LEFT', 'street_types        st', 'sn.suffix_code_id=st.id')
                ->join('LEFT', 'locations            l', 'a.id=l.address_id and l.subunit_id is null and l.active')
@@ -301,7 +301,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                ->from("{$logType}_change_log l")
                ->join('INNER', 'addresses            a',  'a.id = l.address_id')
                ->join('INNER', 'streets              s',  's.id = a.street_id')
-               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.self::TYPE_STREET)
+               ->join('INNER', 'street_designations sd',  's.id =sd.street_id and sd.type_id='.Street::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id =sd.street_name_id')
                ->join('LEFT',  'street_types        st', 'st.id =sn.suffix_code_id')
                ->join('LEFT',  'people               p',  'p.id = l.person_id')

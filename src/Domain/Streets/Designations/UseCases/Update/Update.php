@@ -54,7 +54,7 @@ class Update
     private function validate(UpdateRequest $req): array
     {
         $errors = [];
-        if ($req->type_id == STREET::TYPE_STREET) { $errors[] = 'designations/cannotUpdateStreetType'; }
+        if ($req->type_id == Street::TYPE_STREET) { $errors[] = 'designations/cannotUpdateStreetType'; }
 
         if (!$req->designation_id) { $errors[] = 'designations/missingId';   }
         if (!$req->type_id       ) { $errors[] = 'designations/missingType'; }

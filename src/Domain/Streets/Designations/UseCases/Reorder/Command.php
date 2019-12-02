@@ -8,6 +8,7 @@ namespace Domain\Streets\Designations\UseCases\Reorder;
 
 use Domain\Streets\DataStorage\StreetsRepository;
 use Domain\Streets\Entities\Designation;
+use Domain\Streets\Metadata as Street;
 
 class Command
 {
@@ -33,7 +34,6 @@ class Command
         }
 
         return new Response($req->street_id);
-
     }
 
     private function validate(Request $req): array
@@ -61,7 +61,7 @@ class Command
 
     private function streetTypeIsFirst(int $position, Designation $designation): bool
     {
-        return ($designation->type_id == $this->repo::TYPE_STREET)
+        return ($designation->type_id == Street::TYPE_STREET)
             ?  ($position == 0)
             :  ($position != 0);
    }
