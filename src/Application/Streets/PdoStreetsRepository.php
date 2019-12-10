@@ -175,11 +175,17 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     {
         $this->pdo->beginTransaction();
 
-        $street_id = parent::saveToTable([
-            'town_id' => $req->town_id,
-            'status'  => $req->status,
-            'notes'   => $req->notes
-        ], self::TABLE);
+        try {
+            $street_id = parent::saveToTable([
+                'town_id' => $req->town_id,
+                'status'  => $req->status,
+                'notes'   => $req->notes
+            ], self::TABLE);
+        }
+        catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
 
         if ($street_id) {
             $designation = new Designation([
@@ -189,11 +195,14 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
                 'type_id'    => Metadata::TYPE_STREET,
                 'rank'       => 1
             ]);
-            $designation_id = $this->addDesignation($designation);
-            if ($designation_id) {
-                $this->pdo->commit();
-                return $street_id;
+            try {
+                $designation_id = $this->doQueriesToCreateDesignation($designation);
+                if ($designation_id) {
+                    $this->pdo->commit();
+                    return $street_id;
+                }
             }
+            catch (\Exception $e) { throw $e; }
         }
         $this->pdo->rollBack();
         throw new \Exception('databaseError');
@@ -222,11 +231,35 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
     /**
      * Save a new street designation to the database
      *
+     * @throws \PDOException
      * @return int  The new designation_id
      */
     public function addDesignation(Designation $d): int
     {
         $this->pdo->beginTransaction();
+
+        try {
+            $id = $this->doQueriesToCreateDesignation($d);
+            $this->pdo->commit();
+            return $id;
+        }
+        catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Execute database queries to add a designation
+     *
+     * These are done seperately to allow for other functions to wrap these
+     * calls in a transaction.
+     *
+     * @throws \PDOException
+     * @return int        The new designation_id
+     */
+    private function doQueriesToCreateDesignation(Designation $d): int
+    {
         if ($d->type_id == Metadata::TYPE_STREET) {
             // Make room in the ranks for the new STREET designation
             $sql   = 'update street_designations set rank = rank+1 where street_id=?';
@@ -239,21 +272,14 @@ class PdoStreetsRepository extends PdoRepository implements StreetsRepository
             $query->execute([Metadata::TYPE_HISTORIC, $d->street_id, Metadata::TYPE_STREET]);
         }
 
-        try {
-            $id = parent::saveToTable([
-                'street_id'      => $d->street_id,
-                'street_name_id' => $d->name_id,
-                'type_id'        => $d->type_id,
-                'rank'           => $d->rank,
-                'start_date'     => $d->start_date->format('c')
-            ], 'street_designations');
-            $this->pdo->commit();
-            return $id;
-        }
-        catch (\Exception $e) {
-            $this->pdo->rollBack();
-            throw $e;
-        }
+        $id = parent::saveToTable([
+            'street_id'      => $d->street_id,
+            'street_name_id' => $d->name_id,
+            'type_id'        => $d->type_id,
+            'rank'           => $d->rank,
+            'start_date'     => $d->start_date->format('c')
+        ], 'street_designations');
+        return $id;
     }
 
     public function nextDesignationRank(int $street_id): int
