@@ -46,6 +46,7 @@ create table street_types (
     code varchar(8)  not null unique,
     name varchar(16) not null unique
 );
+insert into street_types values(1, 'ST', 'Street');
 
 create table subunit_types (
     id   serial      primary key,
@@ -104,6 +105,9 @@ create table street_designation_types (
     name        varchar(16) not null unique,
     description varchar(64) not null
 );
+insert into street_designation_types values(1, 'STREET',   'PRIMARY STREET NAME');
+insert into street_designation_types values(2, 'HISTORIC', 'STREET NAME HISTORIC NAME');
+insert into street_designation_types values(3, 'ALIAS',    'STREET NAME ALIAS');
 
 create table streets (
 	id        serial  primary key,
