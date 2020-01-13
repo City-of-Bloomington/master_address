@@ -34,6 +34,7 @@ use Application\Url;
                 <th><?= $this->_('address_type' ); ?></th>
                 <th><?= $this->_('location_id'  ); ?></th>
                 <th><?= $this->_('location_type'); ?></th>
+                <th><?= $this->_('notes'        ); ?></th>
             </tr>
         </thead>
 
@@ -53,6 +54,7 @@ use Application\Url;
 
 
                 $date  = new \DateTime($row['action_date']);
+                $notes = parent::escape($row['notes']);
 
                 echo "
                 <tr><td><a href=\"$uri\">{$date->format(DATE_FORMAT)}</a></td>
@@ -63,6 +65,7 @@ use Application\Url;
                     <td><a href=\"$uri\">{$row['address_type' ]}</a></td>
                     <td><a href=\"$uri\">{$row['location_id'  ]}</a></td>
                     <td><a href=\"$uri\">{$row['location_type']}</a></td>
+                    <td>$notes</td>
                 </tr>
                 ";
             }

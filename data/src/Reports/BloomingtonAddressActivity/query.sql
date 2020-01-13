@@ -13,7 +13,8 @@ select c.action_date,
        concat_ws(' ', p.firstname, p.lastname) as person,
        a.address_type,
        l.location_id,
-      lt.name as location_type
+      lt.name as location_type,
+       c.notes
 from      address_change_log  c
      join addresses           a on  a.id=c.address_id
      join streets             s on  s.id=a.street_id
@@ -46,7 +47,8 @@ select c.action_date,
        concat_ws(' ', p.firstname, p.lastname) as person,
        a.address_type,
        l.location_id,
-      lt.name as location_type
+      lt.name as location_type,
+       c.notes
 from      subunit_change_log  c
      join subunits          sub on sub.id=c.subunit_id
      join subunit_types      st on  st.id=sub.type_id
