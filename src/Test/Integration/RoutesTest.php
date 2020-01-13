@@ -10,12 +10,12 @@ class RoutesTest extends TestCase
 {
     public function testRoutesHaveFunctions()
     {
-        global $ROUTES;
+        global $ROUTES, $DI;
 
         foreach ($ROUTES->getRoutes() as $r) {
             $controller = $r->values['controller'];
             $action     = $r->values['action'    ];
-            $c = new $controller();
+            $c = new $controller($DI);
             $this->assertTrue(method_exists($c, $action), "$controller is missing $action()\n");
         }
     }
