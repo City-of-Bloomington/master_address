@@ -1,6 +1,9 @@
 -- Address activity
-select c.action_date,
+select l.location_id,
        c.address_id as entity_id,
+       a.address_type,
+       c.action_date,
+       concat_ws(' ', p.firstname, p.lastname) as person,
        concat_ws(' ',a.street_number_prefix,
                      a.street_number,
                      a.street_number_suffix) as streetNumber,
@@ -11,11 +14,19 @@ select c.action_date,
        null as subunit,
        a.zip,
        c.action,
-       concat_ws(' ', p.firstname, p.lastname) as person,
-       a.address_type,
-       l.location_id,
       lt.name as location_type,
-       c.notes
+       c.notes,
+       concat_ws(' ', n.direction,
+                      n.name,
+                      t.code,
+                      n.post_direction) as full_street_name,
+       concat_ws(' ', a.street_number_prefix,
+                      a.street_number,
+                      a.street_number_suffix,
+                      n.direction,
+                      n.name,
+                      t.code,
+                      n.post_direction) as full_address
 from      address_change_log  c
      join addresses           a on  a.id=c.address_id
      join streets             s on  s.id=a.street_id
@@ -33,8 +44,11 @@ where c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 
 union all
 
 -- Subunit activity
-select c.action_date,
+select l.location_id,
        c.subunit_id as entity_id,
+       a.address_type,
+       c.action_date,
+       concat_ws(' ', p.firstname, p.lastname) as person,
        concat_ws(' ',a.street_number_prefix,
                      a.street_number,
                      a.street_number_suffix) as streetNumber,
@@ -46,11 +60,21 @@ select c.action_date,
                      sub.identifier) as subunit,
        a.zip,
        c.action,
-       concat_ws(' ', p.firstname, p.lastname) as person,
-       a.address_type,
-       l.location_id,
       lt.name as location_type,
-       c.notes
+       c.notes,
+       concat_ws(' ', n.direction,
+                      n.name,
+                      t.code,
+                      n.post_direction) as full_street_name,
+       concat_ws(' ', a.street_number_prefix,
+                      a.street_number,
+                      a.street_number_suffix,
+                      n.direction,
+                      n.name,
+                      t.code,
+                      n.post_direction,
+                     st.code,
+                    sub.identifier) as full_address
 from      subunit_change_log  c
      join subunits          sub on sub.id=c.subunit_id
      join subunit_types      st on  st.id=sub.type_id
