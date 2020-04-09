@@ -63,7 +63,8 @@ create table location_types (
 create table purposes (
     id           serial       primary key,
     name         varchar(128) not null,
-    purpose_type varchar(32)  not null
+    purpose_type varchar(32)  not null,
+    url          varchar(255)
 );
 
 --
