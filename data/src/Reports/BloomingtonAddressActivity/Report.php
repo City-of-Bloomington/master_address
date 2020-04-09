@@ -33,7 +33,7 @@ class Report extends BaseReport
     {
         $total     = null;
         $startDate = $request['startDate']->format('Y-m-d');
-        $endDate   = $request[  'endDate']->format('Y-m-d');
+        $endDate   = $request[  'endDate']->format('Y-m-d').' 23:59:59';
 
         $qq  = file_get_contents(__DIR__.'/query.sql');
         $sql = "$qq order by action_date";

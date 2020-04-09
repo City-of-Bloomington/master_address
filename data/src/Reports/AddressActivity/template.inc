@@ -34,6 +34,7 @@ use Application\Url;
                 <th><?= $this->_('address_type' ); ?></th>
                 <th><?= $this->_('location_id'  ); ?></th>
                 <th><?= $this->_('location_type'); ?></th>
+                <th><?= $this->_('notes'        ); ?></th>
             </tr>
         </thead>
 
@@ -43,26 +44,19 @@ use Application\Url;
                 $route = $row['subunit'] ? 'subunits.view' : 'addresses.view';
                 $uri   = parent::generateUri($route, ['id'=>$row['entity_id']]);
 
-                $addr  = [$row['streetnumber'],
-                          $row['direction'   ],
-                          $row['name'        ],
-                          $row['code'        ]];
-                if ($row['post_direction']) { $addr[] = $row['post_direction']; }
-                if ($row['subunit'       ]) { $addr[] = $row['subunit'       ]; }
-                $address = implode(' ', $addr);
-
-
                 $date  = new \DateTime($row['action_date']);
+                $notes = parent::escape($row['notes']);
 
                 echo "
                 <tr><td><a href=\"$uri\">{$date->format(DATE_FORMAT)}</a></td>
-                    <td><a href=\"$uri\">$address</a></td>
+                    <td><a href=\"$uri\">{$row['full_address' ]}</a></td>
                     <td><a href=\"$uri\">{$row['zip'          ]}</a></td>
                     <td><a href=\"$uri\">{$row['action'       ]}</a></td>
                     <td><a href=\"$uri\">{$row['person'       ]}</a></td>
                     <td><a href=\"$uri\">{$row['address_type' ]}</a></td>
                     <td><a href=\"$uri\">{$row['location_id'  ]}</a></td>
                     <td><a href=\"$uri\">{$row['location_type']}</a></td>
+                    <td>$notes</td>
                 </tr>
                 ";
             }
