@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Addresses\UseCases\Parse;
@@ -97,7 +97,7 @@ class Parse
 		//echo "Starting with |$string|\n";
 		$address = preg_replace('/[^a-z0-9\-\s\/]/i', '',  $string);
 		$address = preg_replace('/\s+/',              ' ', $address);
-		
+
 		$matches = null;
 
 		if ($parseType=='address') {
@@ -129,6 +129,13 @@ class Parse
 				}
 				$address = trim(preg_replace("#^$matches[0]#i",'',$address));
 			}
+
+			// Strip the country name off the end of the string
+			$countryRegex = '/\s(USA)\s?$/i';
+			if (preg_match($countryRegex, $address, $matches)) {
+                $address = trim(preg_replace($countryRegex, '', $address));
+			}
+
 			#print_r(array_filter((array)$output));
 			#echo "Looking for Zip: |$address|\n";
 			$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
