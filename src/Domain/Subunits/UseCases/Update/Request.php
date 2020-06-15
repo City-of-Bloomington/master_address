@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -12,6 +12,7 @@ class Request
     public $notes;
 
     // Location Fields
+    public $locationType_id;
     public $mailable;
     public $occupiable;
     public $group_quarter;
@@ -26,11 +27,14 @@ class Request
         $this->subunit_id = $subunit_id;
         $this->user_id    = $user_id;
 
-        if (!empty($data['notes'        ])) { $this->notes         =      $data['notes']; }
-        if (!empty($data['mailable'     ])) { $this->mailable      =      $data['mailable'     ] ? true : false; }
-        if (!empty($data['occupiable'   ])) { $this->occupiable    =      $data['occupiable'   ] ? true : false; }
-        if (!empty($data['group_quarter'])) { $this->group_quarter =      $data['group_quarter'] ? true : false; }
-        if (!empty($data['contact_id'   ])) { $this->contact_id    = (int)$data['contact_id'  ]; }
-        if (!empty($data['change_notes' ])) { $this->change_notes  =      $data['change_notes']; }
+        if (!empty($data['notes'])) { $this->notes = $data['notes']; }
+
+        if (!empty($data['locationType_id'])) { $this->locationType_id = (int)$data['locationType_id']; }
+        if (!empty($data['mailable'     ])) { $this->mailable      = $data['mailable'     ] ? true : false; }
+        if (!empty($data['occupiable'   ])) { $this->occupiable    = $data['occupiable'   ] ? true : false; }
+        if (!empty($data['group_quarter'])) { $this->group_quarter = $data['group_quarter'] ? true : false; }
+
+        if (!empty($data['contact_id'  ])) { $this->contact_id   = (int)$data['contact_id'  ]; }
+        if (!empty($data['change_notes'])) { $this->change_notes =      $data['change_notes']; }
     }
 }

@@ -361,6 +361,11 @@ msgstr "Subunit ID"
 msgid "subunit_add"
 msgstr "New Subunit"
 
+msgid "location"
+msgid_plural "locations"
+msgstr[0] "Location"
+msgstr[1] "Locations"
+
 msgid "location_id"
 msgstr "Location ID"
 

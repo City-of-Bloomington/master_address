@@ -1,13 +1,30 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ *---------------------------------------------------------
+ * Subunit table fields
+ *---------------------------------------------------------
  * @param Subunit $this->subunit
- * @param int     $this->subunit_id;
- * @param string  $this->notes;
+ * @param int     $this->subunit_id
+ * @param string  $this->notes
+ *---------------------------------------------------------
+ * Location fields
+ *---------------------------------------------------------
+ * @param int    $this->locationType_id
+ * @param bool   $this->mailable
+ * @param bool   $this->occupiable
+ * @param bool   $this->group_quarter
+ *---------------------------------------------------------
+ * Change log fields
+ *---------------------------------------------------------
  * @param int     $this->contact_id    Change log contact person
  * @param string  $this->contact_name  Change log contact person
  * @param string  $this->change_notes
+ *---------------------------------------------------------
+ * Information to populate select dropdown options
+ *---------------------------------------------------------
+ * @param array  $this->locationTypes
  */
 declare (strict_types=1);
 ?>
@@ -25,6 +42,12 @@ declare (strict_types=1);
                     'value'    => $this->notes,
                     'type'     => 'textarea'
                 ]);
+            ?>
+        </fieldset>
+
+        <fieldset><legend><?= $this->_('location'); ?></legend>
+            <?php
+                $this->_include('locations/partials/locationFields.inc');
             ?>
         </fieldset>
 

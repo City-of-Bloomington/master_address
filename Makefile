@@ -31,8 +31,8 @@ clean:
 	for f in $(shell find public/js   -name '*-*.php'  ); do rm $$f; done
 
 compile: deps $(LANGUAGES)
-	cd                 public/css && sassc -mt compact screen.scss screen-${VERSION}.css
-	cd data/Themes/COB/public/css && sassc -mt compact screen.scss screen-${VERSION}.css
+	cd                 public/css && sassc -t compact -m screen.scss screen-${VERSION}.css
+	cd data/Themes/COB/public/css && sassc -t compact -m screen.scss screen-${VERSION}.css
 	for f in ${JAVASCRIPT}; do cp $$f $${f%.js}-${VERSION}.js; done
 	cd public/js/choosers && cp env.php env-${VERSION}.php
 

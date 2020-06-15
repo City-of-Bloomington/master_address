@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -296,10 +296,11 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $query = $this->pdo->prepare($sql);
         $query->execute([$req->notes, $req->subunit_id]);
 
-        $sql = "update locations set mailable=?, occupiable=?, group_quarter=?
+        $sql = "update locations set type_id=?, mailable=?, occupiable=?, group_quarter=?
                 where subunit_id=? and active";
         $query = $this->pdo->prepare($sql);
         $query->execute([
+            $req->locationType_id,
             $req->mailable,
             $req->occupiable,
             $req->group_quarter,

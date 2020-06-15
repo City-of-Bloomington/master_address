@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -9,6 +9,7 @@ namespace Application\Subunits\Views;
 use Application\Block;
 use Application\Template;
 
+use Domain\Locations\Metadata as Location;
 use Domain\Subunits\UseCases\Info\InfoResponse;
 use Domain\Subunits\UseCases\Update\Request;
 use Domain\People\Entities\Person;
@@ -16,6 +17,7 @@ use Domain\People\Entities\Person;
 class UpdateView extends Template
 {
     public function __construct(Request       $request,
+                                Location      $location,
                                 InfoResponse  $info,
                                 ?Person       $contact=null)
     {
@@ -23,13 +25,11 @@ class UpdateView extends Template
         parent::__construct('two-column', $format);
 
         $vars = [
-            'subunit_id'   => $request->subunit_id,
-            'subunit'      => $info->subunit,
-            'notes'        => parent::escape($request->notes),
-            'contact_id'   => $contact ? $contact->id           : null,
-            'contact_name' => $contact ? $contact->__toString() : null,
-            'change_notes' => parent::escape($request->change_notes),
+            'subunit'       => $info->subunit,
+            'contact_name'  => $contact ? $contact->__toString() : null,
+            'locationTypes' => $location->types()
         ];
+        foreach ($request as $k=>$v) { $vars[$k] = is_string($v) ? parent::escape($v) : $v; }
 
         $this->blocks = [
             new Block('subunits/actions/updateForm.inc', $vars),
