@@ -111,13 +111,18 @@ foreach (['Info', 'Search', 'Update'] as $a) {
 }
 
 // Streets
-foreach (['Add', 'Alias', 'ChangeName', 'ChangeStatus', 'Info',
+foreach (['Add', 'Alias', 'ChangeStatus', 'Info',
           'Intersections', 'IntersectingStreets',
           'Load', 'Search', 'Update'] as $a) {
     $DI->params[ "Domain\\Streets\\UseCases\\$a\\$a"]['repository'] = $DI->lazyGet('Domain\Streets\DataStorage\StreetsRepository');
     $DI->set(    "Domain\\Streets\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Streets\\UseCases\\$a\\$a"));
 }
+$DI->params[ 'Domain\Streets\UseCases\ChangeName\ChangeName']['repository' ] = $DI->lazyGet('Domain\Streets\DataStorage\StreetsRepository');
+$DI->params[ 'Domain\Streets\UseCases\ChangeName\ChangeName']['addressRepo'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
+$DI->set(    "Domain\Streets\UseCases\ChangeName\ChangeName",
+$DI->lazyNew("Domain\Streets\UseCases\ChangeName\ChangeName"));
+
 
 // Street Designations
 foreach (['Load', 'Update'] as $a) {

@@ -2,11 +2,13 @@
 /**
  * Choose a new designation for a street.  The old designation becomes HISTORIC
  *
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\UseCases\ChangeName;
+
+use Domain\Addresses\DataStorage\AddressesRepository;
 
 use Domain\Logs\Entities\ChangeLogEntry;
 use Domain\Logs\Metadata as ChangeLog;
@@ -20,10 +22,13 @@ use Domain\Streets\UseCases\Alias\AliasRequest;
 class ChangeName
 {
     private $repo;
+    private $addressRepo;
 
-    public function __construct(StreetsRepository $repository)
+    public function __construct(StreetsRepository   $repository,
+                                AddressesRepository $addressRepo)
     {
-        $this->repo = $repository;
+        $this->repo        = $repository;
+        $this->addressRepo = $addressRepo;
     }
 
     public function __invoke(ChangeNameRequest $request): ChangeNameResponse
@@ -48,6 +53,13 @@ class ChangeName
                                          'contact_id' => $request->contact_id,
                                          'notes'      => $request->change_notes]);
             $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
+
+            $a = $this->addressRepo->find(['street_id' => $request->street_id]);
+            foreach ($a['rows'] as $a) {
+                $entry->entity_id = $a->id;
+                $this->addressRepo->logChange($entry, $this->addressRepo::LOG_TYPE);
+            }
+
             return new ChangeNameResponse($log_id, $designation_id);
         }
         catch (\Exception $e) {

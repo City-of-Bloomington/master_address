@@ -2,6 +2,7 @@
 /build.sh
 /build
 /dist
+/docs
 .git/
 .git*
 site_config.inc
