@@ -38,7 +38,6 @@ left join street_types        t on  t.id=n.suffix_code_id
      join location_types     lt on lt.id=l.type_id
 
 where a.jurisdiction_id=1 -- Bloomington
-  and c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
   and action_date between :start_date_1 and :end_date_1
 
 union all
@@ -88,5 +87,4 @@ left join street_types        t on   t.id=n.suffix_code_id
      join location_types     lt on  lt.id=l.type_id
 
 where a.jurisdiction_id=1 -- Bloomington
-  and c.action in ('added', 'assigned', 'readdressed', 'reassigned', 'retired', 'corrected', 'updated')
   and c.action_date between :start_date_2 and :end_date_2
