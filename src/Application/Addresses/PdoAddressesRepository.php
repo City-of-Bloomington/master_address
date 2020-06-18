@@ -81,8 +81,14 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         'street_post_direction' => ['prefix'=>'sn', 'dbName'=>'post_direction'],
         'street_suffix_code'    => ['prefix'=>'st', 'dbName'=>'code'          ],
 
-        'status'      => ['prefix' =>'status', 'dbName'=>'status'     ],
-        'location_id' => ['prefix' => 'l',     'dbName'=>'location_id']
+        'status' => ['prefix' =>'status', 'dbName'=>'status'],
+
+        'location_id'     => ['prefix' => 'l', 'dbName'=>'location_id'  ],
+        'locationType_id' => ['prefix' => 'l', 'dbName'=>'type_id'      ],
+        'mailable'        => ['prefix' => 'l', 'dbName'=>'mailable'     ],
+        'occupiable'      => ['prefix' => 'l', 'dbName'=>'occupiable'   ],
+        'group_quarter'   => ['prefix' => 'l', 'dbName'=>'group_quarter'],
+        'active'          => ['prefix' => 'l', 'dbName'=>'active'       ]
     ];
 
     public function columns(): array
@@ -150,13 +156,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                     $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
                     $select->where("$column=?", $v);
                 }
-                else {
-                    if ($f == 'location_id') {
-                        $select->distinct();
-                        $select->join('INNER', 'locations l', 'l.address_id=a.id');
-                        $select->where('l.location_id=?', $v);
-                    }
-                }
             }
         }
         return $this->doSelect($select, $order, $itemsPerPage, $currentPage);
@@ -194,12 +193,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
                         default:
                             $select->where("$column=?", $v);
-                    }
-                }
-                else {
-                    if ($f == 'location_id') {
-                        $select->join('INNER', 'locations l', 'l.address_id=a.id and l.subunit_id is null');
-                        $select->where('l.location_id=?', $v);
                     }
                 }
             }
@@ -353,7 +346,9 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
             try {
                 $locationsRepo = new PdoLocationsRepository($this->pdo);
                 $location_id   = $locationsRepo->assign($location);
-                $locationsRepo->activateAddress($location_id, $address_id);
+                if (!$req->location_id) {
+                    $locationsRepo->activateAddress($location_id, $address_id);
+                }
 
                 // Save address status
                 $this->saveStatus         ($address_id,  $req->status,           self::LOG_TYPE);

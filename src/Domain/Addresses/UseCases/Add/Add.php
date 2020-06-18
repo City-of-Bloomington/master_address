@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -69,7 +69,9 @@ class Add
         if (!$req->state          ) { $errors[] = 'addresses/missingState';        }
         if (!$req->zip            ) { $errors[] = 'addresses/missingZip';          }
 
-        if (!$req->locationType_id) { $errors[] = 'locations/missingType';         }
+        if (!$req->location_id && !$req->locationType_id) {
+            $errors[] = 'locations/missingType';
+        }
 
         # If there are required fields missing, do not do the duplicate check.
         # The duplicate check depends on some of there required fields.

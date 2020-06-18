@@ -11,10 +11,13 @@ declare (strict_types=1);
 use Application\Url;
 
 $sanitationButton = '';
-$sanitationUri    = parent::generateUri('sanitation.update');
+$sanitationUri    = parent::generateUri('sanitation.update' );
 $activateUri      = parent::generateUri('addresses.activate');
+$addAddressUri    = parent::generateUri('addresses.add'     );
+
 $return_url       = Url::current_url(BASE_HOST);
 $helper           = $this->template->getHelper('buttonLink');
+$userCanAdd       = parent::isAllowed('addresses', 'add');
 
 // Group locations by location_id
 $locations = [];
@@ -23,10 +26,18 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
 <section>
 <?php
     foreach (array_keys($locations) as $location_id) {
-        $status  = parent::escape($locations[$location_id][0]->status);
+        $status    = parent::escape($locations[$location_id][0]->status);
+        $addButton = '';
+        if ($userCanAdd) {
+            $addButton = $helper->buttonLink(
+                "$addAddressUri?location_id=$location_id;return_url=$return_url",
+                $this->_('address_add'),
+                'add'
+            );
+        }
         echo "
         <article>
-            <header><h3>{$this->_('location_id')} $location_id $status</h3></header>
+            <header><h3>{$this->_('location_id')} $location_id $status $addButton</h3></header>
             <table>
                 <thead>
                     <tr><th></th>

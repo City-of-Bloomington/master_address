@@ -45,8 +45,6 @@ class AddRequest
     public $mailable;
     public $occupiable;
     public $group_quarter;
-    public $trash_day;
-    public $recycle_week;
 
     // Change log fields
     public $user_id;

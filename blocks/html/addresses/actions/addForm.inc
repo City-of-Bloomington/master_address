@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPL, see LICENSE
  *
  * @param string $this->cancel_url       The url that linked to this form
@@ -106,7 +106,17 @@ declare (strict_types=1);
         </fieldset>
 
         <fieldset><legend><?= $this->_('location'); ?></legend>
-        <?php $this->_include('locations/partials/locationFields.inc'); ?>
+        <?php
+            if ($this->location_id) {
+                echo "
+                <div><label>Location ID</label>
+                     <input name=\"location_id\" type=\"hidden\" value=\"{$this->location_id}\" />
+                     {$this->location_id}
+                </div>
+                ";
+            }
+            $this->_include('locations/partials/locationFields.inc');
+        ?>
         </fieldset>
 
         <fieldset><legend><?= $this->_('changeLog'); ?></legend>

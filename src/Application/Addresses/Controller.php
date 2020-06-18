@@ -149,21 +149,28 @@ class Controller extends BaseController
         }
         else {
             if ($request->location_id) {
-                // Load the current active location information into the request
-                // as the default values
-                $find = $this->di->get('Domain\Locations\UseCases\Find\Find');
-                $fres = $find([
-                    'location_id' => $request->location_id,
-                    'active'      => true
-                ]);
-                if ($fres->errors || !$fres->locations) {
+                // Load the current active address location information into the request
+                // as the default values.
+                $find = $this->di->get('Domain\Addresses\UseCases\Search\Search');
+                $fres = $find(new SearchRequest([
+                    'location_id' => $request->location_id
+                ]));
+                if ($fres->errors || !$fres->addresses) {
                     $_SESSION['errorMessages'] = $fres->errors;
                     return new \Application\Views\NotFoundView();
                 }
+                foreach ($request as $k=>$v) {
+                    if (!$v && isset($fres->addresses[0]->$k)) {
+                        $request->$k = $fres->addresses[0]->$k;
+                    }
+                }
 
-                $request->locationType_id = $fres->locations[0]->type_id;
-                $request->mailable        = $fres->locations[0]->mailable;
-                $request->occupiable      = $fres->locations[0]->occupiable;
+                // This is usually a corner address, so we know the street and number
+                // will be different for the new address.  We should empty out those fields
+                $request->street_number_prefix = null;
+                $request->street_number        = null;
+                $request->street_number_suffix = null;
+                $request->street_id            = null;
             }
         }
 
@@ -173,8 +180,7 @@ class Controller extends BaseController
             $this->di->get('Domain\Locations\Metadata'),
              isset($_SESSION['return_url' ]) ? $_SESSION['return_url'] : View::generateUrl('addresses.index'),
             !empty($_REQUEST['street_id'  ]) ? parent::street  ((int)$_REQUEST['street_id'  ]) : null,
-            !empty($_REQUEST['contact_id' ]) ? parent::person  ((int)$_REQUEST['contact_id' ]) : null,
-            isset($fres->locations[0]) ? $fres->locations[0] : null
+            !empty($_REQUEST['contact_id' ]) ? parent::person  ((int)$_REQUEST['contact_id' ]) : null
         );
     }
 

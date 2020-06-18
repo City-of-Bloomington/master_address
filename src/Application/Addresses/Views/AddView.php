@@ -25,8 +25,7 @@ class AddView extends Template
                                 LocationMetadata $locationMetadata,
                                 string           $cancel_url,
                                 ?Street    $street     = null,
-                                ?Person    $contact    = null,
-                                ?Location  $location   = null)
+                                ?Person    $contact    = null)
     {
         parent::__construct('default', 'html');
         $this->vars['title'] = $this->_('address_add');
@@ -35,7 +34,6 @@ class AddView extends Template
             'cancel_url'      => $cancel_url,
             'street_name'     => $street     ? $street ->__toString() : null,
             'contact_name'    => $contact    ? $contact->__toString() : null,
-            'location'        => $location   ? $location   : null,
             'cities'          => $addressMetadata->cities(),
             'jurisdictions'   => $addressMetadata->jurisdictions(),
             'quarterSections' => $addressMetadata->quarterSections(),
