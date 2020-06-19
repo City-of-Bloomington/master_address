@@ -49,6 +49,9 @@ msgstr "Change related attributes of the address, but not the address itself"
 msgid "addresses.readdress"
 msgstr "Officially change an existing address to a new address"
 
+msgid "locations.location_address_add"
+msgstr "Add an additional address to this location.  This is usually for a corner address."
+
 msgid "streets.update"
 msgstr "Update related attributes of the street, but not the street itself"
 

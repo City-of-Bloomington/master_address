@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2019 City of Bloomington, Indiana
+ * @copyright 2009-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->locations
  *
@@ -8,6 +8,8 @@
  * @param bool  $this->userCanActivate
  */
 declare (strict_types=1);
+
+use Application\Block;
 use Application\Url;
 
 $sanitationButton = '';
@@ -27,17 +29,20 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
 <?php
     foreach (array_keys($locations) as $location_id) {
         $status    = parent::escape($locations[$location_id][0]->status);
-        $addButton = '';
+        $toolbox   = '';
         if ($userCanAdd) {
-            $addButton = $helper->buttonLink(
-                "$addAddressUri?location_id=$location_id;return_url=$return_url",
-                $this->_('address_add'),
-                'add'
-            );
+            $block = new Block('toolbox.inc', ['actions' => [
+                'location_address_add' => [
+                    'uri'   => "$addAddressUri?location_id=$location_id;return_url=$return_url",
+                    'class' => 'add',
+                    'help'  => $this->_("locations.location_address_add", 'messages')
+                ]
+            ]]);
+            $toolbox = $block->render('html', $this->template);
         }
         echo "
         <article>
-            <header><h3>{$this->_('location_id')} $location_id $status $addButton</h3></header>
+            <header><h3>{$this->_('location_id')} $location_id $status</h3>$toolbox</header>
             <table>
                 <thead>
                     <tr><th></th>

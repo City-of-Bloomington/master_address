@@ -369,6 +369,9 @@ msgstr[1] "Locations"
 msgid "location_id"
 msgstr "Location ID"
 
+msgid "location_address_add"
+msgstr "Add Address"
+
 msgid "locationType"
 msgid_plural "locationTypes"
 msgstr[0] "Location Type"
