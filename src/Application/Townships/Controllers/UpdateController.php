@@ -1,29 +1,22 @@
 <?php
 /**
- * @copyright 2017-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
-namespace Application\Townships;
+declare (strict_types=1);
+namespace Application\Townships\Controllers;
+
+use Application\Townships\Views\UpdateView;
+use Domain\Townships\Entities\Township;
+use Domain\Townships\UseCases\Info\InfoRequest;
+use Domain\Townships\UseCases\Update\UpdateRequest;
 
 use Application\Controller as BaseController;
 use Application\View;
 
-use Domain\Townships\Entities\Township;
-use Domain\Townships\UseCases\Info\InfoRequest;
-use Domain\Townships\UseCases\Search\SearchRequest;
-use Domain\Townships\UseCases\Update\UpdateRequest;
-
-class Controller extends BaseController
+class UpdateController extends BaseController
 {
-    public function index(array $params)
-    {
-        $search = $this->di->get('Domain\Townships\UseCases\Search\Search');
-        $res    = $search(new SearchRequest());
-
-        return new Views\ListView($res);
-    }
-
-    public function update(array $params)
+    public function update(array $params): View
     {
         if (isset($_POST['name'])) {
             $update   = $this->di->get('Domain\Townships\UseCases\Update\Update');
@@ -52,6 +45,6 @@ class Controller extends BaseController
         }
         else { $township = new Township(); }
 
-        return new Views\UpdateView($township, isset($response) ? $response : null);
+        return new UpdateView($township, isset($response) ? $response : null);
     }
 }

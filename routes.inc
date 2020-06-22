@@ -32,12 +32,19 @@ $tables = [
 ];
 foreach ($tables as $t) {
     $ROUTES->attach($t, "/$t", function ($r) use ($t) {
-        $r->setValues(['controller'=> 'Application\\'.ucfirst($t).'\Controller']);
+        $ns = 'Application\\'.ucfirst($t).'\Controllers';
 
-        $r->add('update', '/update{/id}') ->addValues(['action'=>'update']);
-        $r->add('index',  '')             ->addValues(['action'=>'index' ]);
+        $r->add('update', '/update{/id}')->setValues([
+            'controller' => "$ns\UpdateController",
+            'action'     => 'update'
+        ]);
+        $r->add('index',  '')->setValues([
+            'controller' => "$ns\IndexController",
+            'action'     => 'index'
+        ]);
     });
 }
+
 $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->setValues(['controller'=> 'Application\Subunits\Controller']);
 
