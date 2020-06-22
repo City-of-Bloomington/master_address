@@ -46,13 +46,13 @@ foreach ($tables as $t) {
 }
 
 $ROUTES->attach('subunits', "/subunits", function ($r) {
-    $r->setValues(['controller'=> 'Application\Subunits\Controller']);
+    $ns = 'Application\Subunits\Controllers';
 
-    $r->add('view',     '/{id}'    )->addValues(['action'=>'view'    ]);
-    $r->add('add',      '/add'     )->addValues(['action'=>'add'     ]);
-    $r->add('activate', '/activate')->addValues(['action'=>'activate']);
+    $r->add('view',     '/{id}'    )->setValues(['action'=>'view'    , 'controller'=>"$ns\ViewController"    ]);
+    $r->add('add',      '/add'     )->setValues(['action'=>'add'     , 'controller'=>"$ns\AddController"     ]);
+    $r->add('activate', '/activate')->setValues(['action'=>'activate', 'controller'=>"$ns\ActivateController"]);
     foreach (['changeStatus', 'correct', 'update', 'verify'] as $a) {
-        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
+        $r->add($a, "/$a{/id}")->setValues(['action'=>$a, 'controller'=>"$ns\\".ucfirst($a).'Controller']);
     }
 });
 $ROUTES->attach('streetNames', "/streets/names", function ($r) {
