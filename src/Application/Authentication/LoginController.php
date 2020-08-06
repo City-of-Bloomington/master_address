@@ -31,12 +31,11 @@ class LoginController extends BaseController
 	{
 		// If they don't have CAS configured, send them onto the application's
 		// internal authentication system
-		if (!defined('CAS')) {
+		if (!defined('CAS_SERVER')) {
 			header('Location: '.View::generateUrl('login.login').'?return_url='.$this->return_url);
 			exit();
 		}
 
-		require_once CAS.'/CAS.php';
 		\phpCAS::client(CAS_VERSION_2_0, CAS_SERVER, 443, CAS_URI, false);
 		\phpCAS::setNoCasServerValidation();
 		\phpCAS::forceAuthentication();

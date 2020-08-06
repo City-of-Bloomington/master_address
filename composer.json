@@ -4,7 +4,7 @@
         "aura/di": "~3",
         "aura/router": "~2",
         "aura/sqlquery": "~2",
-        "jasig/phpcas": "~1",
+        "apereo/phpcas":     "@stable",
         "graylog2/gelf-php": "@stable",
         "zendframework/zend-log": "@stable",
         "zendframework/zend-permissions-acl": "@stable"
