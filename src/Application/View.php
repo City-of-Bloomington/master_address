@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2006-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2006-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
 
@@ -213,11 +213,11 @@ abstract class View
 
 	public static function isAllowed(string $resource, ?string $action=null): bool
     {
-		global $ZEND_ACL;
+		global $ACL;
 		$role = 'Anonymous';
 		if (isset  ($_SESSION['USER']) && $_SESSION['USER']->role) {
 			$role = $_SESSION['USER']->role;
 		}
-		return $ZEND_ACL->isAllowed($role, $resource, $action);
+		return $ACL->isAllowed($role, $resource, $action);
     }
 }

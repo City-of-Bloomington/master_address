@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Users;
@@ -22,7 +22,7 @@ class Controller extends BaseController
 
 	public function index(array $params)
 	{
-        global $ZEND_ACL;
+        global $ACL;
 
 		$page   =  !empty($_GET['page']) ? (int)$_GET['page'] : 1;
         $search = $this->di->get('Domain\Users\UseCases\Search\Search');
@@ -32,7 +32,7 @@ class Controller extends BaseController
         return new Views\SearchView($res,
                                     self::ITEMS_PER_PAGE,
                                     $page,
-                                    $ZEND_ACL->getRoles(),
+                                    $ACL->getRoles(),
                                     $auth->getAuthenticationMethods());
 	}
 
@@ -65,11 +65,11 @@ class Controller extends BaseController
         }
         else { $user = new User(); }
 
-        global $ZEND_ACL;
+        global $ACL;
         $auth = $this->di->get('Domain\Auth\AuthenticationService');
         return new Views\UpdateView($user,
                                     isset($response) ? $response : null,
-                                    $ZEND_ACL->getRoles(),
+                                    $ACL->getRoles(),
                                     $auth->getAuthenticationMethods());
 	}
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2015-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2015-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 /**
  * Grab a timestamp for calculating process time
@@ -20,8 +20,8 @@ if ($route) {
         if (method_exists($c, $action)) {
             list($resource, $permission) = explode('.', $route->name);
             $role = isset($_SESSION['USER']) ? $_SESSION['USER']->role : 'Anonymous';
-            if (   $ZEND_ACL->hasResource($resource)
-                && $ZEND_ACL->isAllowed($role, $resource, $permission)) {
+            if (   $ACL->hasResource($resource)
+                && $ACL->isAllowed($role, $resource, $permission)) {
                 if (!empty($route->params['id'])) {
                         $_GET['id'] = $route->params['id'];
                     $_REQUEST['id'] = $route->params['id'];
