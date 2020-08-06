@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2019 City of Bloomington, Indiana
+ * @copyright 2009-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Address $this->address
  * @param string  $this->title
@@ -26,12 +26,14 @@ use Application\Block;
 
                 }
 
-                if (parent::isAllowed('subunits', 'add')) {
-                    $actions['subunit_add'] = [
-                        'uri'   => parent::generateUri('subunits.add').'?address_id='.$this->address->id,
-                        'class' => 'add',
-                        'help'  => $this->_('subunits.add', 'messages')
-                    ];
+                foreach (['add', 'import'] as $a) {
+                    if (parent::isAllowed('subunits', $a)) {
+                        $actions["subunit_$a"] = [
+                            'uri'   => parent::generateUri("subunits.$a").'?address_id='.$this->address->id,
+                            'class' => 'add',
+                            'help'  => $this->_("subunits.$a", 'messages')
+                        ];
+                    }
                 }
                 if ($actions) {
                     $block = new Block('toolbox.inc', ['actions' => $actions]);

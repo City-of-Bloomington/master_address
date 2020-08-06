@@ -76,6 +76,9 @@ msgstr "Change the status of the subunit"
 msgid "subunits.correct"
 msgstr "Correct the subunit's elements due to some housekeeping error"
 
+msgid "subunits.import"
+msgstr "Bulk import subunits from a CSV file"
+
 msgid "subunits.update"
 msgstr "Change related attributes of the subunit, but not the subunit itself"
 

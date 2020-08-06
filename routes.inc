@@ -51,6 +51,8 @@ $ROUTES->attach('subunits', "/subunits", function ($r) {
     $r->add('view',     '/{id}'    )->setValues(['action'=>'view'    , 'controller'=>"$ns\ViewController"    ]);
     $r->add('add',      '/add'     )->setValues(['action'=>'add'     , 'controller'=>"$ns\AddController"     ]);
     $r->add('activate', '/activate')->setValues(['action'=>'activate', 'controller'=>"$ns\ActivateController"]);
+    $r->add('import',   '/import'  )->setValues(['action'=>'import',   'controller'=>"$ns\ImportController"  ]);
+
     foreach (['changeStatus', 'correct', 'update', 'verify'] as $a) {
         $r->add($a, "/$a{/id}")->setValues(['action'=>$a, 'controller'=>"$ns\\".ucfirst($a).'Controller']);
     }
