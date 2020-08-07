@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Subunits\UseCases\Add;
@@ -48,7 +48,7 @@ class Add
      * @param  AddRequest $req
      * @return array            Any errors with the request
      */
-    private function validate(AddRequest $req): array
+    public function validate(AddRequest $req): array
     {
         $errors = [];
         if (!$req->address_id     ) { $errors[] = 'subunits/missingAddress';    }

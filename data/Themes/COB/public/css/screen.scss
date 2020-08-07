@@ -32,7 +32,8 @@ body > header {
         margin-right: 1em;
     }
 }
-#errorMessages { background-color:$color-error; }
+#errorMessages,
+tbody tr.error td { background-color:$color-error; }
 
 form, fieldset { margin: 0; padding: 0; }
 

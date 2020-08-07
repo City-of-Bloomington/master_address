@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Subunits;
 
 use Domain\Subunits\DataStorage\SubunitsRepository;
+use Domain\Logs\Metadata as Log;
 
 class Metadata
 {
@@ -16,6 +17,8 @@ class Metadata
     {
         $this->repo = $repository;
     }
+
+    public function statuses(): array { return Log::$statuses; }
 
     public function types(): array
     {

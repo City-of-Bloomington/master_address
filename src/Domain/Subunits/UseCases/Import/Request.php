@@ -23,6 +23,5 @@ class Request
             }
         }
         $this->addRequests = $addRequests;
-
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -19,10 +19,10 @@ interface SubunitsRepository
     public function loadStatusLog(int $subunit_id, string $logType): array;
     public function getStatus    (int $subunit_id, string $logType): string;
 
-    public function find         (array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
-    public function findLocations(int $subunit_id): array;
-    public function findAddresses(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
+    public function find         (array $fields,     ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
+    public function findAddresses(array $fields,     ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function changeLog(?int $subunit_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
+    public function findLocations(int $subunit_id): array;
 
     // Write functions
     public function add       (AddRequest     $request): int;
