@@ -86,16 +86,14 @@ $ROUTES->attach('designations', "/designations", function ($r) {
     $r->add('update', '/update/{id}')->addValues(['action'=>'update']);
 });
 $ROUTES->attach('addresses', "/addresses", function ($r) {
-    $r->setValues(['controller'=> 'Application\Addresses\Controller']);
-
-    $r->add('view',      '/{id}'     )->addValues(['action'=>'view'     ]);
-    $r->add('index',     ''          )->addValues(['action'=>'index'    ]);
-    $r->add('add',       '/add'      )->addValues(['action'=>'add'      ]);
-    $r->add('parse',     '/parse'    )->addValues(['action'=>'parse'    ]);
-    $r->add('changeLog', '/changeLog')->addValues(['action'=>'changeLog']);
-    $r->add('activate',  '/activate' )->addValues(['action'=>'activate' ]);
+    $r->add('view',      '/{id}'     )->setValues(['action'=>'view'     , 'controller'=>'Application\Addresses\Controllers\ViewController'     ]);
+    $r->add('index',     ''          )->setValues(['action'=>'search'   , 'controller'=>'Application\Addresses\Controllers\SearchController'   ]);
+    $r->add('add',       '/add'      )->setValues(['action'=>'add'      , 'controller'=>'Application\Addresses\Controllers\AddController'      ]);
+    $r->add('parse',     '/parse'    )->setValues(['action'=>'parse'    , 'controller'=>'Application\Addresses\Controllers\ParseController'    ]);
+    $r->add('changeLog', '/changeLog')->setValues(['action'=>'changeLog', 'controller'=>'Application\Addresses\Controllers\ChangeLogController']);
+    $r->add('activate',  '/activate' )->setValues(['action'=>'activate' , 'controller'=>'Application\Addresses\Controllers\ActivateController' ]);
     foreach (['changeStatus', 'correct', 'update', 'readdress', 'validate', 'verify'] as $a) {
-        $r->add($a, "/$a{/id}")->addValues(['action'=>$a]);
+        $r->add($a, "/$a{/id}")->setValues(['action'=>$a, 'controller'=>'Application\Addresses\Controllers\\'.ucfirst($a).'Controller']);
     }
 });
 
