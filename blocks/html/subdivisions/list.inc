@@ -25,7 +25,8 @@ declare (strict_types=1);
     </header>
     <table>
         <thead>
-            <tr><th><?= $this->_('name'    ); ?></th>
+            <tr><th><?= $this->_('id'      ); ?></th>
+                <th><?= $this->_('name'    ); ?></th>
                 <th><?= $this->_('township'); ?></th>
                 <th><?= $this->_('phase'   ); ?></th>
                 <th><?= $this->_('status'  ); ?></th>
@@ -41,7 +42,8 @@ declare (strict_types=1);
                 $phase    = $s->phase;
 
                 echo "
-                <tr><td><a href=\"$uri\">$name</a></td>
+                <tr><th>{$s->id}</th>
+                    <td><a href=\"$uri\">$name</a></td>
                     <td>$township</td>
                     <td>$phase</td>
                     <td>$status</td>

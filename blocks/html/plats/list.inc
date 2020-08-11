@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2019 City of Bloomington, Indiana
+ * @copyright 2009-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->plats
  */
@@ -24,7 +24,8 @@
     </header>
 	<table>
 		<thead>
-			<tr><th><?= $this->_('name'     ); ?></th>
+			<tr><th><?= $this->_('id'       ); ?></th>
+                <th><?= $this->_('name'     ); ?></th>
 				<th><?= $this->_('township' ); ?></th>
 				<th><?= $this->_('startDate'); ?></th>
 				<th><?= $this->_('endDate'  ); ?></th>
@@ -45,7 +46,8 @@
 				$startDate = $plat->start_date ? $plat->start_date->format(DATE_FORMAT) : '';
 				$endDate   = $plat->end_date   ? $plat->end_date  ->format(DATE_FORMAT) : '';
 				echo "
-				<tr><td><a href=\"$uri\">$name</a></td>
+				<tr><th>{$plat->id}</th>
+                    <td><a href=\"$uri\">$name</a></td>
 					<td>$township</td>
 					<td>$startDate</td>
 					<td>$endDate</td>
