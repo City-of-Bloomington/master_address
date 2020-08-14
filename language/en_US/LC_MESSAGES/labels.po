@@ -205,6 +205,9 @@ msgstr "Address ID"
 msgid "address_add"
 msgstr "New Address"
 
+msgid "address_import"
+msgstr "Import Addresses"
+
 msgid "address2"
 msgstr "Address 2"
 

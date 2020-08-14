@@ -54,7 +54,7 @@ class Add
      *
      * @return array  Any errors from the request
      */
-    private function validate(AddRequest $req): array
+    public function validate(AddRequest $req): array
     {
         $errors = [];
 
@@ -73,14 +73,13 @@ class Add
             $errors[] = 'locations/missingType';
         }
 
-        # If there are required fields missing, do not do the duplicate check.
-        # The duplicate check depends on some of there required fields.
+        # If there are required fields missing, we can save time and return right away.
+        # Also, the duplicate check depends on some of the required fields.
         # If they are missing, the duplicate check will return false positives.
         if ($errors) { return $errors; }
+        if ($this->isDuplicateAddress($req)) { return ['addresses/duplicateAddress']; }
 
-        if ($this->isDuplicateAddress($req)) { $errors[] = 'addresses/duplicateAddress'; }
-
-        return $errors;
+        return $this->repo->validate($req);
     }
 
     private function isDuplicateAddress(AddRequest $req): bool

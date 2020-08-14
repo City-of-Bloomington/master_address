@@ -10,7 +10,7 @@
         "laminas/laminas-permissions-acl": "@stable"
     },
     "require-dev": {
-        "phpunit/phpunit": "@stable"
+        "phpunit/phpunit": "~8"
     },
     "autoload": {
         "psr-4": {

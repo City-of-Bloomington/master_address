@@ -92,6 +92,7 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     $r->add('parse',     '/parse'    )->setValues(['action'=>'parse'    , 'controller'=>'Application\Addresses\Controllers\ParseController'    ]);
     $r->add('changeLog', '/changeLog')->setValues(['action'=>'changeLog', 'controller'=>'Application\Addresses\Controllers\ChangeLogController']);
     $r->add('activate',  '/activate' )->setValues(['action'=>'activate' , 'controller'=>'Application\Addresses\Controllers\ActivateController' ]);
+    $r->add('import',    '/import'   )->setValues(['action'=>'import'   , 'controller'=>'Application\Addresses\Controllers\ImportController'   ]);
     foreach (['changeStatus', 'correct', 'update', 'readdress', 'validate', 'verify'] as $a) {
         $r->add($a, "/$a{/id}")->setValues(['action'=>$a, 'controller'=>'Application\Addresses\Controllers\\'.ucfirst($a).'Controller']);
     }

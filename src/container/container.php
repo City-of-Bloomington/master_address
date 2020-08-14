@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -71,7 +71,7 @@ foreach ($useCases as $a) {
     $DI->set(    "Domain\\Addresses\\UseCases\\$a\\$a",
     $DI->lazyNew("Domain\\Addresses\\UseCases\\$a\\$a"));
 }
-foreach (['Activate', 'Update', 'Validate'] as $a) {
+foreach (['Activate', 'Import', 'Update', 'Validate'] as $a) {
     $DI->params[ "Domain\Addresses\UseCases\\$a\Command"]['repository'] = $DI->lazyGet('Domain\Addresses\DataStorage\AddressesRepository');
     $DI->set(    "Domain\Addresses\UseCases\\$a\Command",
     $DI->lazyNew("Domain\Addresses\UseCases\\$a\Command"));

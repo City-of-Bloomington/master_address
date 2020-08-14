@@ -72,6 +72,7 @@ class AddRequest
                         case 'state_plane_x':
                         case 'state_plane_y':
                         case 'locationType_id':
+                        case 'contact_id':
                             $this->$f = (int)$data[$f];
                         break;
 

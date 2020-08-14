@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2017-2019 City of Bloomington, Indiana
+ * @copyright 2017-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -113,4 +113,10 @@ abstract class PdoRepository
         $query->execute($params);
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+	public function isValidId(int $id, string $table): bool
+	{
+        $result = $this->pdo->query("select id from $table where id=$id");
+        return ($result && $result->fetchColumn()) ? true : false;
+	}
 }

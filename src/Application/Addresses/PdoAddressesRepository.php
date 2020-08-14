@@ -313,6 +313,63 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         return $result;
     }
 
+    /**
+     * Check for any errors in an add request
+     */
+    public function validate(AddRequest $req): array
+    {
+        $errors = [];
+        // Check not null fields
+        if (!$req->street_number  ) { $errors[] = 'addresses/missingStreetNumber'; }
+        if (!$req->address_type   ) { $errors[] = 'addresses/missingType';         }
+        if (!$req->street_id      ) { $errors[] = 'addresses/missingStreet';       }
+        if (!$req->jurisdiction_id) { $errors[] = 'addresses/missingJurisdiction'; }
+        if (!$req->state          ) { $errors[] = 'addresses/missingState';        }
+        if (!$req->zip            ) { $errors[] = 'addresses/missingZip';          }
+
+        // Check foreign keys
+        if (!parent::isValidId($req->street_id      , 'streets'      )) { $errors[] =       'streets/unknown'; }
+        if (!parent::isValidId($req->jurisdiction_id, 'jurisdictions')) { $errors[] = 'jurisdictions/unknown'; }
+        if (!parent::isValidId($req->user_id        , 'people'       )) { $errors[] =        'people/unknown'; }
+
+        if ($req->township_id     && !parent::isValidId($req->township_id    , 'townships'     )) { $errors[] =     'townships/unknown'; }
+        if ($req->subdivision_id  && !parent::isValidId($req->subdivision_id , 'subdivisions'  )) { $errors[] =  'subdivisions/unknown'; }
+        if ($req->plat_id         && !parent::isValidId($req->plat_id        , 'plats'         )) { $errors[] =         'plats/unknown'; }
+        if ($req->location_id     && !parent::isValidId($req->location_id    , 'locations'     )) { $errors[] =     'locations/unknown'; }
+        if ($req->locationType_id && !parent::isValidId($req->locationType_id, 'location_types')) { $errors[] = 'locationTypes/unknown'; }
+        if ($req->contact_id      && !parent::isValidId($req->contact_id     , 'people'        )) { $errors[] =        'people/unknown'; }
+
+        if (!$this->isValidZip($req->zip, $req->city)) { $errors[] = 'addresses/invalidZip'; }
+
+        # The duplicate check depends on some of the required fields.
+        # If they are missing, the duplicate check will return false positives.
+        if ($errors) { return $errors; }
+
+        $sql = "select count(*) from addresses
+                where street_id            = ?
+                  and street_number_prefix = ?
+                  and street_number        = ?
+                  and street_number_suffix = ?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([
+            $req->street_id,
+            $req->street_number_prefix,
+            $req->street_number,
+            $req->street_number_suffix
+        ]);
+        if ($query->fetchColumn()) { $errors[] = 'addresses/duplicateAddress'; }
+
+        return $errors;
+    }
+
+    private function isValidZip(int $zip, string $city): bool
+    {
+        $sql = 'select id from zip_codes where zip=? and city=?';
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$zip, $city]);
+        return $query->fetchColumn() ? true : false;
+    }
+
     //---------------------------------------------------------------
     // Write functions
     //---------------------------------------------------------------
@@ -568,9 +625,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
     public function types(): array
     {
-        $sql = "select distinct address_type from addresses
-                where address_type is not null
-                order by address_type";
+        $sql    = "select unnest(enum_range(null::address_types))";
         $result = $this->pdo->query($sql);
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -579,6 +634,12 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     {
         $sql = "select * from zip_codes order by city, zip";
         $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function locationTypes(): array
+    {
+        $result = $this->pdo->query('select * from location_types order by name');
         return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

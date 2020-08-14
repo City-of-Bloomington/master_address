@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -53,6 +53,20 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
         return $select;
     }
 
+    private function doSelect(SelectInterface $select,
+                              ?int $itemsPerPage = null,
+                              ?int $currentPage  = null): array
+    {
+        $select->orderBy(self::$DEFAULT_SORT);
+        $result = $this->performSelect($select, $itemsPerPage, $currentPage);
+
+        $plats = [];
+        foreach ($result['rows'] as $r) { $plats[] = self::hydrate($r); }
+        $result['rows'] = $plats;
+        return $result;
+    }
+
+
     private static function hydrate(array $row): Plat
     {
         if (!empty($row['start_date'])) { $row['start_date'] = new \DateTime($row['start_date']); }
@@ -72,6 +86,24 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
         throw new \Exception('plats/unknown');
     }
 
+    /**
+     * Find plats using exact matching
+     */
+    public function find(FindRequest $req): array
+    {
+        $select = $this->baseSelect();
+        foreach (self::$fieldmap as $f=>$m) {
+            $column = "$m[prefix].$m[dbName]";
+            if (!empty($req->$f)) {
+                $select->where("$column=?", $req->$f);
+            }
+        }
+        return $this->doSelect($select, $req->itemsPerPage, $req->currentPage);
+    }
+
+    /**
+     * Find plats using wildcard searching
+     */
     public function search(SearchRequest $req): array
     {
         $select = $this->baseSelect();
@@ -90,13 +122,7 @@ class PdoPlatsRepository extends PdoRepository implements PlatsRepository
                 }
             }
         }
-        $select->orderBy(self::$DEFAULT_SORT);
-        $result = $this->performSelect($select, $req->itemsPerPage, $req->currentPage);
-
-        $plats = [];
-        foreach ($result['rows'] as $r) { $plats[] = self::hydrate($r); }
-        $result['rows'] = $plats;
-        return $result;
+        return $this->doSelect($select, $req->itemsPerPage, $req->currentPage);
     }
 
     public function townships(): array

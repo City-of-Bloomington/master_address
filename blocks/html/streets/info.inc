@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2019 City of Bloomington, Indiana
+ * @copyright 2009-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Street $this->street
  * @param bool   $this->disableButtons (optional)
@@ -29,15 +29,16 @@ $town   = parent::escape($this->street->town_name);
                         ];
                     }
                 }
-                if (parent::isAllowed('addresses', 'add')) {
-                    $actions['address_add'] = [
-                        'class' => 'add',
-                        'help'  => $this->_('action_help.address_assign', 'messages'),
-                        'uri'   => parent::generateUri('addresses.add').'?'.http_build_query([
-                                       'street_id'  => $this->street->id,
-                                       'return_url' => Url::current_url(BASE_HOST)
-                                   ])
-                    ];
+                foreach (['add', 'import'] as $a) {
+                    if (parent::isAllowed('addresses', $a)) {
+                        $params = http_build_query(['street_id'  => $this->street->id,
+                                                    'return_url' => Url::current_url(BASE_HOST)]);
+                        $actions["address_$a"] = [
+                            'class' => 'add',
+                            'help'  => $this->_("addresses.$a", 'messages'),
+                            'uri'   => parent::generateUri("addresses.$a").'?'.$params
+                        ];
+                    }
                 }
 
                 if ($actions) {

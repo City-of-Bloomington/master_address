@@ -130,7 +130,6 @@ class ImportController extends Controller
                 'mailable'        => self::bool_value($r[self::MAILABLE     ]),
                 'occupiable'      => self::bool_value($r[self::OCCUPIABLE   ]),
                 'group_quarter'   => self::bool_value($r[self::GROUP_QUARTER]),
-                'user_id'         => $_SESSION['USER']->id,
                 'contact_id'      => $r[self::CONTACT],
                 'change_notes'    => $r[self::CHANGE_NOTES]
             ]);

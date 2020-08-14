@@ -95,4 +95,11 @@ class Metadata
         if   (!$a) { $a = $this->repo->zipCodes(); }
         return $a;
     }
+
+    public function locationTypes(): array
+    {
+        static $a;
+        if   (!$a) { $a = $this->repo->locationTypes(); }
+        return $a;
+    }
 }

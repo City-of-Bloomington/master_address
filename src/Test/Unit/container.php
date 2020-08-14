@@ -12,6 +12,10 @@ $DI = $builder->newInstance();
 //---------------------------------------------------------
 // Metadata providers
 //---------------------------------------------------------
+$DI->params[ 'Domain\Addresses\Metadata']['repository'] = $DI->lazyNew('Test\DataStorage\TestAddressesRepository');
+$DI->set(    'Domain\Addresses\Metadata',
+$DI->lazyNew('Domain\Addresses\Metadata'));
+
 $DI->params[ 'Domain\Subunits\Metadata']['repository'] = $DI->lazyNew('Test\DataStorage\TestSubunitsRepository');
 $DI->set(    'Domain\Subunits\Metadata',
 $DI->lazyNew('Domain\Subunits\Metadata'));

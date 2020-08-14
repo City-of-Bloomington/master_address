@@ -28,11 +28,14 @@ msgstr "I, %s, verify that this information is accurate at this point in time."
 msgid "missingField"
 msgstr "You must provide a %s"
 
-msgid "action_help.address_add"
+msgid "addresses.add"
 msgstr "Add a missing address"
 
-msgid "action_help.address_assign"
+msgid "addresses.assign"
 msgstr "Assign a new address"
+
+msgid "addresses.import"
+msgstr "Bulk import addresses from a CSV file"
 
 msgid "addresses.verify"
 msgstr "Confirm that the address is correct as is and report it"

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -9,7 +9,9 @@ namespace Test\DataStorage;
 use Domain\Addresses\DataStorage\AddressesRepository;
 
 use Domain\Addresses\Entities\Address;
+use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
+use Domain\Addresses\UseCases\Readdress\ReaddressRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Addresses\UseCases\Update\Request as UpdateRequest;
 use Domain\Logs\Entities\ChangeLogEntry;
@@ -30,13 +32,18 @@ class TestAddressesRepository implements AddressesRepository
     public function search  (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array { return []; }
     public function changeLog(?int $address_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array { return []; }
 
+    public function validate(AddRequest $request): array { return []; }
+
     // Write functions
     public function activate(int $address_id, int $location_id) { }
-    public function correct ( CorrectRequest $request) { }
-    public function update  (  UpdateRequest $request) { }
-    public function renumber(RenumberRequest $request) { }
+    public function add      (      AddRequest $request): int { return 1; }
+    public function correct  (  CorrectRequest $request) { }
+    public function update   (   UpdateRequest $request) { }
+    public function readdress(ReaddressRequest $request): int { return 1; }
+    public function renumber ( RenumberRequest $request) { }
     public function logChange(ChangeLogEntry $entry, string $logType): int { return 1; }
     public function saveStatus(int $address_id, string $status, string $logType) { }
+    public function moveSubunitsToAddress(int $old_address_id, int $new_address_id) { }
 
     // Metadata functions
     public function cities         (): array { return []; }
@@ -48,4 +55,5 @@ class TestAddressesRepository implements AddressesRepository
     public function townships      (): array { return []; }
     public function types          (): array { return []; }
     public function zipCodes       (): array { return []; }
+    public function locationTypes  (): array { return []; }
 }

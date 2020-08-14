@@ -25,9 +25,9 @@ foreach ($ROUTES->getRoutes() as $r) {
 // Permissions for unauthenticated browsing
 $ACL->allow(null, 'login');
 $ACL->allow(null, 'home', 'index');
-$ACL->allow(null, 'addresses', ['index', 'view', 'parse']);
-$ACL->allow(null, 'streets',   ['index', 'view', 'intersections', 'intersectingStreets']);
-$ACL->allow(null, 'subunits',  ['index', 'view']);
+$ACL->allow(null, ['addresses', 'streets', 'subunits', 'subdivisions', 'plats'], ['index', 'view']);
+$ACL->allow(null, 'addresses', 'parse');
+$ACL->allow(null, 'streets',  ['intersections', 'intersectingStreets']);
 
 $ACL->allow('viewer', 'reports');
 

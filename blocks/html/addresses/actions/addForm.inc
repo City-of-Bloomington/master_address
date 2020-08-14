@@ -74,7 +74,7 @@ declare (strict_types=1);
             $h = $this->template->getHelper('field');
 
             $options = [];
-            foreach ($this->validActions as $a) { $options[] = ['value'=>$a, 'label'=>$this->_("action_help.address_$a", 'messages')]; }
+            foreach ($this->validActions as $a) { $options[] = ['value'=>$a, 'label'=>$this->_("addresses.$a", 'messages')]; }
             echo $h->field([
                 'name'     => 'action',
                 'id'       => 'action',

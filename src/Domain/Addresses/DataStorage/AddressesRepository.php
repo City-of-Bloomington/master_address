@@ -1,13 +1,15 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Addresses\DataStorage;
 
 use Domain\Addresses\Entities\Address;
+use Domain\Addresses\UseCases\Add\AddRequest;
 use Domain\Addresses\UseCases\Correct\CorrectRequest;
+use Domain\Addresses\UseCases\Readdress\ReaddressRequest;
 use Domain\Addresses\UseCases\Renumber\RenumberRequest;
 use Domain\Addresses\UseCases\Update\Request as UpdateRequest;
 use Domain\Logs\Entities\ChangeLogEntry;
@@ -26,13 +28,18 @@ interface AddressesRepository
     public function search  (array $fields,          ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function changeLog(?int $address_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
 
+    public function validate(AddRequest $request): array;
+
     // Write functions
     public function activate(int $address_id, int $location_id);
-    public function correct ( CorrectRequest $request);
-    public function update  (  UpdateRequest $request);
-    public function renumber(RenumberRequest $request);
+    public function add      (      AddRequest $request): int;
+    public function correct  (  CorrectRequest $request);
+    public function update   (   UpdateRequest $request);
+    public function readdress(ReaddressRequest $request): int;
+    public function renumber ( RenumberRequest $request);
     public function logChange(ChangeLogEntry $entry, string $logType): int;
     public function saveStatus(int $address_id, string $status, string $logType);
+    public function moveSubunitsToAddress(int $old_address_id, int $new_address_id);
 
     // Metadata functions
     public function cities         (): array;
@@ -43,6 +50,6 @@ interface AddressesRepository
     public function subunitTypes   (): array;
     public function townships      (): array;
     public function types          (): array;
+    public function locationTypes  (): array;
     public function zipCodes       (): array;
-
 }
