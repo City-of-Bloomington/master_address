@@ -215,6 +215,36 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
         $result['rows'] = $subunits;
         return $result;
     }
+
+    public function validate(AddRequest $req): array
+    {
+        $errors = [];
+
+        if (!$req->address_id     ) { $errors[] = 'subunits/missingAddress';    }
+        if (!$req->type_id        ) { $errors[] = 'subunits/missingType';       }
+        if (!$req->identifier     ) { $errors[] = 'subunits/missingIdentifier'; }
+        if (!$req->locationType_id) { $errors[] = 'locations/missingType';      }
+        if (!$req->status         ) { $errors[] = 'missingStatus';              }
+
+        if (!parent::isValidId($req->address_id,      'addresses'     )) { $errors[] =     'addresses/unknown'; }
+        if (!parent::isValidId($req->type_id,          'subunit_types')) { $errors[] =  'subunitTypes/unknown'; }
+        if (!parent::isValidId($req->locationType_id, 'location_types')) { $errors[] = 'locationTypes/unknown'; }
+        if (!parent::isValidId($req->user_id        , 'people'        )) { $errors[] =        'people/unknown'; }
+
+        if ($req->contact_id && !parent::isValidId($req->contact_id, 'people')) { $errors[] = 'people/unknown'; }
+
+        # The duplicate check depends on some of the required fields.
+        # If they are missing, the duplicate check will return false positives.
+        if ($errors) { return $errors; }
+
+        $sql = "select count(*) from subunits
+                where address_id=? and type_id=? and identifier=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$req->address_id, $req->type_id, $req->identifier]);
+        if ($query->fetchColumn()) { $errors[] = 'subunits/duplicateSubunit'; }
+
+        return $errors;
+    }
     //---------------------------------------------------------------
     // Write Functions
     //---------------------------------------------------------------

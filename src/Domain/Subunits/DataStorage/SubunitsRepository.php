@@ -24,6 +24,8 @@ interface SubunitsRepository
     public function changeLog(?int $subunit_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array;
     public function findLocations(int $subunit_id): array;
 
+    public function validate(AddRequest $request): array;
+
     // Write functions
     public function add       (AddRequest     $request): int;
     public function correct   (CorrectRequest $request);

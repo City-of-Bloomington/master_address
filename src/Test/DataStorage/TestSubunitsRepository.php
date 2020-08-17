@@ -27,6 +27,8 @@ class TestSubunitsRepository implements SubunitsRepository
     public function changeLog(?int $subunit_id=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array { return []; }
     public function findLocations(int $subunit_id): array                                                                        { return []; }
 
+    public function validate(AddRequest $request): array { return []; }
+
     // Write functions
     public function add       (AddRequest     $request): int                  { return 1; }
     public function correct   (CorrectRequest $request)                           { }

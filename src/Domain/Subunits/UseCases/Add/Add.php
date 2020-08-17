@@ -52,12 +52,18 @@ class Add
     {
         $errors = [];
         if (!$req->address_id     ) { $errors[] = 'subunits/missingAddress';    }
+        if (!$req->type_id        ) { $errors[] = 'subunits/missingType';       }
         if (!$req->identifier     ) { $errors[] = 'subunits/missingIdentifier'; }
         if (!$req->locationType_id) { $errors[] = 'locations/missingType';      }
         if (!$req->status         ) { $errors[] = 'missingStatus';              }
 
-        if ($this->isDuplicateSubunit($req)) { $errors[] = 'subunits/duplicateSubunit'; }
-        return $errors;
+        # If there are required fields missing, we can save time and return right away.
+        # Also, the duplicate check depends on some of the required fields.
+        # If they are missing, the duplicate check will return false positives.
+        if ($errors) { return $errors; }
+        if ($this->isDuplicateSubunit($req)) { return ['subunits/duplicateSubunit']; }
+
+        return $this->repo->validate($req);
     }
 
     private function isDuplicateSubunit(AddRequest $req): bool
