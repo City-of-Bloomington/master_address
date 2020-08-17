@@ -55,9 +55,13 @@ declare (strict_types=1);
     ?>
     <section>
         <p>This will import subunits from a CSV file.
-           Here is an empty <a href="<?= BASE_URI; ?>/templates/subunits.csv">CSV template</a> file you can start from.
-           The CSV file must have a header row.
-           The fields must be in this order:</p>
+           Here is an <a href="<?= BASE_URI; ?>/templates/subunits.xlsx">MS Excel template</a>
+           you can start from as well as an empty
+           <a href="<?= BASE_URI; ?>/templates/subunits.csv">CSV template</a> file.
+           The Excel template has dropdowns with valid data values, but you must remember
+           to save your data as CSV before uploading the file here.
+           The CSV file you upload must have a header row, with fields in this order:
+       </p>
         <table>
             <tbody>
                 <tr><th>Status</th>

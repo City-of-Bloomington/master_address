@@ -25,11 +25,7 @@ RUN apt-get install -y \
     php-curl \
     php-ldap \
     php-xsl \
-    composer \
-    libapache2-mod-php \
-    gettext \
-    make \
-    sassc
+    libapache2-mod-php
 
 COPY docker/php.ini /etc/php/7.2/apache2/conf.d/local.ini
 COPY docker/php.ini /etc/php/7.2/cli/conf.d/local.ini
@@ -39,9 +35,8 @@ COPY docker/phpinfo.php /var/www/html/phpinfo.php
 
 WORKDIR /srv/sites/master_address
 COPY --chown=www-data:staff . /srv/sites/master_address
-RUN composer install --no-plugins --no-scripts
 
-RUN make compile test
+RUN ./phpunit -c src/Test/Unit.xml
 
 EXPOSE 80
 ENTRYPOINT ["apachectl", "-D", "FOREGROUND"]

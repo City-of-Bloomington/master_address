@@ -36,7 +36,7 @@ class ImportView extends Template
         ];
 
         $this->blocks = [
-            new Block('streets/info.inc', ['street' => $info->street]),
+            new Block('streets/info.inc', ['street' => $info->street, 'disableButtons'=>true]),
             new Block('addresses/actions/importForm.inc', $vars)
         ];
     }

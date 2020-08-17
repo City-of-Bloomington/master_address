@@ -18,7 +18,6 @@ declare (strict_types=1);
 <section>
     <header>
         <h1><?= $this->_('address_import'); ?></h1>
-        <h2><?= $this->street; ?></h2>
     </header>
 
     <form method="post" enctype="multipart/form-data">
