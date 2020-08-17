@@ -1,7 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "master_address.fullname" . -}}
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: 'networking.k8s.io/v1beta1'
+kind:       'Ingress'
 metadata:
   name: {{ $fullName }}
   labels:
