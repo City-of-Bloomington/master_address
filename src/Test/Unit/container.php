@@ -34,3 +34,8 @@ $DI->lazyNew('Test\DataStorage\TestAuthenticationService'));
 $DI->params[ 'Domain\Addresses\UseCases\Update\Command']['repository'] = $DI->lazyNew('Test\DataStorage\TestAddressesRepository');
 $DI->set(    'Domain\Addresses\UseCases\Update\Command',
 $DI->lazyNew('Domain\Addresses\UseCases\Update\Command'));
+
+// Subunits
+$DI->params[ 'Domain\Subunits\UseCases\Update\Command']['repository'] = $DI->lazyNew('Test\DataStorage\TestSubunitsRepository');
+$DI->set(    'Domain\Subunits\UseCases\Update\Command',
+$DI->lazyNew('Domain\Subunits\UseCases\Update\Command'));

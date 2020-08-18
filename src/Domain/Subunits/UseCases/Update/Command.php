@@ -37,7 +37,7 @@ class Command
                 'notes'      => $req->change_notes
             ]);
             $log_id = $this->repo->logChange($entry, $this->repo::LOG_TYPE);
-            return new Response($log_id, $req->address_id);
+            return new Response($log_id, $req->subunit_id);
         }
         catch (\Exception $e) {
             return new Response(null, $req->subunit_id, [$e->getMessage()]);
