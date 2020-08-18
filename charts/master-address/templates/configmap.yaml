@@ -99,5 +99,11 @@ data:
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteRule .? {{ .Values.config.base_uri }}/index.php [NC,L]
+
+        php_value error_reporting 32767
+        php_value log_errors on
+        php_value html_errors off
+        php_value arg_separator.output ";"
+        php_value arg_separator.input  ";&"
     </Directory>
 ...

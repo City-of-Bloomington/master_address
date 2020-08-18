@@ -27,11 +27,7 @@ RUN apt-get install -y \
     php-xsl \
     libapache2-mod-php
 
-COPY docker/php.ini /etc/php/7.2/apache2/conf.d/local.ini
-COPY docker/php.ini /etc/php/7.2/cli/conf.d/local.ini
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
-COPY docker/phpinfo.php /var/www/html/phpinfo.php
-
 
 WORKDIR /srv/sites/master_address
 COPY --chown=www-data:staff . /srv/sites/master_address
