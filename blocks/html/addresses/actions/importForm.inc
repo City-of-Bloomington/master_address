@@ -126,7 +126,7 @@ declare (strict_types=1);
                     <td>True: y, Y, 1.  Anything else is false, including empty space</td>
                 </tr>
                 <tr><th>Contact ID</th>
-                    <td>Must be a user_id number</td>
+                    <td>Must be a <a href="<?= parent::generateUri('people.index'); ?>">Person ID</a> number</td>
                 </tr>
                 <tr><th>Change Log Notes</th>
                     <td></td>
