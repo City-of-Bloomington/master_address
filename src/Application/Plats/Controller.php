@@ -65,7 +65,7 @@ class Controller extends BaseController
                 $update   = $this->di->get('Domain\Plats\UseCases\Update\Update');
                 $request  = new UpdateRequest($_POST);
                 $response = $update($request);
-                if (!count($response->errors)) {
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('plats.view', ['id'=>$response->id]));
                     exit();
                 }

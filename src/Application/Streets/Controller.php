@@ -131,7 +131,7 @@ class Controller extends BaseController
                 $request  = new UpdateRequest($street_id, $_SESSION['USER']->id, $_POST);
                 $update   = $this->di->get('Domain\Streets\UseCases\Update\Update');
                 $response = $update($request);
-                if (!count($response->errors)) {
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('streets.view', ['id'=>$request->street_id]));
                     exit();
                 }
@@ -172,7 +172,7 @@ class Controller extends BaseController
             if (isset($_POST['id'])) {
                 $alias    = $this->di->get('Domain\Streets\UseCases\Alias\Alias');
                 $response = $alias($request);
-                if (!count($response->errors)) {
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('streets.view', ['id'=>$street_id]));
                     exit();
                 }

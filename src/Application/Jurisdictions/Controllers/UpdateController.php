@@ -22,7 +22,7 @@ class UpdateController extends Controller
             $update   = $this->di->get('Domain\Jurisdictions\UseCases\Update\Update');
             $request  = new UpdateRequest($_POST);
             $response = $update($request);
-            if (!count($response->errors)) {
+            if (!$response->errors) {
                 header('Location: '.View::generateUrl('jurisdictions.index'));
                 exit();
             }

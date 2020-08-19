@@ -21,7 +21,7 @@ class UpdateController extends BaseController
             $update   = $this->di->get('Domain\Towns\UseCases\Update\Update');
             $request  = new UpdateRequest($_POST);
             $response = $update($request);
-            if (!count($response->errors)) {
+            if (!$response->errors) {
                 header('Location: '.View::generateUrl('towns.index'));
                 exit();
             }

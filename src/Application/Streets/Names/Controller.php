@@ -76,7 +76,7 @@ class Controller extends BaseController
             $request  = new CorrectRequest($_POST);
             $correct  = $this->di->get('Domain\Streets\Names\UseCases\Correct\Correct');
             $response = $correct($request);
-            if (!count($response->errors)) {
+            if (!$response->errors) {
                 header('Location: '.View::generateUrl('streetNames.view', ['id'=>$request->id]));
                 exit();
             }

@@ -45,7 +45,7 @@ class Controller extends BaseController
             if (!$request->role                 ) { $request->role                  = self::DEFAULT_ROLE; }
             if (!$request->authentication_method) { $request->authentication_method = self::DEFAULT_AUTH; }
             $response = $update($request);
-            if (!count($response->errors)) {
+            if (!$response->errors) {
                 header('Location: '.View::generateUrl('users.index'));
                 exit();
             }

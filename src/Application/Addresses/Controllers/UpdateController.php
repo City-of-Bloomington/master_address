@@ -31,7 +31,7 @@ class UpdateController extends Controller
                 $request  = new UpdateRequest($address_id, $_SESSION['USER']->id, $_POST);
                 $update   = $this->di->get('Domain\Addresses\UseCases\Update\Command');
                 $response = $update($request);
-                if (!count($response->errors)) {
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('addresses.view', ['id'=>$address_id]));
                     exit();
                 }

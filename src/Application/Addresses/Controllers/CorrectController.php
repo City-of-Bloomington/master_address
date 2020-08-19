@@ -25,7 +25,7 @@ class CorrectController extends Controller
                 $request  = new CorrectRequest($address_id, $_SESSION['USER']->id, $_POST);
                 $correct  = $this->di->get('Domain\Addresses\UseCases\Correct\Correct');
                 $response = $correct($request);
-                if (!count($response->errors)) {
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('addresses.view', ['id'=>$address_id]));
                     exit();
                 }

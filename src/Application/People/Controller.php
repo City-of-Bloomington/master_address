@@ -52,7 +52,7 @@ class Controller extends BaseController
             $update   = $this->di->get('Domain\People\UseCases\Update\Update');
             $request  = new UpdateRequest($_POST);
             $response = $update($request);
-            if (!count($response->errors)) {
+            if (!$response->errors) {
                 $return_url = !empty($_SESSION['return_url'])
                             ? $_SESSION['return_url']
                             : parent::generateUrl('people.view', ['id'=>$response->id]);

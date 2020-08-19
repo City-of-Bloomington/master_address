@@ -24,7 +24,7 @@ class CorrectController extends Controller
                 $request  = new CorrectRequest($subunit_id, $_SESSION['USER']->id, $_POST);
                 $correct  = $this->di->get('Domain\Subunits\UseCases\Correct\Correct');
                 $response = $correct($request);
-                if (!count($response->errors)) {
+                if (!$response->errors) {
                     header('Location: '.View::generateUrl('subunits.view', ['id'=>$subunit_id]));
                     exit();
                 }
