@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2019 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -91,7 +91,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     {
         $select = $this->baseSelect();
         foreach ($fields as $f=>$v) {
-            if (array_key_exists($f, self::$fieldmap)) {
+            if (isset($v) && array_key_exists($f, self::$fieldmap)) {
                 $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
                 switch ($f) {
                     case 'mailable':
@@ -102,8 +102,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                     break;
 
                     default:
-                        if (empty($v)) { $select->where("$column is null"); }
-                        else           { $select->where("$column=?", $v  ); }
+                        $select->where("$column=?", $v  );
                 }
             }
         }

@@ -98,6 +98,11 @@ $ROUTES->attach('addresses', "/addresses", function ($r) {
     }
 });
 
+$ROUTES->attach('locations', '/locations', function ($r) {
+    $r->add('view',  '/{id}')->setValues(['action'=>'view'  , 'controller'=>'Application\Locations\Controllers\ViewController'  ]);
+    $r->add('index', ''     )->setValues(['action'=>'search', 'controller'=>'Application\Locations\Controllers\SearchController']);
+});
+
 $ROUTES->attach('sanitation', '/sanitation', function ($r) {
     $r->setValues(['controller'=> 'Application\Sanitation\Controller']);
 

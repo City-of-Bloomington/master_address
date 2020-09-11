@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -17,10 +17,10 @@ class Find
         $this->repo = $repository;
     }
 
-    public function __invoke(array $fields): FindResponse
+    public function __invoke(FindRequest $req): FindResponse
     {
         try {
-            $locations = $this->repo->find($fields);
+            $locations = $this->repo->find((array)$req);
             return new FindResponse($locations);
         }
         catch (\Exception $e) {
