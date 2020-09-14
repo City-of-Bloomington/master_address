@@ -39,7 +39,18 @@ foreach ($this->locations as $l) {
             'address', 'subunit'
         ];
         foreach ($locations[$location_id] as $l) {
-            foreach ($fields as $f) { $$f = parent::escape($l->$f); }
+            foreach ($fields as $f) {
+                switch($f) {
+                    case 'mailable':
+                    case 'occupiable':
+                    case 'group_quarter':
+                    case 'active':
+                        $$f = $l->$f ? 'Y' : '';
+                    break;
+                    default:
+                        $$f = parent::escape($l->$f);
+                }
+            }
 
             $uri = $l->subunit_id
                 ? parent::generateUri( 'subunits.view', ['id'=>$l->subunit_id])

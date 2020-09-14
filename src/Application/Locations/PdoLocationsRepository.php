@@ -12,6 +12,8 @@ use Application\PdoRepository;
 
 use Domain\Locations\Entities\Location;
 use Domain\Locations\Entities\Sanitation;
+use Domain\Locations\UseCases\Search\SearchRequest;
+
 use Domain\Streets\Metadata as Street;
 
 class PdoLocationsRepository extends PdoRepository implements LocationsRepository
@@ -21,6 +23,11 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     const TABLE = 'locations';
     const LOG_TYPE = 'location';
 
+    public static $DEFAULT_SORT = [
+        'address',
+        'subunit',
+        'location_id'
+    ];
 
     /**
      * Map Location entity properties to database columns
@@ -83,7 +90,8 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     // Read functions
     //---------------------------------------------------------------
     /**
-     * Finds location rows using exact matching
+     * Finds location rows using exact matching                    break;
+
      *
      * @return array  An array of Location entity objects
      */
@@ -100,6 +108,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                     case 'active':
                         $select->where("$column=?", $v ? 'true' : 'false');
                     break;
+                    case 'postDirection'       : $select->where("sn=?", "$v"); break;
 
                     default:
                         $select->where("$column=?", $v  );
@@ -114,6 +123,66 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
             $locations[] = new Location($row);
         }
         return $locations;
+    }
+
+    /**
+     * Finds locations using wildcard matching of text fields
+     * @param  SearchRequest $search
+     * @return array
+     */
+    public function search(SearchRequest $search): array
+    {
+        $select = $this->baseSelect();
+        foreach ((array)$search as $f => $v) {
+            if (isset($v)) {
+                // Fields handled in self::$fieldmap
+                if (array_key_exists($f, self::$fieldmap)) {
+                    $column = self::$fieldmap[$f]['prefix'].'.'.self::$fieldmap[$f]['dbName'];
+                    switch ($f) {
+                        case 'mailable':
+                        case 'occupiable':
+                        case 'group_quarter':
+                        case 'active':
+                            $select->where("$column=?", $v ? 'true' : 'false');
+                        break;
+
+                        default:
+                            $select->where("$column like ?", "$v%");
+                    }
+                }
+
+                // Additional fields not in self::$fieldmap
+                switch ($f) {
+                    case 'street_number_prefix': $select->where("a.$f=?", $v);         break;
+                    case 'street_number'       : $select->where("a.$f::varchar like ?", "$v%"); break;
+                    case 'street_number_suffix': $select->where("a.$f=?", $v);         break;
+                    case 'city'                : $select->where("a.$f=?", $v);         break;
+                    case 'state'               : $select->where("a.$f=?", $v);         break;
+                    case 'zip'                 : $select->where("a.$f like ?", "$v%"); break;
+                    case 'zipplus4'            : $select->where("a.$f like ?", "$v%"); break;
+
+                    case 'streetType'          : $select->where("st.code=?", $v);           break;
+                    case 'direction'           : $select->where("sn.$f=?",   $v);           break;
+                    case 'street_name'         : $select->where("sn.name like ?", "$v%");   break;
+                    case 'postDirection'       : $select->where("sn.post_direction=?", $v); break;
+
+                    case 'subunitType'         : $select->where("sut.code=?", $v); break;
+                    case 'subunitIdentifier'   : $select->where("sub.identifier like ?", "$v%"); break;
+                }
+            }
+        }
+        return $this->doSelect($select, $search->order, $search->itemsPerPage, $search->currentPage);
+    }
+
+    private function doSelect(SelectInterface $select, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
+        $select->orderBy($order ?? self::$DEFAULT_SORT);
+        $result = parent::performSelect($select, $itemsPerPage, $currentPage);
+
+        $locations = [];
+        foreach ($result['rows'] as $r) { $locations[] = new Location($r); }
+        $result['rows'] = $locations;
+        return $result;
     }
 
     public function sanitation(int $location_id): Sanitation

@@ -375,6 +375,9 @@ msgstr[1] "Locations"
 msgid "location_id"
 msgstr "Location ID"
 
+msgid "location_search"
+msgstr "Find a location"
+
 msgid "location_address_add"
 msgstr "Add Address"
 
