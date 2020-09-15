@@ -19,6 +19,8 @@ class Location
 
     // Foreign key value from location_status
     public $status;
+    public $address_status;
+    public $subunit_status;
 
     // Foreign key value for type_id
     public $type_code;
@@ -31,6 +33,7 @@ class Location
     // String representations for Address and Subunit
     public $address = '';
     public $subunit = '';
+    public $streetAddress;
 
     public function __construct(?array $data=null)
     {

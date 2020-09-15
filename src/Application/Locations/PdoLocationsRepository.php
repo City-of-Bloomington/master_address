@@ -34,19 +34,21 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
      */
     public static $fieldmap = [
         // property  => [dbColumn info]
-        'location_id'  => ['prefix'=>'l',   'dbName'=>'location_id'  ],
-        'type_id'      => ['prefix'=>'l',   'dbName'=>'type_id'      ],
-        'address_id'   => ['prefix'=>'l',   'dbName'=>'address_id'   ],
-        'subunit_id'   => ['prefix'=>'l',   'dbName'=>'subunit_id'   ],
-        'mailable'     => ['prefix'=>'l',   'dbName'=>'mailable'     ],
-        'occupiable'   => ['prefix'=>'l',   'dbName'=>'occupiable'   ],
-        'group_quarter'=> ['prefix'=>'l',   'dbName'=>'group_quarter'],
-        'active'       => ['prefix'=>'l',   'dbName'=>'active'       ],
-        'trash_day'    => ['prefix'=>'san', 'dbName'=>'trash_day'    ],
-        'recycle_week' => ['prefix'=>'san', 'dbName'=>'recycle_week' ],
-        'type_code'    => ['prefix'=>'t',   'dbName'=>'code'         ],
-        'type_name'    => ['prefix'=>'t',   'dbName'=>'name'         ],
-        'status'       => ['prefix'=>'x',   'dbName'=>'status'       ]
+        'location_id'    => ['prefix'=>'l',   'dbName'=>'location_id'  ],
+        'type_id'        => ['prefix'=>'l',   'dbName'=>'type_id'      ],
+        'address_id'     => ['prefix'=>'l',   'dbName'=>'address_id'   ],
+        'subunit_id'     => ['prefix'=>'l',   'dbName'=>'subunit_id'   ],
+        'mailable'       => ['prefix'=>'l',   'dbName'=>'mailable'     ],
+        'occupiable'     => ['prefix'=>'l',   'dbName'=>'occupiable'   ],
+        'group_quarter'  => ['prefix'=>'l',   'dbName'=>'group_quarter'],
+        'active'         => ['prefix'=>'l',   'dbName'=>'active'       ],
+        'trash_day'      => ['prefix'=>'san', 'dbName'=>'trash_day'    ],
+        'recycle_week'   => ['prefix'=>'san', 'dbName'=>'recycle_week' ],
+        'type_code'      => ['prefix'=>'t',   'dbName'=>'code'         ],
+        'type_name'      => ['prefix'=>'t',   'dbName'=>'name'         ],
+        'status'         => ['prefix'=>'x',   'dbName'=>'status'       ],
+        'address_status' => ['prefix'=>'y',   'dbName'=>'status'       ],
+        'subunit_status' => ['prefix'=>'z',   'dbName'=>'status'       ],
     ];
 
     public function columns(): array
@@ -63,7 +65,15 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                                       sn.direction,
                                       sn.name,
                                       st.code,
-                                      sn.post_direction) as address";
+                                      sn.post_direction)        as address";
+            $cols[] = "concat_ws(' ',  a.street_number_prefix,
+                                       a.street_number,
+                                       a.street_number_suffix,
+                                      sn.direction,
+                                      sn.name,
+                                      st.code,
+                                      sn.post_direction,
+                                      sut.code, sub.identifier) as streetAddress";
         }
         return $cols;
     }
@@ -82,7 +92,9 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                ->join('LEFT',  'street_types        st', 'st.id = sn.suffix_code_id')
                ->join('LEFT',  'subunits           sub','sub.id = l.subunit_id')
                ->join('LEFT',  'subunit_types      sut','sut.id = sub.type_id')
-               ->joinSubSelect('LEFT', 'select distinct on (location_id) location_id, status from location_status order by location_id, start_date desc', 'x', 'l.location_id=x.location_id');
+               ->joinSubSelect('LEFT', 'select distinct on (location_id) location_id, status from location_status order by location_id, start_date desc', 'x', 'l.location_id=x.location_id')
+               ->joinSubSelect('LEFT', 'select distinct on (address_id )  address_id, status from  address_status order by  address_id, start_date desc', 'y', 'l.address_id=y.address_id')
+               ->joinSubSelect('LEFT', 'select distinct on (subunit_id )  subunit_id, status from  subunit_status order by  subunit_id, start_date desc', 'z', 'l.subunit_id=z.subunit_id');
         return $select;
     }
 
