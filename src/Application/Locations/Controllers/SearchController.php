@@ -21,10 +21,17 @@ class SearchController extends Controller
         $metadata = $this->di->get('Domain\Addresses\Metadata');
 
         if (!empty($_GET['location'])) {
+            // If all they type is a number, then treat that as a location_id
+            if (is_numeric($_GET['location'])) {
+                header('Location: '.BASE_URL.'/locations/'.(int)$_GET['location']);
+                exit();
+            }
+
             $parse = $this->di->get('Domain\Addresses\UseCases\Parse\Parse');
             $res   = $parse($_GET['location']);
             $_GET  = array_merge($_GET, (array)$res);
         }
+
         $request  = new SearchRequest($_GET, null, parent::ITEMS_PER_PAGE, $page);
         $response = !$request->isEmpty() ? $search($request) : new SearchResponse();
 

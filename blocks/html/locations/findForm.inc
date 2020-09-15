@@ -8,32 +8,23 @@
  * @param int   $this->currentPage
  */
 use Application\Paginator;
+$title = $this->_(['location', 'locations', 100]);
 ?>
 <section>
-    <header><h1><?= $this->_('location_search'); ?></h1></header>
-    <form method="get">
-        <fieldset>
-        <?php
-            $h = $this->template->getHelper('field');
-            echo $h->field([
-                'name'  => 'location',
-                'id'    => 'location',
-                'label' => $this->_('location'),
-                'value' => isset($_GET['location']) ? parent::escape($_GET['location']) : ''
-            ]);
-        ?>
-        </fieldset>
-    </form>
-</section>
-<?php
-    if ($this->locations) { $this->_include('locations/locations.inc'); }
+    <header><h1><?= $title ?></h1></header>
+    <?php
+        if ($this->locations) { $this->_include('locations/results.inc'); }
+        else {
+            echo sprintf($this->_('no_results', 'messages'), $title);
+        }
 
-    if ($this->total > $this->itemsPerPage) {
-        $this->paginator = new Paginator(
-            $this->total,
-            $this->itemsPerPage,
-            $this->currentPage
-        );
-        $this->_include('pageNavigation.inc');
-    }
-?>
+        if ($this->total > $this->itemsPerPage) {
+            $this->paginator = new Paginator(
+                $this->total,
+                $this->itemsPerPage,
+                $this->currentPage
+            );
+            $this->_include('pageNavigation.inc');
+        }
+    ?>
+</section>
