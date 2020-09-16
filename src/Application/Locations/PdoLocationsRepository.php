@@ -46,6 +46,10 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         'recycle_week'   => ['prefix'=>'san', 'dbName'=>'recycle_week' ],
         'type_code'      => ['prefix'=>'t',   'dbName'=>'code'         ],
         'type_name'      => ['prefix'=>'t',   'dbName'=>'name'         ],
+        'city'           => ['prefix'=>'a',   'dbName'=>'city'         ],
+        'state'          => ['prefix'=>'a',   'dbName'=>'state'        ],
+        'zip'            => ['prefix'=>'a',   'dbName'=>'zip'          ],
+        'address_type'   => ['prefix'=>'a',   'dbName'=>'address_type' ],
         'status'         => ['prefix'=>'x',   'dbName'=>'status'       ],
         'address_status' => ['prefix'=>'y',   'dbName'=>'status'       ],
         'subunit_status' => ['prefix'=>'z',   'dbName'=>'status'       ],
@@ -58,6 +62,8 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
             foreach (self::$fieldmap as $responseName=>$map) {
                 $cols[] = "$map[prefix].$map[dbName] as $responseName";
             }
+            $cols[] = 'coalesce(sub.latitude,  a.latitude ) as latitude';
+            $cols[] = 'coalesce(sub.longitude, a.longitude) as longitude';
             $cols[] = "concat_ws(' ', sut.code, sub.identifier) as subunit";
             $cols[] = "concat_ws(' ',  a.street_number_prefix,
                                        a.street_number,

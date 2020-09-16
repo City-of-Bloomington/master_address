@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -34,6 +34,12 @@ class Location
     public $address = '';
     public $subunit = '';
     public $streetAddress;
+    public $address_type;
+    public $city;
+    public $state;
+    public $zip;
+    public $latitude;
+    public $longitude;
 
     public function __construct(?array $data=null)
     {
@@ -49,6 +55,7 @@ class Location
                     case 'type_id':
                     case 'address_id':
                     case 'subunit_id':
+                    case 'zip':
                         $this->$f = (int)$data[$f];
                     break;
 
@@ -57,6 +64,11 @@ class Location
                     case 'group_quarter':
                     case 'active':
                         $this->$f = $data[$f] ? true : false;
+                    break;
+
+                    case 'latitude':
+                    case 'longitude':
+                        $this->$f = (float)$data[$f];
                     break;
 
                     default:

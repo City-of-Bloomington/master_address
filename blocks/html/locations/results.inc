@@ -10,6 +10,7 @@ declare (strict_types=1);
 <thead>
     <tr><th><?= $this->_('location_id'  ); ?></th>
         <th><?= $this->_('address'      ); ?></th>
+        <th><?= $this->_('zip'          ); ?></th>
         <th><?= $this->_('active'       ); ?></th>
         <th><?= $this->_('type'         ); ?></th>
         <th><?= $this->_('mailable'     ); ?></th>
@@ -17,6 +18,7 @@ declare (strict_types=1);
         <th><?= $this->_('group_quarter'); ?></th>
         <th><?= $this->_('trash_day'    ); ?></th>
         <th><?= $this->_('recycle_week' ); ?></th>
+        <th><?= $this->_('address_type' ); ?></th>
         <th><?= $this->_('status'       ); ?></th>
     </tr>
 </thead>
@@ -42,6 +44,7 @@ declare (strict_types=1);
         echo "
         <tr><th>$location_id</th>
             <th><a href=\"$uri\">$address $subunit</a></th>
+            <td>$zip</td>
             <td>$active</td>
             <td>$type_code</td>
             <td>$mailable</td>
@@ -49,6 +52,7 @@ declare (strict_types=1);
             <td>$group_quarter</td>
             <td>$trash_day</td>
             <td>$recycle_week</td>
+            <td>$address_type</td>
             <td>$status</td>
         </tr>
         ";
