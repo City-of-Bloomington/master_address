@@ -40,7 +40,7 @@ declare (strict_types=1);
         $status = !empty($subunit_status) ? $subunit_status : (!empty($address_status) ? $address_status : $status);
         $uri    = $subunit_id
                   ? parent::generateUri( 'subunits.view', ['id'=>$subunit_id])
-                  : parent::generateUri('addresses.view', ['id'=>$subunit_id]);
+                  : parent::generateUri('addresses.view', ['id'=>$address_id]);
         echo "
         <tr><th>$location_id</th>
             <th><a href=\"$uri\">$address $subunit</a></th>
