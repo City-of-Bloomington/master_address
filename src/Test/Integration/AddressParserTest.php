@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2014-2019 City of Bloomington, Indiana
+ * @copyright 2014-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 class AddressParserTest extends TestCase
 {
     protected static $parser;
+
     public static function setUpBeforeClass(): void
     {
         global $DI;
@@ -65,6 +66,50 @@ class AddressParserTest extends TestCase
 		];
 	}
 
+	public function databaseAddressProvider()
+	{
+        global $pdo;
+        $sql = "select address,
+                       street_number_prefix,
+                       street_number,
+                       street_number_suffix,
+                       direction,
+                       streetname,
+                       type_suffix,
+                       post_dir,
+                       code,
+                       identifier
+                from active_locations
+                order by streetname, street_number";
+        $query  = $pdo->prepare($sql);
+        $query->execute();
+        $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        $fields = [
+            'street_number_prefix' => 'street_number_prefix',
+            'street_number'        => 'street_number',
+            'street_number_suffix' => 'street_number_suffix',
+            'direction'            => 'direction',
+            'streetname'           => 'street_name',
+            'type_suffix'          => 'streetType',
+            'post_dir'             => 'postDirection',
+            'code'                 => 'subunitType',
+            'identifier'           => 'subunitIdentifier'
+        ];
+
+        $data = [];
+        foreach ($result as $row) {
+            $expected = [];
+            foreach ($fields as $db=>$p) {
+                if (!empty($row[$db])) {
+                    $expected[$p] = $row[$db];
+                }
+            }
+            $data[] = [$row['address'], $expected];
+        }
+        return $data;
+	}
+
 	/**
 	 * @dataProvider addressProvider
 	 */
@@ -83,5 +128,15 @@ class AddressParserTest extends TestCase
         $parser = self::$parser;
         $parse  = array_filter((array)$parser($input, 'streetNameOnly'));
 		$this->assertEquals($output, $parse);
+	}
+
+	/**
+	 * @dataProvider databaseAddressProvider
+	 */
+	public function testDBAddresses($input, $output)
+	{
+        $parser = self::$parser;
+        $parse  = array_filter((array)$parser($input));
+        $this->assertEquals($output, $parse, "$input failed to parse\n");
 	}
 }
