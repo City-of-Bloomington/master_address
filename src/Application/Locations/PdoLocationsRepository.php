@@ -164,6 +164,10 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                             $select->where("$column=?", $v ? 'true' : 'false');
                         break;
 
+                        case 'zip':
+                            $select->where("$column::varchar like ?", "$v%");
+                        break;
+
                         default:
                             $select->where("$column like ?", "$v%");
                     }
@@ -176,8 +180,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                     case 'street_number_suffix': $select->where("a.$f=?", $v);         break;
                     case 'city'                : $select->where("a.$f=?", $v);         break;
                     case 'state'               : $select->where("a.$f=?", $v);         break;
-                    case 'zip'                 : $select->where("a.$f like ?", "$v%"); break;
-                    case 'zipplus4'            : $select->where("a.$f like ?", "$v%"); break;
+                    case 'zipplus4'            : $select->where("a.$f::varchar like ?", "$v%"); break;
 
                     case 'streetType'          : $select->where("st.code=?", $v);           break;
                     case 'direction'           : $select->where("sn.$f=?",   $v);           break;
