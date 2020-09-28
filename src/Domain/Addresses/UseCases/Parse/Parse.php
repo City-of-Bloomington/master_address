@@ -138,7 +138,7 @@ class Parse
 
 			#print_r(array_filter((array)$output));
 			#echo "Looking for Zip: |$address|\n";
-			$zipPattern = '(?<zip>\d{5})(\-(?<zipplus4>\d{4}))?';
+			$zipPattern = '(?<zip>474\d{2})(\-(?<zipplus4>\d{4}))?';
 			if (preg_match("/\s$zipPattern\s?$/i",$address,$matches)) {
 				$output->{self::ZIP} = trim($matches['zip']);
 				if (isset($matches['zipplus4']) && $matches['zipplus4']) {
