@@ -103,9 +103,10 @@ class Parse
 		if ($parseType=='address') {
 			#echo "Looking for number: |$address|\n";
 
-			$fraction = '\d\/\d';
-			$directionCodePattern = implode('', $directions);
-			$numberPattern = "(?<prefix>$fraction\s|[A-Z]\s)?(?<number>\d+)(?<suffix>\s$fraction\s|\-\d+\s|\s?[A-Z]\s)?(?<direction>[$directionCodePattern]\s)?";
+			$prefix = 'U';
+			$suffix = '[A-Z0-9#\-\/]+';
+			$dir    = implode('', $directions);
+			$numberPattern = "(?<prefix>$prefix\s)?(?<number>\d+)(?<suffix>\s$suffix\s)?(?<direction>[$dir]\s)?";
 
 			if (preg_match("/^$numberPattern/i", $address, $matches)) {
 
