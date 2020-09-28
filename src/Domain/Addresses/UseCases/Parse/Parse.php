@@ -104,7 +104,7 @@ class Parse
 			#echo "Looking for number: |$address|\n";
 
 			$prefix = 'U';
-			$suffix = '[A-Z0-9#\-\/]+';
+			$suffix = '[A-Z0-9#\-\/]{1,3}';
 			$dir    = implode('', $directions);
 			$numberPattern = "(?<prefix>$prefix\s)?(?<number>\d+)(?<suffix>\s$suffix\s)?(?<direction>[$dir]\s)?";
 
@@ -163,12 +163,14 @@ class Parse
 
 			#echo "Looking for subunit: |$address|\n";
 			$subunitTypePattern = implode('|',array_merge($subunitTypes, array_keys($subunitTypes)));
-			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)";
+			$subunitPattern = "(?<subunitType>$subunitTypePattern)(\-|\s)?(?<subunitIdentifier>\w+)?";
 			if (preg_match("/\s(?<subunit>$subunitPattern)$/i",$address,$matches)) {
 				try {
                     $type = strtoupper($matches['subunitType']);
 					$output->{self::SUBUNIT_TYPE} = in_array($type, $subunitTypes) ? $type : $subunitTypes[$type];
-					$output->{self::SUBUNIT_ID} = $matches['subunitIdentifier'];
+					if (!empty($matches['subunitIdentifier'])) {
+                        $output->{self::SUBUNIT_ID} = $matches['subunitIdentifier'];
+                    }
 					$address = trim(preg_replace("/\s$matches[subunit]$/i",'',$address));
 				}
 				catch (\Exception $e) {
