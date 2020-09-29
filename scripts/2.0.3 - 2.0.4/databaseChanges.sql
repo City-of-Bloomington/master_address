@@ -16,3 +16,5 @@ order by address_id, start_date desc;
 alter table  address_status drop end_date;
 alter table  subunit_status drop end_date;
 alter table location_status drop end_date;
+
+delete from street_types where code='BYP';
