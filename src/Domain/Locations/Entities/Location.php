@@ -17,18 +17,15 @@ class Location
     public $group_quarter;
     public $active;
 
-    // Foreign key value from location_status
+    // Fields from foreign key tables
     public $status;
     public $address_status;
     public $subunit_status;
-
-    // Foreign key value for type_id
     public $type_code;
     public $type_name;
-
-    // Sanitation fields
     public $trash_day;
     public $recycle_week;
+    public $jurisdiction_name;
 
     // String representations for Address and Subunit
     public $address = '';

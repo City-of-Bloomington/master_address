@@ -34,25 +34,26 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
      */
     public static $fieldmap = [
         // property  => [dbColumn info]
-        'location_id'    => ['prefix'=>'l',   'dbName'=>'location_id'  ],
-        'type_id'        => ['prefix'=>'l',   'dbName'=>'type_id'      ],
-        'address_id'     => ['prefix'=>'l',   'dbName'=>'address_id'   ],
-        'subunit_id'     => ['prefix'=>'l',   'dbName'=>'subunit_id'   ],
-        'mailable'       => ['prefix'=>'l',   'dbName'=>'mailable'     ],
-        'occupiable'     => ['prefix'=>'l',   'dbName'=>'occupiable'   ],
-        'group_quarter'  => ['prefix'=>'l',   'dbName'=>'group_quarter'],
-        'active'         => ['prefix'=>'l',   'dbName'=>'active'       ],
-        'trash_day'      => ['prefix'=>'san', 'dbName'=>'trash_day'    ],
-        'recycle_week'   => ['prefix'=>'san', 'dbName'=>'recycle_week' ],
-        'type_code'      => ['prefix'=>'t',   'dbName'=>'code'         ],
-        'type_name'      => ['prefix'=>'t',   'dbName'=>'name'         ],
-        'city'           => ['prefix'=>'a',   'dbName'=>'city'         ],
-        'state'          => ['prefix'=>'a',   'dbName'=>'state'        ],
-        'zip'            => ['prefix'=>'a',   'dbName'=>'zip'          ],
-        'address_type'   => ['prefix'=>'a',   'dbName'=>'address_type' ],
-        'status'         => ['prefix'=>'x',   'dbName'=>'status'       ],
-        'address_status' => ['prefix'=>'y',   'dbName'=>'status'       ],
-        'subunit_status' => ['prefix'=>'z',   'dbName'=>'status'       ],
+        'location_id'       => ['prefix'=>'l',   'dbName'=>'location_id'  ],
+        'type_id'           => ['prefix'=>'l',   'dbName'=>'type_id'      ],
+        'address_id'        => ['prefix'=>'l',   'dbName'=>'address_id'   ],
+        'subunit_id'        => ['prefix'=>'l',   'dbName'=>'subunit_id'   ],
+        'mailable'          => ['prefix'=>'l',   'dbName'=>'mailable'     ],
+        'occupiable'        => ['prefix'=>'l',   'dbName'=>'occupiable'   ],
+        'group_quarter'     => ['prefix'=>'l',   'dbName'=>'group_quarter'],
+        'active'            => ['prefix'=>'l',   'dbName'=>'active'       ],
+        'trash_day'         => ['prefix'=>'san', 'dbName'=>'trash_day'    ],
+        'recycle_week'      => ['prefix'=>'san', 'dbName'=>'recycle_week' ],
+        'type_code'         => ['prefix'=>'t',   'dbName'=>'code'         ],
+        'type_name'         => ['prefix'=>'t',   'dbName'=>'name'         ],
+        'jurisdiction_name' => ['prefix'=>'j',   'dbName'=>'name'         ],
+        'city'              => ['prefix'=>'a',   'dbName'=>'city'         ],
+        'state'             => ['prefix'=>'a',   'dbName'=>'state'        ],
+        'zip'               => ['prefix'=>'a',   'dbName'=>'zip'          ],
+        'address_type'      => ['prefix'=>'a',   'dbName'=>'address_type' ],
+        'status'            => ['prefix'=>'x',   'dbName'=>'status'       ],
+        'address_status'    => ['prefix'=>'y',   'dbName'=>'status'       ],
+        'subunit_status'    => ['prefix'=>'z',   'dbName'=>'status'       ],
     ];
 
     public function columns(): array
@@ -92,6 +93,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                ->join('INNER', 'location_types       t',  't.id = l.type_id')
                ->join('LEFT',  'sanitation         san',  'l.location_id=san.location_id')
                ->join('INNER', 'addresses            a',  'a.id = l.address_id')
+               ->join('INNER', 'jurisdictions        j',  'j.id = a.jurisdiction_id')
                ->join('INNER', 'streets              s',  's.id = a.street_id')
                ->join('INNER', 'street_designations sd',  's.id = sd.street_id and sd.type_id='.Street::TYPE_STREET)
                ->join('INNER', 'street_names        sn', 'sn.id = sd.street_name_id')
@@ -109,7 +111,6 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
     //---------------------------------------------------------------
     /**
      * Finds location rows using exact matching                    break;
-
      *
      * @return array  An array of Location entity objects
      */
