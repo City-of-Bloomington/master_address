@@ -27,4 +27,7 @@ $title = $this->_(['location', 'locations', 100]);
             $this->_include('pageNavigation.inc');
         }
     ?>
+    <p> API documentation for this URL is on
+       <a href="https://github.com/City-of-Bloomington/master_address/tree/master/docs/api/locations.md">Github</a>.
+    </p>
 </section>

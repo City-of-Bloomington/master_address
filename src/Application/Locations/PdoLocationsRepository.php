@@ -170,7 +170,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                         break;
 
                         default:
-                            $select->where("$column like ?", "$v%");
+                            $select->where("$column=?", $v);
                     }
                 }
 
