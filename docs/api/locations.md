@@ -1,6 +1,6 @@
 # Locations Service
 
-The service searches for locations in master address.  Each address and subunit gets a separate locations, so this is equivalent to listing base addresses and subunits in the same query.
+This service searches for locations in master address.  Each address and subunit gets a separate location, so this is equivalent to listing base addresses and subunits in the same query.
 
 The search uses wildcards for some of the address component parameters.  The rest of the parameters use an exact match.
 
@@ -25,6 +25,8 @@ https://github.com/City-of-Bloomington/master_address/blob/master/src/Domain/Add
 ### address component parameters
 The parameters come from the parse and represent parts of the address string
 
+param name | match type | Example
+---------- | ---------- | -------
 street_number_prefix | exact match | `where street_number_prefix='U'`
 street_number        | This will always be an integer. But we do the search as a wildcard string | `where street_number like '13%'`
 street_number_suffix | exact match | `where street_number_suffix='1/2'`
@@ -41,36 +43,43 @@ zipplus4             | Wildcard match | `where zipplus4 like '32%'`
 
 
 ### ID fields
-These are ID fields from the foreign key tables.  They are all exact match lookups
+These are ID fields from the foreign key tables.
 
-location_id |
+param name | Database field
+---------- | --------------
+location_id | locations.location_id
 address_id  | addresses.id
 subunit_id  | subunits.id
 
 ### Location Flags
 These are all boolean flags in the locations table.  The possible values for 0,1 where 0=false and 1=true.
 
-mailable      | exact match
-occupiable    | exact match
-group_quarter | exact match
-active        | exact match
+param name    |
+----------    |
+mailable      |
+occupiable    |
+group_quarter |
+active        |
 
 
 ### Status fields
-These are all done as an exact match.  Possible values are: (current, retired, proposed, duplicate, temporary).
+Possible values are: (current, retired, proposed, duplicate, temporary).
 
+param name     | Status
+----------     | ------
 status         | Location status
 address_status | Address status
 subunit_status | Subunit status
 
 ### Address Type
-This is an exact match
-
-address_type | Possible values: (Facility, Property, Street, Temporary, Utility)
+param name   | Possible values
+----------   | ---------------
+address_type | Facility, Property, Street, Temporary, Utility
 
 ### Location Type
-These are all done as an exact match
 
+param name   | description
+----------   | -----------
 type_id      | Location type ID
 type_code    | Location type abbreviation
 type_name    | Location type full name
@@ -97,4 +106,3 @@ The possible values are:
  16 | RM   | Residential Multi-Family
  17 | R2   | Residential 2 Family
  18 | AS   | Accessory Structure
-
