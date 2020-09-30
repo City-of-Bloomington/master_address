@@ -104,12 +104,11 @@ class Parse
 			#echo "Looking for number: |$address|\n";
 
 			$prefix = 'U';
-			$suffix = '[A-Z0-9#\-\/]{1,3}';
+			$suffix = '[A-Z0-9\#\-\/]{1,3}';
 			$dir    = implode('', $directions);
-			$numberPattern = "(?<prefix>$prefix\s)?(?<number>\d+)(?<suffix>\s$suffix\s)?(?<direction>[$dir]\s)?";
+			$number = "(?<prefix>$prefix\s)?(?<number>\d+)(?<suffix>\s$suffix\s)?(?<direction>[$dir]\s)?";
 
-			if (preg_match("/^$numberPattern/i", $address, $matches)) {
-
+			if (preg_match("/^$number/i", $address, $matches)) {
 				if (!empty($matches['prefix'])) { $output->{self::NUMBER_PREFIX} = trim($matches['prefix']); }
 				$output->{self::NUMBER} = trim($matches['number']);
 
