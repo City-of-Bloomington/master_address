@@ -185,7 +185,7 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
 
                     case 'streetType'          : $select->where("st.code=?", $v);           break;
                     case 'direction'           : $select->where("sn.$f=?",   $v);           break;
-                    case 'street_name'         : $select->where("sn.name like ?", ucwords(strtolower($v)).'%'); break;
+                    case 'street_name'         : $select->where("lower(sn.name) like ?", strtolower($v).'%'); break;
                     case 'postDirection'       : $select->where("sn.post_direction=?", $v); break;
 
                     case 'subunitType'         : $select->where("sut.code=?", $v); break;
