@@ -148,8 +148,8 @@ class Parse
 			}
 
 			#echo "Looking for State: |$address|\n";
-			if (preg_match("/\s(?<state>IN)\b/i",$address,$matches)) {
-				$output->{self::STATE} = trim($matches['state']);
+			if (preg_match("/\s(?<state>IN|Indiana)\b/i",$address,$matches)) {
+				$output->{self::STATE} = 'IN';
 				$address = trim(preg_replace("/\s$matches[state]$/i",'',$address));
 			}
 

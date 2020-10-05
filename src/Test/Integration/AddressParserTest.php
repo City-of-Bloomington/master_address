@@ -54,7 +54,8 @@ class AddressParserTest extends TestCase
 			['100 W East Branch Rd', ['street_number'=>'100', 'direction'=>'W', 'street_name'=>'East Branch', 'streetType'=>'RD']],
 			['100 N North St',       ['street_number'=>'100', 'direction'=>'N', 'street_name'=>'North',       'streetType'=>'ST']],
 			['100 S East Side Dr',   ['street_number'=>'100', 'direction'=>'S', 'street_name'=>'East Side',   'streetType'=>'DR']],
-			['3244 Southern Oaks Dr, Bloomington, IN 47401, USA', ['street_number'=>'3244', 'street_name'=>'Southern Oaks', 'streetType'=>'DR', 'city'=>'Bloomington', 'state'=>'IN', 'zip'=>'47401']]
+			['3244 Southern Oaks Dr, Bloomington, IN 47401, USA', ['street_number'=>'3244', 'street_name'=>'Southern Oaks', 'streetType'=>'DR', 'city'=>'Bloomington', 'state'=>'IN', 'zip'=>'47401']],
+			['501 N Morton St, Bloomington, Indiana, 47404', ['street_number'=>'501', 'direction'=>'N', 'street_name'=>'Morton', 'streetType'=>'ST', 'city'=>'Bloomington', 'state'=>'Indiana', 'zip'=>'47404']]
 		];
 	}
 
