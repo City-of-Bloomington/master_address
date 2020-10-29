@@ -51,11 +51,16 @@ $DATABASES = [
  *
  * @see Domain\Auth
  */
-$AUTHENTICATION_METHODS = [
-  'Employee' => [
-      'classname' => 'Site\Employee',
-      'server'    => '{{ ma_directory_service }}',
-  ]
+$DIRECTORY_CONFIG = [
+    'Employee' => [
+        'classname'          => 'Site\Employee',
+        'server'             => '{{ ma_ldap.server             }}',
+        'base_dn'            => '{{ ma_ldap.base_dn            }}',
+        'username_attribute' => '{{ ma_ldap.username_attribute }}',
+        'user_binding'       => '{{ ma_ldap.user_binding       }}',
+        'admin_binding'      => '{{ ma_ldap.admin_binding      }}',
+        'admin_pass'         => '{{ ma_ldap.admin_pass         }}'
+    ]
 ];
 
 /**
