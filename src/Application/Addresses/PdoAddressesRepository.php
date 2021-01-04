@@ -188,7 +188,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
                             $select->where("$column::varchar like ?", "$v%");
                         break;
                         case 'street_name':
-                            $select->where("lower($column) like ?", strtolower("$v%"));
+                            $select->where("lower($column) like ?", strtolower("%$v%"));
                         break;
 
                         default:
