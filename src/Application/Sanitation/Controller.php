@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2021 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -10,6 +10,7 @@ use Application\Controller as BaseController;
 use Application\View;
 
 use Domain\Locations\Entities\Sanitation;
+use Domain\Locations\UseCases\Find\FindRequest;
 
 class Controller extends BaseController
 {
@@ -44,7 +45,7 @@ class Controller extends BaseController
 
             // Load all the locations with this location_id
             $find = $this->di->get('Domain\Locations\UseCases\Find\Find');
-            $res  = $find(['location_id'=>$location_id]);
+            $res  = $find(new FindRequest(['location_id'=>$location_id]));
             return new Views\UpdateView(
                 $sanitation,
                 $this->di->get('Domain\Locations\Metadata'),
