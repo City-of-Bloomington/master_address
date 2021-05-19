@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2019 City of Bloomington, Indiana
+ * @copyright 2009-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->locations
  *
@@ -31,6 +31,7 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
                 <thead>
                     <tr><th></th>
                         <th>{$this->_('active'       )}</th>
+                        <th>{$this->_('status'       )}</th>
                         <th>{$this->_('type'         )}</th>
                         <th>{$this->_('mailable'     )}</th>
                         <th>{$this->_('occupiable'   )}</th>
@@ -43,7 +44,7 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
                 <tbody>
         ";
         $fields = [
-            'location_id', 'status', 'type_code',
+            'location_id', 'type_code',
             'mailable', 'occupiable', 'group_quarter', 'active',
             'trash_day', 'recycle_week',
             'address', 'subunit'
@@ -66,10 +67,12 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
                                    onchange=\"document.location.href='$uri';\"/>";
             }
 
-            $uri = parent::generateUri('subunits.view', ['id'=>$l->subunit_id]);
+            $uri    = parent::generateUri('subunits.view', ['id'=>$l->subunit_id]);
+            $status = $l->subunit_status;
             echo "
             <tr><th><a href=\"$uri\">$address $subunit</a></th>
                 <td>$active</td>
+                <td>$status</td>
                 <td>$type_code</td>
                 <td>$mailable</td>
                 <td>$occupiable</td>
