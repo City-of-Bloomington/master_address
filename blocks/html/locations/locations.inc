@@ -14,10 +14,9 @@ foreach ($this->locations as $l) {
 <section>
 <?php
     foreach (array_keys($locations) as $location_id) {
-        $status  = parent::escape($locations[$location_id][0]->status);
         echo "
         <article>
-            <header><h3>{$this->_('location_id')} $location_id $status</h3></header>
+            <header><h3>{$this->_('location_id')} $location_id</h3></header>
             <table>
                 <thead>
                     <tr><th></th>

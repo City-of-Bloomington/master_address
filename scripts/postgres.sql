@@ -269,14 +269,6 @@ create index on locations( address_id);
 create index on locations( subunit_id);
 create index on locations(    type_id);
 
-create table location_status (
-	id           serial           primary key,
-	location_id  integer          not null,
-	status       address_statuses not null,
-    start_date  timestamp         not null default now()
-);
-create index on location_status(location_id);
-
 create table location_purposes (
     location_id integer not null,
     purpose_id  integer not null,

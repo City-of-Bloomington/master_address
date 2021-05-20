@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018-2020 City of Bloomington, Indiana
+ * @copyright 2018-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -18,10 +18,7 @@ use Domain\Streets\Metadata as Street;
 
 class PdoLocationsRepository extends PdoRepository implements LocationsRepository
 {
-    use \Domain\Logs\DataStorage\StatusLogTrait;
-
     const TABLE = 'locations';
-    const LOG_TYPE = 'location';
 
     public static $DEFAULT_SORT = [
         'address',
@@ -51,7 +48,6 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
         'state'             => ['prefix'=>'a',   'dbName'=>'state'        ],
         'zip'               => ['prefix'=>'a',   'dbName'=>'zip'          ],
         'address_type'      => ['prefix'=>'a',   'dbName'=>'address_type' ],
-        'status'            => ['prefix'=>'x',   'dbName'=>'status'       ],
         'address_status'    => ['prefix'=>'y',   'dbName'=>'status'       ],
         'subunit_status'    => ['prefix'=>'z',   'dbName'=>'status'       ],
     ];
@@ -100,7 +96,6 @@ class PdoLocationsRepository extends PdoRepository implements LocationsRepositor
                ->join('LEFT',  'street_types        st', 'st.id = sn.suffix_code_id')
                ->join('LEFT',  'subunits           sub','sub.id = l.subunit_id')
                ->join('LEFT',  'subunit_types      sut','sut.id = sub.type_id')
-               ->joinSubSelect('LEFT', 'select distinct on (location_id) location_id, status from location_status order by location_id, start_date desc', 'x', 'l.location_id=x.location_id')
                ->joinSubSelect('LEFT', 'select distinct on (address_id )  address_id, status from  address_status order by  address_id, start_date desc', 'y', 'l.address_id=y.address_id')
                ->joinSubSelect('LEFT', 'select distinct on (subunit_id )  subunit_id, status from  subunit_status order by  subunit_id, start_date desc', 'z', 'l.subunit_id=z.subunit_id');
         return $select;

@@ -28,7 +28,6 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
 <section>
 <?php
     foreach (array_keys($locations) as $location_id) {
-        $status    = parent::escape($locations[$location_id][0]->status);
         $toolbox   = '';
         if ($userCanAdd) {
             $block = new Block('toolbox.inc', ['actions' => [
@@ -42,7 +41,7 @@ foreach ($this->locations as $l) { $locations[$l->location_id][] = $l; }
         }
         echo "
         <article>
-            <header><h3>{$this->_('location_id')} $location_id $status</h3>$toolbox</header>
+            <header><h3>{$this->_('location_id')} $location_id</h3>$toolbox</header>
             <table>
                 <thead>
                     <tr><th></th>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
+ * @copyright 2018-2021 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpltxt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -54,15 +54,6 @@ class ChangeStatus
                             $change($request);
                         }
                     }
-                }
-            }
-
-            // Update the status on the active location for this address
-            foreach ($this->repo->findLocations($req->address_id) as $location) {
-                if (   $location->active
-                    && $location->status != $req->status) {
-
-                    $this->repo->saveStatus($location->location_id, $req->status, 'location');
                 }
             }
 
