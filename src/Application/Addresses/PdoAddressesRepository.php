@@ -409,7 +409,6 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
 
                 // Save address status
                 $this->saveStatus         ($address_id,  $req->status,           self::LOG_TYPE);
-                $locationsRepo->saveStatus($location_id, $req->status, $locationsRepo::LOG_TYPE);
 
                 // Return the new address_id
                 $this->pdo->commit();
