@@ -135,3 +135,8 @@ $ROUTES->attach('zipCodes', '/zipCodes', function ($r) {
 
     $r->add('index',  '')->addValues(['action'=>'index' ]);
 });
+
+$ROUTES->attach('places', "/places", function ($r) {
+    $r->add('view',      '/{id}')->setValues(['action'=>'view'  , 'controller'=>'Application\Places\Controllers\ViewController'  ]);
+    $r->add('index',     ''     )->setValues(['action'=>'search', 'controller'=>'Application\Places\Controllers\SearchController']);
+});

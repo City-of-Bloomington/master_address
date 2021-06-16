@@ -28,7 +28,7 @@ if ($platform == 'Pgsql' && !empty($conf['schema'])) {
 $repos = [
     'Addresses', 'Jurisdictions', 'People', 'Plats',
     'Streets', 'Subdivisions', 'Towns', 'Townships', 'Users',
-    'Subunits', 'Locations', 'Reports'
+    'Subunits', 'Locations', 'Reports', 'Places'
 ];
 foreach ($repos as $t) {
     $DI->params[ "Application\\$t\\Pdo{$t}Repository"]["pdo"] = $pdo;
@@ -197,3 +197,9 @@ foreach (\Domain\Reports\Report::list() as $r) {
     $DI->lazyNew("Site\Reports\\$r\Report"));
 }
 
+// Places
+foreach (['Info', 'Search'] as $a) {
+    $DI->params[ "Domain\\Places\\Actions\\$a\\Command"]["repository"] = $DI->lazyGet('Domain\Places\DataStorage\PlacesRepository');
+    $DI->set(    "Domain\\Places\\Actions\\$a\\Command",
+    $DI->lazyNew("Domain\\Places\\Actions\\$a\\Command"));
+}

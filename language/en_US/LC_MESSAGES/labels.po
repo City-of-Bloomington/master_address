@@ -424,6 +424,14 @@ msgstr "New Location Purpose"
 msgid "purpose_edit"
 msgstr "Edit Location Purpose"
 
+msgid "place"
+msgid_plural "places"
+msgstr[0] "Place"
+msgstr[1] "Places"
+
+msgid "place_search"
+msgstr "Find a place"
+
 msgid "plat"
 msgid_plural "plats"
 msgstr[0] "Plat"

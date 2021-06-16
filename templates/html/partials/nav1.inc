@@ -9,6 +9,7 @@
     <?php
         $routes = [
             'people'        => 'person',
+            'places'        => 'place',
             'plats'         => 'plat',
             'streetNames'   => 'streetName',
             'reports'       => 'report'
