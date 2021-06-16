@@ -13,6 +13,7 @@ class InfoResponse
     public $subunit;
     public $address;
     public $locations = [];
+    public $places    = [];
     public $changeLog = [];
     public $statusLog = [];
     public $errors    = [];

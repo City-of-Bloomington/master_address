@@ -26,6 +26,7 @@ class Info
             $info->statusLog = $this->repo->loadStatusLog($req->id, $this->repo::LOG_TYPE);
             $info->address   = $this->repo->loadAddress($info->subunit->address_id);
             $info->locations = $this->repo->findLocations($req->id);
+            $info->places    = $this->repo->findPlaces   ($req->id);
             foreach ($info->locations as $i=>$l) {
                 $result = $this->repo->findAddresses(['location_id'=>$l->location_id]);
                 $info->locations[$i]->addresses = $result['rows'];

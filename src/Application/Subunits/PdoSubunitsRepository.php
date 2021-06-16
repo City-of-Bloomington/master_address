@@ -133,6 +133,25 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
     }
 
     /**
+     * @return array  An array of Place entities
+     */
+    public function findPlaces(int $subunit_id): array
+    {
+        $sql = "select p.id
+                from locations    l
+                join place.places p on p.address_location_id=l.location_id
+                where l.subunit_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$subunit_id]);
+
+        $place_ids = $query->fetchAll(\PDO::FETCH_COLUMN);
+        $places    = [];
+        $repo      = new \Application\Places\PdoPlacesRepository($this->pdo);
+        foreach ($place_ids as $id) { $places[] = $repo->load($id); }
+        return $places;
+    }
+
+    /**
      * Alias for PdoAddressesRepository::find()
      */
     public function findAddresses(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
