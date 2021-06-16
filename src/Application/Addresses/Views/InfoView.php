@@ -45,6 +45,7 @@ class InfoView extends Template
             }
             if ($info->purposes) { $this->blocks['panel-one'][] = new Block('addresses/purposes.inc', ['purposes' => $info->purposes]); }
             if ($info->subunits) { $this->blocks['panel-one'][] = new Block('subunits/list.inc',      ['subunits' => $info->subunits]); }
+            if ($info->places  ) { $this->blocks['panel-one'][] = new Block('places/list.inc',        ['places'   => $info->places  ]); }
         }
         else {
             $this->blocks = [

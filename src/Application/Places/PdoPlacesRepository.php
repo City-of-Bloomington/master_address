@@ -7,8 +7,9 @@ declare (strict_types=1);
 namespace Application\Places;
 
 use Application\PdoRepository;
-use Aura\SqlQuery\Common\SelectInterface;
+use Application\Locations\PdoLocationsRepository;
 
+use Aura\SqlQuery\Common\SelectInterface;
 
 use Domain\Places\DataStorage\PlacesRepository;
 use Domain\Places\Entities\Place;
@@ -155,5 +156,11 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
         foreach ($result['rows'] as $r) { $places[] = self::hydrate($r); }
         $result['rows'] = $places;
         return $result;
+    }
+
+    public function locations(int $location_id): array
+    {
+        $locationsRepo = new PdoLocationsRepository($this->pdo);
+        return $locationsRepo->find(['location_id' => $location_id]);
     }
 }

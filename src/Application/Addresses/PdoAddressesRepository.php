@@ -269,6 +269,26 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
     }
 
     /**
+     * @return array  An array of Place entities
+     */
+    public function findPlaces(int $address_id): array
+    {
+        $sql = "select p.id
+                from locations    l
+                join place.places p on p.address_location_id=l.location_id
+                where l.subunit_id is null
+                  and l.address_id=?";
+        $query = $this->pdo->prepare($sql);
+        $query->execute([$address_id]);
+
+        $place_ids = $query->fetchAll(\PDO::FETCH_COLUMN);
+        $places    = [];
+        $repo      = new \Application\Places\PdoPlacesRepository($this->pdo);
+        foreach ($place_ids as $id) { $places[] = $repo->load($id); }
+        return $places;
+    }
+
+    /**
      * Alias for PdoSubunitsRepository::find()
      */
     public function findSubunits(array $fields, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
