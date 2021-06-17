@@ -13,7 +13,7 @@ use Application\Paginator;
         <tr>
         <?php
             $fields = [
-                'name', 'short_name', 'status', 'vicinity'
+                'name', 'short_name', 'status', 'vicinity', 'category_name', 'entity_name'
             ];
             foreach ($fields as $f) { echo "<th>{$this->_($f)}</th>"; }
         ?>

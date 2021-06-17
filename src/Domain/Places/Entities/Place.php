@@ -21,14 +21,20 @@ class Place
     public $y;
     public $latitude;
     public $longitude;
-    public $entity_id;
-    public $category_id;
     public $type;
     public $map_label1;
     public $map_label2;
     public $comments;
     public $publish_flag;
     public $subplace_flag;
+
+    public $entity_id;
+    public $entity_name;
+    public $entity_code;
+    public $entity_description;
+
+    public $category_id;
+    public $category_name;
 
     public function __construct(?array $data=null)
     {

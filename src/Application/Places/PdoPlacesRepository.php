@@ -41,7 +41,12 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
         'map_label2'        => ['prefix'=>'p', 'dbName'=>'map_label2'          ],
         'comments'          => ['prefix'=>'p', 'dbName'=>'comments'            ],
         'publish_flag'      => ['prefix'=>'p', 'dbName'=>'publish_flag'        ],
-        'subplace_flag'     => ['prefix'=>'p', 'dbName'=>'subplace_flag'       ]
+        'subplace_flag'     => ['prefix'=>'p', 'dbName'=>'subplace_flag'       ],
+        'category_name'     => ['prefix'=>'c', 'dbName'=>'category'            ],
+        'entity_name'       => ['prefix'=>'e', 'dbName'=>'entity_name'         ],
+        'entity_code'       => ['prefix'=>'e', 'dbName'=>'code'                ],
+        'entity_description'=> ['prefix'=>'e', 'dbName'=>'description'         ]
+
     ];
 
     public function columns(): array
@@ -59,7 +64,9 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
     {
         $select = $this->queryFactory->newSelect();
         $select->cols($this->columns())
-               ->from(self::TABLE.' p');
+               ->from(self::TABLE.' p')
+               ->join('LEFT', 'place.categories      c', 'c.id=p.category_id')
+               ->join('LEFT', 'place.public_entities e', 'e.id=p.entity_id');
 
         return $select;
     }
