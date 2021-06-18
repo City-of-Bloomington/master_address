@@ -14,7 +14,6 @@ class Place
     public $status;
     public $landmark_flag;
     public $vicinity;
-    public $dispatch_citycode;
     public $location_id;
     public $description;
     public $x;
@@ -59,7 +58,7 @@ class Place
                         case 'landmark_flag':
                         case 'publish_flag':
                         case 'subplace_flag':
-                            $this->$f = $data[$f]=='Y' ? true : false;
+                            $this->$f = trim($data[$f])=='Y' ? true : false;
                         break;
 
                         default:

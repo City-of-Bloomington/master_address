@@ -43,7 +43,7 @@ $DI->lazyNew('Application\Streets\PdoNamesRepository'));
 //---------------------------------------------------------
 // Metadata providers
 //---------------------------------------------------------
-$contexts = ['Addresses', 'Locations', 'Plats', 'Streets', 'Subdivisions', 'Subunits'];
+$contexts = ['Addresses', 'Locations', 'Places', 'Plats', 'Streets', 'Subdivisions', 'Subunits'];
 foreach ($contexts as $t) {
     $DI->params[ "Domain\\$t\\Metadata"]['repository'] = $DI->lazyGet("Domain\\$t\\DataStorage\\{$t}Repository");
     $DI->set(    "Domain\\$t\\Metadata",
@@ -198,7 +198,7 @@ foreach (\Domain\Reports\Report::list() as $r) {
 }
 
 // Places
-foreach (['Info', 'Search'] as $a) {
+foreach (['Info', 'Search', 'Update'] as $a) {
     $DI->params[ "Domain\\Places\\Actions\\$a\\Command"]["repository"] = $DI->lazyGet('Domain\Places\DataStorage\PlacesRepository');
     $DI->set(    "Domain\\Places\\Actions\\$a\\Command",
     $DI->lazyNew("Domain\\Places\\Actions\\$a\\Command"));

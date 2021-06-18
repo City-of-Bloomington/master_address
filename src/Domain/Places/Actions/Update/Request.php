@@ -4,7 +4,7 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Domain\Places\Actions\Search;
+namespace Domain\Places\Actions\Update;
 
 class Request
 {
@@ -29,12 +29,7 @@ class Request
     public $publish_flag;
     public $subplace_flag;
 
-    // Pagination fields
-    public $order;
-    public $itemsPerPage;
-    public $currentPage;
-
-    public function __construct(?array $data=null, ?array $order=null, ?int $itemsPerPage=null, ?int $currentPage=null)
+    public function __construct(?array $data=null)
     {
         foreach (array_keys((array)$this) as $f) {
             if (!empty($data[$f])) {
@@ -56,7 +51,7 @@ class Request
                     case 'landmark_flag':
                     case 'publish_flag':
                     case 'subplace_flag':
-                        $this->$f = $data[$f]=='Y' ? true : false;
+                        $this->$f = $data[$f] ? true : false;
                     break;
 
                     default:
@@ -64,41 +59,5 @@ class Request
                 }
             }
         }
-        if ($order       ) { $this->order        = $order;        }
-        if ($itemsPerPage) { $this->itemsPerPage = $itemsPerPage; }
-        if ($currentPage ) { $this->currentPage  = $currentPage;  }
-    }
-
-    public function isEmpty(): bool
-    {
-        // Check the most common fields first, so we can return quickly
-        // when there's stuff in this request.
-        $fields = [
-            'name',
-            'short_name',
-            'status',
-            'landmark_flag',
-            'vicinity',
-            'dispatch_citycode',
-            'location_id',
-            'description',
-            'x',
-            'y',
-            'latitude',
-            'longitude',
-            'entity_id',
-            'category_id',
-            'type',
-            'map_label1',
-            'map_label2',
-            'comments',
-            'publish_flag',
-            'subplace_flag',
-            'id'
-        ];
-        foreach ($fields as $f) {
-            if ($this->$f) { return false; }
-        }
-        return true;
     }
 }

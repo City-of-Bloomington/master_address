@@ -27,7 +27,6 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
         'status'            => ['prefix'=>'p', 'dbName'=>'status'              ],
         'landmark_flag'     => ['prefix'=>'p', 'dbName'=>'landmark_flag'       ],
         'vicinity'          => ['prefix'=>'p', 'dbName'=>'vicinity'            ],
-        'dispatch_citycode' => ['prefix'=>'p', 'dbName'=>'dispatch_citycode'   ],
         'location_id'       => ['prefix'=>'p', 'dbName'=>'address_location_id' ],
         'description'       => ['prefix'=>'p', 'dbName'=>'location_description'],
         'x'                 => ['prefix'=>'p', 'dbName'=>'x_coordinate'        ],
@@ -169,5 +168,67 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
     {
         $locationsRepo = new PdoLocationsRepository($this->pdo);
         return $locationsRepo->find(['location_id' => $location_id]);
+    }
+
+    //---------------------------------------------------------------
+    // Write functions
+    //---------------------------------------------------------------
+    public function update(\Domain\Places\Actions\Update\Request $req): int
+    {
+        $data = [];
+        foreach (self::$fieldmap as $f => $db) {
+            if ($db['prefix'] == 'p') {
+                switch ($f) {
+                    case 'landmark_flag':
+                    case 'publish_flag':
+                    case 'subplace_flag':
+                        $data[$db['dbName']] = $req->$f ? 'Y' : null;
+                    break;
+
+                    default:
+                        $data[$db['dbName']] = $req->$f;
+                }
+            }
+        }
+        return parent::saveToTable($data, self::TABLE);
+    }
+
+    //---------------------------------------------------------------
+    // Metadata functions
+    //---------------------------------------------------------------
+    public function categories(): array
+    {
+        $sql = "select id       as category_id,
+                       category as category_name
+                from place.categories
+                order by category";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function entities(): array
+    {
+        $sql = "select id          as entity_id,
+                       entity_name,
+                       code        as entity_code,
+                       description as entity_description
+                from place.public_entities
+                order by entity_name";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function types(): array
+    {
+        $sql = "select distinct(place_type) from place.places order by 1";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function vicinities(): array
+    {
+        $sql = "select distinct(vicinity) from place.places order by 1";
+        $result = $this->pdo->query($sql);
+        return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 }
