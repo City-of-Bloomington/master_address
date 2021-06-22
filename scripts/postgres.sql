@@ -1,4 +1,4 @@
--- @copyright 2017-2019 City of Bloomington, Indiana
+-- @copyright 2017-2021 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE
 set search_path = address;
 
@@ -354,4 +354,100 @@ create table subunit_change_log (
 	foreign key (subunit_id) references subunits(id),
 	foreign key (person_id)  references people  (id),
 	foreign key (contact_id) references people  (id)
+);
+
+set search_path=place;
+
+CREATE TABLE categories (
+    id       serial primary key,
+    category varchar(50)
+);
+
+CREATE TABLE public_entities (
+    id          serial primary key,
+    entity_name varchar(50) unique,
+    code        varchar(8),
+    description varchar(100)
+);
+
+CREATE TABLE places (
+    id                   serial primary key,
+    place_name           varchar(50),
+    short_name           varchar(30),
+    status               varchar(10),
+    landmark_flag        char(2),
+    vicinity             varchar(20),
+    dispatch_citycode    varchar(3),
+    address_location_id  int,
+    location_description varchar(60),
+    x_coordinate         int,
+    y_coordinate         int,
+    latitude             decimal(10, 8),
+    longitude            decimal(10, 8),
+    entity_id            int,
+    category_id          int,
+    place_type           varchar(40),
+    map_label1           varchar(40),
+    map_label2           varchar(40),
+    comments             varchar(250),
+    publish_flag         char(2),
+    subplace_flag        char(2),
+    geom public.geometry(Point,2966),
+    foreign key (category_id) references categories(id),
+    foreign key (  entity_id) references public_entities(id)
+
+);
+create index on places using gist(geom);
+CREATE TRIGGER update_geom BEFORE INSERT OR UPDATE OF x_coordinate, y_coordinate, latitude, longitude ON places FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
+
+CREATE TABLE place_history (
+    id                   serial primary key,
+    place_id             int,
+    user_id              varchar(10),
+    action_date          date,
+    action               varchar(25),
+    other_action_details varchar(100),
+    place_verified       char(2),
+    notes                varchar(255),
+    foreign key (place_id) references places(id)
+);
+
+CREATE TABLE place_alt_names (
+    id            serial primary key,
+    place_id      int,
+    alt_name      varchar(50),
+    name_language varchar(10),
+    alt_type      varchar(15),
+    alt_name_rank smallint,
+    status        varchar(10),
+    comments      varchar(250),
+    foreign key (place_id) references places(id),
+    unique (place_id, alt_name_rank)
+);
+
+CREATE TABLE place_alt_name_hist (
+    id          serial primary key,
+    alt_name_id int,
+    action      varchar(10),
+    user_id     varchar(10),
+    action_date date,
+    comments    varchar(250),
+    foreign key (alt_name_id) references place_alt_names(id)
+);
+
+CREATE TABLE point_of_interest_types (
+    id         serial primary key,
+    poi_type   varchar(50),
+    definition varchar(250)
+);
+
+CREATE TABLE place_point_of_interest (
+    id          serial primary key,
+    place_id    int,
+    poi_type_id int,
+    start_date  date,
+    end_date    date,
+    comments    varchar(250),
+    foreign key (place_id   ) references places(id),
+    foreign key (poi_type_id) references point_of_interest_types(id)
 );
