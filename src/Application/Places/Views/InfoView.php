@@ -23,8 +23,8 @@ class InfoView extends Template
         if ($res->errors) { $_SESSION['errorMessages'] = $res->errors; }
 
         $this->blocks = [ new Block('places/info.inc', ['place' => $res->place]) ];
-        if ($res->locations) {
-            $this->blocks['panel-one'] = [ new Block('locations/locations.inc', ['locations' => $res->locations]) ];
-        }
+        if ($res->locations) { $this->blocks['panel-one'][] = new Block('locations/locations.inc', ['locations' => $res->locations]); }
+        if ($res->alt_names) { $this->blocks['panel-one'][] = new Block('places/alt_names.inc',    ['alt_names' => $res->alt_names]); }
+        if ($res->history  ) { $this->blocks['panel-one'][] = new Block('places/history.inc',      ['history'   => $res->history  ]); }
     }
 }

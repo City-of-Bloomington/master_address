@@ -170,6 +170,20 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
         return $locationsRepo->find(['location_id' => $location_id]);
     }
 
+    public function history(int $place_id): array
+    {
+        $query = $this->pdo->prepare('select * from place.place_history where place_id=?');
+        $query->execute([$place_id]);
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function alt_names(int $place_id): array
+    {
+        $query = $this->pdo->prepare('select * from place.place_alt_names where place_id=?');
+        $query->execute([$place_id]);
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     //---------------------------------------------------------------
     // Write functions
     //---------------------------------------------------------------

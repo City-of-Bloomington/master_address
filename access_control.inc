@@ -30,6 +30,7 @@ $ACL->allow(null, 'addresses', 'parse');
 $ACL->allow(null, 'streets',  ['intersections', 'intersectingStreets']);
 
 $ACL->allow('viewer', 'reports');
+$ACL->allow('viewer', 'places', ['index', 'view']);
 
 $ACL->allow('addressedit');
 $ACL->deny ('addressedit', 'users');

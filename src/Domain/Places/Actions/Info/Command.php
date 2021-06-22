@@ -21,7 +21,9 @@ class Command
     {
         $res = new Response();
         try {
-            $res->place = $this->repo->load($place_id);
+            $res->place     = $this->repo->load     ($place_id);
+            $res->history   = $this->repo->history  ($place_id);
+            $res->alt_names = $this->repo->alt_names($place_id);
             if ($res->place->location_id) {
                 $res->locations = $this->repo->locations($res->place->location_id);
             }

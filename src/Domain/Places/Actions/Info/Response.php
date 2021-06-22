@@ -10,6 +10,8 @@ use Domain\Places\Entities\Place;
 class Response
 {
     public $place;
+    public $history   = [];
+    public $alt_names = [];
     public $locations = [];
     public $errors    = [];
 }
