@@ -55,6 +55,9 @@ msgstr "Officially change an existing address to a new address"
 msgid "locations.location_address_add"
 msgstr "Add an additional address to this location.  This is usually for a corner address."
 
+msgid "places.add"
+msgstr "Create a new place"
+
 msgid "places.update"
 msgstr "Change attributes for a place"
 

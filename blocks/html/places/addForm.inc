@@ -13,7 +13,7 @@
  * @param array $this->vicinities
  *
  * All Request object properties are available as template vars and are already escaped
- * @see Domain\Places\Actions\Update\Request
+ * @see Domain\Places\Actions\Add\Request
  */
 declare (strict_types=1);
 ?>
@@ -21,12 +21,11 @@ declare (strict_types=1);
     <header><h1><?= $this->title; ?></h1></header>
     <form method="post">
         <fieldset>
-            <input name="id" type="hidden" value="<?= $this->id; ?>" />
             <?php
                 $this->_include('places/partials/place_fields.inc');
 
                 $h = $this->template->getHelper('saveAndCancelButtons');
-                echo $h->saveAndCancelButtons(parent::generateUri('places.view', ['id'=>$this->id]));
+                echo $h->saveAndCancelButtons(parent::generateUri('places.index'));
             ?>
         </fieldset>
     </form>

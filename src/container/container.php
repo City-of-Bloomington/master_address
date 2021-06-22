@@ -198,7 +198,7 @@ foreach (\Domain\Reports\Report::list() as $r) {
 }
 
 // Places
-foreach (['Info', 'Search', 'Update'] as $a) {
+foreach (['Add', 'Info', 'Search', 'Update'] as $a) {
     $DI->params[ "Domain\\Places\\Actions\\$a\\Command"]["repository"] = $DI->lazyGet('Domain\Places\DataStorage\PlacesRepository');
     $DI->set(    "Domain\\Places\\Actions\\$a\\Command",
     $DI->lazyNew("Domain\\Places\\Actions\\$a\\Command"));

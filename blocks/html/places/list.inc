@@ -5,9 +5,23 @@
  * @param array $this->places
  */
 declare (strict_types=1);
+use Application\Block;
 use Application\Paginator;
 ?>
 <header><h2><?= $this->_(['place', 'places', 100]); ?></h2></header>
+<?php
+    if (!$this->disableButtons && parent::isAllowed('places', 'add')) {
+        $block = new Block('toolbox.inc', ['actions' => [
+            'add' => [
+                'uri'   => parent::generateUri("places.add"),
+                'class' => 'add',
+                'help'  => $this->_("places.add", 'messages')
+            ]
+        ]]);
+        echo $block->render('html', $this->template);
+    }
+?>
+
 <table>
     <thead>
         <tr>

@@ -187,7 +187,21 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
     //---------------------------------------------------------------
     // Write functions
     //---------------------------------------------------------------
+    public function add(\Domain\Places\Actions\Add\Request $req): int
+    {
+        return parent::saveToTable(self::mapDataFields($req), self::TABLE);
+    }
+
     public function update(\Domain\Places\Actions\Update\Request $req): int
+    {
+        return parent::saveToTable(self::mapDataFields($req), self::TABLE);
+    }
+
+    /**
+     * @param object $req  An Add or Update request object
+     * return array        Data to put in the database, using db fieldnames
+     */
+    private static function mapDataFields($req): array
     {
         $data = [];
         foreach (self::$fieldmap as $f => $db) {
@@ -204,7 +218,7 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
                 }
             }
         }
-        return parent::saveToTable($data, self::TABLE);
+        return $data;
     }
 
     //---------------------------------------------------------------
@@ -234,14 +248,14 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
 
     public function types(): array
     {
-        $sql = "select distinct(place_type) from place.places order by 1";
+        $sql = "select distinct(place_type) from place.places where place_type is not null order by 1";
         $result = $this->pdo->query($sql);
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function vicinities(): array
     {
-        $sql = "select distinct(vicinity) from place.places order by 1";
+        $sql = "select distinct(vicinity) from place.places where vicinity is not null order by 1";
         $result = $this->pdo->query($sql);
         return $result->fetchAll(\PDO::FETCH_COLUMN);
     }
