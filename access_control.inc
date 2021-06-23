@@ -12,6 +12,7 @@ $ACL = new Acl();
 $ACL->addRole(new Role('Anonymous'))
     ->addRole(new Role('viewer'), 'Anonymous')
     ->addRole(new Role('addressedit'))
+    ->addRole(new Role('GIS'))
     ->addRole(new Role('Administrator'));
 /**
  * Create resources for all the routes
@@ -34,5 +35,9 @@ $ACL->allow('viewer', 'places', ['index', 'view']);
 
 $ACL->allow('addressedit');
 $ACL->deny ('addressedit', 'users');
+$ACL->deny ('addressedit', 'places', ['add', 'update']);
+
+$ACL->allow('GIS');
+$ACL->deny ('GIS', 'users');
 
 $ACL->allow('Administrator');
