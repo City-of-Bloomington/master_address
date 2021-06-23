@@ -360,21 +360,21 @@ set search_path=place;
 
 CREATE TABLE categories (
     id       serial primary key,
-    category varchar(50)
+    category varchar(50) not null
 );
 
 CREATE TABLE public_entities (
     id          serial primary key,
-    entity_name varchar(50) unique,
-    code        varchar(8),
+    entity_name varchar(50) not null unique,
+    code        varchar(8)  not null,
     description varchar(100)
 );
 
 CREATE TABLE places (
     id                   serial primary key,
-    place_name           varchar(50),
-    short_name           varchar(30),
-    status               varchar(10),
+    place_name           varchar(50) not null,
+    short_name           varchar(30) not null,
+    status               varchar(10) not null,
     landmark_flag        char(2),
     vicinity             varchar(20),
     dispatch_citycode    varchar(3),
@@ -385,8 +385,8 @@ CREATE TABLE places (
     latitude             decimal(10, 8),
     longitude            decimal(10, 8),
     entity_id            int,
-    category_id          int,
-    place_type           varchar(40),
+    category_id          int         not null,
+    place_type           varchar(40) not null,
     map_label1           varchar(40),
     map_label2           varchar(40),
     comments             varchar(250),
@@ -395,17 +395,16 @@ CREATE TABLE places (
     geom public.geometry(Point,2966),
     foreign key (category_id) references categories(id),
     foreign key (  entity_id) references public_entities(id)
-
 );
 create index on places using gist(geom);
 CREATE TRIGGER update_geom BEFORE INSERT OR UPDATE OF x_coordinate, y_coordinate, latitude, longitude ON places FOR EACH ROW EXECUTE PROCEDURE public.trig_set_geom();
 
 CREATE TABLE place_history (
     id                   serial primary key,
-    place_id             int,
-    user_id              varchar(10),
-    action_date          date,
-    action               varchar(25),
+    place_id             int         not null,
+    user_id              varchar(10) not null,
+    action_date          date        not null,
+    action               varchar(25) not null,
     other_action_details varchar(100),
     place_verified       char(2),
     notes                varchar(255),
@@ -414,12 +413,12 @@ CREATE TABLE place_history (
 
 CREATE TABLE place_alt_names (
     id            serial primary key,
-    place_id      int,
-    alt_name      varchar(50),
-    name_language varchar(10),
-    alt_type      varchar(15),
-    alt_name_rank smallint,
-    status        varchar(10),
+    place_id      int         not null,
+    alt_name      varchar(50) not null,
+    name_language varchar(10) not null,
+    alt_type      varchar(15) not null,
+    alt_name_rank smallint    not null,
+    status        varchar(10) not null,
     comments      varchar(250),
     foreign key (place_id) references places(id),
     unique (place_id, alt_name_rank)
@@ -427,17 +426,17 @@ CREATE TABLE place_alt_names (
 
 CREATE TABLE place_alt_name_hist (
     id          serial primary key,
-    alt_name_id int,
-    action      varchar(10),
-    user_id     varchar(10),
-    action_date date,
+    alt_name_id int         not null,
+    action      varchar(10) not null,
+    user_id     varchar(10) not null,
+    action_date date        not null,
     comments    varchar(250),
     foreign key (alt_name_id) references place_alt_names(id)
 );
 
 CREATE TABLE point_of_interest_types (
     id         serial primary key,
-    poi_type   varchar(50),
+    poi_type   varchar(50) not null,
     definition varchar(250)
 );
 

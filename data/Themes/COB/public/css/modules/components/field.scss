@@ -7,6 +7,8 @@ input[type="checkbox"], input[type="radio"] {
     width:1em;
     height:1em;
 }
+.required label:after { content: " *"; }
+
 fieldset {
     border: none;
 }

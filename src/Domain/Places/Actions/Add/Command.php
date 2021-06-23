@@ -32,8 +32,16 @@ class Command
         return $res;
     }
 
+    /**
+     * @return array  An array of error messages
+     */
     private function validate(Request $req): array
     {
-        return [];
+        $errors = [];
+        if (empty($req->name       )) { $errors[] = 'missingName';      }
+        if (empty($req->short_name )) { $errors[] = 'missingShortName'; }
+        if (empty($req->status     )) { $errors[] = 'missingStatus';    }
+        if (empty($req->category_id)) { $errors[] = 'missingCategory';  }
+        return $errors;
     }
 }

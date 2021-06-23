@@ -30,7 +30,8 @@ echo $h->field([
     'name'     => 'short_name',
     'id'       => 'short_name',
     'label'    => $this->_('short_name'),
-    'value'    => $this->short_name
+    'value'    => $this->short_name,
+    'required' => true
 ]);
 
 $options = [['value'=>'']];
@@ -41,7 +42,8 @@ echo $h->field([
     'label'    => $this->_('status'),
     'type'     => 'select',
     'options'  => $options,
-    'value'    => $this->status
+    'value'    => $this->status,
+    'required' => true
 ]);
 
 
@@ -124,7 +126,8 @@ echo $h->field([
     'label'    => $this->_('category'),
     'type'     => 'select',
     'options'  => $options,
-    'value'    => $this->category_id
+    'value'    => $this->category_id,
+    'required' => true
 ]);
 
 $options = [['value'=>'']];
@@ -135,7 +138,8 @@ echo $h->field([
     'label'    => $this->_('type'),
     'type'     => 'select',
     'options'  => $options,
-    'value'    => $this->type
+    'value'    => $this->type,
+    'required' => true
 ]);
 
 echo $h->field([
