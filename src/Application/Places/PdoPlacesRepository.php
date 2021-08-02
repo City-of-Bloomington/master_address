@@ -206,15 +206,17 @@ class PdoPlacesRepository extends PdoRepository implements PlacesRepository
         $data = [];
         foreach (self::$fieldmap as $f => $db) {
             if ($db['prefix'] == 'p') {
-                switch ($f) {
-                    case 'landmark_flag':
-                    case 'publish_flag':
-                    case 'subplace_flag':
-                        $data[$db['dbName']] = $req->$f ? 'Y' : null;
-                    break;
+                if (!empty($req->$f)) {
+                    switch ($f) {
+                        case 'landmark_flag':
+                        case 'publish_flag':
+                        case 'subplace_flag':
+                            $data[$db['dbName']] = $req->$f ? 'Y' : null;
+                        break;
 
-                    default:
-                        $data[$db['dbName']] = $req->$f;
+                        default:
+                            $data[$db['dbName']] = $req->$f;
+                    }
                 }
             }
         }
