@@ -294,8 +294,7 @@ class PdoSubunitsRepository extends PdoRepository implements SubunitsRepository
                 $locationsRepo->activateSubunit($location_id, $subunit_id);
 
                 // Set the subunit status
-                         $this->saveStatus($subunit_id,  $req->status,           self::LOG_TYPE);
-                $locationsRepo->saveStatus($location_id, $req->status, $locationsRepo::LOG_TYPE);
+                $this->saveStatus($subunit_id, $req->status, self::LOG_TYPE);
 
                 $this->pdo->commit();
                 return $subunit_id;
