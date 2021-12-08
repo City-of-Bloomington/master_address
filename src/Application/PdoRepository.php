@@ -114,9 +114,9 @@ abstract class PdoRepository
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-	public function isValidId(int $id, string $table): bool
+	public function isValidId(int $id, string $table, ?string $keyname='id'): bool
 	{
-        $result = $this->pdo->query("select id from $table where id=$id");
+        $result = $this->pdo->query("select $keyname from $table where $keyname=$id");
         return ($result && $result->fetchColumn()) ? true : false;
 	}
 }

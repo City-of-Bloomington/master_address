@@ -355,7 +355,7 @@ class PdoAddressesRepository extends PdoRepository implements AddressesRepositor
         if ($req->township_id     && !parent::isValidId($req->township_id    , 'townships'     )) { $errors[] =     'townships/unknown'; }
         if ($req->subdivision_id  && !parent::isValidId($req->subdivision_id , 'subdivisions'  )) { $errors[] =  'subdivisions/unknown'; }
         if ($req->plat_id         && !parent::isValidId($req->plat_id        , 'plats'         )) { $errors[] =         'plats/unknown'; }
-        if ($req->location_id     && !parent::isValidId($req->location_id    , 'locations'     )) { $errors[] =     'locations/unknown'; }
+        if ($req->location_id     && !parent::isValidId($req->location_id, 'locations', 'location_id')) { $errors[] =     'locations/unknown'; }
         if ($req->locationType_id && !parent::isValidId($req->locationType_id, 'location_types')) { $errors[] = 'locationTypes/unknown'; }
         if ($req->contact_id      && !parent::isValidId($req->contact_id     , 'people'        )) { $errors[] =        'people/unknown'; }
 
