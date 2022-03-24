@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2018-2022 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Domain\Streets\Entities;
@@ -55,8 +55,8 @@ class Street implements \JsonSerializable
         $out = [];
         if ($this->direction     ) { $out[] = $this->direction;      }
         if ($this->name          ) { $out[] = $this->name;           }
-        if ($this->post_direction) { $out[] = $this->post_direction; }
         if ($this->suffix_code   ) { $out[] = $this->suffix_code;    }
+        if ($this->post_direction) { $out[] = $this->post_direction; }
         return implode(' ', $out);
     }
 
